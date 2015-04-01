@@ -1,0 +1,30 @@
+body {
+    padding-top: 40px; 
+}
+
+footer {
+    margin: 50px 0;
+}
+
+.row {
+    position: relative;
+}
+
+.container {
+	width: 100%!important;
+}
+
+.navbar-nav {
+	margin-left: 20px;
+}
+
+.brand {
+	color: #999999;
+}
+
+.clear-branding {
+	position: absolute; 
+	left: 10px; 
+	top: -7px;
+}
+

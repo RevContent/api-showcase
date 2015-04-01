@@ -1,0 +1,23 @@
+/* Form style */
+input, textarea, select { font: 16px "Merriweather", Georgia, "Times New Roman", Times, serif; color:#555; border:0; -webkit-transition: all 0.2s ease 0s; -moz-transition: all 0.2s ease 0s; -o-transition: all 0.2s ease 0s; transition: all 0.2s ease 0s; float:none; display:block; margin:0px; -webkit-appearance: none; background:none }
+textarea { resize: none; }
+#message { margin: 0; padding: 0px; z-index:200; height:auto; }
+.error_message, #success_page { display: block; height:auto; color:#d31800; font-style:italic; font-family: 'Open Sans', 'Helvetica Neue', Arial, Helvetica, sans-serif; font-size: 12px; padding: 26px 60px 0px 0px; line-height:1.5 }
+#success_page { color:#2b2b2b !important; padding:18px 20px 0 0px }
+.loader { display:none; }
+/* Form Element Styling */
+.contact > .elem-content {background:#fff !important }
+.form-part { padding: 0; margin-top:9px; border-top:1px solid #d8d8d8; }
+.form-part > textarea, .form-part > select, .form-part > input:not([type="submit"]):not([type="image"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]) {
+ display: block;
+ width: 100%;
+ padding: 25px 0px;
+ font-size: 16px;
+ border-bottom:1px solid #d8d8d8;
+ text-align: left;
+ font-style: normal;
+}
+.lt-ie9 .form-part textarea, .lt-ie9 .form-part select, .lt-ie9 .form-part input { display: block; width: 100%; padding: 25px 29px; font-size: 17px;  border-bottom:1px solid #d8d8d8; text-align: left; font-style: normal; }
+.form-part > textarea { height: 174px; resize: none; }
+.form-part > .input-wrapper { position: relative;  }
+.form-part .send-btn { border: none 0px transparent; background: url(../images/icons/bg-mail.png) no-repeat scroll top right transparent; background-size:48px 48px; padding: 19px 60px 16px 4px; height: 48px; font-family: 'Open Sans', 'Helvetica Neue', Arial, Helvetica, sans-serif; font-size: 14px; display: block; width: auto; float: right; margin: 19px 29px 0px 0px; cursor: pointer; line-height:12px; font-style:italic; }

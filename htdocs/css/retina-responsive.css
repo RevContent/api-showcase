@@ -1,0 +1,127 @@
+@charset "utf-8";
+/* Retina Ready Images */
+
+@media only screen and (-Webkit-min-device-pixel-ratio: 1.5),
+only screen and (-moz-min-device-pixel-ratio: 1.5),
+only screen and (-o-min-device-pixel-ratio: 3/2),
+only screen and (min-device-pixel-ratio: 1.5) {
+h1#logo a { background:url(../images/bg-logo@2x.png) center no-repeat; background-size:60px 52px; }
+
+.map {background:url(../images/icons/bg-map@2x.png) no-repeat center left; background-size:48px 48px;  }
+.winner {background:url(../images/icons/bg-winner@2x.png) no-repeat center; background-size:48px 48px; }
+.time {background:url(../images/icons/bg-time@2x.png) no-repeat center; background-size:48px 48px; }
+.pig {background:url(../images/icons/bg-pig@2x.png) no-repeat center; background-size:48px 48px; }
+.adjust {background:url(../images/icons/bg-adjust@2x.png) no-repeat center; background-size:48px 48px; }
+.team {background:url(../images/icons/bg-team@2x.png) no-repeat center; background-size:48px 48px; }
+.works {background:url(../images/icons/bg-works@2x.png) no-repeat center; background-size:48px 48px; }
+.chat {background:url(../images/icons/bg-chat@2x.png) no-repeat center; background-size:48px 48px; }
+.notes {background:url(../images/icons/bg-notes@2x.png) no-repeat center; background-size:48px 48px; }
+.camera {background:url(../images/icons/bg-camera@2x.png) no-repeat center; background-size:48px 48px; }
+.illustration {background:url(../images/icons/bg-illustration@2x.png) no-repeat center; background-size:48px 48px; }
+.social {background:url(../images/icons/bg-social@2x.png) no-repeat center; background-size:48px 48px; }
+.vector {background:url(../images/icons/bg-vector@2x.png) no-repeat center; background-size:48px 48px; }
+.commerce {background:url(../images/icons/bg-commerce@2x.png) no-repeat center; background-size:48px 48px; }
+.search {background:url(../images/icons/bg-search@2x.png) no-repeat center; background-size:48px 48px; }
+.like { background:url(../images/icons/bg-like@2x.png) center no-repeat; background-size:48px 48px; }
+.share { background:url(../images/icons/bg-share@2x.png) center no-repeat; background-size:48px 48px; }
+.document { background:url(../images/icons/bg-document@2x.png) center no-repeat; background-size:48px 48px; }
+.apple { background:url(../images/icons/bg-apple@2x.png) center no-repeat; background-size:48px 48px; }
+.balance { background:url(../images/icons/bg-balance@2x.png) center no-repeat; background-size:48px 48px; }
+.beaker { background:url(../images/icons/bg-beaker@2x.png) center no-repeat; background-size:48px 48px; }
+.beer { background:url(../images/icons/bg-beer@2x.png) center no-repeat; background-size:48px 48px; }
+.books { background:url(../images/icons/bg-books@2x.png) center no-repeat; background-size:48px 48px; }
+.box { background:url(../images/icons/bg-box@2x.png) center no-repeat; background-size:48px 48px; }
+.cake { background:url(../images/icons/bg-cake@2x.png) center no-repeat; background-size:48px 48px; }
+.calculator { background:url(../images/icons/bg-calculator@2x.png) center no-repeat; background-size:48px 48px; }
+.cd { background:url(../images/icons/bg-cd@2x.png) center no-repeat; background-size:48px 48px; }
+.champagne { background:url(../images/icons/bg-champagne@2x.png) center no-repeat; background-size:48px 48px; }
+.chart { background:url(../images/icons/bg-chart@2x.png) center no-repeat; background-size:48px 48px; }
+.cheese { background:url(../images/icons/bg-cheese@2x.png) center no-repeat; background-size:48px 48px; }
+.court { background:url(../images/icons/bg-court@2x.png) center no-repeat; background-size:48px 48px; }
+.delivery { background:url(../images/icons/bg-delivery@2x.png) center no-repeat; background-size:48px 48px; }
+.dvd { background:url(../images/icons/bg-dvd@2x.png) center no-repeat; background-size:48px 48px; }
+.eco { background:url(../images/icons/bg-eco@2x.png) center no-repeat; background-size:48px 48px; }
+.film { background:url(../images/icons/bg-film@2x.png) center no-repeat; background-size:48px 48px; }
+.grape { background:url(../images/icons/bg-grape@2x.png) center no-repeat; background-size:48px 48px; }
+.hot { background:url(../images/icons/bg-hot@2x.png) center no-repeat; background-size:48px 48px; }
+.house { background:url(../images/icons/bg-house@2x.png) center no-repeat; background-size:48px 48px; }
+.icecream { background:url(../images/icons/bg-icecream@2x.png) center no-repeat; background-size:48px 48px; }
+.joystick { background:url(../images/icons/bg-joystick@2x.png) center no-repeat; background-size:48px 48px; }
+.keynote { background:url(../images/icons/bg-keynote@2x.png) center no-repeat; background-size:48px 48px; }
+.link { background:url(../images/icons/bg-link@2x.png) center no-repeat; background-size:48px 48px; }
+.magic { background:url(../images/icons/bg-magic@2x.png) center no-repeat; background-size:48px 48px; }
+.mail { background:url(../images/icons/bg-mail@2x.png) center no-repeat; background-size:48px 48px; }
+.microphone { background:url(../images/icons/bg-microphone@2x.png) center no-repeat; background-size:48px 48px; }
+.network { background:url(../images/icons/bg-network@2x.png) center no-repeat; background-size:48px 48px; }
+.palette { background:url(../images/icons/bg-palette@2x.png) center no-repeat; background-size:48px 48px; }
+.plaster { background:url(../images/icons/bg-plaster@2x.png) center no-repeat; background-size:48px 48px; }
+.player { background:url(../images/icons/bg-player@2x.png) center no-repeat; background-size:48px 48px; }
+.polaroid { background:url(../images/icons/bg-polaroid@2x.png) center no-repeat; background-size:48px 48px; }
+.printer { background:url(../images/icons/bg-printer@2x.png) center no-repeat; background-size:48px 48px; }
+.pulse { background:url(../images/icons/bg-pulse@2x.png) center no-repeat; background-size:48px 48px; }
+.quote { background:url(../images/icons/bg-quote@2x.png) center no-repeat; background-size:48px 48px; }
+.radio { background:url(../images/icons/bg-radio@2x.png) center no-repeat; background-size:48px 48px; }
+.recorder { background:url(../images/icons/bg-recorder@2x.png) center no-repeat; background-size:48px 48px; }
+.scissors { background:url(../images/icons/bg-scissors@2x.png) center no-repeat; background-size:48px 48px; }
+.select { background:url(../images/icons/bg-select@2x.png) center no-repeat; background-size:48px 48px; }
+.serving { background:url(../images/icons/bg-serving@2x.png) center no-repeat; background-size:48px 48px; }
+.share { background:url(../images/icons/bg-share@2x.png) center no-repeat; background-size:48px 48px; }
+.shop { background:url(../images/icons/bg-shop@2x.png) center no-repeat; background-size:48px 48px; }
+.shopping { background:url(../images/icons/bg-shopping@2x.png) center no-repeat; background-size:48px 48px; }
+.smartphone { background:url(../images/icons/bg-smartphone@2x.png) center no-repeat; background-size:48px 48px; }
+.sofa { background:url(../images/icons/bg-sofa@2x.png) center no-repeat; background-size:48px 48px; }
+.syringe { background:url(../images/icons/bg-syringe@2x.png) center no-repeat; background-size:48px 48px; }
+.tape { background:url(../images/icons/bg-tape@2x.png) center no-repeat; background-size:48px 48px; }
+.target { background:url(../images/icons/bg-target@2x.png) center no-repeat; background-size:48px 48px; }
+.television { background:url(../images/icons/bg-television@2x.png) center no-repeat; background-size:48px 48px; }
+.video { background:url(../images/icons/bg-video@2x.png) center no-repeat; background-size:48px 48px; }
+.walkman { background:url(../images/icons/bg-walkman@2x.png) center no-repeat; background-size:48px 48px; }
+.zoom { background:url(../images/icons/bg-zoom@2x.png) center no-repeat; background-size:48px 48px; }
+.tags { background:url(../images/icons/bg-tags@2x.png) center no-repeat; background-size:48px 48px; }
+
+.flex-direction-nav .flex-next {background:url(../images/bg-next@2x.png) center no-repeat; background-size:48px 48px; }
+.flex-direction-nav .flex-prev {background:url(../images/bg-prev@2x.png) center no-repeat; background-size:48px 48px; }
+
+.fancybox-close {background: url(../images/bg-close@2x.png) center no-repeat; background-size:48px 48px;}
+.fancybox-prev span {background: url(../images/bg-prev@2x.png) center no-repeat; background-size:48px 48px;}
+.fancybox-next span {background: url(../images/bg-next@2x.png) center no-repeat; background-size:48px 48px;}
+
+.element > .elem-content > .form-part .send-btn { background: url(../images/icons/bg-mail@2x.png) no-repeat scroll top right transparent; background-size:48px 48px; }
+}
+
+/* Desktop-only rules */
+@media only screen and (min-width: 980px) and (max-width: 1299px) {
+    .container {width:960px; }
+	.col3-3, .col3-3.grey, .col3-3.white, .col4-3 { width:940px; height:auto; }
+}
+
+/* Tablet Portrait size to standard 960 (devices and browsers) */
+@media only screen and (min-width: 768px) and (max-width: 979px) {
+    .container {width:640px; }
+    .col3-3, .col3-3.grey, .col3-3.white, .col4-3 { width:620px; height:auto; }
+	footer .social-list {margin-left:0 }
+}
+
+/* All Mobile Sizes (devices and browser) */
+@media only screen and (max-width: 767px) {
+    .container {width:320px; }
+    .col2-3, .col2-3.grey, .col2-3.white, .col2-3.white-bottom, .col3-3, .col3-3.grey, .col3-3.white, .col4-3 { width:300px; height:auto;  }
+    .col2-3.grey, .col2-3.white, .col2-3.white-bottom { padding:30px 35px 17px 35px; }
+	.col2-3.white h3, .col2-3.white-bottom h3, .col2-3.grey h3, h2 {font-size:24px; line-height:31px; }
+	h2 {letter-spacing:0; margin:0; font-weight:400 }
+	.col2-3 p.small {padding:0 0 12px !important }
+	footer .social-list {margin-left:0 }
+	#map {width:300px; height:280px;}
+}
+
+/* Small mobile sizes */
+@media only screen and (max-width: 399px){
+    #header{
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .pushed-left #header > .logo-wrapper > .tagline,
+    .pushed-left-alt #header > .logo-wrapper > .tagline{
+        display: none !important;
+    }
+}
