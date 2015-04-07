@@ -1,40 +1,58 @@
 body {
-    padding-top: 40px; 
+  padding-top: 40px;
 }
 
 footer {
-    margin: 50px 0;
+  margin: 50px 0;
 }
 
-.row {
-    position: relative;
+.scrollbar-measure {
+  width: 100px;
+  height: 100px;
+  overflow: scroll;
+  position: absolute;
+  top: -9999px;
 }
 
-.container {
-	width: 100%!important;
+.shoveler {
+  display: table;
 }
 
-.navbar-nav {
-	margin-left: 20px;
+.shoveler .shoveler-btn {
+    display: table-cell;
+    vertical-align: middle;
 }
 
-.brand {
-	color: #999999;
-}
-
-.clear-branding {
-	position: absolute; 
-	left: 10px; 
-	top: -7px;
-}
-
-
-#owl-demo .owl-item{
-  margin: 3px;
-}
-
-#owl-demo .owl-item img{
-  display: block;
+.shoveler .shoveler-items {
   width: 100%;
-  height: auto;
+  display: table-cell;
+}
+
+.shoveler .shoveler-item {
+  float: left;
+}
+
+.shoveler-size-sm {
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.shoveler .shoveler-item .shoveler-item-inner {
+  padding: 10px;
+}
+
+.shoveler.shoveler-size-xs .shoveler-item .shoveler-item-inner {
+  padding: 2px;
+}
+
+.shoveler.shoveler-size-sm .shoveler-item .shoveler-item-inner {
+  padding: 4px;
+}
+
+.shoveler.shoveler-size-md .shoveler-item .shoveler-item-inner {
+  padding: 6px;
+}
+
+.shoveler.shoveler-size-lg .shoveler-item .shoveler-item-inner {
+  padding: 8px;
 }

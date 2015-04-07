@@ -1,5 +1,5 @@
 <?php
-  
+
   if (isset($_GET["id"])) {
     switch ($_GET["id"]) {
       case "homepageloop":
@@ -26,14 +26,20 @@
           $download_url = "";
           $git_url = "";
           break;
+      case "carousel":
+          $name = "Content Carousel";
+          $preview_url  = "/showcase/revcontent-api-showcase-carousel-1.0/index.php";
+          $download_url = "";
+          $git_url = "";
+          break;
       default:
           header('Location: ' . $_SERVER['HTTP_REFERER']);
     }
 
   } else {
-    
+
     header('Location: ' . $_SERVER['HTTP_REFERER']);
-  
+
   }
 
 ?>
@@ -142,7 +148,7 @@
           <h3><strong><?php echo $name; ?></strong></h3>
           <div class="ct-part">
              <a class="button" href="<?php echo $preview_url; ?>" target="_blank"><i class="fa fa-eye"></i> Live Preview</a>
-          </div>      
+          </div>
           <div class="ft-part">
               <a class="button" href="<?php echo $download_url; ?>"><i class="fa fa-download"></i> Download Source&nbsp;</a>
               <a class="button" href="<?php echo $git_url; ?>"><i class="fa fa-github"></i> View on GitHub &nbsp;</a>
@@ -157,7 +163,7 @@
               </ul>
               <br />
         </div>
-        
+
         <!--<div class="element clearfix col1-3 home grey auto">
           <h4><strong>Result</strong></h4>
             <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacina. </p>
@@ -191,7 +197,7 @@
 <footer id="footer" class="clearfix">
   <p class="alignleft">© 2015, rev:content All Rights Reserved. <span class="padding">&middot;</span> <a href="404.html" title=""><strong>Legal Notice</strong></a></p>
   <p class="alignright"><a href="">Sign Up</a> <span class="padding">&middot;</span> <a href="mailto:support@revcontent.com" title="Need Help?">support@revcontent.com</a> </p>
-  
+
 </footer>
 <script src="js/jquery-1.11.1.min.js" type="text/javascript"></script>
 <script src="js/jquery-easing-1.3.js" type="text/javascript"></script>
