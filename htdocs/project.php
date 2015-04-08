@@ -27,8 +27,14 @@
           $git_url = "";
           break;
       case "carousel":
-          $name = "Content Carousel";
+          $name = "Carousel";
           $preview_url  = "/showcase/revcontent-api-showcase-carousel-1.0/index.php";
+          $download_url = "";
+          $git_url = "";
+          break;
+      case "grid":
+          $name = "Grid";
+          $preview_url  = "/showcase/revcontent-api-showcase-grid-1.0/index.php";
           $download_url = "";
           $git_url = "";
           break;

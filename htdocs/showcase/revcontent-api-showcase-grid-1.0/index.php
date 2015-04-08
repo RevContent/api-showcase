@@ -8,13 +8,13 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<title>Carousel Example</title>
+<title>Grid Example</title>
 
 <!-- Bootstrap Core CSS -->
 <link href="css/bootstrap.min.css" rel="stylesheet">
 
 <!-- Custom CSS -->
-<link href="css/carousel.css" rel="stylesheet">
+<link href="css/grid.css" rel="stylesheet">
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -67,80 +67,16 @@
     <!-- Page Heading -->
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Carousel
+            <h1 class="page-header">Grid
                 <small>rev:content Native API</small>
             </h1>
         </div>
     </div>
     <!-- /.row -->
 
-    <!-- Post One -->
-    <div class="row">
-        <div class="col-md-3 col-xs-5">
-            <a href="#">
-                <img class="img-responsive" src="http://placehold.it/420x315" alt="">
-            </a>
-        </div>
-        <div class="col-md-7">
-            <h3><a href="#">Post One Headline</a></h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium veniam exercitationem expedita laborum at voluptate. Labore, voluptates totam at aut nemo deserunt rem magni pariatur quos perspiciatis atque eveniet unde.</p>
-            <a class="btn btn-primary" href="#">View Post <span class="glyphicon glyphicon-chevron-right"></span></a>
-        </div>
-    </div>
-    <!-- /.row -->
-
-    <hr>
-
-
-
-    <!-- Post Three -->
-    <div class="row">
-        <div class="col-md-3 col-xs-5">
-            <a href="#">
-                <img class="img-responsive" src="http://placehold.it/420x315" alt="">
-            </a>
-        </div>
-        <div class="col-md-7">
-            <h3><a href="#">Post Three Headline</a></h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis, temporibus, dolores, at, praesentium ut unde repudiandae voluptatum sit ab debitis suscipit fugiat natus velit excepturi amet commodi deleniti alias possimus!</p>
-            <a class="btn btn-primary" href="#">View Post <span class="glyphicon glyphicon-chevron-right"></span></a>
-        </div>
-    </div>
-    <!-- /.row -->
-
-    <hr>
-
-    <!-- Post Four -->
-    <div class="row">
-
-        <div class="col-md-3 col-xs-5">
-            <a href="#">
-                <img class="img-responsive" src="http://placehold.it/420x315" alt="">
-            </a>
-        </div>
-        <div class="col-md-7">
-            <h3><a href="#">Post Four Headline</a></h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, quidem, consectetur, officia rem officiis illum aliquam perspiciatis aspernatur quod modi hic nemo qui soluta aut eius fugit quam in suscipit?</p>
-            <a class="btn btn-primary" href="#">View Post <span class="glyphicon glyphicon-chevron-right"></span></a>
-        </div>
-    </div>
-    <!-- /.row -->
-
     <div class="row">
         <div class="col-md-12">
-            <h2>Some of the best content known to mankind!</h2>
-            <div class="shoveler1"></div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-6">
-            <h2>More from us</h2>
-            <div class="shoveler2"></div>
-        </div>
-        <div class="col-md-6">
-            <h2>From the web</h2>
-            <div class="shoveler2"></div>
+            <div class="grid"></div>
         </div>
     </div>
 
@@ -194,15 +130,25 @@
 <!-- jQuery -->
 <script src="js/jquery.js"></script>
 
-<script src="js/shoveler.js"></script>
+<script src="js/grid.js"></script>
 
 <script src="js/imagesloaded.js"></script>
 
 <script type="text/javascript">
 
     $(function() {
+        // $('.grid1').grid({
+        //     url: 'https://trends.revcontent.com/api/v1/',
+        //     params: {
+        //          api_key: 'a3ef3561e4a67bc7ef7e0aff5a4889d19007c957',
+        //          pub_id: 307,
+        //          widget_id: 67,
+        //          type: 'json',
+        //          domain: '247sports.com'
+        //     }
+        // });
 
-        $('.shoveler1').contentSlider({
+        $('.grid').grid({
             url: 'http://delivery.powr.mosterhout.dev2.dev.internal/api/v1/',
             params: {
                  api_key: '53df2dd2d67ba93d0b262c86918fcbc19c2784d3',
@@ -211,21 +157,10 @@
                  type: 'json',
                  domain: 'bloomberg.com'
             }
-            });
-
-        $('.shoveler2').contentSlider({
-            url: 'https://trends.revcontent.com/api/v1/',
-            params: {
-                 api_key: 'a3ef3561e4a67bc7ef7e0aff5a4889d19007c957',
-                 pub_id: 307,
-                 widget_id: 67,
-                 type: 'json',
-                 domain: '247sports.com'
-            }
         });
     });
 
-    </script>
+</script>
 
 </body>
 

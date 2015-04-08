@@ -146,6 +146,10 @@
             <figure class="images"> <img src="images/carousel.png" alt="<span>Carousel</span><i>→</i>" class="slip" /> </figure>
             </a> </div>
 
+          <div class="element  clearfix col1-3 portfolio photography home"> <a href="project.php?id=grid" title="">
+            <figure class="images"> <img src="images/carousel.png" alt="<span>Grid</span><i>→</i>" class="slip" /> </figure>
+            </a> </div>
+
           <div class="element  clearfix col1-3 home grey"> <a href="http://www.github.com/RevContent" data-title="" class="whole-tile">
             <p class="small">GitHub</p>
             <h3>All of our awesome API examples are open source</h3>
