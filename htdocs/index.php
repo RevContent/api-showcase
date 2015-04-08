@@ -103,17 +103,17 @@
 
           <div class="element  clearfix col1-3 home portfolio photography"> <a href="project.php?id=endofgallery" title="End Of Gallery">
             <figure class="images"> <img src="images/endgallery.png" alt="<span>End Of Gallery</span><i>→</i>" class="slip" /> </figure>
-            </a> 
+            </a>
           </div>
 
           <div class="element  clearfix col1-3 home portfolio webdesign"> <a href="project.php?id=toaster" title="Content Toaster">
             <figure class="images"> <img src="images/toaster.png" alt="<span>Content Toaster</span><i>→</i>" class="slip" /> </figure>
-            </a> 
+            </a>
           </div>
 
           <div class="element  clearfix col1-3 home portfolio"> <a href="project.php?id=homepageloop" title="">
             <figure class="images"> <img src="images/homeloop.png" alt="<span>Homepage Loop</span><i>→</i>" class="slip" /> </figure>
-            </a> 
+            </a>
           </div>
 
           <div class="element  clearfix col1-3 home grey"> <a href="https://v2.revcontent.com/signup" data-title="Sign Up" >
@@ -123,14 +123,14 @@
               <div class="icons document"></div>
               <p class="alignleft">Signup For Free</p>
               <span class="arrow">→</span></div>
-            </a> 
+            </a>
           </div>
-          
+
           <div class="element  clearfix col1-3 portfolio photography home"> <a href="project.html" title="">
             <figure class="images"> <img src="images/parallax.png" alt="<span>Parallax Photo-text</span><i>→</i>" class="slip" /> </figure>
-            </a> 
+            </a>
           </div>
-        
+
 
           <div class="element  clearfix col1-3 services grey auto">
             <div class="icons search"></div>
@@ -142,10 +142,10 @@
             </ul>
           </div>
 
-          <div class="element  clearfix col1-3 portfolio photography home"> <a href="project.html" title="">
+          <div class="element  clearfix col1-3 portfolio photography home"> <a href="project.php?id=carousel" title="">
             <figure class="images"> <img src="images/carousel.png" alt="<span>Content Carousel</span><i>→</i>" class="slip" /> </figure>
             </a> </div>
-          
+
           <div class="element  clearfix col1-3 home grey"> <a href="http://www.github.com/RevContent" data-title="" class="whole-tile">
             <p class="small">GitHub</p>
             <h3>All of our awesome API examples are open source</h3>
@@ -153,17 +153,17 @@
               <div class="icons like"></div>
               <p class="alignleft">Checkout the Code</p>
               <span class="arrow">→</span></div>
-            </a> 
+            </a>
           </div>
-          
+
           <div class="element  clearfix col1-3 portfolio photography home"> <a href="project.php?id=scrolling" title="Scrolling Experience">
             <figure class="images"> <img src="images/scrolling.png" alt="<span>Scrolling Experience</span><i>→</i>" class="slip" /> </figure>
-            </a> 
+            </a>
           </div>
-         
+
           <div class="element  clearfix col1-3 portfolio illustration"> <a href="project.html" title="">
             <figure class="images"> <img src="images/work10.jpg" alt="<span>Book Cover</span><i>→</i>" class="slip" /> </figure>
-            </a> 
+            </a>
           </div>
 
 
@@ -180,15 +180,15 @@
 <footer id="footer" class="clearfix"><div class="containing-wrapper">
   <p class="alignleft">© 2015, rev:content All Rights Reserved. <span class="padding">&middot;</span> <a href="404.html" title=""><strong>Legal Notice</strong></a></p>
   <p class="alignright"><a href="">Sign Up</a> <span class="padding">&middot;</span> <a href="mailto:support@revcontent.com" title="Need Help?">support@revcontent.com</a> </p>
-  
+
   <ul class="social-list clearfix">
     <li> <a href="#" class="pinterest"></a> </li>
     <li> <a href="#" class="twitter"></a> </li>
     <li> <a href="#" class="gplus"></a> </li>
     <li> <a href="#" class="facebook"></a> </li>
   </ul>
-  
-  
+
+
   </div>
 </footer>
 <script src="js/jquery-1.11.1.min.js" type="text/javascript"></script>
