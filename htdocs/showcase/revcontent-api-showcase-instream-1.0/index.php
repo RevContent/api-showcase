@@ -9,7 +9,7 @@
     ini_set('display_errors', 'on');
     ini_set('html_errors', 'on');
 
-    $revcontentAPI = 'https://trends.revcontent.com/api/v1/?'; 
+    $revcontentAPI = 'https://trends.revcontent.com/api/v1/?';
     $api_key       = 'a3ef3561e4a67bc7ef7e0aff5a4889d19007c957';
     $pub_id        = 307;
     $widget_id     = 67;
@@ -29,7 +29,7 @@
         'format' => $format
     ));
 
-    
+
 
     // Make the API call
     $ch = curl_init();
@@ -61,7 +61,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Homepage Loop Example</title>
+    <title>Instream Example</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -121,7 +121,7 @@
         <!-- Page Heading -->
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Homepage Loop
+                <h1 class="page-header">Instream
                     <small>rev:content Native API</small>
                 </h1>
             </div>

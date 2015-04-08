@@ -111,8 +111,8 @@
             </a>
           </div>
 
-          <div class="element  clearfix col1-3 home portfolio"> <a href="project.php?id=homepageloop" title="">
-            <figure class="images"> <img src="images/homeloop.png" alt="<span>Homepage Loop</span><i>→</i>" class="slip" /> </figure>
+          <div class="element  clearfix col1-3 home portfolio"> <a href="project.php?id=instream" title="">
+            <figure class="images"> <img src="images/homeloop.png" alt="<span>Instream</span><i>→</i>" class="slip" /> </figure>
             </a>
           </div>
 
@@ -143,7 +143,7 @@
           </div>
 
           <div class="element  clearfix col1-3 portfolio photography home"> <a href="project.php?id=carousel" title="">
-            <figure class="images"> <img src="images/carousel.png" alt="<span>Content Carousel</span><i>→</i>" class="slip" /> </figure>
+            <figure class="images"> <img src="images/carousel.png" alt="<span>Carousel</span><i>→</i>" class="slip" /> </figure>
             </a> </div>
 
           <div class="element  clearfix col1-3 home grey"> <a href="http://www.github.com/RevContent" data-title="" class="whole-tile">

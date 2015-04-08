@@ -2,14 +2,14 @@
 
   if (isset($_GET["id"])) {
     switch ($_GET["id"]) {
-      case "homepageloop":
-          $name = "Homepage Loop";
-          $preview_url  = "/showcase/revcontent-api-showcase-homepageloop-1.0/index.php";
+      case "instream":
+          $name = "Instream";
+          $preview_url  = "/showcase/revcontent-api-showcase-instream-1.0/index.php";
           $download_url = "";
           $git_url = "";
           break;
       case "endofgallery":
-          $name = "Homepage Loop";
+          $name = "End of Gallery";
           $preview_url  = "/showcase/revcontent-api-showcase-endofgallery-1.0/index.html";
           $download_url = "";
           $git_url = "";
