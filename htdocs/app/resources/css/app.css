@@ -8,7 +8,7 @@ html {
 
 body {
   font-size: 1.6rem;
-  overflow: auto !important;
+  /*overflow: auto !important;*/
 /*  height: auto;*/
   background-color: #efefef;
   font-family: "Proxima Nova Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
@@ -265,11 +265,11 @@ img {
 
 /* Dialog =====================================================================*/
 .md-dialog-container {
-  height: auto;
+  /*height: auto;*/
 }
 
 md-dialog  {
-  max-height: none;
+  /*max-height: none;*/
   margin-top: 15px;
 }
 
