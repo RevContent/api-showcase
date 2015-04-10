@@ -38,7 +38,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                     },
                     grid: {
                         title: 'Grid',
-                        img: 'grid.jpg',
+                        img: 'grid1.jpg',
                         description: 'None',
                         link: 'revcontent-api-showcase-grid-1.0',
                     },

@@ -89,7 +89,9 @@
 
             <footer>
                 <div class="container">
-                    © 2015, rev:content All Rights Reserved. <span class="padding">&middot;</span> <a href="http://support.revcontent.com/support/solutions/articles/158282-privacy-policy" target="_blank" title=""><strong>Legal Notice</strong></a>
+                    © 2015, rev:content All Rights Reserved.
+                    <a style="border-right: 1px solid #000;padding: 0 10px;" href="http://support.revcontent.com/support/solutions/articles/158282-privacy-policy" target="_blank" title=""><strong>Privacy Policy</strong></a>
+                    <a style="padding: 0 10px;" href="http://support.revcontent.com/support/home" target="_blank" title=""><strong>Terms and Conditions</strong></a>
                 </div>
             </footer>
         </div>
