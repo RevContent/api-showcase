@@ -73,7 +73,7 @@
                                 <md-tooltip>Read Up!</md-tooltip>
                             </a>
 
-                            <a class="md-button" target="_self" ng-href="" tabindex="0">
+                            <a class="md-button" target="_blank" ng-href="http://support.revcontent.com/support/home" tabindex="0">
                                 <span>Support</span>
                                 <md-tooltip>How can we help?</md-tooltip>
                             </a>
@@ -89,7 +89,7 @@
 
             <footer>
                 <div class="container">
-                    © 2015, rev:content All Rights Reserved. <span class="padding">&middot;</span> <a href="http://support.revcontent.com/support/home" target="_blank" title=""><strong>Legal Notice</strong></a>
+                    © 2015, rev:content All Rights Reserved. <span class="padding">&middot;</span> <a href="http://support.revcontent.com/support/solutions/articles/158282-privacy-policy" target="_blank" title=""><strong>Legal Notice</strong></a>
                 </div>
             </footer>
         </div>
