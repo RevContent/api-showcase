@@ -55,6 +55,7 @@ jQuery.fn.reverse = [].reverse;
 
         that.load(true).then(function() {
             that.resize();
+            that.$element.trigger('load.app.contentSlider');
         });
     };
     //to == timeout

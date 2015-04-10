@@ -1,11 +1,3 @@
-body {
-  padding-top: 40px;
-}
-
-footer {
-  margin: 50px 0;
-}
-
 .scrollbar-measure {
   width: 100px;
   height: 100px;
@@ -18,9 +10,13 @@ footer {
   display: table;
 }
 
+.shoveler li {
+  list-style: none;
+}
+
 .shoveler .shoveler-btn {
-    display: table-cell;
-    vertical-align: middle;
+  display: table-cell;
+  vertical-align: middle;
 }
 
 .shoveler .shoveler-items {

@@ -1,0 +1,18 @@
+{
+  "name": "API Sandbox",
+  "version": "1.0.0",
+  "dependencies": {
+    "jquery": "1.11.*",
+    "lodash": "2.*",
+    "angular": "~1.3",
+    "angular-animate": "~1",
+    "angular-route": "~1",
+    "angular-material": "latest",
+    "angular-messages": "~1",
+    "angular-ui-router": "~0.2.13",
+    "ui-router-extras": "master",
+    "animate.css": "~3",
+    "imagesloaded": "~3",
+    "sanitize-css": "*"
+  }
+}

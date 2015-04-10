@@ -1,0 +1,59 @@
+<md-dialog class="wide">
+
+    <md-content>
+
+        <h2 style="margin-right:240px;" class="md-display-1">Carousel</h2>
+
+        <div layout layout-padding>
+            <div flex="70">
+                <h2>Some of the best content known to mankind!</h2>
+                <div class="shoveler1"></div>
+
+
+                <h2>More from us</h2>
+                <div class="shoveler2"></div>
+
+                <h2>From the web</h2>
+                <div class="shoveler2"></div>
+            </div>
+            <div flex="30">
+                <div layout>
+                    <a href="/showcase/revcontent-api-showcase-carousel-1.0/index.php" target="_blank" class="md-raised md-button" style="margin-right:8px;">Live Preview</a>
+                    <md-button class="md-raised md-primary">Download</md-button>
+                </div>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.</p>
+            </div>
+        </div>
+
+    </md-content>
+</md-dialog>
+
+<script type="text/javascript">
+
+    $(function() {
+
+        $('.shoveler1').contentSlider({
+            url: 'http://delivery.powr.mosterhout.dev2.dev.internal/api/v1/',
+            params: {
+                 api_key: '53df2dd2d67ba93d0b262c86918fcbc19c2784d3',
+                 pub_id: 45,
+                 widget_id: 98,
+                 type: 'json',
+                 domain: 'bloomberg.com'
+            }
+        });
+
+        $('.shoveler2').contentSlider({
+            url: 'https://trends.revcontent.com/api/v1/',
+            params: {
+                 api_key: 'a3ef3561e4a67bc7ef7e0aff5a4889d19007c957',
+                 pub_id: 307,
+                 widget_id: 67,
+                 type: 'json',
+                 domain: '247sports.com'
+            }
+        });
+
+    });
+
+</script>

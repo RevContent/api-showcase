@@ -1,0 +1,278 @@
+* {
+  position: relative;
+}
+
+html {
+  font-size: 62.5%;
+  line-height: 1.4; }
+
+body {
+  font-size: 1.6rem;
+  overflow: auto !important;
+/*  height: auto;*/
+  background-color: #efefef;
+  font-family: "Proxima Nova Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+html, body {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-touch-callout: none;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased; }
+
+md-select, md-card, md-list, md-toolbar, ul, ol, p, h1, h2, h3, h4, h5, h6 {
+  text-rendering: optimizeLegibility; }
+
+
+/* Defaults =====================================================================*/
+table {
+  margin-bottom: 20px;
+  max-width: 100%;
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: collapse;
+  background-color: transparent;
+}
+
+a {
+  color: #3f51b5;
+  text-decoration: none;
+}
+a:hover, a:focus {
+  text-decoration: underline;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+h1 {
+  font-size: 3.400rem;
+  font-weight: 400;
+  line-height: 4rem;
+}
+h2 {
+  font-size: 2.400rem;
+  font-weight: 400;
+  line-height: 3.2rem;
+}
+h3 {
+  font-size: 2.000rem;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+}
+h4 {
+  font-size: 1.600rem;
+  font-weight: 400;
+  letter-spacing: 0.010em;
+  line-height: 2.4rem;
+}
+p {
+  font-size: 1.6rem;
+  font-weight: 400;
+  letter-spacing: 0.010em;
+  line-height: 2.2rem;
+  margin: 1.6rem 0;
+}
+strong {
+  font-weight: 500;
+}
+td, th {
+  padding: 12px 6px;
+  text-align: left;
+}
+tr:nth-child(even) td {
+  background-color: #f5f5f5;
+}
+th {
+  border-bottom: 1px solid #ccc;
+  background-color: #f5f5f5;
+}
+blockquote {
+  border-left: 3px solid rgba(0, 0, 0, 0.12);
+  font-style: italic;
+  margin-left: 0;
+  padding-left: 16px;
+}
+
+/* Headings =====================================================================*/
+.md-display-4 {
+  font-size: 11.2rem;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  line-height: 11.2rem; }
+
+.md-display-3 {
+  font-size: 5.6rem;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  line-height: 5.6rem; }
+
+.md-display-2 {
+  font-size: 4.5rem;
+  font-weight: 400;
+  line-height: 6.4rem; }
+
+.md-display-1 {
+  font-size: 3.4rem;
+  font-weight: 400;
+  line-height: 4rem; }
+
+.md-headline {
+  font-size: 2.4rem;
+  font-weight: 400;
+  line-height: 3.2rem; }
+
+.md-title, .md-toolbar-tools {
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: 0.005em; }
+
+.md-subhead {
+  font-size: 1.6rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 2.4rem; }
+
+/* Body =====================================================================*/
+p, .md-body-1 {
+  font-size: 1.4rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 2rem !important; }
+
+.md-body-2 {
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 2.4rem; }
+
+.md-caption {
+  font-size: 1.2rem;
+  letter-spacing: 0.02em; }
+
+.md-button {
+  letter-spacing: 0.01em;
+}
+
+[disabled].md-button {
+  background-color: rgba(0,0,0,0.12) !important;
+}
+
+p {
+  font-family: "Proxima Nova Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+hr {
+  border: 0;
+  height: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Container ==================================================================*/
+#wrapper {
+  background-color: #efefef;
+}
+
+.container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+}
+.container-fluid {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* md-card =====================================================================*/
+
+iframe.preview {
+  width: 100%;
+}
+
+md-card {
+  background: #fff;
+  cursor: pointer;
+}
+
+/* md-card =====================================================================*/
+.banner {
+  text-align: center;
+  width: 100%;
+  padding: 20px;
+  margin: 0 0 30px;
+  color: #fff;
+  background: rgba(85, 85, 85, 0.8);
+  border-radius: 2px;
+}
+
+/* Helper =====================================================================*/
+
+.hide { display: none !important; }
+
+.text-center { text-align: center; }
+
+/* Base =====================================================================*/
+header {
+  -webkit-flex-shrink: 0;
+  -moz-flex-shrink: 0;
+  flex-shrink: 0;
+}
+
+main {
+  padding-top: 20px;
+  -webkit-flex-grow: 1;
+  -moz-flex-grow: 1;
+  flex-grow: 1;
+}
+
+footer {
+  padding: 20px 0;
+}
+
+/* Images ==============================================================*/
+img {
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+}
+.img-responsive {
+  max-height: 100%;
+  margin: 0 auto;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Dialog =====================================================================*/
+.md-dialog-container {
+  height: auto;
+}
+
+md-dialog  {
+  max-height: none;
+  margin-top: 15px;
+}
+
+md-dialog.wide {
+  width: 1000px;
+}
