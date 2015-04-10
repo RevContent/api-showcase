@@ -57,9 +57,9 @@
             <header>
                 <md-toolbar class="md-primary">
                     <div class="md-toolbar-tools container md-toolbar-tools-bottom" flex="" tabindex="0">
-                        <div layout="row" flex="">
+                        <div flex layout="row" layout-align="center center">
 
-                            <div flex style="position:absolute;">
+                            <div flex>
                                 <h1>RevContent API Showcase</h1>
                                 <a class="logo" href="/">
                                     <img src="/app/resources/img/revcontent-logo-dark.png">
