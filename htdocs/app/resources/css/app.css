@@ -166,6 +166,10 @@ p, .md-body-1 {
   letter-spacing: 0.01em;
 }
 
+.md-button-lg {
+  padding: 12px;
+}
+
 [disabled].md-button {
   background-color: rgba(0,0,0,0.12) !important;
 }
@@ -222,7 +226,38 @@ md-card {
   cursor: pointer;
 }
 
-/* md-card =====================================================================*/
+/* md-list =====================================================================*/
+md-list {
+  display: block;
+  padding: 8px 0px 8px 0px;
+}
+
+md-list-item, md-list-item .md-list-item-inner {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+/* item-detail =====================================================================*/
+.item-detail .feature {
+  padding-right: 30px;
+}
+
+.item-detail .description md-list-item {
+  margin-bottom: 16px;
+}
+
+.item-detail .description .md-button {
+  width: 100%;
+}
+
+/* banner =====================================================================*/
 .banner {
   text-align: center;
   width: 100%;

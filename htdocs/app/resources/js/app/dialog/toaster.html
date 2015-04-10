@@ -1,63 +1,31 @@
 <md-dialog class="wide">
     <md-content>
 
-        <h2 style="margin-right:240px;" class="md-display-1">Toaster</h2>
+        <h2 class="md-display-1">Toaster</h2>
 
-        <div layout layout-padding>
-            <div flex="70">
-                <div id="rc_toaster_wrapped" style="left:20px;" class="toast-in-toaster"></div>
+        <div class="item-detail" layout>
+
+            <div class="feature" flex="70">
+                <img class="img-responsive preview" src="http://assets.materialup.com/uploads/ec3f8a28-000d-4d92-937a-f3e230c99768/teaser.png" alt="Toaster">
             </div>
-            <div flex="30">
-                <div layout>
-                    <a href="/showcase/revcontent-api-showcase-toaster-1.0/index.html" target="_blank" class="md-raised md-button" style="margin-right:8px;">Live Preview</a>
-                    <md-button class="md-raised md-primary">Download</md-button>
-                </div>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.</p>
+
+            <div class="description" flex="30">
+                <div class="md-body-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.</div>
+
+                <md-list>
+                    <md-list-item class="md-3-line">
+                        <md-button href="/showcase/revcontent-api-showcase-toaster-1.0" class="md-raised md-button-lg" target="_blank">Live Preview</md-button>
+                    </md-list-item>
+                    <md-list-item class="md-3-line">
+                        <md-button href="" class="md-raised md-primary md-button-lg" target="_blank">Download</md-button>
+                    </md-list-item>
+                    <md-list-item class="md-3-line">
+                        <md-button href="" class="md-raised md-primary md-button-lg" target="_blank">Github</md-button>
+                    </md-list-item>
+                </md-list>
             </div>
+
         </div>
     </md-content>
 </md-dialog>
 
-    <script type="text/javascript">
-
-        $(document).ready(function() {
-            $("#rc_toaster_wrapped").hide();
-
-           $('body').on('click', '.rc_no_toast', function(){
-                $('#rc_toaster_wrapped').removeClass('toast-in-toaster').hide();
-            });
-
-            //Prepare the toaster's content
-            var endpoint      = 'https://trends.revcontent.com/api/v1/?';
-            var api_key       = 'a3ef3561e4a67bc7ef7e0aff5a4889d19007c957';
-            var pub_id        = 307;
-            var widget_id     = 67;
-            var domain        = "247sports.com";
-
-            var ajax = $.ajax({
-                url : endpoint,
-                method : 'GET',
-                dataType: 'json',
-                data: {
-                    'api_key' : api_key,
-                    'pub_id' : pub_id,
-                    'widget_id' : widget_id,
-                    'type' : 'json',
-                    'domain' : domain,
-                    'count' : 1
-                },
-                success: function(json) {
-                    var item = json[Math.floor(Math.random()*json.length)];
-                    $('#rc_toaster_wrapped').html('<div class="rc_toaster"></div><h1 class="rc_toaster_title">YOU MAY ALSO LIKE</h1><p class="rc_toaster_headline">'+item.headline+'</p><div class="rc_no_toast">X</div>');
-
-                    $(".rc_toaster").css('background-image', 'url(' + item.image + ')');
-                }
-            });
-
-            ajax.then(function() {
-                $("#rc_toaster_wrapped.toast-in-toaster").slideDown( "slow", function() {});
-            });
-
-        });
-
-    </script>
