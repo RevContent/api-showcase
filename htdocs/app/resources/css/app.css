@@ -11,7 +11,6 @@ body {
   background-color: rgb(229, 229, 229);
   /*overflow: auto !important;*/
 /*  height: auto;*/
-  background-color: #efefef;
   font-family: "Proxima Nova Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
@@ -279,6 +278,7 @@ header {
   -webkit-flex-shrink: 0;
   -moz-flex-shrink: 0;
   flex-shrink: 0;
+  /*z-index: 100;*/
 }
 
 header md-toolbar.md-default-theme {

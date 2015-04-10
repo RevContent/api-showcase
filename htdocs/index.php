@@ -53,8 +53,7 @@
 
     </head>
     <body>
-
-        <div id="wrapper">
+        <div id="wrapper" layout="column" layout-fill>
             <header>
                 <md-toolbar class="md-primary">
                     <div class="md-toolbar-tools container md-toolbar-tools-bottom" flex="" tabindex="0">
@@ -85,12 +84,6 @@
             </header>
 
             <main class="container">
-                <div layout layout-padding>
-                    <md-whiteframe class="md-whiteframe-z1 banner">
-                        <div class="md-banner">Hi, We’re <strong>rev:content</strong>. A native network making brands live up to their full potential. That’s it. And this is our API showcase.</div>
-                    </md-whiteframe>
-                </div>
-
                 <div ui-view="main"></div>
             </main>
 
