@@ -89,7 +89,7 @@
 
             <footer>
                 <div class="container">
-                    © 2015, rev:content All Rights Reserved. <span class="padding">&middot;</span> <a href="404.html" title=""><strong>Legal Notice</strong></a>
+                    © 2015, rev:content All Rights Reserved. <span class="padding">&middot;</span> <a href="http://support.revcontent.com/support/home" target="_blank" title=""><strong>Legal Notice</strong></a>
                 </div>
             </footer>
         </div>

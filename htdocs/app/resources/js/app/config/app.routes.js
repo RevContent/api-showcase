@@ -44,7 +44,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                     },
                     carousel: {
                         title: 'Carousel',
-                        img: 'carousel.jpg',
+                        img: 'carousel1.jpg',
                         description: 'None',
                         link: 'revcontent-api-showcase-carousel-1.0',
                     },
