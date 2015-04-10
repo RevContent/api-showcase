@@ -90,8 +90,12 @@
             <footer>
                 <div class="container">
                     © 2015, rev:content All Rights Reserved.
-                    <a style="border-right: 1px solid #000;padding: 0 10px;" href="http://support.revcontent.com/support/solutions/articles/158282-privacy-policy" target="_blank" title=""><strong>Privacy Policy</strong></a>
-                    <a style="padding: 0 10px;" href="http://support.revcontent.com/support/home" target="_blank" title=""><strong>Terms and Conditions</strong></a>
+                    <md-button href="http://support.revcontent.com/support/solutions/articles/158282-privacy-policy" target="_blank" title=""><strong>Privacy Policy</strong></md-button>
+                    <md-button href="http://support.revcontent.com/support/home" target="_blank" title=""><strong>Terms and Conditions</strong></md-button>
+
+                    <div style="float:right">
+                        Don't have an account? <md-button class="md-primary" target="_blank" href="https://www.revcontent.com/signup/publisher">Join the native rev:olution</md-button>
+                    </div>
                 </div>
             </footer>
         </div>
