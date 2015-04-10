@@ -57,11 +57,24 @@
                     <div class="md-toolbar-tools container md-toolbar-tools-bottom" flex="" tabindex="0">
                         <div layout="row" flex="">
 
-                            <a class="md-button md-default-theme" ng-href="{{ is_granted('ROLE_SUPER_ADMIN') ? '/admin' : '/' }}" tabindex="0">
-                                <span>API ShowCase</span>
-                            </a>
+                            <div flex style="position:absolute;">
+                                <h1>RevContent API Showcase</h1>
+                                <a class="logo" href="/">
+                                    <img src="/app/resources/img/revcontent-logo-dark.png">
+                                </a>
+                            </div>
 
                             <div flex=""></div>
+
+                            <a class="md-button" target="_self" ng-href="" tabindex="0" style="margin-right:8px;">
+                                <span>Docs</span>
+                                <md-tooltip>Read Up!</md-tooltip>
+                            </a>
+
+                            <a class="md-button" target="_self" ng-href="" tabindex="0">
+                                <span>Support</span>
+                                <md-tooltip>How can we help?</md-tooltip>
+                            </a>
 
                         </div>
                     </div>

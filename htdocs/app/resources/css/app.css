@@ -8,6 +8,7 @@ html {
 
 body {
   font-size: 1.6rem;
+  background-color: rgb(229, 229, 229);
   /*overflow: auto !important;*/
 /*  height: auto;*/
   background-color: #efefef;
@@ -172,12 +173,10 @@ hr {
 
 /* Container ==================================================================*/
 #wrapper {
-  background-color: #efefef;
+  background-color: rgb(229, 229, 229);
 }
 
 .container {
-  padding-right: 15px;
-  padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
 }
@@ -198,8 +197,6 @@ hr {
 }
 .container-fluid {
   width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
 }
@@ -237,6 +234,19 @@ header {
   -webkit-flex-shrink: 0;
   -moz-flex-shrink: 0;
   flex-shrink: 0;
+}
+
+header md-toolbar.md-default-theme {
+  background: #fff;
+}
+
+header md-toolbar.md-default-theme .md-button {
+  color: #333;
+}
+
+header h1 {
+  position: absolute;
+  left: -99999px;
 }
 
 main {
