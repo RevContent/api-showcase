@@ -19,7 +19,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
             }
         })
         .state('post', {
-            url: "^{id:.*}",
+            url: "/{id:.*}",
             controller: 'PostIndexCtrl',
             onEnter: ['$stateParams', '$rootScope', '$state', '$mdDialog', '$location', '$mdCardContent', function($stateParams, $rootScope, $state, $mdDialog, $location, $mdCardContent) {
 
@@ -27,31 +27,31 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                     instream: {
                         title: 'Instream',
                         img: 'instream.jpg',
-                        description: 'In-stream native content can look, feel, and function seamlessly across mobile, desktop, or tablet. With the API your in full control of the integration on your property, inject target content in-stream on your homepage, mobile view, or where it fits best for your users.',
+                        description: 'In-stream native sponsored content can look, feel, and function seamlessly across mobile, desktop, or tablet. With the API you\'re in full control of the integration on your web property, inject targeted content in-stream on your homepage, mobile view, or where it fits best for your users.',
                         link: 'revcontent-api-showcase-instream-1.0',
                     },
                     'end-of-gallery': {
                         title: 'End of Gallery',
                         img: 'eog1.jpg',
-                        description: 'Keep the engagement going long after the last page of your gallery. Using our API on the last page of your galleries and top 10 lists is a great way to guide your users to their next destination.',
+                        description: 'Keep the engagement going long after the last page of your gallery. Using our API on the last page of your photo galleries, top 10 lists, or quizes is a great way to guide your users to their next destination.',
                         link: 'revcontent-api-showcase-endofgallery-1.0',
                     },
                     grid: {
                         title: 'Grid',
                         img: 'grid1.jpg',
-                        description: 'None',
+                        description: 'AJAX-powered infinite scrolling UI’s are everywhere these days, with our API you can easily integrate sponsored content into your own implementation. Utilizing our count and offset request parameters to fuel the implementation, you can create a truly native experience that will engage user’s as they scroll.',
                         link: 'revcontent-api-showcase-grid-1.0',
                     },
                     carousel: {
                         title: 'Carousel',
                         img: 'carousel1.jpg',
-                        description: 'None',
+                        description: 'If your site design utilizes a carousel, you can easily integrate sponsored content from our API. Carousels allow you to place many pieces of content into a single, coveted space and our API allows you to make sponsored content inclusion to be completely native to your site’s design and functionality.',
                         link: 'revcontent-api-showcase-carousel-1.0',
                     },
                     toaster: {
                         title: 'Toaster',
                         img: 'toast.jpg',
-                        description: 'None',
+                        description: 'Pop! Content toasters are an engaging way to interact with your readers, once they scroll past 50% of your page’s content, a toaster appears in the lower right corner - or the bottom of the screen in mobile. There are many ways to use content toasters on your site, and with the API, sponsored content can easily be integrated into your own implementation.',
                         link: 'revcontent-api-showcase-toaster-1.0',
                     }
                 };
