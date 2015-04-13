@@ -180,6 +180,10 @@ p, .md-body-1 {
   padding: 12px;
 }
 
+.text-danger {
+  color: #c7254e;
+}
+
 [disabled].md-button {
   background-color: rgba(0,0,0,0.12) !important;
 }
@@ -225,6 +229,11 @@ hr {
   margin-left: auto;
 }
 
+/* md-content ==================================================================*/
+md-content {
+  background: transparent;
+}
+
 /* md-card =====================================================================*/
 
 iframe.preview {
@@ -233,6 +242,13 @@ iframe.preview {
 
 md-card {
   background: #fff;
+}
+
+md-content md-card {
+  padding: 15px 30px;
+}
+
+.grid md-card {
   cursor: pointer;
 }
 

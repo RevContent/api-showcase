@@ -18,6 +18,16 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                 }
             }
         })
+        .state('docs', {
+            url: "/docs",
+            sticky: true,
+            views: {
+                main: {
+                    templateUrl: "app/resources/js/app/docs/docs.html",
+                    controller: 'DocsCtrl'
+                }
+            }
+        })
         .state('post', {
             url: "/{id:.*}",
             controller: 'PostIndexCtrl',

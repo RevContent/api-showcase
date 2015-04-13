@@ -3,5 +3,6 @@ var app = angular.module('app', [
     'ct.ui.router.extras.sticky',
     'ngAnimate',
     'ngMaterial',
-    'ngMessages'
+    'ngMessages',
+    'hljs'
 ]);

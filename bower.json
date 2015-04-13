@@ -13,6 +13,8 @@
     "ui-router-extras": "master",
     "animate.css": "~3",
     "imagesloaded": "~3",
-    "sanitize-css": "*"
+    "sanitize-css": "*",
+    "bootpag": "~1",
+    "angular-highlightjs": "latest"
   }
 }

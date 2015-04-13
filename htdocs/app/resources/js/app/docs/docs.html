@@ -1,0 +1,212 @@
+<md-content style="background:transparent;" layout="column" layout-padding>
+
+    <md-card>
+        <h2 class="md-display-1">API Documentation</h2>
+        <p class="md-subhead">The RevContent API enables you to receive the same ad fill you would see in our traditional ad placements in a more flexible format, including json and xml.</p>
+
+        <h3 class="md-title">URI / Endpoint</h3>
+
+        <div hljs language="bash"># Content-Type application/json or text/xml
+GET http://delivery.powr.mosterhout.dev2.dev.internal/api/v1/</div>
+
+    </md-card>
+
+    <md-card>
+
+        <h2 class="md-display-1">Request</h2>
+
+        <p class="md-subhead">All requests to the API are sent over HTTP and will utilize the following parameter set.</p>
+
+        <table class="table table-condensed table-hover">
+            <thead>
+                <tr>
+                    <th>Property</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code class="text-danger">api_key</code></td>
+                    <td><var>string</var></td>
+                    <td></td>
+                    <td>Your account's assigned API key.</td>
+                </tr>
+                <tr>
+                    <td><code class="text-danger">pub_id</code></td>
+                    <td><var>integer</var></td>
+                    <td></td>
+                    <td>Your assigned account ID.</td>
+                </tr>
+                <tr>
+                    <td><code class="text-danger">widget_id</code></td>
+                    <td><var>integer</var></td>
+                    <td></td>
+                    <td>The ID of the widget associated with this request.</td>
+                </tr>
+                <tr>
+                    <td><code class="text-danger">domain</code></td>
+                    <td><var>string</var></td>
+                    <td></td>
+                    <td>The url encoded domain name associated with this widget.</td>
+                </tr>
+                <tr>
+                    <td><code>user_ip</code></td>
+                    <td><var>string</var></td>
+                    <td><code>Request IP</code>
+                    </td>
+                    <td>The end user's IP address required because response is tailored to end users geography.</td>
+                </tr>
+                <tr>
+                    <td><code>referer</code></td>
+                    <td><var>string</var></td>
+                    <td><code>empty</code></td>
+                    <td>The end user's url encoded webpage url that the request is being made from.</td>
+                </tr>
+                <tr>
+                    <td><code>width</code></td>
+                    <td><var>integer</var></td>
+                    <td><code>1280</code></td>
+                    <td>The end user's screen width.</td>
+                </tr>
+                <tr>
+                    <td><code>img_w</code></td>
+                    <td><var>integer</var></td>
+                    <td><code>420</code></td>
+                    <td>The default creative image width.</td>
+                </tr>
+                <tr>
+                    <td><code>img_h</code></td>
+                    <td><var>integer</var></td>
+                    <td><code>315</code></td>
+                    <td>The default creative image height.</td>
+                </tr>
+                <tr>
+                </tr><tr>
+                    <td><code>format</code></td>
+                    <td><var>string</var></td>
+                    <td><code>json</code></td>
+                    <td>The format of the response, json or xml.</td>
+                </tr>
+                <tr>
+                    <td><code>count</code></td>
+                    <td><var>integer</var></td>
+                    <td><code>25</code></td>
+                    <td>Number of content items you would like in the response.</td>
+                </tr>
+                <tr>
+                    <td><code>offset</code></td>
+                    <td><var>integer</var></td>
+                    <td><code>0</code></td>
+                    <td>The content item that you would like the response to start from.</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">
+                        <div class="md-caption">*Properties marked <span class="text-danger">red</span> are required.</div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <h3 class="md-title">Example</h3>
+
+        <div layout>
+
+            <div style="flex: 0 0 200px;">
+                <md-button ng-class="{'md-primary': (active.request == 'http')}" ng-click="active.request = 'http'" class="md-raised md-hue-1">http</md-button>
+                <md-button ng-class="{'md-primary': (active.request == 'curl')}" ng-click="active.request = 'curl'" class="md-raised md-hue-1">curl</md-button>
+            </div>
+
+            <div>
+                <div ng-show="active.request == 'http'" hljs language="bash"># HTTP GET Request
+https://delivery.powr.mosterhout.dev2.dev.internal/api/v1/?api_key=53df2dd2d67ba93d0b262c86918fcbc19c2784d3&pub_id=45&widget_id=98&domain=bloomberg.com&user_ip=71.100.91.34&referer=www.revcontent.com&format=json&count=25&offset=0</div>
+
+                <div ng-show="active.request == 'curl'" hljs language="bash"># Sample cURL call with No Cache-control
+curl -X GET -H "Cache-Control: no-cache" https://delivery.powr.mosterhout.dev2.dev.internal/api/v1/?api_key=53df2dd2d67ba93d0b262c86918fcbc19c2784d3&pub_id=45&widget_id=98&domain=bloomberg.com&user_ip=71.100.91.34&referer=www.revcontent.com&format=json&count=25&offset=0</div>
+            </div>
+
+        </div>
+
+    </md-card>
+
+    <md-card>
+
+        <h2 class="md-display-1">Response</h2>
+
+        <p class="md-subhead">The expected response values in the return payload are shown below.</p>
+
+        <table class="table table-condensed table-hover" style="">
+            <thead>
+                <tr>
+                    <th>Property</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>headline</code></td>
+                    <td>Content headline.</td>
+                </tr>
+                <tr>
+                    <td><code>url</code></td>
+                    <td>Content destination URL.</td>
+                </tr>
+                <tr>
+                    <td><code>image</code></td>
+                    <td>URL of the content image.</td>
+                </tr>
+                <tr>
+                    <td><code>brand</code></td>
+                    <td>Who is providing the content.</td>
+                </tr>
+                <tr>
+                    <td><code>uid</code></td>
+                    <td>Unique content id to the system.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 class="md-title">Example</h3>
+
+        <div layout>
+
+            <div style="flex: 0 0 200px;">
+                <md-button ng-class="{'md-primary': (active.response == 'json')}" ng-click="active.response = 'json'" class="md-raised md-hue-1">json</md-button>
+                <md-button ng-class="{'md-primary': (active.response == 'xml')}" ng-click="active.response = 'xml'" class="md-raised md-hue-1">xml</md-button>
+            </div>
+
+            <div>
+                <div ng-show="active.response == 'json'" hljs language="javascript">
+[
+    {
+        "headline": "20 Mind-Blowing Facts You Didn't Know",
+        "url":
+        "jmp.revcontent.com/c/adclick.php?ad=cHVibGlzaGVyX2lkPTAmem9uZT0wJm9mZnNldD0xJmFkX2NvdW50PTY",
+        "image": "img.revcontent.com/?url=http://servedby.revcontent.com/ad_images/25/25701.jpg",
+        "brand": "Trending Solutions",
+        "uid": "sponsored_248",
+    },
+    ...
+]</div>
+
+                <div ng-show="active.response == 'xml'" hljs language="xml">
+<widget>
+    <element>
+        <headline>20 Mind-Blowing Facts You Didn't Know</headline>
+        <url>jmp.revcontent.com/c/adclick.php?ad=cHVibGlzaGVyX2lkPTAmem9uZT0wJm9mZnNldD0xJmFkX2NvdW50PTY</url>
+        <image>img.revcontent.com/?url=http://servedby.revcontent.com/ad_images/25/25701.jpg</image>
+        <brand>Trending Solutions</brand>
+        <uid>sponsored_248</uid>
+    </element>
+...
+</widget></div>
+            </div>
+
+        </div>
+
+    </md-card>
+
+</md-content>

@@ -25,9 +25,8 @@
         <script src="app/resources/vendor/ui-router-extras/release/modular/ct-ui-router-extras.sticky.js"></script>
         <script src="app/resources/vendor/angular-material/angular-material.js"></script>
         <script src="app/resources/vendor/angular-messages/angular-messages.js"></script>
-        <script src="app/resources/vendor/imagesloaded/imagesloaded.pkgd.js"></script>
-        <script src="app/resources/vendor/bootpag/lib/jquery.bootpag.js"></script>
         <script src="app/resources/vendor/lodash/dist/lodash.js"></script>
+        <script src="app/resources/vendor/highlightjs/highlight.pack.js"></script>
 
         <!-- plugin js -->
         <script src="showcase/revcontent-api-showcase-grid-1.0/js/grid.js"></script>
@@ -41,12 +40,10 @@
         <script src="app/resources/js/app/app.filters.js"></script>
         <script src="app/resources/js/app/app.directives.js"></script>
         <script src="app/resources/js/app/grid/grid.controller.js"></script>
+        <script src="app/resources/js/app/docs/docs.controller.js"></script>
+        <script src="app/resources/vendor/angular-highlightjs/angular-highlightjs.js"></script>
 
-        <!-- plugin css -->
-        <link rel="stylesheet" type="text/css" href="showcase/revcontent-api-showcase-grid-1.0/css/grid.css">
-        <link rel="stylesheet" type="text/css" href="showcase/revcontent-api-showcase-carousel-1.0/css/carousel.css">
-        <link rel="stylesheet" type="text/css" href="showcase/revcontent-api-showcase-toaster-1.0/css/toaster.css">
-
+        <link href="app/resources/vendor/highlightjs/styles/railscasts.css" rel="stylesheet" type="text/css" media="screen" />
         <link href="app/resources/vendor/sanitize-css/dist/sanitize.css" rel="stylesheet" type="text/css" media="screen" />
         <link href="app/resources/vendor/angular-material/angular-material.css" rel="stylesheet" type="text/css" media="screen" />
         <link href="app/resources/css/app.css" rel="stylesheet" type="text/css" media="screen" />
@@ -68,7 +65,7 @@
 
                             <div flex=""></div>
 
-                            <a class="md-button" target="_self" ng-href="" tabindex="0" style="margin-right:8px;">
+                            <a class="md-button" ui-sref="docs" tabindex="0" style="margin-right:8px;">
                                 <span>Docs</span>
                                 <md-tooltip>Read Up!</md-tooltip>
                             </a>
