@@ -42,7 +42,7 @@ jQuery.fn.reverse = [].reverse;
                                         '<p></p>' +
                                     '</div>' +
                                     '<div class="loader" style="width: 100%; height:100%; display:table;">' +
-                                        '<div style="display:table-cell; vertical-align:middle; text-align: center;"><img src="/images/spinner-dots.gif" /></div>' +
+                                        '<div style="display:table-cell; vertical-align:middle; text-align: center;"><img src="/app/resources/img/spinner-dots.gif" /></div>' +
                                     '</div>' +
                                 '</div>' +
                             '</div>' +

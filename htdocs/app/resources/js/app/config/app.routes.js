@@ -30,7 +30,6 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
         })
         .state('post', {
             url: "/{id:.*}",
-            controller: 'PostIndexCtrl',
             onEnter: ['$stateParams', '$rootScope', '$state', '$mdDialog', '$location', '$mdCardContent', function($stateParams, $rootScope, $state, $mdDialog, $location, $mdCardContent) {
 
                 var plugins = {

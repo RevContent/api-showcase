@@ -129,16 +129,12 @@
 
     <!-- Content Toaster HTML -->
     <div id="rc_toaster_wrapped" class="toast-in-toaster">
-        
+
     </div>
 
     <!-- jQuery Version 1.11.1 -->
     <script src="js/jquery.js"></script>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
-
-  
     <script type="text/javascript">
 
         $(document).ready(function() {
@@ -148,13 +144,13 @@
                 $('#rc_toaster_wrapped').removeClass('toast-in-toaster').hide();
             });
 
-            //Prepare the toaster's content 
-            var endpoint      = 'https://trends.revcontent.com/api/v1/?'; 
+            //Prepare the toaster's content
+            var endpoint      = 'https://trends.revcontent.com/api/v1/?';
             var api_key       = 'a3ef3561e4a67bc7ef7e0aff5a4889d19007c957';
             var pub_id        = 307;
             var widget_id     = 67;
             var domain        = "247sports.com";
-            var clientCall    = $.getJSON(endpoint, 
+            var clientCall    = $.getJSON(endpoint,
             {
                 'api_key' : api_key,
                 'pub_id' : pub_id,
@@ -163,7 +159,7 @@
                 'domain' : domain,
                 'count' : 1
             }, function(data) {
-                
+
                 var item = data[Math.floor(Math.random()*data.length)];
                 $('#rc_toaster_wrapped').html('<div class="rc_toaster"></div><h1 class="rc_toaster_title">YOU MAY ALSO LIKE</h1><p class="rc_toaster_headline">'+item.headline+'</p><div class="rc_no_toast">X</div>');
 
@@ -171,7 +167,7 @@
 
             });
         });
-        
+
         //Show the toaster on scroll
         $(document).scroll(function(e){
 
@@ -181,9 +177,9 @@
 
             if(scrollPercent > 20) {
                 popToastUp();
-            } 
-            
-            function popToastUp() { 
+            }
+
+            function popToastUp() {
 
                 var toast = $("#rc_toaster_wrapped.toast-in-toaster");
 
@@ -192,7 +188,7 @@
                 });
             }
         });
-        
+
     </script>
 
 </body>
