@@ -75,59 +75,6 @@
             </h1>
         </div>
     </div>
-    <!-- /.row -->
-
-    <!-- Post One -->
-    <div class="row">
-        <div class="col-md-3 col-xs-5">
-            <a href="#">
-                <img class="img-responsive" src="http://placehold.it/420x315" alt="">
-            </a>
-        </div>
-        <div class="col-md-7">
-            <h3><a href="#">Post One Headline</a></h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium veniam exercitationem expedita laborum at voluptate. Labore, voluptates totam at aut nemo deserunt rem magni pariatur quos perspiciatis atque eveniet unde.</p>
-            <a class="btn btn-primary" href="#">View Post <span class="glyphicon glyphicon-chevron-right"></span></a>
-        </div>
-    </div>
-    <!-- /.row -->
-
-    <hr>
-
-
-
-    <!-- Post Three -->
-    <div class="row">
-        <div class="col-md-3 col-xs-5">
-            <a href="#">
-                <img class="img-responsive" src="http://placehold.it/420x315" alt="">
-            </a>
-        </div>
-        <div class="col-md-7">
-            <h3><a href="#">Post Three Headline</a></h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis, temporibus, dolores, at, praesentium ut unde repudiandae voluptatum sit ab debitis suscipit fugiat natus velit excepturi amet commodi deleniti alias possimus!</p>
-            <a class="btn btn-primary" href="#">View Post <span class="glyphicon glyphicon-chevron-right"></span></a>
-        </div>
-    </div>
-    <!-- /.row -->
-
-    <hr>
-
-    <!-- Post Four -->
-    <div class="row">
-
-        <div class="col-md-3 col-xs-5">
-            <a href="#">
-                <img class="img-responsive" src="http://placehold.it/420x315" alt="">
-            </a>
-        </div>
-        <div class="col-md-7">
-            <h3><a href="#">Post Four Headline</a></h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, quidem, consectetur, officia rem officiis illum aliquam perspiciatis aspernatur quod modi hic nemo qui soluta aut eius fugit quam in suscipit?</p>
-            <a class="btn btn-primary" href="#">View Post <span class="glyphicon glyphicon-chevron-right"></span></a>
-        </div>
-    </div>
-    <!-- /.row -->
 
     <div class="row">
         <div class="col-md-12">
@@ -146,50 +93,6 @@
             <div class="shoveler2"></div>
         </div>
     </div>
-
-    <hr />
-
-    <!-- Pagination -->
-    <div class="row text-center">
-        <div class="col-lg-12">
-            <ul class="pagination">
-                <li>
-                    <a href="#">&laquo;</a>
-                </li>
-                <li class="active">
-                    <a href="#">1</a>
-                </li>
-                <li>
-                    <a href="#">2</a>
-                </li>
-                <li>
-                    <a href="#">3</a>
-                </li>
-                <li>
-                    <a href="#">4</a>
-                </li>
-                <li>
-                    <a href="#">5</a>
-                </li>
-                <li>
-                    <a href="#">&raquo;</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <!-- /.row -->
-
-    <hr>
-
-    <!-- Footer -->
-    <footer>
-        <div class="row">
-            <div class="col-lg-12">
-                <p>Copyright &copy; Your Website 2015</p>
-            </div>
-        </div>
-        <!-- /.row -->
-    </footer>
 
 </div>
 <!-- /.container -->
