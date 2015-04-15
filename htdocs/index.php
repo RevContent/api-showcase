@@ -85,7 +85,7 @@
                     <md-button href="http://support.revcontent.com/support/home" target="_blank" title=""><strong>Terms and Conditions</strong></md-button>
 
                     <div style="float:right">
-                        Don't have an account? <md-button class="md-primary" target="_blank" href="https://www.revcontent.com/signup/publisher">Join the native rev:olution</md-button>
+                        Don't have an account? <md-button class="md-primary" target="_blank" href="https://v2.revcontent.com/signup">Join the native rev:olution</md-button>
                     </div>
                 </div>
             </footer>
