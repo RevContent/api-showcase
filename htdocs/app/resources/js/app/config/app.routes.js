@@ -51,12 +51,6 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                         description: 'AJAX-powered infinite scrolling UI’s are everywhere these days, with our API you can easily integrate sponsored content into your own implementation. Utilizing our count and offset request parameters to fuel the implementation, you can create a truly native experience that will engage user’s as they scroll.',
                         link: 'revcontent-api-showcase-scrollingexp-1.0',
                     },
-                    carousel: {
-                        title: 'Carousel',
-                        img: 'carousel.jpg',
-                        description: 'If your site design utilizes a carousel, you can easily integrate sponsored content from our API. Carousels allow you to place many pieces of content into a single, coveted space and our API allows you to make sponsored content inclusion to be completely native to your site’s design and functionality.',
-                        link: 'revcontent-api-showcase-carousel-1.0',
-                    },
                     toaster: {
                         title: 'Toaster',
                         img: 'toast.jpg',
