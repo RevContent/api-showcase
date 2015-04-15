@@ -1,0 +1,3 @@
+[submodule "htdocs/api-showcase"]
+	path = htdocs/api-showcase
+	url = https://github.com/RevContent/api-showcase.git
