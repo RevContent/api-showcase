@@ -34,7 +34,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
 
                 var plugins = {
                     instream: {
-                        title: 'Instream',
+                        title: 'In-stream',
                         img: 'instream.jpg',
                         description: 'In-stream native sponsored content can look, feel, and function seamlessly across mobile, desktop, or tablet. With the API you\'re in full control of the integration on your web property, inject targeted content in-stream on your homepage, mobile view, or where it fits best for your users.',
                         link: 'revcontent-api-showcase-instream-1.0',

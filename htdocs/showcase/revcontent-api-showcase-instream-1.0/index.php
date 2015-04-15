@@ -61,7 +61,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Instream Example</title>
+    <title>In-stream Example</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -124,7 +124,7 @@
         <!-- Page Heading -->
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Instream
+                <h1 class="page-header">In-stream
                     <small>rev:content Native API</small>
                 </h1>
             </div>
