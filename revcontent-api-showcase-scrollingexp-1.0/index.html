@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title></title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link href="css/bootstrap.css" rel="stylesheet">
+
+  <link href="css/style.css" rel="stylesheet">
+
+  <link href="css/example.css" rel="stylesheet">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+</head>
+
+<body>
+   <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Showcase Example </a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#">Life</a>
+                    </li>
+                    <li>
+                        <a href="#">News</a>
+                    </li>
+                    <li>
+                        <a href="#">Style</a>
+                    </li>
+                    <li>
+                        <a href="#">Culture</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+     <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Scrolling Experience
+                    <small>rev:content Native API</small>
+                </h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <img alt="" src="http://placehold.it/750x500" class="img-responsive">
+            </div>
+            <div class="col-md-4">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
+                <h3>Project Details</h3>
+                <ul>
+                    <li>Lorem Ipsum</li>
+                    <li>Dolor Sit Amet</li>
+                    <li>Consectetur</li>
+                    <li>Adipiscing Elit</li>
+                </ul>
+            </div>
+        </div>
+        <br/><hr /><br />
+            <div role="main">
+
+            <ul id="container" class="tiles-wrap animated">
+              <!-- These is where we place content loaded from the Wookmark API -->
+            </ul>
+
+            <div id="loader">
+              <div id="loaderCircle"></div>
+            </div>
+
+          </div>
+
+      </div>
+
+
+
+
+
+  <!-- include jQuery -->
+  <script src="js/jquery.js"></script>
+
+  <!-- Include the imagesLoaded plug-in -->
+  <script src="js/imagesloaded.pkgd.min.js"></script>
+
+  <!-- Include the plug-in -->
+  <script src="js/wookmark.js"></script>
+
+  <!-- Once the page is loaded, initalize the plug-in. -->
+
+  <script type="text/javascript">
+    (function ($) {
+      var handler = null,
+          page = 0,
+          isLoading = false,
+          apiURL = 'https://trends.revcontent.com/api/v1/?api_key=a3ef3561e4a67bc7ef7e0aff5a4889d19007c957&pub_id=307&widget_id=67&domain=247sports.com&count=20&&format=json',
+          container = '#container',
+          $loaderCircle = $('#loaderCircle'),
+          wookmark = undefined,
+          options = {
+            offset: 10, // Optional, the distance between grid items
+            itemWidth: 200 // Optional, the width of a grid item
+          };
+
+      /**
+       * When scrolled all the way to the bottom, add more tiles.
+       */
+      function onScroll(event) {
+        // Only check when we're not still waiting for data.
+        if(!isLoading) {
+          // Check if we're within 100 pixels of the bottom edge of the broser window.
+          var closeToBottom = ($(window).scrollTop() + $(window).height() > $(document).height() - 100);
+          if (closeToBottom) {
+            loadData();
+          }
+        }
+      };
+
+      /**
+       * Refreshes the layout after all images have loaded
+       */
+      function applyLayout() {
+        imagesLoaded(container, function () {
+          if (wookmark === undefined) {
+            wookmark = new Wookmark(container);
+          } else {
+            wookmark.initItems();
+            wookmark.layout(true);
+          }
+        });
+      };
+
+      /**
+       * Loads data from the API.
+       */
+      function loadData() {
+        isLoading = true;
+        $loaderCircle.show();
+
+        $.ajax({
+          //url: apiURL + "&offset=" + page,
+          url: apiURL,
+          dataType: 'json',
+          //data: {offset: page}, // Page parameter to make sure we load new data
+          success: onLoadData
+        });
+
+
+      };
+
+      /**
+       * Receives data from the API, creates HTML for images and updates the layout
+       */
+      function onLoadData(data) {
+
+
+        isLoading = false;
+        $loaderCircle.hide();
+
+        // Increment page index for future calls.
+        page=page+20;
+
+        // Create HTML for the images.
+        var html = '';
+        var i=0, length=data.length, image;
+        for(; i<length; i++) {
+          image = data[i];
+          html += '<li>';
+
+          // Image tag (preview in Wookmark are 200px wide, so we calculate the height based on that).
+          html += '<img src="'+image.image+'" width="190" height="'+ Math.floor(Math.random()*(230-80+1)+80) +'">';
+
+          // Image title.
+          html += '<p>'+image.headline+'</p>';
+
+          html += '</li>';
+        }
+
+        // Add image HTML to the page.
+        $(container).append(html);
+
+        // Apply layout.
+        applyLayout();
+      };
+
+      // Capture scroll event.
+      $(document).bind('scroll', onScroll);
+
+      // Load first data from the API.
+      loadData();
+    })(jQuery);
+  </script>
+
+</body>
+</html>
