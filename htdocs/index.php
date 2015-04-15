@@ -70,7 +70,7 @@
                                 <md-tooltip>Read Up!</md-tooltip>
                             </a>
 
-                            <a class="md-button" target="_blank" ng-href="http://support.revcontent.com/support/home" tabindex="0">
+                            <a class="md-button" target="_blank" ng-href="http://support.revcontent.com/support/solutions/folders/4000004477" tabindex="0">
                                 <span>Support</span>
                                 <md-tooltip>How can we help?</md-tooltip>
                             </a>
