@@ -14,8 +14,6 @@
 
         <link rel="shortcut icon" href="/app/resources/img/favicon.ico">
 
-        <link rel="stylesheet" href="//f.fontdeck.com/s/css/uH5+KWQnibDTJRYggGJ9XZLTAgw/api.showcase.mosterhout.dev2.dev.internal/47418.css" type="text/css" />
-
         <script src="app/resources/vendor/jquery/dist/jquery.js"></script>
         <script src="app/resources/vendor/angular/angular.js"></script>
         <script src="app/resources/vendor/angular-aria/angular-aria.js"></script>
@@ -28,11 +26,6 @@
         <script src="app/resources/vendor/lodash/dist/lodash.js"></script>
         <script src="app/resources/vendor/highlightjs/highlight.pack.js"></script>
 
-        <!-- plugin js -->
-        <script src="showcase/revcontent-api-showcase-grid-1.0/js/grid.js"></script>
-        <script src="showcase/revcontent-api-showcase-carousel-1.0/js/shoveler.js"></script>
-        <!-- toaster no plugin js -->
-
         <!-- app js -->
         <script src="app/resources/js/app/app.module.js"></script>
         <script src="app/resources/js/app/config/app.config.js"></script>
@@ -43,6 +36,7 @@
         <script src="app/resources/js/app/docs/docs.controller.js"></script>
         <script src="app/resources/vendor/angular-highlightjs/angular-highlightjs.js"></script>
 
+        <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,500,900,300' rel='stylesheet' type='text/css'>
         <link href="app/resources/vendor/highlightjs/styles/railscasts.css" rel="stylesheet" type="text/css" media="screen" />
         <link href="app/resources/vendor/sanitize-css/dist/sanitize.css" rel="stylesheet" type="text/css" media="screen" />
         <link href="app/resources/vendor/angular-material/angular-material.css" rel="stylesheet" type="text/css" media="screen" />
