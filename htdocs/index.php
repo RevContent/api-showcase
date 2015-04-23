@@ -41,33 +41,41 @@
         <link href="app/resources/vendor/sanitize-css/dist/sanitize.css" rel="stylesheet" type="text/css" media="screen" />
         <link href="app/resources/vendor/angular-material/angular-material.css" rel="stylesheet" type="text/css" media="screen" />
         <link href="app/resources/css/app.css" rel="stylesheet" type="text/css" media="screen" />
+        <link href="app/resources/css/v2-logo.css" rel="stylesheet" type="text/css" media="screen" />
 
     </head>
     <body>
         <div id="wrapper" layout="column" layout-fill>
             <header>
                 <md-toolbar class="md-primary">
-                    <div class="md-toolbar-tools container md-toolbar-tools-bottom" flex="" tabindex="0">
-                        <div flex layout="row" layout-align="center center">
+
+                    <div class="container" layout layout-align="center center" tabindex="0">
+
+                        <div class="md-toolbar-tools" tabindex="0">
 
                             <div flex>
-                                <h1>RevContent API Showcase</h1>
-                                <a class="logo" href="/">
-                                    <img src="/app/resources/img/revcontent-logo-dark.png">
-                                </a>
+                                <div class="navbar-header">
+                                    <div class="navbar-brand">
+                                        <a href="/" class="navbar-logo" title="RevContent.com">
+                                            <span class="icon-rc-logo-dark logo-normal">
+                                                <span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span><span class="path9"></span><span class="path10"></span><span class="path11"></span><span class="path12"></span><span class="path13"></span><span class="path14"></span><span class="path15"></span><span class="path16"></span><span class="path17"></span><span class="path18"></span><span class="path19"></span><span class="path20"></span><span class="path21"></span><span class="path22"></span><span class="path23"></span><span class="path24"></span><span class="path25"></span><span class="path26"></span><span class="path27"></span><span class="path28"></span><span class="path29"></span><span class="path30"></span><span class="path31"></span><span class="path32"></span>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div flex=""></div>
+                            <div flex style="text-align:right;">
+                                <a class="md-button" ui-sref="docs" tabindex="0" style="margin-right:8px;">
+                                    <span>Docs</span>
+                                    <md-tooltip>Read Up!</md-tooltip>
+                                </a>
 
-                            <a class="md-button" ui-sref="docs" tabindex="0" style="margin-right:8px;">
-                                <span>Docs</span>
-                                <md-tooltip>Read Up!</md-tooltip>
-                            </a>
-
-                            <a class="md-button" target="_blank" ng-href="http://support.revcontent.com/support/solutions/folders/4000004477" tabindex="0">
-                                <span>Support</span>
-                                <md-tooltip>How can we help?</md-tooltip>
-                            </a>
+                                <a class="md-button" target="_blank" ng-href="http://support.revcontent.com/support/solutions/folders/4000004477" tabindex="0">
+                                    <span>Support</span>
+                                    <md-tooltip>How can we help?</md-tooltip>
+                                </a>
+                            </div>
 
                         </div>
                     </div>
