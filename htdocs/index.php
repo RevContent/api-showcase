@@ -36,7 +36,7 @@
         <script src="app/resources/js/app/docs/docs.controller.js"></script>
         <script src="app/resources/vendor/angular-highlightjs/angular-highlightjs.js"></script>
 
-        <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,500,900,300' rel='stylesheet' type='text/css'>
+        <link href='//fonts.googleapis.com/css?family=Roboto:400,700,500,900,300' rel='stylesheet' type='text/css'>
         <link href="app/resources/vendor/highlightjs/styles/railscasts.css" rel="stylesheet" type="text/css" media="screen" />
         <link href="app/resources/vendor/sanitize-css/dist/sanitize.css" rel="stylesheet" type="text/css" media="screen" />
         <link href="app/resources/vendor/angular-material/angular-material.css" rel="stylesheet" type="text/css" media="screen" />
