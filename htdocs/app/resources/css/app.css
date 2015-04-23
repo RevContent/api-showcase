@@ -110,7 +110,12 @@ code {
   line-height: 2.2rem;
 }
 
-.navbar-brand a:hover {
+.navbar-brand {
+  letter-spacing: 0;
+}
+
+.navbar-brand a:hover,
+.navbar-brand a:focus {
   text-decoration: none;
 }
 
