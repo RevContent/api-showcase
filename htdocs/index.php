@@ -88,7 +88,7 @@
 
             <footer>
                 <div class="container">
-                    © 2015, revcontent All Rights Reserved.
+                    © 2015, RevContent All Rights Reserved.
                     <md-button href="http://support.revcontent.com/support/solutions/articles/158282-privacy-policy" target="_blank" title=""><strong>Privacy Policy</strong></md-button>
                     <md-button href="http://support.revcontent.com/support/home" target="_blank" title=""><strong>Terms and Conditions</strong></md-button>
 
