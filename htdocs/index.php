@@ -86,17 +86,17 @@
                 <div ui-view="main"></div>
             </main>
 
-            <footer>
-                <div class="container">
+            <div class="container">
+                <footer>
                     © 2015, RevContent All Rights Reserved.
                     <md-button href="http://support.revcontent.com/support/solutions/articles/158282-privacy-policy" target="_blank" title=""><strong>Privacy Policy</strong></md-button>
                     <md-button href="http://support.revcontent.com/support/home" target="_blank" title=""><strong>Terms and Conditions</strong></md-button>
 
                     <div style="float:right">
-                        Don't have an account? <md-button class="md-primary" target="_blank" href="https://v2.revcontent.com/signup">Join the native rev:olution</md-button>
+                        Don't have an account? <md-button class="md-primary" target="_blank" href="https://v2.revcontent.com/signup">Join the native revolution</md-button>
                     </div>
-                </div>
-            </footer>
+                </footer>
+            </div>
         </div>
     </body>
 </html>

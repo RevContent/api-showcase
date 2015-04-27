@@ -342,8 +342,9 @@ main {
 }
 
 footer {
+  font-size: 14px;
   margin-top: 30px;
-  padding: 20px 0;
+  padding: 20px 16px;
 }
 
 /* Images ==============================================================*/
