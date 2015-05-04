@@ -122,7 +122,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <h1 class="page-header">In-stream
-                    <small>rev:content Native API</small>
+                    <small>RevContent Native API</small>
                 </h1>
             </div>
         </div>
@@ -145,7 +145,7 @@
 
         <hr>
 
-        <!-- Post Two Sponsored By rev:content! -->
+        <!-- Post Two Sponsored By RevContent! -->
         <div class="row">
             <div class="col-md-3  col-xs-5">
                 <a href="<?php echo $response[0]['url']; ?>" target="_blank">
@@ -197,7 +197,7 @@
 
         <hr>
 
-        <!-- Post Five Sponsored By rev:content! -->
+        <!-- Post Five Sponsored By RevContent! -->
         <div class="row">
             <div class="col-md-3  col-xs-5">
                 <a href="<?php echo $response[1]['url']; ?>" target="_blank">
