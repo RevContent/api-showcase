@@ -112,21 +112,17 @@
             if (num == 5) {
 
                 //example data
-                var endpoint      = 'https://trends.revcontent.com/api/v1/?';
-                var api_key       = 'a3ef3561e4a67bc7ef7e0aff5a4889d19007c957';
-                var pub_id        = 307;
-                var widget_id     = 67;
-                var domain        = "247sports.com";
+                var url = 'https://trends.revcontent.com/api/v1/?';
 
-                var clientCall = $.getJSON(endpoint,
-                    {
-                        'api_key' : api_key,
-                        'pub_id' : pub_id,
-                        'widget_id' : widget_id,
-                        'type' : 'json',
-                        'domain' : domain,
-                        'count' : 1
-                    }, function(data) {
+                var data = {
+                    'api_key' : 'fdbd849fb2b8c1c259585e7bcd6a09cc87e3e5b7',
+                    'pub_id' : 10,
+                    'widget_id' : 21,
+                    'domain' : 'powr.com',
+                    'count' : 1
+                };
+
+                var clientCall = $.getJSON(url, data, function(data) {
 
                         var item = data[Math.floor(Math.random()*data.length)];
 
