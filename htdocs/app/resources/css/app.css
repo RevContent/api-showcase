@@ -110,6 +110,10 @@ code {
   line-height: 2.2rem;
 }
 
+.margin-top {
+  margin-top: 8px;
+}
+
 .navbar-brand {
   letter-spacing: 0;
 }
