@@ -12,13 +12,11 @@
     <title>Content Toaster Example</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap.css" rel="stylesheet">
 
-    <!-- Showcase CSS -->
     <link href="css/style.css" rel="stylesheet">
 
-    <!-- Custom CSS -->
-    <link href="css/toaster.css" rel="stylesheet">
+    <link href="css/example.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -157,21 +155,18 @@
                 $('#rc_toaster_wrapped').removeClass('toast-in-toaster').hide();
             });
 
-            //Prepare the toaster's content
-            var endpoint      = 'https://trends.revcontent.com/api/v1/?';
-            var api_key       = 'a3ef3561e4a67bc7ef7e0aff5a4889d19007c957';
-            var pub_id        = 307;
-            var widget_id     = 67;
-            var domain        = "247sports.com";
-            var clientCall    = $.getJSON(endpoint,
-            {
-                'api_key' : api_key,
-                'pub_id' : pub_id,
-                'widget_id' : widget_id,
-                'type' : 'json',
-                'domain' : domain,
+            var url = 'https://trends.revcontent.com/api/v1/?';
+
+            var data = {
+                'api_key' : 'fdbd849fb2b8c1c259585e7bcd6a09cc87e3e5b7',
+                'pub_id' : 10,
+                'widget_id' : 21,
+                'domain' : 'powr.com',
                 'count' : 1
-            }, function(data) {
+            };
+
+            //Prepare the toaster's content
+            var clientCall    = $.getJSON(url, data, function(data) {
 
                 var item = data[Math.floor(Math.random()*data.length)];
                 $('#rc_toaster_wrapped').html('<div class="rc_toaster"></div><h1 class="rc_toaster_title">YOU MAY ALSO LIKE</h1><p class="rc_toaster_headline">'+item.headline+'</p><div class="rc_no_toast">X</div>');

@@ -11,14 +11,11 @@
 
   <meta name="viewport" content="width=device-width,initial-scale=1">
 
-  <!-- CSS Reset -->
-  <link rel="stylesheet" href="css/normalize.css">
+  <link href="css/bootstrap.css" rel="stylesheet">
 
-  <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
 
-  <!-- Custom CSS -->
-  <link href="css/scrolling.css" rel="stylesheet">
+  <link href="css/example.css" rel="stylesheet">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -119,17 +116,22 @@
 
   <script type="text/javascript">
     (function ($) {
-      var handler = null,
-          page = 0,
-          isLoading = false,
-          apiURL = 'https://trends.revcontent.com/api/v1/?api_key=a3ef3561e4a67bc7ef7e0aff5a4889d19007c957&pub_id=307&widget_id=67&domain=247sports.com&count=20&&format=json',
-          container = '#container',
-          $loaderCircle = $('#loaderCircle'),
-          wookmark = undefined,
-          options = {
-            offset: 10, // Optional, the distance between grid items
-            itemWidth: 200 // Optional, the width of a grid item
-          };
+
+        var url = 'https://trends.revcontent.com/api/v1/?';
+        var data = {
+            'api_key' : 'fdbd849fb2b8c1c259585e7bcd6a09cc87e3e5b7',
+            'pub_id' : 10,
+            'widget_id' : 21,
+            'type' : 'json',
+            'domain' : 'powr.com',
+        };
+
+        var handler = null,
+            page = 0,
+            isLoading = false,
+            container = '#container',
+            $loaderCircle = $('#loaderCircle'),
+            wookmark = undefined;
 
       /**
        * When scrolled all the way to the bottom, add more tiles.
@@ -162,19 +164,16 @@
       /**
        * Loads data from the API.
        */
-      function loadData() {
-        isLoading = true;
-        $loaderCircle.show();
+        function loadData() {
+            isLoading = true;
+            $loaderCircle.show();
 
-        $.ajax({
-          //url: apiURL + "&offset=" + page,
-          url: apiURL,
-          dataType: 'json',
-          //data: {offset: page}, // Page parameter to make sure we load new data
-          success: onLoadData
-        });
-
-
+            $.ajax({
+                url: url,
+                data: data,
+                dataType: 'json',
+                success: onLoadData
+            });
       };
 
       /**
