@@ -71,7 +71,7 @@
                                     <md-tooltip>Read Up!</md-tooltip>
                                 </a>
 
-                                <a class="md-button" target="_blank" ng-href="http://support.revcontent.com/support/solutions/folders/4000004477" tabindex="0">
+                                <a class="md-button" target="_blank" ng-href="http://faq.revcontent.com/support/solutions/5000137293" tabindex="0">
                                     <span>Support</span>
                                     <md-tooltip>How can we help?</md-tooltip>
                                 </a>
@@ -89,8 +89,8 @@
             <div class="container">
                 <footer>
                     © 2015, RevContent All Rights Reserved.
-                    <md-button href="http://support.revcontent.com/support/solutions/articles/158282-privacy-policy" target="_blank" title=""><strong>Privacy Policy</strong></md-button>
-                    <md-button href="http://support.revcontent.com/support/home" target="_blank" title=""><strong>Terms and Conditions</strong></md-button>
+                    <md-button href="http://faq.revcontent.com/support/solutions/articles/5000615200-revcontent-s-privacy-policy" target="_blank" title=""><strong>Privacy Policy</strong></md-button>
+                    <md-button href="http://faq.revcontent.com/support/home" target="_blank" title=""><strong>Terms and Conditions</strong></md-button>
 
                     <div style="float:right">
                         Don't have an account? <md-button class="md-primary" target="_blank" href="https://v2.revcontent.com/signup">Join the native revolution</md-button>
