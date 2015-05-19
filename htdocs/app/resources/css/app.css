@@ -377,3 +377,11 @@ md-dialog  {
 md-dialog.wide {
   width: 1000px;
 }
+
+.md-tooltip-lg .md-content {
+  white-space: normal;
+}
+
+md-tooltip.md-tooltip-dark.md-default-theme .md-background {
+  background-color: rgba(0, 0, 0, 0.75);
+}

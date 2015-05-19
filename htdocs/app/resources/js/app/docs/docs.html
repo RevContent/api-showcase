@@ -54,14 +54,22 @@ GET http://trends.revcontent.com/api/v1/</div>
                 <tr>
                     <td><code>user_ip</code></td>
                     <td><var>string</var></td>
-                    <td><code>Request IP</code>
+                    <td>
+                        <code style="cursor:pointer;">
+                            <span>Request IP</span>
+                            <md-tooltip class="md-tooltip-lg md-tooltip-dark" md-direction="right">If not provided, the request IP is used. So if your calling the API with client side code, like Javascript, we can detect the user's IP, but if your using backend code you have to pass the user's IP.</md-tooltip>
+                        </code>
                     </td>
                     <td>The end user's IP address required because response is tailored to end users geography.</td>
                 </tr>
                 <tr>
-                    <td><code>user_ip</code></td>
+                    <td><code>user_agent</code></td>
                     <td><var>string</var></td>
-                    <td><code>Request IP</code>
+                    <td>
+                        <code style="cursor:pointer;">
+                            <span>Request User Agent</span>
+                            <md-tooltip class="md-tooltip-lg md-tooltip-dark" md-direction="right">If not provided, the request user agent is used. So if your calling the API with client side code, like Javascript, we can detect the user's user agent, but if your using backend code you have to pass the user's user agent.</md-tooltip>
+                        </code>
                     </td>
                     <td>The end user's user agent required because response is tailored to end users geography.</td>
                 </tr>
