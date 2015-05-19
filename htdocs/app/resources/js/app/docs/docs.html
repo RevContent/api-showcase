@@ -59,6 +59,13 @@ GET http://trends.revcontent.com/api/v1/</div>
                     <td>The end user's IP address required because response is tailored to end users geography.</td>
                 </tr>
                 <tr>
+                    <td><code>user_ip</code></td>
+                    <td><var>string</var></td>
+                    <td><code>Request IP</code>
+                    </td>
+                    <td>The end user's user agent required because response is tailored to end users geography.</td>
+                </tr>
+                <tr>
                     <td><code>referer</code></td>
                     <td><var>string</var></td>
                     <td><code>empty</code></td>
@@ -83,23 +90,34 @@ GET http://trends.revcontent.com/api/v1/</div>
                     <td>The default creative image height.</td>
                 </tr>
                 <tr>
-                </tr><tr>
                     <td><code>format</code></td>
                     <td><var>string</var></td>
                     <td><code>json</code></td>
                     <td>The format of the response, json or xml.</td>
                 </tr>
                 <tr>
-                    <td><code>count</code></td>
+                    <td><code>sponsored_count</code></td>
                     <td><var>integer</var></td>
                     <td><code>25</code></td>
-                    <td>Number of content items you would like in the response.</td>
+                    <td>Number of sponsored content items you would like in the response.</td>
                 </tr>
                 <tr>
-                    <td><code>offset</code></td>
+                    <td><code>sponsored_offset</code></td>
                     <td><var>integer</var></td>
                     <td><code>0</code></td>
-                    <td>The content item that you would like the response to start from.</td>
+                    <td>The sponsored content item that you would like the response to start from.</td>
+                </tr>
+                <tr>
+                    <td><code>internal_count</code></td>
+                    <td><var>integer</var></td>
+                    <td><code>5</code></td>
+                    <td>Number of internal content items you would like in the response.</td>
+                </tr>
+                <tr>
+                    <td><code>internal_offset</code></td>
+                    <td><var>integer</var></td>
+                    <td><code>0</code></td>
+                    <td>The internal content item that you would like the response to start from.</td>
                 </tr>
             </tbody>
             <tfoot>
@@ -183,7 +201,8 @@ curl -X GET -H "Cache-Control: no-cache" http://trends.revcontent.com/api/v1/?ap
         "brand": "Trending Solutions",
         "headline": "20 Mind-Blowing Facts You Didn't Know",
         "image": "//img.revcontent.com/?url=https://revcontent-production.s3.amazonaws.com/content/images/1430757674.jpg&pos=face&h=315&w=420",
-        "url": "//trends.revcontent.com/click.php?d=eJwVk8kVxDAIQ1tiMVs5GEz%2FJYSc5mWwsZA%2BRaQQl1ztRMQNj2nKAxGiKOivuueBPbmY8t"
+        "url": "//trends.revcontent.com/click.php?d=eJwVk8kVxDAIQ1tiMVs5GEz%2FJYSc5mWwsZA%2BRaQQl1ztRMQNj2nKAxGiKOivuueBPbmY8t",
+        "type": "sponsored",
         "uid": "sponsored_248"
     },
     ...
@@ -196,6 +215,7 @@ curl -X GET -H "Cache-Control: no-cache" http://trends.revcontent.com/api/v1/?ap
         <headline>20 Mind-Blowing Facts You Didn't Know</headline>
         <image>//img.revcontent.com/?url=https://revcontent-production.s3.amazonaws.com/content/images/1430757674.jpg&pos=face&h=315&w=420</image>
         <url>//trends.revcontent.com/click.php?d=eJwVk8kVxDAIQ1tiMVs5GEz%2FJYSc5mWwsZA%2BRaQQl1ztRMQNj2nKAxGiKOivuueBPbmY8t</url>
+        <type>sponsored</type>
         <uid>sponsored_248</uid>
     </element>
 ...
