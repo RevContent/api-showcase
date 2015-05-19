@@ -75,6 +75,11 @@
                                     <span>Support</span>
                                     <md-tooltip>How can we help?</md-tooltip>
                                 </a>
+
+                                <a class="md-button" target="_blank" ng-href="http://faq.revcontent.com/support/solutions/folders/5000219605" tabindex="0">
+                                    <span>FAQ</span>
+                                    <md-tooltip>Common Questions</md-tooltip>
+                                </a>
                             </div>
 
                         </div>
