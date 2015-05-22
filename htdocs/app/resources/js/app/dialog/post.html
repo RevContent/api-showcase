@@ -5,31 +5,32 @@
 
         <hr />
 
-        <div class="item-detail" layout>
+        <div class="item-detail" layout="column" layout-gt-md="row">
 
-            <div class="feature" flex="70">
+            <div class="feature" flex="100" flex-gt-md="70">
                 <img class="img-responsive preview" src="/app/resources/img/preview-{{post.img}}" alt="{{ post.title }}">
             </div>
 
-            <div class="description" flex="30" style="background: #f1f1f1; padding: 10px 20px; border-radius:2px;">
+            <div class="description" flex="100" flex-gt-md="30">
+                <div class="inner-description">
 
                     <div class="md-body-2">{{ post.description }}</div>
 
+                    <md-whiteframe layout style="padding:15px; margin-top:20px;">
+                        <md-list style="width:100%;">
+                            <md-list-item class="md-3-line">
 
-                <md-whiteframe layout style="padding:15px; margin-top:20px;">
-                    <md-list style="width:100%;">
-                        <md-list-item class="md-3-line">
-
-                            <md-button href="/showcase/{{post.link}}" class="md-accent md-raised md-hue-2 md-button-lg" target="_blank">Live Preview</md-button>
-                        </md-list-item>
-                        <md-list-item class="md-3-line">
-                            <md-button href="https://github.com/RevContent/api-showcase/archive/master.zip" class="md-raised md-primary md-button-lg">Download</md-button>
-                        </md-list-item>
-                        <md-list-item class="md-3-line" style="margin-bottom:0;">
-                            <md-button href="https://github.com/RevContent/api-showcase" class="md-raised md-primary md-button-lg" target="_blank">Github</md-button>
-                        </md-list-item>
-                    </md-list>
-                </md-whiteframe>
+                                <md-button href="/showcase/{{post.link}}" class="md-accent md-raised md-hue-2 md-button-lg" target="_blank">Live Preview</md-button>
+                            </md-list-item>
+                            <md-list-item class="md-3-line">
+                                <md-button href="https://github.com/RevContent/api-showcase/archive/master.zip" class="md-raised md-primary md-button-lg">Download</md-button>
+                            </md-list-item>
+                            <md-list-item class="md-3-line" style="margin-bottom:0;">
+                                <md-button href="https://github.com/RevContent/api-showcase" class="md-raised md-primary md-button-lg" target="_blank">Github</md-button>
+                            </md-list-item>
+                        </md-list>
+                    </md-whiteframe>
+                </div>
             </div>
 
         </div>

@@ -17,125 +17,127 @@ GET http://trends.revcontent.com/api/v1/</div>
 
         <p class="md-subhead">All requests to the API are sent over HTTP and will utilize the following parameter set.</p>
 
-        <table class="table table-condensed table-hover">
-            <thead>
-                <tr>
-                    <th>Property</th>
-                    <th>Type</th>
-                    <th>Default</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><code class="text-danger">api_key</code></td>
-                    <td><var>string</var></td>
-                    <td></td>
-                    <td>Your account's assigned API key.</td>
-                </tr>
-                <tr>
-                    <td><code class="text-danger">pub_id</code></td>
-                    <td><var>integer</var></td>
-                    <td></td>
-                    <td>Your assigned account ID.</td>
-                </tr>
-                <tr>
-                    <td><code class="text-danger">widget_id</code></td>
-                    <td><var>integer</var></td>
-                    <td></td>
-                    <td>The ID of the widget associated with this request.</td>
-                </tr>
-                <tr>
-                    <td><code class="text-danger">domain</code></td>
-                    <td><var>string</var></td>
-                    <td></td>
-                    <td>The url encoded domain name associated with this widget.</td>
-                </tr>
-                <tr>
-                    <td><code>user_ip</code></td>
-                    <td><var>string</var></td>
-                    <td>
-                        <code style="cursor:pointer;">
-                            <span>Request IP</span>
-                            <md-tooltip class="md-tooltip-lg md-tooltip-dark" md-direction="right">If not provided, the request IP is used. So if your calling the API with client side code, like Javascript, we can detect the user's IP, but if your using backend code you have to pass the user's IP.</md-tooltip>
-                        </code>
-                    </td>
-                    <td>The end user's IP address required because response is tailored to end users geography.</td>
-                </tr>
-                <tr>
-                    <td><code>user_agent</code></td>
-                    <td><var>string</var></td>
-                    <td>
-                        <code style="cursor:pointer;">
-                            <span>Request User Agent</span>
-                            <md-tooltip class="md-tooltip-lg md-tooltip-dark" md-direction="right">If not provided, the request user agent is used. So if your calling the API with client side code, like Javascript, we can detect the user's user agent, but if your using backend code you have to pass the user's user agent.</md-tooltip>
-                        </code>
-                    </td>
-                    <td>The end user's user agent is used to report segmented stats based on device type.</td>
-                </tr>
-                <tr>
-                    <td><code>referer</code></td>
-                    <td><var>string</var></td>
-                    <td><code>empty</code></td>
-                    <td>The end user's url encoded webpage url that the request is being made from.</td>
-                </tr>
-                <tr>
-                    <td><code>width</code></td>
-                    <td><var>integer</var></td>
-                    <td><code>1280</code></td>
-                    <td>The end user's screen width.</td>
-                </tr>
-                <tr>
-                    <td><code>img_w</code></td>
-                    <td><var>integer</var></td>
-                    <td><code>420</code></td>
-                    <td>The default creative image width.</td>
-                </tr>
-                <tr>
-                    <td><code>img_h</code></td>
-                    <td><var>integer</var></td>
-                    <td><code>315</code></td>
-                    <td>The default creative image height.</td>
-                </tr>
-                <tr>
-                    <td><code>format</code></td>
-                    <td><var>string</var></td>
-                    <td><code>json</code></td>
-                    <td>The format of the response, json or xml.</td>
-                </tr>
-                <tr>
-                    <td><code>sponsored_count</code></td>
-                    <td><var>integer</var></td>
-                    <td><code>25</code></td>
-                    <td>Number of sponsored content items you would like in the response.</td>
-                </tr>
-                <tr>
-                    <td><code>sponsored_offset</code></td>
-                    <td><var>integer</var></td>
-                    <td><code>0</code></td>
-                    <td>The sponsored content item that you would like the response to start from.</td>
-                </tr>
-                <tr>
-                    <td><code>internal_count</code></td>
-                    <td><var>integer</var></td>
-                    <td><code>5</code></td>
-                    <td>Number of internal content items you would like in the response.</td>
-                </tr>
-                <tr>
-                    <td><code>internal_offset</code></td>
-                    <td><var>integer</var></td>
-                    <td><code>0</code></td>
-                    <td>The internal content item that you would like the response to start from.</td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="4">
-                        <div class="md-caption">*Properties marked <span class="text-danger">red</span> are required.</div>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
+        <div class="table-responsive">
+            <table class="">
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Type</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code class="text-danger">api_key</code></td>
+                        <td><var>string</var></td>
+                        <td></td>
+                        <td>Your account's assigned API key.</td>
+                    </tr>
+                    <tr>
+                        <td><code class="text-danger">pub_id</code></td>
+                        <td><var>integer</var></td>
+                        <td></td>
+                        <td>Your assigned account ID.</td>
+                    </tr>
+                    <tr>
+                        <td><code class="text-danger">widget_id</code></td>
+                        <td><var>integer</var></td>
+                        <td></td>
+                        <td>The ID of the widget associated with this request.</td>
+                    </tr>
+                    <tr>
+                        <td><code class="text-danger">domain</code></td>
+                        <td><var>string</var></td>
+                        <td></td>
+                        <td>The url encoded domain name associated with this widget.</td>
+                    </tr>
+                    <tr>
+                        <td><code>user_ip</code></td>
+                        <td><var>string</var></td>
+                        <td>
+                            <code style="cursor:pointer;">
+                                <span>Request IP</span>
+                                <md-tooltip class="md-tooltip-lg md-tooltip-dark" md-direction="right">If not provided, the request IP is used. So if your calling the API with client side code, like Javascript, we can detect the user's IP, but if your using backend code you have to pass the user's IP.</md-tooltip>
+                            </code>
+                        </td>
+                        <td>The end user's IP address required because response is tailored to end users geography.</td>
+                    </tr>
+                    <tr>
+                        <td><code>user_agent</code></td>
+                        <td><var>string</var></td>
+                        <td>
+                            <code style="cursor:pointer;">
+                                <span>Request User Agent</span>
+                                <md-tooltip class="md-tooltip-lg md-tooltip-dark" md-direction="right">If not provided, the request user agent is used. So if your calling the API with client side code, like Javascript, we can detect the user's user agent, but if your using backend code you have to pass the user's user agent.</md-tooltip>
+                            </code>
+                        </td>
+                        <td>The end user's user agent is used to report segmented stats based on device type.</td>
+                    </tr>
+                    <tr>
+                        <td><code>referer</code></td>
+                        <td><var>string</var></td>
+                        <td><code>empty</code></td>
+                        <td>The end user's url encoded webpage url that the request is being made from.</td>
+                    </tr>
+                    <tr>
+                        <td><code>width</code></td>
+                        <td><var>integer</var></td>
+                        <td><code>1280</code></td>
+                        <td>The end user's screen width.</td>
+                    </tr>
+                    <tr>
+                        <td><code>img_w</code></td>
+                        <td><var>integer</var></td>
+                        <td><code>420</code></td>
+                        <td>The default creative image width.</td>
+                    </tr>
+                    <tr>
+                        <td><code>img_h</code></td>
+                        <td><var>integer</var></td>
+                        <td><code>315</code></td>
+                        <td>The default creative image height.</td>
+                    </tr>
+                    <tr>
+                        <td><code>format</code></td>
+                        <td><var>string</var></td>
+                        <td><code>json</code></td>
+                        <td>The format of the response, json or xml.</td>
+                    </tr>
+                    <tr>
+                        <td><code>sponsored_count</code></td>
+                        <td><var>integer</var></td>
+                        <td><code>25</code></td>
+                        <td>Number of sponsored content items you would like in the response.</td>
+                    </tr>
+                    <tr>
+                        <td><code>sponsored_offset</code></td>
+                        <td><var>integer</var></td>
+                        <td><code>0</code></td>
+                        <td>The sponsored content item that you would like the response to start from.</td>
+                    </tr>
+                    <tr>
+                        <td><code>internal_count</code></td>
+                        <td><var>integer</var></td>
+                        <td><code>5</code></td>
+                        <td>Number of internal content items you would like in the response.</td>
+                    </tr>
+                    <tr>
+                        <td><code>internal_offset</code></td>
+                        <td><var>integer</var></td>
+                        <td><code>0</code></td>
+                        <td>The internal content item that you would like the response to start from.</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4">
+                            <div class="md-caption">*Properties marked <span class="text-danger">red</span> are required.</div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
 
         <div layout="column">
             <h3 class="md-title">Example</h3>
@@ -163,36 +165,38 @@ curl -X GET -H "Cache-Control: no-cache" http://trends.revcontent.com/api/v1/?ap
 
         <p class="md-subhead">The expected response values in the return payload are shown below.</p>
 
-        <table class="table table-condensed table-hover" style="">
-            <thead>
-                <tr>
-                    <th>Property</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><code>headline</code></td>
-                    <td>Content headline.</td>
-                </tr>
-                <tr>
-                    <td><code>url</code></td>
-                    <td>Content destination URL.</td>
-                </tr>
-                <tr>
-                    <td><code>image</code></td>
-                    <td>URL of the content image.</td>
-                </tr>
-                <tr>
-                    <td><code>brand</code></td>
-                    <td>Who is providing the content.</td>
-                </tr>
-                <tr>
-                    <td><code>uid</code></td>
-                    <td>Unique content id to the system.</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover" style="">
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>headline</code></td>
+                        <td>Content headline.</td>
+                    </tr>
+                    <tr>
+                        <td><code>url</code></td>
+                        <td>Content destination URL.</td>
+                    </tr>
+                    <tr>
+                        <td><code>image</code></td>
+                        <td>URL of the content image.</td>
+                    </tr>
+                    <tr>
+                        <td><code>brand</code></td>
+                        <td>Who is providing the content.</td>
+                    </tr>
+                    <tr>
+                        <td><code>uid</code></td>
+                        <td>Unique content id to the system.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
         <div layout="column">
             <h3 class="md-title">Example</h3>

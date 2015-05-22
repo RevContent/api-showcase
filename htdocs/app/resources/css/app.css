@@ -116,6 +116,7 @@ code {
 
 .navbar-brand {
   letter-spacing: 0;
+  margin-top: 8px;
 }
 
 .navbar-brand a:hover,
@@ -216,6 +217,12 @@ hr {
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* Container ==================================================================*/
 #wrapper {
   background-color: rgb(229, 229, 229);
@@ -224,27 +231,60 @@ hr {
 .container {
   margin-right: auto;
   margin-left: auto;
+  width: 1170px;
 }
-@media (min-width: 768px) {
-  .container {
-    width: 750px;
+
+
+.table-responsive {
+  overflow-x: auto;
+  min-height: 0.01%;
+}
+@media screen and (max-width: 767px) {
+  .table-responsive {
+    width: 100%;
+    margin-bottom: 15px;
+    overflow-y: hidden;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    border: 1px solid #dddddd;
+  }
+  .table-responsive > .table {
+    margin-bottom: 0;
+  }
+  .table-responsive > .table > thead > tr > th,
+  .table-responsive > .table > tbody > tr > th,
+  .table-responsive > .table > tfoot > tr > th,
+  .table-responsive > .table > thead > tr > td,
+  .table-responsive > .table > tbody > tr > td,
+  .table-responsive > .table > tfoot > tr > td {
+    white-space: nowrap;
+  }
+  .table-responsive > .table-bordered {
+    border: 0;
+  }
+  .table-responsive > .table-bordered > thead > tr > th:first-child,
+  .table-responsive > .table-bordered > tbody > tr > th:first-child,
+  .table-responsive > .table-bordered > tfoot > tr > th:first-child,
+  .table-responsive > .table-bordered > thead > tr > td:first-child,
+  .table-responsive > .table-bordered > tbody > tr > td:first-child,
+  .table-responsive > .table-bordered > tfoot > tr > td:first-child {
+    border-left: 0;
+  }
+  .table-responsive > .table-bordered > thead > tr > th:last-child,
+  .table-responsive > .table-bordered > tbody > tr > th:last-child,
+  .table-responsive > .table-bordered > tfoot > tr > th:last-child,
+  .table-responsive > .table-bordered > thead > tr > td:last-child,
+  .table-responsive > .table-bordered > tbody > tr > td:last-child,
+  .table-responsive > .table-bordered > tfoot > tr > td:last-child {
+    border-right: 0;
+  }
+  .table-responsive > .table-bordered > tbody > tr:last-child > th,
+  .table-responsive > .table-bordered > tfoot > tr:last-child > th,
+  .table-responsive > .table-bordered > tbody > tr:last-child > td,
+  .table-responsive > .table-bordered > tfoot > tr:last-child > td {
+    border-bottom: 0;
   }
 }
-@media (min-width: 992px) {
-  .container {
-    width: 970px;
-  }
-}
-@media (min-width: 1200px) {
-  .container {
-    width: 1170px;
-  }
-}
-.container-fluid {
-  width: 100%;
-  margin-right: auto;
-  margin-left: auto;
-}
+
 
 /* md-content ==================================================================*/
 md-content {
@@ -263,6 +303,14 @@ md-card {
 
 md-content md-card {
   padding: 15px 30px;
+}
+
+header md-toolbar {
+  padding: 8px 0;
+}
+
+header .md-toolbar-tools {
+  padding: 0 30px;
 }
 
 .grid md-card {
@@ -294,6 +342,12 @@ md-list-item, md-list-item .md-list-item-inner {
 
 .item-detail .description md-list-item {
   margin-bottom: 16px;
+}
+
+.item-detail .dscription .inner-description {
+  background: #f1f1f1;
+  padding: 10px 20px;
+  border-radius:2px;
 }
 
 .item-detail .description .md-button {
@@ -347,8 +401,18 @@ main {
 
 footer {
   font-size: 14px;
-  margin-top: 30px;
-  padding: 20px 16px;
+  margin-top: 40px;
+  padding: 8px 0px 8px;
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+footer #signup {
+  margin-left: auto;
+}
+
+footer div {
+  padding-bottom: 12px;
 }
 
 /* Images ==============================================================*/
@@ -384,4 +448,84 @@ md-dialog.wide {
 
 md-tooltip.md-tooltip-dark.md-default-theme .md-background {
   background-color: rgba(0, 0, 0, 0.75);
+}
+
+@media (max-width: 1190px) {
+  .container {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 959px) {
+
+  .banner {
+    padding: 10px;
+    margin: 0 0 20px;
+  }
+  .banner .md-banner {
+    font-size: 1.5rem;
+    letter-spacing: 0.01rem;
+    line-height: 2rem;
+  }
+
+  md-content .description {
+    margin-top: 30px;
+  }
+  md-content .description::before {
+    content: 'Description';
+    font-size: 2.4rem;
+    font-weight: 400;
+    line-height: 3.2rem;
+    padding-bottom: 6px;
+    display: block;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  md-content .inner-description {
+    margin-top: 16px;
+  }
+  .item-detail .feature {
+    padding-right: 0;
+  }
+
+  footer #signup {
+    margin-left: 0;
+  }
+
+  footer #btns {
+    margin-left: auto;
+  }
+
+}
+
+@media (max-width: 599px) {
+  h1, h2, h3, h4, h5, h6 {
+    margin-bottom: .4rem;
+    margin-top: .4rem;
+  }
+  md-card md-card-content {
+    padding: 8px;
+  }
+.md-title, .md-toolbar-tools {
+  font-size: 1.8rem;
+  letter-spacing: 0.004em;
+  }
+
+  header .md-toolbar-tools {
+    padding: 0 10px;
+  }
+
+  header md-toolbar {
+    padding: 0;
+  }
+
+  .md-button {
+    font-size: 12px !important;
+  }
+
+  .navbar-brand {
+    margin-top: 5px;
+  }
+  .logo-normal {
+    font-size: 24px;
+  }
 }

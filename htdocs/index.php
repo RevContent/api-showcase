@@ -40,8 +40,8 @@
         <link href="app/resources/vendor/highlightjs/styles/railscasts.css" rel="stylesheet" type="text/css" media="screen" />
         <link href="app/resources/vendor/sanitize-css/dist/sanitize.css" rel="stylesheet" type="text/css" media="screen" />
         <link href="app/resources/vendor/angular-material/angular-material.css" rel="stylesheet" type="text/css" media="screen" />
-        <link href="app/resources/css/app.css" rel="stylesheet" type="text/css" media="screen" />
         <link href="app/resources/css/v2-logo.css" rel="stylesheet" type="text/css" media="screen" />
+        <link href="app/resources/css/app.css" rel="stylesheet" type="text/css" media="screen" />
 
     </head>
     <body>
@@ -53,7 +53,7 @@
 
                         <div class="md-toolbar-tools" tabindex="0">
 
-                            <div flex>
+                            <div>
                                 <div class="navbar-header">
                                     <div class="navbar-brand">
                                         <a href="/" class="navbar-logo" title="RevContent.com">
@@ -65,8 +65,8 @@
                                 </div>
                             </div>
 
-                            <div flex style="text-align:right;">
-                                <a class="md-button" ui-sref="docs" tabindex="0" style="margin-right:8px;">
+                            <div style="margin-left:auto;">
+                                <a class="md-button" ui-sref="docs" tabindex="0">
                                     <span>Docs</span>
                                     <md-tooltip>Read Up!</md-tooltip>
                                 </a>
@@ -92,12 +92,16 @@
             </main>
 
             <div class="container">
-                <footer>
-                    © 2015, RevContent All Rights Reserved.
-                    <md-button href="http://faq.revcontent.com/support/solutions/articles/5000615200-revcontent-s-privacy-policy" target="_blank" title=""><strong>Privacy Policy</strong></md-button>
-                    <md-button href="http://faq.revcontent.com/support/home" target="_blank" title=""><strong>Terms and Conditions</strong></md-button>
+                <footer layout="column" layout-gt-md="row">
+                    <div layout>
+                        <span>© 2015, RevContent All Rights Reserved.</span>
+                        <div id="btns">
+                            <md-button href="http://faq.revcontent.com/support/solutions/articles/5000615200-revcontent-s-privacy-policy" target="_blank" title=""><strong>Privacy Policy</strong></md-button>
+                            <md-button href="http://faq.revcontent.com/support/home" target="_blank" title=""><strong>Terms and Conditions</strong></md-button>
+                        </div>
+                    </div>
 
-                    <div style="float:right">
+                    <div id="signup">
                         Don't have an account? <md-button class="md-primary" target="_blank" href="https://v2.revcontent.com/signup">Join the native revolution</md-button>
                     </div>
                 </footer>
