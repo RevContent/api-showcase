@@ -14,8 +14,8 @@
         'pub_id' => 10,
         'widget_id' => 21,
         'domain' => 'powr.com',
-        'count' => 2,
-        'offset' => 0,
+        'sponsored_count' => 2,
+        'sponsored_offset' => 0,
     ));
     // Make the API call
     $ch = curl_init();
