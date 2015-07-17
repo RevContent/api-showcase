@@ -56,6 +56,13 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                         img: 'toast.jpg',
                         description: 'Pop! Content toasters are an engaging way to interact with your readers, once they scroll past 50% of your page’s content, a toaster appears in the lower right corner - or the bottom of the screen in mobile. There are many ways to use content toasters on your site, and with the API, sponsored content can easily be integrated into your own implementation.',
                         link: 'revcontent-api-showcase-toaster-1.0',
+                    },
+                    'exit-pop': {
+                        title: 'Exit Pop',
+                        img: 'exitpop.jpg',
+                        description: 'Exit Pop is an API implementation that pops up on a user\'s first impression every 24 hours for non-touch enabled devices (e.g. desktops). When the user mouses off the page they are usually trying to close the window or navigate away from the page. Exit Pop is a great way to give these users one more chance to view your RevContent API widget.',
+                        link: 'revcontent-api-showcase-exitpop-1.0',
+                    },
                     slider: {
                         title: 'Slider',
                         img: 'slider.jpg',
