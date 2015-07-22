@@ -115,18 +115,19 @@
                 var url = 'https://trends.revcontent.com/api/v1/?';
 
                 var data = {
-                    'api_key' : 'fdbd849fb2b8c1c259585e7bcd6a09cc87e3e5b7',
-                    'pub_id' : 10,
-                    'widget_id' : 21,
-                    'domain' : 'powr.com',
-                    'sponsored_count' : 1
+                    'api_key' : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+                    'pub_id' : 945,
+                    'widget_id' : 6181,
+                    'domain' : 'apiexamples.powr.com',
+                    'sponsored_count' : 1,
+                    'internal_count': 0
                 };
 
                 var clientCall = $.getJSON(url, data, function(data) {
 
                         var item = data[Math.floor(Math.random()*data.length)];
 
-                        $(".content1").html('<div class="row"><span class="label label-info clear-branding" >Sponsored</span><div class="col-md-3 col-xs-5"><img alt="" src="'+item.image+'" class="img-responsive"></div><div class="col-md-7"><h3>' + item.headline + '</h3><p>'+item.brand+'</p></div></div>'); // example gallery items
+                        $(".content1").html('<div class="row"><a href="'+ item.url +'" target="_blank"><span class="label label-info clear-branding" >Sponsored</span><div class="col-md-3 col-xs-5"><img alt="" src="'+item.image+'" class="img-responsive"></div><div class="col-md-7"><h3>' + item.headline + '</h3><p>'+item.brand+'</p></div></a></div>'); // example gallery items
                 });
 
             } else {
