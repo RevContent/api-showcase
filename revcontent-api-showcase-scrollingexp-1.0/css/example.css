@@ -156,3 +156,8 @@
   background: #4281f5;
   color: #ffffff;
 }
+
+p {
+  font-size: 16px;
+  font-weight: normal;
+}

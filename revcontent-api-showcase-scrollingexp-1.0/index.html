@@ -119,11 +119,12 @@
 
         var url = 'https://trends.revcontent.com/api/v1/?';
         var data = {
-            'api_key' : 'fdbd849fb2b8c1c259585e7bcd6a09cc87e3e5b7',
-            'pub_id' : 10,
-            'widget_id' : 21,
+            'api_key' : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+            'pub_id' : 945,
+            'widget_id' : 6181,
             'type' : 'json',
-            'domain' : 'powr.com',
+            'domain' : 'apiexamples.powr.com',
+            'internal_count': 0
         };
 
         var handler = null,
@@ -195,11 +196,15 @@
           image = data[i];
           html += '<li>';
 
+          html += '<a target="_blank" href="'+ image.url +'">';
+
           // Image tag (preview in Wookmark are 200px wide, so we calculate the height based on that).
           html += '<img src="'+image.image+'" width="190" height="'+ Math.floor(Math.random()*(230-80+1)+80) +'">';
 
           // Image title.
           html += '<p>'+image.headline+'</p>';
+
+          html += '</a>';
 
           html += '</li>';
         }

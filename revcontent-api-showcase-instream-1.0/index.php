@@ -10,12 +10,13 @@
     ini_set('html_errors', 'on');
 
     $url = 'https://trends.revcontent.com/api/v1/?' . http_build_query(array(
-        'api_key' => 'fdbd849fb2b8c1c259585e7bcd6a09cc87e3e5b7',
-        'pub_id' => 10,
-        'widget_id' => 21,
-        'domain' => 'powr.com',
+        'api_key' => '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+        'pub_id' => 945,
+        'widget_id' => 6181,
+        'domain' => 'apiexamples.powr.com',
         'sponsored_count' => 2,
         'sponsored_offset' => 0,
+        'internal_count' => 0
     ));
     // Make the API call
     $ch = curl_init();
