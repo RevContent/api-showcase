@@ -34,30 +34,24 @@ table{border-collapse:collapse;border-spacing:0}
     transition: .5s;
     transition-property: bottom;
     width: 100%;
+    padding-top: 3px;
+    padding-left: 3px;
 }
 
 .rev-toaster-loaded {
     bottom: 0 !important;
-    /*display: block;*/
 }
 
-.rev-toaster:after {
-    visibility: hidden;
-    display: block;
-    font-size: 0;
-    content: " ";
-    clear: both;
-    height: 0;
-}
 
 .rev-by {
     position: absolute;
     background: #000;
     line-height: 20px;
     top: -20px;
+    left: -3px;
     color: #fff;
     font-size: 10px;
-    padding: 0px 4px 0;
+    padding: 0px 4px 0 6px;
     border-top: 1px solid #4CC93D;
 }
 
@@ -83,11 +77,25 @@ table{border-collapse:collapse;border-spacing:0}
     border-top: solid 10px transparent;
 }
 
+.rev-ad {
+    padding-bottom: 3px;
+    height: 4.2rem;
+    overflow: hidden;
+    margin-right: 32px;
+}
+
+.rev-ad a {
+    display: block;
+}
+
+.rev-ad a:hover {
+    text-decoration: none;
+}
+
 .rev-image {
+    height: 4.2rem;
     float: left;
     margin-right: 16px;
-    max-width: 120px;
-    max-height: 90px;
 }
 
 .rev-image img {
@@ -98,38 +106,16 @@ table{border-collapse:collapse;border-spacing:0}
     vertical-align: middle;
 }
 
-.rev-ad {
-    padding: 3px 0 3px 3px;
-    height: 100%;
-    display: inline-block;
-}
-
-.rev-headline {
-    margin-top: 12px;
-    color: #fff;
-}
-
 .rev-headline h3 {
-    font-size: 16px;
-    font-weight: 400;
-    letter-spacing: .4px;
-    line-height: 22px;
-    margin-top: 12px;
-}
-
-.rev-toaster.rev-toaster-multi .rev-image {
-    max-width: 80px;
-}
-
-.rev-toaster.rev-toater-multi .rev-headline h3 {
-    font-size: 12px;
+    color: #fff;
+    font-size: 1rem;
     font-weight: 300;
     letter-spacing: .2px;
-    line-height: 18px;
-    margin-top: 8px;
+    line-height: 1.4rem;
+    margin: 0;
 }
 
-button {
+button.rev-close {
     box-sizing: border-box;
     color: currentColor;
     -webkit-user-select: none;
@@ -175,7 +161,7 @@ button {
     right: 8px;
 }
 
-.icon {
+button.rev-close .icon {
     margin: auto;
     background-repeat: no-repeat no-repeat;
     display: inline-block;
@@ -185,7 +171,7 @@ button {
     color: #f8f8f8;
 }
 
-.icon svg {
+button.rev-close .icon svg {
     width: 15px;
     height: 15px;
 }
