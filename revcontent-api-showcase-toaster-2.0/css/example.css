@@ -1,49 +1,47 @@
-/*! sanitize.css | CC0 Public Domain | github.com/jonathantneal/sanitize.css */
-pre,textarea{overflow:auto}
-[hidden],audio:not([controls]),template{display:none}
-details,main,summary{display:block}
-input[type=number]{width:auto}
-input[type=search]{-webkit-appearance:textfield}
-input[type=search]::-webkit-search-cancel-button,input[type=search]::-webkit-search-decoration{-webkit-appearance:none}
-progress{display:inline-block}
-small{font-size:75%}
-textarea{resize:vertical}
-[unselectable]{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-*,::after,::before{box-sizing:inherit;border-style:solid;border-width:0}
-*{font-size:inherit;line-height:inherit;margin:0;padding:0}
-::after,::before{text-decoration:inherit;vertical-align:inherit}
-:root{-ms-overflow-style:-ms-autohiding-scrollbar;overflow-y:scroll;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;text-size-adjust:100%;box-sizing:border-box;cursor:default;font:16px/1.5 sans-serif;text-rendering:optimizeLegibility}
-a{text-decoration:none}
-audio,canvas,iframe,img,svg,video{vertical-align:middle}
-button,input,select,textarea{background-color:transparent;color:inherit;font-family:inherit;font-style:inherit;font-weight:inherit;min-height:1.5em}
-code,kbd,pre,samp{font-family:monospace,monospace}
-nav ol,nav ul{list-style:none}
-select{-moz-appearance:none;-webkit-appearance:none}
-select::-ms-expand{display:none}
-select::-ms-value{color:currentColor}
-table{border-collapse:collapse;border-spacing:0}
-::-moz-selection{background-color:#B3D4FC;text-shadow:none}
-::selection{background-color:#B3D4FC;text-shadow:none}
-@media screen{[hidden~=screen]{display:inherit}
-[hidden~=screen]:not(:active):not(:focus):not(:target){clip:rect(0 0 0 0)!important;position:absolute!important}
-}
-
 .rev-toaster {
-    background: rgba(0, 0, 0, 0.85);
+    -ms-overflow-style:-ms-autohiding-scrollbar;
+    -webkit-text-size-adjust:100%;
+    -ms-text-size-adjust:100%;
+    text-size-adjust:100%;
+    box-sizing:border-box;
+    cursor:default;
+    text-rendering:optimizeLegibility;
+    background: rgba(0, 0, 0, 0.89);
     position: fixed;
     transition: .5s;
-    transition-property: bottom;
     width: 100%;
     padding-top: 3px;
     padding-left: 3px;
+    bottom: -20px;
+    transform: translateY(100%);
+    -ms-transform: translateY(100%);
+    -moz-transform: translateY(100%);
+    -o-transform: translateY(100%);
+    -webkit-transform: translateY(100%);
 }
 
-.rev-toaster-loaded {
-    bottom: 0 !important;
+.rev-toaster * {
+    font-size:inherit;
+    line-height:inherit;
+    margin:0;
+    padding:0;
 }
 
+.rev-toaster a:hover,
+.rev-toaster a:focus {
+    text-decoration: none;
+}
 
-.rev-by {
+.rev-toaster.rev-toaster-loaded {
+    bottom: 0;
+    transform: none;
+    -ms-transform: none;
+    -moz-transform: none;
+    -o-transform: none;
+    -webkit-transform: none;
+}
+
+.rev-toaster .rev-header {
     position: absolute;
     background: #000;
     line-height: 20px;
@@ -53,9 +51,12 @@ table{border-collapse:collapse;border-spacing:0}
     font-size: 10px;
     padding: 0px 4px 0 6px;
     border-top: 1px solid #4CC93D;
+    font-weight: 500;
+    letter-spacing: .1px;
 }
 
-.rev-by:before, .rev-by:after {
+.rev-toaster .rev-header:before,
+.rev-toaster .rev-header:after {
     display: block;
     position: absolute;
     width: 20px;
@@ -64,58 +65,85 @@ table{border-collapse:collapse;border-spacing:0}
     right: -20px;
     content: "";
 }
-.rev-by:before {
+.rev-toaster .rev-header:before {
     border-top: solid 10px transparent;
     border-right: solid 10px transparent;
     border-left: solid 10px transparent;
     border-bottom: solid 10px transparent;
 }
-.rev-by:after {
+.rev-toaster .rev-header:after {
     border-bottom: solid 10px #000;
     border-left: solid 10px #000;
     border-right: solid 10px transparent;
     border-top: solid 10px transparent;
 }
 
-.rev-ad {
-    padding-bottom: 3px;
-    height: 4.2rem;
-    overflow: hidden;
-    margin-right: 32px;
+.rev-toaster .rev-footer {
+    text-align: right;
+    font-weight: 300;
+    font-size: 10px;
+    line-height: 16px;
+    opacity: .4;
+    clear: both;
 }
 
-.rev-ad a {
+.rev-toaster .rev-footer a {
+    letter-spacing: .1px;
+    color: #fff;
+    padding: 0 6px 3px;
+    display: inline-block;
+}
+
+.rev-toaster .rev-footer a span {
+    color: #4CC93D;
+}
+
+.rev-toaster .rev-ad {
+    padding-bottom: 3px;
+    margin-right: 36px;
+    clear: left;
+}
+
+.rev-toaster .rev-ad a {
     display: block;
 }
 
-.rev-ad a:hover {
-    text-decoration: none;
-}
-
-.rev-image {
-    height: 4.2rem;
+.rev-toaster .rev-image {
+    height: 75px;
     float: left;
-    margin-right: 16px;
+    margin-right: 10px;
 }
 
-.rev-image img {
+.rev-toaster .rev-image img {
     max-width: 100%;
     max-height: 100%;
+    border: 1px solid #000;
     margin: 0 auto;
     display: inline-block;
     vertical-align: middle;
 }
 
-.rev-headline h3 {
+.rev-toaster .rev-headline {
+    max-height: 40px;
+    overflow: hidden;
+}
+
+.rev-toaster .rev-headline h3 {
     color: #fff;
-    font-size: 1rem;
-    font-weight: 300;
+    font-size: 16px;
+    font-weight: 500;
     letter-spacing: .2px;
-    line-height: 1.4rem;
+    line-height: 20px;
     margin: 0;
 }
 
-button.rev-close {
+.rev-toaster .rev-provider {
+    font-size: 12px;
+    color: #888;
+    line-height: 30px;
+}
+
+.rev-toaster button.rev-close {
     box-sizing: border-box;
     color: currentColor;
     -webkit-user-select: none;
@@ -128,9 +156,7 @@ button.rev-close {
     display: inline-table;
     background: 0 0;
     white-space: nowrap;
-
     overflow: hidden;
-
     border-radius: 50%;
     border-radius: 50%;
     box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
@@ -151,8 +177,7 @@ button.rev-close {
     overflow: hidden;
     transition: .2s linear;
     transition-property: background-color,box-shadow;
-    color: rgba(255,255,255,0.87);
-    background-color: #4CC93D;
+    background-color: #6D6D6D;
     line-height: 30px;
     width: 30px;
     height: 30px;
@@ -161,17 +186,18 @@ button.rev-close {
     right: 8px;
 }
 
-button.rev-close .icon {
+.rev-toaster button.rev-close .icon {
     margin: auto;
     background-repeat: no-repeat no-repeat;
-    display: inline-block;
     fill: currentColor;
     height: 30px;
     width: 30px;
-    color: #f8f8f8;
+    margin-top: -2px;
+    color: #c5c5c5;
 }
 
-button.rev-close .icon svg {
+.rev-toaster button.rev-close .icon svg {
+    vertical-align: middle;
     width: 15px;
     height: 15px;
 }
