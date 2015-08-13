@@ -52,9 +52,9 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                         link: 'revcontent-api-showcase-scrollingexp-1.0',
                     },
                     toaster: {
-                        title: 'Toaster',
-                        img: 'toast.jpg',
-                        description: 'Pop! Content toasters are an engaging way to interact with your readers, once they scroll past 50% of your page’s content, a toaster appears in the lower right corner - or the bottom of the screen in mobile. There are many ways to use content toasters on your site, and with the API, sponsored content can easily be integrated into your own implementation.',
+                        title: 'Mobile Toaster',
+                        img: 'toaster.jpg',
+                        description: 'Pop! Content toasters are an engaging way to interact with your readers. The Mobile Toaster will appear as the user pans back to the top of the page and disapear as they scroll back down. Show your reader what\'s trending and get great results with the Mobile Toaster.',
                         link: 'revcontent-api-showcase-toaster-1.0',
                     },
                     'exit-pop': {
@@ -68,12 +68,6 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                         img: 'slider.jpg',
                         description: 'Slider or sometimes called a carousel is an engaging way to showcase RevContent ads on your site! Give your readers the ability to navigate through all of the ads availible to your widget. Fully responsive and configurable to display as many rows and columns as you like at various breakpoints. Slider is a great choice for any site!',
                         link: 'revcontent-api-showcase-slider-1.0',
-                    },
-                    toaster2: {
-                        title: 'Toaster',
-                        img: 'toaster2.jpg',
-                        description: 'Pop! Content toasters are an engaging way to interact with your readers, once they scroll past 50% of your page’s content, a toaster appears in the lower right corner - or the bottom of the screen in mobile. There are many ways to use content toasters on your site, and with the API, sponsored content can easily be integrated into your own implementation.',
-                        link: 'revcontent-api-showcase-toaster-2.0',
                     }
                 };
 
