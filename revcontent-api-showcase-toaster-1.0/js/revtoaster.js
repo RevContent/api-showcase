@@ -141,7 +141,7 @@
             scrollTimeout = false;
         }
 
-        scrollTimeout = setTimeout( delayed, 200);
+        scrollTimeout = setTimeout( delayed, 300);
 
     };
 
