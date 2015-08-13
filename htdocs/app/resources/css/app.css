@@ -438,10 +438,6 @@ md-dialog  {
   margin-top: 15px;
 }
 
-md-dialog.wide {
-  width: 1000px;
-}
-
 .md-tooltip-lg .md-content {
   white-space: normal;
 }

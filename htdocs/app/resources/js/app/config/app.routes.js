@@ -77,6 +77,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                 $mdDialog.show({
                     templateUrl: 'app/resources/js/app/dialog/post.html',
                     targetEvent: $mdCardContent.getClickEvent(),
+                    clickOutsideToClose: true,
                     controller: function($scope) {
                         $scope.post = plugin;
                     },
