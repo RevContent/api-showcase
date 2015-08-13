@@ -2,14 +2,11 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v0.8.3
+ * v0.10.1
  */
 goog.provide('ng.material.components.toast');
 goog.require('ng.material.components.button');
 goog.require('ng.material.core');
-(function() {
-'use strict';
-
 /**
  * @ngdoc module
  * @name material.components.toast
@@ -35,7 +32,7 @@ function MdToastDirective() {
  * @module material.components.toast
  *
  * @description
- * `$mdToast` is a service to build a toast nofication on any position
+ * `$mdToast` is a service to build a toast notification on any position
  * on the screen with an optional duration, and provides a simple promise API.
  *
  *
@@ -86,10 +83,11 @@ function MdToastDirective() {
  * @returns {obj} a `$mdToastPreset` with the chainable configuration methods:
  *
  * - $mdToastPreset#content(string) - sets toast content to string
- * - $mdToastPreset#action(string) - adds an action button, which resolves the promise returned from `show()` if clicked.
+ * - $mdToastPreset#action(string) - adds an action button. If clicked the promise (returned from `show()`) will resolve
+ *   with value 'ok'; otherwise it promise is resolved with 'true' after a hideDelay timeout.
  * - $mdToastPreset#highlightAction(boolean) - sets action button to be highlighted
  * - $mdToastPreset#capsule(boolean) - adds 'md-capsule' class to the toast (curved corners)
- * - $mdToastPreset#theme(boolean) - sets the theme on the toast to theme (default is `$mdThemingProvider`'s default theme)
+ * - $mdToastPreset#theme(string) - sets the theme on the toast to theme (default is `$mdThemingProvider`'s default theme)
  */
 
 /**
@@ -148,7 +146,9 @@ function MdToastDirective() {
  *     to the root element of the application.
  *
  * @returns {promise} A promise that can be resolved with `$mdToast.hide()` or
- * rejected with `$mdToast.cancel()`.
+ * rejected with `$mdToast.cancel()`. `$mdToast.hide()` will resolve either with a Boolean
+ * value == 'true' or the value passed as an argument to `$mdToast.hide()`.
+ * And `$mdToast.cancel()` will resolve the promise with a Boolean value == 'false'
  */
 
 /**
@@ -160,7 +160,9 @@ function MdToastDirective() {
  *
  * @param {*=} response An argument for the resolved promise.
  *
- * @returns {promise} a promise that is called when the existing element is removed from the DOM
+ * @returns {promise} a promise that is called when the existing element is removed from the DOM.
+ * The promise is resolved with either a Boolean value == 'true' or the value passed as the
+ * argument to `.hide()`.
  *
  */
 
@@ -175,20 +177,24 @@ function MdToastDirective() {
  * @param {*=} response An argument for the rejected promise.
  *
  * @returns {promise} a promise that is called when the existing element is removed from the DOM
+ * The promise is resolved with a Boolean value == 'false'.
  *
  */
 
 function MdToastProvider($$interimElementProvider) {
+  // Differentiate promise resolves: hide timeout (value == true) and hide action clicks (value == ok).
+  var ACTION_RESOLVE = 'ok';
+
   var activeToastContent;
   var $mdToast = $$interimElementProvider('$mdToast')
     .setDefaults({
-      methods: ['position', 'hideDelay', 'capsule'],
+      methods: ['position', 'hideDelay', 'capsule' ],
       options: toastDefaultOptions
     })
     .addPreset('simple', {
       argOption: 'content',
-      methods: ['content', 'action', 'highlightAction', 'theme'],
-      options: /* @ngInject */ ["$mdToast", "$mdTheming", function($mdToast, $mdTheming) {
+      methods: ['content', 'action', 'highlightAction', 'theme', 'parent'],
+      options: /* ngInject */ ["$mdToast", "$mdTheming", function($mdToast, $mdTheming) {
         var opts = {
           template: [
             '<md-toast md-theme="{{ toast.theme }}" ng-class="{\'md-capsule\': toast.capsule}">',
@@ -198,13 +204,13 @@ function MdToastProvider($$interimElementProvider) {
               '</md-button>',
             '</md-toast>'
           ].join(''),
-          controller: /* @ngInject */ ["$scope", function mdToastCtrl($scope) {
+          controller: /* ngInject */ ["$scope", function mdToastCtrl($scope) {
             var self = this;
             $scope.$watch(function() { return activeToastContent; }, function() {
               self.content = activeToastContent;
             });
             this.resolve = function() {
-              $mdToast.hide();
+              $mdToast.hide( ACTION_RESOLVE );
             };
           }],
           theme: $mdTheming.defaultTheme(),
@@ -218,11 +224,11 @@ function MdToastProvider($$interimElementProvider) {
       activeToastContent = newContent;
     });
 
-  toastDefaultOptions.$inject = ["$timeout", "$animate", "$mdToast"];
+  toastDefaultOptions.$inject = ["$animate", "$mdToast", "$mdUtil"];
     return $mdToast;
 
-  /* @ngInject */
-  function toastDefaultOptions($timeout, $animate, $mdToast) {
+  /* ngInject */
+  function toastDefaultOptions($animate, $mdToast, $mdUtil) {
     return {
       onShow: onShow,
       onRemove: onRemove,
@@ -232,6 +238,8 @@ function MdToastProvider($$interimElementProvider) {
     };
 
     function onShow(scope, element, options) {
+      element = $mdUtil.extractElementByName(element, 'md-toast');
+
       // 'top left' -> 'md-top md-left'
       activeToastContent = options.content;
       element.addClass(options.position.split(' ').map(function(pos) {
@@ -242,7 +250,7 @@ function MdToastProvider($$interimElementProvider) {
       options.onSwipe = function(ev, gesture) {
         //Add swipeleft/swiperight class to element so it can animate correctly
         element.addClass('md-' + ev.type.replace('$md.',''));
-        $timeout($mdToast.cancel);
+        $mdUtil.nextTick($mdToast.cancel);
       };
       element.on('$md.swipeleft $md.swiperight', options.onSwipe);
       return $animate.enter(element, options.parent);
@@ -263,4 +271,4 @@ function MdToastProvider($$interimElementProvider) {
 }
 MdToastProvider.$inject = ["$$interimElementProvider"];
 
-})();
+ng.material.components.toast = angular.module("material.components.toast");
