@@ -40,7 +40,7 @@
 
     var getData = function() {
         loading = true;
-        var url = 'https://trends.revcontent.com/api/v1/?api_key='+ options.api_key +'&pub_id='+ options.pub_id +'&widget_id='+ options.widget_id +'&domain='+ options.domain +'&sponsored_count=' + options.sponsored + '&sponsored_offset=0&internal_count=0';
+        var url = 'https://trends.revcontent.com/api/v1/?api_key='+ options.api_key +'&pub_id='+ options.pub_id +'&widget_id='+ options.widget_id +'&domain='+ options.domain +'&sponsored_count=' + options.sponsored + '&sponsored_offset=0&internal_count=0&api_source=toast';
 
         var request = new XMLHttpRequest();
 
