@@ -39,6 +39,7 @@
     -moz-transform: none;
     -o-transform: none;
     -webkit-transform: none;
+    z-index: 2147483647;
 }
 
 .rev-toaster .rev-header {
