@@ -27,7 +27,7 @@ gulp.task('embedcss', ['minifycss'], function () {
 });
 
 gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
-    return gulp.src(['./build/*.js', '!./build/revtoaster.min.js'])
+    return gulp.src(['./build/*.js', '!./build/revtoaster.min.js', '!./build/revtoaster.pkgd.js'])
         .pipe(concat('revtoaster.pkgd.js'))
         .pipe(gulp.dest('./build'))
         .pipe(uglify({
