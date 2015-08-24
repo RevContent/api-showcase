@@ -4,14 +4,9 @@ Pop! Content toasters are an engaging way to interact with your readers. The Mob
 
 ## How to use
 
-Add the css file to the document ```<head>```
+Add the packaged or minified revtoaster script before the closing ```</body>``` tag
 
-    <link href="css/example.css" rel="stylesheet">
-
-Add the following scripts before the closing ```</body>``` tag
-
-    <script src="js/imagesloaded.pkgd.js"></script>
-    <script src="js/revtoaster.js"></script>
+    <script src="js/revtoaster.pkgd.js"></script>
 
     <script>
         RevToaster({
@@ -24,3 +19,12 @@ Add the following scripts before the closing ```</body>``` tag
     </script>
 
 Insert the proper values for your widget and optionally set the ```sponsored``` count(accepted values are 1 or 2 sponsored ads).
+
+## Building
+Gulp is used to embed css, concat and uglify the revtoaster script. To build the scripts:
+1. change directory to the revcontent-api-showcase-toaster-1.0 directory
+2. run ```npm install``` to get the gulp dependencies
+3. run ```gulp``` this will run the default task and populate the build directory
+
+## Watch
+During development it can be useful to build the files on the fly when modifications are made. To have gulp watch the ./js/revtoaster and ./css/example.css files run ```gulp watch```
