@@ -1,0 +1,19 @@
+{
+  "name": "revcontent-api-showcase-toaster-1.0",
+  "version": "1",
+  "ignore": [],
+  "description": "RevToaster",
+  "main": "js/revtoaster.js",
+  "dependencies": {
+    "normalize-css": "~3",
+    "imagesloaded": "~3"
+  },
+  "homepage": "https://api-v2.revcontent.com/",
+  "authors": [
+    "Mike Osterhout"
+  ],
+  "keywords": [
+    "revcontent"
+  ],
+  "license": "MIT"
+}

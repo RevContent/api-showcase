@@ -1,16 +1,26 @@
-var gulp      = require('gulp');
-var inject    = require('gulp-inject');
-var rename    = require('gulp-rename');
-var minifycss = require('gulp-minify-css');
-var concat    = require('gulp-concat');
-var uglify    = require('gulp-uglify');
+var gulp         = require('gulp');
+var inject       = require('gulp-inject');
+var rename       = require('gulp-rename');
+var minifycss    = require('gulp-minify-css');
+var concat       = require('gulp-concat');
+var uglify       = require('gulp-uglify');
+var autoprefixer = require('gulp-autoprefixer');
 
 gulp.task('default', ['buildjs']);
 
 gulp.task('minifycss', function() {
-    return gulp.src('./css/revtoaster.css')
-        .pipe(rename('revtoaster.min.css'))
+    return gulp.src(['./vendor/normalize-css/normalize.css', './css/revtoaster.css'])
+        .pipe(concat('revtoaster.min.css'))
         .pipe(minifycss({keepSpecialComments: 0}))
+        .pipe(gulp.dest('./build'));
+});
+
+gulp.task('prefixcss', function() {
+    return gulp.src(['./build/revtoaster.min.css'])
+        .pipe(autoprefixer({
+            browsers: ['> 1%'],
+            cascade: false
+        }))
         .pipe(gulp.dest('./build'));
 });
 
@@ -26,8 +36,8 @@ gulp.task('embedcss', ['minifycss'], function () {
       .pipe(gulp.dest('./build'));
 });
 
-gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
-    return gulp.src(['./build/*.js', '!./build/revtoaster.min.js', '!./build/revtoaster.pkgd.js'])
+gulp.task('buildjs', ['minifycss', 'prefixcss', 'embedcss'], function() {
+    return gulp.src(['./vendor/imagesloaded/imagesloaded.pkgd.js', './build/revtoaster.js'])
         .pipe(concat('revtoaster.pkgd.js'))
         .pipe(gulp.dest('./build'))
         .pipe(uglify({
