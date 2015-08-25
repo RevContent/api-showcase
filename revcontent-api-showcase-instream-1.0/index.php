@@ -1,6 +1,6 @@
 <?php
 /**
-* Example API call in PHP for the RevContent API
+* Example API call in PHP for the Revcontent API
 *
 * Got Questions? Email Us: support@revcontent.com
 *
@@ -106,7 +106,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <h1 class="page-header">In-stream
-                    <small>RevContent Native API</small>
+                    <small>Revcontent Native API</small>
                 </h1>
             </div>
         </div>
@@ -129,7 +129,7 @@
 
         <hr>
 
-        <!-- Post Two Sponsored By RevContent! -->
+        <!-- Post Two Sponsored By Revcontent! -->
         <div class="row">
             <div class="col-md-3  col-xs-5">
                 <a href="<?php echo $response[0]['url']; ?>" target="_blank">
@@ -181,7 +181,7 @@
 
         <hr>
 
-        <!-- Post Five Sponsored By RevContent! -->
+        <!-- Post Five Sponsored By Revcontent! -->
         <div class="row">
             <div class="col-md-3  col-xs-5">
                 <a href="<?php echo $response[1]['url']; ?>" target="_blank">
