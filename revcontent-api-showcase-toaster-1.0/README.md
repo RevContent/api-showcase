@@ -6,7 +6,7 @@ Pop! Content toasters are an engaging way to interact with your readers. The Mob
 
 Add the packaged or minified revtoaster script before the closing ```</body>``` tag
 
-    <script src="js/revtoaster.pkgd.js"></script>
+    <script src="js/revtoaster.min.js"></script>
 
     <script>
         RevToaster({
