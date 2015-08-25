@@ -61,13 +61,13 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                     'exit-pop': {
                         title: 'Exit Pop',
                         img: 'exitpop.jpg',
-                        description: 'Exit Pop is an API implementation that pops up on a user\'s first impression every 24 hours for non-touch enabled devices (e.g. desktops). When the user mouses off the page they are usually trying to close the window or navigate away from the page. Exit Pop is a great way to give these users one more chance to view your RevContent API widget.',
+                        description: 'Exit Pop is an API implementation that pops up on a user\'s first impression every 24 hours for non-touch enabled devices (e.g. desktops). When the user mouses off the page they are usually trying to close the window or navigate away from the page. Exit Pop is a great way to give these users one more chance to view your Revcontent API widget.',
                         link: 'revcontent-api-showcase-exitpop-1.0',
                     },
                     slider: {
                         title: 'Slider',
                         img: 'slider.jpg',
-                        description: 'Slider or sometimes called a carousel is an engaging way to showcase RevContent ads on your site! Give your readers the ability to navigate through all of the ads availible to your widget. Fully responsive and configurable to display as many rows and columns as you like at various breakpoints. Slider is a great choice for any site!',
+                        description: 'Slider or sometimes called a carousel is an engaging way to showcase Revcontent ads on your site! Give your readers the ability to navigate through all of the ads availible to your widget. Fully responsive and configurable to display as many rows and columns as you like at various breakpoints. Slider is a great choice for any site!',
                         link: 'revcontent-api-showcase-slider-1.0',
                     }
                 };

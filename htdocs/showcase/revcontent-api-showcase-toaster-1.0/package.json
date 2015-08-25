@@ -2,7 +2,7 @@
   "name": "api-showcase-toaster",
   "version": "0.0.1",
   "repository": {
-    "url": "git:///RevContent/api-showcase.git"
+    "url": "git:///Revcontent/api-showcase.git"
   },
   "devDependencies": {
     "gulp": "~3",

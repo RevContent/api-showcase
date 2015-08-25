@@ -1,7 +1,7 @@
 API Showcase
 ===
 
-The API Showcase provides examples of what's possible with the RevContent API using jQuery plugins.
+The API Showcase provides examples of what's possible with the Revcontent API using jQuery plugins.
 
 Requirements
 ===
