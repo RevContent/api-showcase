@@ -1,9 +1,35 @@
-( function( window, factory ) {
-  'use strict';
-    window.RevToaster = factory();
+/*
+ooooooooo.                         ooooooooooooo                                  .
+`888   `Y88.                       8'   888   `8                                .o8
+ 888   .d88'  .ooooo.  oooo    ooo      888       .ooooo.   .oooo.    .oooo.o .o888oo  .ooooo.  oooo d8b
+ 888ooo88P'  d88' `88b  `88.  .8'       888      d88' `88b `P  )88b  d88(  "8   888   d88' `88b `888""8P
+ 888`88b.    888ooo888   `88..8'        888      888   888  .oP"888  `"Y88b.    888   888ooo888  888
+ 888  `88b.  888    .o    `888'         888      888   888 d8(  888  o.  )88b   888 . 888    .o  888
+o888o  o888o `Y8bod8P'     `8'         o888o     `Y8bod8P' `Y888""8o 8""888P'   "888" `Y8bod8P' d888b
 
-}( window, function factory() {
+Project: RevToaster
+Version: 1
+Author: michael@revcontent.com
+
+RevToaster({
+    api_key: 'your api_key',
+    pub_id: pub_id,
+    widget_id: widget_id,
+    domain: 'widget domain',
+    sponsored: 2,
+});
+*/
+
+// universal module definition
+( function( window, factory ) {
+    'use strict';
+    // browser global
+    window.RevToaster = factory(window);
+
+}( window, function factory(window) {
 'use strict';
+
+    // ----- vars ----- //
 
     var options;
     var lastScrollTop = 0;
@@ -19,8 +45,9 @@
             return;
         }
 
-        if (getCookie('revtoaster-closed') && !options.testing)
+        if (getCookie('revtoaster-closed') && !options.testing) {
             return;
+        }
 
         appendStyle();
 
