@@ -36,7 +36,11 @@
     text-decoration: none;
 }
 
-.rev-toaster.rev-toaster-loaded {
+body.rev-toaster-loaded {
+    margin: 0;
+}
+
+body.rev-toaster-loaded .rev-toaster{
     bottom: 0;
     transform: none;
     -ms-transform: none;

@@ -9,18 +9,13 @@ var autoprefixer = require('gulp-autoprefixer');
 gulp.task('default', ['buildjs']);
 
 gulp.task('minifycss', function() {
-    return gulp.src(['./vendor/normalize-css/normalize.css', './css/revtoaster.css'])
+    return gulp.src(['./css/revtoaster.css'])
         .pipe(concat('revtoaster.min.css'))
-        .pipe(minifycss({keepSpecialComments: 0}))
-        .pipe(gulp.dest('./build'));
-});
-
-gulp.task('prefixcss', function() {
-    return gulp.src(['./build/revtoaster.min.css'])
         .pipe(autoprefixer({
             browsers: ['> 1%'],
             cascade: false
         }))
+        .pipe(minifycss({keepSpecialComments: 0}))
         .pipe(gulp.dest('./build'));
 });
 
@@ -36,7 +31,7 @@ gulp.task('embedcss', ['minifycss'], function () {
       .pipe(gulp.dest('./build'));
 });
 
-gulp.task('buildjs', ['minifycss', 'prefixcss', 'embedcss'], function() {
+gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
     return gulp.src(['./vendor/imagesloaded/imagesloaded.pkgd.js', './build/revtoaster.js'])
         .pipe(concat('revtoaster.pkgd.js'))
         .pipe(gulp.dest('./build'))

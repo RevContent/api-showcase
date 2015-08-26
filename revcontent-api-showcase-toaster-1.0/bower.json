@@ -5,7 +5,6 @@
   "description": "RevToaster",
   "main": "js/revtoaster.js",
   "dependencies": {
-    "normalize-css": "~3",
     "imagesloaded": "~3"
   },
   "homepage": "https://api-v2.revcontent.com/",
