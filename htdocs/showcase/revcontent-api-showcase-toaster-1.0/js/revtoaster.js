@@ -115,7 +115,7 @@ RevToaster({
                 document.getElementsByTagName('body')[0].appendChild(revToaster);
 
                 imagesLoaded( revToaster, function() {
-                    addClass(revToaster, 'rev-toaster-loaded');
+                    addClass(document.body, 'rev-toaster-loaded');
                     loading = false;
                     bindClose();
                 });
@@ -133,7 +133,7 @@ RevToaster({
 
     var bindClose = function() {
         document.querySelector('.rev-close').addEventListener('click', function(e) {
-            removeClass(revToaster, 'rev-toaster-loaded');
+            removeClass(document.body, 'rev-toaster-loaded');
             setTimeout(function() {
                 revToaster.parentNode.removeChild(revToaster);
                 removed = true;
@@ -164,15 +164,15 @@ RevToaster({
 
             } else if (scrollDirection === 'down' &&
                 document.querySelector('.rev-toaster') !== null &&
-                hasClass(revToaster, 'rev-toaster-loaded')) {
+                hasClass(document.body, 'rev-toaster-loaded')) {
 
-                removeClass(revToaster, 'rev-toaster-loaded');
+                removeClass(document.body, 'rev-toaster-loaded');
 
             } else if (scrollDirection === 'up' &&
                 document.querySelector('.rev-toaster') !== null &&
-                !hasClass(revToaster, 'rev-toaster-loaded')) {
+                !hasClass(document.body, 'rev-toaster-loaded')) {
 
-                addClass(revToaster, 'rev-toaster-loaded');
+                addClass(document.body, 'rev-toaster-loaded');
             }
             lastScrollTop = scrollTop;
             scrollTimeout = false;
