@@ -1,0 +1,122 @@
+.rev-flickity * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-size:inherit;
+    line-height:inherit;
+    margin:0;
+    padding:0;
+}
+
+.rev-flickity:focus {
+    outline: 0;
+}
+
+.rev-flickity .rev-header {
+    float: left;
+    font-size: 22px;
+    line-height: 32px;
+}
+
+.rev-flickity .flickity-viewport {
+    clear: both;
+}
+
+.rev-flickity .rev-sponsored {
+    line-height: 28px;
+    font-size: 16px;
+}
+
+.rev-flickity .rev-sponsored.bottom-right,
+.rev-flickity .rev-sponsored.top-right {
+    float: right;
+}
+
+.rev-flickity .rev-sponsored.top-right a {
+    vertical-align: -5px;
+}
+
+.rev-flickity .flickity-prev-next-button {
+    opacity: 0;
+    transition: all .5s ease-in-out;
+}
+
+.rev-flickity:hover .flickity-prev-next-button {
+    opacity: 1;
+}
+
+.rev-flickity .rev-sponsored a {
+    color: #777;
+}
+
+.rev-flickity a,
+.rev-flickity a:hover,
+.rev-flickity a:focus {
+    text-decoration: none;
+}
+
+.rev-flickity .rev-ad a {
+    display: block;
+    color: #222;
+}
+
+.rev-flickity .rev-image {
+}
+
+.rev-flickity .rev-image img {
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0 auto;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.rev-flickity .rev-headline,
+.rev-flickity .rev-provider {
+    margin: 0 10px;
+}
+
+.rev-flickity .rev-headline {
+    margin-top: 12px;
+    height: 40px;
+    overflow: hidden;
+}
+
+.rev-flickity .rev-headline h3 {
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: .2px;
+    line-height: 20px;
+    margin: 0;
+}
+
+.rev-flickity .rev-provider {
+    font-size: 12px;
+    color: #888;
+    line-height: 30px;
+}
+
+.rev-flickity .flickity-slider {
+}
+
+.rev-flickity .rev-content {
+}
+
+.rev-flickity .rev-ad {
+    margin-right: 10%;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.rev-content {
+    transition: all .5s ease-in-out;
+    opacity: 1;
+    filter: blur(0);
+}
+
+.rev-content.next {
+    transition: all .5s ease-in-out;
+    filter: blur(2px);
+    opacity: .6;
+}
