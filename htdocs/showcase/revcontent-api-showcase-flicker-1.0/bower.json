@@ -1,0 +1,19 @@
+{
+  "name": "revcontent-api-showcase-flickity-1.0",
+  "version": "1",
+  "ignore": [],
+  "description": "RevFlickity",
+  "main": "js/revflickity.js",
+  "dependencies": {
+    "flickity": "~1",
+    "mobile-detect": "~1"
+  },
+  "homepage": "https://api-v2.revcontent.com/",
+  "authors": [
+    "Mike Osterhout"
+  ],
+  "keywords": [
+    "revflickity"
+  ],
+  "license": "MIT"
+}

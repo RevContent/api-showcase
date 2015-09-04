@@ -69,6 +69,12 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                         img: 'slider.jpg',
                         description: 'Slider or sometimes called a carousel is an engaging way to showcase Revcontent ads on your site! Give your readers the ability to navigate through all of the ads availible to your widget. Fully responsive and configurable to display as many rows and columns as you like at various breakpoints. Slider is a great choice for any site!',
                         link: 'revcontent-api-showcase-slider-1.0',
+                    },
+                    flicker: {
+                        title: 'Flicker',
+                        img: 'flicker.jpg',
+                        description: 'With responsive styling and touch enabled gestures Flicker puts the fun into your content slider. You can configure the Flicker widget to show on phone, tablet and desktop and you can even decide how many units to display at various breakpoints. Include Flicker on your page and let the engagement begin!',
+                        link: 'revcontent-api-showcase-flicker-1.0',
                     }
                 };
 
