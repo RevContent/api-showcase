@@ -46,7 +46,8 @@ RevFlickity({
             },
             header: 'Trending Now',
             rev_position: (revDetect.mobile() ? 'bottom_left' : 'bottom_right'),
-            nextWidth: 60,
+            next_width: 60,
+            next_effect: true,
             sponsored: 10,
             dots: false,
             devices: [
@@ -58,7 +59,7 @@ RevFlickity({
         // merge options
         this.options = revUtils.extend(defaults, opts);
         // param errors
-        if (revUtils.validateApiParams(this.options).length) { 
+        if (revUtils.validateApiParams(this.options).length) {
             return;
         }
         // don't show for this device
@@ -139,7 +140,7 @@ RevFlickity({
             this.per_row = this.options.per_row.xxs;
         }
         // divide container width by per row to determine column width, account for width of halved/next item
-        this.columnWidth = ((this.containerWidth - this.options.nextWidth) / this.per_row);
+        this.columnWidth = ((this.containerWidth - this.options.next_width) / this.per_row);
     };
 
     RevFlickity.prototype.getData = function() {
@@ -161,10 +162,10 @@ RevFlickity({
 
                 revUtils.addClass(cell, 'rev-content');
                 // next in line gets special class
-                if (that.per_row == i) {
-                    revUtils.addClass(cell, 'next');    
+                if (that.options.next_effect && i >= that.per_row) {
+                    revUtils.addClass(cell, 'next');
                 }
-            
+
                 cell.innerHTML = html;
 
                 that.flickity.append(cell);
@@ -177,21 +178,24 @@ RevFlickity({
 
             that.selectedIndex = that.flickity.selectedIndex
 
-            that.flickity.on( 'cellSelect', function() {
-                if (that.selectedIndex != that.flickity.selectedIndex) {
-
-                    that.selectedIndex = that.flickity.selectedIndex
-
-                    var current = that.flickity.element.querySelectorAll('.rev-content.next')[0];
-
-                    var nextIndex = (that.selectedIndex == (that.options.sponsored - that.per_row)) ? (that.selectedIndex - that.per_row) : that.selectedIndex + that.per_row;
-
-                    var next = that.flickity.element.querySelectorAll('.rev-content')[nextIndex];
-
-                    revUtils.addClass(next, 'next');
-                    revUtils.removeClass(current, 'next');
-                }
-            });
+            if (that.options.next_effect) {
+                that.flickity.on( 'cellSelect', function() {
+                    if (that.selectedIndex != that.flickity.selectedIndex) { // only do something when index changes
+                        var content = that.flickity.element.querySelectorAll('.rev-content');
+                        var nextIndex = that.flickity.selectedIndex + that.per_row;
+                        var last = that.flickity.selectedIndex >= that.options.sponsored - that.per_row;
+                        for (var i = 0; i < content.length; i++) {
+                            if (last) { // none left to half so all are visible
+                                revUtils.removeClass(content[i], 'next');
+                            } else if (i >= nextIndex) {
+                                revUtils.addClass(content[i], 'next');
+                            } else {
+                                revUtils.removeClass(content[i], 'next');
+                            }
+                        }
+                    }
+                });
+            }
         });
     };
 
