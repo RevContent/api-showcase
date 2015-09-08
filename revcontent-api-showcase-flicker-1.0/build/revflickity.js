@@ -181,9 +181,10 @@ RevFlickity({
             if (that.options.next_effect) {
                 that.flickity.on( 'cellSelect', function() {
                     if (that.selectedIndex != that.flickity.selectedIndex) { // only do something when index changes
+                        that.selectedIndex = that.flickity.selectedIndex
                         var content = that.flickity.element.querySelectorAll('.rev-content');
-                        var nextIndex = that.flickity.selectedIndex + that.per_row;
-                        var last = that.flickity.selectedIndex >= that.options.sponsored - that.per_row;
+                        var nextIndex = that.selectedIndex + that.per_row;
+                        var last = that.selectedIndex >= that.options.sponsored - that.per_row;
                         for (var i = 0; i < content.length; i++) {
                             if (last) { // none left to half so all are visible
                                 revUtils.removeClass(content[i], 'next');
