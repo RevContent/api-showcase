@@ -2874,8 +2874,6 @@ AnyGrid.prototype._create = function() {
     this.element.style.position = "relative";
 
     this.bindResize();
-
-    this._setUp();
 };
 
 AnyGrid.prototype._resetLayout = function() {
