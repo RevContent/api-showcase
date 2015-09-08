@@ -112,11 +112,11 @@
 .rev-content {
     transition: all .5s ease-in-out;
     opacity: 1;
-    filter: blur(0);
+    /*filter: blur(0);*/
 }
 
 .rev-content.next {
     transition: all .5s ease-in-out;
-    filter: blur(1px);
+    /*filter: blur(1px);*/
     opacity: .5;
 }
