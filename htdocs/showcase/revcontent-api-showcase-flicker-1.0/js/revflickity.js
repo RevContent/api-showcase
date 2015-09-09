@@ -45,7 +45,7 @@ RevFlickity({
                 xxl: 7
             },
             header: 'Trending Now',
-            rev_position: (revDetect.mobile() ? 'bottom_left' : 'bottom_right'),
+            rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right'),
             next_width: 60,
             next_effect: true,
             sponsored: 10,
