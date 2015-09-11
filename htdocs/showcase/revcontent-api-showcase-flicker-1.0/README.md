@@ -50,6 +50,10 @@ Insert the proper values for your widget and set any optional parameters
 
     next_effect: true
 
+**sponsored** - number of ads to display
+
+    sponsored: 10
+
 ## Building
 Gulp is used to embed css, concat and uglify the revtoaster script. To build the scripts:
 1. change directory to the revcontent-api-showcase-toaster-1.0 directory

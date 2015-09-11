@@ -9,8 +9,8 @@ var autoprefixer = require('gulp-autoprefixer');
 gulp.task('default', ['buildjs']);
 
 gulp.task('minifycss', function() {
-    return gulp.src(['./vendor/flickity/css/flickity.css', './css/revflickity.css'])
-        .pipe(concat('revflickity.min.css'))
+    return gulp.src(['./vendor/flickity/css/flickity.css', './css/revflicker.css'])
+        .pipe(concat('revflicker.min.css'))
         .pipe(autoprefixer({
             browsers: ['> 1%'],
             cascade: false
@@ -20,7 +20,7 @@ gulp.task('minifycss', function() {
 });
 
 gulp.task('embedcss', ['minifycss'], function () {
-    return gulp.src('./js/revflickity.js')
+    return gulp.src('./js/revflicker.js')
       .pipe(inject(gulp.src(['./build/*.css']), {
         starttag: '/* inject:css */',
         endtag: '/* endinject */',
@@ -32,13 +32,13 @@ gulp.task('embedcss', ['minifycss'], function () {
 });
 
 gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
-    return gulp.src(['./vendor/flickity/dist/flickity.pkgd.js', './vendor/mobile-detect/mobile-detect.js', './js/revutils.js', './js/revdetect.js', './js/revapi.js', './build/revflickity.js'])
-        .pipe(concat('revflickity.pkgd.js'))
+    return gulp.src(['./vendor/flickity/dist/flickity.pkgd.js', './vendor/mobile-detect/mobile-detect.js', './js/revutils.js', './js/revdetect.js', './js/revapi.js', './build/revflicker.js'])
+        .pipe(concat('revflicker.pkgd.js'))
         .pipe(gulp.dest('./build'))
         .pipe(uglify({
             mangle: false
             }))
-        .pipe(rename('revflickity.min.js'))
+        .pipe(rename('revflicker.min.js'))
         .pipe(gulp.dest('./build'));
 });
 

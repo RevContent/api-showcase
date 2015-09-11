@@ -1,10 +1,17 @@
 /*
+ooooooooo.                         oooooooooooo oooo   o8o            oooo
+`888   `Y88.                       `888'     `8 `888   `"'            `888
+ 888   .d88'  .ooooo.  oooo    ooo  888          888  oooo   .ooooo.   888  oooo   .ooooo.  oooo d8b
+ 888ooo88P'  d88' `88b  `88.  .8'   888oooo8     888  `888  d88' `"Y8  888 .8P'   d88' `88b `888""8P
+ 888`88b.    888ooo888   `88..8'    888    "     888   888  888        888888.    888ooo888  888
+ 888  `88b.  888    .o    `888'     888          888   888  888   .o8  888 `88b.  888    .o  888
+o888o  o888o `Y8bod8P'     `8'     o888o        o888o o888o `Y8bod8P' o888o o888o `Y8bod8P' d888b
 
-Project: RevFlickity
+Project: RevFlicker
 Version: 1
 Author: michael@revcontent.com
 
-RevFlickity({
+RevFlicker({
     api_key: 'your api_key',
     pub_id: pub_id,
     widget_id: widget_id,
@@ -18,9 +25,16 @@ RevFlickity({
         xl: 6,
         xxl: 7
     },
+    rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right'),
+    next_width: 60,
+    next_effect: true,
+    sponsored: 10,
+    dots: false,
+    header: 'Trending Now',
     devices: [
         'phone', 'tablet', 'desktop'
-    ]
+    ],
+    url: 'https://trends.revcontent.com/api/v1/'
 });
 */
 
@@ -28,12 +42,12 @@ RevFlickity({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevFlickity = factory(window, window.revUtils, window.revDetect, window.revApi);
+    window.RevFlicker = factory(window, window.revUtils, window.revDetect, window.revApi);
 
 }( window, function factory(window, revUtils, revDetect, revApi) {
 'use strict';
 
-    var RevFlickity = function(opts) {
+    var RevFlicker = function(opts) {
         var defaults = {
            per_row: {
                 xxs: 1,
@@ -69,7 +83,7 @@ RevFlickity({
 
         var that = this;
         //append injrected style
-        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-flickity');
+        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-flicker');
         // create flickity
         this.flickity = new Flickity( '#' + this.options.id, {
             prevNextButtons: revDetect.mobile() ? false : true,
@@ -77,7 +91,7 @@ RevFlickity({
             cellAlign: 'left'
         });
         // wrapper class
-        revUtils.addClass(this.flickity.element, 'rev-flickity');
+        revUtils.addClass(this.flickity.element, 'rev-flicker');
         // HACK for Chrome using emitter to wait for element container to be ready
         this.emitter = new EventEmitter();
         this.getContainerWidth();
@@ -87,7 +101,7 @@ RevFlickity({
         });
     };
 
-    RevFlickity.prototype.appendElements = function() {
+    RevFlicker.prototype.appendElements = function() {
         var header = document.createElement('h2');
         header.innerHTML = this.options.header;
         revUtils.addClass(header, 'rev-header');
@@ -105,7 +119,7 @@ RevFlickity({
         }
     }
 
-    RevFlickity.prototype.getContainerWidth = function() {
+    RevFlicker.prototype.getContainerWidth = function() {
         // HACK for Chrome - sometimes the width will be 0
         var that = this;
         function check() {
@@ -122,7 +136,7 @@ RevFlickity({
         setTimeout(check, 0);
     };
 
-    RevFlickity.prototype.setUp = function() {
+    RevFlicker.prototype.setUp = function() {
         // determine elements per row based on container width
         if (this.containerWidth >= 1500) {
             this.per_row = this.options.per_row.xxl;
@@ -143,7 +157,7 @@ RevFlickity({
         this.columnWidth = ((this.containerWidth - this.options.next_width) / this.per_row);
     };
 
-    RevFlickity.prototype.getData = function() {
+    RevFlicker.prototype.getData = function() {
         var url = this.options.url + '?api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + this.options.sponsored + '&sponsored_offset=0&internal_count=0&api_source=flick';
         var that = this;
         revApi.request(url, function(resp) {
@@ -200,6 +214,6 @@ RevFlickity({
         });
     };
 
-    return RevFlickity;
+    return RevFlicker;
 
 }));
