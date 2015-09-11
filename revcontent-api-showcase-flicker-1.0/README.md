@@ -1,24 +1,54 @@
-# Mobile Toaster
+# Flicker
 
-Pop! Content toasters are an engaging way to interact with your readers. The Mobile Toaster will appear as the user pans back to the top of the page and disapear as they scroll back down. Show your reader what's trending and get great results with the Mobile Toaster.
+
+With responsive styling and touch enabled gestures Flicker puts the fun into your content slider. You can configure the Flicker widget to show on phone, tablet and desktop and you can even decide how many units to display at various breakpoints. Include Flicker on your page and let the engagement begin!
 
 ## How to use
 
 Add the packaged or minified revtoaster script before the closing ```</body>``` tag
 
-    <script src="js/revtoaster.min.js"></script>
+    <script src="js/revflicker.min.js"></script>
 
     <script>
-        RevToaster({
+        RevFlickity({
             api_key: 'your api_key',
             pub_id: pub_id,
             widget_id: widget_id,
-            domain: 'widget domain',
-            sponsored: 2,
+            domain: 'widget domain'
         });
     </script>
 
-Insert the proper values for your widget and optionally set the ```sponsored``` count(accepted values are 1 or 2 sponsored ads).
+Insert the proper values for your widget and set any optional parameters
+
+## Optional options
+
+**per_row** - defines how many ads are visible at various breakpoints
+
+    per_row: {
+        xxs: 1,
+        xs: 1,
+        sm: 3,
+        md: 4,
+        lg: 5,
+        xl: 6,
+        xxl: 7
+    }
+
+**header** - Header text value
+
+    header: 'Trending Now',
+
+**rev_position** - position of Revcontent link, options include ```top_right```, ```bottom_left``` and ```bottom_right```. Default is ```bottom_right``` for mobile and ```top_right``` otherwise
+
+    rev_position:  (revDetect.mobile() ? 'bottom_right' : 'top_right'
+
+**next_width** - the width of the next/halved ad
+
+    next_width: 60
+
+**next_effect** - whether or not to add an effect to the next/halved ad
+
+    next_effect: true
 
 ## Building
 Gulp is used to embed css, concat and uglify the revtoaster script. To build the scripts:
