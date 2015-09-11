@@ -1,4 +1,4 @@
-.rev-flickity * {
+.rev-flicker * {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -8,62 +8,62 @@
     padding:0;
 }
 
-.rev-flickity:focus {
+.rev-flicker:focus {
     outline: 0;
 }
 
-.rev-flickity .rev-header {
+.rev-flicker .rev-header {
     float: left;
     font-size: 22px;
     line-height: 32px;
 }
 
-.rev-flickity .flickity-viewport {
+.rev-flicker .flickity-viewport {
     clear: both;
 }
 
-.rev-flickity .rev-sponsored {
+.rev-flicker .rev-sponsored {
     line-height: 28px;
     font-size: 14px;
 }
 
-.rev-flickity .rev-sponsored.bottom-right,
-.rev-flickity .rev-sponsored.top-right {
+.rev-flicker .rev-sponsored.bottom-right,
+.rev-flicker .rev-sponsored.top-right {
     float: right;
 }
 
-.rev-flickity .rev-sponsored.top-right a {
+.rev-flicker .rev-sponsored.top-right a {
     vertical-align: -5px;
 }
 
-.rev-flickity .flickity-prev-next-button {
+.rev-flicker .flickity-prev-next-button {
     opacity: 0;
     transition: all .5s ease-in-out;
 }
 
-.rev-flickity:hover .flickity-prev-next-button {
+.rev-flicker:hover .flickity-prev-next-button {
     opacity: 1;
 }
 
-.rev-flickity .rev-sponsored a {
+.rev-flicker .rev-sponsored a {
     color: #777;
 }
 
-.rev-flickity a,
-.rev-flickity a:hover,
-.rev-flickity a:focus {
+.rev-flicker a,
+.rev-flicker a:hover,
+.rev-flicker a:focus {
     text-decoration: none;
 }
 
-.rev-flickity .rev-ad a {
+.rev-flicker .rev-ad a {
     display: block;
     color: #222;
 }
 
-.rev-flickity .rev-image {
+.rev-flicker .rev-image {
 }
 
-.rev-flickity .rev-image img {
+.rev-flicker .rev-image img {
     max-width: 100%;
     max-height: 100%;
     margin: 0 auto;
@@ -71,18 +71,18 @@
     vertical-align: middle;
 }
 
-.rev-flickity .rev-headline,
-.rev-flickity .rev-provider {
+.rev-flicker .rev-headline,
+.rev-flicker .rev-provider {
     margin: 0 10px;
 }
 
-.rev-flickity .rev-headline {
+.rev-flicker .rev-headline {
     margin-top: 12px;
     height: 40px;
     overflow: hidden;
 }
 
-.rev-flickity .rev-headline h3 {
+.rev-flicker .rev-headline h3 {
     font-size: 16px;
     font-weight: 500;
     letter-spacing: .2px;
@@ -90,19 +90,19 @@
     margin: 0;
 }
 
-.rev-flickity .rev-provider {
+.rev-flicker .rev-provider {
     font-size: 12px;
     color: #888;
     line-height: 30px;
 }
 
-.rev-flickity .flickity-slider {
+.rev-flicker .flickity-slider {
 }
 
-.rev-flickity .rev-content {
+.rev-flicker .rev-content {
 }
 
-.rev-flickity .rev-ad {
+.rev-flicker .rev-ad {
     margin-right: 10%;
     border: 1px solid #eee;
     border-radius: 5px;

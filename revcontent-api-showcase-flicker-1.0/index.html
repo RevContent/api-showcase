@@ -25,33 +25,34 @@
     <div style="width: 95%; margin: 0 auto;">
 
         <h2 class="demo">All devices</h2>
-        <div id="rev-flickity"></div>
+        <div id="rev-flicker"></div>
 
         <br /><br />
 
         <h2 class="demo">Phone only</h2>
-        <div id="rev-flickity1"></div>
+        <div id="rev-flicker1"></div>
 
         <br /><br />
 
         <h2 class="demo">Phone & Tablet only</h2>
-        <div id="rev-flickity2"></div>
+        <div id="rev-flicker2"></div>
 
         <br /><br />
 
         <h2 class="demo">Desktop only</h2>
-        <div id="rev-flickity3"></div>
+        <div id="rev-flicker3"></div>
 
         <br /><br />
 
     </div>
 
-    <script src="build/revflickity.pkgd.js"></script>
+    <script src="build/revflicker.pkgd.js"></script>
 
     <script>
 
-        new RevFlickity({
-            id: 'rev-flickity',
+        new RevFlicker({
+            id: 'rev-flicker',
+            url: 'http://trends-stg.revcontent.com/api/v1/',
             api_key: '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b&d',
             pub_id: 945,
             widget_id: 6181,
@@ -59,8 +60,9 @@
             rev_position: 'top_right'
         });
 
-        new RevFlickity({
-            id: 'rev-flickity1',
+        new RevFlicker({
+            id: 'rev-flicker1',
+            url: 'http://trends-stg.revcontent.com/api/v1/',
             api_key: '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b&d',
             pub_id: 945,
             widget_id: 6181,
@@ -68,8 +70,9 @@
             devices: ['phone']
         });
 
-        new RevFlickity({
-            id: 'rev-flickity2',
+        new RevFlicker({
+            id: 'rev-flicker2',
+            url: 'http://trends-stg.revcontent.com/api/v1/',
             api_key: '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b&d',
             pub_id: 945,
             widget_id: 6181,
@@ -86,8 +89,9 @@
             devices: ['phone', 'tablet']
         });
 
-        new RevFlickity({
-            id: 'rev-flickity3',
+        new RevFlicker({
+            id: 'rev-flicker3',
+            url: 'http://trends-stg.revcontent.com/api/v1/',
             api_key: '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b&d',
             pub_id: 945,
             widget_id: 6181,
