@@ -10,7 +10,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <title>Revcontent API Showcase</title>
+        <title>Revcontent Innovation Lab</title>
 
         <link rel="shortcut icon" href="/app/resources/img/favicon.ico">
 
