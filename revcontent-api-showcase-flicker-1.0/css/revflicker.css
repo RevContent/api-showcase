@@ -64,11 +64,9 @@
 }
 
 .rev-flicker .rev-image img {
+    display: block;
     max-width: 100%;
-    max-height: 100%;
-    margin: 0 auto;
-    display: inline-block;
-    vertical-align: middle;
+    height: auto;
 }
 
 .rev-flicker .rev-headline,
