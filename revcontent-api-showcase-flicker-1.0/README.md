@@ -9,8 +9,11 @@ Add the packaged or minified revtoaster script before the closing ```</body>``` 
 
     <script src="js/revflicker.min.js"></script>
 
+Insert the proper values for your widget and set any optional options
+
     <script>
-        RevFlickity({
+        RevFlicker({
+            id: 'rev-flicker',
             api_key: 'your api_key',
             pub_id: pub_id,
             widget_id: widget_id,
@@ -18,7 +21,9 @@ Add the packaged or minified revtoaster script before the closing ```</body>``` 
         });
     </script>
 
-Insert the proper values for your widget and set any optional parameters
+Add the html div to the page with matching id
+
+    <div id="rev-flicker"></div>
 
 ## Optional options
 
@@ -33,6 +38,10 @@ Insert the proper values for your widget and set any optional parameters
         xl: 6,
         xxl: 7
     }
+
+**devices** - Determines what devices the widget will be displayed on. Default is all devices
+
+    devices:  ['phone', 'tablet', 'desktop']
 
 **header** - Header text value
 
