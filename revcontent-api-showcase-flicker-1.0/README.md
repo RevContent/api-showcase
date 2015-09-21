@@ -12,7 +12,7 @@ Add the packaged or minified revtoaster script before the closing ```</body>``` 
 Insert the proper values for your widget and set any optional options
 
     <script>
-        RevFlicker({
+        new RevFlicker({
             id: 'rev-flicker',
             api_key: 'your api_key',
             pub_id: pub_id,
