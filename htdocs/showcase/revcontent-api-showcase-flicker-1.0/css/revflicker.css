@@ -21,6 +21,8 @@
     font-size: 22px;
     line-height: 32px;
     margin-bottom: 0;
+    text-align: left;
+    width: auto;
 }
 
 #rev-flicker.rev-flicker .flickity-viewport {
@@ -77,6 +79,7 @@
 #rev-flicker.rev-flicker .rev-headline,
 #rev-flicker.rev-flicker .rev-provider {
     margin: 0 10px;
+    text-align: left;
 }
 
 #rev-flicker.rev-flicker .rev-headline {
