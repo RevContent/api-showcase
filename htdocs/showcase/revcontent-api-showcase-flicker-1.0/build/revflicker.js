@@ -49,7 +49,7 @@ RevFlicker({
 
     var RevFlicker = function(opts) {
         var defaults = {
-           per_row: {
+            per_row: {
                 xxs: 1,
                 xs: 1,
                 sm: 3,
@@ -83,9 +83,16 @@ RevFlicker({
 
         var that = this;
         //append injrected style
-        revUtils.appendStyle('/* inject:css */.flickity-enabled:focus,.rev-flicker:focus{outline:0}.flickity-enabled{position:relative}.flickity-viewport{overflow:hidden;position:relative;height:100%}.flickity-slider{position:absolute;width:100%;height:100%}.flickity-enabled.is-draggable{-webkit-tap-highlight-color:transparent;tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.flickity-enabled.is-draggable .flickity-viewport{cursor:move;cursor:-webkit-grab;cursor:grab}.flickity-enabled.is-draggable .flickity-viewport.is-pointer-down{cursor:-webkit-grabbing;cursor:grabbing}.flickity-prev-next-button{position:absolute;top:50%;width:44px;height:44px;border:none;border-radius:50%;background:#fff;background:hsla(0,0%,100%,.75);cursor:pointer;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}.flickity-prev-next-button:hover{background:#fff}.flickity-prev-next-button:focus{outline:0;box-shadow:0 0 0 5px #09F}.flickity-prev-next-button:active{filter:alpha(opacity=60);opacity:.6}.flickity-prev-next-button.previous{left:10px}.flickity-prev-next-button.next{right:10px}.flickity-rtl .flickity-prev-next-button.previous{left:auto;right:10px}.flickity-rtl .flickity-prev-next-button.next{right:auto;left:10px}.flickity-prev-next-button:disabled{filter:alpha(opacity=30);opacity:.3;cursor:auto}.flickity-prev-next-button svg{position:absolute;left:20%;top:20%;width:60%;height:60%}.flickity-prev-next-button .arrow{fill:#333}.flickity-prev-next-button.no-svg{color:#333;font-size:26px}.flickity-page-dots{position:absolute;width:100%;bottom:-25px;padding:0;margin:0;list-style:none;text-align:center;line-height:1}.flickity-rtl .flickity-page-dots{direction:rtl}.flickity-page-dots .dot{display:inline-block;width:10px;height:10px;margin:0 8px;background:#333;border-radius:50%;filter:alpha(opacity=25);opacity:.25;cursor:pointer}.flickity-page-dots .dot.is-selected{filter:alpha(opacity=100);opacity:1}.rev-flicker *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}.rev-flicker .rev-header{float:left;font-size:22px;line-height:32px}.rev-flicker .flickity-viewport{clear:both}.rev-flicker .rev-sponsored{line-height:28px;font-size:14px}.rev-flicker .rev-sponsored.bottom-right,.rev-flicker .rev-sponsored.top-right{float:right}.rev-flicker .rev-sponsored.top-right a{vertical-align:-5px}.rev-flicker .flickity-prev-next-button{opacity:0;-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out}.rev-flicker:hover .flickity-prev-next-button{opacity:1}.rev-flicker .rev-sponsored a{color:#777}.rev-flicker a,.rev-flicker a:focus,.rev-flicker a:hover{text-decoration:none}.rev-flicker .rev-ad a{display:block;color:#222}.rev-flicker .rev-image img{display:block;max-width:100%;height:auto}.rev-flicker .rev-headline,.rev-flicker .rev-provider{margin:0 10px}.rev-flicker .rev-headline{margin-top:12px;height:40px;overflow:hidden}.rev-flicker .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}.rev-flicker .rev-provider{font-size:12px;color:#888;line-height:30px}.rev-flicker .rev-ad{margin-right:10%;border:1px solid #eee;border-radius:5px;overflow:hidden}.rev-content{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;opacity:1}.rev-content.next{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;opacity:.5}/* endinject */', 'rev-flicker');
+        revUtils.appendStyle('/* inject:css */#rev-flicker.rev-flicker:focus,.flickity-enabled:focus{outline:0}#rev-flicker.rev-flicker,#rev-flicker.rev-flicker .flickity-viewport{clear:both}.flickity-enabled{position:relative}.flickity-viewport{overflow:hidden;position:relative;height:100%}.flickity-slider{position:absolute;width:100%;height:100%}.flickity-enabled.is-draggable{-webkit-tap-highlight-color:transparent;tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.flickity-enabled.is-draggable .flickity-viewport{cursor:move;cursor:-webkit-grab;cursor:grab}.flickity-enabled.is-draggable .flickity-viewport.is-pointer-down{cursor:-webkit-grabbing;cursor:grabbing}.flickity-prev-next-button{position:absolute;top:50%;width:44px;height:44px;border:none;border-radius:50%;background:#fff;background:hsla(0,0%,100%,.75);cursor:pointer;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}.flickity-prev-next-button:hover{background:#fff}.flickity-prev-next-button:focus{outline:0;box-shadow:0 0 0 5px #09F}.flickity-prev-next-button:active{filter:alpha(opacity=60);opacity:.6}.flickity-prev-next-button.previous{left:10px}.flickity-prev-next-button.next{right:10px}.flickity-rtl .flickity-prev-next-button.previous{left:auto;right:10px}.flickity-rtl .flickity-prev-next-button.next{right:auto;left:10px}.flickity-prev-next-button:disabled{filter:alpha(opacity=30);opacity:.3;cursor:auto}.flickity-prev-next-button svg{position:absolute;left:20%;top:20%;width:60%;height:60%}.flickity-prev-next-button .arrow{fill:#333}.flickity-prev-next-button.no-svg{color:#333;font-size:26px}.flickity-page-dots{position:absolute;width:100%;bottom:-25px;padding:0;margin:0;list-style:none;text-align:center;line-height:1}.flickity-rtl .flickity-page-dots{direction:rtl}.flickity-page-dots .dot{display:inline-block;width:10px;height:10px;margin:0 8px;background:#333;border-radius:50%;filter:alpha(opacity=25);opacity:.25;cursor:pointer}.flickity-page-dots .dot.is-selected{filter:alpha(opacity=100);opacity:1}#rev-flicker.rev-flicker *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-flicker.rev-flicker .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0}#rev-flicker.rev-flicker .rev-sponsored{line-height:28px;font-size:14px}#rev-flicker.rev-flicker .rev-sponsored.bottom-right,#rev-flicker.rev-flicker .rev-sponsored.top-right{float:right}#rev-flicker.rev-flicker .rev-sponsored.top-right a{vertical-align:-5px}#rev-flicker.rev-flicker .flickity-prev-next-button{opacity:0;-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out}#rev-flicker.rev-flicker:hover .flickity-prev-next-button{opacity:1}#rev-flicker.rev-flicker .rev-sponsored a{color:#777}#rev-flicker.rev-flicker a,#rev-flicker.rev-flicker a:focus,#rev-flicker.rev-flicker a:hover{text-decoration:none}#rev-flicker.rev-flicker .rev-ad a{display:block;color:#222}#rev-flicker.rev-flicker .rev-image img{display:block;max-width:100%;height:auto}#rev-flicker.rev-flicker .rev-headline,#rev-flicker.rev-flicker .rev-provider{margin:0 10px}#rev-flicker.rev-flicker .rev-headline{margin-top:12px;height:40px;overflow:hidden}#rev-flicker.rev-flicker .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-flicker.rev-flicker .rev-provider{font-size:12px;color:#888;line-height:30px}#rev-flicker.rev-flicker .rev-ad{margin-right:10%;border:1px solid #eee;border-radius:5px;overflow:hidden}#rev-flicker .rev-content{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;opacity:1}#rev-flicker .rev-content.next{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;opacity:.5}/* endinject */', 'rev-flicker');
+
+        // append a new element to the flicker
+        var flickerElement = document.createElement('div');
+        flickerElement.id = 'rev-flicker';
+        flickerElement.class = 'rev-flicker';
+        revUtils.append(document.getElementById(this.options.id), flickerElement);
+
         // create flickity
-        this.flickity = new Flickity( '#' + this.options.id, {
+        this.flickity = new Flickity( flickerElement, {
             prevNextButtons: revDetect.mobile() ? false : true,
             pageDots: this.options.dots,
             cellAlign: 'left'
@@ -176,7 +183,7 @@ RevFlicker({
 
                 revUtils.addClass(cell, 'rev-content');
                 // next in line gets special class
-                if (that.options.next_effect && i >= that.per_row) {
+                if (that.options.next_effect && i >= that.perRow) {
                     revUtils.addClass(cell, 'next');
                 }
 
@@ -197,8 +204,8 @@ RevFlicker({
                     if (that.selectedIndex != that.flickity.selectedIndex) { // only do something when index changes
                         that.selectedIndex = that.flickity.selectedIndex
                         var content = that.flickity.element.querySelectorAll('.rev-content');
-                        var nextIndex = that.selectedIndex + that.per_row;
-                        var last = that.selectedIndex >= that.options.sponsored - that.per_row;
+                        var nextIndex = that.selectedIndex + that.perRow;
+                        var last = that.selectedIndex >= that.options.sponsored - that.perRow;
                         for (var i = 0; i < content.length; i++) {
                             if (last) { // none left to half so all are visible
                                 revUtils.removeClass(content[i], 'next');

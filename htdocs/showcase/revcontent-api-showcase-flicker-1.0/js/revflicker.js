@@ -49,7 +49,7 @@ RevFlicker({
 
     var RevFlicker = function(opts) {
         var defaults = {
-           per_row: {
+            per_row: {
                 xxs: 1,
                 xs: 1,
                 sm: 3,
@@ -84,8 +84,15 @@ RevFlicker({
         var that = this;
         //append injrected style
         revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-flicker');
+
+        // append a new element to the flicker
+        var flickerElement = document.createElement('div');
+        flickerElement.id = 'rev-flicker';
+        flickerElement.class = 'rev-flicker';
+        revUtils.append(document.getElementById(this.options.id), flickerElement);
+
         // create flickity
-        this.flickity = new Flickity( '#' + this.options.id, {
+        this.flickity = new Flickity( flickerElement, {
             prevNextButtons: revDetect.mobile() ? false : true,
             pageDots: this.options.dots,
             cellAlign: 'left'
@@ -176,7 +183,7 @@ RevFlicker({
 
                 revUtils.addClass(cell, 'rev-content');
                 // next in line gets special class
-                if (that.options.next_effect && i >= that.per_row) {
+                if (that.options.next_effect && i >= that.perRow) {
                     revUtils.addClass(cell, 'next');
                 }
 
@@ -197,8 +204,8 @@ RevFlicker({
                     if (that.selectedIndex != that.flickity.selectedIndex) { // only do something when index changes
                         that.selectedIndex = that.flickity.selectedIndex
                         var content = that.flickity.element.querySelectorAll('.rev-content');
-                        var nextIndex = that.selectedIndex + that.per_row;
-                        var last = that.selectedIndex >= that.options.sponsored - that.per_row;
+                        var nextIndex = that.selectedIndex + that.perRow;
+                        var last = that.selectedIndex >= that.options.sponsored - that.perRow;
                         for (var i = 0; i < content.length; i++) {
                             if (last) { // none left to half so all are visible
                                 revUtils.removeClass(content[i], 'next');
