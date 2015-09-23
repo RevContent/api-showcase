@@ -154,7 +154,7 @@ if ( typeof define === 'function' && define.amd ) {
  * class helper functions
  * from bonzo https://github.com/ded/bonzo
  * MIT license
- * 
+ *
  * classie.has( elem, 'my-class' ) -> true/false
  * classie.add( elem, 'my-new-class' )
  * classie.remove( elem, 'my-unwanted-class' )
@@ -243,7 +243,7 @@ if ( typeof define === 'function' && define.amd ) {
  */
 
 ;(function () {
-    
+
 
     /**
      * Class for managing events.
@@ -1190,7 +1190,7 @@ if ( typeof define === 'function' && define.amd ) {
 
 ( function( ElemProto ) {
 
-  
+
 
   var matchesMethod = ( function() {
     // check for the standard method name first
@@ -1296,7 +1296,7 @@ if ( typeof define === 'function' && define.amd ) {
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-  
+
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -1346,7 +1346,7 @@ utils.modulo = function( num, div ) {
 };
 
 // ----- isArray ----- //
-  
+
 var objToString = Object.prototype.toString;
 utils.isArray = function( obj ) {
   return objToString.call( obj ) == '[object Array]';
@@ -1559,7 +1559,7 @@ return utils;
 }));
 
 ( function( window, factory ) {
-  
+
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -1653,7 +1653,7 @@ return Cell;
 }));
 
 ( function( window, factory ) {
-  
+
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -1921,7 +1921,7 @@ return proto;
  */
 
 ( function( window, factory ) {
-  
+
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -2670,7 +2670,7 @@ return Flickity;
 /*global define: false, module: false, require: false */
 
 ( function( window, factory ) {
-  
+
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -2987,7 +2987,7 @@ return Unipointer;
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-  
+
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -3345,7 +3345,7 @@ return Unidragger;
 }));
 
 ( function( window, factory ) {
-  
+
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -3718,7 +3718,7 @@ return Flickity;
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-  
+
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -3832,7 +3832,7 @@ return TapListener;
 // -------------------------- prev/next button -------------------------- //
 
 ( function( window, factory ) {
-  
+
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4092,7 +4092,7 @@ return Flickity;
 }));
 
 ( function( window, factory ) {
-  
+
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4277,7 +4277,7 @@ return Flickity;
 }));
 
 ( function( window, factory ) {
-  
+
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4463,7 +4463,7 @@ return Flickity;
 }));
 
 ( function( window, factory ) {
-  
+
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4640,7 +4640,7 @@ return Flickity;
 }));
 
 ( function( window, factory ) {
-  
+
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4772,7 +4772,7 @@ return Flickity;
  */
 
 ( function( window, factory ) {
-  
+
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4813,7 +4813,7 @@ return Flickity;
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-  
+
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4949,7 +4949,7 @@ return Flickity;
  * MIT License
  */
 
-( function( window, factory ) { 
+( function( window, factory ) {
   // universal module definition
 
   /*global define: false, module: false, require: false */
@@ -5288,7 +5288,7 @@ function makeArray( obj ) {
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-  
+
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -6512,7 +6512,6 @@ RevFlicker({
         xxl: 7
     },
     rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right'),
-    next_width: 60,
     next_effect: true,
     sponsored: 10,
     dots: false,
@@ -6546,7 +6545,6 @@ RevFlicker({
             },
             header: 'Trending Now',
             rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right'),
-            next_width: 60,
             next_effect: true,
             sponsored: 10,
             dots: false,
@@ -6569,7 +6567,7 @@ RevFlicker({
 
         var that = this;
         //append injrected style
-        revUtils.appendStyle('/* inject:css */#rev-flicker.rev-flicker:focus,.flickity-enabled:focus{outline:0}#rev-flicker.rev-flicker,#rev-flicker.rev-flicker .flickity-viewport{clear:both}.flickity-enabled{position:relative}.flickity-viewport{overflow:hidden;position:relative;height:100%}.flickity-slider{position:absolute;width:100%;height:100%}.flickity-enabled.is-draggable{-webkit-tap-highlight-color:transparent;tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.flickity-enabled.is-draggable .flickity-viewport{cursor:move;cursor:-webkit-grab;cursor:grab}.flickity-enabled.is-draggable .flickity-viewport.is-pointer-down{cursor:-webkit-grabbing;cursor:grabbing}.flickity-prev-next-button{position:absolute;top:50%;width:44px;height:44px;border:none;border-radius:50%;background:#fff;background:hsla(0,0%,100%,.75);cursor:pointer;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}.flickity-prev-next-button:hover{background:#fff}.flickity-prev-next-button:focus{outline:0;box-shadow:0 0 0 5px #09F}.flickity-prev-next-button:active{filter:alpha(opacity=60);opacity:.6}.flickity-prev-next-button.previous{left:10px}.flickity-prev-next-button.next{right:10px}.flickity-rtl .flickity-prev-next-button.previous{left:auto;right:10px}.flickity-rtl .flickity-prev-next-button.next{right:auto;left:10px}.flickity-prev-next-button:disabled{filter:alpha(opacity=30);opacity:.3;cursor:auto}.flickity-prev-next-button svg{position:absolute;left:20%;top:20%;width:60%;height:60%}.flickity-prev-next-button .arrow{fill:#333}.flickity-prev-next-button.no-svg{color:#333;font-size:26px}.flickity-page-dots{position:absolute;width:100%;bottom:-25px;padding:0;margin:0;list-style:none;text-align:center;line-height:1}.flickity-rtl .flickity-page-dots{direction:rtl}.flickity-page-dots .dot{display:inline-block;width:10px;height:10px;margin:0 8px;background:#333;border-radius:50%;filter:alpha(opacity=25);opacity:.25;cursor:pointer}.flickity-page-dots .dot.is-selected{filter:alpha(opacity=100);opacity:1}#rev-flicker.rev-flicker *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-flicker.rev-flicker .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-flicker.rev-flicker .rev-sponsored{line-height:24px;font-size:12px}#rev-flicker.rev-flicker .rev-sponsored.bottom-right,#rev-flicker.rev-flicker .rev-sponsored.top-right{float:right}#rev-flicker.rev-flicker .rev-sponsored.top-right a{vertical-align:-5px}#rev-flicker.rev-flicker .flickity-prev-next-button{opacity:0;-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out}#rev-flicker.rev-flicker:hover .flickity-prev-next-button{opacity:1}#rev-flicker.rev-flicker .rev-sponsored a{color:#777}#rev-flicker.rev-flicker a,#rev-flicker.rev-flicker a:focus,#rev-flicker.rev-flicker a:hover{text-decoration:none}#rev-flicker.rev-flicker .rev-ad a{display:block;color:#222}#rev-flicker.rev-flicker .rev-image img{display:block;max-width:100%;height:auto}#rev-flicker.rev-flicker .rev-headline,#rev-flicker.rev-flicker .rev-provider{margin:0 10px;text-align:left}#rev-flicker.rev-flicker .rev-headline{margin-top:12px;height:40px;overflow:hidden}#rev-flicker.rev-flicker .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-flicker.rev-flicker .rev-provider{font-size:12px;color:#888;line-height:30px}#rev-flicker.rev-flicker .rev-ad{margin-right:10%;border:1px solid #eee;border-radius:5px;overflow:hidden}#rev-flicker .rev-content{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;opacity:1}#rev-flicker .rev-content.next{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;opacity:.5}/* endinject */', 'rev-flicker');
+        revUtils.appendStyle('/* inject:css */#rev-flicker.rev-flicker:focus,.flickity-enabled:focus{outline:0}.flickity-enabled{position:relative}.flickity-viewport{overflow:hidden;position:relative;height:100%}.flickity-slider{position:absolute;width:100%;height:100%}.flickity-enabled.is-draggable{-webkit-tap-highlight-color:transparent;tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.flickity-enabled.is-draggable .flickity-viewport{cursor:move;cursor:-webkit-grab;cursor:grab}.flickity-enabled.is-draggable .flickity-viewport.is-pointer-down{cursor:-webkit-grabbing;cursor:grabbing}.flickity-prev-next-button{position:absolute;top:50%;width:44px;height:44px;border:none;border-radius:50%;background:#fff;background:hsla(0,0%,100%,.75);cursor:pointer;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}.flickity-prev-next-button:hover{background:#fff}.flickity-prev-next-button:focus{outline:0;box-shadow:0 0 0 5px #09F}.flickity-prev-next-button:active{filter:alpha(opacity=60);opacity:.6}.flickity-prev-next-button.previous{left:10px}.flickity-prev-next-button.next{right:10px}.flickity-rtl .flickity-prev-next-button.previous{left:auto;right:10px}.flickity-rtl .flickity-prev-next-button.next{right:auto;left:10px}.flickity-prev-next-button:disabled{filter:alpha(opacity=30);opacity:.3;cursor:auto}.flickity-prev-next-button svg{position:absolute;left:20%;top:20%;width:60%;height:60%}.flickity-prev-next-button .arrow{fill:#333}.flickity-prev-next-button.no-svg{color:#333;font-size:26px}.flickity-page-dots{position:absolute;width:100%;bottom:-25px;padding:0;margin:0;list-style:none;text-align:center;line-height:1}.flickity-rtl .flickity-page-dots{direction:rtl}.flickity-page-dots .dot{display:inline-block;width:10px;height:10px;margin:0 8px;background:#333;border-radius:50%;filter:alpha(opacity=25);opacity:.25;cursor:pointer}.flickity-page-dots .dot.is-selected{filter:alpha(opacity=100);opacity:1}#rev-flicker.rev-flicker{clear:both;margin:4px}#rev-flicker.rev-flicker *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-flicker.rev-flicker .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-flicker.rev-flicker .flickity-viewport{clear:both}#rev-flicker.rev-flicker .rev-sponsored{line-height:24px;font-size:12px}#rev-flicker.rev-flicker .rev-sponsored.bottom-right,#rev-flicker.rev-flicker .rev-sponsored.top-right{float:right}#rev-flicker.rev-flicker .rev-sponsored.top-right a{vertical-align:-5px}#rev-flicker.rev-flicker .flickity-prev-next-button{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;opacity:1}#rev-flicker.rev-flicker .flickity-prev-next-button:disabled{opacity:0}#rev-flicker.rev-flicker .rev-sponsored a{color:#999}#rev-flicker.rev-flicker a,#rev-flicker.rev-flicker a:focus,#rev-flicker.rev-flicker a:hover{text-decoration:none}#rev-flicker.rev-flicker .rev-ad a{display:block;color:#222}#rev-flicker.rev-flicker .rev-image img{display:block;max-width:100%;height:auto}#rev-flicker.rev-flicker .rev-headline,#rev-flicker.rev-flicker .rev-provider{margin:0 10px;text-align:left}#rev-flicker.rev-flicker .rev-headline{margin-top:12px;height:40px;overflow:hidden}#rev-flicker.rev-flicker .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-flicker.rev-flicker .rev-provider{font-size:12px;color:#888;line-height:30px}#rev-flicker.rev-flicker .rev-ad{border:1px solid #eee;border-radius:5px;overflow:hidden}#rev-flicker .rev-content{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;opacity:1}#rev-flicker .rev-content.next{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;opacity:.5}/* endinject */', 'rev-flicker');
 
         // append a new element to the flicker
         var flickerElement = document.createElement('div');
@@ -6581,7 +6579,8 @@ RevFlicker({
         this.flickity = new Flickity( flickerElement, {
             prevNextButtons: revDetect.mobile() ? false : true,
             pageDots: this.options.dots,
-            cellAlign: 'left'
+            cellAlign: 'left',
+            percentPosition: false
         });
         // wrapper class
         revUtils.addClass(this.flickity.element, 'rev-flicker');
@@ -6602,7 +6601,7 @@ RevFlicker({
 
         var sponsored = document.createElement('div');
         revUtils.addClass(sponsored, 'rev-sponsored');
-        sponsored.innerHTML = '<a href="http://revcontent.com">Sponsored by Revcontent</a>';
+        sponsored.innerHTML = '<a href="http://revcontent.com" target="_blank">Sponsored by Revcontent</a>';
         if (this.options.rev_position == 'top_right') {
             revUtils.addClass(sponsored, 'top-right')
             revUtils.prepend(this.flickity.element, sponsored);
@@ -6632,22 +6631,23 @@ RevFlicker({
     RevFlicker.prototype.setUp = function() {
         // determine elements per row based on container width
         if (this.containerWidth >= 1500) {
-            this.per_row = this.options.per_row.xxl;
+            this.perRow = this.options.per_row.xxl;
         }else if (this.containerWidth >= 1250) {
-            this.per_row = this.options.per_row.xl;
+            this.perRow = this.options.per_row.xl;
         }else if (this.containerWidth >= 1000) {
-            this.per_row = this.options.per_row.lg;
+            this.perRow = this.options.per_row.lg;
         }else if (this.containerWidth >= 750) {
-            this.per_row = this.options.per_row.md;
+            this.perRow = this.options.per_row.md;
         }else if (this.containerWidth >= 500) {
-            this.per_row = this.options.per_row.sm;
+            this.perRow = this.options.per_row.sm;
         }else if (this.containerWidth >= 250) {
-            this.per_row = this.options.per_row.xs;
+            this.perRow = this.options.per_row.xs;
         }else {
-            this.per_row = this.options.per_row.xxs;
+            this.perRow = this.options.per_row.xxs;
         }
-        // divide container width by per row to determine column width, account for width of halved/next item
-        this.columnWidth = ((this.containerWidth - this.options.next_width) / this.per_row);
+
+        this.marginWidth = (((this.containerWidth) / (this.perRow) * .065).toFixed(2) / 1);
+        this.columnWidth = (((this.containerWidth - (this.marginWidth * this.perRow)) / (this.perRow + .5)).toFixed(2) / 1);
     };
 
     RevFlicker.prototype.getData = function() {
@@ -6666,6 +6666,7 @@ RevFlicker({
                 var cell = document.createElement('div');
 
                 cell.style.width = that.columnWidth + 'px';
+                cell.style.marginRight = that.marginWidth + 'px';
 
                 revUtils.addClass(cell, 'rev-content');
                 // next in line gets special class

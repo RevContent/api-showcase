@@ -26,7 +26,6 @@ RevFlicker({
         xxl: 7
     },
     rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right'),
-    next_width: 60,
     next_effect: true,
     sponsored: 10,
     dots: false,
@@ -60,7 +59,6 @@ RevFlicker({
             },
             header: 'Trending Now',
             rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right'),
-            next_width: 60,
             next_effect: true,
             sponsored: 10,
             dots: false,
@@ -95,7 +93,8 @@ RevFlicker({
         this.flickity = new Flickity( flickerElement, {
             prevNextButtons: revDetect.mobile() ? false : true,
             pageDots: this.options.dots,
-            cellAlign: 'left'
+            cellAlign: 'left',
+            percentPosition: false
         });
         // wrapper class
         revUtils.addClass(this.flickity.element, 'rev-flicker');
@@ -116,7 +115,7 @@ RevFlicker({
 
         var sponsored = document.createElement('div');
         revUtils.addClass(sponsored, 'rev-sponsored');
-        sponsored.innerHTML = '<a href="http://revcontent.com">Sponsored by Revcontent</a>';
+        sponsored.innerHTML = '<a href="http://revcontent.com" target="_blank">Sponsored by Revcontent</a>';
         if (this.options.rev_position == 'top_right') {
             revUtils.addClass(sponsored, 'top-right')
             revUtils.prepend(this.flickity.element, sponsored);
@@ -146,22 +145,23 @@ RevFlicker({
     RevFlicker.prototype.setUp = function() {
         // determine elements per row based on container width
         if (this.containerWidth >= 1500) {
-            this.per_row = this.options.per_row.xxl;
+            this.perRow = this.options.per_row.xxl;
         }else if (this.containerWidth >= 1250) {
-            this.per_row = this.options.per_row.xl;
+            this.perRow = this.options.per_row.xl;
         }else if (this.containerWidth >= 1000) {
-            this.per_row = this.options.per_row.lg;
+            this.perRow = this.options.per_row.lg;
         }else if (this.containerWidth >= 750) {
-            this.per_row = this.options.per_row.md;
+            this.perRow = this.options.per_row.md;
         }else if (this.containerWidth >= 500) {
-            this.per_row = this.options.per_row.sm;
+            this.perRow = this.options.per_row.sm;
         }else if (this.containerWidth >= 250) {
-            this.per_row = this.options.per_row.xs;
+            this.perRow = this.options.per_row.xs;
         }else {
-            this.per_row = this.options.per_row.xxs;
+            this.perRow = this.options.per_row.xxs;
         }
-        // divide container width by per row to determine column width, account for width of halved/next item
-        this.columnWidth = ((this.containerWidth - this.options.next_width) / this.per_row);
+
+        this.marginWidth = (((this.containerWidth) / (this.perRow) * .065).toFixed(2) / 1);
+        this.columnWidth = (((this.containerWidth - (this.marginWidth * this.perRow)) / (this.perRow + .5)).toFixed(2) / 1);
     };
 
     RevFlicker.prototype.getData = function() {
@@ -180,6 +180,7 @@ RevFlicker({
                 var cell = document.createElement('div');
 
                 cell.style.width = that.columnWidth + 'px';
+                cell.style.marginRight = that.marginWidth + 'px';
 
                 revUtils.addClass(cell, 'rev-content');
                 // next in line gets special class
