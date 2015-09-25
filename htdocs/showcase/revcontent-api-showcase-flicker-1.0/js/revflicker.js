@@ -103,6 +103,7 @@ RevFlicker({
         this.getContainerWidth();
         this.emitter.on('containerReady', function() {
             that.setUp();
+            that.preData();
             that.getData();
         });
     };
@@ -162,63 +163,82 @@ RevFlicker({
 
         this.marginWidth = (((this.containerWidth) / (this.perRow) * .065).toFixed(2) / 1);
         this.columnWidth = (((this.containerWidth - (this.marginWidth * this.perRow)) / (this.perRow + .5)).toFixed(2) / 1);
+        this.imageHeight = Math.round(this.columnWidth * (3/4));
+    };
+
+    RevFlicker.prototype.preData = function() {
+        var that = this;
+        for (var i = 0; i < this.options.sponsored; i++) {
+            var html = '<div class="rev-ad">' +
+                        '<a href="" target="_blank">' +
+                            '<div class="rev-image" style="height:'+ that.imageHeight +'px"><img src=""/></div>' +
+                            '<div class="rev-headline"><h3></h3></div>' +
+                            '<div class="rev-provider"></div>' +
+                        '</a>' +
+                    '</div>';
+            var cell = document.createElement('div');
+
+            cell.style.width = that.columnWidth + 'px';
+            cell.style.marginRight = that.marginWidth + 'px';
+
+            revUtils.addClass(cell, 'rev-content');
+            // next in line gets special class
+            if (that.options.next_effect && i >= that.perRow) {
+                revUtils.addClass(cell, 'next');
+            }
+
+            cell.innerHTML = html;
+
+            that.flickity.append(cell);
+        }
+
+        // append elements
+        that.appendElements();
+
+        that.selectedIndex = that.flickity.selectedIndex
+
+        if (that.options.next_effect) {
+            that.flickity.on( 'cellSelect', function() {
+                if (that.selectedIndex != that.flickity.selectedIndex) { // only do something when index changes
+                    that.selectedIndex = that.flickity.selectedIndex;
+                    var content = that.flickity.element.querySelectorAll('.rev-content');
+                    var nextIndex = that.selectedIndex + that.perRow;
+                    var last = that.selectedIndex >= that.options.sponsored - that.perRow;
+                    for (var i = 0; i < content.length; i++) {
+                        if (last) { // none left to half so all are visible
+                            revUtils.removeClass(content[i], 'next');
+                        } else if (i >= nextIndex) {
+                            revUtils.addClass(content[i], 'next');
+                        } else {
+                            revUtils.removeClass(content[i], 'next');
+                        }
+                    }
+                }
+            });
+        }
     };
 
     RevFlicker.prototype.getData = function() {
         var url = this.options.url + '?api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + this.options.sponsored + '&sponsored_offset=0&internal_count=0&api_source=flick';
         var that = this;
         revApi.request(url, function(resp) {
+
+            var ads = that.flickity.element.querySelectorAll('.rev-ad');
+
             for (var i = 0; i < resp.length; i++) {
-                // for each response append
-                var html = '<div class="rev-ad">' +
-                            '<a href="'+ resp[i].url +'" target="_blank">' +
-                                '<div class="rev-image"><img src="'+ resp[i].image +'"/></div>' +
-                                '<div class="rev-headline"><h3>'+ resp[i].headline +'</h3></div>' +
-                                '<div class="rev-provider">'+ resp[i].brand +'</div>' +
-                            '</a>' +
-                        '</div>';
-                var cell = document.createElement('div');
-
-                cell.style.width = that.columnWidth + 'px';
-                cell.style.marginRight = that.marginWidth + 'px';
-
-                revUtils.addClass(cell, 'rev-content');
-                // next in line gets special class
-                if (that.options.next_effect && i >= that.perRow) {
-                    revUtils.addClass(cell, 'next');
-                }
-
-                cell.innerHTML = html;
-
-                that.flickity.append(cell);
+                var ad = ads[i],
+                    data = resp[i];
+                ad.querySelectorAll('a')[0].setAttribute('href', data.url);
+                ad.querySelectorAll('img')[0].setAttribute('src', data.image);
+                ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
+                ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
             }
+
             imagesLoaded( that.flickity.element, function() {
+                revUtils.addClass(that.flickity.element, 'loaded');
                 that.flickity.reloadCells();
             });
-            // append elements
-            that.appendElements();
 
-            that.selectedIndex = that.flickity.selectedIndex
-
-            if (that.options.next_effect) {
-                that.flickity.on( 'cellSelect', function() {
-                    if (that.selectedIndex != that.flickity.selectedIndex) { // only do something when index changes
-                        that.selectedIndex = that.flickity.selectedIndex
-                        var content = that.flickity.element.querySelectorAll('.rev-content');
-                        var nextIndex = that.selectedIndex + that.perRow;
-                        var last = that.selectedIndex >= that.options.sponsored - that.perRow;
-                        for (var i = 0; i < content.length; i++) {
-                            if (last) { // none left to half so all are visible
-                                revUtils.removeClass(content[i], 'next');
-                            } else if (i >= nextIndex) {
-                                revUtils.addClass(content[i], 'next');
-                            } else {
-                                revUtils.removeClass(content[i], 'next');
-                            }
-                        }
-                    }
-                });
-            }
         });
     };
 
