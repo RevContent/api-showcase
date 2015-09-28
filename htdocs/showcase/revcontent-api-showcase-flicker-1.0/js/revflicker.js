@@ -57,6 +57,7 @@ RevFlicker({
                 xl: 6,
                 xxl: 7
             },
+            image_ratio: (revDetect.mobile() ? 'wide_rectangle' : 'rectangle'),
             header: 'Trending Now',
             rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right'),
             next_effect: true,
@@ -161,9 +162,18 @@ RevFlicker({
             this.perRow = this.options.per_row.xxs;
         }
 
-        this.marginWidth = (((this.containerWidth) / (this.perRow) * .065).toFixed(2) / 1);
+        if (this.options.image_ratio == 'square') {
+            this.imageHeight = 400;
+            this.imageWidth = 400;
+        } else if (this.options.image_ratio == 'rectangle') {
+            this.imageHeight = 300;
+            this.imageWidth = 400;
+        } else if (this.options.image_ratio == 'wide_rectangle') {
+            this.imageHeight = 450;
+            this.imageWidth = 800;
+        }
         this.columnWidth = (((this.containerWidth - (this.marginWidth * this.perRow)) / (this.perRow + .5)).toFixed(2) / 1);
-        this.imageHeight = Math.round(this.columnWidth * (3/4));
+        this.preloaderHeight = Math.round(this.columnWidth * (this.imageHeight / this.imageWidth));
     };
 
     RevFlicker.prototype.preData = function() {
@@ -171,7 +181,7 @@ RevFlicker({
         for (var i = 0; i < this.options.sponsored; i++) {
             var html = '<div class="rev-ad">' +
                         '<a href="" target="_blank">' +
-                            '<div class="rev-image" style="height:'+ that.imageHeight +'px"><img src=""/></div>' +
+                            '<div class="rev-image" style="height:'+ that.preloaderHeight +'px"><img src=""/></div>' +
                             '<div class="rev-headline"><h3></h3></div>' +
                             '<div class="rev-provider"></div>' +
                         '</a>' +
@@ -219,7 +229,8 @@ RevFlicker({
     };
 
     RevFlicker.prototype.getData = function() {
-        var url = this.options.url + '?api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + this.options.sponsored + '&sponsored_offset=0&internal_count=0&api_source=flick';
+
+        var url = this.options.url + '?img_h='+ this.imageHeight +'&img_w='+ this.imageWidth +'&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + this.options.sponsored + '&sponsored_offset=0&internal_count=0&api_source=flick';
         var that = this;
         revApi.request(url, function(resp) {
 
