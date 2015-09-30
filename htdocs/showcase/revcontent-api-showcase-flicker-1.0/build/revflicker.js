@@ -82,7 +82,7 @@ RevFlicker({
 
         var that = this;
         //append injrected style
-        revUtils.appendStyle('/* inject:css */#rev-flicker.rev-flicker:focus,.flickity-enabled:focus{outline:0}.flickity-enabled{position:relative}.flickity-viewport{overflow:hidden;position:relative;height:100%}.flickity-slider{position:absolute;width:100%;height:100%}.flickity-enabled.is-draggable{-webkit-tap-highlight-color:transparent;tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.flickity-enabled.is-draggable .flickity-viewport{cursor:move;cursor:-webkit-grab;cursor:grab}.flickity-enabled.is-draggable .flickity-viewport.is-pointer-down{cursor:-webkit-grabbing;cursor:grabbing}.flickity-prev-next-button{position:absolute;top:50%;width:44px;height:44px;border:none;border-radius:50%;background:#fff;background:hsla(0,0%,100%,.75);cursor:pointer;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}.flickity-prev-next-button:hover{background:#fff}.flickity-prev-next-button:focus{outline:0;box-shadow:0 0 0 5px #09F}.flickity-prev-next-button:active{filter:alpha(opacity=60);opacity:.6}.flickity-prev-next-button.previous{left:10px}.flickity-prev-next-button.next{right:10px}.flickity-rtl .flickity-prev-next-button.previous{left:auto;right:10px}.flickity-rtl .flickity-prev-next-button.next{right:auto;left:10px}.flickity-prev-next-button:disabled{filter:alpha(opacity=30);opacity:.3;cursor:auto}.flickity-prev-next-button svg{position:absolute;left:20%;top:20%;width:60%;height:60%}.flickity-prev-next-button .arrow{fill:#333}.flickity-prev-next-button.no-svg{color:#333;font-size:26px}.flickity-page-dots{position:absolute;width:100%;bottom:-25px;padding:0;margin:0;list-style:none;text-align:center;line-height:1}.flickity-rtl .flickity-page-dots{direction:rtl}.flickity-page-dots .dot{display:inline-block;width:10px;height:10px;margin:0 8px;background:#333;border-radius:50%;filter:alpha(opacity=25);opacity:.25;cursor:pointer}.flickity-page-dots .dot.is-selected{filter:alpha(opacity=100);opacity:1}#rev-flicker.rev-flicker{clear:both;margin:4px}#rev-flicker.rev-flicker *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-flicker.rev-flicker .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-flicker.rev-flicker .flickity-viewport{clear:both}#rev-flicker.rev-flicker .rev-sponsored{line-height:24px;font-size:12px}#rev-flicker.rev-flicker .rev-sponsored.bottom-right,#rev-flicker.rev-flicker .rev-sponsored.top-right{float:right}#rev-flicker.rev-flicker .rev-sponsored.top-right a{vertical-align:-5px}#rev-flicker.rev-flicker .flickity-prev-next-button{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;opacity:1}#rev-flicker.rev-flicker .flickity-prev-next-button:disabled{opacity:0}#rev-flicker.rev-flicker .rev-sponsored a{color:#999}#rev-flicker.rev-flicker a,#rev-flicker.rev-flicker a:focus,#rev-flicker.rev-flicker a:hover{text-decoration:none}#rev-flicker.rev-flicker .rev-ad a{display:block;color:#222}#rev-flicker.rev-flicker .rev-image{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;background:#eee}#rev-flicker.rev-flicker .rev-image img{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-flicker.rev-flicker.loaded .rev-image{background:0 0}#rev-flicker.rev-flicker.loaded .rev-image img{opacity:1}#rev-flicker.rev-flicker .rev-headline,#rev-flicker.rev-flicker .rev-provider{margin:0 10px;text-align:left}#rev-flicker.rev-flicker .rev-headline{margin-top:12px;height:40px;overflow:hidden}#rev-flicker.rev-flicker .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-flicker.rev-flicker .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px}#rev-flicker.rev-flicker .rev-ad{border:1px solid #eee;border-radius:5px;overflow:hidden}#rev-flicker .rev-content{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-flicker .rev-content.next{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:.5}/* endinject */', 'rev-flicker');
+        revUtils.appendStyle('/* inject:css */#rev-flicker.rev-flicker:focus,.flickity-enabled:focus{outline:0}.flickity-enabled{position:relative}.flickity-viewport{overflow:hidden;position:relative;height:100%}.flickity-slider{position:absolute;width:100%;height:100%}.flickity-enabled.is-draggable{-webkit-tap-highlight-color:transparent;tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.flickity-enabled.is-draggable .flickity-viewport{cursor:move;cursor:-webkit-grab;cursor:grab}.flickity-enabled.is-draggable .flickity-viewport.is-pointer-down{cursor:-webkit-grabbing;cursor:grabbing}.flickity-prev-next-button{position:absolute;top:50%;width:44px;height:44px;border:none;border-radius:50%;background:#fff;background:hsla(0,0%,100%,.75);cursor:pointer;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}.flickity-prev-next-button:hover{background:#fff}.flickity-prev-next-button:focus{outline:0;box-shadow:0 0 0 5px #09F}.flickity-prev-next-button:active{filter:alpha(opacity=60);opacity:.6}.flickity-prev-next-button.previous{left:10px}.flickity-prev-next-button.next{right:10px}.flickity-rtl .flickity-prev-next-button.previous{left:auto;right:10px}.flickity-rtl .flickity-prev-next-button.next{right:auto;left:10px}.flickity-prev-next-button:disabled{filter:alpha(opacity=30);opacity:.3;cursor:auto}.flickity-prev-next-button svg{position:absolute;left:20%;top:20%;width:60%;height:60%}.flickity-prev-next-button .arrow{fill:#333}.flickity-prev-next-button.no-svg{color:#333;font-size:26px}.flickity-page-dots{position:absolute;width:100%;bottom:-25px;padding:0;margin:0;list-style:none;text-align:center;line-height:1}.flickity-rtl .flickity-page-dots{direction:rtl}.flickity-page-dots .dot{display:inline-block;width:10px;height:10px;margin:0 8px;background:#333;border-radius:50%;filter:alpha(opacity=25);opacity:.25;cursor:pointer}.flickity-page-dots .dot.is-selected{filter:alpha(opacity=100);opacity:1}#rev-flicker.rev-flicker{clear:both;margin:4px}#rev-flicker.rev-flicker *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-flicker.rev-flicker .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-flicker.rev-flicker .flickity-viewport{clear:both}#rev-flicker.rev-flicker .rev-sponsored{line-height:24px;font-size:12px}#rev-flicker.rev-flicker .rev-sponsored.bottom-right,#rev-flicker.rev-flicker .rev-sponsored.top-right{float:right}#rev-flicker.rev-flicker .rev-sponsored.top-right a{vertical-align:-5px}#rev-flicker.rev-flicker .flickity-prev-next-button{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;opacity:1}#rev-flicker.rev-flicker .flickity-prev-next-button:disabled{opacity:0}#rev-flicker.rev-flicker .rev-sponsored a{color:#999}#rev-flicker.rev-flicker a,#rev-flicker.rev-flicker a:focus,#rev-flicker.rev-flicker a:hover{text-decoration:none}#rev-flicker.rev-flicker .rev-ad a{display:block;color:#222}#rev-flicker.rev-flicker .rev-image{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;background:#eee}#rev-flicker.rev-flicker .rev-image img{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-flicker.rev-flicker.loaded .rev-image{background:0 0}#rev-flicker.rev-flicker.loaded .rev-image img{opacity:1}#rev-flicker.rev-flicker .rev-headline,#rev-flicker.rev-flicker .rev-provider{margin:0 10px;text-align:left}#rev-flicker.rev-flicker .rev-headline{margin-top:12px;height:40px;overflow:hidden}#rev-flicker.rev-flicker .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-flicker.rev-flicker .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px}#rev-flicker.rev-flicker .rev-ad{border:1px solid #eee;border-radius:5px;overflow:hidden}#rev-flicker .rev-content{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-flicker .rev-content.rev-next{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:.5}/* endinject */', 'rev-flicker');
 
         // append a new element to the flicker
         var flickerElement = document.createElement('div');
@@ -172,7 +172,24 @@ RevFlicker({
             this.imageHeight = 450;
             this.imageWidth = 800;
         }
-        this.columnWidth = (((this.containerWidth - (this.marginWidth * this.perRow)) / (this.perRow + .5)).toFixed(2) / 1);
+
+        var width = this.containerWidth / this.perRow;
+
+        this.margin = ((width * .05).toFixed(2) / 1);
+        this.innerMargin = ((width * .02).toFixed(2) / 1);
+
+        // font size is relative to width, other measurements are relative to this font size
+        this.headlineFontSize = Math.max(14, ((width * .03).toFixed(2) / 1));
+        this.headlineLineHeight = ((this.headlineFontSize * 1.25).toFixed(2) / 1);
+        this.headlineHeight = ((this.headlineLineHeight * 2).toFixed(2) / 1);
+        this.headlineMarginTop = ((this.headlineHeight * .2).toFixed(2) / 1);
+
+        this.providerFontSize = Math.max(11, ((this.headlineLineHeight / 2).toFixed(2) / 1));
+        this.providerLineHeight = ((this.providerFontSize * 1.25).toFixed(2) / 1);
+        this.providerMargin = ((this.providerLineHeight * .2).toFixed(2) / 1);
+
+        this.columnWidth = (((this.containerWidth - (this.margin * this.perRow)) / (this.perRow + (1/2))).toFixed(2) / 1);
+
         this.preloaderHeight = Math.round(this.columnWidth * (this.imageHeight / this.imageWidth));
     };
 
@@ -182,19 +199,19 @@ RevFlicker({
             var html = '<div class="rev-ad">' +
                         '<a href="" target="_blank">' +
                             '<div class="rev-image" style="height:'+ that.preloaderHeight +'px"><img src=""/></div>' +
-                            '<div class="rev-headline"><h3></h3></div>' +
-                            '<div class="rev-provider"></div>' +
+                            '<div class="rev-headline" style="height:'+ that.headlineHeight +'px; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>' +
+                            '<div style="margin:' + that.providerMargin +'px '  + that.innerMargin + 'px ' + that.providerMargin +'px;font-size:'+ that.providerFontSize +'px;line-height:'+ that.providerLineHeight +'px;height:'+ that.providerLineHeight +'px;" class="rev-provider"></div>' +
                         '</a>' +
                     '</div>';
             var cell = document.createElement('div');
 
             cell.style.width = that.columnWidth + 'px';
-            cell.style.marginRight = that.marginWidth + 'px';
+            cell.style.marginRight = that.margin + 'px';
 
             revUtils.addClass(cell, 'rev-content');
             // next in line gets special class
             if (that.options.next_effect && i >= that.perRow) {
-                revUtils.addClass(cell, 'next');
+                revUtils.addClass(cell, 'rev-next');
             }
 
             cell.innerHTML = html;
@@ -205,7 +222,7 @@ RevFlicker({
         // append elements
         that.appendElements();
 
-        that.selectedIndex = that.flickity.selectedIndex
+        that.selectedIndex = that.flickity.selectedIndex;
 
         if (that.options.next_effect) {
             that.flickity.on( 'cellSelect', function() {
@@ -216,11 +233,11 @@ RevFlicker({
                     var last = that.selectedIndex >= that.options.sponsored - that.perRow;
                     for (var i = 0; i < content.length; i++) {
                         if (last) { // none left to half so all are visible
-                            revUtils.removeClass(content[i], 'next');
+                            revUtils.removeClass(content[i], 'rev-next');
                         } else if (i >= nextIndex) {
-                            revUtils.addClass(content[i], 'next');
+                            revUtils.addClass(content[i], 'rev-next');
                         } else {
-                            revUtils.removeClass(content[i], 'next');
+                            revUtils.removeClass(content[i], 'rev-next');
                         }
                     }
                 }
