@@ -133,7 +133,7 @@
     opacity: 1;
 }
 
-#rev-flicker .rev-content.next {
+#rev-flicker .rev-content.rev-next {
     transition: opacity .5s ease-in-out;
     opacity: .5;
 }

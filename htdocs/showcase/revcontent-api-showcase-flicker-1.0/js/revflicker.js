@@ -194,7 +194,7 @@ RevFlicker({
             revUtils.addClass(cell, 'rev-content');
             // next in line gets special class
             if (that.options.next_effect && i >= that.perRow) {
-                revUtils.addClass(cell, 'next');
+                revUtils.addClass(cell, 'rev-next');
             }
 
             cell.innerHTML = html;
@@ -216,11 +216,11 @@ RevFlicker({
                     var last = that.selectedIndex >= that.options.sponsored - that.perRow;
                     for (var i = 0; i < content.length; i++) {
                         if (last) { // none left to half so all are visible
-                            revUtils.removeClass(content[i], 'next');
+                            revUtils.removeClass(content[i], 'rev-next');
                         } else if (i >= nextIndex) {
-                            revUtils.addClass(content[i], 'next');
+                            revUtils.addClass(content[i], 'rev-next');
                         } else {
-                            revUtils.removeClass(content[i], 'next');
+                            revUtils.removeClass(content[i], 'rev-next');
                         }
                     }
                 }
