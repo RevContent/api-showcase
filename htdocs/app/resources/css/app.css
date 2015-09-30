@@ -8,9 +8,6 @@ html {
 
 body {
   font-size: 1.6rem;
-  background-color: rgb(229, 229, 229);
-  /*overflow: auto !important;*/
-/*  height: auto;*/
   font-family: "Roboto", 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
@@ -402,18 +399,13 @@ main {
 
 footer {
   font-size: 14px;
-  margin-top: 40px;
-  padding: 8px 0px 8px;
-  margin-left: 8px;
-  margin-right: 8px;
+  padding: 12px 0px 8px;
+  border-top: 1px solid rgba(189, 189, 189, 0.5);
+  margin-top: 30px;
 }
 
-footer #signup {
-  margin-left: auto;
-}
-
-footer div {
-  padding-bottom: 12px;
+footer .container > div {
+  margin: 0 8px;
 }
 
 /* Images ==============================================================*/
@@ -483,15 +475,6 @@ md-tooltip.md-tooltip-dark.md-default-theme .md-background {
   .item-detail .feature {
     padding-right: 0;
   }
-
-  footer #signup {
-    margin-left: 0;
-  }
-
-  footer #btns {
-    margin-left: auto;
-  }
-
 }
 
 @media (max-width: 599px) {

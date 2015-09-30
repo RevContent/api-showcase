@@ -45,13 +45,13 @@
 
     </head>
     <body>
-        <div id="wrapper" layout="column" layout-fill>
+        <div id="wrapper">
             <header>
                 <md-toolbar class="md-primary">
 
                     <div class="container" layout layout-align="center center" tabindex="0">
 
-                        <div class="md-toolbar-tools" tabindex="0">
+                        <div layout layout-align="center center" class="md-toolbar-tools" tabindex="0">
 
                             <div>
                                 <div class="navbar-header">
@@ -63,7 +63,26 @@
                                 </div>
                             </div>
 
-                            <div style="margin-left:auto;">
+                            <md-menu layout layout-align="center center" hide-gt-sm style="margin-left:auto;margin-right:0;padding:0;">
+                                <md-button ng-click="$mdOpenMenu($event)" class="md-icon-button" aria-label="Open sample menu">
+                                    <md-icon>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fit="" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M4 27h28v-3H4v3zm0-8h28v-3H4v3zM4 8v3h28V8H4z"/></svg>
+                                    </md-icon>
+                                </md-button>
+                                <md-menu-content>
+                                    <md-menu-item>
+                                        <md-button ui-sref="docs">Docs</md-button>
+                                    </md-menu-item>
+                                    <md-menu-item>
+                                        <md-button target="_blank" ng-href="http://faq.revcontent.com/support/solutions/5000137293">Support</md-button>
+                                    </md-menu-item>
+                                    <md-menu-item>
+                                        <md-button target="_blank" ng-href="http://faq.revcontent.com/support/solutions/folders/5000219605">FAQ</md-button>
+                                    </md-menu-item>
+                                </md-menu-content>
+                            </md-menu>
+
+                            <div style="margin-left:auto;" hide-sm>
                                 <a class="md-button" ui-sref="docs" tabindex="0">
                                     <span>Docs</span>
                                     <md-tooltip>Read Up!</md-tooltip>
@@ -89,21 +108,23 @@
                 <div ui-view="main"></div>
             </main>
 
-            <div class="container">
-                <footer layout="column" layout-gt-md="row">
-                    <div layout>
-                        <span>© 2015, Revcontent All Rights Reserved.</span>
-                        <div id="btns">
-                            <md-button href="http://faq.revcontent.com/support/solutions/articles/5000615200-revcontent-s-privacy-policy" target="_blank" title=""><strong>Privacy Policy</strong></md-button>
-                            <md-button href="http://faq.revcontent.com/support/home" target="_blank" title=""><strong>Terms and Conditions</strong></md-button>
+            <footer>
+                <div class="container">
+                    <div layout="column" layout-gt-lg="row" layout-align="center center"  layout-align-lg="space-between center" layout-align-gt-lg="space-between center">
+                        <div layout="column" layout-gt-md="row" layout-align="center center">
+                            <span>© 2015, Revcontent All Rights Reserved.</span>
+                            <div layout="row">
+                                <md-button href="http://faq.revcontent.com/support/solutions/articles/5000615200-revcontent-s-privacy-policy" target="_blank" title=""><strong>Privacy Policy</strong></md-button>
+                                <md-button href="http://faq.revcontent.com/support/home" target="_blank" title=""><strong>Terms and Conditions</strong></md-button>
+                            </div>
+                        </div>
+
+                        <div id="signup" layout layout-align="center center">
+                            Don't have an account? <md-button class="md-primary" target="_blank" href="https://v2.revcontent.com/signup">Join the native revolution</md-button>
                         </div>
                     </div>
-
-                    <div id="signup">
-                        Don't have an account? <md-button class="md-primary" target="_blank" href="https://v2.revcontent.com/signup">Join the native revolution</md-button>
-                    </div>
-                </footer>
-            </div>
+                </div>
+            </footer>
         </div>
     </body>
 </html>
