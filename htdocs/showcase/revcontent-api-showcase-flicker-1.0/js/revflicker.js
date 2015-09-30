@@ -172,7 +172,24 @@ RevFlicker({
             this.imageHeight = 450;
             this.imageWidth = 800;
         }
-        this.columnWidth = (((this.containerWidth - (this.marginWidth * this.perRow)) / (this.perRow + .5)).toFixed(2) / 1);
+
+        var width = this.containerWidth / this.perRow;
+
+        this.margin = ((width * .05).toFixed(2) / 1);
+        this.innerMargin = ((width * .02).toFixed(2) / 1);
+
+        // font size is relative to width, other measurements are relative to this font size
+        this.headlineFontSize = Math.max(14, ((width * .03).toFixed(2) / 1));
+        this.headlineLineHeight = ((this.headlineFontSize * 1.25).toFixed(2) / 1);
+        this.headlineHeight = ((this.headlineLineHeight * 2).toFixed(2) / 1);
+        this.headlineMarginTop = ((this.headlineHeight * .2).toFixed(2) / 1);
+
+        this.providerFontSize = Math.max(11, ((this.headlineLineHeight / 2).toFixed(2) / 1));
+        this.providerLineHeight = ((this.providerFontSize * 1.25).toFixed(2) / 1);
+        this.providerMargin = ((this.providerLineHeight * .2).toFixed(2) / 1);
+
+        this.columnWidth = (((this.containerWidth - (this.margin * this.perRow)) / (this.perRow + (1/2))).toFixed(2) / 1);
+
         this.preloaderHeight = Math.round(this.columnWidth * (this.imageHeight / this.imageWidth));
     };
 
@@ -182,14 +199,14 @@ RevFlicker({
             var html = '<div class="rev-ad">' +
                         '<a href="" target="_blank">' +
                             '<div class="rev-image" style="height:'+ that.preloaderHeight +'px"><img src=""/></div>' +
-                            '<div class="rev-headline"><h3></h3></div>' +
-                            '<div class="rev-provider"></div>' +
+                            '<div class="rev-headline" style="height:'+ that.headlineHeight +'px; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>' +
+                            '<div style="margin:' + that.providerMargin +'px '  + that.innerMargin + 'px ' + that.providerMargin +'px;font-size:'+ that.providerFontSize +'px;line-height:'+ that.providerLineHeight +'px;height:'+ that.providerLineHeight +'px;" class="rev-provider"></div>' +
                         '</a>' +
                     '</div>';
             var cell = document.createElement('div');
 
             cell.style.width = that.columnWidth + 'px';
-            cell.style.marginRight = that.marginWidth + 'px';
+            cell.style.marginRight = that.margin + 'px';
 
             revUtils.addClass(cell, 'rev-content');
             // next in line gets special class
@@ -205,7 +222,7 @@ RevFlicker({
         // append elements
         that.appendElements();
 
-        that.selectedIndex = that.flickity.selectedIndex
+        that.selectedIndex = that.flickity.selectedIndex;
 
         if (that.options.next_effect) {
             that.flickity.on( 'cellSelect', function() {
