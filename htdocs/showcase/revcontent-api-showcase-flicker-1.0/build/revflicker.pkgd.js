@@ -6643,7 +6643,8 @@ RevFlicker({
             prevNextButtons: revDetect.mobile() ? false : true,
             pageDots: this.options.dots,
             cellAlign: 'left',
-            percentPosition: false
+            percentPosition: false,
+            wrapAround: true
         });
         // wrapper class
         revUtils.addClass(this.flickity.element, 'rev-flicker');
@@ -6812,7 +6813,6 @@ RevFlicker({
 
             imagesLoaded( that.flickity.element, function() {
                 revUtils.addClass(that.flickity.element, 'loaded');
-                that.flickity.reloadCells();
             });
 
         });
