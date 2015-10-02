@@ -26,7 +26,6 @@ RevFlicker({
         xxl: 7
     },
     rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right'),
-    next_width: 60,
     next_effect: true,
     sponsored: 10,
     dots: false,
@@ -49,7 +48,7 @@ RevFlicker({
 
     var RevFlicker = function(opts) {
         var defaults = {
-           per_row: {
+            per_row: {
                 xxs: 1,
                 xs: 1,
                 sm: 3,
@@ -58,9 +57,9 @@ RevFlicker({
                 xl: 6,
                 xxl: 7
             },
+            image_ratio: (revDetect.mobile() ? 'wide_rectangle' : 'rectangle'),
             header: 'Trending Now',
             rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right'),
-            next_width: 60,
             next_effect: true,
             sponsored: 10,
             dots: false,
@@ -84,11 +83,20 @@ RevFlicker({
         var that = this;
         //append injrected style
         revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-flicker');
+
+        // append a new element to the flicker
+        var flickerElement = document.createElement('div');
+        flickerElement.id = 'rev-flicker';
+        flickerElement.class = 'rev-flicker';
+        revUtils.append(document.getElementById(this.options.id), flickerElement);
+
         // create flickity
-        this.flickity = new Flickity( '#' + this.options.id, {
+        this.flickity = new Flickity( flickerElement, {
             prevNextButtons: revDetect.mobile() ? false : true,
             pageDots: this.options.dots,
-            cellAlign: 'left'
+            cellAlign: 'left',
+            percentPosition: false,
+            wrapAround: true
         });
         // wrapper class
         revUtils.addClass(this.flickity.element, 'rev-flicker');
@@ -97,6 +105,7 @@ RevFlicker({
         this.getContainerWidth();
         this.emitter.on('containerReady', function() {
             that.setUp();
+            that.preData();
             that.getData();
         });
     };
@@ -109,7 +118,7 @@ RevFlicker({
 
         var sponsored = document.createElement('div');
         revUtils.addClass(sponsored, 'rev-sponsored');
-        sponsored.innerHTML = '<a href="http://revcontent.com">Sponsored by Revcontent</a>';
+        sponsored.innerHTML = '<a href="http://revcontent.com" target="_blank">Sponsored by Revcontent</a>';
         if (this.options.rev_position == 'top_right') {
             revUtils.addClass(sponsored, 'top-right')
             revUtils.prepend(this.flickity.element, sponsored);
@@ -139,78 +148,125 @@ RevFlicker({
     RevFlicker.prototype.setUp = function() {
         // determine elements per row based on container width
         if (this.containerWidth >= 1500) {
-            this.per_row = this.options.per_row.xxl;
+            this.perRow = this.options.per_row.xxl;
         }else if (this.containerWidth >= 1250) {
-            this.per_row = this.options.per_row.xl;
+            this.perRow = this.options.per_row.xl;
         }else if (this.containerWidth >= 1000) {
-            this.per_row = this.options.per_row.lg;
+            this.perRow = this.options.per_row.lg;
         }else if (this.containerWidth >= 750) {
-            this.per_row = this.options.per_row.md;
+            this.perRow = this.options.per_row.md;
         }else if (this.containerWidth >= 500) {
-            this.per_row = this.options.per_row.sm;
+            this.perRow = this.options.per_row.sm;
         }else if (this.containerWidth >= 250) {
-            this.per_row = this.options.per_row.xs;
+            this.perRow = this.options.per_row.xs;
         }else {
-            this.per_row = this.options.per_row.xxs;
+            this.perRow = this.options.per_row.xxs;
         }
-        // divide container width by per row to determine column width, account for width of halved/next item
-        this.columnWidth = ((this.containerWidth - this.options.next_width) / this.per_row);
+
+        if (this.options.image_ratio == 'square') {
+            this.imageHeight = 400;
+            this.imageWidth = 400;
+        } else if (this.options.image_ratio == 'rectangle') {
+            this.imageHeight = 300;
+            this.imageWidth = 400;
+        } else if (this.options.image_ratio == 'wide_rectangle') {
+            this.imageHeight = 450;
+            this.imageWidth = 800;
+        }
+
+        var width = this.containerWidth / this.perRow;
+
+        this.margin = ((width * .05).toFixed(2) / 1);
+        this.innerMargin = ((width * .02).toFixed(2) / 1);
+
+        // font size is relative to width, other measurements are relative to this font size
+        this.headlineFontSize = Math.max(14, ((width * .03).toFixed(2) / 1));
+        this.headlineLineHeight = ((this.headlineFontSize * 1.25).toFixed(2) / 1);
+        this.headlineHeight = ((this.headlineLineHeight * 2).toFixed(2) / 1);
+        this.headlineMarginTop = ((this.headlineHeight * .2).toFixed(2) / 1);
+
+        this.providerFontSize = Math.max(11, ((this.headlineLineHeight / 2).toFixed(2) / 1));
+        this.providerLineHeight = ((this.providerFontSize * 1.25).toFixed(2) / 1);
+        this.providerMargin = ((this.providerLineHeight * .2).toFixed(2) / 1);
+
+        this.columnWidth = (((this.containerWidth - (this.margin * this.perRow)) / (this.perRow + (1/2))).toFixed(2) / 1);
+
+        this.preloaderHeight = Math.round(this.columnWidth * (this.imageHeight / this.imageWidth));
+    };
+
+    RevFlicker.prototype.preData = function() {
+        var that = this;
+        for (var i = 0; i < this.options.sponsored; i++) {
+            var html = '<div class="rev-ad">' +
+                        '<a href="" target="_blank">' +
+                            '<div class="rev-image" style="height:'+ that.preloaderHeight +'px"><img src=""/></div>' +
+                            '<div class="rev-headline" style="height:'+ that.headlineHeight +'px; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>' +
+                            '<div style="margin:' + that.providerMargin +'px '  + that.innerMargin + 'px ' + that.providerMargin +'px;font-size:'+ that.providerFontSize +'px;line-height:'+ that.providerLineHeight +'px;height:'+ that.providerLineHeight +'px;" class="rev-provider"></div>' +
+                        '</a>' +
+                    '</div>';
+            var cell = document.createElement('div');
+
+            cell.style.width = that.columnWidth + 'px';
+            cell.style.marginRight = that.margin + 'px';
+
+            revUtils.addClass(cell, 'rev-content');
+            // next in line gets special class
+            if (that.options.next_effect && i >= that.perRow) {
+                revUtils.addClass(cell, 'rev-next');
+            }
+
+            cell.innerHTML = html;
+
+            that.flickity.append(cell);
+        }
+
+        // append elements
+        that.appendElements();
+
+        that.selectedIndex = that.flickity.selectedIndex;
+
+        if (that.options.next_effect) {
+            that.flickity.on( 'cellSelect', function() {
+                if (that.selectedIndex != that.flickity.selectedIndex) { // only do something when index changes
+                    that.selectedIndex = that.flickity.selectedIndex;
+                    var content = that.flickity.element.querySelectorAll('.rev-content');
+                    var nextIndex = that.selectedIndex + that.perRow;
+                    var last = that.selectedIndex >= that.options.sponsored - that.perRow;
+                    for (var i = 0; i < content.length; i++) {
+                        if (last) { // none left to half so all are visible
+                            revUtils.removeClass(content[i], 'rev-next');
+                        } else if (i >= nextIndex) {
+                            revUtils.addClass(content[i], 'rev-next');
+                        } else {
+                            revUtils.removeClass(content[i], 'rev-next');
+                        }
+                    }
+                }
+            });
+        }
     };
 
     RevFlicker.prototype.getData = function() {
-        var url = this.options.url + '?api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + this.options.sponsored + '&sponsored_offset=0&internal_count=0&api_source=flick';
+
+        var url = this.options.url + '?img_h='+ this.imageHeight +'&img_w='+ this.imageWidth +'&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + this.options.sponsored + '&sponsored_offset=0&internal_count=0&api_source=flick';
         var that = this;
         revApi.request(url, function(resp) {
+
+            var ads = that.flickity.element.querySelectorAll('.rev-ad');
+
             for (var i = 0; i < resp.length; i++) {
-                // for each response append
-                var html = '<div class="rev-ad">' +
-                            '<a href="'+ resp[i].url +'" target="_blank">' +
-                                '<div class="rev-image"><img src="'+ resp[i].image +'"/></div>' +
-                                '<div class="rev-headline"><h3>'+ resp[i].headline +'</h3></div>' +
-                                '<div class="rev-provider">'+ resp[i].brand +'</div>' +
-                            '</a>' +
-                        '</div>';
-                var cell = document.createElement('div');
-
-                cell.style.width = that.columnWidth + 'px';
-
-                revUtils.addClass(cell, 'rev-content');
-                // next in line gets special class
-                if (that.options.next_effect && i >= that.per_row) {
-                    revUtils.addClass(cell, 'next');
-                }
-
-                cell.innerHTML = html;
-
-                that.flickity.append(cell);
+                var ad = ads[i],
+                    data = resp[i];
+                ad.querySelectorAll('a')[0].setAttribute('href', data.url);
+                ad.querySelectorAll('img')[0].setAttribute('src', data.image);
+                ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
+                ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
             }
+
             imagesLoaded( that.flickity.element, function() {
-                that.flickity.reloadCells();
+                revUtils.addClass(that.flickity.element, 'loaded');
             });
-            // append elements
-            that.appendElements();
 
-            that.selectedIndex = that.flickity.selectedIndex
-
-            if (that.options.next_effect) {
-                that.flickity.on( 'cellSelect', function() {
-                    if (that.selectedIndex != that.flickity.selectedIndex) { // only do something when index changes
-                        that.selectedIndex = that.flickity.selectedIndex
-                        var content = that.flickity.element.querySelectorAll('.rev-content');
-                        var nextIndex = that.selectedIndex + that.per_row;
-                        var last = that.selectedIndex >= that.options.sponsored - that.per_row;
-                        for (var i = 0; i < content.length; i++) {
-                            if (last) { // none left to half so all are visible
-                                revUtils.removeClass(content[i], 'next');
-                            } else if (i >= nextIndex) {
-                                revUtils.addClass(content[i], 'next');
-                            } else {
-                                revUtils.removeClass(content[i], 'next');
-                            }
-                        }
-                    }
-                });
-            }
         });
     };
 

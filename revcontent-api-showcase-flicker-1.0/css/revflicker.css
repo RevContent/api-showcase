@@ -1,5 +1,6 @@
 #rev-flicker.rev-flicker {
     clear: both;
+    margin: 4px;
 }
 
 #rev-flicker.rev-flicker * {
@@ -44,16 +45,19 @@
 }
 
 #rev-flicker.rev-flicker .flickity-prev-next-button {
-    opacity: 0;
     transition: all .5s ease-in-out;
 }
 
-#rev-flicker.rev-flicker:hover .flickity-prev-next-button {
+#rev-flicker.rev-flicker .flickity-prev-next-button {
     opacity: 1;
 }
 
+#rev-flicker.rev-flicker .flickity-prev-next-button:disabled {
+    opacity: 0;
+}
+
 #rev-flicker.rev-flicker .rev-sponsored a {
-    color: #777;
+    color: #999;
 }
 
 #rev-flicker.rev-flicker a,
@@ -68,6 +72,21 @@
 }
 
 #rev-flicker.rev-flicker .rev-image {
+    transition: all .5s ease-in-out;
+    background: #eee;
+}
+
+#rev-flicker.rev-flicker .rev-image img {
+    transition: all .5s ease-in-out;
+    opacity: 0;
+}
+
+#rev-flicker.rev-flicker.loaded .rev-image {
+    background: transparent;
+}
+
+#rev-flicker.rev-flicker.loaded .rev-image img {
+    opacity: 1;
 }
 
 #rev-flicker.rev-flicker .rev-image img {
@@ -100,27 +119,21 @@
     font-size: 12px;
     color: #888;
     line-height: 30px;
-}
-
-#rev-flicker.rev-flicker .flickity-slider {
-}
-
-#rev-flicker.rev-flicker .rev-content {
+    height: 30px;
 }
 
 #rev-flicker.rev-flicker .rev-ad {
-    margin-right: 10%;
     border: 1px solid #eee;
     border-radius: 5px;
     overflow: hidden;
 }
 
 #rev-flicker .rev-content {
-    transition: all .5s ease-in-out;
+    transition: opacity .5s ease-in-out;
     opacity: 1;
 }
 
-#rev-flicker .rev-content.next {
-    transition: all .5s ease-in-out;
+#rev-flicker .rev-content.rev-next {
+    transition: opacity .5s ease-in-out;
     opacity: .5;
 }
