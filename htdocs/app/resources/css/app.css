@@ -9,6 +9,9 @@ html {
 body {
   font-size: 1.6rem;
   font-family: "Roboto", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }
 
 html, body {
@@ -16,6 +19,10 @@ html, body {
   -webkit-touch-callout: none;
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased; }
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
 
 md-select, md-card, md-list, md-toolbar, ul, ol, p, h1, h2, h3, h4, h5, h6 {
   text-rendering: optimizeLegibility; }
@@ -222,9 +229,9 @@ hr {
 }
 
 /* Container ==================================================================*/
-#wrapper {
+/*#wrapper {
   background-color: rgb(229, 229, 229);
-}
+}*/
 
 .container {
   margin-right: auto;
@@ -307,10 +314,6 @@ header md-toolbar {
   padding: 8px 0;
 }
 
-header .md-toolbar-tools {
-  padding: 0 30px;
-}
-
 .grid md-card {
   cursor: pointer;
 }
@@ -371,10 +374,8 @@ md-list-item, md-list-item .md-list-item-inner {
 
 /* Base =====================================================================*/
 header {
-  -webkit-flex-shrink: 0;
-  -moz-flex-shrink: 0;
   flex-shrink: 0;
-  /*z-index: 100;*/
+  border-bottom: 1px solid #CECECE;
 }
 
 header md-toolbar.md-default-theme {
@@ -391,17 +392,23 @@ header h1 {
 }
 
 main {
-  padding-top: 20px;
-  -webkit-flex-grow: 1;
-  -moz-flex-grow: 1;
+  background-color: rgb(229, 229, 229);
   flex-grow: 1;
+}
+
+main .container {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 footer {
   font-size: 14px;
-  padding: 12px 0px 8px;
   border-top: 1px solid rgba(189, 189, 189, 0.5);
-  margin-top: 30px;
+}
+
+footer .container {
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
 
 footer .container > div {
