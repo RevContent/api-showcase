@@ -113,6 +113,43 @@ RevFlicker({
         });
     };
 
+    RevFlicker.prototype.resize = function() {
+        var that = this;
+        setTimeout(function() {
+
+            that.containerWidth = that.flickity.element.offsetWidth;
+
+            that.setUp();
+
+            var ads = that.flickity.element.querySelectorAll('.rev-content');
+
+            for (var i = 0; i < ads.length; i++) {
+                var ad = ads[i];
+
+                ad.style.width = that.columnWidth + 'px';
+                ad.style.marginRight = that.margin + 'px';
+
+                ad.querySelectorAll('.rev-image')[0].style.height = that.preloaderHeight + 'px';
+                ad.querySelectorAll('.rev-headline')[0].style.height = that.headlineHeight + 'px';
+                ad.querySelectorAll('.rev-headline')[0].style.margin = that.headlineMarginTop +'px ' + that.innerMargin + 'px 0';
+
+                ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = that.headlineFontSize +'px';
+                ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = that.headlineLineHeight +'px';
+                ad.querySelectorAll('.rev-provider')[0].style.margin = that.providerMargin +'px '  + that.innerMargin + 'px ' + that.providerMargin +'px';
+                ad.querySelectorAll('.rev-provider')[0].style.fontSize = that.providerFontSize +'px';
+                ad.querySelectorAll('.rev-provider')[0].style.lineHeight = that.providerLineHeight + 'px';
+                ad.querySelectorAll('.rev-provider')[0].style.height = that.providerLineHeight +'px';
+            }
+
+            that.flickity.resize();
+
+            if (that.options.next_effect) {
+                that.selectedIndex = -1;
+                that.nextEffect();
+            }
+        });
+    };
+
     RevFlicker.prototype.appendElements = function() {
         var header = document.createElement('h2');
         header.innerHTML = this.options.header;
@@ -129,7 +166,7 @@ RevFlicker({
             revUtils.addClass(sponsored, this.options.rev_position.replace('_', '-'));
             revUtils.append(this.flickity.element, sponsored);
         }
-    }
+    };
 
     RevFlicker.prototype.getContainerWidth = function() {
         // HACK for Chrome - sometimes the width will be 0
@@ -226,26 +263,29 @@ RevFlicker({
         // append elements
         that.appendElements();
 
-        that.selectedIndex = that.flickity.selectedIndex;
-
         if (that.options.next_effect) {
+            that.selectedIndex = that.flickity.selectedIndex;
             that.flickity.on( 'cellSelect', function() {
-                if (that.selectedIndex != that.flickity.selectedIndex) { // only do something when index changes
-                    that.selectedIndex = that.flickity.selectedIndex;
-                    var content = that.flickity.element.querySelectorAll('.rev-content');
-                    var nextIndex = that.selectedIndex + that.perRow;
-                    var last = that.selectedIndex >= that.options.sponsored - that.perRow;
-                    for (var i = 0; i < content.length; i++) {
-                        if (last) { // none left to half so all are visible
-                            revUtils.removeClass(content[i], 'rev-next');
-                        } else if (i >= nextIndex) {
-                            revUtils.addClass(content[i], 'rev-next');
-                        } else {
-                            revUtils.removeClass(content[i], 'rev-next');
-                        }
-                    }
-                }
+                that.nextEffect();
             });
+        }
+    };
+
+    RevFlicker.prototype.nextEffect = function() {
+        if (this.selectedIndex != this.flickity.selectedIndex) { // only do something when index changes
+            this.selectedIndex = this.flickity.selectedIndex;
+            var content = this.flickity.element.querySelectorAll('.rev-content');
+            var nextIndex = this.selectedIndex + this.perRow;
+            var last = this.selectedIndex >= this.options.sponsored - this.perRow;
+            for (var i = 0; i < content.length; i++) {
+                if (last) { // none left to half so all are visible
+                    revUtils.removeClass(content[i], 'rev-next');
+                } else if (i >= nextIndex) {
+                    revUtils.addClass(content[i], 'rev-next');
+                } else {
+                    revUtils.removeClass(content[i], 'rev-next');
+                }
+            }
         }
     };
 

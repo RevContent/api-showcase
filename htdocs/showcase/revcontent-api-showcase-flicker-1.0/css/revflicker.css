@@ -45,10 +45,7 @@
 }
 
 #rev-flicker.rev-flicker .flickity-prev-next-button {
-    transition: all .5s ease-in-out;
-}
-
-#rev-flicker.rev-flicker .flickity-prev-next-button {
+    transition: opacity .5s ease-in-out;
     opacity: 1;
 }
 
@@ -72,12 +69,12 @@
 }
 
 #rev-flicker.rev-flicker .rev-image {
-    transition: all .5s ease-in-out;
+    transition: background .5s ease-in-out;
     background: #eee;
 }
 
 #rev-flicker.rev-flicker .rev-image img {
-    transition: all .5s ease-in-out;
+    transition: opacity .5s ease-in-out;
     opacity: 0;
 }
 
@@ -126,6 +123,7 @@
     border: 1px solid #eee;
     border-radius: 5px;
     overflow: hidden;
+    background: #fff;
 }
 
 #rev-flicker .rev-content {
