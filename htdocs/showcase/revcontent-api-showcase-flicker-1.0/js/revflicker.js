@@ -48,6 +48,7 @@ RevFlicker({
 
     var RevFlicker = function(opts) {
         var defaults = {
+            element: false,
             per_row: {
                 xxs: 1,
                 xs: 1,
@@ -88,7 +89,9 @@ RevFlicker({
         var flickerElement = document.createElement('div');
         flickerElement.id = 'rev-flicker';
         flickerElement.class = 'rev-flicker';
-        revUtils.append(document.getElementById(this.options.id), flickerElement);
+        var innerElement = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
+        innerElement.style.width = '100%';
+        revUtils.append(innerElement, flickerElement);
 
         // create flickity
         this.flickity = new Flickity( flickerElement, {
