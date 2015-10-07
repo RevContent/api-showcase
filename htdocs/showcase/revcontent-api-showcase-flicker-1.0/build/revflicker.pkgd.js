@@ -6451,6 +6451,16 @@ utils.removeClass = function(el, className) {
         el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
 };
 
+utils.addEventListener = function(el, eventName, handler) {
+  if (el.addEventListener) {
+    el.addEventListener(eventName, handler);
+  } else {
+    el.attachEvent('on' + eventName, function(){
+      handler.call(el);
+    });
+  }
+}
+
 // -----  ----- //
 return utils;
 
@@ -6659,43 +6669,43 @@ RevFlicker({
             that.preData();
             that.getData();
         });
+
+        revUtils.addEventListener(window, 'resize', function() {
+            that.resize();
+        });
     };
 
     RevFlicker.prototype.resize = function() {
-        var that = this;
-        setTimeout(function() {
+        this.containerWidth = this.flickity.element.offsetWidth;
 
-            that.containerWidth = that.flickity.element.offsetWidth;
+        this.setUp();
 
-            that.setUp();
+        var ads = this.flickity.element.querySelectorAll('.rev-content');
 
-            var ads = that.flickity.element.querySelectorAll('.rev-content');
+        for (var i = 0; i < ads.length; i++) {
+            var ad = ads[i];
 
-            for (var i = 0; i < ads.length; i++) {
-                var ad = ads[i];
+            ad.style.width = this.columnWidth + 'px';
+            ad.style.marginRight = this.margin + 'px';
 
-                ad.style.width = that.columnWidth + 'px';
-                ad.style.marginRight = that.margin + 'px';
+            ad.querySelectorAll('.rev-image')[0].style.height = this.preloaderHeight + 'px';
+            ad.querySelectorAll('.rev-headline')[0].style.height = this.headlineHeight + 'px';
+            ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
 
-                ad.querySelectorAll('.rev-image')[0].style.height = that.preloaderHeight + 'px';
-                ad.querySelectorAll('.rev-headline')[0].style.height = that.headlineHeight + 'px';
-                ad.querySelectorAll('.rev-headline')[0].style.margin = that.headlineMarginTop +'px ' + that.innerMargin + 'px 0';
+            ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
+            ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
+            ad.querySelectorAll('.rev-provider')[0].style.margin = this.providerMargin +'px '  + this.innerMargin + 'px ' + this.providerMargin +'px';
+            ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize +'px';
+            ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
+            ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
+        }
 
-                ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = that.headlineFontSize +'px';
-                ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = that.headlineLineHeight +'px';
-                ad.querySelectorAll('.rev-provider')[0].style.margin = that.providerMargin +'px '  + that.innerMargin + 'px ' + that.providerMargin +'px';
-                ad.querySelectorAll('.rev-provider')[0].style.fontSize = that.providerFontSize +'px';
-                ad.querySelectorAll('.rev-provider')[0].style.lineHeight = that.providerLineHeight + 'px';
-                ad.querySelectorAll('.rev-provider')[0].style.height = that.providerLineHeight +'px';
-            }
+        this.flickity.resize();
 
-            that.flickity.resize();
-
-            if (that.options.next_effect) {
-                that.selectedIndex = -1;
-                that.nextEffect();
-            }
-        });
+        if (this.options.next_effect) {
+            this.selectedIndex = -1;
+            this.nextEffect();
+        }
     };
 
     RevFlicker.prototype.appendElements = function() {
