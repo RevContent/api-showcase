@@ -247,8 +247,10 @@ RevFlicker({
     };
 
     RevFlicker.prototype.getData = function() {
-
-        var url = this.options.url + '?img_h='+ this.imageHeight +'&img_w='+ this.imageWidth +'&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + this.options.sponsored + '&sponsored_offset=0&internal_count=0&api_source=flick';
+        if (typeof is_blocked === 'undefined') {
+            var is_blocked = '0';
+        }
+        var url = this.options.url + '?img_h='+ this.imageHeight +'&img_w='+ this.imageWidth +'&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + this.options.sponsored + '&sponsored_offset=0&internal_count=0&api_source=flick&is_blocked=' + is_blocked;
         var that = this;
         revApi.request(url, function(resp) {
 
