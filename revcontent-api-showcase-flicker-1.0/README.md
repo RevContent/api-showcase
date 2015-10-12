@@ -22,8 +22,7 @@ Insert the proper values for your widget and set any optional options
                     api_key: 'your api_key',
                     pub_id: pub_id,
                     widget_id: widget_id,
-                    domain: 'widget domain',
-                    adp: true
+                    domain: 'widget domain'
                 });
             });
         })();
