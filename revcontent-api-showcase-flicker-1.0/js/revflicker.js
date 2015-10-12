@@ -66,7 +66,8 @@ RevFlicker({
             devices: [
                 'phone', 'tablet', 'desktop'
             ],
-            url: 'https://trends.revcontent.com/api/v1/'
+            url: 'https://trends.revcontent.com/api/v1/',
+            adp: true
         };
 
         // merge options
@@ -106,7 +107,7 @@ RevFlicker({
         this.emitter.on('containerReady', function() {
             that.setUp();
             that.preData();
-            if (this.options.adp == true) {
+            if (that.options.adp == true) {
                 that.isBlocked(function(is_blocked) {
                     that.getData(is_blocked);
                 });
