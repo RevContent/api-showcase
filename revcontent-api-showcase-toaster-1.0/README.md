@@ -15,6 +15,7 @@ Add the packaged or minified revtoaster script before the closing ```</body>``` 
             widget_id: widget_id,
             domain: 'widget domain',
             sponsored: 2,
+            adp: true
         });
     </script>
 

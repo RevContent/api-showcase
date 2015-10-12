@@ -17,7 +17,8 @@ Insert the proper values for your widget and set any optional options
             api_key: 'your api_key',
             pub_id: pub_id,
             widget_id: widget_id,
-            domain: 'widget domain'
+            domain: 'widget domain',
+            adp: true
         });
     </script>
 
@@ -62,6 +63,10 @@ Add the html div to the page with matching id
 **sponsored** - number of ads to display
 
     sponsored: 10
+
+**adp** - enable adblock detection
+
+    adp: false
 
 ## Building
 Gulp is used to embed css, concat and uglify the revtoaster script. To build the scripts:

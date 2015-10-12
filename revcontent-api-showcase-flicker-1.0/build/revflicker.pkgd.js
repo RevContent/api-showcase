@@ -154,7 +154,7 @@ if ( typeof define === 'function' && define.amd ) {
  * class helper functions
  * from bonzo https://github.com/ded/bonzo
  * MIT license
- *
+ * 
  * classie.has( elem, 'my-class' ) -> true/false
  * classie.add( elem, 'my-new-class' )
  * classie.remove( elem, 'my-unwanted-class' )
@@ -243,7 +243,7 @@ if ( typeof define === 'function' && define.amd ) {
  */
 
 ;(function () {
-
+    
 
     /**
      * Class for managing events.
@@ -1190,7 +1190,7 @@ if ( typeof define === 'function' && define.amd ) {
 
 ( function( ElemProto ) {
 
-
+  
 
   var matchesMethod = ( function() {
     // check for the standard method name first
@@ -1296,7 +1296,7 @@ if ( typeof define === 'function' && define.amd ) {
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -1346,7 +1346,7 @@ utils.modulo = function( num, div ) {
 };
 
 // ----- isArray ----- //
-
+  
 var objToString = Object.prototype.toString;
 utils.isArray = function( obj ) {
   return objToString.call( obj ) == '[object Array]';
@@ -1559,7 +1559,7 @@ return utils;
 }));
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -1653,7 +1653,7 @@ return Cell;
 }));
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -1921,7 +1921,7 @@ return proto;
  */
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -2670,7 +2670,7 @@ return Flickity;
 /*global define: false, module: false, require: false */
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -2987,7 +2987,7 @@ return Unipointer;
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -3345,7 +3345,7 @@ return Unidragger;
 }));
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -3718,7 +3718,7 @@ return Flickity;
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -3832,7 +3832,7 @@ return TapListener;
 // -------------------------- prev/next button -------------------------- //
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4092,7 +4092,7 @@ return Flickity;
 }));
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4277,7 +4277,7 @@ return Flickity;
 }));
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4463,7 +4463,7 @@ return Flickity;
 }));
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4640,7 +4640,7 @@ return Flickity;
 }));
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4772,7 +4772,7 @@ return Flickity;
  */
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4813,7 +4813,7 @@ return Flickity;
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4949,7 +4949,7 @@ return Flickity;
  * MIT License
  */
 
-( function( window, factory ) {
+( function( window, factory ) { 
   // universal module definition
 
   /*global define: false, module: false, require: false */
@@ -5288,7 +5288,7 @@ function makeArray( obj ) {
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -6614,7 +6614,8 @@ RevFlicker({
             devices: [
                 'phone', 'tablet', 'desktop'
             ],
-            url: 'https://trends.revcontent.com/api/v1/'
+            url: 'https://trends.revcontent.com/api/v1/',
+            adp: true
         };
 
         // merge options
@@ -6654,9 +6655,36 @@ RevFlicker({
         this.emitter.on('containerReady', function() {
             that.setUp();
             that.preData();
-            that.getData();
+            if (that.options.adp == true) {
+                that.isBlocked(function(is_blocked) {
+                    that.getData(is_blocked);
+                });
+            } else {
+                that.getData(false);
+            }
         });
     };
+
+    RevFlicker.prototype.isBlocked = function(e, o) {
+        if ("undefined" != typeof document.body) {
+            var t = "0.1.2-dev",
+                o = o ? o : "sponsorText",
+                n = document.createElement("DIV");
+            n.id = o, n.style.position = "absolute";
+            n.style.left = "-999px";
+            n.appendChild(document.createTextNode("&nbsp;"));
+            document.body.appendChild(n);
+            setTimeout(function() {
+                if (n) {
+                    var o = 0 == n.clientHeight;
+                    try {} catch (d) {
+                        console && console.log && console.log("ad-block-test error", d)
+                    }
+                    e(o, t), document.body.removeChild(n)
+                }
+            }, 175)
+        }
+    }
 
     RevFlicker.prototype.appendElements = function() {
         var header = document.createElement('h2');
@@ -6794,9 +6822,8 @@ RevFlicker({
         }
     };
 
-    RevFlicker.prototype.getData = function() {
-
-        var url = this.options.url + '?img_h='+ this.imageHeight +'&img_w='+ this.imageWidth +'&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + this.options.sponsored + '&sponsored_offset=0&internal_count=0&api_source=flick';
+    RevFlicker.prototype.getData = function(is_blocked) {
+        var url = this.options.url + '?img_h='+ this.imageHeight +'&img_w='+ this.imageWidth +'&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + this.options.sponsored + '&sponsored_offset=0&internal_count=0&api_source=flick&is_blocked=' + is_blocked;
         var that = this;
         revApi.request(url, function(resp) {
 

@@ -66,7 +66,8 @@ RevFlicker({
             devices: [
                 'phone', 'tablet', 'desktop'
             ],
-            url: 'https://trends.revcontent.com/api/v1/'
+            url: 'https://trends.revcontent.com/api/v1/',
+            adp: true
         };
 
         // merge options
@@ -106,9 +107,36 @@ RevFlicker({
         this.emitter.on('containerReady', function() {
             that.setUp();
             that.preData();
-            that.getData();
+            if (that.options.adp == true) {
+                that.isBlocked(function(is_blocked) {
+                    that.getData(is_blocked);
+                });
+            } else {
+                that.getData(false);
+            }
         });
     };
+
+    RevFlicker.prototype.isBlocked = function(e, o) {
+        if ("undefined" != typeof document.body) {
+            var t = "0.1.2-dev",
+                o = o ? o : "sponsorText",
+                n = document.createElement("DIV");
+            n.id = o, n.style.position = "absolute";
+            n.style.left = "-999px";
+            n.appendChild(document.createTextNode("&nbsp;"));
+            document.body.appendChild(n);
+            setTimeout(function() {
+                if (n) {
+                    var o = 0 == n.clientHeight;
+                    try {} catch (d) {
+                        console && console.log && console.log("ad-block-test error", d)
+                    }
+                    e(o, t), document.body.removeChild(n)
+                }
+            }, 175)
+        }
+    }
 
     RevFlicker.prototype.appendElements = function() {
         var header = document.createElement('h2');
@@ -246,9 +274,8 @@ RevFlicker({
         }
     };
 
-    RevFlicker.prototype.getData = function() {
-
-        var url = this.options.url + '?img_h='+ this.imageHeight +'&img_w='+ this.imageWidth +'&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + this.options.sponsored + '&sponsored_offset=0&internal_count=0&api_source=flick';
+    RevFlicker.prototype.getData = function(is_blocked) {
+        var url = this.options.url + '?img_h='+ this.imageHeight +'&img_w='+ this.imageWidth +'&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + this.options.sponsored + '&sponsored_offset=0&internal_count=0&api_source=flick&is_blocked=' + is_blocked;
         var that = this;
         revApi.request(url, function(resp) {
 
