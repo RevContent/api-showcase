@@ -336,9 +336,36 @@ RevFlicker({
         this.emitter.on('containerReady', function() {
             that.setUp();
             that.preData();
-            that.getData();
+            if (this.options.adp == true) {
+                that.isBlocked(function(is_blocked) {
+                    that.getData(is_blocked);
+                });
+            } else {
+                that.getData(false);
+            }
         });
     };
+
+    RevFlicker.prototype.isBlocked = function(e, o) {
+        if ("undefined" != typeof document.body) {
+            var t = "0.1.2-dev",
+                o = o ? o : "sponsorText",
+                n = document.createElement("DIV");
+            n.id = o, n.style.position = "absolute";
+            n.style.left = "-999px";
+            n.appendChild(document.createTextNode("&nbsp;"));
+            document.body.appendChild(n);
+            setTimeout(function() {
+                if (n) {
+                    var o = 0 == n.clientHeight;
+                    try {} catch (d) {
+                        console && console.log && console.log("ad-block-test error", d)
+                    }
+                    e(o, t), document.body.removeChild(n)
+                }
+            }, 175)
+        }
+    }
 
     RevFlicker.prototype.appendElements = function() {
         var header = document.createElement('h2');

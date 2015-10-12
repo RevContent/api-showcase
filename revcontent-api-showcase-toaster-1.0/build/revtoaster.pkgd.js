@@ -17,6 +17,7 @@ RevToaster({
     widget_id: widget_id,
     domain: 'widget domain',
     sponsored: 2,
+    adp: true
 });
 */
 
@@ -75,7 +76,28 @@ RevToaster({
         document.getElementsByTagName('head')[0].appendChild(style);
     }
 
-    var getData = function() {
+    var isBlocked = function(e, o) {
+        if ("undefined" != typeof document.body) {
+            var t = "0.1.2-dev",
+                o = o ? o : "sponsorText",
+                n = document.createElement("DIV");
+            n.id = o, n.style.position = "absolute";
+            n.style.left = "-999px";
+            n.appendChild(document.createTextNode("&nbsp;"));
+            document.body.appendChild(n);
+            setTimeout(function() {
+                if (n) {
+                    var o = 0 == n.clientHeight;
+                    try {} catch (d) {
+                        console && console.log && console.log("ad-block-test error", d)
+                    }
+                    e(o, t), document.body.removeChild(n)
+                }
+            }, 175)
+        }
+    }
+
+    var getData = function(is_blocked) {
         loading = true;
         var url = options.url + '?api_key='+ options.api_key +'&pub_id='+ options.pub_id +'&widget_id='+ options.widget_id +'&domain='+ options.domain +'&sponsored_count=' + options.sponsored + '&sponsored_offset=0&internal_count=0&api_source=toast&is_blocked=' + is_blocked;
 
@@ -160,7 +182,13 @@ RevToaster({
             if (scrollDirection === 'up' &&
                 document.querySelector('.rev-toaster') === null) {
 
-                getData();
+                if (options.adp == true) {
+                    isBlocked(function(is_blocked) {
+                        getData(is_blocked);
+                    });
+                } else {
+                    getData(false);
+                }
 
             } else if (scrollDirection === 'down' &&
                 document.querySelector('.rev-toaster') !== null &&
