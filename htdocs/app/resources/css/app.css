@@ -10,8 +10,8 @@ body {
   font-size: 1.6rem;
   font-family: "Roboto", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   display: flex;
-  min-height: 100vh;
   flex-direction: column;
+  height: 100%;
 }
 
 html, body {
@@ -391,9 +391,24 @@ header h1 {
   left: -99999px;
 }
 
+header, footer {
+  flex: none;
+}
+header {
+  flex-shrink: 0;
+}
+
 main {
   background-color: rgb(229, 229, 229);
+  flex: 1 0 auto;
   flex-grow: 1;
+}
+
+main::after {
+  content: '\00a0';
+  display: block;
+  height: 0px;
+  visibility: hidden;
 }
 
 main .container {
