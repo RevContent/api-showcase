@@ -13,3 +13,15 @@ footer {
 .navbar-nav {
     margin-left: 20px;
 }
+
+#revexitunit * {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
+#revexitunit *:before,
+#revexitunit *:after {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
