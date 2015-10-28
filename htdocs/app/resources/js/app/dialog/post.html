@@ -1,42 +1,66 @@
 <md-dialog>
-    <md-dialog-content>
+    <md-toolbar md-scroll-shrink>
+        <div class="md-toolbar-tools">
+            <h2 style="color:#fff;" class="md-display-2" ng-bind="post.title"></h2>
+        </div>
+    </md-toolbar>
 
-        <h2 class="md-display-1">{{ post.title }}</h2>
+    <md-dialog-content class="md-dialog-content">
 
-        <hr />
+        <div class="item-detail" hide-gt-md>
 
-        <div class="item-detail" layout="column" layout-gt-md="row">
+            <md-content layout="row" layout-wrap>
+                <div flex="50" layout layout-align="center center">
+                    <md-button flex style="margin:8px;" href="/showcase/{{post.link}}" class="md-accent md-raised md-hue-2" target="_blank">Live Preview</md-button>
+                </div>
+                <div flex="50" layout layout-align="center center">
+                    <md-button flex style="margin:8px;" href="https://github.com/Revcontent/api-showcase/archive/master.zip" class="md-raised md-primary md-hue-1">Download</md-button>
+                </div>
+                <div flex="50" layout layout-align="center center">
+                    <md-button flex style="margin:8px;" href="https://github.com/Revcontent/api-showcase" class="md-raised md-primary md-hue-1" target="_blank">Github</md-button>
+                </div>
+                <div flex="50" layout layout-align="center center">
+                    <md-button flex style="margin:8px;" href="https://github.com/Revcontent/api-showcase/tree/master/{{post.link}}" class="md-raised md-primary md-hue-1" target="_blank">Instructions</md-button>
+                </div>
+            </md-content>
 
-            <div class="feature" flex-gt-md="70">
+            <br />
+
+            <md-content>
+                <h3 style="margin-top:0;" class="md-title">Preview Image:</h3>
+                <img class="img-responsive" src="/app/resources/img/preview-{{post.img}}" alt="{{ post.title }}">
+            </md-content>
+
+            <br />
+
+            <md-content>
+                <h3 style="margin-top:0;" class="md-title">Description:</h3>
+                <div class="md-body-2" ng-bind="post.description"></div>
+            </md-content>
+        </div>
+
+        <div hide show-gt-md layout="column" layout-gt-md="row">
+
+            <div flex-gt-md="70" style="padding-right:16px;">
                 <img class="img-responsive preview" src="/app/resources/img/preview-{{post.img}}" alt="{{ post.title }}">
             </div>
 
-            <div class="description" flex-gt-md="30">
-                <div class="inner-description">
-
+            <div flex-gt-md="30">
+                <md-content layout-padding style="padding-top:0;">
                     <div class="md-body-2">{{ post.description }}</div>
+                </md-content>
 
-                    <md-whiteframe layout style="padding:15px; margin-top:20px;">
-                        <md-list style="width:100%;">
-                            <md-list-item class="md-3-line">
+                <md-content layout="column">
 
-                                <md-button href="/showcase/{{post.link}}" class="md-accent md-raised md-hue-2 md-button-lg" target="_blank">Live Preview</md-button>
-                            </md-list-item>
+                    <md-button style="margin-bottom:16px;" href="/showcase/{{post.link}}" class="md-accent md-raised md-hue-2" target="_blank">Live Preview</md-button>
 
-                            <md-list-item class="md-3-line">
-                                <md-button href="https://github.com/Revcontent/api-showcase/archive/master.zip" class="md-raised md-primary md-button-lg">Download</md-button>
-                            </md-list-item>
+                    <md-button style="margin-bottom:16px;" href="https://github.com/Revcontent/api-showcase/archive/master.zip" class="md-raised md-primary md-hue-1">Download</md-button>
 
-                            <md-list-item class="md-3-line">
-                                <md-button href="https://github.com/Revcontent/api-showcase" class="md-raised md-primary md-button-lg" target="_blank">Github</md-button>
-                            </md-list-item>
+                    <md-button style="margin-bottom:16px;" href="https://github.com/Revcontent/api-showcase" class="md-raised md-hue-1 md-primary" target="_blank">Github</md-button>
 
-                            <md-list-item ng-if="post.docs" class="md-3-line" style="margin-bottom:0;">
-                                <md-button href="https://github.com/Revcontent/api-showcase/tree/master/{{post.link}}" class="md-raised md-primary md-button-lg" target="_blank">Instructions</md-button>
-                            </md-list-item>
-                        </md-list>
-                    </md-whiteframe>
-                </div>
+                    <md-button style="margin-bottom:16px;" ng-if="post.docs" href="https://github.com/Revcontent/api-showcase/tree/master/{{post.link}}" class="md-raised md-hue-1 md-primary" target="_blank">Instructions</md-button>
+
+                </md-content>
             </div>
 
         </div>

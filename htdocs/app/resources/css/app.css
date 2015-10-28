@@ -207,6 +207,10 @@ p, .md-body-1 {
   color: #c7254e;
 }
 
+md-dialog .md-dialog-content {
+  padding: 24px 12px;
+}
+
 [disabled].md-button {
   background-color: rgba(0,0,0,0.12) !important;
 }
@@ -297,11 +301,6 @@ md-content {
 }
 
 /* md-card =====================================================================*/
-
-iframe.preview {
-  width: 100%;
-}
-
 md-card {
   background: #fff;
 }
@@ -345,12 +344,6 @@ md-list-item, md-list-item .md-list-item-inner {
   margin-bottom: 16px;
 }
 
-.item-detail .dscription .inner-description {
-  background: #f1f1f1;
-  padding: 10px 20px;
-  border-radius:2px;
-}
-
 .item-detail .description .md-button {
   width: 100%;
 }
@@ -378,7 +371,7 @@ header {
   border-bottom: 1px solid #CECECE;
 }
 
-header md-toolbar.md-default-theme {
+header md-toolbar:not(.md-menu-toolbar) {
   background: #fff;
 }
 
@@ -440,7 +433,7 @@ img {
   width: 100%;
   max-height: 100%;
   margin: 0 auto;
-  display: inline-block;
+  display: block;
   vertical-align: middle;
 }
 
@@ -492,12 +485,6 @@ md-tooltip.md-tooltip-dark.md-default-theme .md-background {
     display: block;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
-  md-content .inner-description {
-    margin-top: 16px;
-  }
-  .item-detail .feature {
-    padding-right: 0;
-  }
 }
 
 @media (max-width: 599px) {
@@ -530,5 +517,12 @@ md-tooltip.md-tooltip-dark.md-default-theme .md-background {
   }
   .logo-normal {
     font-size: 24px;
+  }
+}
+
+/* HACK for things not working */
+@media (min-width: 960px) {
+  .show-gt-md  {
+    display: flex !important;
   }
 }
