@@ -134,7 +134,7 @@
             <div class="col-md-3  col-xs-5">
                 <a href="<?php echo $response[0]['url']; ?>" target="_blank">
                     <span class="label label-info clear-branding" >Sponsored</span>
-                    <img class="img-responsive" src="http://<?php echo $response[0]['image']; ?>" alt="" />
+                    <img class="img-responsive" src="<?php echo $response[0]['image']; ?>" alt="" />
                 </a>
             </div>
             <div class="col-md-7">
@@ -186,7 +186,7 @@
             <div class="col-md-3  col-xs-5">
                 <a href="<?php echo $response[1]['url']; ?>" target="_blank">
                     <span class="label label-info clear-branding" >Sponsored</span>
-                    <img class="img-responsive" src="http://<?php echo $response[1]['image']; ?>" alt="" />
+                    <img class="img-responsive" src="<?php echo $response[1]['image']; ?>" alt="" />
                 </a>
             </div>
             <div class="col-md-7">

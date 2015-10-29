@@ -240,8 +240,17 @@ hr {
 .container {
   margin-right: auto;
   margin-left: auto;
-  width: 1170px;
+  /*width: 1170px;*/
+  width: 100%;
+  max-width: 940px;
 }
+@media screen and (min-width: 1263px) {
+  .container {
+    max-width: 1170px;
+  }
+}
+
+
 
 
 .table-responsive {
@@ -457,7 +466,7 @@ md-tooltip.md-tooltip-dark.md-default-theme .md-background {
 
 @media (max-width: 1190px) {
   .container {
-    width: 100% !important;
+
   }
 }
 
@@ -525,4 +534,9 @@ md-tooltip.md-tooltip-dark.md-default-theme .md-background {
   .show-gt-md  {
     display: flex !important;
   }
+}
+
+/* IE + General Crossbrower adjustments */
+.navbar-logo img {
+  max-width: 260px;
 }
