@@ -545,3 +545,38 @@ md-tooltip.md-tooltip-dark.md-default-theme .md-background {
     max-width: 260px;
   }
 }
+
+/* Dialog Overrides for Mobile */
+md-dialog.md-transition-in,
+md-dialog.md-transition-out {
+  transition: none !important;
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -o-transition: none !important;
+  transform: translate(0, 0) !important;
+  -webkit-transform: translate(0, 0) !important;
+  -ms-transform: translate(0, 0) !important;
+}
+
+md-dialog.md-transition-in {
+  opacity: 1 !important;
+  top: 5% !important;
+  /*position: static !important;*/
+}
+
+body.md-dialog-is-showing {
+  top: auto !important;
+  overflow: auto!important;
+}
+
+body.md-dialog-is-showing md-dialog {
+  position: fixed !important;
+  top: 5% !important;
+  display: block !important;
+
+}
+
+body.md-dialog-is-showing .md-dialog-container {
+  display: block;
+  padding: 0 10%;
+}
