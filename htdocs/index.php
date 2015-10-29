@@ -53,7 +53,7 @@
                     <div layout="row" layout-align="center center" class="md-toolbar-tools" tabindex="0">
 
                             <div id="navbar" class="navbar-header" layout="row" flex="100">
-                                <div class="navbar-brand" layout="row"  flex="70" flex-md="50">
+                                <div class="navbar-brand" layout="row"  flex="70" flex-md="50" layout-align="start center">
                                     <a href="/" class="navbar-logo" title="Revcontent Innovation Lab">
                                         <img src="app/resources/img/revcontent-labs.png" alt="Revcontent Innovation Lab">
                                     </a>

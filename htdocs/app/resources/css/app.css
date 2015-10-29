@@ -538,5 +538,10 @@ md-tooltip.md-tooltip-dark.md-default-theme .md-background {
 
 /* IE + General Crossbrower adjustments */
 .navbar-logo img {
-  max-width: 260px;
+  max-width: 200px;
+}
+@media (min-width: 480px) {
+  .navbar-logo img {
+    max-width: 260px;
+  }
 }
