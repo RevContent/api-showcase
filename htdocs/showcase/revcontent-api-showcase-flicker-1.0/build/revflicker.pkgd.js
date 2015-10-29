@@ -6583,6 +6583,10 @@ RevFlicker({
         xl: 6,
         xxl: 7
     },
+    show_arrows: {
+        mobile: false,
+        desktop: true
+    },
     rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right'),
     next_effect: true,
     sponsored: 10,
@@ -6620,6 +6624,10 @@ RevFlicker({
             header: 'Trending Now',
             rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right'),
             next_effect: true,
+            show_arrows: {
+                mobile: false,
+                desktop: true
+            },
             sponsored: 10,
             dots: false,
             devices: [
@@ -6653,7 +6661,7 @@ RevFlicker({
 
         // create flickity
         this.flickity = new Flickity( flickerElement, {
-            prevNextButtons: revDetect.mobile() ? false : true,
+            prevNextButtons: revDetect.mobile() ? this.options.show_arrows.mobile : this.options.show_arrows.desktop,
             pageDots: this.options.dots,
             cellAlign: 'left',
             percentPosition: false,
