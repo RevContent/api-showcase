@@ -16,6 +16,8 @@ RevToaster({
     pub_id: pub_id,
     widget_id: widget_id,
     domain: 'widget domain',
+    header: 'Trending Today',
+    closed_hours: 24,
     sponsored: 2,
 });
 */
@@ -64,6 +66,8 @@ RevToaster({
 
     RevToaster.defaults = {
         testing: false,
+        header: 'Trending Today',
+        closed_hours: 24,
         sponsored: 1,
         url: 'https://trends.revcontent.com/api/v1/'
     };
@@ -87,7 +91,7 @@ RevToaster({
             if (request.status >= 200 && request.status < 400) {
                 var resp = JSON.parse(request.responseText);
 
-                var html = '<div class="rev-header">Trending Today</div>' +
+                var html = '<div class="rev-header">' + options.header + '</div>' +
                             '<button class="rev-close">' +
                                 '<div class="icon">' +
                                     '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>' +
@@ -132,12 +136,15 @@ RevToaster({
     };
 
     var bindClose = function() {
+        if (!options.closed_hours) {
+            return false;
+        }
         document.querySelector('.rev-close').addEventListener('click', function(e) {
             removeClass(document.body, 'rev-toaster-loaded');
             setTimeout(function() {
                 revToaster.parentNode.removeChild(revToaster);
                 removed = true;
-                setCookie('revtoaster-closed', 1, 1);
+                setCookie('revtoaster-closed', 1, (options.closed_hours / 24));
             }, 2000);
         });
     };
