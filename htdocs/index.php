@@ -50,53 +50,55 @@
 
                 <div class="container" layout layout-align="center center" tabindex="0">
 
-                    <div layout layout-align="center center" class="md-toolbar-tools" tabindex="0">
+                    <div layout="row" layout-align="center center" class="md-toolbar-tools" tabindex="0">
 
-                        <div>
-                            <div class="navbar-header">
-                                <div class="navbar-brand">
+                            <div id="navbar" class="navbar-header" layout="row" flex="100">
+                                <div class="navbar-brand" layout="row"  flex="70" flex-md="50" layout-align="start center">
                                     <a href="/" class="navbar-logo" title="Revcontent Innovation Lab">
                                         <img src="app/resources/img/revcontent-labs.png" alt="Revcontent Innovation Lab">
                                     </a>
                                 </div>
+                                <md-menu layout="row" layout-align="center center" hide-gt-sm style="margin-left:auto;margin-right:0;padding:0;">
+                                    <md-button ng-click="$mdOpenMenu($event)" class="md-icon-button" aria-label="Open sample menu">
+                                        <md-icon>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fit="" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M4 27h28v-3H4v3zm0-8h28v-3H4v3zM4 8v3h28V8H4z"/></svg>
+                                        </md-icon>
+                                    </md-button>
+                                    <md-menu-content>
+                                        <md-menu-item>
+                                            <md-button ui-sref="docs">Docs</md-button>
+                                        </md-menu-item>
+                                        <md-menu-item>
+                                            <md-button target="_blank" ng-href="http://faq.revcontent.com/support/solutions/5000137293">Support</md-button>
+                                        </md-menu-item>
+                                        <md-menu-item>
+                                            <md-button target="_blank" ng-href="http://faq.revcontent.com/support/solutions/folders/5000219605">FAQ</md-button>
+                                        </md-menu-item>
+                                    </md-menu-content>
+                                </md-menu>
+
+                                <div id="menu_desktop" hide-sm  flex="30" flex-md="50" layout="row" layout-align="center end" layout-padding>
+
+                                    <a class="md-button" ui-sref="docs" tabindex="0">
+                                        <span>Docs</span>
+                                        <md-tooltip>Read Up!</md-tooltip>
+                                    </a>
+
+                                    <a class="md-button" target="_blank" ng-href="http://faq.revcontent.com/support/solutions/5000137293" tabindex="0">
+                                        <span>Support</span>
+                                        <md-tooltip>How can we help?</md-tooltip>
+                                    </a>
+
+                                    <a class="md-button" target="_blank" ng-href="http://faq.revcontent.com/support/solutions/folders/5000219605" tabindex="0">
+                                        <span>FAQ</span>
+                                        <md-tooltip>Common Questions</md-tooltip>
+                                    </a>
+
+                                </div>
+
                             </div>
-                        </div>
 
-                        <md-menu layout layout-align="center center" hide-gt-sm style="margin-left:auto;margin-right:0;padding:0;">
-                            <md-button ng-click="$mdOpenMenu($event)" class="md-icon-button" aria-label="Open sample menu">
-                                <md-icon>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fit="" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M4 27h28v-3H4v3zm0-8h28v-3H4v3zM4 8v3h28V8H4z"/></svg>
-                                </md-icon>
-                            </md-button>
-                            <md-menu-content>
-                                <md-menu-item>
-                                    <md-button ui-sref="docs">Docs</md-button>
-                                </md-menu-item>
-                                <md-menu-item>
-                                    <md-button target="_blank" ng-href="http://faq.revcontent.com/support/solutions/5000137293">Support</md-button>
-                                </md-menu-item>
-                                <md-menu-item>
-                                    <md-button target="_blank" ng-href="http://faq.revcontent.com/support/solutions/folders/5000219605">FAQ</md-button>
-                                </md-menu-item>
-                            </md-menu-content>
-                        </md-menu>
 
-                        <div style="margin-left:auto;" hide-sm>
-                            <a class="md-button" ui-sref="docs" tabindex="0">
-                                <span>Docs</span>
-                                <md-tooltip>Read Up!</md-tooltip>
-                            </a>
-
-                            <a class="md-button" target="_blank" ng-href="http://faq.revcontent.com/support/solutions/5000137293" tabindex="0">
-                                <span>Support</span>
-                                <md-tooltip>How can we help?</md-tooltip>
-                            </a>
-
-                            <a class="md-button" target="_blank" ng-href="http://faq.revcontent.com/support/solutions/folders/5000219605" tabindex="0">
-                                <span>FAQ</span>
-                                <md-tooltip>Common Questions</md-tooltip>
-                            </a>
-                        </div>
 
                     </div>
                 </div>
