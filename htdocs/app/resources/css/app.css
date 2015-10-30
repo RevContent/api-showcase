@@ -547,36 +547,48 @@ md-tooltip.md-tooltip-dark.md-default-theme .md-background {
 }
 
 /* Dialog Overrides for Mobile */
-md-dialog.md-transition-in,
-md-dialog.md-transition-out {
-  transition: none !important;
-  -webkit-transition: none !important;
-  -moz-transition: none !important;
-  -o-transition: none !important;
-  transform: translate(0, 0) !important;
-  -webkit-transform: translate(0, 0) !important;
-  -ms-transform: translate(0, 0) !important;
+body.os-ios.device-iphone md-dialog.md-transition-in,
+body.os-windows-phone.browser-ie md-dialog.md-transition-in,
+body.os-ios.device-iphone md-dialog.md-transition-out,
+body.os-windows-phone.browser-ie md-dialog.md-transition-out {
+    transition: none !important;
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -o-transition: none !important;
+    transform: translate(0, 0) !important;
+    -webkit-transform: translate(0, 0) !important;
+    -ms-transform: translate(0, 0) !important;
 }
 
-md-dialog.md-transition-in {
-  opacity: 1 !important;
-  top: 5% !important;
-  /*position: static !important;*/
+body.os-ios.device-iphone.md-dialog-is-showing,
+body.os-windows-phone.browser-ie.md-dialog-is-showing,
+{
+    top: auto !important;
+    overflow: auto !important;
 }
 
-body.md-dialog-is-showing {
-  top: auto !important;
-  overflow: auto!important;
+body.os-ios.device-iphone.md-dialog-is-showing .md-dialog-container,
+body.os-windows-phone.browser-ie.md-dialog-is-showing .md-dialog-container {
+    display: block !important;
+    padding: 0 10%;
+    height: 100%;
+    max-height: 100%;
+    position: fixed !important;
+    top: 0 !important;
 }
 
-body.md-dialog-is-showing md-dialog {
-  position: fixed !important;
-  top: 5% !important;
-  display: block !important;
-
+body.os-ios.device-iphone.md-dialog-is-showing md-dialog.md-transition-in,
+body.os-windows-phone.browser-ie.md-dialog-is-showing md-dialog.md-transition-in {
+    position: fixed !important;
+    opacity: 1 !important;
+    top: 5% !important;
+    display: block !important;
+    max-height: 80% !important;
 }
 
-body.md-dialog-is-showing .md-dialog-container {
-  display: block;
-  padding: 0 10%;
+body.os-ios.device-iphone.md-dialog-is-showing md-dialog.md-transition-in md-dialog-content div[layout="column"],
+body.os-ios.device-iphone.md-dialog-is-showing md-dialog.md-transition-in md-dialog-content md-content,
+body.os-windows-phone.browser-ie.md-dialog-is-showing md-dialog.md-transition-in md-dialog-content div[layout="column"],
+body.os-windows-phone.browser-ie.md-dialog-is-showing md-dialog.md-transition-in md-dialog-content md-content {
+    padding: 0 12px;
 }
