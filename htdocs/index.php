@@ -25,6 +25,8 @@
         <script src="app/resources/vendor/angular-messages/angular-messages.js"></script>
         <script src="app/resources/vendor/lodash/dist/lodash.js"></script>
         <script src="app/resources/vendor/highlightjs/highlight.pack.js"></script>
+        <script src="app/resources/vendor/re-tree/re-tree.js"></script>
+        <script src="app/resources/vendor/ng-device-detector/ng-device-detector.js"></script>
 
         <!-- app js -->
         <script src="app/resources/js/app/app.module.js"></script>
@@ -44,7 +46,7 @@
         <link href="app/resources/css/app.css" rel="stylesheet" type="text/css" media="screen" />
 
     </head>
-    <body>
+    <body device-detector>
         <header>
             <md-toolbar class="md-primary">
 

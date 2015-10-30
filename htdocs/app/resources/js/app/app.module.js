@@ -4,5 +4,6 @@ var app = angular.module('app', [
     'ngAnimate',
     'ngMaterial',
     'ngMessages',
-    'hljs'
+    'hljs',
+    'ng.deviceDetector'
 ]);
