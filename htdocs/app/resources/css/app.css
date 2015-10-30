@@ -157,13 +157,23 @@ code {
   font-weight: 400;
   line-height: 3.2rem; }
 
-.md-banner {
+/* banner =====================================================================*/
+.banner {
+  margin: 0 0 30px;
+  text-align: center;
+  color: #fff;
+}
+
+.banner .banner-inner {
+  background: rgba(85, 85, 85, 0.8);
+  border-radius: 2px;
+  padding: 20px;
   font-size: 1.9rem;
   letter-spacing: 0.03rem;
   line-height: 2.7rem;
 }
 
-.md-banner strong {
+.banner strong {
   font-weight: 800;
 }
 
@@ -357,17 +367,6 @@ md-list-item, md-list-item .md-list-item-inner {
   width: 100%;
 }
 
-/* banner =====================================================================*/
-.banner {
-  text-align: center;
-  width: 100%;
-  padding: 20px;
-  margin: 0 0 30px;
-  color: #fff;
-  background: rgba(85, 85, 85, 0.8);
-  border-radius: 2px;
-}
-
 /* Helper =====================================================================*/
 
 .hide { display: none !important; }
@@ -477,7 +476,7 @@ md-tooltip.md-tooltip-dark.md-default-theme .md-background {
     padding: 10px;
     margin: 0 0 20px;
   }
-  .banner .md-banner {
+  .banner .banner-inner {
     font-size: 1.5rem;
     letter-spacing: 0.01rem;
     line-height: 2rem;
