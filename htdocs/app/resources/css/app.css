@@ -452,7 +452,8 @@ img {
 }
 
 md-dialog  {
-  /*max-height: none;*/
+  width: 80%;
+  max-width: 1100px;
   margin-top: 15px;
 }
 
