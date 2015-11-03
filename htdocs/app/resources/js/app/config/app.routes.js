@@ -86,6 +86,9 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                     clickOutsideToClose: true,
                     controller: function($scope) {
                         $scope.post = plugin;
+                        $scope.close = function() {
+                            $mdDialog.hide();
+                        }
                     },
                     onComplete: function() {
                     }
