@@ -95,6 +95,9 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                 }, function() { //cancel
                     $location.path('/');
                 });
+            }],
+            onExit: ['$mdDialog', function($mdDialog) {
+                $mdDialog.hide();
             }]
         });
 }]);
