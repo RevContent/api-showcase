@@ -25,7 +25,9 @@ api.request = function(url, success, failure) {
 
     request.onload = function() {
         if (request.status >= 200 && request.status < 400) {
-            success(JSON.parse(request.responseText));
+            try {
+                success(JSON.parse(request.responseText));
+            } catch(e) { }
         } else if(failure) {
             failure(request);
         }
