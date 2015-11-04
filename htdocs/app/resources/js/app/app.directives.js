@@ -23,3 +23,14 @@ app.directive('mdCard', ['$location', '$mdCardContent', function ($location, $md
     }
   };
 }]);
+
+app.directive('preloader', ['$location', '$mdCardContent', function ($location, $mdCardContent) {
+  return {
+    restrict: "AE",
+    link: function(scope, element, attrs) {
+        imagesLoaded( element, function() {
+            angular.element(element).find('img').addClass('loaded');
+        });
+    }
+  };
+}]);

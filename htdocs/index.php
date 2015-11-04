@@ -27,6 +27,7 @@
         <script src="app/resources/vendor/highlightjs/highlight.pack.js"></script>
         <script src="app/resources/vendor/re-tree/re-tree.js"></script>
         <script src="app/resources/vendor/ng-device-detector/ng-device-detector.js"></script>
+        <script src="app/resources/vendor/imagesloaded/imagesloaded.pkgd.js"></script>
 
         <!-- app js -->
         <script src="app/resources/js/app/app.module.js"></script>
