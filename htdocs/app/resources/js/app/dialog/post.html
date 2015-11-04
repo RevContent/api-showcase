@@ -25,7 +25,7 @@
                 <div flex="50" layout layout-align="center center">
                     <md-button flex style="margin:8px;" href="https://github.com/Revcontent/api-showcase" class="md-raised md-primary md-hue-1" target="_blank">Github</md-button>
                 </div>
-                <div flex="50" layout layout-align="center center">
+                <div flex="50" layout layout-align="center center" ng-if="post.docs">
                     <md-button flex style="margin:8px;" href="https://github.com/Revcontent/api-showcase/tree/master/{{post.link}}" class="md-raised md-primary md-hue-1" target="_blank">Instructions</md-button>
                 </div>
             </md-content>
