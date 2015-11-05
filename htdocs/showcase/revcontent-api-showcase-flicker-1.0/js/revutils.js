@@ -100,6 +100,10 @@ utils.append = function(el, html) {
     el.appendChild(html);
 }
 
+utils.remove = function(el) {
+    el.parentNode.removeChild(el);
+}
+
 utils.next = function(el) {
     function nextElementSibling(el) {
         do { el = el.nextSibling; } while ( el && el.nodeType !== 1 );

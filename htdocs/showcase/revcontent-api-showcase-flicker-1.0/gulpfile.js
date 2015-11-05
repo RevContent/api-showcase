@@ -1,4 +1,6 @@
 var gulp         = require('gulp');
+var header       = require('gulp-header');
+var pkg          = require('./package.json');
 var inject       = require('gulp-inject');
 var rename       = require('gulp-rename');
 var minifycss    = require('gulp-minify-css');
@@ -32,6 +34,14 @@ gulp.task('embedcss', ['minifycss'], function () {
 });
 
 gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
+
+    var banner = ['/**',
+      ' * <%= pkg.name %> - <%= pkg.description %>',
+      ' * @version v<%= pkg.version %>',
+      ' * @link <%= pkg.homepage %>',
+      ' */',
+      ''].join('\n');
+
     return gulp.src(['./vendor/flickity/dist/flickity.pkgd.js', './vendor/mobile-detect/mobile-detect.js', './js/revutils.js', './js/revdetect.js', './js/revapi.js', './build/revflicker.js'])
         .pipe(concat('revflicker.pkgd.js'))
         .pipe(gulp.dest('./build'))
@@ -39,7 +49,9 @@ gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
             mangle: false
             }))
         .pipe(rename('revflicker.min.js'))
-        .pipe(gulp.dest('./build'));
+        .pipe(header(banner, { pkg : pkg } ))
+        .pipe(gulp.dest('./build'))
+        .pipe(gulp.dest('../../build'));
 });
 
 gulp.task('watch', function () {

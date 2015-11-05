@@ -6418,6 +6418,10 @@ utils.append = function(el, html) {
     el.appendChild(html);
 }
 
+utils.remove = function(el) {
+    el.parentNode.removeChild(el);
+}
+
 utils.next = function(el) {
     function nextElementSibling(el) {
         do { el = el.nextSibling; } while ( el && el.nodeType !== 1 );
@@ -6537,7 +6541,9 @@ api.request = function(url, success, failure) {
 
     request.onload = function() {
         if (request.status >= 200 && request.status < 400) {
-            success(JSON.parse(request.responseText));
+            try {
+                success(JSON.parse(request.responseText));
+            } catch(e) { }
         } else if(failure) {
             failure(request);
         }

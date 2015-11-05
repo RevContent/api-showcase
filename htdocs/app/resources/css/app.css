@@ -456,6 +456,18 @@ md-dialog  {
   margin-top: 15px;
 }
 
+md-dialog .dialog-header {
+  color: #fff;
+}
+
+md-dialog .dialog-header .close-button {
+  margin-left:auto;
+}
+
+md-dialog .dialog-header .close-button md-icon {
+  color:#fff;
+}
+
 .md-tooltip-lg .md-content {
   white-space: normal;
 }

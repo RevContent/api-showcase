@@ -86,6 +86,9 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                     clickOutsideToClose: true,
                     controller: function($scope) {
                         $scope.post = plugin;
+                        $scope.close = function() {
+                            $mdDialog.hide();
+                        }
                     },
                     onComplete: function() {
                     }
@@ -95,6 +98,9 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                 }, function() { //cancel
                     $location.path('/');
                 });
+            }],
+            onExit: ['$mdDialog', function($mdDialog) {
+                $mdDialog.hide();
             }]
         });
 }]);
