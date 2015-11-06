@@ -1,7 +1,7 @@
 CHANGELOG for RevFlicker
 ========================
 
-This changelog references the relevant changes done in RevFlicker minor versions
+This changelog references the relevant changes done in RevFlicker
 
 * 0.1.1
 
