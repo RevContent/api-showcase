@@ -32,6 +32,7 @@ RevFlicker({
     rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right'),
     next_effect: true,
     sponsored: 10,
+    internal: false,
     dots: false,
     header: 'Trending Now',
     devices: [
@@ -71,6 +72,7 @@ RevFlicker({
                 desktop: true
             },
             sponsored: 10,
+            internal: false,
             dots: false,
             devices: [
                 'phone', 'tablet', 'desktop'
@@ -299,7 +301,10 @@ RevFlicker({
 
     RevFlicker.prototype.getData = function() {
 
-        var url = this.options.url + '?img_h='+ this.imageHeight +'&img_w='+ this.imageWidth +'&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + this.options.sponsored + '&sponsored_offset=0&internal_count=0&api_source=flick';
+        var sponsored = this.options.internal ? 0 : this.options.sponsored;
+        var internal = this.options.internal ? this.options.internal : 0;
+
+        var url = this.options.url + '?img_h='+ this.imageHeight +'&img_w='+ this.imageWidth +'&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + sponsored + '&internal_count=' + internal + '&sponsored_offset=0&internal_offset=0&api_source=flick';
         var that = this;
         revApi.request(url, function(resp) {
 
