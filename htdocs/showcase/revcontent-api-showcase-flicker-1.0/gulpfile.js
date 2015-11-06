@@ -11,7 +11,7 @@ var autoprefixer = require('gulp-autoprefixer');
 gulp.task('default', ['buildjs']);
 
 gulp.task('minifycss', function() {
-    return gulp.src(['./vendor/flickity/css/flickity.css', './css/revflicker.css'])
+    return gulp.src(['./vendor/flickity/css/flickity.css', './css/revflicker.css', './css/rev.css'])
         .pipe(concat('revflicker.min.css'))
         .pipe(autoprefixer({
             browsers: ['> 1%'],
@@ -42,7 +42,7 @@ gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
       ' */',
       ''].join('\n');
 
-    return gulp.src(['./vendor/flickity/dist/flickity.pkgd.js', './vendor/mobile-detect/mobile-detect.js', './js/revutils.js', './js/revdetect.js', './js/revapi.js', './build/revflicker.js'])
+    return gulp.src(['./vendor/flickity/dist/flickity.pkgd.js', './vendor/mobile-detect/mobile-detect.js', './js/revutils.js', './js/revdetect.js', './js/revapi.js', './build/revflicker.js', './js/revdialog.js'])
         .pipe(concat('revflicker.pkgd.js'))
         .pipe(gulp.dest('./build'))
         .pipe(uglify({

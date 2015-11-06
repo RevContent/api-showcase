@@ -145,7 +145,14 @@ utils.addEventListener = function(el, eventName, handler) {
       handler.call(el);
     });
   }
-}
+};
+
+utils.addDialog = function(insertPoint, url){
+    return new RevDialog({
+        insertPoint : insertPoint,
+        url : url
+    });
+};
 
 // -----  ----- //
 return utils;

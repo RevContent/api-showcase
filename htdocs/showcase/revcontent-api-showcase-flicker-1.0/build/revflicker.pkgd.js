@@ -154,7 +154,7 @@ if ( typeof define === 'function' && define.amd ) {
  * class helper functions
  * from bonzo https://github.com/ded/bonzo
  * MIT license
- *
+ * 
  * classie.has( elem, 'my-class' ) -> true/false
  * classie.add( elem, 'my-new-class' )
  * classie.remove( elem, 'my-unwanted-class' )
@@ -243,7 +243,7 @@ if ( typeof define === 'function' && define.amd ) {
  */
 
 ;(function () {
-
+    
 
     /**
      * Class for managing events.
@@ -1190,7 +1190,7 @@ if ( typeof define === 'function' && define.amd ) {
 
 ( function( ElemProto ) {
 
-
+  
 
   var matchesMethod = ( function() {
     // check for the standard method name first
@@ -1296,7 +1296,7 @@ if ( typeof define === 'function' && define.amd ) {
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -1346,7 +1346,7 @@ utils.modulo = function( num, div ) {
 };
 
 // ----- isArray ----- //
-
+  
 var objToString = Object.prototype.toString;
 utils.isArray = function( obj ) {
   return objToString.call( obj ) == '[object Array]';
@@ -1559,7 +1559,7 @@ return utils;
 }));
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -1653,7 +1653,7 @@ return Cell;
 }));
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -1921,7 +1921,7 @@ return proto;
  */
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -2670,7 +2670,7 @@ return Flickity;
 /*global define: false, module: false, require: false */
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -2987,7 +2987,7 @@ return Unipointer;
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -3345,7 +3345,7 @@ return Unidragger;
 }));
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -3718,7 +3718,7 @@ return Flickity;
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -3832,7 +3832,7 @@ return TapListener;
 // -------------------------- prev/next button -------------------------- //
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4092,7 +4092,7 @@ return Flickity;
 }));
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4277,7 +4277,7 @@ return Flickity;
 }));
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4463,7 +4463,7 @@ return Flickity;
 }));
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4640,7 +4640,7 @@ return Flickity;
 }));
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4772,7 +4772,7 @@ return Flickity;
  */
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4813,7 +4813,7 @@ return Flickity;
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4949,7 +4949,7 @@ return Flickity;
  * MIT License
  */
 
-( function( window, factory ) {
+( function( window, factory ) { 
   // universal module definition
 
   /*global define: false, module: false, require: false */
@@ -5288,7 +5288,7 @@ function makeArray( obj ) {
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -6463,7 +6463,14 @@ utils.addEventListener = function(el, eventName, handler) {
       handler.call(el);
     });
   }
-}
+};
+
+utils.addDialog = function(insertPoint, url){
+    return new RevDialog({
+        insertPoint : insertPoint,
+        url : url
+    });
+};
 
 // -----  ----- //
 return utils;
@@ -6655,7 +6662,7 @@ RevFlicker({
 
         var that = this;
         //append injrected style
-        revUtils.appendStyle('/* inject:css */#rev-flicker.rev-flicker:focus,.flickity-enabled:focus{outline:0}.flickity-enabled{position:relative}.flickity-viewport{overflow:hidden;position:relative;height:100%}.flickity-slider{position:absolute;width:100%;height:100%}.flickity-enabled.is-draggable{-webkit-tap-highlight-color:transparent;tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.flickity-enabled.is-draggable .flickity-viewport{cursor:move;cursor:-webkit-grab;cursor:grab}.flickity-enabled.is-draggable .flickity-viewport.is-pointer-down{cursor:-webkit-grabbing;cursor:grabbing}.flickity-prev-next-button{position:absolute;top:50%;width:44px;height:44px;border:none;border-radius:50%;background:#fff;background:hsla(0,0%,100%,.75);cursor:pointer;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}.flickity-prev-next-button:hover{background:#fff}.flickity-prev-next-button:focus{outline:0;box-shadow:0 0 0 5px #09F}.flickity-prev-next-button:active{filter:alpha(opacity=60);opacity:.6}.flickity-prev-next-button.previous{left:10px}.flickity-prev-next-button.next{right:10px}.flickity-rtl .flickity-prev-next-button.previous{left:auto;right:10px}.flickity-rtl .flickity-prev-next-button.next{right:auto;left:10px}.flickity-prev-next-button:disabled{filter:alpha(opacity=30);opacity:.3;cursor:auto}.flickity-prev-next-button svg{position:absolute;left:20%;top:20%;width:60%;height:60%}.flickity-prev-next-button .arrow{fill:#333}.flickity-prev-next-button.no-svg{color:#333;font-size:26px}.flickity-page-dots{position:absolute;width:100%;bottom:-25px;padding:0;margin:0;list-style:none;text-align:center;line-height:1}.flickity-rtl .flickity-page-dots{direction:rtl}.flickity-page-dots .dot{display:inline-block;width:10px;height:10px;margin:0 8px;background:#333;border-radius:50%;filter:alpha(opacity=25);opacity:.25;cursor:pointer}.flickity-page-dots .dot.is-selected{filter:alpha(opacity=100);opacity:1}#rev-flicker.rev-flicker{clear:both;margin:4px}#rev-flicker.rev-flicker *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-flicker.rev-flicker .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-flicker.rev-flicker .flickity-viewport{clear:both}#rev-flicker.rev-flicker .rev-sponsored{line-height:24px;font-size:12px}#rev-flicker.rev-flicker .rev-sponsored.bottom-right,#rev-flicker.rev-flicker .rev-sponsored.top-right{float:right}#rev-flicker.rev-flicker .rev-sponsored.top-right a{vertical-align:-5px}#rev-flicker.rev-flicker .flickity-prev-next-button{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-flicker.rev-flicker .flickity-prev-next-button:disabled{opacity:0}#rev-flicker.rev-flicker .rev-sponsored a{color:#999}#rev-flicker.rev-flicker a,#rev-flicker.rev-flicker a:focus,#rev-flicker.rev-flicker a:hover{text-decoration:none}#rev-flicker.rev-flicker .rev-ad a{display:block;color:#222}#rev-flicker.rev-flicker .rev-image{-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee}#rev-flicker.rev-flicker .rev-image img{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-flicker.rev-flicker.loaded .rev-image{background:0 0}#rev-flicker.rev-flicker.loaded .rev-image img{opacity:1}#rev-flicker.rev-flicker .rev-headline,#rev-flicker.rev-flicker .rev-provider{margin:0 10px;text-align:left}#rev-flicker.rev-flicker .rev-headline{margin-top:12px;height:40px;overflow:hidden}#rev-flicker.rev-flicker .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-flicker.rev-flicker .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px}#rev-flicker.rev-flicker .rev-ad{border:1px solid #eee;border-radius:5px;overflow:hidden;background:#fff}#rev-flicker .rev-content{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-flicker .rev-content.rev-next{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:.5}/* endinject */', 'rev-flicker');
+        revUtils.appendStyle('/* inject:css */#rev-flicker.rev-flicker:focus,.flickity-enabled:focus{outline:0}.flickity-enabled{position:relative}.flickity-viewport{overflow:hidden;position:relative;height:100%}.flickity-slider{position:absolute;width:100%;height:100%}.flickity-enabled.is-draggable{-webkit-tap-highlight-color:transparent;tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.flickity-enabled.is-draggable .flickity-viewport{cursor:move;cursor:grab}.flickity-enabled.is-draggable .flickity-viewport.is-pointer-down{cursor:grabbing}.flickity-prev-next-button{position:absolute;top:50%;width:44px;height:44px;border:none;border-radius:50%;background:#fff;background:hsla(0,0%,100%,.75);cursor:pointer;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}.flickity-prev-next-button:hover{background:#fff}.flickity-prev-next-button:focus{outline:0;box-shadow:0 0 0 5px #09F}.flickity-prev-next-button:active{filter:alpha(opacity=60);opacity:.6}.flickity-prev-next-button.previous{left:10px}.flickity-prev-next-button.next{right:10px}.flickity-rtl .flickity-prev-next-button.previous{left:auto;right:10px}.flickity-rtl .flickity-prev-next-button.next{right:auto;left:10px}.flickity-prev-next-button:disabled{filter:alpha(opacity=30);opacity:.3;cursor:auto}.flickity-prev-next-button svg{position:absolute;left:20%;top:20%;width:60%;height:60%}.flickity-prev-next-button .arrow{fill:#333}.flickity-prev-next-button.no-svg{color:#333;font-size:26px}.flickity-page-dots{position:absolute;width:100%;bottom:-25px;padding:0;margin:0;list-style:none;text-align:center;line-height:1}.flickity-rtl .flickity-page-dots{direction:rtl}.flickity-page-dots .dot{display:inline-block;width:10px;height:10px;margin:0 8px;background:#333;border-radius:50%;filter:alpha(opacity=25);opacity:.25;cursor:pointer}.flickity-page-dots .dot.is-selected{filter:alpha(opacity=100);opacity:1}#rev-flicker.rev-flicker{clear:both;margin:4px}#rev-flicker.rev-flicker *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-flicker.rev-flicker .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-flicker.rev-flicker .flickity-viewport{clear:both}#rev-flicker.rev-flicker .rev-sponsored{line-height:24px;font-size:12px}#rev-flicker.rev-flicker .rev-sponsored.bottom-right,#rev-flicker.rev-flicker .rev-sponsored.top-right{float:right}#rev-flicker.rev-flicker .rev-sponsored.top-right a{vertical-align:-5px}#rev-flicker.rev-flicker .flickity-prev-next-button{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-flicker.rev-flicker .flickity-prev-next-button:disabled{opacity:0}#rev-flicker.rev-flicker .rev-sponsored a{color:#999}#rev-flicker.rev-flicker a,#rev-flicker.rev-flicker a:focus,#rev-flicker.rev-flicker a:hover{text-decoration:none}#rev-flicker.rev-flicker .rev-ad a{display:block;color:#222}#rev-flicker.rev-flicker .rev-image{-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee}#rev-flicker.rev-flicker .rev-image img{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-flicker.rev-flicker.loaded .rev-image{background:0 0}#rev-flicker.rev-flicker.loaded .rev-image img{opacity:1}#rev-flicker.rev-flicker .rev-headline,#rev-flicker.rev-flicker .rev-provider{margin:0 10px;text-align:left}#rev-flicker.rev-flicker .rev-headline{margin-top:12px;height:40px;overflow:hidden}#rev-flicker.rev-flicker .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-flicker.rev-flicker .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px}#rev-flicker.rev-flicker .rev-ad{border:1px solid #eee;border-radius:5px;overflow:hidden;background:#fff}#rev-flicker .rev-content{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-flicker .rev-content.rev-next{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:.5}.closeButton{position:absolute;cursor:pointer;right:10px}a{cursor:pointer!important}.dumbBoxWrap{display:none;z-index:40001}.dumbBoxOverlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";filter:alpha(opacity=50);z-index:40001}.vertical-offset{position:fixed;top:10%;width:100%;height:85%;z-index:40002}.dumbBox{background-color:#fff;padding:10px;border:1px solid #000;border-radius:5px;//overflow:visible}.normal{width:80%;max-width:500px;min-height:410px;margin:0 auto;position:relative}.full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}.dumbHeader{height:20px;//border:solid 1px red}.dumbContent{position:absolute;//height:100%;right:10px;left:10px;top:30px;bottom:10px}/* endinject */', 'rev-flicker');
 
         // append a new element to the flicker
         var flickerElement = document.createElement('div');
@@ -6683,6 +6690,8 @@ RevFlicker({
             that.preData();
             that.getData();
         });
+
+        window.revDialog = revUtils.addDialog(this.options.id,'https://aboutus.revcontent.com/what_is.php');
 
         revUtils.addEventListener(window, 'resize', function() {
             that.resize();
@@ -6730,7 +6739,7 @@ RevFlicker({
 
         var sponsored = document.createElement('div');
         revUtils.addClass(sponsored, 'rev-sponsored');
-        sponsored.innerHTML = '<a href="http://revcontent.com" target="_blank">Sponsored by Revcontent</a>';
+        sponsored.innerHTML = '<a onclick="revDialog.showDialog()" >Sponsored by Revcontent</a>';
         if (this.options.rev_position == 'top_right') {
             revUtils.addClass(sponsored, 'top-right')
             revUtils.prepend(this.flickity.element, sponsored);
@@ -6886,5 +6895,99 @@ RevFlicker({
     };
 
     return RevFlicker;
+
+}));
+
+
+// universal module definition
+( function( window, factory ) {
+    'use strict';
+    // browser global
+    window.RevDialog = factory(window, window.revUtils);
+
+}( window, function factory(window, revUtils) {
+'use strict';
+
+    var RevDialog = function(opts) {
+        var that = this;
+        this.options = opts;
+
+        this.render();
+
+        revUtils.addEventListener(window, 'resize', function() {
+            that.resize();
+        });
+    };
+
+    RevDialog.prototype.resize = function() {
+        this.containerWidth = document.documentElement.clientWidth;
+        this.containerHeight = document.documentElement.clientHeight;
+        if (this.containerWidth < 585 || this.containerHeight < 455) {
+            this.setFullHeight();
+        } else if (this.containerWidth >= 585 && this.containerHeight >= 455) {
+            this.setMinHeight();
+        }
+    };
+
+    RevDialog.prototype.setFullHeight = function() {
+        var dumbBox = document.querySelector('.dumbBox');
+        revUtils.removeClass(dumbBox, 'normal');
+        revUtils.addClass(dumbBox, 'full-screen');
+    };
+
+    RevDialog.prototype.setMinHeight = function() {
+        var dumbBox = document.querySelector('.dumbBox');
+        revUtils.removeClass(dumbBox, 'full-screen');
+        revUtils.addClass(dumbBox, 'normal');
+
+    };
+
+    RevDialog.prototype.getContainerWidth = function() {
+        var dumbBox = document.querySelector('.dumbBox');
+        return dumbBox.offsetWidth;
+    };
+
+    RevDialog.prototype.getContainerHeight = function() {
+        var dumbBox = document.querySelector('.dumbBox');
+        return dumbBox.offsetWidth;
+    };
+
+
+    RevDialog.prototype.render = function() {
+        var html = '<div class="dumbBoxWrap">' +
+                        '<div class="dumbBoxOverlay"> &nbsp; </div>' +
+                            '<div class="vertical-offset">' +
+                                '<div class="dumbBox">' +
+                                    '<div class="dumbHeader">' +
+                                        '<a class="closeButton" onclick="revDialog.closeDialog()">' +
+                                            '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>' +
+                                        '</a>' +
+                                    '</div>' +
+                                    '<div class="dumbContent">' +
+                                        '<iFrame id="dialogContent" src="' + this.options.url + '" width="100%" height="100%" frameborder="0">' +
+                                        '</iFrame>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';
+        var wrap = document.createElement('div');
+        wrap.innerHTML = html;
+        var innerElement = document.getElementById(this.options.insertPoint);
+        revUtils.append(innerElement, wrap);
+    };
+
+    RevDialog.prototype.showDialog = function() {
+        this.resize();
+        document.querySelector('.dumbBoxWrap').style.display = 'block';
+        return false;
+    };
+
+    RevDialog.prototype.closeDialog = function() {
+        document.querySelector('.dumbBoxWrap').style.display = 'none';
+        return false;
+    };
+
+    return RevDialog;
 
 }));
