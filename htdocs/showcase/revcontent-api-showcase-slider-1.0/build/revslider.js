@@ -105,7 +105,7 @@ RevSlider({
         revUtils.append(containerElement, forwardBtn);
         revUtils.append(element, containerElement);
 
-        var grid = new AnyGrid(gridElement, { masonry: false });
+        var grid = new AnyGrid(gridElement, { masonry: false, perRow: this.options.per_row });
 
         var page = 1,
             limit = grid.getPerRow() * 2,
