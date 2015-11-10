@@ -80,6 +80,17 @@ RevSlider({
         // merge options
         this.options = revUtils.extend(defaults, opts);
 
+        if (revUtils.validateApiParams(this.options).length) {
+            return;
+        }
+
+        // don't show for this device
+        if (!revDetect.show(this.options.devices)) {
+            return;
+        }
+
+        var that = this;
+
         revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-slider');
 
         var backBtn = document.createElement('div');
