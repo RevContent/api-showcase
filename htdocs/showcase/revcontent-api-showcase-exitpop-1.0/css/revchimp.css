@@ -1,0 +1,575 @@
+.revexititem {
+    position: relative;
+    overflow: hidden;
+}
+
+.revexititem .revexitsubscriber.hidden {
+    top: -500px;
+}
+
+.revexititem .revexitsubscriber {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-size: 13px;
+    color: #676767;
+    z-index: 2147483605;
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-family: "Montseratt", Arial, sans-serif;
+    border: 1px solid transparent;
+    padding: 8px;
+    box-sizing: border-box;
+    transition: all 0.5s ease-in-out;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAFoCAYAAADttMYPAAAAGXRFW…Zt27bD2rZt23ZY27Zt27Yd1rZt27Zth7Vt27Y/1v4lwABrGsduKxaPMQAAAABJRU5ErkJggg==);
+}
+
+.revexititem .revexitsubscriber.successful {
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+    color: #3c763d;
+}
+
+.revexititem .revexitsubscriber.successful:before {
+    font-size: 18px;
+    content: " Subscription Confirmed ";
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    display: block;
+    color: #3c763d;
+
+}
+
+.revexititem .revexitsubscriber.successful .subscribe-header,
+.revexititem .revexitsubscriber.successful .subscribe-message {
+    display: none;
+
+}
+
+.revexititem .revexitsubscriber.failed {
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    color: #a94442;
+}
+
+.revexititem .revexitsubscriber.failed:before {
+    font-size: 18px;
+    content: " Try again... ";
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    display: block;
+    color: #a94442;
+}
+
+.revexititem .revexitsubscriber.failed .subscribe-header,
+.revexititem .revexitsubscriber.failed .subscribe-message {
+    display: none;
+    color: #a94442;
+}
+
+
+.revexititem .revexitsubscriber > * {
+    box-sizing: border-box;
+}
+
+.revexititem .revexitsubscriber div {
+    margin: 0;
+    padding: 0;
+}
+
+.revexititem .revexitsubscriber .subscribe-close {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    width: 16px;
+    height: 16px;
+    display: block;
+    cursor: pointer;
+    z-index: 2147483605;
+    background-color: #111111;
+    color: #dddddd;
+    transition: all 0.5s ease-in-out;
+    line-height: 16px;
+    text-align: center;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    -o-border-radius: 2px;
+}
+.revexititem .revexitsubscriber .subscribe-close:hover {
+    background-color: #4cc93d;
+    color: #ffffff;
+}
+
+
+.revexititem .revexitsubscriber .subscribe-close:after {
+    content: " x " ;
+}
+
+.revexititem .revexitsubscriber .subscribe-alert {
+    color: inherit;
+    paddding: 5px;
+    font-size: 14px;
+}
+
+.revexititem .revexitsubscriber .subscribe-alert.successful-subscription {
+
+}
+.revexititem .revexitsubscriber .subscribe-alert.failed-subscription {
+
+}
+
+
+.revexititem .revexitsubscriber .subscribe-header { 
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 120%;
+    margin-bottom: 10px;
+    color: #444444;
+    text-transform: none;
+}
+
+.revexititem .revexitsubscriber .subscribe-message {
+    font-size: 14px;
+    color: inherit;
+}
+
+.revexititem .revexitsubscriber .subscribe-input ,
+.revexititem .revexitsubscriber .subscribe-button {
+    display: block;
+    width: 100%;
+    font-size: 12px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px; 
+    -o-border-radius: 3px;  
+    height: 32px;
+    line-height: 32px;
+    padding: 0 10px;
+    z-index: inherit;
+    outline: none;
+    transition: all 0.5s ease-in;
+}
+
+.revexititem .revexitsubscriber .subscribe-input:focus {
+    border-color: #4cc93d;
+}
+
+.revexititem .revexitsubscriber .subscribe-input  {
+    border: 1px solid #dddddd;
+    margin: 7px 0;
+    color: #444444;
+    
+}
+
+.revexititem .revexitsubscriber .subscribe-button {
+    border: 1px solid #555555;
+    background-color: #333333;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.revexititem .revexitsubscriber .subscribe-button:hover {
+    background-color: #4cc93d;
+}
+.revexititem .revexitsubscriber .subscribe-loader {
+    display: none;
+    position: absolute;
+    left: 8px;
+    bottom: 18px;
+    width: 50px;
+    height: 16px;
+    border: 0;
+    z-index: 2147483605;
+}
+
+
+.chimploader {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    font-size: 0;
+}
+.chimploader.reversed li {
+    border: 3px solid white;
+    -webkit-animation: LOADINGREV 2s infinite;
+    animation: LOADINGREV 2s infinite;
+}
+.chimploader.reversed li:nth-child(1n) {
+    -webkit-animation-delay: 0s;
+    animation-delay: 0s;
+}
+.chimploader.reversed li:nth-child(2n) {
+    -webkit-animation-delay: 0.2s;
+    animation-delay: 0.2s;
+}
+.chimploader.reversed li:nth-child(3n) {
+    -webkit-animation-delay: 0.4s;
+    animation-delay: 0.4s;
+}
+.chimploader li {
+    height: 0;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 0;
+    margin: 0;
+    height: 10px;
+    width: 10px;
+    border: 3px solid #4cc93d;
+    border-radius: 100%;
+    -webkit-transform: transformZ(0);
+    -ms-transform: transformZ(0);
+    transform: transformZ(0);
+    -webkit-animation: LOADING 2s infinite;
+    animation: LOADING 2s infinite;
+}
+.chimploader li:nth-child(1n) {
+    left: -20px;
+    -webkit-animation-delay: 0s;
+    animation-delay: 0s;
+}
+.chimploader li:nth-child(2n) {
+    left: 0;
+    -webkit-animation-delay: 0.2s;
+    animation-delay: 0.2s;
+}
+.chimploader li:nth-child(3n) {
+    left: 20px;
+    -webkit-animation-delay: 0.4s;
+    animation-delay: 0.4s;
+}
+
+.grid-row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+.grid-row .col {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 50%;
+}
+.grid-row .col + .col {
+    background: #2b8ccd;
+    left: auto;
+    right: 0;
+}
+
+@-webkit-keyframes LOADING {
+    0% {
+        -webkit-transform: scale(0.5);
+        transform: scale(0.5);
+        background: #2b8ccd;
+    }
+    50% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        background: white;
+    }
+    100% {
+        -webkit-transform: scale(0.5);
+        transform: scale(0.5);
+        background: #4cc93d;
+    }
+}
+
+@keyframes LOADING {
+    0% {
+        -webkit-transform: scale(0.5);
+        transform: scale(0.5);
+        background: #4cc93d;
+    }
+    50% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        background: white;
+    }
+    100% {
+        -webkit-transform: scale(0.5);
+        transform: scale(0.5);
+        background: #4cc93d;
+    }
+}
+@-webkit-keyframes LOADINGREV {
+    0% {
+        -webkit-transform: scale(0.5);
+        transform: scale(0.5);
+        background: white;
+    }
+    50% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        background: #4cc93d;
+    }
+    100% {
+        -webkit-transform: scale(0.5);
+        transform: scale(0.5);
+        background: white;
+    }
+}
+@keyframes LOADINGREV {
+    0% {
+        -webkit-transform: scale(0.5);
+        transform: scale(0.5);
+        background: white;
+    }
+    50% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        background: #4cc93d;
+    }
+    100% {
+        -webkit-transform: scale(0.5);
+        transform: scale(0.5);
+        background: white;
+    }
+
+}
+
+#revexitunit {
+    transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -webkit-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+}
+
+.modal-hd.taskbar-theme #revexitunit {
+    width: 956px;
+    max-width: 956px;
+    padding: 0 0 ;
+    transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -webkit-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+}
+.modal-hd.taskbar-theme #revexitadpanel {
+    width: 956px;
+    max-width: 956px;
+    margin: 0 0;
+    transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -webkit-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+}
+.modal-hd.taskbar-theme #revexitadpanel.white-bg {
+    background-color: rgba(255,255255,0.9);
+}
+
+.modal-hd.taskbar-theme #revexitheader {
+    margin: 0 0 0 0;
+    padding: 0 18px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 23px;
+    background-color: #eeeeee;
+    border-bottom: 1.0px solid #4cc93d;
+    transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -webkit-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+}
+
+.modal-hd.taskbar-theme #revexitcloseme {
+    right: 20px;
+    background-size: contain;
+    width: 15px;
+    height: 15px;
+    margin-top: 15px;
+}
+.modal-hd.taskbar-theme .revexititem {
+    margin-right: 0;
+    margin-bottom: 0;
+}
+
+
+#revexitmask.modal-hd.taskbar-theme > #revexitunit.revexitunitwrap {
+    background: transparent;
+    background-color:transparent;
+    padding: 0 0;
+}
+#revexitmask.modal-hd.taskbar-theme > #revexitunit.revexitunitwrap.white-bg {
+    padding: 0 0;
+}
+.modal-hd.taskbar-theme #revexitheader.white-bg {
+    background-color: #ffffff;
+    border-bottom: 1.0px solid #ffffff;
+}
+
+#revtaskbar.revtaskbar {
+    display: block;
+    width: 100%;
+    padding: 0;
+    top:0;
+    min-height: 92px;
+    box-sizing: border-box;
+    background-color: #252525;
+    border-top: 1.0px solid #4cc93d;
+    color: #eeeeee;
+    font-family: "Montsteratt", sans-serif;
+    position: relative;
+    opacity: 1;
+    transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -webkit-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;    
+
+}
+#revtaskbar.revtaskbar.hidden {
+    top: -50px;
+    opacity: 0;
+    transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -webkit-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+}
+
+#revtaskbar.revtaskbar.detached {
+    top: 50px;
+    opacity: 0;
+}
+
+#revtaskbar.revtaskbar p {
+    margin: 0 0 10px 0;
+    padding: 0;
+}
+
+#revtaskbar.revtaskbar:before {
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #4cc93d;
+    position: absolute;
+    top: 0;
+    left: 46%;
+}
+
+#revtaskbar.revtaskbar:hover {
+    border-top: 6.0px solid #4cc93d;
+}
+
+#revtaskbar.revtaskbar .padder {
+    padding: 18px;
+}
+
+#revtaskbar.revtaskbar select,
+#revtaskbar.revtaskbar textarea,
+#revtaskbar.revtaskbar input,
+#revtaskbar.revtaskbar button {
+    height: 28px;
+    line-height: 28px;
+    padding: 0 6px;
+    border: 1.0px solid #666666;
+    margin-right: 15px;
+    border-radius: 4px;
+    outline: none!important;
+    box-sizing: border-box;
+    font-size: 15px;
+    box-shadow: 3px 3px 1px rgba(0,0,0,.25);
+    -webkit-box-shadow: 3px 3px 1px rgba(0,0,0,.25);
+    -moz-box-shadow: 3px 3px 1px rgba(0,0,0,.25);
+    -o-box-shadow: 3px 3px 1px rgba(0,0,0,.25);    
+    transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -webkit-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+    font-family: "Montsteratt", sans-serif;
+    color: #333333;
+}
+
+#revtaskbar.revtaskbar select {
+    float: left;
+    width: 200px;
+}
+
+#revtaskbar.revtaskbar input {
+    float: left;
+    width: 200px;
+    margin-right: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: 0;
+}
+#revtaskbar.revtaskbar input:focus {
+    border-color: #4cc93d;
+}
+
+#revtaskbar .subscribe-loader {
+    display: none;
+    position: absolute;
+    right: 36px;
+    bottom: 26px;
+    width: 50px;
+    height: 16px;
+    border: 0;
+    z-index: 2147483605;
+}
+
+
+#revtaskbar.revtaskbar button {
+    float: left;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: 0;
+    cursor: pointer;
+    padding: 0 10px;
+    text-transform: uppercase;
+    font-weight: bold;
+
+}
+#revtaskbar.revtaskbar button:hover {
+    background-color: #4cc93d;
+    color: #ffffff;
+}
+
+#revtaskbar.revtaskbar .subscribe-alert {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: block;
+    height: 100%;
+    opacity: 0.8;
+    padding: 18px;
+    text-align: center;
+    font-size: 16px;
+    color: #444444;
+    background-color: rgba(220, 220, 220, 0.9)
+}
+
+#revtaskbar.revtaskbar .subscribe-alert.failed-subscription {
+    color: #676767;
+    background-color: rgba(220, 220, 220, 0.95);
+}
+#revtaskbar.revtaskbar .subscribe-alert.failed-subscription:before {
+    content: "Error! ";
+    font-weight: bold;
+}
+#revtaskbar.revtaskbar .subscribe-alert.successful-subscription {
+    color: #3c763d;
+    background-color: rgba(223, 240, 216, 0.95);
+}
+#revtaskbar.revtaskbar .subscribe-alert.successful-subscription:before {
+    content: "Success! ";
+    font-weight: bold;    
+}
+
+#revtaskbar.revtaskbar .subscribe-message {
+    margin-bottom: 10px;
+}
+
