@@ -47,7 +47,7 @@ body.rev-toaster-loaded .rev-toaster{
     -moz-transform: none;
     -o-transform: none;
     -webkit-transform: none;
-    z-index: 2147483647;
+    z-index: 147483647;
 }
 
 .rev-toaster .rev-header {
