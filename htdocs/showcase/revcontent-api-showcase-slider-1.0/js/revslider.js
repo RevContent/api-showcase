@@ -148,54 +148,38 @@ RevSlider({
         var setData = function() {
             var minDelay = (gridElement.children.length > 0) ? 300 : 0;
             var start = new Date();
-            var url = 'https://trends.revcontent.com/api/v1/?api_key=3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b&pub_id=945&widget_id=6181&domain=apiexamples.powr.com&sponsored_count=' + limit + '&sponsored_offset=' + ((page * limit) - limit) + '&internal_count=0';
+            var url = that.options.url + '/?api_key=3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b&pub_id=945&widget_id=6181&domain=apiexamples.powr.com&sponsored_count=' + limit + '&sponsored_offset=' + ((page * limit) - limit) + '&internal_count=0';
 
             fade('fadeOut');
 
-            var request = new XMLHttpRequest();
-
-            request.open('GET', url, true);
-
-            request.onload = function() {
-              if (request.status >= 200 && request.status < 400) {
-
-                var respond = function() {
-                    var resp = JSON.parse(request.responseText);
-                    var loader = document.createElement('div');
-                    var containerHtml = '';
-                    for (var i in resp) {
-                        var node = document.createElement('div');
-                        var html = '<div style="opacity:0"><a href="'+ resp[i].url +'"><img class="img-responsive" src="'+ resp[i].image +'"/><h3>'+ resp[i].headline +'</h3></a></div>';
-                        node.innerHTML = html;
-                        containerHtml += html;
-                        loader.appendChild(node);
-                    }
-                    imagesLoaded( loader, function() {
-                        gridElement.innerHTML = containerHtml;
-                        fade('fadeIn');
-
-                        grid.reloadItems();
-                        grid.layout();
-                    });
+            var respond = function(resp) {
+                var loader = document.createElement('div');
+                var containerHtml = '';
+                for (var i in resp) {
+                    var node = document.createElement('div');
+                    var html = '<div style="opacity:0"><a href="'+ resp[i].url +'"><img class="img-responsive" src="'+ resp[i].image +'"/><h3>'+ resp[i].headline +'</h3></a></div>';
+                    node.innerHTML = html;
+                    containerHtml += html;
+                    loader.appendChild(node);
                 }
+                imagesLoaded( loader, function() {
+                    gridElement.innerHTML = containerHtml;
+                    fade('fadeIn');
 
+                    grid.reloadItems();
+                    grid.layout();
+                });
+            }
+
+            revApi.request(url, function(resp) {
                 var end = new Date();
                 var requestTime = end - start;
                 if (requestTime  < minDelay) {
-                    setTimeout(function() { respond(); }, minDelay - requestTime );
+                    setTimeout(function() { respond(resp); }, minDelay - requestTime );
                 } else {
-                    respond();
+                    respond(resp);
                 }
-              } else {
-                // error
-              }
-            };
-
-            request.onerror = function() {
-
-            };
-
-            request.send();
+            });
         };
 
         setData();
