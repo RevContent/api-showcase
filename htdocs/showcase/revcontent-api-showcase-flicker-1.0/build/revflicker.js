@@ -118,15 +118,17 @@ RevFlicker({
             that.setUp();
             that.preData();
             that.getData();
+
         });
 
-        //window.revDialog = new RevDialog('opt-out','https://aboutus.revcontent.com/what_is.php');
 
-        window.revDialog = revUtils.addDialog('opt-out','https://aboutus.revcontent.com/what_is.php');
+        window.revDialog = new RevDialog();
 
         revUtils.addEventListener(window, 'resize', function() {
             that.resize();
         });
+
+
     };
 
     RevFlicker.prototype.resize = function() {
@@ -170,7 +172,7 @@ RevFlicker({
 
         var sponsored = document.createElement('div');
         revUtils.addClass(sponsored, 'rev-sponsored');
-        sponsored.innerHTML = '<a onclick="revDialog.showDialog()" >Sponsored by Revcontent</a>';
+        sponsored.innerHTML = '<a id="sponsored-link" onclick="revDialog.showDialog();" >Sponsored by Revcontent</a>';
         if (this.options.rev_position == 'top_right') {
             revUtils.addClass(sponsored, 'top-right')
             revUtils.prepend(this.flickity.element, sponsored);

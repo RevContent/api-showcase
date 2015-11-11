@@ -9,10 +9,10 @@
 }( window, function factory(window, revUtils) {
 'use strict';
 
-    var RevDialog = function(id, url) {
+    var RevDialog = function() {
         var that = this;
-        this.id = id;
-        this.url = url;
+        this.id = 'opt-out';
+        //this.url = url;
 
         this.render();
 
@@ -88,7 +88,10 @@
         wrap.id = this.id;
         wrap.innerHTML = html;
         revUtils.append(document.getElementsByTagName("BODY")[0], wrap);
+
     };
+
+
 
     RevDialog.prototype.showDialog = function() {
         document.querySelector('.revDialogBoxWrap').style.display = 'block';
