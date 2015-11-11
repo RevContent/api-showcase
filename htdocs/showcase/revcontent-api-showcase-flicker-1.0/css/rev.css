@@ -11,7 +11,7 @@ a {
 
 .revDialogBoxWrap { /* The div that shows/hides. */
     display:none; /* starts out hidden */
-    z-index:40001; /* High z-index to ensure it appears above all content */
+    z-index:2147483641; /* High z-index to ensure it appears above all content */
 }
 
 .revDialogBoxOverlay { /* Shades out background when selector is active */
@@ -24,7 +24,7 @@ a {
     opacity:.5; /* Sets opacity so it's partly transparent */
     -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; /* IE transparency */
     filter:alpha(opacity=50); /* More IE transparency */
-    z-index:40001;
+    z-index:2147483641;
 }
 
 .vertical-offset { /* Fixed position to provide the vertical offset */
@@ -33,7 +33,7 @@ a {
     top: 0px;
     width:100%;
     margin-left: -15px;
-    z-index:40002; /* ensures box appears above overlay */
+    z-index:2147483642; /* ensures box appears above overlay */
 }
 
 .revDialogBox { /* The actual box, centered in the fixed-position div */
