@@ -399,7 +399,8 @@
         // Ad Bypass for "Tile" UI Theme
         var subscriber_theme = "taskbar";
         if(true === enableSubscriptions && revcontentexitvars.ml !== undefined) {
-            subscriber_theme = revcontentexitvars.ml.split(";")[4].toLowerCase() || "taskbar";
+            var ml_vars = revcontentexitvars.ml.split(";");
+            subscriber_theme = ml_vars[4] !== undefined ? ml_vars[4].toLowerCase() : "taskbar";
             if(subscriber_theme === "tile"){
                 if(internal_count === 8) {
                     internal_count--;
