@@ -43,8 +43,12 @@
             if(typeof this.subscriber === "object"){
                 this.subscriber.detach();
             }
-            $('#revtaskbar').detach();
-            $('#revexit_styles_alt').detach();
+            if( typeof $('#revtaskbar') === "object" && $('#revtaskbar').length > 0){
+                $('#revtaskbar').detach();
+            }
+            if( typeof $('#revexit_styles_alt') === "object" && $('#revexit_styles_alt').length > 0){
+                $('revexit_styles_alt').detach();
+            }
         },
         configureEndpoint: function(){
             this.subscription_url = /localhost/i.test(top.location.hostname) ? this.endpoints.dev : this.endpoints.production;
@@ -401,14 +405,18 @@
     });
 
     function revcontentInitChimpanzee(subscription_settings){
-        if(typeof window.RevChimp !== undefined && typeof window.RevChimp.render === "function"){
-            window.RevChimp.render(subscription_settings);
+        if(window.RevChimp !== undefined){
+            if(typeof window.RevChimp.render === "function") {
+                window.RevChimp.render(subscription_settings);
+            }
         }
     }
 
     function revcontentDetachChimpanzee(){
-        if(typeof window.RevChimp !== undefined && typeof window.RevChimp.shutdown === "function"){
-            window.RevChimp.shutdown();
+        if(window.RevChimp !== undefined){
+            if(typeof window.RevChimp.shutdown === "function") {
+                window.RevChimp.shutdown();
+            }
         }
     }
 

@@ -43,8 +43,12 @@
             if(typeof this.subscriber === "object"){
                 this.subscriber.detach();
             }
-            $('#revtaskbar').detach();
-            $('#revexit_styles_alt').detach();
+            if( typeof $('#revtaskbar') === "object" && $('#revtaskbar').length > 0){
+                $('#revtaskbar').detach();
+            }
+            if( typeof $('#revexit_styles_alt') === "object" && $('#revexit_styles_alt').length > 0){
+                $('revexit_styles_alt').detach();
+            }
         },
         configureEndpoint: function(){
             this.subscription_url = /localhost/i.test(top.location.hostname) ? this.endpoints.dev : this.endpoints.production;

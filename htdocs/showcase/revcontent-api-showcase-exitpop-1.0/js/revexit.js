@@ -138,14 +138,18 @@
     });
 
     function revcontentInitChimpanzee(subscription_settings){
-        if(typeof window.RevChimp !== undefined && typeof window.RevChimp.render === "function"){
-            window.RevChimp.render(subscription_settings);
+        if(window.RevChimp !== undefined){
+            if(typeof window.RevChimp.render === "function") {
+                window.RevChimp.render(subscription_settings);
+            }
         }
     }
 
     function revcontentDetachChimpanzee(){
-        if(typeof window.RevChimp !== undefined && typeof window.RevChimp.shutdown === "function"){
-            window.RevChimp.shutdown();
+        if(window.RevChimp !== undefined){
+            if(typeof window.RevChimp.shutdown === "function") {
+                window.RevChimp.shutdown();
+            }
         }
     }
 
