@@ -50,7 +50,19 @@ gulp.task('revchimp-inject', ['revchimp-css'], function () {
       .pipe(gulp.dest('./build'));
 });
 
-gulp.task('build-rx', ['revexit-css', 'revchimp-css', 'revchimp-inject'], function() {
+gulp.task('revexit-inject', ['revexit-css'], function () {
+    return gulp.src('./js/revexit.js')
+        .pipe(inject(gulp.src(['./build/revexit.min.css']), {
+            starttag: '/* inject:css */',
+            endtag: '/* endinject */',
+            transform: function (filePath, file) {
+                return file.contents.toString('utf8')
+            }
+        }))
+        .pipe(gulp.dest('./build'));
+});
+
+gulp.task('build-rx', ['revexit-css', 'revchimp-css', 'revchimp-inject', 'revexit-inject'], function() {
 
     var banner = ['/**',
       ' * <%= pkg.name %> - <%= pkg.description %>',
@@ -60,7 +72,7 @@ gulp.task('build-rx', ['revexit-css', 'revchimp-css', 'revchimp-inject'], functi
       ' */',
       ''].join('\n');
 
-    return gulp.src(['./build/revchimp.js', './js/revexit.js'])
+    return gulp.src(['./build/revchimp.js', './build/revexit.js'])
         .pipe(concat('revexit.pkgd.js'))
         .pipe(gulp.dest('./build'))
         .pipe(uglify({
