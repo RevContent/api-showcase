@@ -7,6 +7,12 @@
     top: -500px;
 }
 
+#revexitunit .revexititem:last-of-type,
+#revexitunit .revexititem .revexitsubscriber,
+#revexitunit .revexititem .revexitsubscriber * {
+    box-sizing: border-box;
+}
+
 .revexititem .revexitsubscriber {
     width: 100%;
     height: 100%;
@@ -49,10 +55,28 @@
 
 .revexititem .revexitsubscriber.failed {
     background-color: #f2dede;
-    border-color: #ebccd1;
+    border-color: transparent;
     color: #a94442;
 }
+.revexititem .revexitsubscriber.failed .subscribe-alert.failed-subscription {
+    color: #676767;
+    background-color: rgba(220, 220, 220, 0.95);
+}
+.revexititem .revexitsubscriber.failed .subscribe-alert.failed-subscription:before {
+    content: "Error! ";
+    font-weight: bold;
+}
+.revexititem .revexitsubscriber.successful .subscribe-alert.successful-subscription {
+    color: #3c763d;
+    background-color: rgba(223, 240, 216, 0.95);
+}
+.revexititem .revexitsubscriber.successful .subscribe-alert.successful-subscription:before {
+    content: "Success! ";
+    font-weight: bold;
+}
 
+
+/*
 .revexititem .revexitsubscriber.failed:before {
     font-size: 18px;
     content: " Try again... ";
@@ -67,11 +91,7 @@
     display: none;
     color: #a94442;
 }
-
-
-.revexititem .revexitsubscriber > * {
-    box-sizing: border-box;
-}
+*/
 
 .revexititem .revexitsubscriber div {
     margin: 0;
@@ -108,9 +128,16 @@
 }
 
 .revexititem .revexitsubscriber .subscribe-alert {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     color: inherit;
-    paddding: 5px;
+    padding: 10px;
     font-size: 14px;
+    color: #444444;
+    background-color: rgba(220, 220, 220, 0.9);
 }
 
 .revexititem .revexitsubscriber .subscribe-alert.successful-subscription {

@@ -24,7 +24,7 @@
  z = inactivity trigger duration in seconds, defaults to 6 seconds if not provided, minimum of 6 seconds allowed
  j = background mode, defaults to "default", options are "classic", "default" OR custom RGBA OR Hexadecimal color OR a handful of HTML color names (red, blue etc.)
  ps = Panel Size, choices are "3x2" or "4x2" defaults to 4x2, NOTE: for HD modes only!
- ml = "Mailing List" Feature, multi-key parameter for Mailchimp Integration, ml=API_KEY;LIST_ID;HEADLINE;MESSAGE, default = disabled
+ ml = "Mailing List" Feature, multi-key parameter for Mailchimp Integration, ml=API_KEY;LIST_ID;HEADLINE;MESSAGE;THEME, default = disabled, THEME options are "taskbar" or "tile"
 
  **/
 (function(j,q,u,e,r,y,R,o,x){try{o=jQuery;if(o&&(!R||(R&&o.fn.jquery==R))){x=true}}catch(er){}if(!x||(R&&o.fn.jquery!=R)){(q=j.createElement(q)).type='text/javascript';if(r){q.async=true}q.src='//ajax.googleapis.com/ajax/libs/jquery/'+(R||1)+'/jquery.min.js';u=j.getElementsByTagName(u)[0];q.onload=q.onreadystatechange=(function(){if(!e&&(!this.readyState||this.readyState=='loaded'||this.readyState=='complete')){e=true;x=jQuery;jQuery.noConflict(true)(function(){y(x)});q.onload=q.onreadystatechange=null;u.removeChild(q)}});u.appendChild(q)}else{y(o)}})(document,'script','head',false,false,(function($){$(function(){
@@ -241,12 +241,14 @@
             enableSubscriptions = true;
             var default_headline = "Get Daily News";
             var default_message =  "Enter your e-mail to get started.";
-            var subscription_settings = {apiKey: null, listID: null, headline: default_headline, message: default_message};
+            var default_theme = "taskbar";
+            var subscription_settings = {apiKey: null, listID: null, headline: default_headline, message: default_message, theme: default_theme};
             var extracted_settings = revcontentexitvars.ml.split(";");
             subscription_settings.apiKey = extracted_settings[0] !== undefined && extracted_settings[0].length > 0 ? extracted_settings[0] : null;
             subscription_settings.listID = extracted_settings[1] !== undefined && extracted_settings[1].length > 0 ? extracted_settings[1] : null;
             subscription_settings.headline = extracted_settings[2] !== undefined &&  extracted_settings[2].length > 0 ? decodeURI(extracted_settings[2]) : default_headline;
             subscription_settings.message = extracted_settings[3] !== undefined &&  extracted_settings[3].length > 0 ? decodeURI(extracted_settings[3]) : default_message;
+            subscription_settings.theme = extracted_settings[4] !== undefined &&  extracted_settings[4].length > 0 ? decodeURI(extracted_settings[4]).toLowerCase() : default_theme;
         }
 
         var $mask_n_wrap   = $('#revexitmask, #revexitunit');
@@ -394,6 +396,20 @@
             revcontentexitendpoint = 'https://'+revcontentexitvars.s+'/api/v1/?';
         }
 
+        // Ad Bypass for "Tile" UI Theme
+        var subscriber_theme = "taskbar";
+        if(true === enableSubscriptions && revcontentexitvars.ml !== undefined) {
+            subscriber_theme = revcontentexitvars.ml.split(";")[4].toLowerCase() || "taskbar";
+            if(subscriber_theme === "tile"){
+                if(internal_count === 8) {
+                    internal_count--;
+                } else {
+                    sponsored_count--;
+                }
+            }
+
+        }
+
         var revcontentexitdata = {
             'api_key' : revcontentexitvars.k,
             'pub_id' : revcontentexitvars.p,
@@ -449,6 +465,19 @@
                 }
             } else {
                 revpayload = sponsoredArray;
+            }
+
+            // Pseudo-tile for Mailing List Feature: "Tile Theme"
+            if(subscriber_theme === "tile" && true === enableSubscriptions && typeof revcontentexitvars.ml !== undefined) {
+                var fake_payload = {
+                    headline: "",
+                    url: "#",
+                    image: "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=",
+                    brand: "RevContent",
+                    type: "sponsored",
+                    uid: null
+                }
+                revpayload.push(fake_payload);
             }
 
             for (i = 0; i < revpayload.length; i++) {

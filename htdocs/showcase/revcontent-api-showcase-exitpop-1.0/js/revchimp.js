@@ -12,6 +12,8 @@
 (function ($, window, document, undefined) {
 
     var RevChimp = {
+        exitMask: $('#revexitmask'),
+        exitUnit: $('#revexitunit'),
         formName: 'form_revsubscriber',
         endpoints: {
             production: '/* @echo CHIMP_PROD_URL */',
@@ -46,6 +48,7 @@
         },
         configureEndpoint: function(){
             this.subscription_url = /localhost/i.test(top.location.hostname) ? this.endpoints.dev : this.endpoints.production;
+            console.log("Configuring JSONP Endpoint URL ... --> " + this.subscription_url);
         },
         loadSettings: function(subscription_settings){
             console.log("RevChimp: Loading Settings: ", subscription_settings);
@@ -53,13 +56,21 @@
         },
         selectUI: function(parent_node){
             console.log("RevChimp: Selecting UI Theme");
-            this.taskbarUI(parent_node);
+            switch(this.settings.theme){
+                case "tile":
+                    this.tileUI(parent_node);
+                break;
+                case "taskbar":
+                default:
+                    this.taskbarUI(parent_node);
+                break;
+            }
+
         },
         render: function(subscription_settings){
             console.log("RevChimp: Rendering UI ...");
             console.log("RevChimp: Associating Parent Node: " + $("#revexitunit").attr('id'));
             var that = this;
-
             that.loadSettings(subscription_settings);
             that.selectUI($("#revexitunit"));
             that.renderStyles();
@@ -83,6 +94,8 @@
         },
         setupBindings: function () {
             console.log("RevChimp: Setup Event Bindings");
+            this.exitMask = $('#revexitmask');
+            this.exitUnit = $('#revexitunit');
             this.subscriberElement = $('.revexitsubscriber:first');
             this.selectElement = $("#RevChimpInputSelect");
             this.inputElement = $("#RevChimpInputEmail");
@@ -163,11 +176,12 @@
             });
         },
         taskbarUI: function (parent_node) {
-            console.log("RevChimp: Build Taskbar UI...");
+            console.log("RevChimp: Build Taskbar UI (Affix to Bottom of Modal)...");
+            var that = this;
             $('.revexitsubscriber').detach();
             if (typeof parent_node == "object") {
                 console.log("RevChimp: Attaching to Parent Node..." + parent_node.id);
-                $("#revexitmask").addClass("taskbar-theme");
+                $('#revexitmask').removeClass("tile-theme").addClass("taskbar-theme");
                 var subscriber_taskbar = $('<div />'),
                     subscriber_form = $('<form method="post" action="' + this.subscription_url + '" name="' + this.formName + '" id="' + this.formName + '" />'),
                     subscriber_padder = $('<div />').addClass('padder'),
@@ -196,10 +210,46 @@
                 this.subscriber = subscriber_taskbar;
                 parent_node.append(this.subscriber);
 
-                var that = this;
                 setTimeout(function () {
                     that.subscriber.removeClass("hidden");
                 }, 2000);
+            }
+        },
+        tileUI: function (parent_node) {
+            console.log("RevChimp: Build Tile UI (Replace Last Ad Tile)...");
+            var that = this;
+            var $last_item = $('#revexitunit').find(".revexititem:last");
+            console.log("Last Ad Item = ", $last_item );
+            var $item_card = $last_item.length > 0 ? $($last_item[0]) : undefined;
+            $('.revexitsubscriber').detach();
+            console.log("Attaching to Item Card: ". $item_card);
+            if($item_card !==  undefined && $item_card.length > 0) {
+                $('#revexitmask').removeClass("taskbar-theme").addClass("tile-theme");
+                var subscriber_alert = $('<div />').addClass("subscribe-alert").hide(),
+                    subscriber_loader = $('<div />').addClass("subscribe-loader").append($('<ul />').addClass("chimploader").append(['<li></li>','<li></li>','<li></li>'])),
+                    //subscriber_close = $('<span />').addClass("subscribe-close"),
+                    subscriber_header = $('<div />').addClass("subscribe-header").text(this.settings.headline),
+                    subscriber_message = $('<div />').addClass("subscribe-message").text(this.settings.message),
+                    subscriber_input = $('<input />').addClass("subscribe-input").attr({
+                        'id': 'RevChimpInputEmail',
+                        'type': 'text',
+                        'placeholder': 'E-mail Address'
+                    }),
+                    subscriber_button = $('<button />').addClass("subscribe-button").attr({
+                        'id': 'RevChimpSubscribeButton',
+                        'type': 'button'
+                    }).text("Subscribe"),
+                    subscriber = $('<div />').addClass("revexitsubscriber hidden").append([subscriber_alert, subscriber_loader,/*subscriber_close,*/ subscriber_header, subscriber_message, subscriber_input, subscriber_button]).attr({
+                        'data-apikey': this.settings.apiKey,
+                        'data-listid': this.settings.listID
+                    });
+
+                this.subscriber = subscriber;
+                $item_card.prepend(this.subscriber).children('a:first').css({'visibility': 'hidden'});
+
+                //setTimeout(function () {
+                    that.subscriber.removeClass("hidden");
+                //}, 1000);
             }
         }
     };
