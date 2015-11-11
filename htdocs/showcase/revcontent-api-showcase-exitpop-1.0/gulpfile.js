@@ -54,6 +54,7 @@ gulp.task('build-rx', ['revexit-css', 'revchimp-css', 'revchimp-inject'], functi
 
     var banner = ['/**',
       ' * <%= pkg.name %> - <%= pkg.description %>',
+      ' * @date - <%= new Date() %>',
       ' * @version v<%= pkg.version %>',
       ' * @link <%= pkg.homepage %>',
       ' */',
