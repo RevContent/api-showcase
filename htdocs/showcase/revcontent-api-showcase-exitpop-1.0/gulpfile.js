@@ -7,6 +7,7 @@ var minifycss    = require('gulp-minify-css');
 var concat       = require('gulp-concat');
 var uglify       = require('gulp-uglify');
 var autoprefixer = require('gulp-autoprefixer');
+var stripDebug = require('gulp-strip-debug');
 
 gulp.task('default', ['build-rx']);
 
@@ -59,6 +60,7 @@ gulp.task('build-rx', ['revexit-css', 'revchimp-css', 'revchimp-inject'], functi
         .pipe(uglify({
             mangle: false
             }))
+        .pipe(stripDebug())
         .pipe(rename('revexit.min.js'))
         .pipe(header(banner, { pkg : pkg } ))
         .pipe(gulp.dest('./build'))
