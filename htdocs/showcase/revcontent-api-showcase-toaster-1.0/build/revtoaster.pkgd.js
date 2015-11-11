@@ -1090,11 +1090,8 @@ utils.addEventListener = function(el, eventName, handler) {
   }
 };
 
-utils.addDialog = function(insertPoint, url){
-    return new RevDialog({
-        insertPoint : insertPoint,
-        url : url
-    });
+utils.addDialog = function(id, url){
+    return new RevDialog(id, url);
 };
 
 // -----  ----- //
@@ -1112,9 +1109,10 @@ return utils;
 }( window, function factory(window, revUtils) {
 'use strict';
 
-    var RevDialog = function(opts) {
+    var RevDialog = function(id, url) {
         var that = this;
-        this.options = opts;
+        this.id = id;
+        this.url = url;
 
         this.render();
 
@@ -1126,71 +1124,95 @@ return utils;
     RevDialog.prototype.resize = function() {
         this.containerWidth = document.documentElement.clientWidth;
         this.containerHeight = document.documentElement.clientHeight;
-        if (this.containerWidth < 585 || this.containerHeight < 455) {
+        if (this.containerHeight < 455) {
             this.setFullHeight();
-        } else if (this.containerWidth >= 585 && this.containerHeight >= 455) {
-            this.setMinHeight();
+        } else if (this.containerHeight >= 455) {
+            this.setNormalHeight();
+            this.centerDialog();
         }
     };
 
     RevDialog.prototype.setFullHeight = function() {
-        var dumbBox = document.querySelector('.dumbBox');
-        revUtils.removeClass(dumbBox, 'normal');
-        revUtils.addClass(dumbBox, 'full-screen');
+        var revDialogBox = document.querySelector('.revDialogBox');
+        revUtils.removeClass(revDialogBox, 'normal');
+        revUtils.addClass(revDialogBox, 'full-screen');
+        revDialogBox.style.left = '15px';
+        revDialogBox.style.top = '15px';
     };
 
-    RevDialog.prototype.setMinHeight = function() {
-        var dumbBox = document.querySelector('.dumbBox');
-        revUtils.removeClass(dumbBox, 'full-screen');
-        revUtils.addClass(dumbBox, 'normal');
+    RevDialog.prototype.setNormalHeight = function() {
+        var revDialogBox = document.querySelector('.revDialogBox');
+        revUtils.removeClass(revDialogBox, 'full-screen');
+        revUtils.addClass(revDialogBox, 'normal');
 
     };
 
     RevDialog.prototype.getContainerWidth = function() {
-        var dumbBox = document.querySelector('.dumbBox');
-        return dumbBox.offsetWidth;
+        var revDialogBox = document.querySelector('.revDialogBox');
+        return revDialogBox.offsetWidth;
     };
 
     RevDialog.prototype.getContainerHeight = function() {
-        var dumbBox = document.querySelector('.dumbBox');
-        return dumbBox.offsetWidth;
+        var revDialogBox = document.querySelector('.revDialogBox');
+        return revDialogBox.offsetWidth;
     };
 
 
     RevDialog.prototype.render = function() {
-        var html = '<div class="dumbBoxWrap">' +
-                        '<div class="dumbBoxOverlay"> &nbsp; </div>' +
-                            '<div class="vertical-offset">' +
-                                '<div class="dumbBox">' +
-                                    '<div class="dumbHeader">' +
-                                        '<a class="closeButton" onclick="revDialog.closeDialog()">' +
-                                            '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>' +
-                                        '</a>' +
-                                    '</div>' +
-                                    '<div class="dumbContent">' +
-                                        '<iFrame id="dialogContent" src="' + this.options.url + '" width="100%" height="100%" frameborder="0">' +
-                                        '</iFrame>' +
+        var html = '<div class="revDialogBoxWrap">' +
+                        '<div class="revDialogBoxOverlay" onclick="revDialog.closeDialog()"> &nbsp; </div>' +
+                        '<div class="vertical-offset" >' +
+                            '<div class="revDialogBox normal">' +
+                                '<div class="revDialogHeader">' +
+                                    '<a class="closeButton" onclick="revDialog.closeDialog()">' +
+                                        '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>' +
+                                    '</a>' +
+                                '</div>' +
+                                '<div class="revDialogContent">' +
+                                    '<div class="rc-about rc-modal-content">' +
+                                        '<a href="http://www.revcontent.com" target="_blank" class="rc-logo"></a>' +
+                                        '<p id="main">The content you see here is paid for by the advertiser or content provider whose link you click on, and is recommended to you by <a href="http://www.revcontent.com" target="_blank">Revcontent</a>. As the leading platform for native advertising and content recommendation, <a href="http://www.revcontent.com" target="_blank">Revcontent</a> uses interest based targeting to select content that we think will be of particular interest to you. We encourage you to view our <a href="http://faq.revcontent.com/support/solutions/articles/5000615200-revcontent-s-privacy-policy">Privacy Policy</a> and your opt out options here: <a class="rc-opt-out-link" href="http://faq.revcontent.com/support/solutions/articles/5000615200" target="_blank">Opt Out Options</a></p>' +
+                                        '<div class="rc-well">' +
+                                    	'<h2>Want your content to appear on sites like this?</h2>' +
+                                    	'<p><a href="http://www.revcontent.com" target="_blank">Increase your visitor engagement now!</a></p>' +
+                                        '</div>' +
                                     '</div>' +
                                 '</div>' +
                             '</div>' +
                         '</div>' +
                     '</div>';
+
+        var el = document.querySelector('#'+this.id);
+        if (el) {revUtils.remove(el);}
         var wrap = document.createElement('div');
+        wrap.id = this.id;
         wrap.innerHTML = html;
-        var innerElement = document.getElementById(this.options.insertPoint);
-        revUtils.append(innerElement, wrap);
+        revUtils.append(document.getElementsByTagName("BODY")[0], wrap);
     };
 
     RevDialog.prototype.showDialog = function() {
+        document.querySelector('.revDialogBoxWrap').style.display = 'block';
         this.resize();
-        document.querySelector('.dumbBoxWrap').style.display = 'block';
         return false;
     };
 
     RevDialog.prototype.closeDialog = function() {
-        document.querySelector('.dumbBoxWrap').style.display = 'none';
+        document.querySelector('.revDialogBoxWrap').style.display = 'none';
         return false;
     };
+
+    RevDialog.prototype.centerDialog = function() {
+        var db = document.querySelector('.revDialogBox');
+        var w = db.offsetWidth;
+        var h = db.offsetHeight;
+
+        var left = (this.containerWidth/2)-(w/2);
+        var top = (this.containerHeight/2)-(h/2);
+
+        db.style.top = top+'px';
+        db.style.left = left+'px';
+    };
+
 
     return RevDialog;
 
@@ -1223,9 +1245,9 @@ RevToaster({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevToaster = factory(window, window.revUtils);
+    window.RevToaster = factory(window);
 
-}( window, function factory(window, revUtils) {
+}( window, function factory(window) {
 'use strict';
 
     // ----- vars ----- //
@@ -1260,7 +1282,7 @@ RevToaster({
 
         window.addEventListener('touchmove', move);
 
-        window.revDialog = revUtils.addDialog(options.id,'https://aboutus.revcontent.com/what_is.php');
+        window.revDialog = new RevDialog('opt-out','https://aboutus.revcontent.com/what_is.php');
     };
 
     RevToaster.defaults = {
@@ -1274,7 +1296,7 @@ RevToaster({
     var appendStyle = function() {
         var style = document.createElement('style');
         style.type = 'text/css';
-        style.innerHTML = '/* inject:css */.rev-toaster{-ms-overflow-style:-ms-autohiding-scrollbar;-webkit-text-size-adjust:100%;text-size-adjust:100%;box-sizing:border-box;cursor:default;text-rendering:optimizeLegibility;background:rgba(0,0,0,.89);position:fixed;-webkit-transition:.5s;transition:.5s;width:100%;padding-top:3px;padding-left:3px;bottom:-20px;transform:translateY(100%);-ms-transform:translateY(100%);-moz-transform:translateY(100%);-o-transform:translateY(100%);-webkit-transform:translateY(100%)}.rev-toaster *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}.rev-toaster a,.rev-toaster a:focus,.rev-toaster a:hover{text-decoration:none}body.rev-toaster-loaded{margin:0}body.rev-toaster-loaded .rev-toaster{bottom:0;transform:none;-ms-transform:none;-moz-transform:none;-o-transform:none;-webkit-transform:none;z-index:147483647}.rev-toaster .rev-header{position:absolute;background:#000;line-height:20px;top:-20px;left:-3px;color:#fff;font-size:10px;padding:0 4px 0 6px;border-top:1px solid #4CC93D;font-weight:500;letter-spacing:.1px}.rev-toaster .rev-header:after,.rev-toaster .rev-header:before{border-right:solid 10px transparent;border-top:solid 10px transparent;box-sizing:border-box;display:block;position:absolute;width:20px;height:20px;top:0;right:-20px;content:""}.rev-toaster .rev-header:before{border-left:solid 10px transparent;border-bottom:solid 10px transparent}.rev-toaster .rev-header:after{border-bottom:solid 10px #000;border-left:solid 10px #000}.rev-toaster .rev-footer{text-align:right;font-weight:300;font-size:10px;line-height:16px;opacity:.4;clear:both}.rev-toaster .rev-footer a{letter-spacing:.1px;color:#fff;padding:0 6px 3px;display:inline-block}.rev-toaster .rev-footer a span{color:#4CC93D}.rev-toaster .rev-ad{padding-bottom:3px;margin-right:36px;clear:left}.rev-toaster .rev-ad a{display:block}.rev-toaster .rev-image{height:75px;float:left;margin-right:10px}.rev-toaster .rev-image img{max-width:100%;max-height:100%;border:1px solid #000;margin:0 auto;display:inline-block;vertical-align:middle}.rev-toaster .rev-headline{max-height:40px;overflow:hidden}.rev-toaster .rev-headline h3{color:#fff;font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}.rev-toaster .rev-provider{font-size:12px;color:#888;line-height:30px}.rev-toaster button.rev-close{outline:0;border:0;display:inline-table;background:#6D6D6D;white-space:nowrap;cursor:pointer;box-shadow:0 2px 5px 0 rgba(0,0,0,.26);box-sizing:border-box;color:currentColor;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;z-index:20;vertical-align:middle;border-radius:50%;background-clip:padding-box;overflow:hidden;-webkit-transition:.2s linear;transition:.2s linear;-webkit-transition-property:background-color,box-shadow;transition-property:background-color,box-shadow;line-height:30px;width:30px;height:30px;position:absolute;top:-15px;right:8px}.rev-toaster button.rev-close .icon{margin:-2px auto auto;background-repeat:no-repeat no-repeat;fill:currentColor;height:30px;width:30px;color:#c5c5c5}.rev-toaster button.rev-close .icon svg{vertical-align:middle;width:15px;height:15px}.closeButton{position:absolute;cursor:pointer;right:10px}a{cursor:pointer!important}.dumbBoxWrap{display:none;z-index:2147483641}.dumbBoxOverlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";filter:alpha(opacity=50);z-index:2147483641}.vertical-offset{position:fixed;top:10%;width:100%;height:85%;z-index:2147483642}.dumbBox{background-color:#fff;padding:10px;border:1px solid #000;border-radius:5px;//overflow:visible}.normal{width:80%;max-width:500px;min-height:410px;margin:0 auto;position:relative}.full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}.dumbHeader{height:20px;//border:solid 1px red}.dumbContent{position:absolute;//height:100%;right:10px;left:10px;top:30px;bottom:10px}/* endinject */';
+        style.innerHTML = '/* inject:css */.rev-toaster{-ms-overflow-style:-ms-autohiding-scrollbar;-webkit-text-size-adjust:100%;text-size-adjust:100%;box-sizing:border-box;cursor:default;text-rendering:optimizeLegibility;background:rgba(0,0,0,.89);position:fixed;-webkit-transition:.5s;transition:.5s;width:100%;padding-top:3px;padding-left:3px;bottom:-20px;transform:translateY(100%);-ms-transform:translateY(100%);-moz-transform:translateY(100%);-o-transform:translateY(100%);-webkit-transform:translateY(100%)}.rev-toaster *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}.rev-toaster a,.rev-toaster a:focus,.rev-toaster a:hover{text-decoration:none}body.rev-toaster-loaded{margin:0}body.rev-toaster-loaded .rev-toaster{bottom:0;transform:none;-ms-transform:none;-moz-transform:none;-o-transform:none;-webkit-transform:none;z-index:147483647}.rev-toaster .rev-header{position:absolute;background:#000;line-height:20px;top:-20px;left:-3px;color:#fff;font-size:10px;padding:0 4px 0 6px;border-top:1px solid #4CC93D;font-weight:500;letter-spacing:.1px}.rev-toaster .rev-header:after,.rev-toaster .rev-header:before{border-right:solid 10px transparent;border-top:solid 10px transparent;box-sizing:border-box;display:block;position:absolute;width:20px;height:20px;top:0;right:-20px;content:""}.rev-toaster .rev-header:before{border-left:solid 10px transparent;border-bottom:solid 10px transparent}.rev-toaster .rev-header:after{border-bottom:solid 10px #000;border-left:solid 10px #000}.rev-toaster .rev-footer{text-align:right;font-weight:300;font-size:10px;line-height:16px;opacity:.4;clear:both}.rev-toaster .rev-footer a{letter-spacing:.1px;color:#fff;padding:0 6px 3px;display:inline-block}.rev-toaster .rev-footer a span{color:#4CC93D}.rev-toaster .rev-ad{padding-bottom:3px;margin-right:36px;clear:left}.rev-toaster .rev-ad a{display:block}.rev-toaster .rev-image{height:75px;float:left;margin-right:10px}.rev-toaster .rev-image img{max-width:100%;max-height:100%;border:1px solid #000;margin:0 auto;display:inline-block;vertical-align:middle}.rev-toaster .rev-headline{max-height:40px;overflow:hidden}.rev-toaster .rev-headline h3{color:#fff;font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}.rev-toaster .rev-provider{font-size:12px;color:#888;line-height:30px}.rev-toaster button.rev-close{outline:0;border:0;display:inline-table;background:#6D6D6D;white-space:nowrap;cursor:pointer;box-shadow:0 2px 5px 0 rgba(0,0,0,.26);box-sizing:border-box;color:currentColor;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;z-index:20;vertical-align:middle;border-radius:50%;background-clip:padding-box;overflow:hidden;-webkit-transition:.2s linear;transition:.2s linear;-webkit-transition-property:background-color,box-shadow;transition-property:background-color,box-shadow;line-height:30px;width:30px;height:30px;position:absolute;top:-15px;right:8px}.rev-toaster button.rev-close .icon{margin:-2px auto auto;background-repeat:no-repeat no-repeat;fill:currentColor;height:30px;width:30px;color:#c5c5c5}.rev-toaster button.rev-close .icon svg{vertical-align:middle;width:15px;height:15px}.closeButton{position:absolute;cursor:pointer;right:10px}a{cursor:pointer!important}.revDialogBoxWrap{display:none;z-index:2147483641}.revDialogBoxOverlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";filter:alpha(opacity=50);z-index:2147483641}.vertical-offset{position:fixed;display:table-cell;top:0;width:100%;margin-left:-15px;z-index:2147483642}.revDialogBox{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}.normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}.full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}.revDialogHeader{height:20px}.rc-about{font-family:Arial,sans-serif;font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}.rc-about .rc-logo{background:url(https://www.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}.rc-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}.rc-about p#main{text-align:left}.rc-opt-out,.rc-well{text-align:center}.rc-about h2{color:#777;font-family:Arial,sans-serif;font-size:16px;line-height:18px}.rc-about a{color:#00cb43}.rc-well{border:1px solid #E0E0E0;padding:20px;border-radius:2px;margin:20px 0}.rc-well h2{margin-top:0}.rc-well p{margin-bottom:0}.rc-opt-out a{margin-top:6px;display:inline-block}/* endinject */';
         document.getElementsByTagName('head')[0].appendChild(style);
     }
 

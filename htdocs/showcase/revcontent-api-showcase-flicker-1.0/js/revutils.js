@@ -147,11 +147,8 @@ utils.addEventListener = function(el, eventName, handler) {
   }
 };
 
-utils.addDialog = function(insertPoint, url){
-    return new RevDialog({
-        insertPoint : insertPoint,
-        url : url
-    });
+utils.addDialog = function(id, url){
+    return new RevDialog(id, url);
 };
 
 // -----  ----- //

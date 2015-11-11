@@ -120,7 +120,9 @@ RevFlicker({
             that.getData();
         });
 
-        window.revDialog = revUtils.addDialog(this.options.id,'https://aboutus.revcontent.com/what_is.php');
+        //window.revDialog = new RevDialog('opt-out','https://aboutus.revcontent.com/what_is.php');
+
+        window.revDialog = revUtils.addDialog('opt-out','https://aboutus.revcontent.com/what_is.php');
 
         revUtils.addEventListener(window, 'resize', function() {
             that.resize();

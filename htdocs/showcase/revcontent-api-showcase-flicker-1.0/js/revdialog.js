@@ -9,9 +9,10 @@
 }( window, function factory(window, revUtils) {
 'use strict';
 
-    var RevDialog = function(opts) {
+    var RevDialog = function(id, url) {
         var that = this;
-        this.options = opts;
+        this.id = id;
+        this.url = url;
 
         this.render();
 
@@ -80,10 +81,13 @@
                             '</div>' +
                         '</div>' +
                     '</div>';
+
+        var el = document.querySelector('#'+this.id);
+        if (el) {revUtils.remove(el);}
         var wrap = document.createElement('div');
+        wrap.id = this.id;
         wrap.innerHTML = html;
-        var innerElement = document.getElementById(this.options.insertPoint);
-        revUtils.append(innerElement, wrap);
+        revUtils.append(document.getElementsByTagName("BODY")[0], wrap);
     };
 
     RevDialog.prototype.showDialog = function() {

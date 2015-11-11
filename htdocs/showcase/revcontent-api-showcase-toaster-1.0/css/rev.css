@@ -9,12 +9,12 @@ a {
 }
 
 
-.dumbBoxWrap { /* The div that shows/hides. */
+.revDialogBoxWrap { /* The div that shows/hides. */
     display:none; /* starts out hidden */
     z-index:2147483641; /* High z-index to ensure it appears above all content */
 }
 
-.dumbBoxOverlay { /* Shades out background when selector is active */
+.revDialogBoxOverlay { /* Shades out background when selector is active */
     position:fixed;
     top: 0;
     left: 0;
@@ -29,28 +29,35 @@ a {
 
 .vertical-offset { /* Fixed position to provide the vertical offset */
     position:fixed;
-    top:10%;
+    display: table-cell;
+    top: 0px;
     width:100%;
-    height: 85%;
+    margin-left: -15px;
     z-index:2147483642; /* ensures box appears above overlay */
 }
 
-.dumbBox { /* The actual box, centered in the fixed-position div */
-     /* Whatever width you want the box to be */
-     /* Everything below is just visual styling */
+.revDialogBox { /* The actual box, centered in the fixed-position div */
+    /* Whatever width you want the box to be */
+    /* Everything below is just visual styling */
+    position:absolute;
+    vertical-align: middle;
     background-color:white;
     padding:10px;
-    border:1px solid black;
-    border-radius: 5px;
-    //overflow: visible;
+    border:1px solid #555;
+    border-radius: 12px;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    overflow: auto;
+    -webkit-box-shadow: 3px 3px 10px 4px #555;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+    -moz-box-shadow:    3px 3px 10px 4px #555;  /* Firefox 3.5 - 3.6 */
+    box-shadow:         3px 3px 10px 4px #555;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
 }
 
 .normal {
-    width:80%;
-    max-width: 500px;
-    min-height: 410px;
-    margin:0 auto;
-    position:relative;
+    min-width: 270px;
+    max-width: 435px;
+    width: 90%;
+    margin:10px auto;
 }
 
 .full-screen {
@@ -61,17 +68,75 @@ a {
     bottom: 15px;
 }
 
-.dumbHeader {
+.revDialogHeader {
     height: 20px;
-    //border: solid 1px red;
 }
 
-.dumbContent {
-    position: absolute;
-    //height: 100%;
+.revDialogContent {
+    /*position: absolute;
+    height: 100%;
     right:10px;
     left:10px;
     top: 30px;
-    bottom: 10px;
+    bottom: 10px;*/
 }
 
+.rc-about {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    text-align: left;
+    -moz-box-sizing:content-box;
+    -webkit-box-sizing:content-box;
+    box-sizing:content-box;
+    color: #333;
+    padding: 15px;
+}
+.rc-about .rc-logo {
+    background: transparent url(https://www.revcontent.com/assets/img/rc-logo.png) no-repeat bottom center;
+    width: 220px;
+    height: 48px;
+    display: block; margin: 0 auto;
+}
+.rc-about p {
+    margin: 16px 0;
+    color: #555;
+    font-size: 14px;
+    line-height: 16px;
+
+}
+
+.rc-about p#main{
+    text-align: left;
+}
+
+.rc-about h2 {
+    color: #777;
+    font-family: Arial, sans-serif;
+}
+.rc-about h2 {
+    font-size: 16px;
+    line-height: 18px;
+}
+.rc-about a {
+    color: #00cb43;
+}
+.rc-well {
+    border: 1px solid #E0E0E0;
+    padding: 20px;
+    text-align: center;
+    border-radius: 2px;
+    margin: 20px 0;
+}
+.rc-well h2 {
+    margin-top: 0;
+}
+.rc-well p {
+    margin-bottom: 0;
+}
+.rc-opt-out {
+    text-align: center;
+}
+.rc-opt-out a {
+    margin-top: 6px;
+    display: inline-block;
+}

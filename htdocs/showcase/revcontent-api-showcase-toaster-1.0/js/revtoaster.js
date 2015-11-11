@@ -26,9 +26,9 @@ RevToaster({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevToaster = factory(window, window.revUtils);
+    window.RevToaster = factory(window);
 
-}( window, function factory(window, revUtils) {
+}( window, function factory(window) {
 'use strict';
 
     // ----- vars ----- //
@@ -63,7 +63,7 @@ RevToaster({
 
         window.addEventListener('touchmove', move);
 
-        window.revDialog = revUtils.addDialog(options.id,'https://aboutus.revcontent.com/what_is.php');
+        window.revDialog = new RevDialog('opt-out','https://aboutus.revcontent.com/what_is.php');
     };
 
     RevToaster.defaults = {

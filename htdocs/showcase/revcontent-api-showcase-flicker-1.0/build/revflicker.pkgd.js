@@ -6465,11 +6465,8 @@ utils.addEventListener = function(el, eventName, handler) {
   }
 };
 
-utils.addDialog = function(insertPoint, url){
-    return new RevDialog({
-        insertPoint : insertPoint,
-        url : url
-    });
+utils.addDialog = function(id, url){
+    return new RevDialog(id, url);
 };
 
 // -----  ----- //
@@ -6691,7 +6688,9 @@ RevFlicker({
             that.getData();
         });
 
-        window.revDialog = revUtils.addDialog(this.options.id,'https://aboutus.revcontent.com/what_is.php');
+        //window.revDialog = new RevDialog('opt-out','https://aboutus.revcontent.com/what_is.php');
+
+        window.revDialog = revUtils.addDialog('opt-out','https://aboutus.revcontent.com/what_is.php');
 
         revUtils.addEventListener(window, 'resize', function() {
             that.resize();
@@ -6908,9 +6907,10 @@ RevFlicker({
 }( window, function factory(window, revUtils) {
 'use strict';
 
-    var RevDialog = function(opts) {
+    var RevDialog = function(id, url) {
         var that = this;
-        this.options = opts;
+        this.id = id;
+        this.url = url;
 
         this.render();
 
@@ -6979,10 +6979,13 @@ RevFlicker({
                             '</div>' +
                         '</div>' +
                     '</div>';
+
+        var el = document.querySelector('#'+this.id);
+        if (el) {revUtils.remove(el);}
         var wrap = document.createElement('div');
+        wrap.id = this.id;
         wrap.innerHTML = html;
-        var innerElement = document.getElementById(this.options.insertPoint);
-        revUtils.append(innerElement, wrap);
+        revUtils.append(document.getElementsByTagName("BODY")[0], wrap);
     };
 
     RevDialog.prototype.showDialog = function() {
