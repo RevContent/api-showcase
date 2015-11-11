@@ -83,6 +83,7 @@
                 xhrFields: {
                     withCredentials: true
                 },
+                timeout: 15000,
                 crossDomain: true,
                 dataType: 'jsonp',
                 jsonp: false,
@@ -147,8 +148,10 @@
                         that.subscriberElement.addClass("failed");
                         that.subscriberElement.find('.subscribe-alert').removeClass("successful-subscription").addClass("failed-subscription").text(that.serviceUnavailable).fadeIn(200).delay(3000).fadeOut();
                     });
+                },
+                complete: function(xhrObj){
+                    console.log("RevChimp: AJAX Completed....");
                 }
-
             });
         },
         taskbarUI: function (parent_node) {
