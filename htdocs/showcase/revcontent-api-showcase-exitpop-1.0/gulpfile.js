@@ -24,7 +24,7 @@ gulp.task('revchimp-css', function() {
 });
 
 gulp.task('revexit-css', function() {
-    return gulp.src(['./css/revexit.css'])
+    return gulp.src(['./css/revexit.css', './css/rev.css'])
         .pipe(concat('revexit.min.css'))
         .pipe(autoprefixer({
             browsers: ['> 1%'],
@@ -72,7 +72,7 @@ gulp.task('build-rx', ['revexit-css', 'revchimp-css', 'revchimp-inject', 'revexi
       ' */',
       ''].join('\n');
 
-    return gulp.src(['./build/revchimp.js', './build/revexit.js'])
+    return gulp.src(['./js/revutils.js', './js/revdialog.js', './build/revchimp.js', './build/revexit.js'])
         .pipe(concat('revexit.pkgd.js'))
         .pipe(gulp.dest('./build'))
         .pipe(uglify({

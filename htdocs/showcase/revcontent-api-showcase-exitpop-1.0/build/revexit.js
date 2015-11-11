@@ -135,6 +135,12 @@
                 $("body").trigger("mousemove touchmove");
             }
         }
+
+        // Initialize RevDialog (OPT-Out feature)
+        if(typeof RevDialog === "function") {
+            window.revDialog = new RevDialog();
+        }
+
     });
 
     function revcontentInitChimpanzee(subscription_settings){
@@ -490,7 +496,7 @@
                 revpayload1 = revpayload1 + "<div class='revexititem' id='revexititem_"+i+"'><a title='"+revpayload[i].headline+"' href='"+revpayload[i].url+"' target='_blank'><div class='revexitimgholder' style='background-image: url(http:"+ revpayload[i].image +");'><div class='revexititemmask'><div class='revexitheadlinewrap'><div class='revexitheadline'>"+ revpayload[i].headline + ((revpayload[i].type.toLowerCase() === 'internal') ? "<span class='revexitprovider'>" + revpayload[i].brand + "</span>" : "") + "</div></div></div></div></a></div>";
             }
 
-            var revexit_package = "<style id='revexit_style'>" + revstyle + styles_panel3x2 + "</style><div id='revexitmask' class='revexitmaskwrap'><div id='revexitunit' class='revexitunitwrap' style='display:none;'><div id='revexitheader'><span href='#' id='revexitcloseme'></span><span class='rxlabel'>BEFORE YOU GO, CHECK OUT MORE</span> <a href='https://www.revcontent.com' target='_blank' id='revexitsponsor'><span>Sponsored <em class='sponsor-noshow' style='font-style:normal!important'>By Revcontent</em></span></a></div><div id='revexitadpanel'>"+revpayload1+"<div style='clear:both;display:block;'></div></div></div>";
+            var revexit_package = "<style id='revexit_style'>" + revstyle + styles_panel3x2 + "</style><div id='revexitmask' class='revexitmaskwrap'><div id='revexitunit' class='revexitunitwrap' style='display:none;'><div id='revexitheader'><span href='#' id='revexitcloseme'></span><span class='rxlabel'>BEFORE YOU GO, CHECK OUT MORE</span> <a id='revexitsponsor' onclick='revDialog.showDialog();'><span>Sponsored <em class='sponsor-noshow' style='font-style:normal!important'>By Revcontent</em></span></a></div><div id='revexitadpanel'>"+revpayload1+"<div style='clear:both;display:block;'></div></div></div>";
             $('#revexitmask, #revexitunit, .revexitmaskwrap, .revexitunitwrap, #revexit_style').detach();
 
             if(true === revExitIPhone) {
