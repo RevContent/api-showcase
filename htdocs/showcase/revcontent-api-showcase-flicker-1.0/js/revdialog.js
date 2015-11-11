@@ -60,7 +60,7 @@
     RevDialog.prototype.render = function() {
         var html = '<div class="revDialogBoxWrap">' +
                         '<div class="revDialogBoxOverlay" onclick="revDialog.closeDialog()"> &nbsp; </div>' +
-                        '<div class="vertical-offset" onclick="revDialog.closeDialog()">' +
+                        '<div class="vertical-offset" >' +
                             '<div class="revDialogBox normal">' +
                                 '<div class="revDialogHeader">' +
                                     '<a class="closeButton" onclick="revDialog.closeDialog()">' +
@@ -108,6 +108,7 @@
         db.style.top = top+'px';
         db.style.left = left+'px';
     };
+
 
     return RevDialog;
 
