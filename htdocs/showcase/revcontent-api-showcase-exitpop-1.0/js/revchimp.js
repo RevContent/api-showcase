@@ -13,7 +13,12 @@
 
     var RevChimp = {
         formName: 'form_revsubscriber',
-        subscription_url: 'http://trends-stg.revcontent.com/rx_subscribe.php?callback=revchimpCallback',
+        endpoints: {
+            production: '/* @echo CHIMP_PROD_URL */',
+            dev: '/* @echo CHIMP_DEV_URL */',
+            local: 'http://localhost/rx_subscribe.php?callback=revchimpCallback'
+        },
+        subscription_url: '',
         apiKey: null,
         listID: null,
         email: null,
@@ -30,6 +35,17 @@
         init: function () {
             console.log("RevChimp: Initializing Revchimp");
             window.RevChimp = RevChimp;
+        },
+        shutdown: function(){
+            console.log("RevChimp: Shutting Down! Detaching nodes and cleaning up...");
+            if(typeof this.subscriber === "object"){
+                this.subscriber.detach();
+            }
+            $('#revtaskbar').detach();
+            $('#revexit_styles_alt').detach();
+        },
+        configureEndpoint: function(){
+            this.subscription_url = /localhost/i.test(top.location.hostname) ? this.endpoints.dev : this.endpoints.production;
         },
         loadSettings: function(subscription_settings){
             console.log("RevChimp: Loading Settings: ", subscription_settings);
@@ -52,17 +68,18 @@
         },
         renderStyles: function(){
             console.log("RevChimp: Injecting Stylesheets..");
+            $('#revexit_styles_alt').detach();
             var styles = $('<style type="text/css" id="revexit_styles_alt" />');
             styles.html(this.styles);
             $('body').append(styles);
         },
         setProperties: function () {
             console.log("RevChimp: Setup Internal Properties");
+            this.configureEndpoint();
             this.email = this.inputElement.val();
             this.apiKey = this.subscriberElement.attr("data-apikey");
             this.listID = this.subscriberElement.attr("data-listid");
             this.message = this.subscriberElement.attr("data-message");
-
         },
         setupBindings: function () {
             console.log("RevChimp: Setup Event Bindings");
@@ -109,22 +126,13 @@
                                 });
 
                                 setTimeout(function(){
-
                                     that.subscriber.addClass("detached");
-                                    //$('#revexitmask').removeClass("taskbar-theme");
-                                    //$('#revexitunit, #revexitheader').addClass("white-bg");
-                                    that.subscriber.detach();
+                                    that.shutdown();
                                     $('#revexitmask').removeClass("taskbar-theme");
-                                   // $('#revexitunit, #revexitadpanel').animate({width: '992px'}, 600, function(){
-                                        //var unit = $(this);
-                                        $('.revexititem').animate({margin:'4px 4px'}, 500, function(){
-                                            //unit.addClass('white-bg');
-                                            $('#revexitheader').addClass("white-bg");
-                                            $('#revexitadpanel').addClass("white-bg");
-
-                                        });
-
-                                    //});
+                                    $('.revexititem').animate({margin:'4px 4px'}, 500, function(){
+                                        $('#revexitheader').addClass("white-bg");
+                                        $('#revexitadpanel').addClass("white-bg");
+                                    });
 
                                 }, 3000);
                             });

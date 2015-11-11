@@ -7,7 +7,8 @@ var minifycss    = require('gulp-minify-css');
 var concat       = require('gulp-concat');
 var uglify       = require('gulp-uglify');
 var autoprefixer = require('gulp-autoprefixer');
-var stripDebug = require('gulp-strip-debug');
+var stripDebug   = require('gulp-strip-debug');
+var preprocess   = require('gulp-preprocess');
 
 gulp.task('default', ['build-rx']);
 
@@ -35,6 +36,10 @@ gulp.task('revexit-css', function() {
 
 gulp.task('revchimp-inject', ['revchimp-css'], function () {
     return gulp.src('./js/revchimp.js')
+      .pipe(preprocess({context: {
+            CHIMP_PROD_URL: 'https://trends.revcontent.com/rx_subscribe.php?callback=revchimpCallback',
+            CHIMP_DEV_URL: 'http://delivery.localhost/rx_subscribe.php?callback=revchimpCallback'
+      }}))
       .pipe(inject(gulp.src(['./build/revchimp.min.css']), {
         starttag: '/* inject:css */',
         endtag: '/* endinject */',

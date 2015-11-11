@@ -138,8 +138,14 @@
     });
 
     function revcontentInitChimpanzee(subscription_settings){
-        if(typeof window.RevChimp !== undefined){
+        if(typeof window.RevChimp !== undefined && typeof window.RevChimp.render === "function"){
             window.RevChimp.render(subscription_settings);
+        }
+    }
+
+    function revcontentDetachChimpanzee(){
+        if(typeof window.RevChimp !== undefined && typeof window.RevChimp.shutdown === "function"){
+            window.RevChimp.shutdown();
         }
     }
 
@@ -352,8 +358,10 @@
             $('#revexitunit > *, #revexitunit > *:before, #revexitunit > *:after').css({'box-sizing':'inherit'});
         }
 
-        if(true === enableSubscriptions){
+        if(true === enableSubscriptions && $exit_mask.hasClass("modal-hd")){
             revcontentInitChimpanzee(subscription_settings);
+        } else {
+            revcontentDetachChimpanzee();
         }
     }
 
