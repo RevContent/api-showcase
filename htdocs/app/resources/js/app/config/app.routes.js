@@ -102,5 +102,14 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
             onExit: ['$mdDialog', function($mdDialog) {
                 $mdDialog.hide();
             }]
+        })
+        .state('404', {
+            url: "*path",
+            views: {
+                main: {
+                    templateUrl: 'app/resources/js/app/404.html',
+                    controller: 'PreviewCtrl'
+                }
+            }
         });
 }]);
