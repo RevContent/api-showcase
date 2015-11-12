@@ -42,7 +42,7 @@ gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
       ' */',
       ''].join('\n');
 
-    return gulp.src(['./vendor/imagesloaded/imagesloaded.pkgd.js', './js/revutils.js', './js/revdialog.js', './build/revtoaster.js'])
+    return gulp.src(['./vendor/imagesloaded/imagesloaded.pkgd.js', './js/revdialog.js', './build/revtoaster.js'])
         .pipe(concat('revtoaster.pkgd.js'))
         .pipe(gulp.dest('./build'))
         .pipe(uglify({

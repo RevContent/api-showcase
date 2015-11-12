@@ -4,9 +4,9 @@
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevDialog = factory(window, window.revUtils);
+    window.RevDialog = factory(window);
 
-}( window, function factory(window, revUtils) {
+}( window, function factory(window) {
 'use strict';
 
     var RevDialog = function() {
@@ -16,7 +16,7 @@
 
         this.render();
 
-        revUtils.addEventListener(window, 'resize', function() {
+        this.addEventListener(window, 'resize', function() {
             that.resize();
         });
     };
@@ -34,16 +34,16 @@
 
     RevDialog.prototype.setFullHeight = function() {
         var revDialogBox = document.querySelector('.revDialogBox');
-        revUtils.removeClass(revDialogBox, 'normal');
-        revUtils.addClass(revDialogBox, 'full-screen');
+        this.removeClass(revDialogBox, 'normal');
+        this.addClass(revDialogBox, 'full-screen');
         revDialogBox.style.left = '15px';
         revDialogBox.style.top = '15px';
     };
 
     RevDialog.prototype.setNormalHeight = function() {
         var revDialogBox = document.querySelector('.revDialogBox');
-        revUtils.removeClass(revDialogBox, 'full-screen');
-        revUtils.addClass(revDialogBox, 'normal');
+        this.removeClass(revDialogBox, 'full-screen');
+        this.addClass(revDialogBox, 'normal');
 
     };
 
@@ -83,11 +83,11 @@
                     '</div>';
 
         var el = document.querySelector('#'+this.id);
-        if (el) {revUtils.remove(el);}
+        if (el) {this.remove(el);}
         var wrap = document.createElement('div');
         wrap.id = this.id;
         wrap.innerHTML = html;
-        revUtils.append(document.getElementsByTagName("BODY")[0], wrap);
+        this.append(document.getElementsByTagName("BODY")[0], wrap);
 
     };
 
@@ -114,6 +114,40 @@
 
         db.style.top = top+'px';
         db.style.left = left+'px';
+    };
+
+    RevDialog.prototype.addEventListener = function(el, eventName, handler) {
+      if (el.addEventListener) {
+        el.addEventListener(eventName, handler);
+      } else {
+        el.attachEvent('on' + eventName, function(){
+          handler.call(el);
+        });
+      }
+    };
+
+    RevDialog.prototype.addClass = function(el, className) {
+        if (!el) return false;
+        if (el.classList)
+          el.classList.add(className);
+        else
+          el.className += ' ' + className;
+    };
+
+    RevDialog.prototype.removeClass = function(el, className) {
+        if (!el) return false;
+        if (el.classList)
+            el.classList.remove(className);
+        else
+            el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+    };
+
+    RevDialog.prototype.append = function(el, html) {
+        el.appendChild(html);
+    };
+
+    RevDialog.prototype.remove = function(el) {
+        el.parentNode.removeChild(el);
     };
 
 

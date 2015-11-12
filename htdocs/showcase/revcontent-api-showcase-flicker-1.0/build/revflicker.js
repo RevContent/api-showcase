@@ -120,8 +120,9 @@ RevFlicker({
             that.getData();
         });
 
-
-        window.revDialog = new RevDialog();
+        if (typeof RevDialog !== "undefined") {
+            window.revDialog = new RevDialog();
+        }
 
         revUtils.addEventListener(window, 'resize', function() {
             that.resize();

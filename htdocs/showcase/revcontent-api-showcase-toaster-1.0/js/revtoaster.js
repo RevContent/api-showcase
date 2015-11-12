@@ -63,7 +63,9 @@ RevToaster({
 
         window.addEventListener('touchmove', move);
 
-        window.revDialog = new RevDialog('opt-out','https://aboutus.revcontent.com/what_is.php');
+       if (typeof RevDialog !== "undefined") {
+           window.revDialog = new RevDialog();
+       }
     };
 
     RevToaster.defaults = {
