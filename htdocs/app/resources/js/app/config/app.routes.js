@@ -29,8 +29,9 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
             }
         })
         .state('post', {
-            url: "/{id:.*}",
-            onEnter: ['$stateParams', '$rootScope', '$state', '$mdDialog', '$location', '$mdCardContent', function($stateParams, $rootScope, $state, $mdDialog, $location, $mdCardContent) {
+            url: "/{id}",
+            dialog: true,
+            onEnter: ['$stateParams', '$state', '$mdDialog', '$window', '$mdCardContent', '$stateManager', function($stateParams, $state, $mdDialog, $window, $mdCardContent, $stateManager) {
 
                 var plugins = {
                     instream: {
@@ -69,6 +70,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                         img: 'slider.jpg',
                         description: 'Slider or sometimes called a carousel is an engaging way to showcase Revcontent ads on your site! Give your readers the ability to navigate through all of the ads availible to your widget. Fully responsive and configurable to display as many rows and columns as you like at various breakpoints. Slider is a great choice for any site!',
                         link: 'revcontent-api-showcase-slider-1.0',
+                        preview: true
                     },
                     flicker: {
                         title: 'Flicker',
@@ -82,25 +84,47 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
 
                 $mdDialog.show({
                     templateUrl: 'app/resources/js/app/dialog/post.html',
-                    targetEvent: $mdCardContent.getClickEvent(),
+                    // targetEvent: $mdCardContent.getClickEvent(), // causing bug on history navigation
                     clickOutsideToClose: true,
                     controller: function($scope) {
+                        $scope.id = $stateParams.id;
                         $scope.post = plugin;
                         $scope.close = function() {
                             $mdDialog.hide();
-                        }
+                        };
+                        $scope.preview = function(id, preview) {
+                            if (preview) { // go to the post preview page once the dialog is done hiding
+                                $mdDialog.hide().then(function() {
+                                    $state.go('post_preview', {id: id});
+                                });
+                            } else { //legacy open blank
+                                $window.open('/showcase/' + $scope.post.link, '_blank');
+                            }
+
+                        };
                     },
                     onComplete: function() {
                     }
                 })
                 .then(function(answer) { //close
-                    $location.path('/');
                 }, function() { //cancel
-                    $location.path('/');
+                    $state.go(($stateManager.previousState && !$stateManager.previousStateDialog) ? $stateManager.previousState : 'home', $stateManager.previousStateParams);
                 });
             }],
             onExit: ['$mdDialog', function($mdDialog) {
                 $mdDialog.hide();
             }]
+        })
+        .state('post_preview', {
+            url: "/{id}/preview",
+            sticky: true,
+            views: {
+                main: {
+                    templateUrl: function($stateParams) {
+                        return 'app/resources/js/app/preview/'+ $stateParams.id +'.html'
+                    },
+                    controller: 'PreviewCtrl'
+                }
+            }
         });
 }]);

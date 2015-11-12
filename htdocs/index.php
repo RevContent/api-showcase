@@ -27,6 +27,7 @@
         <script src="app/resources/vendor/highlightjs/highlight.pack.js"></script>
         <script src="app/resources/vendor/re-tree/re-tree.js"></script>
         <script src="app/resources/vendor/ng-device-detector/ng-device-detector.js"></script>
+        <script src="build/revslider.min.js"></script>
 
         <!-- app js -->
         <script src="app/resources/js/app/app.module.js"></script>
@@ -36,6 +37,7 @@
         <script src="app/resources/js/app/app.directives.js"></script>
         <script src="app/resources/js/app/grid/grid.controller.js"></script>
         <script src="app/resources/js/app/docs/docs.controller.js"></script>
+        <script src="app/resources/js/app/preview/preview.controller.js"></script>
         <script src="app/resources/vendor/angular-highlightjs/angular-highlightjs.js"></script>
 
         <link href='//fonts.googleapis.com/css?family=Roboto:400,700,500,900,300' rel='stylesheet' type='text/css'>
@@ -107,9 +109,7 @@
             </md-toolbar>
         </header>
 
-        <main>
-            <div class="container" ui-view="main"></div>
-        </main>
+        <main ui-view="main" layout-align="center center" layout="column"></main>
 
         <footer>
             <div class="container">
