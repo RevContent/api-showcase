@@ -107,8 +107,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
             url: "*path",
             views: {
                 main: {
-                    templateUrl: 'app/resources/js/app/404.html',
-                    controller: 'PreviewCtrl'
+                    templateUrl: 'app/resources/js/app/404.html'
                 }
             }
         });
