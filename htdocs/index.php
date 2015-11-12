@@ -35,6 +35,7 @@
         <script src="app/resources/js/app/config/app.routes.js"></script>
         <script src="app/resources/js/app/app.filters.js"></script>
         <script src="app/resources/js/app/app.directives.js"></script>
+        <script src="app/resources/js/app/app.services.js"></script>
         <script src="app/resources/js/app/grid/grid.controller.js"></script>
         <script src="app/resources/js/app/docs/docs.controller.js"></script>
         <script src="app/resources/js/app/preview/preview.controller.js"></script>

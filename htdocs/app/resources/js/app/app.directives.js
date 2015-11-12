@@ -1,35 +1,3 @@
-app.service('$mdCardContent', function() {
-    this.clickEvent = null;
-
-    this.setClickEvent = function(evt) {
-        this.clickEvent = evt;
-    };
-
-    this.getClickEvent = function() {
-        return this.clickEvent;
-    };
-});
-
-app.service('$stateManager', function() {
-    this.stickyPath;
-    this.originPath;
-
-    this.setPath = function(stickyPath) {
-        this.stickyPath = stickyPath;
-    }
-    this.getPath = function() {
-        return this.stickyPath;
-    }
-
-    this.setOriginPath = function(originPath) {
-        this.originPath = originPath;
-    }
-
-    this.getOriginPath = function() {
-        return this.originPath;
-    }
-});
-
 app.directive('mdCard', ['$location', '$mdCardContent', function ($location, $mdCardContent) {
   return {
     restrict: "AEC",
