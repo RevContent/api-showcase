@@ -12,5 +12,4 @@ app.run(function($rootScope, $stateParams, $location, $stateManager, $window) {
         $stateManager.previousState       = fromState.name;
         $stateManager.previousStateParams = fromStateParams;
     });
-    });
 });

@@ -4732,6 +4732,10 @@ var AnyGrid = Outlayer.create( 'anyGrid', {
     }
 });
 
+AnyGrid.prototype.getBreakPoint = function() {
+    return this.breakPoint;
+}
+
 AnyGrid.prototype.getPerRow = function() {
     return this.perRow;
 }
@@ -4752,18 +4756,25 @@ AnyGrid.prototype._setUp = function() {
 
     if (this.containerWidth >= 1500) {
         this.perRow = this.options.perRow.xxl;
+        this.breakPoint = 'xxl'
     }else if (this.containerWidth >= 1250) {
         this.perRow = this.options.perRow.xl;
+        this.breakPoint = 'xl'
     }else if (this.containerWidth >= 1000) {
         this.perRow = this.options.perRow.lg;
+        this.breakPoint = 'lg'
     }else if (this.containerWidth >= 750) {
         this.perRow = this.options.perRow.md;
+        this.breakPoint = 'md'
     }else if (this.containerWidth >= 500) {
         this.perRow = this.options.perRow.sm;
+        this.breakPoint = 'sm'
     }else if (this.containerWidth >= 250) {
         this.perRow = this.options.perRow.xs;
+        this.breakPoint = 'xs'
     }else {
         this.perRow = this.options.perRow.xxs;
+        this.breakPoint = 'xxs'
     }
 
     this.columnWidth = (this.containerWidth / this.perRow);
@@ -5118,7 +5129,16 @@ RevSlider({
         mobile: false,
         desktop: true
     },
-    perRow: {
+    rows: {
+        xxs: 2,
+        xs: 2,
+        sm: 2,
+        md: 2,
+        lg: 2,
+        xl: 2,
+        xxl: 2
+    },
+    per_row: {
         xxs: 1,
         xs: 1,
         sm: 3,
@@ -5129,12 +5149,12 @@ RevSlider({
     },
     image_ratio: (revDetect.mobile() ? 'wide_rectangle' : 'rectangle'),
     rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right'),
-    internal: false,
     header: 'Trending Now',
     devices: [
         'phone', 'tablet', 'desktop'
     ],
-    url: 'https://trends.revcontent.com/api/v1/'
+    url: 'https://trends.revcontent.com/api/v1/',
+    ad_border: true
 });
 */
 
@@ -5151,6 +5171,15 @@ RevSlider({
 
         var defaults = {
             element: false,
+            rows: {
+                xxs: 2,
+                xs: 2,
+                sm: 2,
+                md: 2,
+                lg: 2,
+                xl: 2,
+                xxl: 2
+            },
             per_row: {
                 xxs: 1,
                 xs: 1,
@@ -5172,25 +5201,42 @@ RevSlider({
             devices: [
                 'phone', 'tablet', 'desktop'
             ],
-            url: 'https://trends.revcontent.com/api/v1/'
+            url: 'https://trends.revcontent.com/api/v1/',
+            ad_border: true
         };
 
         // merge options
         this.options = revUtils.extend(defaults, opts);
 
-        revUtils.appendStyle('/* inject:css */#rev-slider,#rev-slider #rev-slider-grid{padding:0;width:100%}#rev-slider #rev-slider-grid>div{padding:10px}#rev-slider{display:table;width:100%}#rev-slider a{color:inherit}#rev-slider a:hover{text-decoration:none}#rev-slider>div{display:table-cell;vertical-align:middle;padding:0 30px}/* endinject */', 'rev-slider');
+        if (revUtils.validateApiParams(this.options).length) {
+            return;
+        }
+
+        // don't show for this device
+        if (!revDetect.show(this.options.devices)) {
+            return;
+        }
+
+        var that = this;
+
+        revUtils.appendStyle('/* inject:css */#rev-slider a,#rev-slider a:focus,#rev-slider a:hover{text-decoration:none}#rev-slider,#rev-slider #rev-slider-grid,#rev-slider #rev-slider-grid-container{padding:0;width:100%}#rev-slider #rev-slider-grid-container{display:table;width:100%}#rev-slider{clear:both}#rev-slider *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-slider #rev-slider-grid-container>div{display:table-cell;vertical-align:middle}#rev-slider #rev-slider-grid-container .rev-btn-container{padding:0 30px}#rev-slider a{color:inherit}#rev-slider:focus{outline:0}#rev-slider .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-slider .rev-sponsored{line-height:24px;font-size:12px}#rev-slider .rev-sponsored.bottom-right,#rev-slider .rev-sponsored.top-right{float:right}#rev-slider .rev-sponsored.top-right a{vertical-align:-5px}#rev-slider .rev-sponsored a{color:#999}#rev-slider .rev-ad a{display:block;color:#222}#rev-slider .rev-image{position:relative;-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee}#rev-slider .rev-image img{position:absolute;top:0;left:0;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-slider.loaded .rev-image{background:0 0}#rev-slider.loaded .rev-image img{opacity:1}#rev-slider .rev-headline,#rev-slider .rev-provider{margin:0 10px;text-align:left}#rev-slider .rev-headline{margin-top:12px;height:40px;overflow:hidden}#rev-slider .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-slider .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px}#rev-slider .rev-ad{border-radius:5px;overflow:hidden;background:#fff}#rev-slider .rev-content{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-slider .rev-content.rev-next{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:.5}/* endinject */', 'rev-slider');
 
         var backBtn = document.createElement('div');
         backBtn.id = "back";
-        backBtn.innerHTML = '<button id="btn-back" class="btn btn-primary"><</button>';
+        backBtn.setAttribute('class', 'rev-btn-container');
+        backBtn.innerHTML = '<button id="btn-back" class="rev-btn"><</button>';
 
         var forwardBtn = document.createElement('div');
         forwardBtn.id = "forward";
-        forwardBtn.innerHTML = '<button id="btn-forward" class="btn btn-primary">></button>';
+        forwardBtn.setAttribute('class', 'rev-btn-container');
+        forwardBtn.innerHTML = '<button id="btn-forward" class="rev-btn">></button>';
 
         var containerElement = document.createElement('div');
         containerElement.id = 'rev-slider';
         containerElement.class = 'rev-slider';
+
+        var gridContainerElement = document.createElement('div');
+        gridContainerElement.id = 'rev-slider-grid-container';
 
         var gridElement = document.createElement('div');
         gridElement.id = 'rev-slider-grid';
@@ -5198,15 +5244,21 @@ RevSlider({
         var element = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
         element.style.width = '100%';
 
-        revUtils.append(containerElement, backBtn);
-        revUtils.append(containerElement, gridElement);
-        revUtils.append(containerElement, forwardBtn);
+        revUtils.append(containerElement, gridContainerElement);
+        revUtils.append(gridContainerElement, backBtn);
+        revUtils.append(gridContainerElement, gridElement);
+        revUtils.append(gridContainerElement, forwardBtn);
         revUtils.append(element, containerElement);
 
-        var grid = new AnyGrid(gridElement, { masonry: false, perRow: this.options.per_row });
+        var grid = new AnyGrid(gridElement, { masonry: false, perRow: this.options.per_row, transitionDuration: 0});
+
+        var getLimit = function() {
+            // can pass object for rows or just single value for all breakpoints
+            return grid.getPerRow() * (that.options.rows[grid.getBreakPoint()] ? that.options.rows[grid.getBreakPoint()] : that.options.rows);
+        }
 
         var page = 1,
-            limit = grid.getPerRow() * 2,
+            limit = getLimit(),
             resizeTimeout;
 
         grid.on('resized', function() {
@@ -5214,87 +5266,175 @@ RevSlider({
                 clearTimeout(resizeTimeout);
             }
             function delay() {
-                var newLimit = grid.getPerRow() * 2;
+                var newLimit = getLimit();
+                var reconfig = 0;
                 if (newLimit != limit) {
+                    reconfig = (newLimit - limit);
                     limit = newLimit;
-                    setData();
+                    getData();
                 }
+                resize(reconfig);
                 resizeTimeout = false;
             }
             resizeTimeout = setTimeout(delay, 300);
         });
 
-        var fade = function(fade) {
-            var children = gridElement.children;
-            for (var i = 0; i < children.length; i++) {
-              var child = children[i];
-              child.classList.add(fade);
+        if (this.options.image_ratio == 'square') {
+            var imageHeight = 400;
+            var imageWidth = 400;
+        } else if (this.options.image_ratio == 'rectangle') {
+            var imageHeight = 300;
+            var imageWidth = 400;
+        } else if (this.options.image_ratio == 'wide_rectangle') {
+            var imageHeight = 450;
+            var imageWidth = 800;
+        }
+
+        var appendElements = function() {
+            var header = document.createElement('h2');
+            header.innerHTML = that.options.header;
+            revUtils.addClass(header, 'rev-header');
+            revUtils.prepend(containerElement, header);
+
+            var sponsored = document.createElement('div');
+            revUtils.addClass(sponsored, 'rev-sponsored');
+            sponsored.innerHTML = '<a href="http://revcontent.com" target="_blank">Sponsored by Revcontent</a>';
+            if (that.options.rev_position == 'top_right') {
+                revUtils.addClass(sponsored, 'top-right')
+                revUtils.prepend(containerElement, sponsored);
+            } else if (that.options.rev_position == 'bottom_left' || that.options.rev_position == 'bottom_right') {
+                revUtils.addClass(sponsored, that.options.rev_position.replace('_', '-'));
+                revUtils.append(containerElement, sponsored);
             }
         }
 
-        var setData = function() {
-            var minDelay = (gridElement.children.length > 0) ? 300 : 0;
-            var start = new Date();
-            var url = 'https://trends.revcontent.com/api/v1/?api_key=3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b&pub_id=945&widget_id=6181&domain=apiexamples.powr.com&sponsored_count=' + limit + '&sponsored_offset=' + ((page * limit) - limit) + '&internal_count=0';
+        appendElements();
 
-            fade('fadeOut');
+        var setUp = function() {
+            var width = grid.containerWidth / grid.perRow;
 
-            var request = new XMLHttpRequest();
+            that.padding = ((width * .025).toFixed(2) / 1);
+            that.innerMargin = ((width * .02).toFixed(2) / 1);
 
-            request.open('GET', url, true);
+            // // font size is relative to width, other measurements are relative to this font size
+            that.headlineFontSize = Math.max(14, ((width * .03).toFixed(2) / 1));
+            that.headlineLineHeight = ((that.headlineFontSize * 1.25).toFixed(2) / 1);
+            that.headlineHeight = ((that.headlineLineHeight * 2).toFixed(2) / 1);
+            that.headlineMarginTop = ((that.headlineHeight * .2).toFixed(2) / 1);
 
-            request.onload = function() {
-              if (request.status >= 200 && request.status < 400) {
+            that.providerFontSize = Math.max(11, ((that.headlineLineHeight / 2).toFixed(2) / 1));
+            that.providerLineHeight = ((that.providerFontSize * 1.25).toFixed(2) / 1);
+            that.providerMargin = ((that.providerLineHeight * .2).toFixed(2) / 1);
 
-                var respond = function() {
-                    var resp = JSON.parse(request.responseText);
-                    var loader = document.createElement('div');
-                    var containerHtml = '';
-                    for (var i in resp) {
-                        var node = document.createElement('div');
-                        var html = '<div style="opacity:0"><a href="'+ resp[i].url +'"><img class="img-responsive" src="'+ resp[i].image +'"/><h3>'+ resp[i].headline +'</h3></a></div>';
-                        node.innerHTML = html;
-                        containerHtml += html;
-                        loader.appendChild(node);
-                    }
-                    imagesLoaded( loader, function() {
-                        gridElement.innerHTML = containerHtml;
-                        fade('fadeIn');
+            that.preloaderHeight = (grid.columnWidth - (that.padding * 2) - (that.options.ad_border ? 2 : 0)) * (imageHeight / imageWidth);
+        }
 
-                        grid.reloadItems();
-                        grid.layout();
-                    });
-                }
+        setUp();
 
-                var end = new Date();
-                var requestTime = end - start;
-                if (requestTime  < minDelay) {
-                    setTimeout(function() { respond(); }, minDelay - requestTime );
-                } else {
-                    respond();
-                }
-              } else {
-                // error
-              }
-            };
+        var appendCell = function() {
+            var html = '<div class="rev-ad" style="'+ (that.options.ad_border ? 'border:1px solid #eee' : '') +'">' +
+                        '<a href="" target="_blank">' +
+                            '<div class="rev-image" style="height:'+ that.preloaderHeight +'px">' +
+                                '<img src=""/>' +
+                            '</div>' +
+                            '<div class="rev-headline" style="height:'+ that.headlineHeight +'px; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;">' +
+                                '<h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3>' +
+                            '</div>' +
+                            '<div style="margin:' + that.providerMargin +'px '  + that.innerMargin + 'px ' + that.providerMargin +'px;font-size:'+ that.providerFontSize +'px;line-height:'+ that.providerLineHeight +'px;height:'+ that.providerLineHeight +'px;" class="rev-provider"></div>' +
+                        '</a>' +
+                    '</div>';
+            var cell = document.createElement('div');
 
-            request.onerror = function() {
+            cell.style.padding = that.padding + 'px';
 
-            };
+            revUtils.addClass(cell, 'rev-content');
 
-            request.send();
+            cell.innerHTML = html;
+
+            gridElement.appendChild(cell);
         };
 
-        setData();
+        for (var i = 0; i < limit; i++) {
+            appendCell();
+        };
+
+        grid.reloadItems();
+        grid.layout();
+
+        var getData = function() {
+            var url = that.options.url + '?api_key='+ that.options.api_key +'&pub_id='+ that.options.pub_id +'&widget_id='+ that.options.widget_id +'&domain='+ that.options.domain +'&sponsored_count=' + limit + '&sponsored_offset=' + ((page * limit) - limit) + '&internal_count=0';
+
+            revApi.request(url, function(resp) {
+
+                var ads = element.querySelectorAll('.rev-ad');
+
+                for (var i = 0; i < resp.length; i++) {
+                    var ad = ads[i],
+                        data = resp[i];
+                    ad.querySelectorAll('a')[0].setAttribute('href', data.url);
+                    ad.querySelectorAll('img')[0].setAttribute('src', data.image);
+                    ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
+                    ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
+                }
+
+                imagesLoaded( gridElement, function() {
+                    revUtils.addClass(containerElement, 'loaded');
+                });
+            });
+        };
+
+        getData();
+
+
+        var resize = function(reconfig) {
+            setUp();
+            if (reconfig !== 0) {
+                var nodes = element.querySelectorAll('.rev-content');
+                if (reconfig < 0) {
+                    for (var i = 0; i < nodes.length; i++) {
+                        if (i >= limit) {
+                            grid.remove(nodes[i]);
+                        }
+                    };
+                } else {
+                    var add = limit - nodes.length;
+                    for (var i = 0; i < add; i++) {
+                        appendCell();
+                    }
+                }
+            }
+
+
+            var ads = element.querySelectorAll('.rev-content');
+
+            for (var i = 0; i < ads.length; i++) {
+                var ad = ads[i];
+
+                ad.style.padding = that.padding + 'px';
+
+                ad.querySelectorAll('.rev-image')[0].style.height = that.preloaderHeight + 'px';
+                ad.querySelectorAll('.rev-headline')[0].style.height = that.headlineHeight + 'px';
+                ad.querySelectorAll('.rev-headline')[0].style.margin = that.headlineMarginTop +'px ' + that.innerMargin + 'px 0';
+
+                ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = that.headlineFontSize +'px';
+                ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = that.headlineLineHeight +'px';
+                ad.querySelectorAll('.rev-provider')[0].style.margin = that.providerMargin +'px '  + that.innerMargin + 'px ' + that.providerMargin +'px';
+                ad.querySelectorAll('.rev-provider')[0].style.fontSize = that.providerFontSize +'px';
+                ad.querySelectorAll('.rev-provider')[0].style.lineHeight = that.providerLineHeight + 'px';
+                ad.querySelectorAll('.rev-provider')[0].style.height = that.providerLineHeight +'px';
+            }
+            grid.reloadItems();
+            grid.layout();
+        };
 
         document.getElementById('btn-forward').addEventListener('click', function() {
             page = page + 1;
-            setData();
+            getData();
         });
 
         document.getElementById('btn-back').addEventListener('click', function() {
             page = Math.max(1, page - 1);
-            setData();
+            getData();
         });
     };
 
