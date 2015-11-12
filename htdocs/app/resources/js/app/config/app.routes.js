@@ -75,7 +75,14 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                     templateUrl: function($stateParams) {
                         return 'app/resources/js/app/preview/'+ $stateParams.id +'.html'
                     },
-                    controller: 'PreviewCtrl'
+                    controller: 'PreviewCtrl',
+                    controllerAs: 'ctrl'
+                },
+                sidenav: {
+                    templateUrl: function($stateParams) {
+                        console.log($stateParams.id);
+                        return 'app/resources/js/app/preview/sidenav/'+ $stateParams.id +'.html'
+                    }
                 }
             }
         });

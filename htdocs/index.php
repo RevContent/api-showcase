@@ -28,6 +28,7 @@
         <script src="app/resources/vendor/re-tree/re-tree.js"></script>
         <script src="app/resources/vendor/ng-device-detector/ng-device-detector.js"></script>
         <script src="build/revslider.min.js"></script>
+        <script src="build/revflicker.min.js"></script>
 
         <!-- app js -->
         <script src="app/resources/js/app/app.module.js"></script>
@@ -111,6 +112,8 @@
         </header>
 
         <main ui-view="main" layout-align="center center" layout="column"></main>
+
+        <md-sidenav ui-view="sidenav" md-component-id="left" class="md-sidenav-left"></md-sidenav>
 
         <footer>
             <div class="container">

@@ -417,6 +417,27 @@ main .container {
   padding-bottom: 20px;
 }
 
+md-toast#widgetSize.md-top {
+  min-width: 0;
+  left: -8px;
+  opacity: 0.8;
+  top: -8px;
+  min-height: 36px;
+  padding: 0 18px;
+}
+
+main .container-builder {
+  margin-top: 0;
+  margin-bottom: 10%;
+  flex-grow: 1;
+}
+
+main .container.container-builder-header {
+  margin: 0;
+  flex-grow: 0;
+}
+
+
 footer {
   font-size: 14px;
   border-top: 1px solid rgba(189, 189, 189, 0.5);

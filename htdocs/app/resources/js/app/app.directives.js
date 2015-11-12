@@ -58,3 +58,40 @@ app.directive('revSlider', ['$timeout', function ($timeout) {
     }
   };
 }]);
+
+
+app.directive('revFlicker', ['$location', '$mdCardContent', '$timeout', 'options', function ($location, $mdCardContent, $timeout, options) {
+  return {
+    restrict: "AE",
+    link: function(scope, element, attrs) {
+
+        var widget;
+
+        options.next_effect = true;
+
+        $timeout(function() {
+            widget = new RevFlicker({
+                element: element,
+                devices: options.getDevices(),
+                sponsored: options.sponsored,
+                header: options.header,
+                api_key : options.api_key,
+                pub_id : options.pub_id,
+                widget_id : options.widget_id,
+                domain : options.domain,
+                rev_position: options.rev_position,
+                per_row: options.per_row,
+                next_effect: options.next_effect
+            });
+        });
+
+        var watcher = scope.$watch(function() { return options }, function(newOpts, oldOpts) {
+            if (newOpts != oldOpts) {
+                $timeout(function() {
+                    widget.update(newOpts, oldOpts);
+                });
+            }
+        }, true);
+    }
+  };
+}]);
