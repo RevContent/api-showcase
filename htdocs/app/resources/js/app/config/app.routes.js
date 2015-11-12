@@ -80,7 +80,6 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                 },
                 sidenav: {
                     templateUrl: function($stateParams) {
-                        console.log($stateParams.id);
                         return 'app/resources/js/app/preview/sidenav/'+ $stateParams.id +'.html'
                     }
                 }
