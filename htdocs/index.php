@@ -130,6 +130,22 @@
             </div>
         </footer>
 
+        <script type="text/ng-template" id="preview/menu.html">
+            <md-menu flex layout layout-fill>
+                <md-button style="text-transform:none;" ng-click="$mdOpenMenu($event)" aria-label="Change Widget">
+                    <div layout>
+                        <h1 style="cursor:pointer;" class="md-headline">{{ menu.widgets[menu.id].title }}</h1>
+                        <md-icon md-menu-origin>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 36 36" style="pointer-events: none; display: block;"><path d="M10.5 15l7.5 7.5 7.5-7.5z"/></svg>
+                        </md-icon>
+                    </div>
+                </md-button>
+                <md-menu-content>
+                    <md-menu-item ng-repeat="(key, value) in menu.widgets"><md-button ng-click="menu.preview(key)">{{value.title}}</md-button></md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </script>
+
         <script>
          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

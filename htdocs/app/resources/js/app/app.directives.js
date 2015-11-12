@@ -12,6 +12,26 @@ app.directive('mdCard', ['$location', '$mdCardContent', function ($location, $md
   };
 }]);
 
+app.directive('previewMenu', ['widgets', '$stateParams', '$window', function (widgets, $stateParams, $window) {
+  return {
+    restrict: "AEC",
+    templateUrl: 'preview/menu.html',
+    controllerAs: 'menu',
+    controller: function($scope, $state, $rootScope) {
+        this.id = $stateParams.id ? $stateParams.id : 'flicker';
+        this.widgets = widgets.data;
+        this.preview = function(id) {
+            var widget = this.widgets[id];
+            if (widget.preview) {
+                $state.go('post_preview', {id: id});
+            } else {
+                $window.open('/showcase/' + widget.link, '_blank');
+            }
+        }
+    }
+  };
+}]);
+
 app.directive('revSlider', ['$timeout', function ($timeout) {
   return {
     restrict: "AE",
