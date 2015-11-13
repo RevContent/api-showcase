@@ -6,8 +6,8 @@
 
         <div layout layout-fill>
             <div layout layout-align="center center" style="position: absolute;right: 0;top: -30px;">
-                <span ng-bind="ctrl.slider.type"></span>
-                <md-switch ng-model="ctrl.slider.type" aria-label="Slider Type" ng-true-value="'Fluid'" ng-false-value="'Discrete'"></md-switch>
+                <span ng-bind="ctrl.slider.type == 'Discrete' ? 'Breakpoints' : 'Fluid'"></span>
+                <md-switch ng-model="ctrl.slider.type" aria-label="Slider Type" ng-true-value="'Fluid'" ng-false-value="'Discrete'" aria-label="Slider Type"></md-switch>
             </div>
 
             <div layout layout-fill layout-padding>
