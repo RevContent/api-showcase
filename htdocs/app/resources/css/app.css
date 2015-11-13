@@ -619,20 +619,3 @@ body.os-windows-phone.browser-ie.md-dialog-is-showing md-dialog.md-transition-in
 body.os-windows-phone.browser-ie.md-dialog-is-showing md-dialog.md-transition-in md-dialog-content md-content {
     padding: 0 12px;
 }
-
-.preloader {
-  height: 0;
-  padding-bottom: 75%;
-  position: relative;
-  width: 100%;
-}
-
-.preloader img.preview {
-  opacity: 0;
-  position: absolute;
-}
-
-.preloader img.preview.loaded {
-  opacity: 1;
-  transition: opacity .4s;
-}
