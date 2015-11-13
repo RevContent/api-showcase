@@ -12,6 +12,17 @@ app.directive('mdCard', ['$location', '$mdCardContent', function ($location, $md
   };
 }]);
 
+app.directive('preloadImages', ['$location', '$mdCardContent', function ($location, $mdCardContent) {
+    return {
+        restrict: "AE",
+        link: function(scope, element, attrs) {
+            imagesLoaded( element, function() { // wait for ALL images to load
+                angular.element(element).find('.preloader img').addClass('loaded');
+            });
+        }
+    }
+}]);
+
 app.directive('previewMenu', ['widgets', '$stateParams', '$window', function (widgets, $stateParams, $window) {
   return {
     restrict: "AEC",
