@@ -14,6 +14,7 @@ Repository
 
 [https://stash.clickbooth.com/projects/RV2/repos/api-showcase/browse](https://stash.clickbooth.com/projects/RV2/repos/api-showcase/browse)
 
+
 License
 -------
 
@@ -25,13 +26,3 @@ transfer of this file outside of the Integraclick corporate network is
 strictly prohibited. Questions, comments or concerns should be directed to
 compliance@integraclick.com
 ```
-<!---
-test 1
-test 2
-test 3
-test 4
-test 5
-test 6
-test 7
-test 8
--->

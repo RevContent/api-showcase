@@ -1,0 +1,115 @@
+<md-content layout="column" layout-padding ng-controller="BuilderOptionsCtrl as ctrl">
+
+    <md-list layout="column" layout-padding>
+
+        <md-subheader class="md-accent" class="md-accent">Widget Settings</md-subheader>
+        <md-list-item>
+            <div layout="column" layout-fill>
+                <md-input-container>
+                    <label>Domain</label>
+                    <input ng-model="ctrl.options.domain" ng-change="ctrl.optionChange()">
+                </md-input-container>
+
+                <md-input-container>
+                    <label>API Key</label>
+                    <input ng-model="ctrl.options.api_key" ng-change="ctrl.optionChange()">
+                </md-input-container>
+
+                <md-input-container>
+                    <label>Publisher ID</label>
+                    <input ng-model="ctrl.options.pub_id" ng-change="ctrl.optionChange()">
+                </md-input-container>
+
+                <md-input-container>
+                    <label>Widget ID</label>
+                    <input ng-model="ctrl.options.widget_id" ng-change="ctrl.optionChange()">
+                </md-input-container>
+            </div>
+        </md-list-item>
+
+        <md-subheader class="md-accent" class="md-accent">Headline</md-subheader>
+        <md-list-item>
+            <md-input-container>
+                <label>Headline</label>
+                <input ng-model="ctrl.options.header" ng-change="ctrl.optionChange()">
+            </md-input-container>
+        </md-list-item>
+
+        <md-subheader class="md-accent" class="md-accent">Rev Position</md-subheader>
+        <md-list-item>
+            <md-select ng-model="ctrl.options.rev_position" ng-change="ctrl.optionChange()" aria-label="Rev Position">
+                <md-option ng-repeat="position in ctrl.options.rev_positions" value="{{position.key}}">{{position.value}}</md-option>
+            </md-select>
+        </md-list-item>
+
+        <md-subheader class="md-accent" class="md-accent">Sponsored Count</md-subheader>
+        <md-list-item>
+            <md-input-container>
+                <label>Sponsored Count</label>
+                <input ng-model="ctrl.options.sponsored" ng-change="ctrl.optionChange()">
+            </md-input-container>
+        </md-list-item>
+
+        <md-subheader class="md-accent" class="md-accent">Next Effect</md-subheader>
+        <md-list-item>
+            <md-switch ng-model="ctrl.options.next_effect" ng-change="ctrl.optionChange()" aria-label="Next Effect"></md-switch>
+            <span ng-bind="ctrl.options.next_effect ? 'Yes' : 'No'"></span>
+        </md-list-item>
+
+        <md-subheader class="md-accent" class="md-accent">Devices</md-subheader>
+         <md-list-item>
+            <div layout="column">
+                <div flex="50">
+                    <md-checkbox aria-label="Phone" ng-model="ctrl.options.devices.phone" ng-change="ctrl.optionChange()">Phone</md-checkbox>
+                </div>
+                <div flex="50">
+                    <md-checkbox aria-label="Tablet" ng-model="ctrl.options.devices.tablet" ng-change="ctrl.optionChange()">Tablet</md-checkbox>
+                </div>
+                <div flex="50">
+                    <md-checkbox aria-label="Desktop" ng-model="ctrl.options.devices.desktop" ng-change="ctrl.optionChange()">Desktop</md-checkbox>
+                </div>
+             </div>
+        </md-list-item>
+
+        <md-subheader class="md-accent" class="md-accent">Per Row</md-subheader>
+        <md-list-item>
+            <div layout="column" layout-fill>
+                <div flex layout="column">
+                    <span class="md-body-1">Extra Extra Small</span>
+                    <md-slider ng-class="{'md-primary': (ctrl.options.size == 1)}" flex md-discrete ng-model="ctrl.options.per_row.xxs" ng-change="ctrl.perRowChange()" step="1" min="1" max="10" aria-label="Extra Extra Small"></md-slider>
+                </div>
+
+                <div layout="column">
+                    <span class="md-body-1">Extra Small</span>
+                    <md-slider ng-class="{'md-primary': (ctrl.options.size == 2)}" flex md-discrete ng-model="ctrl.options.per_row.xs" ng-change="ctrl.perRowChange()" step="1" min="1" max="10" aria-label="Extra Small"></md-slider>
+                </div>
+
+                <div layout="column">
+                    <span class="md-body-1">Small</span>
+                    <md-slider ng-class="{'md-primary': (ctrl.options.size == 3)}" flex md-discrete ng-model="ctrl.options.per_row.sm" ng-change="ctrl.perRowChange()" step="1" min="1" max="10" aria-label="Small"></md-slider>
+                </div>
+
+                <div layout="column">
+                    <span class="md-body-1">Medium</span>
+                    <md-slider ng-class="{'md-primary': (ctrl.options.size == 4)}" flex md-discrete ng-model="ctrl.options.per_row.md" ng-change="ctrl.perRowChange()" step="1" min="1" max="10" aria-label="Medium"></md-slider>
+                </div>
+
+                <div layout="column">
+                    <span class="md-body-1">Large</span>
+                    <md-slider ng-class="{'md-primary': (ctrl.options.size == 5)}" flex md-discrete ng-model="ctrl.options.per_row.lg" ng-change="ctrl.perRowChange()" step="1" min="1" max="10" aria-label="Large"></md-slider>
+                </div>
+
+                <div layout="column">
+                    <span class="md-body-1">Extra Large</span>
+                    <md-slider ng-class="{'md-primary': (ctrl.options.size == 6)}" flex md-discrete ng-model="ctrl.options.per_row.xl" ng-change="ctrl.perRowChange()" step="1" min="1" max="10" aria-label="Extra Large"></md-slider>
+                </div>
+
+                <div layout="column">
+                    <span class="md-body-1">Extra Extra Large</span>
+                    <md-slider ng-class="{'md-primary': (ctrl.options.size == 7)}" flex md-discrete ng-model="ctrl.options.per_row.xxl" ng-change="ctrl.perRowChange()" step="1" min="1" max="10" aria-label="Extra Extra Large"></md-slider>
+                </div>
+            </div>
+        </md-list-item>
+    </md-list>
+
+</md-content>

@@ -1,8 +1,8 @@
 {
-  "name": "rev-flicker",
-  "description": "Scrolling Gallery",
+  "name": "rev-slider",
+  "description": "Content Gallery",
   "homepage": "http://labs.revcontent.com",
-  "version": "0.1.1",
+  "version": "0.1.0",
   "repository": {
     "url": "git:///Revcontent/api-showcase.git"
   },

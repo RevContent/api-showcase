@@ -1,0 +1,42 @@
+<div class="container container-builder-header" layout="column" layout-fill layout-align="start center">
+
+    <md-content ng-cloak style="background:transparent;" layout="column" layout-fill>
+
+        <div layout layout-fill preview-menu></div>
+
+        <div layout layout-fill>
+            <div layout layout-align="center center" style="position: absolute;right: 0;top: -30px;">
+                <span ng-bind="ctrl.slider.type == 'Discrete' ? 'Breakpoints' : 'Fluid'"></span>
+                <md-switch ng-model="ctrl.slider.type" aria-label="Slider Type" ng-true-value="'Fluid'" ng-false-value="'Discrete'" aria-label="Slider Type"></md-switch>
+            </div>
+
+            <div layout layout-fill layout-padding>
+                <md-card flex layout layout-padding>
+                    <div flex layout="column" layout-padding layout-gt-sm="row">
+
+                        <md-button style="margin-left:12px; margin-right:12px;" class="md-raised md-accent" ng-click="ctrl.toggleNav()">Edit Options</md-button>
+
+                        <div flex layout="column" layout-fill>
+
+                            <md-slider ng-show="ctrl.slider.type == 'Fluid'" flex ng-change="ctrl.sliderChange()" step="1" min="{{ ctrl.slider.min }}" max="{{ ctrl.slider.max }}" ng-model="ctrl.slider.value" aria-label="width"></md-slider>
+
+                            <md-slider ng-show="ctrl.slider.type == 'Discrete'" flex md-discrete ng-model="ctrl.options.size" ng-change="ctrl.sliderChangeDiscrete()" step="1" min="1" max="7" aria-label="width"></md-slider>
+                        </div>
+                    </div>
+                </md-card>
+            </div>
+        </div>
+    </md-content>
+</div>
+
+<div class="container-builder" layout="column" layout-align="center center" layout-fill>
+    <div id="widgetContainer">
+        <md-card layout layout-padding>
+            <div flex>
+                <div ng-style="{width: ctrl.slider.value}">
+                    <div rev-flicker></div>
+                </div>
+            </div>
+        </md-card>
+    </div>
+</div>

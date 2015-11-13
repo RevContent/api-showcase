@@ -32,6 +32,7 @@ RevFlicker({
     rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right'),
     next_effect: true,
     sponsored: 10,
+    internal: false,
     dots: false,
     header: 'Trending Now',
     devices: [
@@ -71,6 +72,7 @@ RevFlicker({
                 desktop: true
             },
             sponsored: 10,
+            internal: false,
             dots: false,
             devices: [
                 'phone', 'tablet', 'desktop'
@@ -91,7 +93,7 @@ RevFlicker({
 
         var that = this;
         //append injrected style
-        revUtils.appendStyle('/* inject:css */#rev-flicker.rev-flicker:focus,.flickity-enabled:focus{outline:0}.rc-about,.rc-about h2{font-family:Arial,sans-serif}.flickity-enabled{position:relative}.flickity-viewport{overflow:hidden;position:relative;height:100%}.flickity-slider{position:absolute;width:100%;height:100%}.flickity-enabled.is-draggable{-webkit-tap-highlight-color:transparent;tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.flickity-enabled.is-draggable .flickity-viewport{cursor:move;cursor:grab}.flickity-enabled.is-draggable .flickity-viewport.is-pointer-down{cursor:grabbing}.flickity-prev-next-button{position:absolute;top:50%;width:44px;height:44px;border:none;border-radius:50%;background:#fff;background:hsla(0,0%,100%,.75);cursor:pointer;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}.flickity-prev-next-button:hover{background:#fff}.flickity-prev-next-button:focus{outline:0;box-shadow:0 0 0 5px #09F}.flickity-prev-next-button:active{filter:alpha(opacity=60);opacity:.6}.flickity-prev-next-button.previous{left:10px}.flickity-prev-next-button.next{right:10px}.flickity-rtl .flickity-prev-next-button.previous{left:auto;right:10px}.flickity-rtl .flickity-prev-next-button.next{right:auto;left:10px}.flickity-prev-next-button:disabled{filter:alpha(opacity=30);opacity:.3;cursor:auto}.flickity-prev-next-button svg{position:absolute;left:20%;top:20%;width:60%;height:60%}.flickity-prev-next-button .arrow{fill:#333}.flickity-prev-next-button.no-svg{color:#333;font-size:26px}.flickity-page-dots{position:absolute;width:100%;bottom:-25px;padding:0;margin:0;list-style:none;text-align:center;line-height:1}.flickity-rtl .flickity-page-dots{direction:rtl}.flickity-page-dots .dot{display:inline-block;width:10px;height:10px;margin:0 8px;background:#333;border-radius:50%;filter:alpha(opacity=25);opacity:.25;cursor:pointer}.flickity-page-dots .dot.is-selected{filter:alpha(opacity=100);opacity:1}#rev-flicker.rev-flicker{clear:both;margin:4px}#rev-flicker.rev-flicker *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-flicker.rev-flicker .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-flicker.rev-flicker .flickity-viewport{clear:both}#rev-flicker.rev-flicker .rev-sponsored{line-height:24px;font-size:12px}#rev-flicker.rev-flicker .rev-sponsored.bottom-right,#rev-flicker.rev-flicker .rev-sponsored.top-right{float:right}#rev-flicker.rev-flicker .rev-sponsored.top-right a{vertical-align:-5px}#rev-flicker.rev-flicker .flickity-prev-next-button{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-flicker.rev-flicker .flickity-prev-next-button:disabled{opacity:0}#rev-flicker.rev-flicker .rev-sponsored a{color:#999}#rev-flicker.rev-flicker a,#rev-flicker.rev-flicker a:focus,#rev-flicker.rev-flicker a:hover{text-decoration:none}#rev-flicker.rev-flicker .rev-ad a{display:block;color:#222}#rev-flicker.rev-flicker .rev-image{-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee}#rev-flicker.rev-flicker .rev-image img{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-flicker.rev-flicker.loaded .rev-image{background:0 0}#rev-flicker.rev-flicker.loaded .rev-image img{opacity:1}#rev-flicker.rev-flicker .rev-headline,#rev-flicker.rev-flicker .rev-provider{margin:0 10px;text-align:left}#rev-flicker.rev-flicker .rev-headline{margin-top:12px;height:40px;overflow:hidden}#rev-flicker.rev-flicker .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-flicker.rev-flicker .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px}#rev-flicker.rev-flicker .rev-ad{border:1px solid #eee;border-radius:5px;overflow:hidden;background:#fff}#rev-flicker .rev-content{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-flicker .rev-content.rev-next{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:.5}.closeButton{position:absolute;cursor:pointer;right:10px}a{cursor:pointer!important}.revDialogBoxWrap{display:none;z-index:2147483641}.revDialogBoxOverlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";filter:alpha(opacity=50);z-index:2147483641}.vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}.revDialogBox{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}.normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}.full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}.revDialogHeader{height:20px}.rc-about{font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}.rc-about .rc-logo{background:url(https://www.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}.rc-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}.rc-about p#main{text-align:left}.rc-opt-out,.rc-well{text-align:center}.rc-about h2{color:#777;font-size:16px;line-height:18px}.rc-about a{color:#00cb43}.rc-well{border:1px solid #E0E0E0;padding:20px;border-radius:2px;margin:20px 0}.rc-well h2{margin-top:0}.rc-well p{margin-bottom:0}.rc-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-flicker');
+        revUtils.appendStyle('/* inject:css */#rev-flicker.rev-flicker:focus,.flickity-enabled:focus{outline:0}.flickity-enabled{position:relative}.flickity-viewport{overflow:hidden;position:relative;height:100%}.flickity-slider{position:absolute;width:100%;height:100%}.flickity-enabled.is-draggable{-webkit-tap-highlight-color:transparent;tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.flickity-enabled.is-draggable .flickity-viewport{cursor:move;cursor:-webkit-grab;cursor:grab}.flickity-enabled.is-draggable .flickity-viewport.is-pointer-down{cursor:-webkit-grabbing;cursor:grabbing}.flickity-prev-next-button{position:absolute;top:50%;width:44px;height:44px;border:none;border-radius:50%;background:#fff;background:hsla(0,0%,100%,.75);cursor:pointer;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}.flickity-prev-next-button:hover{background:#fff}.flickity-prev-next-button:focus{outline:0;box-shadow:0 0 0 5px #09F}.flickity-prev-next-button:active{filter:alpha(opacity=60);opacity:.6}.flickity-prev-next-button.previous{left:10px}.flickity-prev-next-button.next{right:10px}.flickity-rtl .flickity-prev-next-button.previous{left:auto;right:10px}.flickity-rtl .flickity-prev-next-button.next{right:auto;left:10px}.flickity-prev-next-button:disabled{filter:alpha(opacity=30);opacity:.3;cursor:auto}.flickity-prev-next-button svg{position:absolute;left:20%;top:20%;width:60%;height:60%}.flickity-prev-next-button .arrow{fill:#333}.flickity-prev-next-button.no-svg{color:#333;font-size:26px}.flickity-page-dots{position:absolute;width:100%;bottom:-25px;padding:0;margin:0;list-style:none;text-align:center;line-height:1}.flickity-rtl .flickity-page-dots{direction:rtl}.flickity-page-dots .dot{display:inline-block;width:10px;height:10px;margin:0 8px;background:#333;border-radius:50%;filter:alpha(opacity=25);opacity:.25;cursor:pointer}.flickity-page-dots .dot.is-selected{filter:alpha(opacity=100);opacity:1}#rev-flicker.rev-flicker{clear:both;margin:4px}#rev-flicker.rev-flicker *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-flicker.rev-flicker .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-flicker.rev-flicker .flickity-viewport{clear:both}#rev-flicker.rev-flicker .rev-sponsored{line-height:24px;font-size:12px}#rev-flicker.rev-flicker .rev-sponsored.bottom-right,#rev-flicker.rev-flicker .rev-sponsored.top-right{float:right}#rev-flicker.rev-flicker .rev-sponsored.top-right a{vertical-align:-5px}#rev-flicker.rev-flicker .flickity-prev-next-button{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-flicker.rev-flicker .flickity-prev-next-button:disabled{opacity:0}#rev-flicker.rev-flicker .rev-sponsored a{color:#999}#rev-flicker.rev-flicker a,#rev-flicker.rev-flicker a:focus,#rev-flicker.rev-flicker a:hover{text-decoration:none}#rev-flicker.rev-flicker .rev-ad a{display:block;color:#222}#rev-flicker.rev-flicker .rev-image{-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee}#rev-flicker.rev-flicker .rev-image img{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-flicker.rev-flicker.loaded .rev-image{background:0 0}#rev-flicker.rev-flicker.loaded .rev-image img{opacity:1}#rev-flicker.rev-flicker .rev-headline,#rev-flicker.rev-flicker .rev-provider{margin:0 10px;text-align:left}#rev-flicker.rev-flicker .rev-headline{margin-top:12px;height:40px;overflow:hidden}#rev-flicker.rev-flicker .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-flicker.rev-flicker .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px}#rev-flicker.rev-flicker .rev-ad{border:1px solid #eee;border-radius:5px;overflow:hidden;background:#fff}#rev-flicker .rev-content{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-flicker .rev-content.rev-next{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:.5}/* endinject */', 'rev-flicker');
 
         // append a new element to the flicker
         var flickerElement = document.createElement('div');
@@ -116,23 +118,22 @@ RevFlicker({
         this.getContainerWidth();
         this.emitter.on('containerReady', function() {
             that.setUp();
+            that.appendElements();
             that.preData();
             that.getData();
         });
-
-        if (typeof RevDialog !== "undefined") {
-            window.revDialog = new RevDialog();
-        }
 
         revUtils.addEventListener(window, 'resize', function() {
             that.resize();
         });
 
-
+        this.flickity.on( 'cellSelect', function() {
+            that.emitter.emit('cellSelect');
+        });
     };
 
     RevFlicker.prototype.resize = function() {
-        this.containerWidth = this.flickity.element.offsetWidth;
+        this.getContainerWidth(true);
 
         this.setUp();
 
@@ -165,28 +166,38 @@ RevFlicker({
     };
 
     RevFlicker.prototype.appendElements = function() {
-        var header = document.createElement('h2');
-        header.innerHTML = this.options.header;
-        revUtils.addClass(header, 'rev-header');
-        revUtils.prepend(this.flickity.element, header);
+        if (this.header) {
+            revUtils.remove(this.header);
+        }
+        this.header = document.createElement('h2');
+        this.header.innerHTML = this.options.header;
+        revUtils.addClass(this.header, 'rev-header');
+        revUtils.prepend(this.flickity.element, this.header);
 
-        var sponsored = document.createElement('div');
-        revUtils.addClass(sponsored, 'rev-sponsored');
-        sponsored.innerHTML = '<a id="sponsored-link" onclick="revDialog.showDialog();" >Sponsored by Revcontent</a>';
+        if (this.sponsored) {
+            revUtils.remove(this.sponsored);
+        }
+        this.sponsored = document.createElement('div');
+        revUtils.addClass(this.sponsored, 'rev-sponsored');
+        this.sponsored.innerHTML = '<a href="http://revcontent.com" target="_blank">Sponsored by Revcontent</a>';
         if (this.options.rev_position == 'top_right') {
-            revUtils.addClass(sponsored, 'top-right')
-            revUtils.prepend(this.flickity.element, sponsored);
+            revUtils.addClass(this.sponsored, 'top-right')
+            revUtils.prepend(this.flickity.element, this.sponsored);
         } else if (this.options.rev_position == 'bottom_left' || this.options.rev_position == 'bottom_right') {
-            revUtils.addClass(sponsored, this.options.rev_position.replace('_', '-'));
-            revUtils.append(this.flickity.element, sponsored);
+            revUtils.addClass(this.sponsored, this.options.rev_position.replace('_', '-'));
+            revUtils.append(this.flickity.element, this.sponsored);
         }
     };
 
-    RevFlicker.prototype.getContainerWidth = function() {
+    RevFlicker.prototype.getContainerWidth = function(ready) {
+        if (ready) {
+            this.containerWidth = this.flickity.element.parentNode.offsetWidth;
+            return;
+        }
         // HACK for Chrome - sometimes the width will be 0
         var that = this;
         function check() {
-            var containerWidth = that.flickity.element.offsetWidth;
+            var containerWidth = that.flickity.element.parentNode.offsetWidth;
             if(containerWidth > 0) {
                 that.containerWidth = containerWidth;
                 // emit event so we can continue
@@ -248,9 +259,43 @@ RevFlicker({
         this.preloaderHeight = Math.round(this.columnWidth * (this.imageHeight / this.imageWidth));
     };
 
+    RevFlicker.prototype.update = function(newOpts, oldOpts) {
+        this.options = revUtils.extend(this.options, newOpts);
+
+        if ( (newOpts.size !== oldOpts.size) || (newOpts.realSize !== oldOpts.realSize) || (newOpts.per_row !== oldOpts.per_row)) {
+            this.resize();
+        }
+
+        if (newOpts.sponsored !== oldOpts.sponsored) {
+            this.preData();
+            this.getData();
+            this.flickity.reloadCells();
+            this.flickity.reposition();
+        }
+
+        if ((newOpts.header !== oldOpts.header) || newOpts.rev_position !== oldOpts.rev_position) {
+            this.appendElements();
+        }
+
+        if (newOpts.next_effect !== oldOpts.next_effect) {
+            this.nextEffect();
+        }
+    };
+
     RevFlicker.prototype.preData = function() {
+
+        var content = this.flickity.element.querySelectorAll('.rev-content');
+        var index = content.length;
+        if (content.length > this.options.sponsored) {
+            var index = this.options.sponsored;
+            for (var i = this.options.sponsored; i < content.length; i++) {
+                revUtils.remove(content[i]);
+            }
+        }
+
         var that = this;
-        for (var i = 0; i < this.options.sponsored; i++) {
+
+        for (var j = index; j < this.options.sponsored; j++) {
             var html = '<div class="rev-ad">' +
                         '<a href="" target="_blank">' +
                             '<div class="rev-image" style="height:'+ that.preloaderHeight +'px"><img src=""/></div>' +
@@ -265,7 +310,7 @@ RevFlicker({
 
             revUtils.addClass(cell, 'rev-content');
             // next in line gets special class
-            if (that.options.next_effect && i >= that.perRow) {
+            if (that.options.next_effect && j >= that.perRow) {
                 revUtils.addClass(cell, 'rev-next');
             }
 
@@ -274,38 +319,54 @@ RevFlicker({
             that.flickity.append(cell);
         }
 
-        // append elements
-        that.appendElements();
-
         if (that.options.next_effect) {
             that.selectedIndex = that.flickity.selectedIndex;
-            that.flickity.on( 'cellSelect', function() {
-                that.nextEffect();
-            });
+            that.attachNextEffect();
         }
     };
 
+    RevFlicker.prototype.attachNextEffect = function() {
+        var that = this;
+        this.emitter.on( 'cellSelect', function() {
+            return that.nextEffect();
+        });
+    };
+
     RevFlicker.prototype.nextEffect = function() {
-        if (this.selectedIndex != this.flickity.selectedIndex) { // only do something when index changes
-            this.selectedIndex = this.flickity.selectedIndex;
-            var content = this.flickity.element.querySelectorAll('.rev-content');
-            var nextIndex = this.selectedIndex + this.perRow;
-            var last = this.selectedIndex >= this.options.sponsored - this.perRow;
-            for (var i = 0; i < content.length; i++) {
-                if (last) { // none left to half so all are visible
-                    revUtils.removeClass(content[i], 'rev-next');
-                } else if (i >= nextIndex) {
-                    revUtils.addClass(content[i], 'rev-next');
-                } else {
-                    revUtils.removeClass(content[i], 'rev-next');
+        if (this.options.next_effect) {
+            if (!this.emitter.getListeners('cellSelect').length) {
+                this.attachNextEffect();
+            }
+            if (this.selectedIndex != this.flickity.selectedIndex) { // only do something when index changes
+                this.selectedIndex = this.flickity.selectedIndex;
+                var content = this.flickity.element.querySelectorAll('.rev-content');
+                var nextIndex = this.selectedIndex + this.perRow;
+                var last = this.selectedIndex >= this.options.sponsored - this.perRow;
+                for (var i = 0; i < content.length; i++) {
+                    if (last) { // none left to half so all are visible
+                        revUtils.removeClass(content[i], 'rev-next');
+                    } else if (i >= nextIndex) {
+                        revUtils.addClass(content[i], 'rev-next');
+                    } else {
+                        revUtils.removeClass(content[i], 'rev-next');
+                    }
                 }
             }
+        } else {
+            var content = this.flickity.element.querySelectorAll('.rev-content.rev-next');
+            for (var i = 0; i < content.length; i++) {
+                revUtils.removeClass(content[i], 'rev-next');
+            }
         }
+        return this.options.next_effect ? false : true;
     };
 
     RevFlicker.prototype.getData = function() {
 
-        var url = this.options.url + '?img_h='+ this.imageHeight +'&img_w='+ this.imageWidth +'&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + this.options.sponsored + '&sponsored_offset=0&internal_count=0&api_source=flick';
+        var sponsored = this.options.internal ? 0 : this.options.sponsored;
+        var internal = this.options.internal ? this.options.internal : 0;
+
+        var url = this.options.url + '?img_h='+ this.imageHeight +'&img_w='+ this.imageWidth +'&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + sponsored + '&internal_count=' + internal + '&sponsored_offset=0&internal_offset=0&api_source=flick';
         var that = this;
         revApi.request(url, function(resp) {
 
