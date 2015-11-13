@@ -22,7 +22,7 @@ a {
     height:100%;
     background-color:black;
     opacity:.5; /* Sets opacity so it's partly transparent */
-    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; /* IE transparency */
+    /*-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";*/ /* IE transparency */
     filter:alpha(opacity=50); /* More IE transparency */
     z-index:2147483641;
 }

@@ -130,6 +130,10 @@ RevFlicker({
         this.flickity.on( 'cellSelect', function() {
             that.emitter.emit('cellSelect');
         });
+
+        if(typeof window.revDialog !== undefined) {
+            window.revDialog = new RevDialog();
+        }
     };
 
     RevFlicker.prototype.resize = function() {
@@ -179,7 +183,7 @@ RevFlicker({
         }
         this.sponsored = document.createElement('div');
         revUtils.addClass(this.sponsored, 'rev-sponsored');
-        this.sponsored.innerHTML = '<a href="http://revcontent.com" target="_blank">Sponsored by Revcontent</a>';
+        this.sponsored.innerHTML = '<a onclick="revDialog.showDialog();">Sponsored by Revcontent</a>';
         if (this.options.rev_position == 'top_right') {
             revUtils.addClass(this.sponsored, 'top-right')
             revUtils.prepend(this.flickity.element, this.sponsored);
