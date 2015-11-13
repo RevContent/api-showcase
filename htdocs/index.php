@@ -27,6 +27,8 @@
         <script src="app/resources/vendor/highlightjs/highlight.pack.js"></script>
         <script src="app/resources/vendor/re-tree/re-tree.js"></script>
         <script src="app/resources/vendor/ng-device-detector/ng-device-detector.js"></script>
+        <script src="build/revslider.min.js"></script>
+        <script src="build/revflicker.min.js"></script>
 
         <!-- app js -->
         <script src="app/resources/js/app/app.module.js"></script>
@@ -34,8 +36,10 @@
         <script src="app/resources/js/app/config/app.routes.js"></script>
         <script src="app/resources/js/app/app.filters.js"></script>
         <script src="app/resources/js/app/app.directives.js"></script>
+        <script src="app/resources/js/app/app.services.js"></script>
         <script src="app/resources/js/app/grid/grid.controller.js"></script>
         <script src="app/resources/js/app/docs/docs.controller.js"></script>
+        <script src="app/resources/js/app/preview/preview.controller.js"></script>
         <script src="app/resources/vendor/angular-highlightjs/angular-highlightjs.js"></script>
 
         <link href='//fonts.googleapis.com/css?family=Roboto:400,700,500,900,300' rel='stylesheet' type='text/css'>
@@ -107,9 +111,9 @@
             </md-toolbar>
         </header>
 
-        <main>
-            <div class="container" ui-view="main"></div>
-        </main>
+        <main ui-view="main" layout-align="center center" layout="column"></main>
+
+        <md-sidenav ui-view="sidenav" md-component-id="left" class="md-sidenav-left"></md-sidenav>
 
         <footer>
             <div class="container">
@@ -128,6 +132,22 @@
                 </div>
             </div>
         </footer>
+
+        <script type="text/ng-template" id="preview/menu.html">
+            <md-menu flex layout layout-fill>
+                <md-button style="text-transform:none;" ng-click="$mdOpenMenu($event)" aria-label="Change Widget">
+                    <div layout>
+                        <h1 style="cursor:pointer;" class="md-headline">{{ menu.widgets[menu.id].title }}</h1>
+                        <md-icon md-menu-origin>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 36 36" style="pointer-events: none; display: block;"><path d="M10.5 15l7.5 7.5 7.5-7.5z"/></svg>
+                        </md-icon>
+                    </div>
+                </md-button>
+                <md-menu-content>
+                    <md-menu-item ng-repeat="(key, value) in menu.widgets"><md-button ng-click="menu.preview(key)">{{value.title}}</md-button></md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </script>
 
         <script>
          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
