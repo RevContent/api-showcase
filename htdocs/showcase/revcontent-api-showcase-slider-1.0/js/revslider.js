@@ -96,6 +96,10 @@ RevSlider({
             ad_border: true
         };
 
+        if(typeof window.revDialog !== undefined) {
+            window.revDialog = new RevDialog();
+        }
+
         // merge options
         this.options = revUtils.extend(defaults, opts);
 
@@ -189,7 +193,7 @@ RevSlider({
 
             var sponsored = document.createElement('div');
             revUtils.addClass(sponsored, 'rev-sponsored');
-            sponsored.innerHTML = '<a href="http://revcontent.com" target="_blank">Sponsored by Revcontent</a>';
+            sponsored.innerHTML = '<a onclick="revDialog.showDialog();">Sponsored by Revcontent</a>';
             if (that.options.rev_position == 'top_right') {
                 revUtils.addClass(sponsored, 'top-right')
                 revUtils.prepend(containerElement, sponsored);

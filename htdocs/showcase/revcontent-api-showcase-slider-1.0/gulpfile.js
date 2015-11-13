@@ -11,7 +11,7 @@ var autoprefixer = require('gulp-autoprefixer');
 gulp.task('default', ['buildjs']);
 
 gulp.task('minifycss', function() {
-    return gulp.src(['./css/revslider.css'])
+    return gulp.src(['./css/revslider.css', '../css/revdialog.css'])
         .pipe(concat('revslider.min.css'))
         .pipe(autoprefixer({
             browsers: ['> 1%'],
@@ -42,7 +42,7 @@ gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
       ' */',
       ''].join('\n');
 
-    return gulp.src(['./vendor/mobile-detect/mobile-detect.js', './vendor/imagesloaded/imagesloaded.pkgd.js', './vendor/any-grid/dist/any-grid.js', '../js/revutils.js', '../js/revdetect.js', '../js/revapi.js', './build/revslider.js'])
+    return gulp.src(['./vendor/mobile-detect/mobile-detect.js', './vendor/imagesloaded/imagesloaded.pkgd.js', './vendor/any-grid/dist/any-grid.js', '../js/revutils.js', '../js/revdialog.js', '../js/revdetect.js', '../js/revapi.js', './build/revslider.js'])
         .pipe(concat('revslider.pkgd.js'))
         .pipe(gulp.dest('./build'))
         .pipe(uglify({
