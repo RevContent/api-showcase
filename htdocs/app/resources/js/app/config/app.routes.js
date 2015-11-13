@@ -84,5 +84,13 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                     }
                 }
             }
+        })
+        .state('404', {
+            url: "*path",
+            views: {
+                main: {
+                    templateUrl: 'app/resources/js/app/404.html'
+                }
+            }
         });
 }]);
