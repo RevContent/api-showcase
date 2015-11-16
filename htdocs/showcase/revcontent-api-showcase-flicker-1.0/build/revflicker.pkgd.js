@@ -6479,7 +6479,7 @@ return utils;
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevDialog = factory(window);
+    window.revDialog = factory(window);
 
 }( window, function factory(window) {
 'use strict';
@@ -6488,11 +6488,14 @@ return utils;
         var that = this;
         this.id = 'opt-out';
         //this.url = url;
-
         this.render();
+        this.resizeEnd;
 
         this.addEventListener(window, 'resize', function() {
-            that.resize();
+            clearTimeout(that.resizeEnd);
+            that.resizeEnd = setTimeout(function() {
+                that.resize();
+            }, 100);
         });
     };
 
@@ -6508,42 +6511,42 @@ return utils;
     };
 
     RevDialog.prototype.setFullHeight = function() {
-        var revDialogBox = document.querySelector('.revDialogBox');
-        this.removeClass(revDialogBox, 'normal');
-        this.addClass(revDialogBox, 'full-screen');
+        var revDialogBox = document.querySelector('.rd-box');
+        this.removeClass(revDialogBox, 'rd-normal');
+        this.addClass(revDialogBox, 'rd-full-screen');
         revDialogBox.style.left = '15px';
         revDialogBox.style.top = '15px';
     };
 
     RevDialog.prototype.setNormalHeight = function() {
-        var revDialogBox = document.querySelector('.revDialogBox');
-        this.removeClass(revDialogBox, 'full-screen');
-        this.addClass(revDialogBox, 'normal');
+        var revDialogBox = document.querySelector('.rd-box');
+        this.removeClass(revDialogBox, 'rd-full-screen');
+        this.addClass(revDialogBox, 'rd-normal');
 
     };
 
     RevDialog.prototype.getContainerWidth = function() {
-        var revDialogBox = document.querySelector('.revDialogBox');
+        var revDialogBox = document.querySelector('.rd-box');
         return revDialogBox.offsetWidth;
     };
 
     RevDialog.prototype.getContainerHeight = function() {
-        var revDialogBox = document.querySelector('.revDialogBox');
+        var revDialogBox = document.querySelector('.rd-box');
         return revDialogBox.offsetWidth;
     };
 
 
     RevDialog.prototype.render = function() {
-        var html = '<div class="revDialogBoxWrap">' +
-                        '<div class="revDialogBoxOverlay" onclick="revDialog.closeDialog()"> &nbsp; </div>' +
-                        '<div class="vertical-offset" >' +
-                            '<div class="revDialogBox normal">' +
-                                '<div class="revDialogHeader">' +
-                                    '<a class="closeButton" onclick="revDialog.closeDialog()">' +
+        var html = '<div class="rd-box-wrap">' +
+                        '<div class="rd-box-overlay" onclick="revDialog.closeDialog()"> &nbsp; </div>' +
+                        '<div class="rd-vertical-offset" >' +
+                            '<div class="rd-box rd-normal">' +
+                                '<div class="rd-header">' +
+                                    '<a class="rd-close-button" onclick="revDialog.closeDialog()">' +
                                         '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>' +
                                     '</a>' +
                                 '</div>' +
-                                '<div class="revDialogContent">' +
+                                '<div class="rd-content">' +
                                     '<div class="rc-about rc-modal-content">' +
                                         '<a href="http://www.revcontent.com" target="_blank" class="rc-logo"></a>' +
                                         '<p id="main">The content you see here is paid for by the advertiser or content provider whose link you click on, and is recommended to you by <a href="http://www.revcontent.com" target="_blank">Revcontent</a>. As the leading platform for native advertising and content recommendation, <a href="http://www.revcontent.com" target="_blank">Revcontent</a> uses interest based targeting to select content that we think will be of particular interest to you. We encourage you to view our <a href="http://faq.revcontent.com/support/solutions/articles/5000615200-revcontent-s-privacy-policy">Privacy Policy</a> and your opt out options here: <a class="rc-opt-out-link" href="http://faq.revcontent.com/support/solutions/articles/5000615200" target="_blank">Opt Out Options</a></p>' +
@@ -6560,27 +6563,30 @@ return utils;
         var el = document.querySelector('#'+this.id);
         if (el) {this.remove(el);}
         var wrap = document.createElement('div');
+        wrap.className = 'revdialog';
         wrap.id = this.id;
         wrap.innerHTML = html;
-        this.append(document.getElementsByTagName("BODY")[0], wrap);
+        var bodyEl = document.getElementsByTagName("BODY")[0];
+        if (bodyEl !== undefined)
+            this.append(bodyEl, wrap);
 
     };
 
 
 
     RevDialog.prototype.showDialog = function() {
-        document.querySelector('.revDialogBoxWrap').style.display = 'block';
+        document.querySelector('.rd-box-wrap').style.display = 'block';
         this.resize();
         return false;
     };
 
     RevDialog.prototype.closeDialog = function() {
-        document.querySelector('.revDialogBoxWrap').style.display = 'none';
+        document.querySelector('.rd-box-wrap').style.display = 'none';
         return false;
     };
 
     RevDialog.prototype.centerDialog = function() {
-        var db = document.querySelector('.revDialogBox');
+        var db = document.querySelector('.rd-box');
         var w = db.offsetWidth;
         var h = db.offsetHeight;
 
@@ -6618,15 +6624,17 @@ return utils;
     };
 
     RevDialog.prototype.append = function(el, html) {
-        el.appendChild(html);
+        if (el !== undefined)
+            el.appendChild(html);
     };
 
     RevDialog.prototype.remove = function(el) {
         el.parentNode.removeChild(el);
     };
 
+    var rD = new RevDialog();
 
-    return RevDialog;
+    return rD;
 
 }));
 /**
@@ -6770,9 +6778,9 @@ RevFlicker({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevFlicker = factory(window, window.revUtils, window.revDetect, window.revApi);
+    window.RevFlicker = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDialog);
 
-}( window, function factory(window, revUtils, revDetect, revApi) {
+}( window, function factory(window, revUtils, revDetect, revApi, revDialog) {
 'use strict';
 
     var RevFlicker = function(opts) {
@@ -6817,7 +6825,7 @@ RevFlicker({
 
         var that = this;
         //append injrected style
-        revUtils.appendStyle('/* inject:css */#rev-flicker.rev-flicker:focus,.flickity-enabled:focus{outline:0}.rc-about,.rc-about h2{font-family:Arial,sans-serif}.flickity-enabled{position:relative}.flickity-viewport{overflow:hidden;position:relative;height:100%}.flickity-slider{position:absolute;width:100%;height:100%}.flickity-enabled.is-draggable{-webkit-tap-highlight-color:transparent;tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.flickity-enabled.is-draggable .flickity-viewport{cursor:move;cursor:grab}.flickity-enabled.is-draggable .flickity-viewport.is-pointer-down{cursor:grabbing}.flickity-prev-next-button{position:absolute;top:50%;width:44px;height:44px;border:none;border-radius:50%;background:#fff;background:hsla(0,0%,100%,.75);cursor:pointer;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}.flickity-prev-next-button:hover{background:#fff}.flickity-prev-next-button:focus{outline:0;box-shadow:0 0 0 5px #09F}.flickity-prev-next-button:active{filter:alpha(opacity=60);opacity:.6}.flickity-prev-next-button.previous{left:10px}.flickity-prev-next-button.next{right:10px}.flickity-rtl .flickity-prev-next-button.previous{left:auto;right:10px}.flickity-rtl .flickity-prev-next-button.next{right:auto;left:10px}.flickity-prev-next-button:disabled{filter:alpha(opacity=30);opacity:.3;cursor:auto}.flickity-prev-next-button svg{position:absolute;left:20%;top:20%;width:60%;height:60%}.flickity-prev-next-button .arrow{fill:#333}.flickity-prev-next-button.no-svg{color:#333;font-size:26px}.flickity-page-dots{position:absolute;width:100%;bottom:-25px;padding:0;margin:0;list-style:none;text-align:center;line-height:1}.flickity-rtl .flickity-page-dots{direction:rtl}.flickity-page-dots .dot{display:inline-block;width:10px;height:10px;margin:0 8px;background:#333;border-radius:50%;filter:alpha(opacity=25);opacity:.25;cursor:pointer}.flickity-page-dots .dot.is-selected{filter:alpha(opacity=100);opacity:1}#rev-flicker.rev-flicker{clear:both;margin:4px}#rev-flicker.rev-flicker *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-flicker.rev-flicker .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-flicker.rev-flicker .flickity-viewport{clear:both}#rev-flicker.rev-flicker .rev-sponsored{line-height:24px;font-size:12px}#rev-flicker.rev-flicker .rev-sponsored.bottom-right,#rev-flicker.rev-flicker .rev-sponsored.top-right{float:right}#rev-flicker.rev-flicker .rev-sponsored.top-right a{vertical-align:-5px}#rev-flicker.rev-flicker .flickity-prev-next-button{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-flicker.rev-flicker .flickity-prev-next-button:disabled{opacity:0}#rev-flicker.rev-flicker .rev-sponsored a{color:#999}#rev-flicker.rev-flicker a,#rev-flicker.rev-flicker a:focus,#rev-flicker.rev-flicker a:hover{text-decoration:none}#rev-flicker.rev-flicker .rev-ad a{display:block;color:#222}#rev-flicker.rev-flicker .rev-image{-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee}#rev-flicker.rev-flicker .rev-image img{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-flicker.rev-flicker.loaded .rev-image{background:0 0}#rev-flicker.rev-flicker.loaded .rev-image img{opacity:1}#rev-flicker.rev-flicker .rev-headline,#rev-flicker.rev-flicker .rev-provider{margin:0 10px;text-align:left}#rev-flicker.rev-flicker .rev-headline{margin-top:12px;height:40px;overflow:hidden}#rev-flicker.rev-flicker .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-flicker.rev-flicker .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px}#rev-flicker.rev-flicker .rev-ad{border:1px solid #eee;border-radius:5px;overflow:hidden;background:#fff}#rev-flicker .rev-content{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-flicker .rev-content.rev-next{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:.5}.closeButton{position:absolute;cursor:pointer;right:10px}a{cursor:pointer!important}.revDialogBoxWrap{display:none;z-index:2147483641}.revDialogBoxOverlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}.vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}.revDialogBox{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}.normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}.full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}.revDialogHeader{height:20px}.rc-about{font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}.rc-about .rc-logo{background:url(https://www.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}.rc-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}.rc-about p#main{text-align:left}.rc-opt-out,.rc-well{text-align:center}.rc-about h2{color:#777;font-size:16px;line-height:18px}.rc-about a{color:#00cb43}.rc-well{border:1px solid #E0E0E0;padding:20px;border-radius:2px;margin:20px 0}.rc-well h2{margin-top:0}.rc-well p{margin-bottom:0}.rc-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-flicker');
+        revUtils.appendStyle('/* inject:css */#rev-flicker.rev-flicker:focus,.flickity-enabled:focus{outline:0}.rc-about,.rc-about h2{font-family:Arial,sans-serif}.flickity-enabled{position:relative}.flickity-viewport{overflow:hidden;position:relative;height:100%}.flickity-slider{position:absolute;width:100%;height:100%}.flickity-enabled.is-draggable{-webkit-tap-highlight-color:transparent;tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.flickity-enabled.is-draggable .flickity-viewport{cursor:move;cursor:grab}.flickity-enabled.is-draggable .flickity-viewport.is-pointer-down{cursor:grabbing}.flickity-prev-next-button{position:absolute;top:50%;width:44px;height:44px;border:none;border-radius:50%;background:#fff;background:hsla(0,0%,100%,.75);cursor:pointer;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}.flickity-prev-next-button:hover{background:#fff}.flickity-prev-next-button:focus{outline:0;box-shadow:0 0 0 5px #09F}.flickity-prev-next-button:active{filter:alpha(opacity=60);opacity:.6}.flickity-prev-next-button.previous{left:10px}.flickity-prev-next-button.next{right:10px}.flickity-rtl .flickity-prev-next-button.previous{left:auto;right:10px}.flickity-rtl .flickity-prev-next-button.next{right:auto;left:10px}.flickity-prev-next-button:disabled{filter:alpha(opacity=30);opacity:.3;cursor:auto}.flickity-prev-next-button svg{position:absolute;left:20%;top:20%;width:60%;height:60%}.flickity-prev-next-button .arrow{fill:#333}.flickity-prev-next-button.no-svg{color:#333;font-size:26px}.flickity-page-dots{position:absolute;width:100%;bottom:-25px;padding:0;margin:0;list-style:none;text-align:center;line-height:1}.flickity-rtl .flickity-page-dots{direction:rtl}.flickity-page-dots .dot{display:inline-block;width:10px;height:10px;margin:0 8px;background:#333;border-radius:50%;filter:alpha(opacity=25);opacity:.25;cursor:pointer}.flickity-page-dots .dot.is-selected{filter:alpha(opacity=100);opacity:1}#rev-flicker.rev-flicker{clear:both;margin:4px}#rev-flicker.rev-flicker *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-flicker.rev-flicker .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-flicker.rev-flicker .flickity-viewport{clear:both}#rev-flicker.rev-flicker .rev-sponsored{line-height:24px;font-size:12px}#rev-flicker.rev-flicker .rev-sponsored.bottom-right,#rev-flicker.rev-flicker .rev-sponsored.top-right{float:right}#rev-flicker.rev-flicker .rev-sponsored.top-right a{vertical-align:-5px}#rev-flicker.rev-flicker .flickity-prev-next-button{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-flicker.rev-flicker .flickity-prev-next-button:disabled{opacity:0}#rev-flicker.rev-flicker .rev-sponsored a{color:#999}#rev-flicker.rev-flicker a,#rev-flicker.rev-flicker a:focus,#rev-flicker.rev-flicker a:hover{text-decoration:none}#rev-flicker.rev-flicker .rev-ad a{display:block;color:#222}#rev-flicker.rev-flicker .rev-image{-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee}#rev-flicker.rev-flicker .rev-image img{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-flicker.rev-flicker.loaded .rev-image{background:0 0}#rev-flicker.rev-flicker.loaded .rev-image img{opacity:1}#rev-flicker.rev-flicker .rev-headline,#rev-flicker.rev-flicker .rev-provider{margin:0 10px;text-align:left}#rev-flicker.rev-flicker .rev-headline{margin-top:12px;height:40px;overflow:hidden}#rev-flicker.rev-flicker .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-flicker.rev-flicker .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px}#rev-flicker.rev-flicker .rev-ad{border:1px solid #eee;border-radius:5px;overflow:hidden;background:#fff}#rev-flicker .rev-content{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-flicker .rev-content.rev-next{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:.5}.rd-close-button{position:absolute;cursor:pointer;right:10px}a{cursor:pointer!important}.rd-box-wrap{display:none;z-index:2147483641}.rd-box-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}.rd-vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}.rd-box{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}.rd-normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}.rd-full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}.rd-header{height:20px}.rc-about{font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}.rc-about .rc-logo{background:url(https://www.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}.rc-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}.rc-about p#main{text-align:left}.rc-opt-out,.rc-well{text-align:center}.rc-about h2{color:#777;font-size:16px;line-height:18px}.rc-about a{color:#00cb43}.rc-well{border:1px solid #E0E0E0;padding:20px;border-radius:2px;margin:20px 0}.rc-well h2{margin-top:0}.rc-well p{margin-bottom:0}.rc-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-flicker');
 
         // append a new element to the flicker
         var flickerElement = document.createElement('div');
@@ -6854,10 +6862,6 @@ RevFlicker({
         this.flickity.on( 'cellSelect', function() {
             that.emitter.emit('cellSelect');
         });
-
-        if(typeof window.revDialog !== undefined) {
-            window.revDialog = new RevDialog();
-        }
     };
 
     RevFlicker.prototype.resize = function() {

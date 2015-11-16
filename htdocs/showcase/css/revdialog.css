@@ -1,4 +1,4 @@
-.closeButton {
+.rd-close-button {
     position: absolute;
     cursor: pointer;
     right: 10px;
@@ -9,12 +9,12 @@ a {
 }
 
 
-.revDialogBoxWrap { /* The div that shows/hides. */
+.rd-box-wrap { /* The div that shows/hides. */
     display:none; /* starts out hidden */
     z-index:2147483641; /* High z-index to ensure it appears above all content */
 }
 
-.revDialogBoxOverlay { /* Shades out background when selector is active */
+.rd-box-overlay { /* Shades out background when selector is active */
     position:fixed;
     top: 0;
     left: 0;
@@ -27,7 +27,7 @@ a {
     z-index:2147483641;
 }
 
-.vertical-offset { /* Fixed position to provide the vertical offset */
+.rd-vertical-offset { /* Fixed position to provide the vertical offset */
     position:fixed;
     display: table-cell;
     top: 0px;
@@ -36,7 +36,7 @@ a {
     z-index:2147483642; /* ensures box appears above overlay */
 }
 
-.revDialogBox { /* The actual box, centered in the fixed-position div */
+.rd-box { /* The actual box, centered in the fixed-position div */
     /* Whatever width you want the box to be */
     /* Everything below is just visual styling */
     position:absolute;
@@ -53,14 +53,14 @@ a {
     box-shadow:         3px 3px 10px 4px #555;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
 }
 
-.normal {
+.rd-normal {
     min-width: 270px;
     max-width: 435px;
     width: 90%;
     margin:10px auto;
 }
 
-.full-screen {
+.rd-full-screen {
     position:fixed;
     right:15px;
     left:15px;
@@ -68,11 +68,11 @@ a {
     bottom: 15px;
 }
 
-.revDialogHeader {
+.rd-header {
     height: 20px;
 }
 
-.revDialogContent {
+.rd-content {
     /*position: absolute;
     height: 100%;
     right:10px;

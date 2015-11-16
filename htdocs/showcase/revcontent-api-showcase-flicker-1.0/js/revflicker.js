@@ -46,9 +46,9 @@ RevFlicker({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevFlicker = factory(window, window.revUtils, window.revDetect, window.revApi);
+    window.RevFlicker = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDialog);
 
-}( window, function factory(window, revUtils, revDetect, revApi) {
+}( window, function factory(window, revUtils, revDetect, revApi, revDialog) {
 'use strict';
 
     var RevFlicker = function(opts) {
@@ -130,10 +130,6 @@ RevFlicker({
         this.flickity.on( 'cellSelect', function() {
             that.emitter.emit('cellSelect');
         });
-
-        if(typeof window.revDialog !== undefined) {
-            window.revDialog = new RevDialog();
-        }
     };
 
     RevFlicker.prototype.resize = function() {

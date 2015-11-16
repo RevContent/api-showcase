@@ -5020,7 +5020,7 @@ return utils;
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevDialog = factory(window);
+    window.revDialog = factory(window);
 
 }( window, function factory(window) {
 'use strict';
@@ -5029,11 +5029,14 @@ return utils;
         var that = this;
         this.id = 'opt-out';
         //this.url = url;
-
         this.render();
+        this.resizeEnd;
 
         this.addEventListener(window, 'resize', function() {
-            that.resize();
+            clearTimeout(that.resizeEnd);
+            that.resizeEnd = setTimeout(function() {
+                that.resize();
+            }, 100);
         });
     };
 
@@ -5049,42 +5052,42 @@ return utils;
     };
 
     RevDialog.prototype.setFullHeight = function() {
-        var revDialogBox = document.querySelector('.revDialogBox');
-        this.removeClass(revDialogBox, 'normal');
-        this.addClass(revDialogBox, 'full-screen');
+        var revDialogBox = document.querySelector('.rd-box');
+        this.removeClass(revDialogBox, 'rd-normal');
+        this.addClass(revDialogBox, 'rd-full-screen');
         revDialogBox.style.left = '15px';
         revDialogBox.style.top = '15px';
     };
 
     RevDialog.prototype.setNormalHeight = function() {
-        var revDialogBox = document.querySelector('.revDialogBox');
-        this.removeClass(revDialogBox, 'full-screen');
-        this.addClass(revDialogBox, 'normal');
+        var revDialogBox = document.querySelector('.rd-box');
+        this.removeClass(revDialogBox, 'rd-full-screen');
+        this.addClass(revDialogBox, 'rd-normal');
 
     };
 
     RevDialog.prototype.getContainerWidth = function() {
-        var revDialogBox = document.querySelector('.revDialogBox');
+        var revDialogBox = document.querySelector('.rd-box');
         return revDialogBox.offsetWidth;
     };
 
     RevDialog.prototype.getContainerHeight = function() {
-        var revDialogBox = document.querySelector('.revDialogBox');
+        var revDialogBox = document.querySelector('.rd-box');
         return revDialogBox.offsetWidth;
     };
 
 
     RevDialog.prototype.render = function() {
-        var html = '<div class="revDialogBoxWrap">' +
-                        '<div class="revDialogBoxOverlay" onclick="revDialog.closeDialog()"> &nbsp; </div>' +
-                        '<div class="vertical-offset" >' +
-                            '<div class="revDialogBox normal">' +
-                                '<div class="revDialogHeader">' +
-                                    '<a class="closeButton" onclick="revDialog.closeDialog()">' +
+        var html = '<div class="rd-box-wrap">' +
+                        '<div class="rd-box-overlay" onclick="revDialog.closeDialog()"> &nbsp; </div>' +
+                        '<div class="rd-vertical-offset" >' +
+                            '<div class="rd-box rd-normal">' +
+                                '<div class="rd-header">' +
+                                    '<a class="rd-close-button" onclick="revDialog.closeDialog()">' +
                                         '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>' +
                                     '</a>' +
                                 '</div>' +
-                                '<div class="revDialogContent">' +
+                                '<div class="rd-content">' +
                                     '<div class="rc-about rc-modal-content">' +
                                         '<a href="http://www.revcontent.com" target="_blank" class="rc-logo"></a>' +
                                         '<p id="main">The content you see here is paid for by the advertiser or content provider whose link you click on, and is recommended to you by <a href="http://www.revcontent.com" target="_blank">Revcontent</a>. As the leading platform for native advertising and content recommendation, <a href="http://www.revcontent.com" target="_blank">Revcontent</a> uses interest based targeting to select content that we think will be of particular interest to you. We encourage you to view our <a href="http://faq.revcontent.com/support/solutions/articles/5000615200-revcontent-s-privacy-policy">Privacy Policy</a> and your opt out options here: <a class="rc-opt-out-link" href="http://faq.revcontent.com/support/solutions/articles/5000615200" target="_blank">Opt Out Options</a></p>' +
@@ -5101,27 +5104,30 @@ return utils;
         var el = document.querySelector('#'+this.id);
         if (el) {this.remove(el);}
         var wrap = document.createElement('div');
+        wrap.className = 'revdialog';
         wrap.id = this.id;
         wrap.innerHTML = html;
-        this.append(document.getElementsByTagName("BODY")[0], wrap);
+        var bodyEl = document.getElementsByTagName("BODY")[0];
+        if (bodyEl !== undefined)
+            this.append(bodyEl, wrap);
 
     };
 
 
 
     RevDialog.prototype.showDialog = function() {
-        document.querySelector('.revDialogBoxWrap').style.display = 'block';
+        document.querySelector('.rd-box-wrap').style.display = 'block';
         this.resize();
         return false;
     };
 
     RevDialog.prototype.closeDialog = function() {
-        document.querySelector('.revDialogBoxWrap').style.display = 'none';
+        document.querySelector('.rd-box-wrap').style.display = 'none';
         return false;
     };
 
     RevDialog.prototype.centerDialog = function() {
-        var db = document.querySelector('.revDialogBox');
+        var db = document.querySelector('.rd-box');
         var w = db.offsetWidth;
         var h = db.offsetHeight;
 
@@ -5159,15 +5165,17 @@ return utils;
     };
 
     RevDialog.prototype.append = function(el, html) {
-        el.appendChild(html);
+        if (el !== undefined)
+            el.appendChild(html);
     };
 
     RevDialog.prototype.remove = function(el) {
         el.parentNode.removeChild(el);
     };
 
+    var rD = new RevDialog();
 
-    return RevDialog;
+    return rD;
 
 }));
 /**
@@ -5318,9 +5326,9 @@ RevSlider({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevSlider = factory(window, window.revUtils, window.revDetect, window.revApi);
+    window.RevSlider = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDialog);
 
-}( window, function factory(window, revUtils, revDetect, revApi) {
+}( window, function factory(window, revUtils, revDetect, revApi, revDialog) {
 'use strict';
 
     var RevSlider = function(opts) {
@@ -5361,10 +5369,6 @@ RevSlider({
             ad_border: true
         };
 
-        if(typeof window.revDialog !== undefined) {
-            window.revDialog = new RevDialog();
-        }
-
         // merge options
         this.options = revUtils.extend(defaults, opts);
 
@@ -5379,7 +5383,7 @@ RevSlider({
 
         var that = this;
 
-        revUtils.appendStyle('/* inject:css */#rev-slider a,#rev-slider a:focus,#rev-slider a:hover{text-decoration:none}.rc-about,.rc-about h2{font-family:Arial,sans-serif}#rev-slider,#rev-slider #rev-slider-grid,#rev-slider #rev-slider-grid-container{padding:0;width:100%}#rev-slider #rev-slider-grid-container{display:table;width:100%}#rev-slider{clear:both}#rev-slider *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-slider #rev-slider-grid-container>div{display:table-cell;vertical-align:middle}#rev-slider #rev-slider-grid-container .rev-btn-container{padding:0 30px}#rev-slider a{color:inherit}#rev-slider:focus{outline:0}#rev-slider .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-slider .rev-sponsored{line-height:24px;font-size:12px}#rev-slider .rev-sponsored.bottom-right,#rev-slider .rev-sponsored.top-right{float:right}#rev-slider .rev-sponsored.top-right a{vertical-align:-5px}#rev-slider .rev-sponsored a{color:#999}#rev-slider .rev-ad a{display:block;color:#222}#rev-slider .rev-image{position:relative;-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee}#rev-slider .rev-image img{position:absolute;top:0;left:0;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-slider.loaded .rev-image{background:0 0}#rev-slider.loaded .rev-image img{opacity:1}#rev-slider .rev-headline,#rev-slider .rev-provider{margin:0 10px;text-align:left}#rev-slider .rev-headline{margin-top:12px;height:40px;overflow:hidden}#rev-slider .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-slider .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px}#rev-slider .rev-ad{border-radius:5px;overflow:hidden;background:#fff}#rev-slider .rev-content{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-slider .rev-content.rev-next{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:.5}.closeButton{position:absolute;cursor:pointer;right:10px}a{cursor:pointer!important}.revDialogBoxWrap{display:none;z-index:2147483641}.revDialogBoxOverlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}.vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}.revDialogBox{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}.normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}.full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}.revDialogHeader{height:20px}.rc-about{font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}.rc-about .rc-logo{background:url(https://www.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}.rc-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}.rc-about p#main{text-align:left}.rc-opt-out,.rc-well{text-align:center}.rc-about h2{color:#777;font-size:16px;line-height:18px}.rc-about a{color:#00cb43}.rc-well{border:1px solid #E0E0E0;padding:20px;border-radius:2px;margin:20px 0}.rc-well h2{margin-top:0}.rc-well p{margin-bottom:0}.rc-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-slider');
+        revUtils.appendStyle('/* inject:css */#rev-slider a,#rev-slider a:focus,#rev-slider a:hover{text-decoration:none}.rc-about,.rc-about h2{font-family:Arial,sans-serif}#rev-slider,#rev-slider #rev-slider-grid,#rev-slider #rev-slider-grid-container{padding:0;width:100%}#rev-slider #rev-slider-grid-container{display:table;width:100%}#rev-slider{clear:both}#rev-slider *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-slider #rev-slider-grid-container>div{display:table-cell;vertical-align:middle}#rev-slider #rev-slider-grid-container .rev-btn-container{padding:0 30px}#rev-slider a{color:inherit}#rev-slider:focus{outline:0}#rev-slider .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-slider .rev-sponsored{line-height:24px;font-size:12px}#rev-slider .rev-sponsored.bottom-right,#rev-slider .rev-sponsored.top-right{float:right}#rev-slider .rev-sponsored.top-right a{vertical-align:-5px}#rev-slider .rev-sponsored a{color:#999}#rev-slider .rev-ad a{display:block;color:#222}#rev-slider .rev-image{position:relative;-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee}#rev-slider .rev-image img{position:absolute;top:0;left:0;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-slider.loaded .rev-image{background:0 0}#rev-slider.loaded .rev-image img{opacity:1}#rev-slider .rev-headline,#rev-slider .rev-provider{margin:0 10px;text-align:left}#rev-slider .rev-headline{margin-top:12px;height:40px;overflow:hidden}#rev-slider .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-slider .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px}#rev-slider .rev-ad{border-radius:5px;overflow:hidden;background:#fff}#rev-slider .rev-content{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-slider .rev-content.rev-next{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:.5}.rd-close-button{position:absolute;cursor:pointer;right:10px}a{cursor:pointer!important}.rd-box-wrap{display:none;z-index:2147483641}.rd-box-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}.rd-vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}.rd-box{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}.rd-normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}.rd-full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}.rd-header{height:20px}.rc-about{font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}.rc-about .rc-logo{background:url(https://www.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}.rc-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}.rc-about p#main{text-align:left}.rc-opt-out,.rc-well{text-align:center}.rc-about h2{color:#777;font-size:16px;line-height:18px}.rc-about a{color:#00cb43}.rc-well{border:1px solid #E0E0E0;padding:20px;border-radius:2px;margin:20px 0}.rc-well h2{margin-top:0}.rc-well p{margin-bottom:0}.rc-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-slider');
 
         var backBtn = document.createElement('div');
         backBtn.id = "back";

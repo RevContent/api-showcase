@@ -26,9 +26,9 @@ RevToaster({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevToaster = factory(window);
+    window.RevToaster = factory(window, window.revDialog);
 
-}( window, function factory(window) {
+}( window, function factory(window, revDialog) {
 'use strict';
 
     // ----- vars ----- //
@@ -63,9 +63,6 @@ RevToaster({
 
         window.addEventListener('touchmove', move);
 
-       if (typeof RevDialog !== "undefined") {
-           window.revDialog = new RevDialog();
-       }
     };
 
     RevToaster.defaults = {

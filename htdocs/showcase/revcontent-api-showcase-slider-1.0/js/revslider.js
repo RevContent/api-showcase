@@ -53,9 +53,9 @@ RevSlider({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevSlider = factory(window, window.revUtils, window.revDetect, window.revApi);
+    window.RevSlider = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDialog);
 
-}( window, function factory(window, revUtils, revDetect, revApi) {
+}( window, function factory(window, revUtils, revDetect, revApi, revDialog) {
 'use strict';
 
     var RevSlider = function(opts) {
@@ -95,10 +95,6 @@ RevSlider({
             url: 'https://trends.revcontent.com/api/v1/',
             ad_border: true
         };
-
-        if(typeof window.revDialog !== undefined) {
-            window.revDialog = new RevDialog();
-        }
 
         // merge options
         this.options = revUtils.extend(defaults, opts);
