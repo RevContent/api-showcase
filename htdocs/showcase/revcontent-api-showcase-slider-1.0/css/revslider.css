@@ -25,10 +25,10 @@
     padding:0;
 }
 
-#rev-slider #rev-slider-grid-container > div {
+/*#rev-slider #rev-slider-grid-container > div {
     display: table-cell;
     vertical-align: middle;
-}
+}*/
 
 #rev-slider #rev-slider-grid-container .rev-btn-container {
     padding: 0 30px;

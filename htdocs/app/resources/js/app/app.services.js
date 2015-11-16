@@ -151,6 +151,16 @@ app.service('options', function() {
         1500
     ];
 
+    this.rows = {
+        xxs: 2,
+        xs: 2,
+        sm: 2,
+        md: 2,
+        lg: 2,
+        xl: 2,
+        xxl: 2
+    };
+
     this.per_row = {
         xxs: 1,
         xs: 1,

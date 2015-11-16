@@ -1,9 +1,6 @@
 app.directive('mdCard', ['$location', '$mdCardContent', function ($location, $mdCardContent) {
   return {
     restrict: "AEC",
-    scope: {
-        document: '='
-    },
     link: function(scope, element, attrs) {
         element.on('click', function(e) {
             $mdCardContent.setClickEvent(e);
@@ -44,6 +41,7 @@ app.directive('previewMenu', ['widgets', '$stateParams', '$window', function (wi
 }]);
 
 app.directive('revSlider', ['$timeout', function ($timeout) {
+app.directive('revSlider', ['$timeout', 'options', function ($timeout, options) {
   return {
     restrict: "AE",
     scope: {
@@ -53,19 +51,29 @@ app.directive('revSlider', ['$timeout', function ($timeout) {
 
         var widget;
 
-        var options = {
-            element: element,
-            url: 'http://trends.revcontent.com/api/v1/',
-            api_key : 'bf3f270aa50d127f0f8b8c92a979d76aa1391d38',
-            pub_id : 7846,
-            widget_id : 13523,
-            domain : 'bustle.com',
-            rev_position: 'top_right'
-        };
+        $timeout(function() {
+            widget = new RevSlider({
+                element: element,
+                is_resize_bound: false,
+                devices: options.getDevices(),
+                header: options.header,
+                api_key : options.api_key,
+                pub_id : options.pub_id,
+                widget_id : options.widget_id,
+                domain : options.domain,
+                rev_position: options.rev_position,
+                rows: options.rows,
+                per_row: options.per_row
+            });
+        });
 
-        $.extend(options, scope.revSlider);
-
-        widget = new RevSlider(options);
+        var watcher = scope.$watch(function() { return options }, function(newOpts, oldOpts) {
+            if (newOpts != oldOpts) {
+                $timeout(function() {
+                    widget.update(newOpts, oldOpts);
+                });
+            }
+        }, true);
     }
   };
 }]);
