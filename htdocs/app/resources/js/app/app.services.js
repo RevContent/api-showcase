@@ -51,6 +51,13 @@ app.service('widgets', function() {
             link: 'revcontent-api-showcase-flicker-1.0/index.html',
             bg: '#F7F9F8',
             preview: true
+        },
+        sidenav: {
+            title: 'Sidenav',
+            img: 'sidenav.jpg',
+            description: 'With responsive styling and touch enabled gestures Flicker puts the fun into your content slider. You can configure the Flicker widget to show on phone, tablet and desktop and you can even decide how many units to display at various breakpoints. Include Flicker on your page and let the engagement begin!',
+            link: 'revcontent-api-showcase-sidenav-1.0/index.html',
+            preview: true
         }
     };
 });
@@ -100,6 +107,7 @@ app.service('options', function() {
     this.api_key = '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b';
     this.widget_id = 6181;
     this.pub_id = 945;
+    this.visible = true;
 
     this.size = 4;
 

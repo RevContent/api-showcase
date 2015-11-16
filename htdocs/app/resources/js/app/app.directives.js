@@ -40,7 +40,56 @@ app.directive('previewMenu', ['widgets', '$stateParams', '$window', function (wi
   };
 }]);
 
-app.directive('revSlider', ['$timeout', function ($timeout) {
+app.directive('revSidenav', ['$timeout', 'options', '$rootScope', function ($timeout, options, $rootScope) {
+  return {
+    restrict: "AE",
+    link: function(scope, element, attrs) {
+
+        var widget;
+        //close this thing when changing states, otherwise it just stays open on other pages
+        $rootScope.$on("$stateChangeStart", function() {
+            widget.hide();
+        });
+
+        options.inner_widget = {
+            name: 'slider',
+            options: {
+                per_row: 3,
+                rows: 10
+            }
+        };
+        options.width = 600;
+
+        widget = new RevSidenav({
+            width: options.width,
+            devices: options.getDevices(),
+            sponsored: options.sponsored,
+            header: options.header,
+            api_key : options.api_key,
+            pub_id : options.pub_id,
+            widget_id : options.widget_id,
+            domain : options.domain,
+            rev_position: options.rev_position,
+            inner_widget: options.inner_widget
+        });
+
+        var watcher = scope.$watch(function() { return options }, function(newOpts, oldOpts) {
+            if (newOpts != oldOpts) {
+                $timeout(function() {
+                    widget.update(newOpts, oldOpts);
+                });
+            }
+        }, true);
+
+        $timeout(function() {
+            widget.show();
+        });
+
+
+    }
+  };
+}]);
+
 app.directive('revSlider', ['$timeout', 'options', function ($timeout, options) {
   return {
     restrict: "AE",
@@ -78,8 +127,7 @@ app.directive('revSlider', ['$timeout', 'options', function ($timeout, options) 
   };
 }]);
 
-
-app.directive('revFlicker', ['$location', '$mdCardContent', '$timeout', 'options', function ($location, $mdCardContent, $timeout, options) {
+app.directive('revFlicker', ['$location', '$timeout', 'options', function ($location, $timeout, options) {
   return {
     restrict: "AE",
     link: function(scope, element, attrs) {

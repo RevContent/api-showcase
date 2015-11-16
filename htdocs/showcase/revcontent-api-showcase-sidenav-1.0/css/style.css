@@ -1,0 +1,15 @@
+body {
+    padding-top: 70px;
+}
+
+footer {
+    margin: 50px 0;
+}
+
+.row {
+    position: relative;
+}
+
+.navbar-nav {
+    margin-left: 20px;
+}

@@ -28,8 +28,9 @@
         <script src="app/resources/vendor/re-tree/re-tree.js"></script>
         <script src="app/resources/vendor/ng-device-detector/ng-device-detector.js"></script>
         <script src="app/resources/vendor/imagesloaded/imagesloaded.pkgd.js"></script>
-        <script src="build/revslider.min.js"></script>
-        <script src="build/revflicker.min.js"></script>
+        <script src="showcase/revcontent-api-showcase-slider-1.0/build/revslider.pkgd.js"></script>
+        <script src="showcase/revcontent-api-showcase-flicker-1.0/build/revflicker.pkgd.js"></script>
+        <script src="showcase/revcontent-api-showcase-sidenav-1.0/build/revsidenav.pkgd.js"></script>
 
         <!-- app js -->
         <script src="app/resources/js/app/app.module.js"></script>
