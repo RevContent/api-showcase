@@ -2,6 +2,7 @@
     position: absolute;
     cursor: pointer;
     right: 10px;
+    z-index: 10;
 }
 
 a {
@@ -70,6 +71,8 @@ a {
 
 #rev-opt-out .rd-header {
     height: 20px;
+    position: absolute;
+    right: 0;
 }
 
 #rev-opt-out .rd-content {
@@ -126,6 +129,7 @@ a {
     text-align: center;
     border-radius: 2px;
     margin: 20px 0;
+    margin-bottom: 0;
 }
 .rc-well h2 {
     margin-top: 0;
