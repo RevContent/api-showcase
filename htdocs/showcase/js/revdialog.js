@@ -11,9 +11,9 @@
 
     var RevDialog = function() {
         var that = this;
-        this.id = 'opt-out';
+        this.id = 'rev-opt-out';
         //this.url = url;
-        this.render();
+        setTimeout(function() {that.render();}, 100);
         this.resizeEnd;
 
         this.addEventListener(window, 'resize', function() {
