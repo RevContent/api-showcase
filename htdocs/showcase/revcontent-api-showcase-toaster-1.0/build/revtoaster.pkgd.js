@@ -1016,7 +1016,7 @@ function makeArray( obj ) {
 
 
     RevDialog.prototype.render = function() {
-        var html = '<div class="rd-box-wrap">' +
+        var html = '<div class="rd-box-wrap" style="display:none;">' +
                         '<div class="rd-box-overlay" onclick="revDialog.closeDialog()"> &nbsp; </div>' +
                         '<div class="rd-vertical-offset" >' +
                             '<div class="rd-box rd-normal">' +
