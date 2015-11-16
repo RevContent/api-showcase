@@ -14,7 +14,8 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
             views: {
                 main: {
                     templateUrl: "app/resources/js/app/grid/grid.html",
-                    controller: 'GridCtrl'
+                    controller: 'GridCtrl',
+                    controllerAs: 'ctrl'
                 }
             }
         })
