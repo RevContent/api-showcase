@@ -170,16 +170,27 @@ return utils;
         var that = this;
         this.id = 'rev-opt-out';
         //this.url = url;
-        setTimeout(function() {that.render();}, 100);
+        //setTimeout(function() {that.render();}, 100);
         this.resizeEnd;
 
-        this.addEventListener(window, 'resize', function() {
+        this.addEventHandler(window, 'load', function() {
+            that.render();
+        });
+
+        this.addEventHandler(window, 'resize', function() {
             clearTimeout(that.resizeEnd);
             that.resizeEnd = setTimeout(function() {
                 that.resize();
             }, 100);
         });
     };
+
+    RevDialog.prototype.addEventHandler = function(elem,eventType,handler) {
+     if (elem.addEventListener)
+         elem.addEventListener (eventType,handler,false);
+     else if (elem.attachEvent)
+         elem.attachEvent ('on'+eventType,handler);
+    }
 
     RevDialog.prototype.resize = function() {
         this.containerWidth = document.documentElement.clientWidth;
