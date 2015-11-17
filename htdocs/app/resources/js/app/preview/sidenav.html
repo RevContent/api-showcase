@@ -1,0 +1,25 @@
+<div class="container" flex>
+
+    <md-content ng-cloak style="background:transparent;" layout="column">
+
+        <div layout layout-fill preview-menu></div>
+
+
+        <div layout layout-fill>
+
+            <div layout layout-fill layout-padding>
+                <md-card flex layout layout-padding>
+                    <div flex layout="column" layout-padding layout-gt-sm="row">
+
+                        <md-button style="margin-left:12px; margin-right:12px;" class="md-raised md-accent" ng-click="ctrl.toggleNav()">Edit Options</md-button>
+
+                        <md-button flex ng-click="ctrl.toggleVisible()" class="md-primary md-raised">Show/hide</md-button>
+                    </div>
+                </md-card>
+            </div>
+        </div>
+
+        <div rev-sidenav></div>
+
+    </md-content>
+</div>

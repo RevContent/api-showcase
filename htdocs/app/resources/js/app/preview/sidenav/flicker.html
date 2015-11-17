@@ -57,19 +57,17 @@
         </md-list-item>
 
         <md-subheader class="md-accent" class="md-accent">Devices</md-subheader>
-         <md-list-item>
-            <div layout="column">
-                <div flex="50">
-                    <md-checkbox aria-label="Phone" ng-model="ctrl.options.devices.phone" ng-change="ctrl.optionChange()">Phone</md-checkbox>
-                </div>
-                <div flex="50">
-                    <md-checkbox aria-label="Tablet" ng-model="ctrl.options.devices.tablet" ng-change="ctrl.optionChange()">Tablet</md-checkbox>
-                </div>
-                <div flex="50">
-                    <md-checkbox aria-label="Desktop" ng-model="ctrl.options.devices.desktop" ng-change="ctrl.optionChange()">Desktop</md-checkbox>
-                </div>
-             </div>
-        </md-list-item>
+        <div layout="column">
+            <div flex="50">
+                <md-checkbox aria-label="Phone" ng-model="ctrl.options.devices.phone">Phone</md-checkbox>
+            </div>
+            <div flex="50">
+                <md-checkbox aria-label="Tablet" ng-model="ctrl.options.devices.tablet">Tablet</md-checkbox>
+            </div>
+            <div flex="50">
+                <md-checkbox aria-label="Desktop" ng-model="ctrl.options.devices.desktop">Desktop</md-checkbox>
+            </div>
+         </div>
 
         <md-subheader class="md-accent" class="md-accent">Per Row</md-subheader>
         <md-list-item>

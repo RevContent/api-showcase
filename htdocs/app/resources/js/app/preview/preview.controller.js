@@ -6,6 +6,8 @@ app.controller('PreviewCtrl', function($stateParams, $mdToast, $rootScope, $scop
     this.options = options;
     this.slider = slider;
 
+    this.visible = true;
+
     var widgetSizeToastVisible = false;
     var widgetSizeToastTimeout = false;
     var showWidgetSizeToast = function() {
@@ -41,6 +43,10 @@ app.controller('PreviewCtrl', function($stateParams, $mdToast, $rootScope, $scop
         $mdSidenav('left').toggle();
     };
 
+    this.toggleVisible = function() { //this does not work well with the internal widget closing
+        this.options.visible = !this.options.visible;
+    }
+
     this.sliderChange = function() {
         showWidgetSizeToast();
 
@@ -66,10 +72,6 @@ app.controller('PreviewCtrl', function($stateParams, $mdToast, $rootScope, $scop
 app.controller('BuilderOptionsCtrl', function($stateParams, $mdToast, $rootScope, $scope, $http, $timeout, $mdBottomSheet, $mdSidenav, options) {
 
     this.options = options;
-
-    // this.perRowChange = function() {
-    //     $rootScope.$broadcast('sizeChange');
-    // };
 
     // var timeout;
     // this.optionChange = function() {
