@@ -17,7 +17,7 @@
         formName: 'form_revsubscriber',
         endpoints: {
             production: 'https://trends.revcontent.com/rx_subscribe.php?callback=revchimpCallback',
-            dev: 'http://delivery.localhost/rx_subscribe.php?callback=revchimpCallback',
+            dev: 'http://shogun.local/rx_subscribe.php?callback=revchimpCallback',
             local: 'http://localhost/rx_subscribe.php?callback=revchimpCallback'
         },
         subscription_url: '',
@@ -51,7 +51,7 @@
             }
         },
         configureEndpoint: function(){
-            this.subscription_url = /localhost/i.test(top.location.hostname) ? this.endpoints.dev : this.endpoints.production;
+            this.subscription_url = /localhost|local/i.test(top.location.hostname) ? this.endpoints.dev : this.endpoints.production;
             console.log("Configuring JSONP Endpoint URL ... --> " + this.subscription_url);
         },
         loadSettings: function(subscription_settings){

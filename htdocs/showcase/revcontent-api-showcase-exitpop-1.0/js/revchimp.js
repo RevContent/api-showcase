@@ -51,7 +51,7 @@
             }
         },
         configureEndpoint: function(){
-            this.subscription_url = /localhost/i.test(top.location.hostname) ? this.endpoints.dev : this.endpoints.production;
+            this.subscription_url = /localhost|local/i.test(top.location.hostname) ? this.endpoints.dev : this.endpoints.production;
             console.log("Configuring JSONP Endpoint URL ... --> " + this.subscription_url);
         },
         loadSettings: function(subscription_settings){
