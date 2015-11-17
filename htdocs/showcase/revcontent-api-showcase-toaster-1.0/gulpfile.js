@@ -11,7 +11,7 @@ var autoprefixer = require('gulp-autoprefixer');
 gulp.task('default', ['buildjs']);
 
 gulp.task('minifycss', function() {
-    return gulp.src(['./css/revtoaster.css'])
+    return gulp.src(['./css/revtoaster.css', '../css/revdialog.css'])
         .pipe(concat('revtoaster.min.css'))
         .pipe(autoprefixer({
             browsers: ['> 1%'],
@@ -42,7 +42,7 @@ gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
       ' */',
       ''].join('\n');
 
-    return gulp.src(['./vendor/imagesloaded/imagesloaded.pkgd.js', './build/revtoaster.js'])
+    return gulp.src(['./vendor/imagesloaded/imagesloaded.pkgd.js', '../js/revdialog.js', './build/revtoaster.js'])
         .pipe(concat('revtoaster.pkgd.js'))
         .pipe(gulp.dest('./build'))
         .pipe(uglify({
