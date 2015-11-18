@@ -2,7 +2,7 @@
   "name": "rev-toaster",
   "description": "Content Toaster",
   "homepage": "http://labs.revcontent.com",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "repository": {
     "url": "git:///Revcontent/api-showcase.git"
   },
