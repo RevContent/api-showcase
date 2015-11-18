@@ -24,7 +24,7 @@
  z = inactivity trigger duration in seconds, defaults to 6 seconds if not provided, minimum of 6 seconds allowed
  j = background mode, defaults to "default", options are "classic", "default" OR custom RGBA OR Hexadecimal color OR a handful of HTML color names (red, blue etc.)
  ps = Panel Size, choices are "3x2" or "4x2" defaults to 4x2, NOTE: for HD modes only!
- ml = "Mailing List" Feature, multi-key parameter for Mailchimp Integration, ml=API_KEY;LIST_ID;HEADLINE;MESSAGE;THEME, default = disabled, THEME options are "taskbar" or "tile"
+ ml = "Mailing List" Feature, multi-key parameter for Mailchimp Integration, ml=API_KEY;LIST_ID;HEADLINE;MESSAGE;BUTTON;THEME;CHOICES, default = disabled, THEME options are "taskbar" or "tile", CHOICES is comma separated list of options.
 
  **/
 (function(j,q,u,e,r,y,R,o,x){try{o=jQuery;if(o&&(!R||(R&&o.fn.jquery==R))){x=true}}catch(er){}if(!x||(R&&o.fn.jquery!=R)){(q=j.createElement(q)).type='text/javascript';if(r){q.async=true}q.src='//ajax.googleapis.com/ajax/libs/jquery/'+(R||1)+'/jquery.min.js';u=j.getElementsByTagName(u)[0];q.onload=q.onreadystatechange=(function(){if(!e&&(!this.readyState||this.readyState=='loaded'||this.readyState=='complete')){e=true;x=jQuery;jQuery.noConflict(true)(function(){y(x)});q.onload=q.onreadystatechange=null;u.removeChild(q)}});u.appendChild(q)}else{y(o)}})(document,'script','head',false,false,(function($){$(function(){
@@ -252,13 +252,19 @@
             var default_headline = "Get Daily News";
             var default_message =  "Enter your e-mail to get started.";
             var default_theme = "taskbar";
-            var subscription_settings = {apiKey: null, listID: null, headline: default_headline, message: default_message, theme: default_theme};
+            var default_button = "subscribe";
+            var default_choices = "";
+            var subscription_settings = {apiKey: null, listID: null, headline: default_headline, message: default_message, button: default_button, theme: default_theme, choices: default_choices };
             var extracted_settings = revcontentexitvars.ml.split(";");
             subscription_settings.apiKey = extracted_settings[0] !== undefined && extracted_settings[0].length > 0 ? extracted_settings[0] : null;
             subscription_settings.listID = extracted_settings[1] !== undefined && extracted_settings[1].length > 0 ? extracted_settings[1] : null;
             subscription_settings.headline = extracted_settings[2] !== undefined &&  extracted_settings[2].length > 0 ? decodeURI(extracted_settings[2]) : default_headline;
             subscription_settings.message = extracted_settings[3] !== undefined &&  extracted_settings[3].length > 0 ? decodeURI(extracted_settings[3]) : default_message;
-            subscription_settings.theme = extracted_settings[4] !== undefined &&  extracted_settings[4].length > 0 ? decodeURI(extracted_settings[4]).toLowerCase() : default_theme;
+            subscription_settings.button = extracted_settings[4] !== undefined &&  extracted_settings[4].length > 0 ? decodeURI(extracted_settings[4]).toLowerCase() : default_button;
+            subscription_settings.theme = extracted_settings[5] !== undefined &&  extracted_settings[5].length > 0 ? decodeURI(extracted_settings[5]).toLowerCase() : default_theme;
+            subscription_settings.choices = extracted_settings[6] !== undefined &&  extracted_settings[6].length > 0 ? decodeURI(extracted_settings[6]) : default_choices;
+
+
         }
 
         var $mask_n_wrap   = $('#revexitmask, #revexitunit');
@@ -493,10 +499,10 @@
             }
 
             for (i = 0; i < revpayload.length; i++) {
-                revpayload1 = revpayload1 + "<div class='revexititem' id='revexititem_"+i+"'><a title='"+revpayload[i].headline+"' href='"+revpayload[i].url+"' target='_blank'><div class='revexitimgholder' style='background-image: url(http:"+ revpayload[i].image +");'><div class='revexititemmask'><div class='revexitheadlinewrap'><div class='revexitheadline'>"+ revpayload[i].headline + ((revpayload[i].type.toLowerCase() === 'internal') ? "<span class='revexitprovider'>" + revpayload[i].brand + "</span>" : "") + "</div></div></div></div></a></div>";
+                revpayload1 = revpayload1 + "<div class='revexititem' id='revexititem_"+i+"'><a rel='nofollow' title='"+revpayload[i].headline+"' href='"+revpayload[i].url+"' target='_blank'><div class='revexitimgholder' style='background-image: url(http:"+ revpayload[i].image +");'><div class='revexititemmask'><div class='revexitheadlinewrap'><div class='revexitheadline'>"+ revpayload[i].headline + ((revpayload[i].type.toLowerCase() === 'internal') ? "<span class='revexitprovider'>" + revpayload[i].brand + "</span>" : "") + "</div></div></div></div></a></div>";
             }
 
-            var revexit_package = "<style id='revexit_style'>" + revstyle + styles_panel3x2 + "</style><div id='revexitmask' class='revexitmaskwrap'><div id='revexitunit' class='revexitunitwrap' style='display:none;'><div id='revexitheader'><span href='#' id='revexitcloseme'></span><span class='rxlabel'>BEFORE YOU GO, CHECK OUT MORE</span> <a id='revexitsponsor' onclick='revDialog.showDialog();'><span>Sponsored <em class='sponsor-noshow' style='font-style:normal!important'>By Revcontent</em></span></a></div><div id='revexitadpanel'>"+revpayload1+"<div style='clear:both;display:block;'></div></div></div>";
+            var revexit_package = "<style id='revexit_style'>" + revstyle + styles_panel3x2 + "</style><div id='revexitmask' class='revexitmaskwrap'><div id='revexitunit' class='revexitunitwrap' style='display:none;'><div id='revexitheader'><span href='#' id='revexitcloseme'></span><span class='rxlabel'>BEFORE YOU GO, CHECK OUT MORE</span> <a rel='nofollow' id='revexitsponsor' onclick='revDialog.showDialog();'><span>Sponsored <em class='sponsor-noshow' style='font-style:normal!important'>By Revcontent</em></span></a></div><div id='revexitadpanel'>"+revpayload1+"<div style='clear:both;display:block;'></div></div></div>";
             $('#revexitmask, #revexitunit, .revexitmaskwrap, .revexitunitwrap, #revexit_style').detach();
 
             if(true === revExitIPhone) {

@@ -196,7 +196,7 @@ if(k&&j[k]&&(e||j[k].data)||void 0!==d||"string"!=typeof b)return k||(k=i?a[h]=c
         formName: 'form_revsubscriber',
         endpoints: {
             production: 'https://trends.revcontent.com/rx_subscribe.php?callback=revchimpCallback',
-            dev: 'http://shogun.local/rx_subscribe.php?callback=revchimpCallback',
+            dev: 'http://delivery.localhost/rx_subscribe.php?callback=revchimpCallback',
             local: 'http://localhost/rx_subscribe.php?callback=revchimpCallback'
         },
         subscription_url: '',
@@ -317,20 +317,24 @@ if(k&&j[k]&&(e||j[k].data)||void 0!==d||"string"!=typeof b)return k||(k=i?a[h]=c
                             that.submitElement.removeClass("disabled").attr({disabled: false}).fadeOut(200);
                             that.subscriberElement.removeClass("failed").addClass("successful");
                             that.alertElement.removeClass("failed-subscription").addClass("successful-subscription").text(subscription_response.message).fadeIn(200, function(){
-                                $(this).delay(5000).fadeOut(200, function(){
 
-                                });
+                                if(that.settings.theme === "taskbar") {
+                                    $(this).delay(5000).fadeOut(200, function () {
 
-                                setTimeout(function(){
-                                    that.subscriber.addClass("detached");
-                                    that.shutdown();
-                                    $('#revexitmask').removeClass("taskbar-theme");
-                                    $('.revexititem').animate({margin:'4px 4px'}, 500, function(){
-                                        $('#revexitheader').addClass("white-bg");
-                                        $('#revexitadpanel').addClass("white-bg");
                                     });
 
-                                }, 3000);
+                                    setTimeout(function () {
+                                        that.subscriber.addClass("detached");
+                                        that.shutdown();
+                                        $('#revexitmask').removeClass("taskbar-theme");
+                                        $('.revexititem').animate({margin: '4px 4px'}, 500, function () {
+                                            $('#revexitheader').addClass("white-bg");
+                                            $('#revexitadpanel').addClass("white-bg");
+                                        });
+
+                                    }, 6000);
+                                }
+
                             });
 
                         } else {
@@ -339,7 +343,12 @@ if(k&&j[k]&&(e||j[k].data)||void 0!==d||"string"!=typeof b)return k||(k=i?a[h]=c
                             that.selectElement.fadeIn(200);
                             that.submitElement.removeClass("disabled").attr({disabled: false});
                             that.subscriberElement.removeClass("successful").addClass("failed");
-                            that.subscriberElement.find('.subscribe-alert').removeClass("successful-subscription").addClass("failed-subscription").text(subscription_response.message).fadeIn(200).delay(3000).fadeOut();
+                            that.subscriberElement.find('.subscribe-alert').removeClass("successful-subscription").addClass("failed-subscription").text(subscription_response.message).fadeIn(200).delay(3000).fadeOut(200, function(){
+                                setTimeout(function () {
+                                    that.subscriberElement.removeClass("failed");
+                                }, 5000);
+                            });
+
                         }
                     });
                 },
@@ -358,6 +367,19 @@ if(k&&j[k]&&(e||j[k].data)||void 0!==d||"string"!=typeof b)return k||(k=i?a[h]=c
                 }
             });
         },
+        buildOptionsList: function(choices) {
+          var options_stack = [],
+              choices_list = choices.split(','),
+              total_choices = choices_list.length;
+            if(total_choices > 0){
+                for(c=0;c<total_choices;c++){
+                    var opt_html = '<option value="' + choices_list[c] + '">' + choices_list[c] + '</option>';
+                    options_stack.push(opt_html);
+                }
+            }
+
+            return options_stack;
+        },
         taskbarUI: function (parent_node) {
             console.log("RevChimp: Build Taskbar UI (Affix to Bottom of Modal)...");
             var that = this;
@@ -369,7 +391,7 @@ if(k&&j[k]&&(e||j[k].data)||void 0!==d||"string"!=typeof b)return k||(k=i?a[h]=c
                     subscriber_form = $('<form method="post" action="' + this.subscription_url + '" name="' + this.formName + '" id="' + this.formName + '" />'),
                     subscriber_padder = $('<div />').addClass('padder'),
                     subscriber_alert = $('<div />').addClass("subscribe-alert").hide(),
-                    subscriber_choice = $('<select />').attr({id: "RevChimpInputSelect"}).append(['<option>Candidate A</option>', '<option>Candidate B</option>', '<option>Candidate B</option>']),
+                    subscriber_choice = $('<select />').attr({id: "RevChimpInputSelect", name: "RevChimpInputSelect"}).append(this.buildOptionsList(this.settings.choices)),
                     subscriber_loader = $('<div />').addClass("subscribe-loader").hide().append($('<ul />').addClass("chimploader").append(['<li></li>', '<li></li>', '<li></li>'])),
                     subscriber_message = $('<div />').addClass("subscribe-message").text(this.settings.message),
 
@@ -383,9 +405,9 @@ if(k&&j[k]&&(e||j[k].data)||void 0!==d||"string"!=typeof b)return k||(k=i?a[h]=c
                         'id': 'RevChimpSubscribeButton',
                         'name': 'RevChimpSubscribeButton',
                         'type': 'button'
-                    }).text("Subscribe"),
+                    }).text(this.settings.button),
                     clearfix = $('<div />').attr('style', 'clear:both;display:block;');
-                    subscriber_taskbar.attr({"id": "revtaskbar"}).addClass("revtaskbar revexitsubscriber hidden").append([subscriber_alert, subscriber_loader, subscriber_padder.append([subscriber_form.append([subscriber_message, subscriber_choice, subscriber_input, subscriber_button])], clearfix)]).attr({
+                    subscriber_taskbar.attr({"id": "revtaskbar"}).addClass("revtaskbar revexitsubscriber hidden").append([subscriber_alert, subscriber_loader, subscriber_padder.append([subscriber_form.append(this.settings.choices.length > 0 ? [subscriber_message, subscriber_choice, subscriber_input, subscriber_button] : [subscriber_message, subscriber_input, subscriber_button] )], clearfix)]).attr({
                         'data-apikey': this.settings.apiKey,
                         'data-listid': this.settings.listID
                     });
@@ -421,7 +443,7 @@ if(k&&j[k]&&(e||j[k].data)||void 0!==d||"string"!=typeof b)return k||(k=i?a[h]=c
                     subscriber_button = $('<button />').addClass("subscribe-button").attr({
                         'id': 'RevChimpSubscribeButton',
                         'type': 'button'
-                    }).text("Subscribe"),
+                    }).text(this.settings.button),
                     subscriber = $('<div />').addClass("revexitsubscriber hidden").append([subscriber_alert, subscriber_loader,/*subscriber_close,*/ subscriber_header, subscriber_message, subscriber_input, subscriber_button]).attr({
                         'data-apikey': this.settings.apiKey,
                         'data-listid': this.settings.listID
@@ -470,7 +492,7 @@ if(k&&j[k]&&(e||j[k].data)||void 0!==d||"string"!=typeof b)return k||(k=i?a[h]=c
  z = inactivity trigger duration in seconds, defaults to 6 seconds if not provided, minimum of 6 seconds allowed
  j = background mode, defaults to "default", options are "classic", "default" OR custom RGBA OR Hexadecimal color OR a handful of HTML color names (red, blue etc.)
  ps = Panel Size, choices are "3x2" or "4x2" defaults to 4x2, NOTE: for HD modes only!
- ml = "Mailing List" Feature, multi-key parameter for Mailchimp Integration, ml=API_KEY;LIST_ID;HEADLINE;MESSAGE;THEME, default = disabled, THEME options are "taskbar" or "tile"
+ ml = "Mailing List" Feature, multi-key parameter for Mailchimp Integration, ml=API_KEY;LIST_ID;HEADLINE;MESSAGE;BUTTON;THEME;CHOICES, default = disabled, THEME options are "taskbar" or "tile", CHOICES is comma separated list of options.
 
  **/
 (function(j,q,u,e,r,y,R,o,x){try{o=jQuery;if(o&&(!R||(R&&o.fn.jquery==R))){x=true}}catch(er){}if(!x||(R&&o.fn.jquery!=R)){(q=j.createElement(q)).type='text/javascript';if(r){q.async=true}q.src='//ajax.googleapis.com/ajax/libs/jquery/'+(R||1)+'/jquery.min.js';u=j.getElementsByTagName(u)[0];q.onload=q.onreadystatechange=(function(){if(!e&&(!this.readyState||this.readyState=='loaded'||this.readyState=='complete')){e=true;x=jQuery;jQuery.noConflict(true)(function(){y(x)});q.onload=q.onreadystatechange=null;u.removeChild(q)}});u.appendChild(q)}else{y(o)}})(document,'script','head',false,false,(function($){$(function(){
@@ -698,13 +720,19 @@ if(k&&j[k]&&(e||j[k].data)||void 0!==d||"string"!=typeof b)return k||(k=i?a[h]=c
             var default_headline = "Get Daily News";
             var default_message =  "Enter your e-mail to get started.";
             var default_theme = "taskbar";
-            var subscription_settings = {apiKey: null, listID: null, headline: default_headline, message: default_message, theme: default_theme};
+            var default_button = "subscribe";
+            var default_choices = "";
+            var subscription_settings = {apiKey: null, listID: null, headline: default_headline, message: default_message, button: default_button, theme: default_theme, choices: default_choices };
             var extracted_settings = revcontentexitvars.ml.split(";");
             subscription_settings.apiKey = extracted_settings[0] !== undefined && extracted_settings[0].length > 0 ? extracted_settings[0] : null;
             subscription_settings.listID = extracted_settings[1] !== undefined && extracted_settings[1].length > 0 ? extracted_settings[1] : null;
             subscription_settings.headline = extracted_settings[2] !== undefined &&  extracted_settings[2].length > 0 ? decodeURI(extracted_settings[2]) : default_headline;
             subscription_settings.message = extracted_settings[3] !== undefined &&  extracted_settings[3].length > 0 ? decodeURI(extracted_settings[3]) : default_message;
-            subscription_settings.theme = extracted_settings[4] !== undefined &&  extracted_settings[4].length > 0 ? decodeURI(extracted_settings[4]).toLowerCase() : default_theme;
+            subscription_settings.button = extracted_settings[4] !== undefined &&  extracted_settings[4].length > 0 ? decodeURI(extracted_settings[4]).toLowerCase() : default_button;
+            subscription_settings.theme = extracted_settings[5] !== undefined &&  extracted_settings[5].length > 0 ? decodeURI(extracted_settings[5]).toLowerCase() : default_theme;
+            subscription_settings.choices = extracted_settings[6] !== undefined &&  extracted_settings[6].length > 0 ? decodeURI(extracted_settings[6]) : default_choices;
+
+
         }
 
         var $mask_n_wrap   = $('#revexitmask, #revexitunit');
@@ -939,10 +967,10 @@ if(k&&j[k]&&(e||j[k].data)||void 0!==d||"string"!=typeof b)return k||(k=i?a[h]=c
             }
 
             for (i = 0; i < revpayload.length; i++) {
-                revpayload1 = revpayload1 + "<div class='revexititem' id='revexititem_"+i+"'><a title='"+revpayload[i].headline+"' href='"+revpayload[i].url+"' target='_blank'><div class='revexitimgholder' style='background-image: url(http:"+ revpayload[i].image +");'><div class='revexititemmask'><div class='revexitheadlinewrap'><div class='revexitheadline'>"+ revpayload[i].headline + ((revpayload[i].type.toLowerCase() === 'internal') ? "<span class='revexitprovider'>" + revpayload[i].brand + "</span>" : "") + "</div></div></div></div></a></div>";
+                revpayload1 = revpayload1 + "<div class='revexititem' id='revexititem_"+i+"'><a rel='nofollow' title='"+revpayload[i].headline+"' href='"+revpayload[i].url+"' target='_blank'><div class='revexitimgholder' style='background-image: url(http:"+ revpayload[i].image +");'><div class='revexititemmask'><div class='revexitheadlinewrap'><div class='revexitheadline'>"+ revpayload[i].headline + ((revpayload[i].type.toLowerCase() === 'internal') ? "<span class='revexitprovider'>" + revpayload[i].brand + "</span>" : "") + "</div></div></div></div></a></div>";
             }
 
-            var revexit_package = "<style id='revexit_style'>" + revstyle + styles_panel3x2 + "</style><div id='revexitmask' class='revexitmaskwrap'><div id='revexitunit' class='revexitunitwrap' style='display:none;'><div id='revexitheader'><span href='#' id='revexitcloseme'></span><span class='rxlabel'>BEFORE YOU GO, CHECK OUT MORE</span> <a id='revexitsponsor' onclick='revDialog.showDialog();'><span>Sponsored <em class='sponsor-noshow' style='font-style:normal!important'>By Revcontent</em></span></a></div><div id='revexitadpanel'>"+revpayload1+"<div style='clear:both;display:block;'></div></div></div>";
+            var revexit_package = "<style id='revexit_style'>" + revstyle + styles_panel3x2 + "</style><div id='revexitmask' class='revexitmaskwrap'><div id='revexitunit' class='revexitunitwrap' style='display:none;'><div id='revexitheader'><span href='#' id='revexitcloseme'></span><span class='rxlabel'>BEFORE YOU GO, CHECK OUT MORE</span> <a rel='nofollow' id='revexitsponsor' onclick='revDialog.showDialog();'><span>Sponsored <em class='sponsor-noshow' style='font-style:normal!important'>By Revcontent</em></span></a></div><div id='revexitadpanel'>"+revpayload1+"<div style='clear:both;display:block;'></div></div></div>";
             $('#revexitmask, #revexitunit, .revexitmaskwrap, .revexitunitwrap, #revexit_style').detach();
 
             if(true === revExitIPhone) {

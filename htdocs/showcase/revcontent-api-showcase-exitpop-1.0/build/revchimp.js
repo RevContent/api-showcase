@@ -17,7 +17,7 @@
         formName: 'form_revsubscriber',
         endpoints: {
             production: 'https://trends.revcontent.com/rx_subscribe.php?callback=revchimpCallback',
-            dev: 'http://shogun.local/rx_subscribe.php?callback=revchimpCallback',
+            dev: 'http://delivery.localhost/rx_subscribe.php?callback=revchimpCallback',
             local: 'http://localhost/rx_subscribe.php?callback=revchimpCallback'
         },
         subscription_url: '',
@@ -138,20 +138,24 @@
                             that.submitElement.removeClass("disabled").attr({disabled: false}).fadeOut(200);
                             that.subscriberElement.removeClass("failed").addClass("successful");
                             that.alertElement.removeClass("failed-subscription").addClass("successful-subscription").text(subscription_response.message).fadeIn(200, function(){
-                                $(this).delay(5000).fadeOut(200, function(){
 
-                                });
+                                if(that.settings.theme === "taskbar") {
+                                    $(this).delay(5000).fadeOut(200, function () {
 
-                                setTimeout(function(){
-                                    that.subscriber.addClass("detached");
-                                    that.shutdown();
-                                    $('#revexitmask').removeClass("taskbar-theme");
-                                    $('.revexititem').animate({margin:'4px 4px'}, 500, function(){
-                                        $('#revexitheader').addClass("white-bg");
-                                        $('#revexitadpanel').addClass("white-bg");
                                     });
 
-                                }, 3000);
+                                    setTimeout(function () {
+                                        that.subscriber.addClass("detached");
+                                        that.shutdown();
+                                        $('#revexitmask').removeClass("taskbar-theme");
+                                        $('.revexititem').animate({margin: '4px 4px'}, 500, function () {
+                                            $('#revexitheader').addClass("white-bg");
+                                            $('#revexitadpanel').addClass("white-bg");
+                                        });
+
+                                    }, 6000);
+                                }
+
                             });
 
                         } else {
@@ -160,7 +164,12 @@
                             that.selectElement.fadeIn(200);
                             that.submitElement.removeClass("disabled").attr({disabled: false});
                             that.subscriberElement.removeClass("successful").addClass("failed");
-                            that.subscriberElement.find('.subscribe-alert').removeClass("successful-subscription").addClass("failed-subscription").text(subscription_response.message).fadeIn(200).delay(3000).fadeOut();
+                            that.subscriberElement.find('.subscribe-alert').removeClass("successful-subscription").addClass("failed-subscription").text(subscription_response.message).fadeIn(200).delay(3000).fadeOut(200, function(){
+                                setTimeout(function () {
+                                    that.subscriberElement.removeClass("failed");
+                                }, 5000);
+                            });
+
                         }
                     });
                 },
@@ -179,6 +188,19 @@
                 }
             });
         },
+        buildOptionsList: function(choices) {
+          var options_stack = [],
+              choices_list = choices.split(','),
+              total_choices = choices_list.length;
+            if(total_choices > 0){
+                for(c=0;c<total_choices;c++){
+                    var opt_html = '<option value="' + choices_list[c] + '">' + choices_list[c] + '</option>';
+                    options_stack.push(opt_html);
+                }
+            }
+
+            return options_stack;
+        },
         taskbarUI: function (parent_node) {
             console.log("RevChimp: Build Taskbar UI (Affix to Bottom of Modal)...");
             var that = this;
@@ -190,7 +212,7 @@
                     subscriber_form = $('<form method="post" action="' + this.subscription_url + '" name="' + this.formName + '" id="' + this.formName + '" />'),
                     subscriber_padder = $('<div />').addClass('padder'),
                     subscriber_alert = $('<div />').addClass("subscribe-alert").hide(),
-                    subscriber_choice = $('<select />').attr({id: "RevChimpInputSelect"}).append(['<option>Candidate A</option>', '<option>Candidate B</option>', '<option>Candidate B</option>']),
+                    subscriber_choice = $('<select />').attr({id: "RevChimpInputSelect", name: "RevChimpInputSelect"}).append(this.buildOptionsList(this.settings.choices)),
                     subscriber_loader = $('<div />').addClass("subscribe-loader").hide().append($('<ul />').addClass("chimploader").append(['<li></li>', '<li></li>', '<li></li>'])),
                     subscriber_message = $('<div />').addClass("subscribe-message").text(this.settings.message),
 
@@ -204,9 +226,9 @@
                         'id': 'RevChimpSubscribeButton',
                         'name': 'RevChimpSubscribeButton',
                         'type': 'button'
-                    }).text("Subscribe"),
+                    }).text(this.settings.button),
                     clearfix = $('<div />').attr('style', 'clear:both;display:block;');
-                    subscriber_taskbar.attr({"id": "revtaskbar"}).addClass("revtaskbar revexitsubscriber hidden").append([subscriber_alert, subscriber_loader, subscriber_padder.append([subscriber_form.append([subscriber_message, subscriber_choice, subscriber_input, subscriber_button])], clearfix)]).attr({
+                    subscriber_taskbar.attr({"id": "revtaskbar"}).addClass("revtaskbar revexitsubscriber hidden").append([subscriber_alert, subscriber_loader, subscriber_padder.append([subscriber_form.append(this.settings.choices.length > 0 ? [subscriber_message, subscriber_choice, subscriber_input, subscriber_button] : [subscriber_message, subscriber_input, subscriber_button] )], clearfix)]).attr({
                         'data-apikey': this.settings.apiKey,
                         'data-listid': this.settings.listID
                     });
@@ -242,7 +264,7 @@
                     subscriber_button = $('<button />').addClass("subscribe-button").attr({
                         'id': 'RevChimpSubscribeButton',
                         'type': 'button'
-                    }).text("Subscribe"),
+                    }).text(this.settings.button),
                     subscriber = $('<div />').addClass("revexitsubscriber hidden").append([subscriber_alert, subscriber_loader,/*subscriber_close,*/ subscriber_header, subscriber_message, subscriber_input, subscriber_button]).attr({
                         'data-apikey': this.settings.apiKey,
                         'data-listid': this.settings.listID
