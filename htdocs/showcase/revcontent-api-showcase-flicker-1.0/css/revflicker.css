@@ -135,3 +135,56 @@
     transition: opacity .5s ease-in-out;
     opacity: .5;
 }
+
+#rev-flicker .rev-flicker {
+    clear: both;
+}
+
+#rev-flicker.rev-flicker-text-overlay .rev-ad {
+    position: relative;
+}
+
+#rev-flicker.rev-flicker-text-overlay .rev-ad a {
+    height: 100%;
+}
+
+#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-headline {
+    position: absolute;
+    bottom: 4px;
+    color: #fff;
+    height: auto !important;
+}
+
+#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay,
+#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:after,
+#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:before {
+    border-radius: 5px;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+}
+
+#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:after,
+#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:before {
+    transition: all .5s ease-in-out;
+    content: "";
+    display: block;
+}
+
+#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:after {
+    background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.75) 100%);
+}
+
+#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:before {
+    opacity: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%);
+}
+
+#rev-flicker.rev-flicker-text-overlay .rev-ad a:hover .rev-overlay:after {
+    opacity: 0;
+}
+
+#rev-flicker.rev-flicker-text-overlay .rev-ad a:hover .rev-overlay:before {
+    opacity: 1;
+}

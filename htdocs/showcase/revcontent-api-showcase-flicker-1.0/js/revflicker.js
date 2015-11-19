@@ -77,7 +77,8 @@ RevFlicker({
             devices: [
                 'phone', 'tablet', 'desktop'
             ],
-            url: 'https://trends.revcontent.com/api/v1/'
+            url: 'https://trends.revcontent.com/api/v1/',
+            text_overlay: false
         };
 
         // merge options
@@ -120,6 +121,7 @@ RevFlicker({
             that.setUp();
             that.appendElements();
             that.preData();
+            that.textOverlay();
             that.getData();
         });
 
@@ -156,6 +158,8 @@ RevFlicker({
             ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
             ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
         }
+
+        this.textOverlay();
 
         this.flickity.resize();
 
@@ -280,7 +284,33 @@ RevFlicker({
         if (newOpts.next_effect !== oldOpts.next_effect) {
             this.nextEffect();
         }
+
+        if (newOpts.text_overlay !== oldOpts.text_overlay) {
+            this.textOverlay();
+            this.flickity.reloadCells();
+            this.flickity.reposition();
+        }
     };
+
+    RevFlicker.prototype.textOverlay = function() {
+        var ads = this.containerElement.querySelectorAll('.rev-ad');
+        if (this.options.text_overlay) {
+            revUtils.addClass(this.containerElement, 'rev-flicker-text-overlay');
+            for (var i = 0; i < ads.length; i++) {
+                var ad = ads[i];
+                ad.style.height = this.preloaderHeight + 'px';
+                if (!ad.querySelectorAll('.rev-overlay').length) { // add rev-overlay if not already there
+                    ad.querySelectorAll('img')[0].insertAdjacentHTML('afterend', '<div class="rev-overlay"></div>');
+                }
+            }
+        } else {
+            revUtils.removeClass(this.containerElement, 'rev-flicker-text-overlay');
+            for (var i = 0; i < ads.length; i++) {
+                var ad = ads[i];
+                ad.style.height = 'auto';
+            }
+        }
+    }
 
     RevFlicker.prototype.preData = function() {
 
