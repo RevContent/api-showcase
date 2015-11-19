@@ -77,7 +77,9 @@ RevFlicker({
             devices: [
                 'phone', 'tablet', 'desktop'
             ],
-            url: 'https://trends.revcontent.com/api/v1/'
+            url: 'https://trends.revcontent.com/api/v1/',
+            headline_size: 2,
+            max_headline: true
         };
 
         // merge options
@@ -90,6 +92,8 @@ RevFlicker({
         if (!revDetect.show(this.options.devices)) {
             return;
         }
+
+        this.maxHeadlineHeight = 0;
 
         var that = this;
         //append injrected style
@@ -122,6 +126,8 @@ RevFlicker({
             that.preData();
             that.getData();
         });
+
+        this.ellipsisTimer;
 
         revUtils.addEventListener(window, 'resize', function() {
             that.resize();
@@ -162,6 +168,43 @@ RevFlicker({
         if (this.options.next_effect) {
             this.selectedIndex = -1;
             this.nextEffect();
+        }
+        this.checkEllipsis();
+    };
+
+    RevFlicker.prototype.checkEllipsis = function() {
+        var that = this;
+        clearTimeout(that.ellipsisTimer);
+        that.ellipsisTimer = setTimeout(function() {
+            that.doEllipsis();
+        }, 300);
+    };
+
+    RevFlicker.prototype.doEllipsis = function() {
+        //console.log('In doEllipsis...');
+        var ads = this.flickity.element.querySelectorAll('.rev-content');
+        if (ads.length > 0) {
+            var el = ads[0].querySelectorAll('.rev-headline')[0];
+            var t = el.cloneNode(true);
+            t.style.visibility = 'hidden';
+            t.style.height = 'auto';
+            t.style.width = el.clientWidth+'px';
+            revUtils.append(el.parentNode, t);
+
+            for (var i = 0; i < ads.length; i++) {
+                var ad = ads[i];
+                var text = ad.querySelectorAll('a')[0].title;
+
+                t.querySelectorAll('.rev-headline h3')[0].innerHTML = text;
+                while (text.length > 0 && (t.clientHeight > el.clientHeight))
+                {
+                    text = text.substr(0, text.length - 1);
+                    t.querySelectorAll('.rev-headline h3')[0].innerHTML = text + "...";
+                }
+                ad.querySelectorAll('.rev-headline h3')[0].innerHTML = t.querySelectorAll('.rev-headline h3')[0].innerHTML;
+
+            }
+            revUtils.remove(t);
         }
     };
 
@@ -247,7 +290,10 @@ RevFlicker({
         // font size is relative to width, other measurements are relative to this font size
         this.headlineFontSize = Math.max(14, ((width * .03).toFixed(2) / 1));
         this.headlineLineHeight = ((this.headlineFontSize * 1.25).toFixed(2) / 1);
-        this.headlineHeight = ((this.headlineLineHeight * 2).toFixed(2) / 1);
+        this.headlineHeight = ((this.headlineLineHeight * this.options.headline_size).toFixed(2) / 1);
+        if (this.options.max_headline && this.getMaxHeadlineHeight() > 0) {
+            this.headlineHeight = this.getMaxHeadlineHeight();
+        }
         this.headlineMarginTop = ((this.headlineHeight * .2).toFixed(2) / 1);
 
         this.providerFontSize = Math.max(11, ((this.headlineLineHeight / 2).toFixed(2) / 1));
@@ -376,6 +422,7 @@ RevFlicker({
                 var ad = ads[i],
                     data = resp[i];
                 ad.querySelectorAll('a')[0].setAttribute('href', data.url);
+                ad.querySelectorAll('a')[0].title = data.headline;
                 ad.querySelectorAll('img')[0].setAttribute('src', data.image);
                 ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
                 ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
@@ -383,9 +430,38 @@ RevFlicker({
 
             imagesLoaded( that.flickity.element, function() {
                 revUtils.addClass(that.flickity.element, 'loaded');
+                that.resize();
             });
 
         });
+    };
+
+    RevFlicker.prototype.getMaxHeadlineHeight = function() {
+        var maxHeadlineHeight = 0;
+        var that = this;
+
+        var ads = that.flickity.element.querySelectorAll('.rev-ad');
+        if (ads.length > 0) {
+            var el = ads[0].querySelectorAll('.rev-headline')[0];
+            var t = el.cloneNode(true);
+            t.style.visibility = 'hidden';
+            t.style.height = 'auto';
+            t.style.width = el.clientWidth+'px';
+            revUtils.append(el.parentNode, t);
+
+            for (var i = 0; i < ads.length; i++) {
+                var ad = ads[i];
+                var text = ad.querySelectorAll('a')[0].title;
+                var headlineEl = t.querySelectorAll('.rev-headline h3')[0];
+                headlineEl.innerHTML = text;
+                if (t.clientHeight > maxHeadlineHeight) {
+                    maxHeadlineHeight = t.clientHeight;
+                    //console.log('maxHeadlineHeight: ' + maxHeadlineHeight );
+                }
+            }
+            revUtils.remove(t);
+        }
+        return maxHeadlineHeight;
     };
 
     return RevFlicker;

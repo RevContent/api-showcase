@@ -148,7 +148,9 @@ app.directive('revFlicker', ['$location', '$timeout', 'options', function ($loca
                 domain : options.domain,
                 rev_position: options.rev_position,
                 per_row: options.per_row,
-                next_effect: options.next_effect
+                next_effect: options.next_effect,
+                headline_size: options.headline_size,
+                max_headline: options.max_headline
             });
         });
 
