@@ -102,7 +102,7 @@ RevToaster({
 
                 for (var i = 0; i < resp.length; i++) {
                     html += '<div class="rev-ad">' +
-                                '<a href="'+ resp[i].url +'">' +
+                                '<a rel="nofollow" href="'+ resp[i].url +'">' +
                                     '<div class="rev-image"><img src="'+ resp[i].image +'"/></div>' +
                                     '<div class="rev-headline"><h3>'+ resp[i].headline +'</h3></div>' +
                                     '<div class="rev-provider">'+ resp[i].brand +'</div>' +

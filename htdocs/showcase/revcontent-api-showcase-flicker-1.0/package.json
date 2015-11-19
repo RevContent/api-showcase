@@ -2,7 +2,7 @@
   "name": "rev-flicker",
   "description": "Scrolling Gallery",
   "homepage": "http://labs.revcontent.com",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "repository": {
     "url": "git:///Revcontent/api-showcase.git"
   },
