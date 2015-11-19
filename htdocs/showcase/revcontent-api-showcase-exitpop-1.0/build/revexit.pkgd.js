@@ -203,6 +203,7 @@ if(k&&j[k]&&(e||j[k].data)||void 0!==d||"string"!=typeof b)return k||(k=i?a[h]=c
         apiKey: null,
         listID: null,
         email: null,
+        choice: '',
         subscriberElement: $('.revexitsubscriber:first'),
         selectElement: $("#RevChimpInputSelect"),
         inputElement: $("#RevChimpInputEmail"),
@@ -271,6 +272,7 @@ if(k&&j[k]&&(e||j[k].data)||void 0!==d||"string"!=typeof b)return k||(k=i?a[h]=c
             console.log("RevChimp: Setup Internal Properties");
             this.configureEndpoint();
             this.email = this.inputElement.val();
+            this.choice = this.selectElement.val();
             this.apiKey = this.subscriberElement.attr("data-apikey");
             this.listID = this.subscriberElement.attr("data-listid");
             this.message = this.subscriberElement.attr("data-message");
@@ -302,7 +304,7 @@ if(k&&j[k]&&(e||j[k].data)||void 0!==d||"string"!=typeof b)return k||(k=i?a[h]=c
                 jsonp: false,
                 jsonpCallback: "revchimpCallback",
                 type: 'post',
-                data: {api_key: that.apiKey, list_id: that.listID, email: that.email},
+                data: {api_key: that.apiKey, list_id: that.listID, email: that.email, choice: that.choice},
                 beforeSend: function () {
                     that.submitElement.addClass("disabled").attr({disabled: true});
                     that.spinnerElement.fadeIn(300);
@@ -310,7 +312,7 @@ if(k&&j[k]&&(e||j[k].data)||void 0!==d||"string"!=typeof b)return k||(k=i?a[h]=c
                 success: function (subscription_response) {
                     that.spinnerElement.fadeOut(300, function () {
                         if (subscription_response.subscribed == true) {
-                            console.log("RevChimp: Completed subscription....");
+                            console.log("RevChimp: Completed subscription....", subscription_response);
                             that.subscriberElement.find('.subscribe-message').fadeOut(200);
                             that.inputElement.fadeOut(200);
                             that.selectElement.fadeOut(200);
