@@ -79,7 +79,7 @@ RevFlicker({
             ],
             url: 'https://trends.revcontent.com/api/v1/',
             headline_size: 2,
-            max_headline: true
+            max_headline: false
         };
 
         // merge options
@@ -181,30 +181,15 @@ RevFlicker({
     };
 
     RevFlicker.prototype.doEllipsis = function() {
-        //console.log('In doEllipsis...');
         var ads = this.flickity.element.querySelectorAll('.rev-content');
         if (ads.length > 0) {
-            var el = ads[0].querySelectorAll('.rev-headline')[0];
-            var t = el.cloneNode(true);
-            t.style.visibility = 'hidden';
-            t.style.height = 'auto';
-            t.style.width = el.clientWidth+'px';
-            revUtils.append(el.parentNode, t);
-
             for (var i = 0; i < ads.length; i++) {
                 var ad = ads[i];
                 var text = ad.querySelectorAll('a')[0].title;
-
-                t.querySelectorAll('.rev-headline h3')[0].innerHTML = text;
-                while (text.length > 0 && (t.clientHeight > el.clientHeight))
-                {
-                    text = text.substr(0, text.length - 1);
-                    t.querySelectorAll('.rev-headline h3')[0].innerHTML = text + "...";
-                }
-                ad.querySelectorAll('.rev-headline h3')[0].innerHTML = t.querySelectorAll('.rev-headline h3')[0].innerHTML;
-
+                var el = ad.querySelectorAll('.rev-headline h3')[0];
+                var newText = revUtils.ellipsisText(el, text, this.headlineHeight);
+                ad.querySelectorAll('.rev-headline h3')[0].innerHTML = newText;
             }
-            revUtils.remove(t);
         }
     };
 
@@ -346,7 +331,6 @@ RevFlicker({
                         '<a href="" target="_blank">' +
                             '<div class="rev-image" style="height:'+ that.preloaderHeight +'px"><img src=""/></div>' +
                             '<div class="rev-headline" style="height:'+ that.headlineHeight +'px; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>' +
-                            //'<div class="rev-headline" style="height:auto; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>' +
                             '<div style="margin:' + that.providerMargin +'px '  + that.innerMargin + 'px ' + that.providerMargin +'px;font-size:'+ that.providerFontSize +'px;line-height:'+ that.providerLineHeight +'px;height:'+ that.providerLineHeight +'px;" class="rev-provider"></div>' +
                         '</a>' +
                     '</div>';
@@ -425,9 +409,7 @@ RevFlicker({
                 ad.querySelectorAll('a')[0].setAttribute('href', data.url);
                 ad.querySelectorAll('a')[0].title = data.headline;
                 ad.querySelectorAll('img')[0].setAttribute('src', data.image);
-                //ad.querySelectorAll('img')[0].setAttribute('title', data.headline);
                 ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
-                //ad.querySelectorAll('.rev-headline h3')[0].title = data.headline;
                 ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
             }
 
@@ -436,38 +418,32 @@ RevFlicker({
                 that.resize();
             });
 
-
         });
     };
 
     RevFlicker.prototype.getMaxHeadlineHeight = function() {
         var maxHeadlineHeight = 0;
         var that = this;
-
         var ads = that.flickity.element.querySelectorAll('.rev-ad');
         if (ads.length > 0) {
-            var el = ads[0].querySelectorAll('.rev-headline')[0];
+            var el = ads[0].querySelectorAll('.rev-headline h3')[0];
             var t = el.cloneNode(true);
             t.style.visibility = 'hidden';
             t.style.height = 'auto';
-            t.style.width = el.clientWidth+'px';
             revUtils.append(el.parentNode, t);
-
-
             for (var i = 0; i < ads.length; i++) {
                 var ad = ads[i];
-                var text = ad.querySelectorAll('a')[0].title;
-                var headlineEl = t.querySelectorAll('.rev-headline h3')[0];
-                headlineEl.innerHTML = text;
-                if (t.clientHeight > maxHeadlineHeight) {
+                t.innerHTML = ad.querySelectorAll('a')[0].title;
+                if(t.clientHeight > maxHeadlineHeight) {
                     maxHeadlineHeight = t.clientHeight;
-                    //console.log('maxHeadlineHeight: ' + maxHeadlineHeight );
                 }
             }
             revUtils.remove(t);
         }
         return maxHeadlineHeight;
     };
+
+
 
     return RevFlicker;
 
