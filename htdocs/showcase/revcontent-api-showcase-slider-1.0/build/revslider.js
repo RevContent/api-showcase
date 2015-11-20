@@ -298,7 +298,27 @@ RevSlider({
         this.grid.reloadItems();
         this.grid.layout();
         this.checkEllipsis();
+        if (this.options.max_headline) {
+            this.checkMaxHeadlineHeightPerRow();
+        }
     };
+
+    RevSlider.prototype.checkMaxHeadlineHeightPerRow = function() {
+        var itemsPerRow = this.grid.getPerRow();
+        var currentRowNum = 0;
+        var currentHeadlineHeight = this.getMaxHeadlineHeight(currentRowNum, itemsPerRow);
+        var ads = this.element.querySelectorAll('.rev-content');
+        if (ads.length > 0) {
+            for (var i = 0; i < ads.length; i++) {
+                if (i > 0 && i % itemsPerRow == 0) {
+                    var currentHeadlineHeight = this.getMaxHeadlineHeight(++currentRowNum, itemsPerRow);
+                }
+                var ad = ads[i];
+                ad.querySelectorAll('.rev-headline')[0].style.height = currentHeadlineHeight + 'px';
+            }
+        }
+
+    }
 
 
     RevSlider.prototype.checkEllipsis = function() {
@@ -387,17 +407,22 @@ RevSlider({
         });
     };
 
-    RevSlider.prototype.getMaxHeadlineHeight = function() {
+    RevSlider.prototype.getMaxHeadlineHeight = function(rowNum, numItems) {
         var maxHeadlineHeight = 0;
         var that = this;
         var ads = that.element.querySelectorAll('.rev-ad');
         if (ads.length > 0) {
+            rowNum = (rowNum != undefined) ? rowNum : 0;
+            numItems = (numItems != undefined) ? numItems : ads.length;
+            var offset = rowNum * numItems;
+            var nextOffset = offset + numItems;
+            var itemsPerRow = this.grid.getPerRow()
             var el = ads[0].querySelectorAll('.rev-headline h3')[0];
             var t = el.cloneNode(true);
             t.style.visibility = 'hidden';
             t.style.height = 'auto';
             revUtils.append(el.parentNode, t);
-            for (var i = 0; i < ads.length; i++) {
+            for (var i = offset; i < nextOffset; i++) {
                 var ad = ads[i];
                 t.innerHTML = ad.querySelectorAll('a')[0].title;
                 if(t.clientHeight > maxHeadlineHeight) {
