@@ -3,9 +3,13 @@ CHANGELOG for RevFlicker
 
 This changelog references the relevant changes done in RevFlicker
 
-* 0.1.2
+* 0.1.3
 
  * Add **text_overlay** option - this option forces the text to overlay the image on a dark gradient.
+
+* 0.1.2
+
+  * Add rel="nofollow" on ad links
 
 * 0.1.1
 
