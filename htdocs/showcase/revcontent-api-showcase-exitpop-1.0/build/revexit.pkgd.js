@@ -220,7 +220,10 @@ if(k&&j[k]&&(e||j[k].data)||void 0!==d||"string"!=typeof b)return k||(k=i?a[h]=c
         },
         shutdown: function(){
             console.log("RevChimp: Shutting Down! Detaching nodes and cleaning up...");
-            if(typeof this.subscriber === "object"){
+            $('#revexitmask').removeClass("taskbar-theme");
+            $('#revexitmask').removeClass("tile-theme");
+            $("#revexitunit").removeClass("chimp-initialized");
+            if(this.subscriber !== null && typeof this.subscriber === "object"){
                 this.subscriber.detach();
             }
             if( typeof $('#revtaskbar') === "object" && $('#revtaskbar').length > 0){
@@ -260,6 +263,7 @@ if(k&&j[k]&&(e||j[k].data)||void 0!==d||"string"!=typeof b)return k||(k=i?a[h]=c
             that.renderStyles();
             that.setupBindings();
             that.setProperties();
+            $("#revexitunit").addClass("chimp-initialized");
         },
         renderStyles: function(){
             console.log("RevChimp: Injecting Stylesheets..");
@@ -615,7 +619,7 @@ if(k&&j[k]&&(e||j[k].data)||void 0!==d||"string"!=typeof b)return k||(k=i?a[h]=c
 
     function revcontentInitChimpanzee(subscription_settings){
         if(window.RevChimp !== undefined){
-            if(typeof window.RevChimp.render === "function") {
+            if(typeof window.RevChimp.render === "function" && !$("#revexitunit").hasClass("chimp-initialized")) {
                 window.RevChimp.render(subscription_settings);
             }
         }
@@ -809,12 +813,12 @@ if(k&&j[k]&&(e||j[k].data)||void 0!==d||"string"!=typeof b)return k||(k=i?a[h]=c
         else if(false === revExitMobile && viewport_width >= 1024) {
             $('body.revexit-open').css({'overflow': 'hidden', 'height': '100%'});
             $exit_mask.css({'height': '100%', 'position': 'fixed', 'overflow': 'hidden'}).addClass("modal-hd");
-            $exit_wrap.css({'position': 'static', 'overflow': 'hidden', 'height': 'auto', 'width': $('#revexitadpanel').innerWidth()});
+            $exit_wrap.css({'position': 'static', 'overflow': 'hidden', 'height': 'auto', 'width': $('#revexitadpanel').innerWidth() || 992 });
             //console.log("HD Desktop case");
             var spnsr_mrgns = (100 * ((($(window).width() - $('#revexitunit').width()) / 2) / $(window).width())) || 5;    
             //$('#revexitsponsor').css({'text-shadow':'0 0 2px rgba(30,30,30, 0.8)', 'border': '0', 'margin':'0 ' + spnsr_mrgns + '%' ,'position':'fixed','top':'4%','left':0,'display':'block','width': $('#revexitunit').width(),'text-align': 'right','max-width': $('#revexitunit').width() + 'px'});    
             $('#revexitsponsor').css({'padding': '0 18px 0 0', 'color':'rgba(0,0,0,0.5)', 'margin': '0', 'margin':'0 0 !important', 'position':'absolute', 'top': '11px', 'right': '50px', 'display':'inline-block', 'width': 'auto','text-align': 'right', 'max-width': $('#revexitunit').width() + 'px'});
-            if(($exit_wrap.outerHeight() + ($(window).height() * 0.10)) > $(window).height()) {
+            if(false === enableSubscriptions && (($exit_wrap.outerHeight() + ($(window).height() * 0.10)) > $(window).height())) {
                 $exit_mask.addClass('fullscreen');
             }
             switch(revPanelSize) {
@@ -991,7 +995,10 @@ if(k&&j[k]&&(e||j[k].data)||void 0!==d||"string"!=typeof b)return k||(k=i?a[h]=c
                 revcontentSetupViewport(revExitMobile, revExitIPhone, revExitIPad, revcontentexitvars);
                 $(window).on('resize', function(){
                    if($('body').hasClass('revexit-open')){
-                       revcontentSetupViewport(revExitMobile, revExitIPhone, revExitIPad, revcontentexitvars);
+                       clearTimeout(viewportSetupTimeout);
+                       var viewportSetupTimeout = setTimeout(function(){
+                           revcontentSetupViewport(revExitMobile, revExitIPhone, revExitIPad, revcontentexitvars);
+                       }, 900);
                    }
                 });
                 if($('#revexitmask').hasClass('modal-mobile') && !$('#revexitmask').hasClass('modal-tablet')){

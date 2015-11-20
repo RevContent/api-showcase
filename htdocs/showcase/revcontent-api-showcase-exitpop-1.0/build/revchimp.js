@@ -41,7 +41,10 @@
         },
         shutdown: function(){
             console.log("RevChimp: Shutting Down! Detaching nodes and cleaning up...");
-            if(typeof this.subscriber === "object"){
+            $('#revexitmask').removeClass("taskbar-theme");
+            $('#revexitmask').removeClass("tile-theme");
+            $("#revexitunit").removeClass("chimp-initialized");
+            if(this.subscriber !== null && typeof this.subscriber === "object"){
                 this.subscriber.detach();
             }
             if( typeof $('#revtaskbar') === "object" && $('#revtaskbar').length > 0){
@@ -81,6 +84,7 @@
             that.renderStyles();
             that.setupBindings();
             that.setProperties();
+            $("#revexitunit").addClass("chimp-initialized");
         },
         renderStyles: function(){
             console.log("RevChimp: Injecting Stylesheets..");
