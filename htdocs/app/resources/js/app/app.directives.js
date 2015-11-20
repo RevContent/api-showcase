@@ -135,6 +135,7 @@ app.directive('revFlicker', ['$location', '$timeout', 'options', function ($loca
         var widget;
 
         options.next_effect = true;
+        options.text_overlay = false;
 
         $timeout(function() {
             widget = new RevFlicker({
@@ -148,7 +149,8 @@ app.directive('revFlicker', ['$location', '$timeout', 'options', function ($loca
                 domain : options.domain,
                 rev_position: options.rev_position,
                 per_row: options.per_row,
-                next_effect: options.next_effect
+                next_effect: options.next_effect,
+                text_overlay: options.text_overlay
             });
         });
 

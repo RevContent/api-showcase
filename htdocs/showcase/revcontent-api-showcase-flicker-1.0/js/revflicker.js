@@ -77,7 +77,8 @@ RevFlicker({
             devices: [
                 'phone', 'tablet', 'desktop'
             ],
-            url: 'https://trends.revcontent.com/api/v1/'
+            url: 'https://trends.revcontent.com/api/v1/',
+            text_overlay: false
         };
 
         // merge options
@@ -96,15 +97,20 @@ RevFlicker({
         revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-flicker');
 
         // append a new element to the flicker
-        var flickerElement = document.createElement('div');
-        flickerElement.id = 'rev-flicker';
-        flickerElement.class = 'rev-flicker';
-        var innerElement = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
-        innerElement.style.width = '100%';
-        revUtils.append(innerElement, flickerElement);
+        this.containerElement = document.createElement('div');
+        this.containerElement.id = 'rev-flicker';
+        this.containerElement.setAttribute('class', 'rev-flicker');
+
+        this.flickerElement = document.createElement('div');
+
+        this.innerElement = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
+        this.innerElement.style.width = '100%';
+
+        revUtils.append(this.containerElement, this.flickerElement);
+        revUtils.append(this.innerElement, this.containerElement);
 
         // create flickity
-        this.flickity = new Flickity( flickerElement, {
+        this.flickity = new Flickity( this.flickerElement, {
             prevNextButtons: revDetect.mobile() ? this.options.show_arrows.mobile : this.options.show_arrows.desktop,
             pageDots: this.options.dots,
             cellAlign: 'left',
@@ -120,6 +126,7 @@ RevFlicker({
             that.setUp();
             that.appendElements();
             that.preData();
+            that.textOverlay();
             that.getData();
         });
 
@@ -157,6 +164,8 @@ RevFlicker({
             ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
         }
 
+        this.textOverlay();
+
         this.flickity.resize();
 
         if (this.options.next_effect) {
@@ -172,7 +181,7 @@ RevFlicker({
         this.header = document.createElement('h2');
         this.header.innerHTML = this.options.header;
         revUtils.addClass(this.header, 'rev-header');
-        revUtils.prepend(this.flickity.element, this.header);
+        revUtils.prepend(this.containerElement, this.header);
 
         if (this.sponsored) {
             revUtils.remove(this.sponsored);
@@ -182,10 +191,10 @@ RevFlicker({
         this.sponsored.innerHTML = '<a onclick="revDialog.showDialog();">Sponsored by Revcontent</a>';
         if (this.options.rev_position == 'top_right') {
             revUtils.addClass(this.sponsored, 'top-right')
-            revUtils.prepend(this.flickity.element, this.sponsored);
+            revUtils.prepend(this.containerElement, this.sponsored);
         } else if (this.options.rev_position == 'bottom_left' || this.options.rev_position == 'bottom_right') {
             revUtils.addClass(this.sponsored, this.options.rev_position.replace('_', '-'));
-            revUtils.append(this.flickity.element, this.sponsored);
+            revUtils.append(this.containerElement, this.sponsored);
         }
     };
 
@@ -280,7 +289,33 @@ RevFlicker({
         if (newOpts.next_effect !== oldOpts.next_effect) {
             this.nextEffect();
         }
+
+        if (newOpts.text_overlay !== oldOpts.text_overlay) {
+            this.textOverlay();
+            this.flickity.reloadCells();
+            this.flickity.reposition();
+        }
     };
+
+    RevFlicker.prototype.textOverlay = function() {
+        var ads = this.containerElement.querySelectorAll('.rev-ad');
+        if (this.options.text_overlay) {
+            revUtils.addClass(this.containerElement, 'rev-flicker-text-overlay');
+            for (var i = 0; i < ads.length; i++) {
+                var ad = ads[i];
+                ad.style.height = this.preloaderHeight + 'px';
+                if (!ad.querySelectorAll('.rev-overlay').length) { // add rev-overlay if not already there
+                    ad.querySelectorAll('img')[0].insertAdjacentHTML('afterend', '<div class="rev-overlay"></div>');
+                }
+            }
+        } else {
+            revUtils.removeClass(this.containerElement, 'rev-flicker-text-overlay');
+            for (var i = 0; i < ads.length; i++) {
+                var ad = ads[i];
+                ad.style.height = 'auto';
+            }
+        }
+    }
 
     RevFlicker.prototype.preData = function() {
 
@@ -382,7 +417,7 @@ RevFlicker({
             }
 
             imagesLoaded( that.flickity.element, function() {
-                revUtils.addClass(that.flickity.element, 'loaded');
+                revUtils.addClass(that.containerElement, 'loaded');
             });
 
         });
