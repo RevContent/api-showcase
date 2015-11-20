@@ -137,6 +137,7 @@ app.directive('revFlicker', ['$location', '$timeout', 'options', function ($loca
         var widget;
 
         options.next_effect = true;
+        options.text_overlay = false;
 
         $timeout(function() {
             widget = new RevFlicker({
@@ -152,7 +153,8 @@ app.directive('revFlicker', ['$location', '$timeout', 'options', function ($loca
                 per_row: options.per_row,
                 next_effect: options.next_effect,
                 headline_size: options.headline_size,
-                max_headline: options.max_headline
+                max_headline: options.max_headline,
+                text_overlay: options.text_overlay
             });
         });
 
