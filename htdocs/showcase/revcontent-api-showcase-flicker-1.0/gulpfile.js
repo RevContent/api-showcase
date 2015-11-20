@@ -42,7 +42,7 @@ gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
       ' */',
       ''].join('\n');
 
-    return gulp.src(['./vendor/flickity/dist/flickity.pkgd.js', './vendor/mobile-detect/mobile-detect.js', './js/revutils.js', '../js/revdialog.js', './js/revdetect.js', './js/revapi.js', './build/revflicker.js'])
+    return gulp.src(['./vendor/flickity/dist/flickity.pkgd.js', './vendor/mobile-detect/mobile-detect.js', '../js/revutils.js', '../js/revdialog.js', './js/revdetect.js', './js/revapi.js', './build/revflicker.js'])
         .pipe(concat('revflicker.pkgd.js'))
         .pipe(gulp.dest('./build'))
         .pipe(uglify({

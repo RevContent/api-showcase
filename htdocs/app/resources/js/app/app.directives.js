@@ -112,7 +112,9 @@ app.directive('revSlider', ['$timeout', 'options', function ($timeout, options) 
                 domain : options.domain,
                 rev_position: options.rev_position,
                 rows: options.rows,
-                per_row: options.per_row
+                per_row: options.per_row,
+                headline_size: options.headline_size,
+                max_headline: options.max_headline
             });
         });
 
