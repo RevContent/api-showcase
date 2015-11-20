@@ -416,7 +416,6 @@ RevSlider({
             numItems = (numItems != undefined) ? numItems : ads.length;
             var offset = rowNum * numItems;
             var nextOffset = offset + numItems;
-            var itemsPerRow = this.grid.getPerRow()
             var el = ads[0].querySelectorAll('.rev-headline h3')[0];
             var t = el.cloneNode(true);
             t.style.visibility = 'hidden';
