@@ -1,8 +1,9 @@
 /*!
- * imagesLoaded PACKAGED v3.2.0
+ * imagesLoaded PACKAGED v3.1.8
  * JavaScript is all like "You images are done yet or what?"
  * MIT License
  */
+
 
 /*!
  * EventEmitter v4.2.6 - git.io/ee
@@ -12,7 +13,7 @@
  */
 
 (function () {
-	'use strict';
+	
 
 	/**
 	 * Class for managing events.
@@ -556,17 +557,17 @@ if ( typeof define === 'function' && define.amd ) {
 })( this );
 
 /*!
- * imagesLoaded v3.2.0
+ * imagesLoaded v3.1.8
  * JavaScript is all like "You images are done yet or what?"
  * MIT License
  */
 
-( function( window, factory ) { 'use strict';
+( function( window, factory ) { 
   // universal module definition
 
   /*global define: false, module: false, require: false */
 
-  if ( typeof define == 'function' && define.amd ) {
+  if ( typeof define === 'function' && define.amd ) {
     // AMD
     define( [
       'eventEmitter/EventEmitter',
@@ -574,7 +575,7 @@ if ( typeof define === 'function' && define.amd ) {
     ], function( EventEmitter, eventie ) {
       return factory( window, EventEmitter, eventie );
     });
-  } else if ( typeof module == 'object' && module.exports ) {
+  } else if ( typeof exports === 'object' ) {
     // CommonJS
     module.exports = factory(
       window,
@@ -600,6 +601,7 @@ function factory( window, EventEmitter, eventie ) {
 
 var $ = window.jQuery;
 var console = window.console;
+var hasConsole = typeof console !== 'undefined';
 
 // -------------------------- helpers -------------------------- //
 
@@ -613,7 +615,7 @@ function extend( a, b ) {
 
 var objToString = Object.prototype.toString;
 function isArray( obj ) {
-  return objToString.call( obj ) == '[object Array]';
+  return objToString.call( obj ) === '[object Array]';
 }
 
 // turn element or nodeList into an array
@@ -622,9 +624,9 @@ function makeArray( obj ) {
   if ( isArray( obj ) ) {
     // use object if already an array
     ary = obj;
-  } else if ( typeof obj.length == 'number' ) {
+  } else if ( typeof obj.length === 'number' ) {
     // convert nodeList to array
-    for ( var i=0; i < obj.length; i++ ) {
+    for ( var i=0, len = obj.length; i < len; i++ ) {
       ary.push( obj[i] );
     }
   } else {
@@ -644,17 +646,17 @@ function makeArray( obj ) {
   function ImagesLoaded( elem, options, onAlways ) {
     // coerce ImagesLoaded() without new, to be new ImagesLoaded()
     if ( !( this instanceof ImagesLoaded ) ) {
-      return new ImagesLoaded( elem, options, onAlways );
+      return new ImagesLoaded( elem, options );
     }
     // use elem as selector string
-    if ( typeof elem == 'string' ) {
+    if ( typeof elem === 'string' ) {
       elem = document.querySelectorAll( elem );
     }
 
     this.elements = makeArray( elem );
     this.options = extend( {}, this.options );
 
-    if ( typeof options == 'function' ) {
+    if ( typeof options === 'function' ) {
       onAlways = options;
     } else {
       extend( this.options, options );
@@ -686,71 +688,25 @@ function makeArray( obj ) {
     this.images = [];
 
     // filter & find items if we have an item selector
-    for ( var i=0; i < this.elements.length; i++ ) {
+    for ( var i=0, len = this.elements.length; i < len; i++ ) {
       var elem = this.elements[i];
-      this.addElementImages( elem );
-    }
-  };
-
-  /**
-   * @param {Node} element
-   */
-  ImagesLoaded.prototype.addElementImages = function( elem ) {
-    // filter siblings
-    if ( elem.nodeName == 'IMG' ) {
-      this.addImage( elem );
-    }
-    // get background image on element
-    if ( this.options.background === true ) {
-      this.addElementBackgroundImages( elem );
-    }
-
-    // find children
-    // no non-element nodes, #143
-    var nodeType = elem.nodeType;
-    if ( !nodeType || !elementNodeTypes[ nodeType ] ) {
-      return;
-    }
-    var childImgs = elem.querySelectorAll('img');
-    // concat childElems to filterFound array
-    for ( var i=0; i < childImgs.length; i++ ) {
-      var img = childImgs[i];
-      this.addImage( img );
-    }
-
-    // get child background images
-    if ( typeof this.options.background == 'string' ) {
-      var children = elem.querySelectorAll( this.options.background );
-      for ( i=0; i < children.length; i++ ) {
-        var child = children[i];
-        this.addElementBackgroundImages( child );
+      // filter siblings
+      if ( elem.nodeName === 'IMG' ) {
+        this.addImage( elem );
+      }
+      // find children
+      // no non-element nodes, #143
+      var nodeType = elem.nodeType;
+      if ( !nodeType || !( nodeType === 1 || nodeType === 9 || nodeType === 11 ) ) {
+        continue;
+      }
+      var childElems = elem.querySelectorAll('img');
+      // concat childElems to filterFound array
+      for ( var j=0, jLen = childElems.length; j < jLen; j++ ) {
+        var img = childElems[j];
+        this.addImage( img );
       }
     }
-  };
-
-  var elementNodeTypes = {
-    1: true,
-    9: true,
-    11: true
-  };
-
-  ImagesLoaded.prototype.addElementBackgroundImages = function( elem ) {
-    var style = getStyle( elem );
-    // get url inside url("...")
-    var reURL = /url\(['"]*([^'"\)]+)['"]*\)/gi;
-    var matches = reURL.exec( style.backgroundImage );
-    while ( matches !== null ) {
-      var url = matches && matches[1];
-      if ( url ) {
-        this.addBackground( url, elem );
-      }
-      matches = reURL.exec( style.backgroundImage );
-    }
-  };
-
-  // IE8
-  var getStyle = window.getComputedStyle || function( elem ) {
-    return elem.currentStyle;
   };
 
   /**
@@ -761,63 +717,73 @@ function makeArray( obj ) {
     this.images.push( loadingImage );
   };
 
-  ImagesLoaded.prototype.addBackground = function( url, elem ) {
-    var background = new Background( url, elem );
-    this.images.push( background );
-  };
-
   ImagesLoaded.prototype.check = function() {
     var _this = this;
-    this.progressedCount = 0;
+    var checkedCount = 0;
+    var length = this.images.length;
     this.hasAnyBroken = false;
     // complete if no images
-    if ( !this.images.length ) {
+    if ( !length ) {
       this.complete();
       return;
     }
 
-    function onProgress( image, elem, message ) {
-      // HACK - Chrome triggers event before object properties have changed. #83
-      setTimeout( function() {
-        _this.progress( image, elem, message );
-      });
+    function onConfirm( image, message ) {
+      if ( _this.options.debug && hasConsole ) {
+        console.log( 'confirm', image, message );
+      }
+
+      _this.progress( image );
+      checkedCount++;
+      if ( checkedCount === length ) {
+        _this.complete();
+      }
+      return true; // bind once
     }
 
-    for ( var i=0; i < this.images.length; i++ ) {
+    for ( var i=0; i < length; i++ ) {
       var loadingImage = this.images[i];
-      loadingImage.once( 'progress', onProgress );
+      loadingImage.on( 'confirm', onConfirm );
       loadingImage.check();
     }
   };
 
-  ImagesLoaded.prototype.progress = function( image, elem, message ) {
-    this.progressedCount++;
+  ImagesLoaded.prototype.progress = function( image ) {
     this.hasAnyBroken = this.hasAnyBroken || !image.isLoaded;
-    // progress event
-    this.emit( 'progress', this, image, elem );
-    if ( this.jqDeferred && this.jqDeferred.notify ) {
-      this.jqDeferred.notify( this, image );
-    }
-    // check if completed
-    if ( this.progressedCount == this.images.length ) {
-      this.complete();
-    }
-
-    if ( this.options.debug && console ) {
-      console.log( 'progress: ' + message, image, elem );
-    }
+    // HACK - Chrome triggers event before object properties have changed. #83
+    var _this = this;
+    setTimeout( function() {
+      _this.emit( 'progress', _this, image );
+      if ( _this.jqDeferred && _this.jqDeferred.notify ) {
+        _this.jqDeferred.notify( _this, image );
+      }
+    });
   };
 
   ImagesLoaded.prototype.complete = function() {
     var eventName = this.hasAnyBroken ? 'fail' : 'done';
     this.isComplete = true;
-    this.emit( eventName, this );
-    this.emit( 'always', this );
-    if ( this.jqDeferred ) {
-      var jqMethod = this.hasAnyBroken ? 'reject' : 'resolve';
-      this.jqDeferred[ jqMethod ]( this );
-    }
+    var _this = this;
+    // HACK - another setTimeout so that confirm happens after progress
+    setTimeout( function() {
+      _this.emit( eventName, _this );
+      _this.emit( 'always', _this );
+      if ( _this.jqDeferred ) {
+        var jqMethod = _this.hasAnyBroken ? 'reject' : 'resolve';
+        _this.jqDeferred[ jqMethod ]( _this );
+      }
+    });
   };
+
+  // -------------------------- jquery -------------------------- //
+
+  if ( $ ) {
+    $.fn.imagesLoaded = function( options, callback ) {
+      var instance = new ImagesLoaded( this, options, callback );
+      return instance.jqDeferred.promise( $(this) );
+    };
+  }
+
 
   // --------------------------  -------------------------- //
 
@@ -828,118 +794,103 @@ function makeArray( obj ) {
   LoadingImage.prototype = new EventEmitter();
 
   LoadingImage.prototype.check = function() {
+    // first check cached any previous images that have same src
+    var resource = cache[ this.img.src ] || new Resource( this.img.src );
+    if ( resource.isConfirmed ) {
+      this.confirm( resource.isLoaded, 'cached was confirmed' );
+      return;
+    }
+
     // If complete is true and browser supports natural sizes,
     // try to check for image status manually.
-    var isComplete = this.getIsImageComplete();
-    if ( isComplete ) {
+    if ( this.img.complete && this.img.naturalWidth !== undefined ) {
       // report based on naturalWidth
       this.confirm( this.img.naturalWidth !== 0, 'naturalWidth' );
       return;
     }
 
     // If none of the checks above matched, simulate loading on detached element.
-    this.proxyImage = new Image();
-    eventie.bind( this.proxyImage, 'load', this );
-    eventie.bind( this.proxyImage, 'error', this );
-    // bind to image as well for Firefox. #191
-    eventie.bind( this.img, 'load', this );
-    eventie.bind( this.img, 'error', this );
-    this.proxyImage.src = this.img.src;
-  };
+    var _this = this;
+    resource.on( 'confirm', function( resrc, message ) {
+      _this.confirm( resrc.isLoaded, message );
+      return true;
+    });
 
-  LoadingImage.prototype.getIsImageComplete = function() {
-    return this.img.complete && this.img.naturalWidth !== undefined;
+    resource.check();
   };
 
   LoadingImage.prototype.confirm = function( isLoaded, message ) {
     this.isLoaded = isLoaded;
-    this.emit( 'progress', this, this.img, message );
+    this.emit( 'confirm', this, message );
+  };
+
+  // -------------------------- Resource -------------------------- //
+
+  // Resource checks each src, only once
+  // separate class from LoadingImage to prevent memory leaks. See #115
+
+  var cache = {};
+
+  function Resource( src ) {
+    this.src = src;
+    // add to cache
+    cache[ src ] = this;
+  }
+
+  Resource.prototype = new EventEmitter();
+
+  Resource.prototype.check = function() {
+    // only trigger checking once
+    if ( this.isChecked ) {
+      return;
+    }
+    // simulate loading on detached element
+    var proxyImage = new Image();
+    eventie.bind( proxyImage, 'load', this );
+    eventie.bind( proxyImage, 'error', this );
+    proxyImage.src = this.src;
+    // set flag
+    this.isChecked = true;
   };
 
   // ----- events ----- //
 
   // trigger specified handler for event type
-  LoadingImage.prototype.handleEvent = function( event ) {
+  Resource.prototype.handleEvent = function( event ) {
     var method = 'on' + event.type;
     if ( this[ method ] ) {
       this[ method ]( event );
     }
   };
 
-  LoadingImage.prototype.onload = function() {
+  Resource.prototype.onload = function( event ) {
     this.confirm( true, 'onload' );
-    this.unbindEvents();
+    this.unbindProxyEvents( event );
   };
 
-  LoadingImage.prototype.onerror = function() {
+  Resource.prototype.onerror = function( event ) {
     this.confirm( false, 'onerror' );
-    this.unbindEvents();
+    this.unbindProxyEvents( event );
   };
 
-  LoadingImage.prototype.unbindEvents = function() {
-    eventie.unbind( this.proxyImage, 'load', this );
-    eventie.unbind( this.proxyImage, 'error', this );
-    eventie.unbind( this.img, 'load', this );
-    eventie.unbind( this.img, 'error', this );
-  };
+  // ----- confirm ----- //
 
-  // -------------------------- Background -------------------------- //
-
-  function Background( url, element ) {
-    this.url = url;
-    this.element = element;
-    this.img = new Image();
-  }
-
-  // inherit LoadingImage prototype
-  Background.prototype = new LoadingImage();
-
-  Background.prototype.check = function() {
-    eventie.bind( this.img, 'load', this );
-    eventie.bind( this.img, 'error', this );
-    this.img.src = this.url;
-    // check if image is already complete
-    var isComplete = this.getIsImageComplete();
-    if ( isComplete ) {
-      this.confirm( this.img.naturalWidth !== 0, 'naturalWidth' );
-      this.unbindEvents();
-    }
-  };
-
-  Background.prototype.unbindEvents = function() {
-    eventie.unbind( this.img, 'load', this );
-    eventie.unbind( this.img, 'error', this );
-  };
-
-  Background.prototype.confirm = function( isLoaded, message ) {
+  Resource.prototype.confirm = function( isLoaded, message ) {
+    this.isConfirmed = true;
     this.isLoaded = isLoaded;
-    this.emit( 'progress', this, this.element, message );
+    this.emit( 'confirm', this, message );
   };
 
-  // -------------------------- jQuery -------------------------- //
-
-  ImagesLoaded.makeJQueryPlugin = function( jQuery ) {
-    jQuery = jQuery || window.jQuery;
-    if ( !jQuery ) {
-      return;
-    }
-    // set local variable
-    $ = jQuery;
-    // $().imagesLoaded()
-    $.fn.imagesLoaded = function( options, callback ) {
-      var instance = new ImagesLoaded( this, options, callback );
-      return instance.jqDeferred.promise( $(this) );
-    };
+  Resource.prototype.unbindProxyEvents = function( event ) {
+    eventie.unbind( event.target, 'load', this );
+    eventie.unbind( event.target, 'error', this );
   };
-  // try making plugin
-  ImagesLoaded.makeJQueryPlugin();
 
-  // --------------------------  -------------------------- //
+  // -----  ----- //
 
   return ImagesLoaded;
 
 });
-
 
 
 
@@ -1221,7 +1172,7 @@ RevToaster({
 
                 for (var i = 0; i < resp.length; i++) {
                     html += '<div class="rev-ad">' +
-                                '<a href="'+ resp[i].url +'">' +
+                                '<a rel="nofollow" href="'+ resp[i].url +'">' +
                                     '<div class="rev-image"><img src="'+ resp[i].image +'"/></div>' +
                                     '<div class="rev-headline"><h3>'+ resp[i].headline +'</h3></div>' +
                                     '<div class="rev-provider">'+ resp[i].brand +'</div>' +
