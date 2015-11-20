@@ -332,7 +332,7 @@ RevFlicker({
 
         for (var j = index; j < this.options.sponsored; j++) {
             var html = '<div class="rev-ad">' +
-                        '<a href="" target="_blank">' +
+                        '<a href="" rel="nofollow" target="_blank">' +
                             '<div class="rev-image" style="height:'+ that.preloaderHeight +'px"><img src=""/></div>' +
                             '<div class="rev-headline" style="height:'+ that.headlineHeight +'px; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>' +
                             '<div style="margin:' + that.providerMargin +'px '  + that.innerMargin + 'px ' + that.providerMargin +'px;font-size:'+ that.providerFontSize +'px;line-height:'+ that.providerLineHeight +'px;height:'+ that.providerLineHeight +'px;" class="rev-provider"></div>' +
