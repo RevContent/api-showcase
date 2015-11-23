@@ -477,6 +477,8 @@ RevFlicker({
                 }
             }
             revUtils.remove(t);
+            var numLines = Math.ceil(maxHeadlineHeight / that.headlineLineHeight);
+            maxHeadlineHeight = numLines * that.headlineLineHeight;
         }
         return maxHeadlineHeight;
     };
