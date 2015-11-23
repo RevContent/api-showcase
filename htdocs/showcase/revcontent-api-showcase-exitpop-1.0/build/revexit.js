@@ -25,6 +25,7 @@
  j = background mode, defaults to "default", options are "classic", "default" OR custom RGBA OR Hexadecimal color OR a handful of HTML color names (red, blue etc.)
  ps = Panel Size, choices are "3x2" or "4x2" defaults to 4x2, NOTE: for HD modes only!
  ml = "Mailing List" Feature, multi-key parameter for Mailchimp Integration, ml=API_KEY;LIST_ID;HEADLINE;MESSAGE;BUTTON;THEME;CHOICES, default = disabled, THEME options are "taskbar" or "tile", CHOICES is comma separated list of options.
+ ch = "Closed Hours", The interval at which RevExit will remain closed for. Defaults to 24 Hours or 1-day if not provided.
 
  **/
 (function(j,q,u,e,r,y,R,o,x){try{o=jQuery;if(o&&(!R||(R&&o.fn.jquery==R))){x=true}}catch(er){}if(!x||(R&&o.fn.jquery!=R)){(q=j.createElement(q)).type='text/javascript';if(r){q.async=true}q.src='//ajax.googleapis.com/ajax/libs/jquery/'+(R||1)+'/jquery.min.js';u=j.getElementsByTagName(u)[0];q.onload=q.onreadystatechange=(function(){if(!e&&(!this.readyState||this.readyState=='loaded'||this.readyState=='complete')){e=true;x=jQuery;jQuery.noConflict(true)(function(){y(x)});q.onload=q.onreadystatechange=null;u.removeChild(q)}});u.appendChild(q)}else{y(o)}})(document,'script','head',false,false,(function($){$(function(){
@@ -61,6 +62,13 @@
             revcontentexithash = revcontentexithashes[i].split('=');
             revcontentexitvars.push(revcontentexithash[0]);
             revcontentexitvars[revcontentexithash[0]] = revcontentexithash[1];
+        }
+
+        // Closed Hours
+        if(revcontentexitvars.ch === undefined || isNaN(revcontentexitvars.ch)) {
+            revcontentexitvars.ch = 24;
+        } else if(revcontentexitvars.ch < 1) {
+            revcontentexitvars.ch = 24;
         }
 
         // Setup Exit Mode
@@ -562,7 +570,7 @@
 
         });
 
-        revcontentSetCookie("revcontentapibeforego_" + revcontentexitvars.w, 1, 1);
+        revcontentSetCookie("revcontentapibeforego_" + revcontentexitvars.w, 1, revcontentexitvars.ch/24);
     }
 
 })}),'2.1.4');
