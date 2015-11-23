@@ -4777,6 +4777,10 @@ AnyGrid.prototype._setUp = function() {
         this.breakPoint = 'xxs'
     }
 
+    if (!this.perRow) { // try to just set it to what was passed
+        this.perRow = parseInt(this.options.perRow);
+    }
+
     this.columnWidth = (this.containerWidth / this.perRow);
 
     this.cols = Math.floor( this.containerWidth / this.columnWidth );
@@ -5496,7 +5500,7 @@ RevSlider({
         if (this.options.max_headline && this.getMaxHeadlineHeight() > 0) {
             this.headlineHeight = this.getMaxHeadlineHeight();
         }
-        this.headlineMarginTop = ((this.headlineHeight * .2).toFixed(2) / 1);
+        this.headlineMarginTop = ((this.headlineLineHeight * .4).toFixed(2) / 1);
 
         this.providerFontSize = Math.max(11, ((this.headlineLineHeight / 2).toFixed(2) / 1));
         this.providerLineHeight = ((this.providerFontSize * 1.25).toFixed(2) / 1);
