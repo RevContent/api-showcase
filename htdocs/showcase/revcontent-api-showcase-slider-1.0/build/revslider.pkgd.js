@@ -5595,12 +5595,12 @@ RevSlider({
             ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
         }
 
-        this.grid.reloadItems();
-        this.grid.layout();
         this.checkEllipsis();
         if (this.options.max_headline) {
             this.checkMaxHeadlineHeightPerRow();
         }
+        this.grid.reloadItems();
+        this.grid.layout();
     };
 
     RevSlider.prototype.checkMaxHeadlineHeightPerRow = function() {
