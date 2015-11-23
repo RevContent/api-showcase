@@ -196,7 +196,7 @@ RevSlider({
         if (this.options.max_headline && this.getMaxHeadlineHeight() > 0) {
             this.headlineHeight = this.getMaxHeadlineHeight();
         }
-        this.headlineMarginTop = ((this.headlineHeight * .2).toFixed(2) / 1);
+        this.headlineMarginTop = ((this.headlineLineHeight * .4).toFixed(2) / 1);
 
         this.providerFontSize = Math.max(11, ((this.headlineLineHeight / 2).toFixed(2) / 1));
         this.providerLineHeight = ((this.providerFontSize * 1.25).toFixed(2) / 1);
