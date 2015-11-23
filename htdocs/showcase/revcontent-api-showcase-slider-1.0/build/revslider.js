@@ -96,7 +96,7 @@ RevSlider({
             url: 'https://trends.revcontent.com/api/v1/',
             ad_border: true,
             headline_size: 2,
-            max_headline: false
+            max_headline: true
         };
 
         // merge options
@@ -429,6 +429,8 @@ RevSlider({
                 }
             }
             revUtils.remove(t);
+            var numLines = Math.ceil(maxHeadlineHeight / that.headlineLineHeight);
+            maxHeadlineHeight = numLines * that.headlineLineHeight;
         }
         return maxHeadlineHeight;
     };

@@ -4777,10 +4777,6 @@ AnyGrid.prototype._setUp = function() {
         this.breakPoint = 'xxs'
     }
 
-    if (!this.perRow) { // try to just set it to what was passed
-        this.perRow = parseInt(this.options.perRow);
-    }
-
     this.columnWidth = (this.containerWidth / this.perRow);
 
     this.cols = Math.floor( this.containerWidth / this.columnWidth );
@@ -5400,7 +5396,7 @@ RevSlider({
             url: 'https://trends.revcontent.com/api/v1/',
             ad_border: true,
             headline_size: 2,
-            max_headline: false
+            max_headline: true
         };
 
         // merge options
@@ -5733,6 +5729,8 @@ RevSlider({
                 }
             }
             revUtils.remove(t);
+            var numLines = Math.ceil(maxHeadlineHeight / that.headlineLineHeight);
+            maxHeadlineHeight = numLines * that.headlineLineHeight;
         }
         return maxHeadlineHeight;
     };
