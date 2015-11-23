@@ -5396,7 +5396,7 @@ RevSlider({
             url: 'https://trends.revcontent.com/api/v1/',
             ad_border: true,
             headline_size: 2,
-            max_headline: true
+            max_headline: false
         };
 
         // merge options
