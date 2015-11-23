@@ -26,6 +26,7 @@
  ps = Panel Size, choices are "3x2" or "4x2" defaults to 4x2, NOTE: for HD modes only!
  ml = "Mailing List" Feature, multi-key parameter for Mailchimp Integration, ml=API_KEY;LIST_ID;HEADLINE;MESSAGE;BUTTON;THEME;CHOICES, default = disabled, THEME options are "taskbar" or "tile", CHOICES is comma separated list of options.
  ch = "Closed Hours", The interval at which RevExit will remain closed for. Defaults to 24 Hours or 1-day if not provided.
+ r = "Regions" or zones that RevExit will trigger once departed, default = "all", can be set to "top", "bottom", "left" or "right". Combinations are also accepted, ex. "left,right"
 
  **/
 (function(j,q,u,e,r,y,R,o,x){try{o=jQuery;if(o&&(!R||(R&&o.fn.jquery==R))){x=true}}catch(er){}if(!x||(R&&o.fn.jquery!=R)){(q=j.createElement(q)).type='text/javascript';if(r){q.async=true}q.src='//ajax.googleapis.com/ajax/libs/jquery/'+(R||1)+'/jquery.min.js';u=j.getElementsByTagName(u)[0];q.onload=q.onreadystatechange=(function(){if(!e&&(!this.readyState||this.readyState=='loaded'||this.readyState=='complete')){e=true;x=jQuery;jQuery.noConflict(true)(function(){y(x)});q.onload=q.onreadystatechange=null;u.removeChild(q)}});u.appendChild(q)}else{y(o)}})(document,'script','head',false,false,(function($){$(function(){
@@ -71,6 +72,16 @@
             revcontentexitvars.ch = 24;
         }
 
+        // Exit Regions
+        var exit_regions = ["all"];
+        if(revcontentexitvars.r === undefined) {
+            revcontentexitvars.r = "all";
+        } else if(revcontentexitvars.r.length === 0){
+            revcontentexitvars.r = "all";
+        } else {
+            exit_regions = revcontentexitvars.r.split(",");
+        }
+
         // Setup Exit Mode
         var exitMode = "desktop";
         switch(revcontentexitvars.x) {
@@ -104,7 +115,6 @@
 
         if (userHasRevcontent != "" && revcontentexitvars.t != "true") {
             $('body').attr({'data-revexit': 'expired'});
-            //console.log("user already saw us today");
         } else {
             var exit_expired = $('body').attr('data-revexit') == 'expired' ? true : false;
             if (false == exit_expired && revExitMobile == false && exitMode != "mobileonly" && (exitMode == "desktop" || exitMode == "desktop+mobile")) {
@@ -116,12 +126,54 @@
                     var mouse_y = e.clientY;
                     var viewport_dimensions = {width: $(window).width(), height: $(window).height()};
 
-                    if (mouse_x <= 0 || mouse_x >= viewport_dimensions.width || mouse_y <= 0 || mouse_y >= viewport_dimensions.height) {
-                        // the cursor has left the building
+                    var fire_rx = false;
+
+                    // Exit on ALL regions
+                    if(exit_regions.indexOf("all") !== -1) {
+                        if (mouse_x <= 0 || (mouse_x >= viewport_dimensions.width) || mouse_y <= 0 || mouse_y >= viewport_dimensions.height) {
+                            console.log("Exiting from ALL zones");
+                            fire_rx = true;
+                        }
+                    }
+
+                    // Exit on TOP
+                    if(exit_regions.indexOf("all") === -1 && exit_regions.indexOf("top") !== -1) {
+                        if (mouse_y <= 0 && mouse_y < viewport_dimensions.height) {
+                            console.log("Exiting from TOP zone");
+                            fire_rx = true;
+                        }
+                    }
+
+                    // Exit on LEFT
+                    if(exit_regions.indexOf("all") === -1 && exit_regions.indexOf("left") !== -1) {
+                        if (mouse_x <= 0 && mouse_x < viewport_dimensions.width) {
+                            console.log("Exiting from LEFT zone");
+                            fire_rx = true;
+                        }
+                    }
+
+                    // Exit on BOTTOM
+                    if(exit_regions.indexOf("all") === -1 && exit_regions.indexOf("bottom") !== -1) {
+                        if (mouse_y > 0 && mouse_y >= viewport_dimensions.height) {
+                            console.log("Exiting from BOTTOM zone");
+                            fire_rx = true;
+                        }
+                    }
+
+                    // Exit on RIGHT
+                    if(exit_regions.indexOf("all") === -1 && exit_regions.indexOf("right") !== -1) {
+                        if (mouse_x > 0 && mouse_x >= viewport_dimensions.width) {
+                            console.log("Exiting from RIGHT zone");
+                            fire_rx = true;
+                        }
+                    }
+
+                    if(true === fire_rx){
                         if ($('body').attr('data-revexit') === undefined || revcontentexitvars.t == "true") {
                             revcontentExecute(revcontentexitvars, revExitMobile, revExitIPhone, revExitIPad, enableSubscriptions);
                         }
                     }
+
                 });
             } else if (false === exit_expired && revExitMobile == true && exitMode != "desktop" && (exitMode == "desktop+mobile" || exitMode == "mobileonly" || exitMode == "mobile")) {
                 //console.log("event2");
