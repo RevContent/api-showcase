@@ -279,7 +279,6 @@ RevFlicker({
         var width = this.containerWidth / this.perRow;
 
         this.margin = ((width * .05).toFixed(2) / 1);
-        this.innerMargin = ((width * .02).toFixed(2) / 1);
 
         // font size is relative to width, other measurements are relative to this font size
         this.headlineFontSize = Math.max(14, ((width * .03).toFixed(2) / 1));
@@ -289,6 +288,8 @@ RevFlicker({
             this.headlineHeight = this.getMaxHeadlineHeight();
         }
         this.headlineMarginTop = ((this.headlineLineHeight * .4).toFixed(2) / 1);
+
+        this.innerMargin = ((this.headlineMarginTop * .3).toFixed(2) / 1);
 
         this.providerFontSize = Math.max(11, ((this.headlineLineHeight / 2).toFixed(2) / 1));
         this.providerLineHeight = ((this.providerFontSize * 1.25).toFixed(2) / 1);
