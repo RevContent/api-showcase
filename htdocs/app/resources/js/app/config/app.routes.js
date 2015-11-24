@@ -102,7 +102,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
             views: {
                 main: {
                     templateUrl: function($stateParams) {
-                        return 'app/resources/js/app/demo//index.html'
+                        return 'app/resources/js/app/demo/index.html'
                     },
                     controller: 'DemoCtrl',
                     controllerAs: 'demo'
