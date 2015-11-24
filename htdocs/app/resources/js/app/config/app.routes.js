@@ -36,6 +36,11 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
 
                 var widget = widgets.data[$stateParams.id];
 
+                if (!widget) {
+                    $state.go('404', {path: $stateParams.id});
+                    return false;
+                }
+
                 $mdDialog.show({
                     templateUrl: 'app/resources/js/app/dialog/post.html',
                     // targetEvent: $mdCardContent.getClickEvent(), // causing bug on history navigation
