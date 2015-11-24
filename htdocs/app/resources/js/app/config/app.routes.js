@@ -55,6 +55,11 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                                 $window.open('/showcase/' + $scope.post.link, '_blank');
                             }
                         };
+                        $scope.demo = function(id) {
+                            $mdDialog.hide().then(function() {
+                                $state.go('post_demo', {id: id});
+                            });
+                        };
                     },
                     onComplete: function() {
                     }
@@ -83,6 +88,19 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                     templateUrl: function($stateParams) {
                         return 'app/resources/js/app/preview/sidenav/'+ $stateParams.id +'.html'
                     }
+                }
+            }
+        })
+        .state('post_demo', {
+            url: "/{id}/demo",
+            sticky: true,
+            views: {
+                main: {
+                    templateUrl: function($stateParams) {
+                        return 'app/resources/js/app/demo/'+ $stateParams.id +'.html'
+                    },
+                    controller: 'DemoCtrl',
+                    controllerAs: 'ctrl'
                 }
             }
         })
