@@ -112,7 +112,7 @@
 
         <main layout>
 
-            <md-sidenav md-is-open="true" md-is-locked-open="true" ui-view="sidenav" md-component-id="left" class="md-sidenav-left"></md-sidenav>
+            <md-sidenav md-is-open="demoSidenav.sideNavOpen" md-is-locked-open="demoSidenav.sideNavOpen" ui-view="sidenav" md-component-id="left" class="md-sidenav-left"></md-sidenav>
 
             <div ui-view="main" flex layout-align="center center" layout="column"></div>
 

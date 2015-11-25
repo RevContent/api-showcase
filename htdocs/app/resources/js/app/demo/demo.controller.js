@@ -1,5 +1,7 @@
 app.controller('DemoCtrl', function(widgets, $stateParams, $state, $mdToast, $rootScope, $scope, $http, $timeout, $mdBottomSheet, $mdSidenav, $mdToast, options, slider, widgets) {
 
+    this.sideNavOpen = $stateParams.demo_id ? true : false;
+
     this.widget = widgets.data[$stateParams.id];
 
     if (!this.widget) {
