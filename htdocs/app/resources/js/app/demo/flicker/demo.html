@@ -1,6 +1,12 @@
 <div flex layout="column" layout-fill layout-padding>
 
-    <h2 class="md-headline" ng-bind="demo.widget.title"></h2>
+    <div>
+
+        <h2 class="md-headline" ng-bind="demo.widget.title"></h2>
+
+        <div ng-include="demo.getDescription()"></div>
+
+    </div>
 
     <div flex="grow" layout layout-align="center center" ng-include="demo.getPage()"></div>
 

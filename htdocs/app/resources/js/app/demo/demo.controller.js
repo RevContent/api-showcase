@@ -12,8 +12,16 @@ app.controller('DemoCtrl', function(widgets, $stateParams, $state, $mdToast, $ro
 
     this.widget.id = $stateParams.id;
 
+    this.getDescription = function() {
+        return 'app/resources/js/app/demo/flicker/'+ $stateParams.demo_id +'/description.html';
+    }
+
     this.getPage = function() {
-        return 'app/resources/js/app/demo/flicker/demo'+ $stateParams.demo_id +'.html';
+        return 'app/resources/js/app/demo/flicker/'+ $stateParams.demo_id +'/demo.html';
+    }
+
+    this.getActive = function(id) {
+        return ($stateParams.demo_id == id)
     }
 
 });

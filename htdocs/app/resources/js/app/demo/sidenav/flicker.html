@@ -2,15 +2,44 @@
 
     <md-list layout="column" layout-padding>
         <md-subheader class="md-accent" class="md-accent">Demos</md-subheader>
+
         <md-list-item>
-
-            <div layout="column">
-                <md-button ui-sref="post_demo({ id: demoSidenav.widget.id, demo_id: 1 })">Demo</md-button>
-
-                <md-button ui-sref="post_demo({ id: demoSidenav.widget.id, demo_id: 2 })">Demo</md-button>
-            </div>
-
+            <md-button flex class="fade-button" ng-class="{'md-primary': demoSidenav.getActive(1)}" ui-sref="post_demo({ id: demoSidenav.widget.id, demo_id: 1 })">Default</md-button>
         </md-list-item>
+
+        <md-list-item>
+            <md-button flex class="fade-button" ng-class="{'md-primary': demoSidenav.getActive(2)}" ui-sref="post_demo({ id: demoSidenav.widget.id, demo_id: 2 })">Rev Position</md-button>
+        </md-list-item>
+
+        <md-list-item>
+            <md-button flex ng-class="{'md-primary': demoSidenav.getActive(3)}" ui-sref="post_demo({ id: demoSidenav.widget.id, demo_id: 3 })">Per Row</md-button>
+        </md-list-item>
+
+        <md-list-item>
+                    <md-button flex ng-class="{'md-primary': demoSidenav.getActive(4)}" ui-sref="post_demo({ id: demoSidenav.widget.id, demo_id: 4 })">Show Arrows</md-button>
+        </md-list-item>
+
+        <md-list-item>
+            <md-button flex ng-class="{'md-primary': demoSidenav.getActive(5)}" ui-sref="post_demo({ id: demoSidenav.widget.id, demo_id: 5 })">Next Effect</md-button>
+        </md-list-item>
+
+        <md-list-item>
+            <md-button flex ng-class="{'md-primary': demoSidenav.getActive(6)}" ui-sref="post_demo({ id: demoSidenav.widget.id, demo_id: 6 })">Sponsored</md-button>
+        </md-list-item>
+
+        <md-list-item>
+            <md-button flex ng-class="{'md-primary': demoSidenav.getActive(7)}" ui-sref="post_demo({ id: demoSidenav.widget.id, demo_id: 7 })">Internal</md-button>
+        </md-list-item>
+
+        <md-list-item>
+            <md-button flex ng-class="{'md-primary': demoSidenav.getActive(8)}" ui-sref="post_demo({ id: demoSidenav.widget.id, demo_id: 8 })">Header</md-button>
+        </md-list-item>
+
+        <md-list-item>
+            <md-button flex ng-class="{'md-primary': demoSidenav.getActive(9)}" ui-sref="post_demo({ id: demoSidenav.widget.id, demo_id: 9 })">Devices</md-button>
+        </md-list-item>
+
+
     </md-list>
 
 </md-content>

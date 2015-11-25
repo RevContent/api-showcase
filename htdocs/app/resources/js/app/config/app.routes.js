@@ -62,7 +62,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                         };
                         $scope.demo = function(id) {
                             $mdDialog.hide().then(function() {
-                                $state.go('post_demo', {id: id});
+                                $state.go('post_demos', {id: id});
                             });
                         };
                     },
@@ -116,6 +116,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
             }
         })
         .state('post_demo', {
+            sticky: true,
             url: "/{id}/demos/{demo_id}",
             views: {
                 main: {
