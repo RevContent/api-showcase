@@ -98,11 +98,10 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
         })
         .state('post_demos', {
             url: "/{id}/demos",
-            sticky: true,
             views: {
                 main: {
                     templateUrl: function($stateParams) {
-                        return 'app/resources/js/app/demo/index.html'
+                        return 'app/resources/js/app/demo/'+ $stateParams.id +'/index.html'
                     },
                     controller: 'DemoCtrl',
                     controllerAs: 'demo'
@@ -116,13 +115,22 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                 }
             }
         })
-        .state('post_demos.post_demo', {
-            url: "/{demo_id}",
+        .state('post_demo', {
+            url: "/{id}/demos/{demo_id}",
             views: {
-                demo: {
+                main: {
                     templateUrl: function($stateParams) {
-                        return 'app/resources/js/app/demo/'+ $stateParams.id + '/demo' +  $stateParams.demo_id + '.html'
-                    }
+                        return 'app/resources/js/app/demo/'+ $stateParams.id + '/demo.html'
+                    },
+                    controller: 'DemoCtrl',
+                    controllerAs: 'demo'
+                },
+                sidenav: {
+                    templateUrl: function($stateParams) {
+                        return 'app/resources/js/app/demo/sidenav/'+ $stateParams.id +'.html'
+                    },
+                    controller: 'DemoCtrl',
+                    controllerAs: 'demoSidenav'
                 }
             }
         })

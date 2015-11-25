@@ -2,8 +2,6 @@
 
     <h2 class="md-headline" ng-bind="demo.widget.title"></h2>
 
-    <div flex="grow" layout layout-align="center center">
-        <div layout layout-fill ui-view="demo"></div>
-    </div>
+    <div flex="grow" layout layout-align="center center" ng-include="demo.getPage()"></div>
 
 </div>
