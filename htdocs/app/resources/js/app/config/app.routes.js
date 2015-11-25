@@ -103,6 +103,26 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                     templateUrl: function($stateParams) {
                         return 'app/resources/js/app/demo/'+ $stateParams.id +'/index.html'
                     },
+                    controller: 'DemosCtrl',
+                    controllerAs: 'demo'
+                },
+                sidenav: {
+                    templateUrl: function($stateParams) {
+                        return 'app/resources/js/app/demo/sidenav/'+ $stateParams.id +'.html'
+                    },
+                    controller: 'DemosCtrl',
+                    controllerAs: 'demoSidenav'
+                }
+            }
+        })
+        .state('post_demo', {
+            sticky: true,
+            url: "/{id}/demo",
+            views: {
+                main: {
+                    templateUrl: function($stateParams) {
+                        return 'app/resources/js/app/demo/'+ $stateParams.id +'/demo.html'
+                    },
                     controller: 'DemoCtrl',
                     controllerAs: 'demo'
                 },
@@ -115,23 +135,19 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                 }
             }
         })
-        .state('post_demo', {
-            sticky: true,
-            url: "/{id}/demos/{demo_id}",
+        .state('post_demo_id', {
+            parent: 'post_demo',
+            url: "/{demo_id}",
             views: {
-                main: {
+                description: {
                     templateUrl: function($stateParams) {
-                        return 'app/resources/js/app/demo/'+ $stateParams.id + '/demo.html'
-                    },
-                    controller: 'DemoCtrl',
-                    controllerAs: 'demo'
+                        return 'app/resources/js/app/demo/'+ $stateParams.id +'/'+ $stateParams.demo_id +'/description.html';
+                    }
                 },
-                sidenav: {
+                demo: {
                     templateUrl: function($stateParams) {
-                        return 'app/resources/js/app/demo/sidenav/'+ $stateParams.id +'.html'
-                    },
-                    controller: 'DemoCtrl',
-                    controllerAs: 'demoSidenav'
+                        return 'app/resources/js/app/demo/'+ $stateParams.id +'/'+ $stateParams.demo_id +'/demo.html';
+                    }
                 }
             }
         })

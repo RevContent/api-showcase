@@ -4,22 +4,44 @@
 
     <p class="md-body-1">Flicker is a truly incredible widget. It's just excellent.</p>
 
-    <md-button ui-sref="post_demo({ id: demo.widget.id, demo_id: 1 })">Demo</md-button>
+    <md-list layout="column" layout-padding>
 
-    <md-button ui-sref="post_demo({ id: demo.widget.id, demo_id: 2 })">Demo</md-button>
+        <md-list-item>
+            <md-button flex class="fade-button" ui-sref="post_demo_id({ id: demo.widget.id, demo_id: 1 })">Default</md-button>
+        </md-list-item>
 
-    <md-button ui-sref="post_demo({ id: demo.widget.id, demo_id: 3 })">Demo</md-button>
+        <md-list-item>
+            <md-button flex class="fade-button" ui-sref="post_demo_id({ id: demo.widget.id, demo_id: 2 })">Rev Position</md-button>
+        </md-list-item>
 
-    <md-button ui-sref="post_demo({ id: demo.widget.id, demo_id: 4 })">Demo</md-button>
+        <md-list-item>
+            <md-button flex class="fade-button" ui-sref="post_demo_id({ id: demo.widget.id, demo_id: 3 })">Per Row</md-button>
+        </md-list-item>
 
-    <md-button ui-sref="post_demo({ id: demo.widget.id, demo_id: 5 })">Demo</md-button>
+        <md-list-item>
+            <md-button flex class="fade-button" ui-sref="post_demo_id({ id: demo.widget.id, demo_id: 4 })">Show Arrows</md-button>
+        </md-list-item>
 
-    <md-button ui-sref="post_demo({ id: demo.widget.id, demo_id: 6 })">Demo</md-button>
+        <md-list-item>
+            <md-button flex class="fade-button" ui-sref="post_demo_id({ id: demo.widget.id, demo_id: 5 })">Next Effect</md-button>
+        </md-list-item>
 
-    <md-button ui-sref="post_demo({ id: demo.widget.id, demo_id: 7 })">Demo</md-button>
+        <md-list-item>
+            <md-button flex class="fade-button" ui-sref="post_demo_id({ id: demo.widget.id, demo_id: 6 })">Sponsored</md-button>
+        </md-list-item>
 
-    <md-button ui-sref="post_demo({ id: demo.widget.id, demo_id: 8 })">Demo</md-button>
+        <md-list-item>
+            <md-button flex class="fade-button" ui-sref="post_demo_id({ id: demo.widget.id, demo_id: 7 })">Internal</md-button>
+        </md-list-item>
 
-    <md-button ui-sref="post_demo({ id: demo.widget.id, demo_id: 9 })">Demo</md-button>
+        <md-list-item>
+            <md-button flex class="fade-button" ui-sref="post_demo_id({ id: demo.widget.id, demo_id: 8 })">Header</md-button>
+        </md-list-item>
+
+        <md-list-item>
+            <md-button flex class="fade-button" ui-sref="post_demo_id({ id: demo.widget.id, demo_id: 9 })">Devices</md-button>
+        </md-list-item>
+
+    </md-list>
 
 </div>

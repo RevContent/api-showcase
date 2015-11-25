@@ -636,3 +636,7 @@ body.os-windows-phone.browser-ie.md-dialog-is-showing md-dialog.md-transition-in
   opacity: 1;
   transition: opacity 1s;
 }
+
+.fade-button {
+  transition: all .5s;
+}
