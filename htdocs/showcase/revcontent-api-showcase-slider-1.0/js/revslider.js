@@ -88,7 +88,6 @@ RevSlider({
                 mobile: false,
                 desktop: true
             },
-            sponsored: 10,
             internal: false,
             devices: [
                 'phone', 'tablet', 'desktop'
