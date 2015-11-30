@@ -42,8 +42,7 @@ gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
       ' */',
       ''].join('\n');
 
-    // return gulp.src(['./vendor/imagesloaded/imagesloaded.pkgd.js', '../revcontent-api-showcase-slider-1.0/build/revslider.js', './build/revsidenav.js'])
-    return gulp.src(['./vendor/imagesloaded/imagesloaded.pkgd.js', './build/revsidenav.js'])
+    return gulp.src(['./vendor/mobile-detect/mobile-detect.js', '../js/revutils.js', '../js/revdialog.js', '../js/revdetect.js', '../js/revapi.js', '../revcontent-api-showcase-slider-1.0/build/revslider.pkgd.js',  './build/revsidenav.js'])
         .pipe(concat('revsidenav.pkgd.js'))
         .pipe(gulp.dest('./build'))
         .pipe(uglify({
