@@ -37,8 +37,8 @@ gulp.task('revexit-css', function() {
 gulp.task('revchimp-inject', ['revchimp-css'], function () {
     return gulp.src('./js/revchimp.js')
       .pipe(preprocess({context: {
-            CHIMP_PROD_URL: 'https://trends.revcontent.com/rx_subscribe.php?callback=revchimpCallback',
-            CHIMP_DEV_URL: 'http://delivery.localhost/rx_subscribe.php?callback=revchimpCallback'
+            CHIMP_PROD_URL: process.env.CHIMP_PROD_URL || 'https://trends.revcontent.com/rx_subscribe.php?callback=revchimpCallback',
+            CHIMP_DEV_URL: process.env.CHIMP_DEV_URL || 'http://delivery.localhost/rx_subscribe.php?callback=revchimpCallback'
       }}))
       .pipe(inject(gulp.src(['./build/revchimp.min.css']), {
         starttag: '/* inject:css */',
@@ -49,6 +49,18 @@ gulp.task('revchimp-inject', ['revchimp-css'], function () {
       }))
       .pipe(gulp.dest('./build'));
 });
+
+gulp.task('revexit-jquery', function () {
+    return gulp.src('./js/jquery.js')
+        .pipe(gulp.dest('./build'))
+        .pipe(uglify({
+            mangle: false
+        }))
+        .pipe(stripDebug())
+        .pipe(rename('jquery.min.js'))
+        .pipe(gulp.dest('./build'));
+});
+
 
 gulp.task('revexit-inject', ['revexit-css'], function () {
     return gulp.src('./js/revexit.js')
@@ -62,7 +74,7 @@ gulp.task('revexit-inject', ['revexit-css'], function () {
         .pipe(gulp.dest('./build'));
 });
 
-gulp.task('build-rx', ['revexit-css', 'revchimp-css', 'revchimp-inject', 'revexit-inject'], function() {
+gulp.task('build-rx', ['revexit-css', 'revchimp-css', 'revchimp-inject', 'revexit-inject', 'revexit-jquery'], function() {
 
     var banner = ['/**',
       ' * <%= pkg.name %> - <%= pkg.description %>',
@@ -72,7 +84,7 @@ gulp.task('build-rx', ['revexit-css', 'revchimp-css', 'revchimp-inject', 'revexi
       ' */',
       ''].join('\n');
 
-    return gulp.src(['./js/revutils.js', '../js/revdialog.js', './build/revchimp.js', './build/revexit.js'])
+    return gulp.src(['./js/revutils.js', '../js/revdialog.js', './build/jquery.js', './build/revchimp.js', './build/revexit.js'])
         .pipe(concat('revexit.pkgd.js'))
         .pipe(gulp.dest('./build'))
         .pipe(uglify({

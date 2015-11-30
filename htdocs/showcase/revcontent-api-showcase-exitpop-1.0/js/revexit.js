@@ -24,7 +24,9 @@
  z = inactivity trigger duration in seconds, defaults to 6 seconds if not provided, minimum of 6 seconds allowed
  j = background mode, defaults to "default", options are "classic", "default" OR custom RGBA OR Hexadecimal color OR a handful of HTML color names (red, blue etc.)
  ps = Panel Size, choices are "3x2" or "4x2" defaults to 4x2, NOTE: for HD modes only!
- ml = "Mailing List" Feature, multi-key parameter for Mailchimp Integration, ml=API_KEY;LIST_ID;HEADLINE;MESSAGE;THEME, default = disabled, THEME options are "taskbar" or "tile"
+ ml = "Mailing List" Feature, multi-key parameter for Mailchimp Integration, ml=API_KEY;LIST_ID;HEADLINE;MESSAGE;BUTTON;THEME;CHOICES, default = disabled, THEME options are "taskbar" or "tile", CHOICES is comma separated list of options.
+ ch = "Closed Hours", The interval at which RevExit will remain closed for. Defaults to 24 Hours or 1-day if not provided.
+ r = "Regions" or zones that RevExit will trigger once departed, default = "all", can be set to "top", "bottom", "left" or "right". Combinations are also accepted, ex. "left,right"
 
  **/
 (function(j,q,u,e,r,y,R,o,x){try{o=jQuery;if(o&&(!R||(R&&o.fn.jquery==R))){x=true}}catch(er){}if(!x||(R&&o.fn.jquery!=R)){(q=j.createElement(q)).type='text/javascript';if(r){q.async=true}q.src='//ajax.googleapis.com/ajax/libs/jquery/'+(R||1)+'/jquery.min.js';u=j.getElementsByTagName(u)[0];q.onload=q.onreadystatechange=(function(){if(!e&&(!this.readyState||this.readyState=='loaded'||this.readyState=='complete')){e=true;x=jQuery;jQuery.noConflict(true)(function(){y(x)});q.onload=q.onreadystatechange=null;u.removeChild(q)}});u.appendChild(q)}else{y(o)}})(document,'script','head',false,false,(function($){$(function(){
@@ -63,6 +65,23 @@
             revcontentexitvars[revcontentexithash[0]] = revcontentexithash[1];
         }
 
+        // Closed Hours
+        if(revcontentexitvars.ch === undefined || isNaN(revcontentexitvars.ch)) {
+            revcontentexitvars.ch = 24;
+        } else if(revcontentexitvars.ch < 1) {
+            revcontentexitvars.ch = 24;
+        }
+
+        // Exit Regions
+        var exit_regions = ["all"];
+        if(revcontentexitvars.r === undefined) {
+            revcontentexitvars.r = "all";
+        } else if(revcontentexitvars.r.length === 0){
+            revcontentexitvars.r = "all";
+        } else {
+            exit_regions = revcontentexitvars.r.split(",");
+        }
+
         // Setup Exit Mode
         var exitMode = "desktop";
         switch(revcontentexitvars.x) {
@@ -96,7 +115,6 @@
 
         if (userHasRevcontent != "" && revcontentexitvars.t != "true") {
             $('body').attr({'data-revexit': 'expired'});
-            //console.log("user already saw us today");
         } else {
             var exit_expired = $('body').attr('data-revexit') == 'expired' ? true : false;
             if (false == exit_expired && revExitMobile == false && exitMode != "mobileonly" && (exitMode == "desktop" || exitMode == "desktop+mobile")) {
@@ -108,12 +126,54 @@
                     var mouse_y = e.clientY;
                     var viewport_dimensions = {width: $(window).width(), height: $(window).height()};
 
-                    if (mouse_x <= 0 || mouse_x >= viewport_dimensions.width || mouse_y <= 0 || mouse_y >= viewport_dimensions.height) {
-                        // the cursor has left the building
+                    var fire_rx = false;
+
+                    // Exit on ALL regions
+                    if(exit_regions.indexOf("all") !== -1) {
+                        if (mouse_x <= 0 || (mouse_x >= viewport_dimensions.width) || mouse_y <= 0 || mouse_y >= viewport_dimensions.height) {
+                            console.log("Exiting from ALL zones");
+                            fire_rx = true;
+                        }
+                    }
+
+                    // Exit on TOP
+                    if(exit_regions.indexOf("all") === -1 && exit_regions.indexOf("top") !== -1) {
+                        if (mouse_y <= 0 && mouse_y < viewport_dimensions.height) {
+                            console.log("Exiting from TOP zone");
+                            fire_rx = true;
+                        }
+                    }
+
+                    // Exit on LEFT
+                    if(exit_regions.indexOf("all") === -1 && exit_regions.indexOf("left") !== -1) {
+                        if (mouse_x <= 0 && mouse_x < viewport_dimensions.width) {
+                            console.log("Exiting from LEFT zone");
+                            fire_rx = true;
+                        }
+                    }
+
+                    // Exit on BOTTOM
+                    if(exit_regions.indexOf("all") === -1 && exit_regions.indexOf("bottom") !== -1) {
+                        if (mouse_y > 0 && mouse_y >= viewport_dimensions.height) {
+                            console.log("Exiting from BOTTOM zone");
+                            fire_rx = true;
+                        }
+                    }
+
+                    // Exit on RIGHT
+                    if(exit_regions.indexOf("all") === -1 && exit_regions.indexOf("right") !== -1) {
+                        if (mouse_x > 0 && mouse_x >= viewport_dimensions.width) {
+                            console.log("Exiting from RIGHT zone");
+                            fire_rx = true;
+                        }
+                    }
+
+                    if(true === fire_rx){
                         if ($('body').attr('data-revexit') === undefined || revcontentexitvars.t == "true") {
                             revcontentExecute(revcontentexitvars, revExitMobile, revExitIPhone, revExitIPad, enableSubscriptions);
                         }
                     }
+
                 });
             } else if (false === exit_expired && revExitMobile == true && exitMode != "desktop" && (exitMode == "desktop+mobile" || exitMode == "mobileonly" || exitMode == "mobile")) {
                 //console.log("event2");
@@ -145,7 +205,7 @@
 
     function revcontentInitChimpanzee(subscription_settings){
         if(window.RevChimp !== undefined){
-            if(typeof window.RevChimp.render === "function") {
+            if(typeof window.RevChimp.render === "function" && !$("#revexitunit").hasClass("chimp-initialized")) {
                 window.RevChimp.render(subscription_settings);
             }
         }
@@ -252,13 +312,19 @@
             var default_headline = "Get Daily News";
             var default_message =  "Enter your e-mail to get started.";
             var default_theme = "taskbar";
-            var subscription_settings = {apiKey: null, listID: null, headline: default_headline, message: default_message, theme: default_theme};
+            var default_button = "subscribe";
+            var default_choices = "";
+            var subscription_settings = {apiKey: null, listID: null, headline: default_headline, message: default_message, button: default_button, theme: default_theme, choices: default_choices };
             var extracted_settings = revcontentexitvars.ml.split(";");
             subscription_settings.apiKey = extracted_settings[0] !== undefined && extracted_settings[0].length > 0 ? extracted_settings[0] : null;
             subscription_settings.listID = extracted_settings[1] !== undefined && extracted_settings[1].length > 0 ? extracted_settings[1] : null;
             subscription_settings.headline = extracted_settings[2] !== undefined &&  extracted_settings[2].length > 0 ? decodeURI(extracted_settings[2]) : default_headline;
             subscription_settings.message = extracted_settings[3] !== undefined &&  extracted_settings[3].length > 0 ? decodeURI(extracted_settings[3]) : default_message;
-            subscription_settings.theme = extracted_settings[4] !== undefined &&  extracted_settings[4].length > 0 ? decodeURI(extracted_settings[4]).toLowerCase() : default_theme;
+            subscription_settings.button = extracted_settings[4] !== undefined &&  extracted_settings[4].length > 0 ? decodeURI(extracted_settings[4]).toLowerCase() : default_button;
+            subscription_settings.theme = extracted_settings[5] !== undefined &&  extracted_settings[5].length > 0 ? decodeURI(extracted_settings[5]).toLowerCase() : default_theme;
+            subscription_settings.choices = extracted_settings[6] !== undefined &&  extracted_settings[6].length > 0 ? decodeURI(extracted_settings[6]) : default_choices;
+
+
         }
 
         var $mask_n_wrap   = $('#revexitmask, #revexitunit');
@@ -333,12 +399,12 @@
         else if(false === revExitMobile && viewport_width >= 1024) {
             $('body.revexit-open').css({'overflow': 'hidden', 'height': '100%'});
             $exit_mask.css({'height': '100%', 'position': 'fixed', 'overflow': 'hidden'}).addClass("modal-hd");
-            $exit_wrap.css({'position': 'static', 'overflow': 'hidden', 'height': 'auto', 'width': $('#revexitadpanel').innerWidth()});
+            $exit_wrap.css({'position': 'static', 'overflow': 'hidden', 'height': 'auto', 'width': $('#revexitadpanel').innerWidth() || 992 });
             //console.log("HD Desktop case");
             var spnsr_mrgns = (100 * ((($(window).width() - $('#revexitunit').width()) / 2) / $(window).width())) || 5;    
             //$('#revexitsponsor').css({'text-shadow':'0 0 2px rgba(30,30,30, 0.8)', 'border': '0', 'margin':'0 ' + spnsr_mrgns + '%' ,'position':'fixed','top':'4%','left':0,'display':'block','width': $('#revexitunit').width(),'text-align': 'right','max-width': $('#revexitunit').width() + 'px'});    
             $('#revexitsponsor').css({'padding': '0 18px 0 0', 'color':'rgba(0,0,0,0.5)', 'margin': '0', 'margin':'0 0 !important', 'position':'absolute', 'top': '11px', 'right': '50px', 'display':'inline-block', 'width': 'auto','text-align': 'right', 'max-width': $('#revexitunit').width() + 'px'});
-            if(($exit_wrap.outerHeight() + ($(window).height() * 0.10)) > $(window).height()) {
+            if(false === enableSubscriptions && (($exit_wrap.outerHeight() + ($(window).height() * 0.10)) > $(window).height())) {
                 $exit_mask.addClass('fullscreen');
             }
             switch(revPanelSize) {
@@ -493,10 +559,10 @@
             }
 
             for (i = 0; i < revpayload.length; i++) {
-                revpayload1 = revpayload1 + "<div class='revexititem' id='revexititem_"+i+"'><a title='"+revpayload[i].headline+"' href='"+revpayload[i].url+"' target='_blank'><div class='revexitimgholder' style='background-image: url(http:"+ revpayload[i].image +");'><div class='revexititemmask'><div class='revexitheadlinewrap'><div class='revexitheadline'>"+ revpayload[i].headline + ((revpayload[i].type.toLowerCase() === 'internal') ? "<span class='revexitprovider'>" + revpayload[i].brand + "</span>" : "") + "</div></div></div></div></a></div>";
+                revpayload1 = revpayload1 + "<div class='revexititem' id='revexititem_"+i+"'><a rel='nofollow' title='"+revpayload[i].headline+"' href='"+revpayload[i].url+"' target='_blank'><div class='revexitimgholder' style='background-image: url(http:"+ revpayload[i].image +");'><div class='revexititemmask'><div class='revexitheadlinewrap'><div class='revexitheadline'>"+ revpayload[i].headline + ((revpayload[i].type.toLowerCase() === 'internal') ? "<span class='revexitprovider'>" + revpayload[i].brand + "</span>" : "") + "</div></div></div></div></a></div>";
             }
 
-            var revexit_package = "<style id='revexit_style'>" + revstyle + styles_panel3x2 + "</style><div id='revexitmask' class='revexitmaskwrap'><div id='revexitunit' class='revexitunitwrap' style='display:none;'><div id='revexitheader'><span href='#' id='revexitcloseme'></span><span class='rxlabel'>BEFORE YOU GO, CHECK OUT MORE</span> <a id='revexitsponsor' onclick='revDialog.showDialog();'><span>Sponsored <em class='sponsor-noshow' style='font-style:normal!important'>By Revcontent</em></span></a></div><div id='revexitadpanel'>"+revpayload1+"<div style='clear:both;display:block;'></div></div></div>";
+            var revexit_package = "<style id='revexit_style'>" + revstyle + styles_panel3x2 + "</style><div id='revexitmask' class='revexitmaskwrap'><div id='revexitunit' class='revexitunitwrap' style='display:none;'><div id='revexitheader'><span href='#' id='revexitcloseme'></span><span class='rxlabel'>BEFORE YOU GO, CHECK OUT MORE</span> <a rel='nofollow' id='revexitsponsor' onclick='revDialog.showDialog();'><span>Sponsored <em class='sponsor-noshow' style='font-style:normal!important'>By Revcontent</em></span></a></div><div id='revexitadpanel'>"+revpayload1+"<div style='clear:both;display:block;'></div></div></div>";
             $('#revexitmask, #revexitunit, .revexitmaskwrap, .revexitunitwrap, #revexit_style').detach();
 
             if(true === revExitIPhone) {
@@ -515,7 +581,10 @@
                 revcontentSetupViewport(revExitMobile, revExitIPhone, revExitIPad, revcontentexitvars);
                 $(window).on('resize', function(){
                    if($('body').hasClass('revexit-open')){
-                       revcontentSetupViewport(revExitMobile, revExitIPhone, revExitIPad, revcontentexitvars);
+                       clearTimeout(viewportSetupTimeout);
+                       var viewportSetupTimeout = setTimeout(function(){
+                           revcontentSetupViewport(revExitMobile, revExitIPhone, revExitIPad, revcontentexitvars);
+                       }, 900);
                    }
                 });
                 if($('#revexitmask').hasClass('modal-mobile') && !$('#revexitmask').hasClass('modal-tablet')){
@@ -553,7 +622,7 @@
 
         });
 
-        revcontentSetCookie("revcontentapibeforego_" + revcontentexitvars.w, 1, 1);
+        revcontentSetCookie("revcontentapibeforego_" + revcontentexitvars.w, 1, revcontentexitvars.ch/24);
     }
 
 })}),'2.1.4');
