@@ -16,7 +16,8 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                     templateUrl: "app/resources/js/app/grid/grid.html",
                     controller: 'GridCtrl',
                     controllerAs: 'ctrl'
-                }
+                },
+                sidenav: false
             }
         })
         .state('docs', {
@@ -26,7 +27,8 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                 main: {
                     templateUrl: "app/resources/js/app/docs/docs.html",
                     controller: 'DocsCtrl'
-                }
+                },
+                sidenav: false
             }
         })
         .state('post', {
@@ -106,17 +108,10 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                     controller: 'DemosCtrl',
                     controllerAs: 'demo'
                 },
-                sidenav: {
-                    templateUrl: function($stateParams) {
-                        return 'app/resources/js/app/demo/sidenav/'+ $stateParams.id +'.html'
-                    },
-                    controller: 'DemosCtrl',
-                    controllerAs: 'demoSidenav'
-                }
+                sidenav: false
             }
         })
         .state('post_demo', {
-            sticky: true,
             url: "/{id}/demo",
             views: {
                 main: {
@@ -133,7 +128,12 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                     controller: 'DemoCtrl',
                     controllerAs: 'demoSidenav'
                 }
-            }
+            },
+            onExit: ['$stateParams', function($stateParams) {
+                if ($stateParams.id == 'sidenav') {
+                    RevSidenav({});
+                }
+            }]
         })
         .state('post_demo_id', {
             parent: 'post_demo',
