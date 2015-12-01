@@ -53,9 +53,9 @@ RevSlider({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevSlider = factory(window, window.revUtils, window.revDetect, window.revApi);
+    window.RevSlider = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDialog);
 
-}( window, function factory(window, revUtils, revDetect, revApi) {
+}( window, function factory(window, revUtils, revDetect, revApi, revDialog) {
 'use strict';
 
     var RevSlider = function(opts) {
@@ -219,7 +219,7 @@ RevSlider({
         }
         this.sponsored = document.createElement('div');
         revUtils.addClass(this.sponsored, 'rev-sponsored');
-        this.sponsored.innerHTML = '<a href="http://revcontent.com" target="_blank">Sponsored by Revcontent</a>';
+        this.sponsored.innerHTML = '<a onclick="revDialog.showDialog();">Sponsored by Revcontent</a>';
         if (this.options.rev_position == 'top_right') {
             revUtils.addClass(this.sponsored, 'top-right')
             revUtils.prepend(this.containerElement, this.sponsored);
