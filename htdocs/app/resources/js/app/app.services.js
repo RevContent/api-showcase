@@ -28,6 +28,7 @@ app.service('widgets', function() {
             link: 'revcontent-api-showcase-toaster-1.0/index.html',
             bg: '#CFC28E',
             docs: true,
+            demo: true
         },
         'exit-pop': {
             title: 'Exit Pop',
@@ -42,7 +43,8 @@ app.service('widgets', function() {
             description: 'Slider or sometimes called a carousel is an engaging way to showcase Revcontent ads on your site! Give your readers the ability to navigate through all of the ads availible to your widget. Fully responsive and configurable to display as many rows and columns as you like at various breakpoints. Slider is a great choice for any site!',
             link: 'revcontent-api-showcase-slider-1.0/index.html',
             bg: '#2E4E5D',
-            preview: true
+            preview: true,
+            demo: true
         },
         flicker: {
             title: 'Flicker',
@@ -50,14 +52,16 @@ app.service('widgets', function() {
             description: 'With responsive styling and touch enabled gestures Flicker puts the fun into your content slider. You can configure the Flicker widget to show on phone, tablet and desktop and you can even decide how many units to display at various breakpoints. Include Flicker on your page and let the engagement begin!',
             link: 'revcontent-api-showcase-flicker-1.0/index.html',
             bg: '#F7F9F8',
-            preview: true
+            preview: true,
+            demo: true
         },
         sidenav: {
             title: 'Sidenav',
             img: 'sidenav.jpg',
             description: 'With responsive styling and touch enabled gestures Flicker puts the fun into your content slider. You can configure the Flicker widget to show on phone, tablet and desktop and you can even decide how many units to display at various breakpoints. Include Flicker on your page and let the engagement begin!',
             link: 'revcontent-api-showcase-sidenav-1.0/index.html',
-            preview: true
+            preview: true,
+            demo: true
         }
     };
 });

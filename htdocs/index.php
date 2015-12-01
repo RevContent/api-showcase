@@ -28,6 +28,7 @@
         <script src="app/resources/vendor/re-tree/re-tree.js"></script>
         <script src="app/resources/vendor/ng-device-detector/ng-device-detector.js"></script>
         <script src="app/resources/vendor/imagesloaded/imagesloaded.pkgd.js"></script>
+        <script src="showcase/revcontent-api-showcase-toaster-1.0/build/revtoaster.pkgd.js"></script>
         <script src="showcase/revcontent-api-showcase-slider-1.0/build/revslider.pkgd.js"></script>
         <script src="showcase/revcontent-api-showcase-flicker-1.0/build/revflicker.pkgd.js"></script>
         <script src="showcase/revcontent-api-showcase-sidenav-1.0/build/revsidenav.pkgd.js"></script>
@@ -41,6 +42,7 @@
         <script src="app/resources/js/app/app.services.js"></script>
         <script src="app/resources/js/app/grid/grid.controller.js"></script>
         <script src="app/resources/js/app/docs/docs.controller.js"></script>
+        <script src="app/resources/js/app/demo/demo.controller.js"></script>
         <script src="app/resources/js/app/preview/preview.controller.js"></script>
         <script src="app/resources/vendor/angular-highlightjs/angular-highlightjs.js"></script>
 
@@ -103,19 +105,19 @@
                                     </a>
 
                                 </div>
-
                             </div>
-
-
-
                     </div>
                 </div>
             </md-toolbar>
         </header>
 
-        <main ui-view="main" layout-align="center center" layout="column"></main>
+        <main layout>
 
-        <md-sidenav ui-view="sidenav" md-component-id="left" class="md-sidenav-left"></md-sidenav>
+            <md-sidenav md-is-open="demoSidenav.sideNavOpen" md-is-locked-open="demoSidenav.sideNavOpen" ui-view="sidenav" md-component-id="left" class="md-sidenav-left"></md-sidenav>
+
+            <div ui-view="main" flex layout-align="center center" layout="column"></div>
+
+        </main>
 
         <footer>
             <div class="container">

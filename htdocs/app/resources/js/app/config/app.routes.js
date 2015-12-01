@@ -16,7 +16,8 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                     templateUrl: "app/resources/js/app/grid/grid.html",
                     controller: 'GridCtrl',
                     controllerAs: 'ctrl'
-                }
+                },
+                sidenav: false
             }
         })
         .state('docs', {
@@ -26,7 +27,8 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                 main: {
                     templateUrl: "app/resources/js/app/docs/docs.html",
                     controller: 'DocsCtrl'
-                }
+                },
+                sidenav: false
             }
         })
         .state('post', {
@@ -35,6 +37,11 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
             onEnter: ['$stateParams', '$state', '$mdDialog', '$window', '$mdCardContent', '$stateManager', 'widgets', function($stateParams, $state, $mdDialog, $window, $mdCardContent, $stateManager, widgets) {
 
                 var widget = widgets.data[$stateParams.id];
+
+                if (!widget) {
+                    $state.go('404', {path: $stateParams.id});
+                    return false;
+                }
 
                 $mdDialog.show({
                     templateUrl: 'app/resources/js/app/dialog/post.html',
@@ -54,6 +61,11 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                             } else { //legacy open blank
                                 $window.open('/showcase/' + $scope.post.link, '_blank');
                             }
+                        };
+                        $scope.demo = function(id) {
+                            $mdDialog.hide().then(function() {
+                                $state.go('post_demos', {id: id});
+                            });
                         };
                     },
                     onComplete: function() {
@@ -82,6 +94,61 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                 sidenav: {
                     templateUrl: function($stateParams) {
                         return 'app/resources/js/app/preview/sidenav/'+ $stateParams.id +'.html'
+                    }
+                }
+            }
+        })
+        .state('post_demos', {
+            url: "/{id}/demos",
+            views: {
+                main: {
+                    templateUrl: function($stateParams) {
+                        return 'app/resources/js/app/demo/'+ $stateParams.id +'/index.html'
+                    },
+                    controller: 'DemosCtrl',
+                    controllerAs: 'demo'
+                },
+                sidenav: false
+            }
+        })
+        .state('post_demo', {
+            url: "/{id}/demo",
+            views: {
+                main: {
+                    templateUrl: function($stateParams) {
+                        return 'app/resources/js/app/demo/'+ $stateParams.id +'/demo.html'
+                    },
+                    controller: 'DemoCtrl',
+                    controllerAs: 'demo'
+                },
+                sidenav: {
+                    templateUrl: function($stateParams) {
+                        return 'app/resources/js/app/demo/navigation/'+ $stateParams.id +'.html'
+                    },
+                    controller: 'DemoCtrl',
+                    controllerAs: 'demoSidenav'
+                }
+            },
+            onExit: ['$stateParams', function($stateParams) {
+                if ($stateParams.id == 'sidenav') {
+                    RevSidenav({});
+                } else if ($stateParams.id == 'toaster') {
+                    RevToaster({});
+                }
+            }]
+        })
+        .state('post_demo_id', {
+            parent: 'post_demo',
+            url: "/{demo_id}",
+            views: {
+                description: {
+                    templateUrl: function($stateParams) {
+                        return 'app/resources/js/app/demo/'+ $stateParams.id +'/'+ $stateParams.demo_id +'/description.html';
+                    }
+                },
+                demo: {
+                    templateUrl: function($stateParams) {
+                        return 'app/resources/js/app/demo/'+ $stateParams.id +'/'+ $stateParams.demo_id +'/demo.html';
                     }
                 }
             }

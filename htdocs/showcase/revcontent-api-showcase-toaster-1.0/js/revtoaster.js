@@ -26,234 +26,269 @@ RevToaster({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevToaster = factory(window, window.revDialog);
+    window.RevToaster = factory(window, window.revUtils, window.revDetect, window.revApi);
 
-}( window, function factory(window, revDialog) {
+}( window, function factory(window, revUtils, revDetect, revApi) {
 'use strict';
 
     // ----- vars ----- //
 
-    var options;
-    var lastScrollTop = 0;
-    var scrollTimeout;
-    var loading = false;
-    var removed = false;
-    var revToaster;
+    var RevToaster;
+    var instance;
 
-    function RevToaster( opts ) {
-        options = extend(RevToaster.defaults, opts);
-
-        if (validateApiParams(options).length) {
-            return;
-        }
-
-        if (getCookie('revtoaster-closed') && !options.testing) {
-            return;
-        }
-
-        appendStyle();
-
-        options.sponsored = (options.sponsored > 2) ? 2 : options.sponsored;
-
-        revToaster = document.createElement('div');
-        addClass(revToaster, 'rev-toaster');
-        if (options.sponsored > 1) {
-            addClass(revToaster, 'rev-toaster-multi');
-        }
-
-        window.addEventListener('touchmove', move);
-
-    };
-
-    RevToaster.defaults = {
+    var defaults = {
         testing: false,
         header: 'Trending Today',
         closed_hours: 24,
         sponsored: 1,
-        url: 'https://trends.revcontent.com/api/v1/'
+        url: 'https://trends.revcontent.com/api/v1/',
+        rev_position: 'bottom_right',
+        devices: [
+            'phone', 'tablet', 'desktop'
+        ]
     };
+    // var options;
+    var lastScrollTop = 0;
+    var scrollTimeout;
+    var loaded = false;
+    var removed = false;
 
-    var appendStyle = function() {
-        var style = document.createElement('style');
-        style.type = 'text/css';
-        style.innerHTML = '/* inject:css */[inject]/* endinject */';
-        document.getElementsByTagName('head')[0].appendChild(style);
-    }
+    var RevToaster = function( opts ) {
+        if (instance) {
+            instance.update(opts, instance.options);
+            return instance;
+        }
 
-    var getData = function() {
-        loading = true;
-        var url = options.url + '?api_key='+ options.api_key +'&pub_id='+ options.pub_id +'&widget_id='+ options.widget_id +'&domain='+ options.domain +'&sponsored_count=' + options.sponsored + '&sponsored_offset=0&internal_count=0&api_source=toast';
+        // if it wasn't newed up
+        if ( !( this instanceof RevToaster ) ) {
+            instance = new RevToaster(opts);
+            return instance;
+        } else {
+            instance = this;
+        }
 
-        var request = new XMLHttpRequest();
+        // merge options
+        this.options = revUtils.extend(defaults, opts);
+        this.options.sponsored = (this.options.sponsored > 2) ? 2 : this.options.sponsored;
 
-        request.open('GET', url, true);
+        // param errors
+        if (revUtils.validateApiParams(this.options).length) {
+            return;
+        }
+        // don't show for this device
+        if (!revDetect.show(this.options.devices)) {
+            return;
+        }
 
-        request.onload = function() {
-            if (request.status >= 200 && request.status < 400) {
-                var resp = JSON.parse(request.responseText);
+        if (revUtils.getCookie('revtoaster-closed') && !this.options.testing) {
+            return;
+        }
 
-                var html = '<div class="rev-header">' + options.header + '</div>' +
-                            '<button class="rev-close">' +
-                                '<div class="icon">' +
-                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>' +
-                                '</div>' +
-                            '</button>';
+        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-toaster');
 
-                html += '<div class="rev-content">';
+        var that = this;
+
+        this.init = function() {
+            this.revToaster = document.createElement('div');
+            this.revToaster.className = 'rev-toaster';
+
+            this.containerElement = document.createElement('div');
+            this.containerElement.className = 'rev-content-container';
+            revUtils.append(this.revToaster, this.containerElement);
+
+            if (this.options.sponsored > 1) {
+                revUtils.addClass(this.revToaster, 'rev-toaster-multi');
+            }
+
+            this.appendElements();
+
+            for (var i = 0; i < this.options.sponsored; i++) {
+                this.appendCell();
+            };
+
+            this.bindClose();
+
+            revUtils.append(document.body, that.revToaster);
+
+            // window.addEventListener('scroll', this.move); // for debugging
+
+            window.addEventListener('touchmove', this.move);
+        };
+
+        this.update = function(newOpts, oldOpts) {
+            this.options = revUtils.extend(defaults, newOpts);
+
+            if (this.visible != newOpts.visible) {
+                if (newOpts.visible) {
+                    this.show();
+                } else {
+                    this.hide();
+                }
+            }
+
+            if ((this.options.header !== oldOpts.header) || this.options.rev_position !== oldOpts.rev_position) {
+                this.appendElements();
+            }
+
+            if (this.options.sponsored !== oldOpts.sponsored) {
+                if (this.options.sponsored > oldOpts.sponsored) {
+                    this.appendCell();
+                } else {
+                    var nodes = this.revToaster.querySelectorAll('.rev-content');
+                    revUtils.remove(nodes[1]);
+                }
+                this.getData();
+            }
+        };
+
+        this.appendElements = function() {
+            if (this.header) {
+                revUtils.remove(this.header);
+            }
+
+            this.header = document.createElement('div');
+            this.header.className = 'rev-header';
+            this.header.innerHTML = that.options.header;
+
+            revUtils.append(that.revToaster, this.header);
+
+            if (!this.closeButton) {
+                this.closeButton = document.createElement('button');
+                this.closeButton.className = 'rev-close';
+                this.closeButton.innerHTML = '<div class="icon">' +
+                                        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>' +
+                                    '</div>';
+
+                revUtils.append(that.revToaster, this.closeButton);
+            }
+
+            if (this.sponsored) {
+                revUtils.remove(this.sponsored);
+            }
+            this.sponsored = document.createElement('div');
+            this.sponsored.className = 'rev-sponsored';
+            this.sponsored.innerHTML = '<a onclick="revDialog.showDialog()">Sponsored by Revcontent</a>';
+
+            if (this.options.rev_position == 'top_right') {
+                revUtils.addClass(this.sponsored, 'top-right')
+                revUtils.prepend(this.revToaster, this.sponsored);
+            } else if (this.options.rev_position == 'bottom_left' || this.options.rev_position == 'bottom_right') {
+                revUtils.addClass(this.sponsored, this.options.rev_position.replace('_', '-'));
+                revUtils.append(this.revToaster, this.sponsored);
+            }
+        };
+
+        this.move = function() {
+            if (removed) {
+                window.removeEventListener('touchmove', this.move);
+                return;
+            }
+
+            if (scrollTimeout) {
+                return;
+            }
+
+            function delayed() {
+
+                var scrollTop = window.pageYOffset,
+                    scrollDirection = (scrollTop < lastScrollTop) ? 'up' : 'down';
+
+                if (scrollDirection === 'up') {
+                    if (!loaded) {
+                        that.getData(true);
+                    } else {
+                        that.show();
+                    }
+                } else if (scrollDirection === 'down') {
+                    that.hide();
+
+                }
+                lastScrollTop = scrollTop;
+                scrollTimeout = false;
+            }
+
+            scrollTimeout = setTimeout( delayed, 300);
+        };
+
+        this.appendCell = function() {
+            var html = '<div class="rev-ad">' +
+                        '<a href="" target="_blank">' +
+                            '<div class="rev-image">' +
+                                '<img src=""/>' +
+                            '</div>' +
+                            '<div class="rev-headline">' +
+                                '<h3></h3>' +
+                            '</div>' +
+                            '<div class="rev-provider"></div>' +
+                        '</a>' +
+                    '</div>';
+            var cell = document.createElement('div');
+
+            revUtils.addClass(cell, 'rev-content');
+
+            cell.innerHTML = html;
+
+            that.containerElement.appendChild(cell);
+        };
+
+        this.getData = function(show) {
+            loaded = true;
+            var url = this.options.url + '?api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + this.options.sponsored + '&sponsored_offset=0&internal_count=0&api_source=toast';
+
+            var that = this;
+
+            revApi.request(url, function(resp) {
+
+                var ads = that.containerElement.querySelectorAll('.rev-ad');
 
                 for (var i = 0; i < resp.length; i++) {
-                    html += '<div class="rev-ad">' +
-                                '<a rel="nofollow" href="'+ resp[i].url +'">' +
-                                    '<div class="rev-image"><img src="'+ resp[i].image +'"/></div>' +
-                                    '<div class="rev-headline"><h3>'+ resp[i].headline +'</h3></div>' +
-                                    '<div class="rev-provider">'+ resp[i].brand +'</div>' +
-                                '</a>' +
-                            '</div>';
+                    var ad = ads[i],
+                        data = resp[i];
+                    ad.querySelectorAll('a')[0].setAttribute('href', data.url);
+                    ad.querySelectorAll('img')[0].setAttribute('src', data.image);
+                    ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
+                    ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
                 }
+                if (show) {
+                    that.show();
+                }
+            });
+        };
 
-                html += '</div>';
+        this.bindClose = function() {
+            if (!this.options.closed_hours) {
+                return false;
+            }
+            var that = this;
 
-                html += '<div class="rev-footer"><a onclick="revDialog.showDialog()">Sponsored by Revcontent</a></div>';
+            this.closeButton.addEventListener('click', function(e) {
+                revUtils.removeClass(document.body, 'rev-toaster-loaded');
+                setTimeout(function() {
+                    that.revToaster.parentNode.removeChild(that.revToaster);
+                    removed = true;
+                    revUtils.setCookie('revtoaster-closed', 1, (that.options.closed_hours / 24));
+                }, 2000);
+            });
+        };
 
-                revToaster.innerHTML = html;
-
-                document.getElementsByTagName('body')[0].appendChild(revToaster);
-
-                imagesLoaded( revToaster, function() {
-                    addClass(document.body, 'rev-toaster-loaded');
-                    loading = false;
-                    bindClose();
-                });
+        this.show = function() {
+            if (!loaded) {
+                this.getData(true);
             } else {
-                //error
+                var that = this;
+                imagesLoaded( this.containerElement, function() {
+                    that.visible = true;
+                    revUtils.addClass(document.body, 'rev-toaster-loaded');
+                });
             }
         };
 
-        request.onerror = function() {
-            //error
+        this.hide = function() {
+            this.visible = false;
+            revUtils.removeClass(document.body, 'rev-toaster-loaded');
         };
 
-        request.send();
-    };
-
-    var bindClose = function() {
-        if (!options.closed_hours) {
-            return false;
-        }
-        document.querySelector('.rev-close').addEventListener('click', function(e) {
-            removeClass(document.body, 'rev-toaster-loaded');
-            setTimeout(function() {
-                revToaster.parentNode.removeChild(revToaster);
-                removed = true;
-                setCookie('revtoaster-closed', 1, (options.closed_hours / 24));
-            }, 2000);
-        });
-    };
-
-    var move = function() {
-        if (removed) {
-            window.removeEventListener('touchmove', move);
-            return;
-        }
-
-        if (loading || scrollTimeout) {
-            return;
-        }
-
-        function delayed() {
-
-            var scrollTop = window.pageYOffset,
-                scrollDirection = (scrollTop < lastScrollTop) ? 'up' : 'down';
-
-            if (scrollDirection === 'up' &&
-                document.querySelector('.rev-toaster') === null) {
-
-                getData();
-
-            } else if (scrollDirection === 'down' &&
-                document.querySelector('.rev-toaster') !== null &&
-                hasClass(document.body, 'rev-toaster-loaded')) {
-
-                removeClass(document.body, 'rev-toaster-loaded');
-
-            } else if (scrollDirection === 'up' &&
-                document.querySelector('.rev-toaster') !== null &&
-                !hasClass(document.body, 'rev-toaster-loaded')) {
-
-                addClass(document.body, 'rev-toaster-loaded');
-            }
-            lastScrollTop = scrollTop;
-            scrollTimeout = false;
-        }
-
-        scrollTimeout = setTimeout( delayed, 300);
-
-    };
-
-    var validateApiParams = function(params) {
-        var errors = [];
-        if (!params.sponsored){
-            errors.push('sponsored');
-        }
-        if (!params.api_key){
-            errors.push('api_key');
-        }
-        if (!params.pub_id){
-            errors.push('pub_id');
-        }
-        if (!params.widget_id){
-            errors.push('widget_id');
-        }
-        if (!params.domain){
-            errors.push('domain');
-        }
-        return errors;
-    }
-
-    var extend = function( a, b ) {
-      for ( var prop in b ) {
-        a[ prop ] = b[ prop ];
-      }
-      return a;
-    };
-
-    var setCookie = function(cname, cvalue, exdays) {
-        var d = new Date();
-        d.setTime(d.getTime() + (exdays*24*60*60*1000));
-        var expires = "expires="+d.toUTCString();
-        document.cookie = cname + "=" + cvalue + "; " + expires;
-    };
-
-    var getCookie = function(cname) {
-        var name = cname + "=";
-        var ca = document.cookie.split(';');
-        for(var i=0; i<ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0)==' ') c = c.substring(1);
-            if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
-        }
-        return "";
-    };
-
-    var hasClass = function(el, className) {
-        if (el.classList)
-          return el.classList.contains(className);
-        else
-          return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
-    }
-
-    var addClass = function(el, className) {
-        if (el.classList)
-          el.classList.add(className);
-        else
-          el.className += ' ' + className;
-    };
-
-    var removeClass = function(el, className) {
-        if (el.classList)
-            el.classList.remove(className);
-        else
-            el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+        this.init();
     };
 
     return RevToaster;
