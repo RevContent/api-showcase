@@ -93,7 +93,9 @@ RevSlider({
                 'phone', 'tablet', 'desktop'
             ],
             url: 'https://trends.revcontent.com/api/v1/',
-            ad_border: true
+            ad_border: true,
+            headline_size: 2,
+            max_headline: false
         };
 
         // merge options
@@ -163,6 +165,8 @@ RevSlider({
         this.grid.layout();
 
         // this.attachButtonEvents();
+
+        this.ellipsisTimer;
     };
 
     RevSlider.prototype.setUp = function() {
@@ -182,13 +186,17 @@ RevSlider({
         }
 
         this.padding = ((width * .025).toFixed(2) / 1);
-        this.innerMargin = ((width * .02).toFixed(2) / 1);
 
         // // font size is relative to width, other measurements are relative to this font size
         this.headlineFontSize = Math.max(14, ((width * .03).toFixed(2) / 1));
         this.headlineLineHeight = ((this.headlineFontSize * 1.25).toFixed(2) / 1);
-        this.headlineHeight = ((this.headlineLineHeight * 2).toFixed(2) / 1);
-        this.headlineMarginTop = ((this.headlineHeight * .2).toFixed(2) / 1);
+        this.headlineHeight = ((this.headlineLineHeight * this.options.headline_size).toFixed(2) / 1);
+        if (this.options.max_headline && this.getMaxHeadlineHeight() > 0) {
+            this.headlineHeight = this.getMaxHeadlineHeight();
+        }
+        this.headlineMarginTop = ((this.headlineLineHeight * .4).toFixed(2) / 1);
+
+        this.innerMargin = ((this.headlineMarginTop * .3).toFixed(2) / 1);
 
         this.providerFontSize = Math.max(11, ((this.headlineLineHeight / 2).toFixed(2) / 1));
         this.providerLineHeight = ((this.providerFontSize * 1.25).toFixed(2) / 1);
@@ -226,7 +234,11 @@ RevSlider({
 
         this.options = revUtils.extend(this.options, newOpts);
 
-        if ( (newOpts.size !== oldOpts.size) || (newOpts.realSize !== oldOpts.realSize) || (newOpts.per_row !== oldOpts.per_row) || (newOpts.rows !== oldOpts.rows)) {
+        if ( (newOpts.size !== oldOpts.size) ||
+             (newOpts.realSize !== oldOpts.realSize) ||
+             (newOpts.per_row !== oldOpts.per_row) ||
+             (newOpts.rows !== oldOpts.rows) ||
+             (newOpts.headline_size !== oldOpts.headline_size)) {
             this.options.perRow = this.options.per_row; // AnyGrid needs camels
             this.resize();
         }
@@ -283,8 +295,51 @@ RevSlider({
             ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
         }
 
+        this.checkEllipsis();
+        if (this.options.max_headline) {
+            this.checkMaxHeadlineHeightPerRow();
+        }
         this.grid.reloadItems();
         this.grid.layout();
+    };
+
+    RevSlider.prototype.checkMaxHeadlineHeightPerRow = function() {
+        var itemsPerRow = this.grid.getPerRow();
+        var currentRowNum = 0;
+        var currentHeadlineHeight = this.getMaxHeadlineHeight(currentRowNum, itemsPerRow);
+        var ads = this.element.querySelectorAll('.rev-content');
+        if (ads.length > 0) {
+            for (var i = 0; i < ads.length; i++) {
+                if (i > 0 && i % itemsPerRow == 0) {
+                    var currentHeadlineHeight = this.getMaxHeadlineHeight(++currentRowNum, itemsPerRow);
+                }
+                var ad = ads[i];
+                ad.querySelectorAll('.rev-headline')[0].style.height = currentHeadlineHeight + 'px';
+            }
+        }
+
+    }
+
+
+    RevSlider.prototype.checkEllipsis = function() {
+        var that = this;
+        clearTimeout(that.ellipsisTimer);
+        that.ellipsisTimer = setTimeout(function() {
+            that.doEllipsis();
+        }, 300);
+    };
+
+    RevSlider.prototype.doEllipsis = function() {
+        var ads = this.element.querySelectorAll('.rev-content');
+        if (ads.length > 0) {
+            for (var i = 0; i < ads.length; i++) {
+                var ad = ads[i];
+                var text = ad.querySelectorAll('a')[0].title;
+                var el = ad.querySelectorAll('.rev-headline h3')[0];
+                var newText = revUtils.ellipsisText(el, text, this.headlineHeight);
+                ad.querySelectorAll('.rev-headline h3')[0].innerHTML = newText;
+            }
+        }
     };
 
     RevSlider.prototype.getLimit = function() {
@@ -326,6 +381,7 @@ RevSlider({
                 var ad = ads[i],
                     data = resp[i];
                 ad.querySelectorAll('a')[0].setAttribute('href', data.url);
+                ad.querySelectorAll('a')[0].title = data.headline;
                 ad.querySelectorAll('img')[0].setAttribute('src', data.image);
                 ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
                 ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
@@ -333,6 +389,7 @@ RevSlider({
 
             imagesLoaded( that.gridElement, function() {
                 revUtils.addClass(that.containerElement, 'loaded');
+                that.resize();
             });
         });
     };
@@ -348,7 +405,35 @@ RevSlider({
             that.page = Math.max(1, that.page - 1);
             that.getData();
         });
-    }
+    };
+
+    RevSlider.prototype.getMaxHeadlineHeight = function(rowNum, numItems) {
+        var maxHeadlineHeight = 0;
+        var that = this;
+        var ads = that.element.querySelectorAll('.rev-ad');
+        if (ads.length > 0) {
+            rowNum = (rowNum != undefined) ? rowNum : 0;
+            numItems = (numItems != undefined) ? numItems : ads.length;
+            var offset = rowNum * numItems;
+            var nextOffset = offset + numItems;
+            var el = ads[0].querySelectorAll('.rev-headline h3')[0];
+            var t = el.cloneNode(true);
+            t.style.visibility = 'hidden';
+            t.style.height = 'auto';
+            revUtils.append(el.parentNode, t);
+            for (var i = offset; i < nextOffset; i++) {
+                var ad = ads[i];
+                t.innerHTML = ad.querySelectorAll('a')[0].title;
+                if(t.clientHeight > maxHeadlineHeight) {
+                    maxHeadlineHeight = t.clientHeight;
+                }
+            }
+            revUtils.remove(t);
+            var numLines = Math.ceil(maxHeadlineHeight / that.headlineLineHeight);
+            maxHeadlineHeight = numLines * that.headlineLineHeight;
+        }
+        return maxHeadlineHeight;
+    };
 
 
     return RevSlider;

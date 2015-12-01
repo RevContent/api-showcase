@@ -151,7 +151,23 @@ utils.addEventListener = function(el, eventName, handler) {
       handler.call(el);
     });
   }
-}
+};
+
+utils.ellipsisText = function(el, text, height) {
+    var ellipText = '';
+    var t = el.cloneNode(true);
+    t.style.visibility = 'hidden';
+    t.style.height = 'auto';
+    this.append(el.parentNode, t);
+    t.innerHTML = text;
+    while (text.length > 0 && (t.clientHeight > height)) {
+        text = text.substr(0, text.length - 1);
+        t.innerHTML = text + "...";
+    }
+    ellipText = t.innerHTML;
+    this.remove(t);
+    return ellipText;
+};
 
 // -----  ----- //
 return utils;

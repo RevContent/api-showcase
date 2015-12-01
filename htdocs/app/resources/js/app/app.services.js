@@ -182,4 +182,7 @@ app.service('options', function() {
         xl: 6,
         xxl: 7
     };
+
+    this.headline_size = 2;
+    this.max_headline = false;
 });

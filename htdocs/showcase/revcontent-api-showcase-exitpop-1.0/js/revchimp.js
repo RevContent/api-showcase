@@ -24,6 +24,7 @@
         apiKey: null,
         listID: null,
         email: null,
+        choice: '',
         subscriberElement: $('.revexitsubscriber:first'),
         selectElement: $("#RevChimpInputSelect"),
         inputElement: $("#RevChimpInputEmail"),
@@ -40,7 +41,10 @@
         },
         shutdown: function(){
             console.log("RevChimp: Shutting Down! Detaching nodes and cleaning up...");
-            if(typeof this.subscriber === "object"){
+            $('#revexitmask').removeClass("taskbar-theme");
+            $('#revexitmask').removeClass("tile-theme");
+            $("#revexitunit").removeClass("chimp-initialized");
+            if(this.subscriber !== null && typeof this.subscriber === "object"){
                 this.subscriber.detach();
             }
             if( typeof $('#revtaskbar') === "object" && $('#revtaskbar').length > 0){
@@ -51,7 +55,7 @@
             }
         },
         configureEndpoint: function(){
-            this.subscription_url = /localhost/i.test(top.location.hostname) ? this.endpoints.dev : this.endpoints.production;
+            this.subscription_url = /localhost|local/i.test(top.location.hostname) ? this.endpoints.dev : this.endpoints.production;
             console.log("Configuring JSONP Endpoint URL ... --> " + this.subscription_url);
         },
         loadSettings: function(subscription_settings){
@@ -80,6 +84,7 @@
             that.renderStyles();
             that.setupBindings();
             that.setProperties();
+            $("#revexitunit").addClass("chimp-initialized");
         },
         renderStyles: function(){
             console.log("RevChimp: Injecting Stylesheets..");
@@ -92,6 +97,7 @@
             console.log("RevChimp: Setup Internal Properties");
             this.configureEndpoint();
             this.email = this.inputElement.val();
+            this.choice = this.selectElement.val();
             this.apiKey = this.subscriberElement.attr("data-apikey");
             this.listID = this.subscriberElement.attr("data-listid");
             this.message = this.subscriberElement.attr("data-message");
@@ -123,7 +129,7 @@
                 jsonp: false,
                 jsonpCallback: "revchimpCallback",
                 type: 'post',
-                data: {api_key: that.apiKey, list_id: that.listID, email: that.email},
+                data: {api_key: that.apiKey, list_id: that.listID, email: that.email, choice: that.choice},
                 beforeSend: function () {
                     that.submitElement.addClass("disabled").attr({disabled: true});
                     that.spinnerElement.fadeIn(300);
@@ -131,27 +137,31 @@
                 success: function (subscription_response) {
                     that.spinnerElement.fadeOut(300, function () {
                         if (subscription_response.subscribed == true) {
-                            console.log("RevChimp: Completed subscription....");
+                            console.log("RevChimp: Completed subscription....", subscription_response);
                             that.subscriberElement.find('.subscribe-message').fadeOut(200);
                             that.inputElement.fadeOut(200);
                             that.selectElement.fadeOut(200);
                             that.submitElement.removeClass("disabled").attr({disabled: false}).fadeOut(200);
                             that.subscriberElement.removeClass("failed").addClass("successful");
                             that.alertElement.removeClass("failed-subscription").addClass("successful-subscription").text(subscription_response.message).fadeIn(200, function(){
-                                $(this).delay(5000).fadeOut(200, function(){
 
-                                });
+                                if(that.settings.theme === "taskbar") {
+                                    $(this).delay(5000).fadeOut(200, function () {
 
-                                setTimeout(function(){
-                                    that.subscriber.addClass("detached");
-                                    that.shutdown();
-                                    $('#revexitmask').removeClass("taskbar-theme");
-                                    $('.revexititem').animate({margin:'4px 4px'}, 500, function(){
-                                        $('#revexitheader').addClass("white-bg");
-                                        $('#revexitadpanel').addClass("white-bg");
                                     });
 
-                                }, 3000);
+                                    setTimeout(function () {
+                                        that.subscriber.addClass("detached");
+                                        that.shutdown();
+                                        $('#revexitmask').removeClass("taskbar-theme");
+                                        $('.revexititem').animate({margin: '4px 4px'}, 500, function () {
+                                            $('#revexitheader').addClass("white-bg");
+                                            $('#revexitadpanel').addClass("white-bg");
+                                        });
+
+                                    }, 6000);
+                                }
+
                             });
 
                         } else {
@@ -160,7 +170,12 @@
                             that.selectElement.fadeIn(200);
                             that.submitElement.removeClass("disabled").attr({disabled: false});
                             that.subscriberElement.removeClass("successful").addClass("failed");
-                            that.subscriberElement.find('.subscribe-alert').removeClass("successful-subscription").addClass("failed-subscription").text(subscription_response.message).fadeIn(200).delay(3000).fadeOut();
+                            that.subscriberElement.find('.subscribe-alert').removeClass("successful-subscription").addClass("failed-subscription").text(subscription_response.message).fadeIn(200).delay(3000).fadeOut(200, function(){
+                                setTimeout(function () {
+                                    that.subscriberElement.removeClass("failed");
+                                }, 5000);
+                            });
+
                         }
                     });
                 },
@@ -179,6 +194,19 @@
                 }
             });
         },
+        buildOptionsList: function(choices) {
+          var options_stack = [],
+              choices_list = choices.split(','),
+              total_choices = choices_list.length;
+            if(total_choices > 0){
+                for(c=0;c<total_choices;c++){
+                    var opt_html = '<option value="' + choices_list[c] + '">' + choices_list[c] + '</option>';
+                    options_stack.push(opt_html);
+                }
+            }
+
+            return options_stack;
+        },
         taskbarUI: function (parent_node) {
             console.log("RevChimp: Build Taskbar UI (Affix to Bottom of Modal)...");
             var that = this;
@@ -190,7 +218,7 @@
                     subscriber_form = $('<form method="post" action="' + this.subscription_url + '" name="' + this.formName + '" id="' + this.formName + '" />'),
                     subscriber_padder = $('<div />').addClass('padder'),
                     subscriber_alert = $('<div />').addClass("subscribe-alert").hide(),
-                    subscriber_choice = $('<select />').attr({id: "RevChimpInputSelect"}).append(['<option>Candidate A</option>', '<option>Candidate B</option>', '<option>Candidate B</option>']),
+                    subscriber_choice = $('<select />').attr({id: "RevChimpInputSelect", name: "RevChimpInputSelect"}).append(this.buildOptionsList(this.settings.choices)),
                     subscriber_loader = $('<div />').addClass("subscribe-loader").hide().append($('<ul />').addClass("chimploader").append(['<li></li>', '<li></li>', '<li></li>'])),
                     subscriber_message = $('<div />').addClass("subscribe-message").text(this.settings.message),
 
@@ -204,9 +232,9 @@
                         'id': 'RevChimpSubscribeButton',
                         'name': 'RevChimpSubscribeButton',
                         'type': 'button'
-                    }).text("Subscribe"),
+                    }).text(this.settings.button),
                     clearfix = $('<div />').attr('style', 'clear:both;display:block;');
-                    subscriber_taskbar.attr({"id": "revtaskbar"}).addClass("revtaskbar revexitsubscriber hidden").append([subscriber_alert, subscriber_loader, subscriber_padder.append([subscriber_form.append([subscriber_message, subscriber_choice, subscriber_input, subscriber_button])], clearfix)]).attr({
+                    subscriber_taskbar.attr({"id": "revtaskbar"}).addClass("revtaskbar revexitsubscriber hidden").append([subscriber_alert, subscriber_loader, subscriber_padder.append([subscriber_form.append(this.settings.choices.length > 0 ? [subscriber_message, subscriber_choice, subscriber_input, subscriber_button] : [subscriber_message, subscriber_input, subscriber_button] )], clearfix)]).attr({
                         'data-apikey': this.settings.apiKey,
                         'data-listid': this.settings.listID
                     });
@@ -242,7 +270,7 @@
                     subscriber_button = $('<button />').addClass("subscribe-button").attr({
                         'id': 'RevChimpSubscribeButton',
                         'type': 'button'
-                    }).text("Subscribe"),
+                    }).text(this.settings.button),
                     subscriber = $('<div />').addClass("revexitsubscriber hidden").append([subscriber_alert, subscriber_loader,/*subscriber_close,*/ subscriber_header, subscriber_message, subscriber_input, subscriber_button]).attr({
                         'data-apikey': this.settings.apiKey,
                         'data-listid': this.settings.listID
