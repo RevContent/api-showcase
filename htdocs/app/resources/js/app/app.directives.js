@@ -100,6 +100,8 @@ app.directive('revSlider', ['$timeout', 'options', function ($timeout, options) 
 
         var widget;
 
+        options.text_overlay = false;
+
         $timeout(function() {
             widget = new RevSlider({
                 element: element,
@@ -114,7 +116,8 @@ app.directive('revSlider', ['$timeout', 'options', function ($timeout, options) 
                 rows: options.rows,
                 per_row: options.per_row,
                 headline_size: options.headline_size,
-                max_headline: options.max_headline
+                max_headline: options.max_headline,
+                text_overlay: options.text_overlay
             });
         });
 

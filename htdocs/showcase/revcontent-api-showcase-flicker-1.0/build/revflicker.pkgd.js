@@ -6377,11 +6377,17 @@ utils.appendStyle = function(style, namespace) {
     }
 };
 
+//b overwrites a only one level :/
 utils.extend = function( a, b ) {
-  for ( var prop in b ) {
-    a[ prop ] = b[ prop ];
-  }
-  return a;
+    var c = {};
+    for (var prop in a) {
+        c[prop] = a[prop];
+    }
+
+    for ( var prop in b ) {
+        c[ prop ] = b[ prop ];
+    }
+    return c;
 };
 
 utils.inArray = function(array, item) {

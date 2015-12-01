@@ -53,9 +53,9 @@ RevSlider({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevSlider = factory(window, window.revUtils, window.revDetect, window.revApi);
+    window.RevSlider = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDialog);
 
-}( window, function factory(window, revUtils, revDetect, revApi) {
+}( window, function factory(window, revUtils, revDetect, revApi, revDialog) {
 'use strict';
 
     var RevSlider = function(opts) {
@@ -95,7 +95,8 @@ RevSlider({
             url: 'https://trends.revcontent.com/api/v1/',
             ad_border: true,
             headline_size: 2,
-            max_headline: false
+            max_headline: false,
+            text_overlay: false
         };
 
         // merge options
@@ -161,6 +162,8 @@ RevSlider({
             this.appendCell();
         };
 
+        this.textOverlay();
+
         this.grid.reloadItems();
         this.grid.layout();
 
@@ -205,6 +208,26 @@ RevSlider({
         this.preloaderHeight = (this.grid.columnWidth - (this.padding * 2) - (this.options.ad_border ? 2 : 0)) * (imageHeight / imageWidth);
     };
 
+    RevSlider.prototype.textOverlay = function() {
+        var ads = this.containerElement.querySelectorAll('.rev-ad');
+        if (this.options.text_overlay) {
+            revUtils.addClass(this.containerElement, 'rev-slider-text-overlay');
+            for (var i = 0; i < ads.length; i++) {
+                var ad = ads[i];
+                ad.style.height = this.preloaderHeight + 'px';
+                if (!ad.querySelectorAll('.rev-overlay').length) { // add rev-overlay if not already there
+                    ad.querySelectorAll('img')[0].insertAdjacentHTML('afterend', '<div class="rev-overlay"></div>');
+                }
+            }
+        } else {
+            revUtils.removeClass(this.containerElement, 'rev-slider-text-overlay');
+            for (var i = 0; i < ads.length; i++) {
+                var ad = ads[i];
+                ad.style.height = 'auto';
+            }
+        }
+    };
+
     RevSlider.prototype.appendElements = function() {
         if (this.header) {
             revUtils.remove(this.header);
@@ -219,7 +242,7 @@ RevSlider({
         }
         this.sponsored = document.createElement('div');
         revUtils.addClass(this.sponsored, 'rev-sponsored');
-        this.sponsored.innerHTML = '<a href="http://revcontent.com" target="_blank">Sponsored by Revcontent</a>';
+        this.sponsored.innerHTML = '<a onclick="revDialog.showDialog();">Sponsored by Revcontent</a>';
         if (this.options.rev_position == 'top_right') {
             revUtils.addClass(this.sponsored, 'top-right')
             revUtils.prepend(this.containerElement, this.sponsored);
@@ -234,17 +257,23 @@ RevSlider({
 
         this.options = revUtils.extend(this.options, newOpts);
 
-        if ( (newOpts.size !== oldOpts.size) ||
-             (newOpts.realSize !== oldOpts.realSize) ||
-             (newOpts.per_row !== oldOpts.per_row) ||
-             (newOpts.rows !== oldOpts.rows) ||
-             (newOpts.headline_size !== oldOpts.headline_size)) {
+        if ( (this.options.size !== oldOpts.size) ||
+             (this.options.realSize !== oldOpts.realSize) ||
+             (this.options.per_row !== oldOpts.per_row) ||
+             (this.options.rows !== oldOpts.rows) ||
+             (this.options.headline_size !== oldOpts.headline_size)) {
             this.options.perRow = this.options.per_row; // AnyGrid needs camels
             this.resize();
         }
 
-        if ((newOpts.header !== oldOpts.header) || newOpts.rev_position !== oldOpts.rev_position) {
+        if ((this.options.header !== oldOpts.header) || this.options.rev_position !== oldOpts.rev_position) {
             this.appendElements();
+        }
+
+        if (this.options.text_overlay !== oldOpts.text_overlay) {
+            this.textOverlay();
+            this.grid.reloadItems();
+            this.grid.layout();
         }
     };
 
@@ -294,6 +323,8 @@ RevSlider({
             ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
             ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
         }
+
+        this.textOverlay();
 
         this.checkEllipsis();
         if (this.options.max_headline) {
