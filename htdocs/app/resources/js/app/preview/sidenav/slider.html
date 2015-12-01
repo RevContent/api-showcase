@@ -55,7 +55,6 @@
             </div>
          </div>
 
-
         <md-subheader class="md-accent" class="md-accent">Headlines</md-subheader>
         <div layout="column">
             <div flex="50">
@@ -63,7 +62,12 @@
                 <md-slider ng-class="md-primary" flex md-discrete ng-model="ctrl.options.headline_size"  step="1" min="1" max="4" aria-label="Headline Rows"></md-slider>
             </div>
             <div flex="50">
-                <md-checkbox aria-label="Auto" ng-model="ctrl.options.max_headline">Auto</md-checkbox>
+                <span class="md-body-1">Auto Height?</span>
+                <md-checkbox aria-label="Auto" ng-model="ctrl.options.max_headline">{{ ctrl.options.max_headline ? 'Yes' : 'No' }}</md-checkbox>
+            </div>
+            <div flex="50">
+                <span class="md-body-1">Text Overlay?</span>
+                <md-checkbox aria-label="Phone" ng-model="ctrl.options.text_overlay">{{ ctrl.options.text_overlay ? 'Yes' : 'No' }}</md-checkbox>
             </div>
         </div>
 
