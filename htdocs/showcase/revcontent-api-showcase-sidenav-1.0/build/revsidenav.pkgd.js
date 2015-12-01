@@ -7076,9 +7076,9 @@ RevSidenav({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevSidenav = factory(window, window.revUtils, window.revDetect, window.revApi);
+    window.RevSidenav = factory(window, window.revUtils, window.revDetect);
 
-}( window, function factory(window, revUtils, revDetect, revApi) {
+}( window, function factory(window, revUtils, revDetect) {
 'use strict';
 
     var RevSidenav;
@@ -7156,8 +7156,7 @@ RevSidenav({
 
             revUtils.append(this.sidenavElement, this.innerWidgetElement);
 
-            document.getElementsByTagName('body')[0].appendChild(this.sidenavElement);
-
+            revUtils.append(document.body, this.sidenavElement);
 
             this.innerWidget = new RevSlider({
                 element: [this.innerWidgetElement],
