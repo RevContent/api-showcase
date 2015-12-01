@@ -27,7 +27,7 @@ app.service('widgets', function() {
             description: 'Pop! Content toasters are an engaging way to interact with your readers. The Mobile Toaster will appear as the user pans back to the top of the page and disapear as they scroll back down. Show your reader what\'s trending and get great results with the Mobile Toaster.',
             link: 'revcontent-api-showcase-toaster-1.0/index.html',
             bg: '#CFC28E',
-            docs: true,
+            preview: true,
             demo: true
         },
         'exit-pop': {
