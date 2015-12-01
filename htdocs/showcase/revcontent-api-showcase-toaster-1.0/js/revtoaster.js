@@ -117,6 +117,7 @@ RevToaster({
 
         this.update = function(newOpts, oldOpts) {
             this.options = revUtils.extend(defaults, newOpts);
+            this.options.sponsored = (this.options.sponsored > 2) ? 2 : this.options.sponsored;
 
             if (this.visible != newOpts.visible) {
                 if (newOpts.visible) {
