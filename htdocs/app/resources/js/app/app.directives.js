@@ -40,6 +40,59 @@ app.directive('previewMenu', ['widgets', '$stateParams', '$window', function (wi
   };
 }]);
 
+app.directive('revToaster', ['$timeout', 'options', '$rootScope', function ($timeout, options, $rootScope) {
+  return {
+    restrict: "AE",
+    link: function(scope, element, attrs) {
+
+        var widget;
+        //close this thing when changing states, otherwise it just stays open on other pages
+        $rootScope.$on("$stateChangeStart", function() {
+            widget.hide();
+        });
+
+        options.rev_position = 'bottom_right';
+        options.sponsored = 2;
+        options.rev_positions = {
+            bottom_left: {
+                key: 'bottom_left',
+                value: 'Bottom Left',
+            },
+            bottom_right: {
+                key: 'bottom_right',
+                value: 'Bottom Right',
+            }
+        };
+
+        widget = new RevToaster({
+            api_key : options.api_key,
+            pub_id : options.pub_id,
+            widget_id : options.widget_id,
+            domain : options.domain,
+            testing: true,
+            header: options.header,
+            sponsored: options.sponsored,
+            rev_position: options.rev_position,
+            devices: options.getDevices(),
+        });
+
+        var watcher = scope.$watch(function() { return options }, function(newOpts, oldOpts) {
+            if (newOpts != oldOpts) {
+                $timeout(function() {
+                    widget.update(newOpts, oldOpts);
+                });
+            }
+        }, true);
+
+        $timeout(function() {
+            widget.show();
+        });
+
+
+    }
+  };
+}]);
+
 app.directive('revSidenav', ['$timeout', 'options', '$rootScope', function ($timeout, options, $rootScope) {
   return {
     restrict: "AE",

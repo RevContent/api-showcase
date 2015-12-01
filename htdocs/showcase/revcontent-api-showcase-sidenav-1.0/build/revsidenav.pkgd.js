@@ -1079,7 +1079,9 @@ utils.append = function(el, html) {
 }
 
 utils.remove = function(el) {
-    el.parentNode.removeChild(el);
+    if (el) {
+        el.parentNode.removeChild(el);
+    }
 }
 
 utils.next = function(el) {
@@ -6389,7 +6391,9 @@ utils.append = function(el, html) {
 }
 
 utils.remove = function(el) {
-    el.parentNode.removeChild(el);
+    if (el) {
+        el.parentNode.removeChild(el);
+    }
 }
 
 utils.next = function(el) {

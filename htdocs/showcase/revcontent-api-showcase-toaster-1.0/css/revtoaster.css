@@ -97,6 +97,10 @@ body.rev-toaster-loaded .rev-toaster{
     clear: both;
 }
 
+.rev-toaster .rev-sponsored.bottom-left {
+    text-align: left;
+}
+
 .rev-toaster .rev-sponsored a {
     letter-spacing: .1px;
     color: #fff;
