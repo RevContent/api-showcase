@@ -132,6 +132,8 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
             onExit: ['$stateParams', function($stateParams) {
                 if ($stateParams.id == 'sidenav') {
                     RevSidenav({});
+                } else if ($stateParams.id == 'toaster') {
+                    RevToaster({});
                 }
             }]
         })

@@ -1,6 +1,7 @@
 <script>
 setTimeout(function() {
-    new RevToaster({
+    var toaster = new RevToaster({
+        testing: true,
         url: 'http://trends.revcontent.com/api/v1/',
         api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
         pub_id : 945,
@@ -8,5 +9,6 @@ setTimeout(function() {
         domain : 'apiexamples.powr.com',
         header : 'Something Cool!'
     });
+    toaster.show();
 });
 </script>
