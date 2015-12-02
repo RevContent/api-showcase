@@ -111,12 +111,10 @@
             </md-toolbar>
         </header>
 
+        <md-sidenav md-is-open="demoSidenav.sideNavOpen" ui-view="sidenav" md-component-id="left" class="md-sidenav-left"></md-sidenav>
+
         <main layout>
-
-            <md-sidenav md-is-open="demoSidenav.sideNavOpen" md-is-locked-open="demoSidenav.sideNavOpen" ui-view="sidenav" md-component-id="left" class="md-sidenav-left"></md-sidenav>
-
             <div ui-view="main" flex layout-align="center center" layout="column"></div>
-
         </main>
 
         <footer>
@@ -148,7 +146,7 @@
                     </div>
                 </md-button>
                 <md-menu-content>
-                    <md-menu-item ng-repeat="(key, value) in menu.widgets"><md-button ng-click="menu.preview(key)">{{value.title}}</md-button></md-menu-item>
+                    <md-menu-item ng-repeat="(key, value) in menu.widgets"><md-button ng-click="menu.link(key)">{{value.title}}</md-button></md-menu-item>
                 </md-menu-content>
             </md-menu>
         </script>

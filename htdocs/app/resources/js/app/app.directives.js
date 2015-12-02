@@ -20,21 +20,25 @@ app.directive('preloadImages', ['$location', '$mdCardContent', function ($locati
     }
 }]);
 
-app.directive('previewMenu', ['widgets', '$stateParams', '$window', function (widgets, $stateParams, $window) {
+app.directive('widgetMenu', ['widgets', '$stateParams', '$window', '$state', function (widgets, $stateParams, $window, $state) {
   return {
     restrict: "AEC",
     templateUrl: 'preview/menu.html',
     controllerAs: 'menu',
     controller: function($scope, $state, $rootScope) {
+
         this.id = $stateParams.id ? $stateParams.id : 'flicker';
         this.widgets = widgets.data;
-        this.preview = function(id) {
+        this.link = function(id) {
             var widget = this.widgets[id];
-            if (widget.preview) {
+            if ($state.current.name == 'post_demo_id' && widget.demo) {
+                $state.go('post_demo_id', {id: id, demo_id: 1});
+                return;
+            } else if ($state.current.name == 'post_preview' && widget.preview) {
                 $state.go('post_preview', {id: id});
-            } else {
-                $window.open('/showcase/' + widget.link, '_blank');
+                return;
             }
+            $window.open('/showcase/' + widget.link, '_blank');
         }
     }
   };

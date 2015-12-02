@@ -15,8 +15,11 @@ app.controller('DemosCtrl', function(widgets, $stateParams, $state, $mdToast, $r
 
 
 app.controller('DemoCtrl', function(widgets, $stateParams, $state, $mdToast, $rootScope, $scope, $http, $timeout, $mdBottomSheet, $mdSidenav, $mdToast, options, slider, widgets) {
+    var that = this;
 
-    this.sideNavOpen = true;
+    $timeout(function() {
+        that.sideNavOpen = true;
+    });
 
     this.widget = widgets.data[$stateParams.id];
 
