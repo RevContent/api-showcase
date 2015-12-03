@@ -49,6 +49,8 @@ app.directive('revToaster', ['$timeout', 'options', '$rootScope', function ($tim
     restrict: "AE",
     link: function(scope, element, attrs) {
 
+        options.set();
+
         var widget;
         //close this thing when changing states, otherwise it just stays open on other pages
         $rootScope.$on("$stateChangeStart", function() {
@@ -101,6 +103,8 @@ app.directive('revSidenav', ['$timeout', 'options', '$rootScope', function ($tim
   return {
     restrict: "AE",
     link: function(scope, element, attrs) {
+
+        options.set();
 
         var widget;
         //close this thing when changing states, otherwise it just stays open on other pages
@@ -155,6 +159,8 @@ app.directive('revSlider', ['$timeout', 'options', function ($timeout, options) 
     },
     link: function(scope, element, attrs) {
 
+        options.set();
+
         var widget;
 
         options.text_overlay = false;
@@ -193,6 +199,8 @@ app.directive('revFlicker', ['$location', '$timeout', 'options', function ($loca
   return {
     restrict: "AE",
     link: function(scope, element, attrs) {
+
+        options.set();
 
         var widget;
 

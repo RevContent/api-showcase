@@ -107,82 +107,87 @@ app.service('slider', function(options) {
 
 
 app.service('options', function() {
-    this.domain = 'apiexamples.powr.com';
-    this.api_key = '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b';
-    this.widget_id = 6181;
-    this.pub_id = 945;
-    this.visible = true;
 
-    this.size = 4;
+    this.set = function() {
+        this.domain = 'apiexamples.powr.com';
+        this.api_key = '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b';
+        this.widget_id = 6181;
+        this.pub_id = 945;
+        this.visible = true;
 
-    this.sponsored = 10;
+        this.size = 4;
 
-    this.devices = {
-        phone: true,
-        tablet: true,
-        desktop: true
-    };
+        this.sponsored = 10;
 
-    this.getDevices = function() {
-        var devices = [];
-        for (var device in this.devices) {
-          if (this.devices.hasOwnProperty(device)) {
-            if (this.devices[device])
-                devices.push(device);
-          }
+        this.devices = {
+            phone: true,
+            tablet: true,
+            desktop: true
+        };
+
+        this.getDevices = function() {
+            var devices = [];
+            for (var device in this.devices) {
+              if (this.devices.hasOwnProperty(device)) {
+                if (this.devices[device])
+                    devices.push(device);
+              }
+            }
+            return devices;
         }
-        return devices;
+
+        this.header = 'Trending Now';
+
+        this.rev_positions = {
+            top_right: {
+                key: 'top_right',
+                value: 'Top Right',
+            },
+            bottom_left: {
+                key: 'bottom_left',
+                value: 'Bottom Left',
+            },
+            bottom_right: {
+                key: 'bottom_right',
+                value: 'Bottom Right',
+            }
+        };
+
+        this.rev_position = this.rev_positions.top_right.key;
+
+        this.sizes = [
+            150,
+            250,
+            500,
+            750,
+            1000,
+            1250,
+            1500
+        ];
+
+        this.rows = {
+            xxs: 2,
+            xs: 2,
+            sm: 2,
+            md: 2,
+            lg: 2,
+            xl: 2,
+            xxl: 2
+        };
+
+        this.per_row = {
+            xxs: 1,
+            xs: 1,
+            sm: 3,
+            md: 4,
+            lg: 5,
+            xl: 6,
+            xxl: 7
+        };
+
+        this.headline_size = 2;
+        this.max_headline = false;
     }
 
-    this.header = 'Trending Now';
-
-    this.rev_positions = {
-        top_right: {
-            key: 'top_right',
-            value: 'Top Right',
-        },
-        bottom_left: {
-            key: 'bottom_left',
-            value: 'Bottom Left',
-        },
-        bottom_right: {
-            key: 'bottom_right',
-            value: 'Bottom Right',
-        }
-    };
-
-    this.rev_position = this.rev_positions.top_right.key;
-
-    this.sizes = [
-        150,
-        250,
-        500,
-        750,
-        1000,
-        1250,
-        1500
-    ];
-
-    this.rows = {
-        xxs: 2,
-        xs: 2,
-        sm: 2,
-        md: 2,
-        lg: 2,
-        xl: 2,
-        xxl: 2
-    };
-
-    this.per_row = {
-        xxs: 1,
-        xs: 1,
-        sm: 3,
-        md: 4,
-        lg: 5,
-        xl: 6,
-        xxl: 7
-    };
-
-    this.headline_size = 2;
-    this.max_headline = false;
+    this.set();
 });
