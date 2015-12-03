@@ -1,13 +1,16 @@
-<div class="container" flex layout="column" layout-fill layout-padding>
+<div flex layout="column" layout-fill layout-padding>
 
     <div>
-
         <div layout layout-fill widget-menu></div>
 
-        <div ui-view="description"></div>
+        <div layout-padding>
+
+            <div ui-view="description"></div>
+
+        </div>
 
     </div>
 
-    <div flex="grow" layout layout-align="center center" ui-view="demo"></div>
+    <div flex="grow" layout layout-padding layout-align="center center" ui-view="demo"></div>
 
 </div>
