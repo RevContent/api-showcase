@@ -122,7 +122,8 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                     controller: 'DemoCtrl',
                     controllerAs: 'demo'
                 },
-                sidenav: {
+                sidenav: false,
+                sidenavDemo: {
                     templateUrl: function($stateParams) {
                         return 'app/resources/js/app/demo/navigation/'+ $stateParams.id +'.html'
                     },

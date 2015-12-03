@@ -111,9 +111,12 @@
             </md-toolbar>
         </header>
 
-        <md-sidenav md-is-open="demoSidenav.sideNavOpen" ui-view="sidenav" md-component-id="left" class="md-sidenav-left"></md-sidenav>
+        <md-sidenav ui-view="sidenav" md-component-id="left" class="md-sidenav-left"></md-sidenav>
 
         <main layout>
+
+            <md-sidenav ui-view="sidenavDemo" md-is-locked-open="showDemoSideNav" md-component-id="leftDemo" class="md-sidenav-left"></md-sidenav>
+
             <div ui-view="main" flex layout-align="center center" layout="column"></div>
         </main>
 
