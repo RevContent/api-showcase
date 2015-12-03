@@ -64,7 +64,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                         };
                         $scope.demo = function(id) {
                             $mdDialog.hide().then(function() {
-                                $state.go('post_demos', {id: id});
+                                $state.go('post_demo_id', {id: id, demo_id: 1});
                             });
                         };
                     },
@@ -112,6 +112,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
             }
         })
         .state('post_demo', {
+            sticky: true,
             url: "/{id}/demo",
             views: {
                 main: {
@@ -121,21 +122,15 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                     controller: 'DemoCtrl',
                     controllerAs: 'demo'
                 },
-                sidenav: {
+                sidenav: false,
+                sidenavDemo: {
                     templateUrl: function($stateParams) {
                         return 'app/resources/js/app/demo/navigation/'+ $stateParams.id +'.html'
                     },
                     controller: 'DemoCtrl',
                     controllerAs: 'demoSidenav'
                 }
-            },
-            onExit: ['$stateParams', function($stateParams) {
-                if ($stateParams.id == 'sidenav') {
-                    RevSidenav({});
-                } else if ($stateParams.id == 'toaster') {
-                    RevToaster({});
-                }
-            }]
+            }
         })
         .state('post_demo_id', {
             parent: 'post_demo',

@@ -1,13 +1,22 @@
 <div flex layout="column" layout-fill layout-padding>
 
     <div>
+        <div layout layout-fill widget-menu></div>
 
-        <h2 class="md-headline" ng-bind="demo.widget.title"></h2>
+        <div layout-padding>
 
-        <div ui-view="description"></div>
+            <div class="demo-description" ui-view="description"></div>
+
+        </div>
 
     </div>
 
-    <div flex="grow" layout layout-align="center center" ui-view="demo"></div>
+    <div flex="grow" layout="column" layout-padding>
+
+        <h2 class="md-headline">Result:</h2>
+
+        <div ui-view="demo"></div>
+
+    </div>
 
 </div>

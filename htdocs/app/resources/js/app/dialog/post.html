@@ -17,10 +17,10 @@
 
             <md-content layout="row" layout-wrap>
                 <div flex="50" layout layout-align="center center">
-                    <md-button flex style="margin:8px;" ng-click="preview(id, post.preview)" class="md-accent md-raised md-hue-2">Live Preview</md-button>
+                    <md-button flex style="margin:8px;" ng-show="post.demo" ng-click="demo(id, post.demo)" class="md-accent md-raised md-hue-2">Docs</md-button>
                 </div>
                 <div flex="50" layout layout-align="center center">
-                    <md-button flex style="margin:8px;" ng-show="post.demo" ng-click="demo(id, post.demo)" class="md-accent md-raised md-hue-2">Demo</md-button>
+                    <md-button flex style="margin:8px;" ng-click="preview(id, post.preview)" class="md-accent md-raised md-hue-2">Live Preview</md-button>
                 </div>
                 <div flex="50" layout layout-align="center center">
                     <md-button flex style="margin:8px;" href="https://github.com/Revcontent/api-showcase/archive/master.zip" class="md-raised md-primary md-hue-1">Download</md-button>
@@ -58,9 +58,9 @@
 
                 <md-content layout="column">
 
-                    <md-button style="margin-bottom:16px;" ng-click="preview(id, post.preview)" class="md-accent md-raised md-hue-2">Live Preview</md-button>
+                    <md-button style="margin-bottom:16px;" ng-show="post.demo" ng-click="demo(id)" class="md-accent md-raised md-hue-2">Docs</md-button>
 
-                    <md-button style="margin-bottom:16px;" ng-show="post.demo" ng-click="demo(id)" class="md-accent md-raised md-hue-2">Demo</md-button>
+                    <md-button style="margin-bottom:16px;" ng-click="preview(id, post.preview)" class="md-accent md-raised md-hue-2">Live Preview</md-button>
 
                     <md-button style="margin-bottom:16px;" href="https://github.com/Revcontent/api-showcase/archive/master.zip" class="md-raised md-primary md-hue-1">Download</md-button>
 

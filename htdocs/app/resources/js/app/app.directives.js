@@ -20,21 +20,25 @@ app.directive('preloadImages', ['$location', '$mdCardContent', function ($locati
     }
 }]);
 
-app.directive('previewMenu', ['widgets', '$stateParams', '$window', function (widgets, $stateParams, $window) {
+app.directive('widgetMenu', ['widgets', '$stateParams', '$window', '$state', function (widgets, $stateParams, $window, $state) {
   return {
     restrict: "AEC",
     templateUrl: 'preview/menu.html',
     controllerAs: 'menu',
     controller: function($scope, $state, $rootScope) {
+
         this.id = $stateParams.id ? $stateParams.id : 'flicker';
         this.widgets = widgets.data;
-        this.preview = function(id) {
+        this.link = function(id) {
             var widget = this.widgets[id];
-            if (widget.preview) {
+            if ($state.current.name == 'post_demo_id' && widget.demo) {
+                $state.go('post_demo_id', {id: id, demo_id: 1});
+                return;
+            } else if ($state.current.name == 'post_preview' && widget.preview) {
                 $state.go('post_preview', {id: id});
-            } else {
-                $window.open('/showcase/' + widget.link, '_blank');
+                return;
             }
+            $window.open('/showcase/' + widget.link, '_blank');
         }
     }
   };
@@ -44,6 +48,8 @@ app.directive('revToaster', ['$timeout', 'options', '$rootScope', function ($tim
   return {
     restrict: "AE",
     link: function(scope, element, attrs) {
+
+        options.set();
 
         var widget;
         //close this thing when changing states, otherwise it just stays open on other pages
@@ -98,6 +104,8 @@ app.directive('revSidenav', ['$timeout', 'options', '$rootScope', function ($tim
     restrict: "AE",
     link: function(scope, element, attrs) {
 
+        options.set();
+
         var widget;
         //close this thing when changing states, otherwise it just stays open on other pages
         $rootScope.$on("$stateChangeStart", function() {
@@ -151,6 +159,8 @@ app.directive('revSlider', ['$timeout', 'options', function ($timeout, options) 
     },
     link: function(scope, element, attrs) {
 
+        options.set();
+
         var widget;
 
         options.text_overlay = false;
@@ -189,6 +199,8 @@ app.directive('revFlicker', ['$location', '$timeout', 'options', function ($loca
   return {
     restrict: "AE",
     link: function(scope, element, attrs) {
+
+        options.set();
 
         var widget;
 

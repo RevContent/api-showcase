@@ -640,3 +640,30 @@ body.os-windows-phone.browser-ie.md-dialog-is-showing md-dialog.md-transition-in
 .fade-button {
   transition: all .5s;
 }
+
+#widgetContainer {
+  z-index: 79
+}
+
+.demo-description p:first-child {
+  margin-top: 0;
+}
+
+.demo-description code {
+  margin-bottom: 14px;
+}
+
+.demo-description table code {
+  margin-bottom: 0;
+  background: inherit;
+  color: #333;
+  padding: 0;
+}
+
+.demo-description pre {
+  margin: 0;
+}
+
+.demo-description table {
+  width: auto;
+}
