@@ -5,12 +5,18 @@
 
         <div layout-padding>
 
-            <div ui-view="description"></div>
+            <div class="demo-description" ui-view="description"></div>
 
         </div>
 
     </div>
 
-    <div flex="grow" layout layout-padding layout-align="center center" ui-view="demo"></div>
+    <div flex="grow" layout="column" layout-padding>
+
+        <h2 class="md-headline">Result:</h2>
+
+        <div ui-view="demo"></div>
+
+    </div>
 
 </div>
