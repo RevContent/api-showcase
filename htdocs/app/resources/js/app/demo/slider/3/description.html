@@ -1,1 +1,41 @@
-per_row
+<p class="md-body-1">The per_row option allows you to define how many ads will be visible on a row. The total columns. This does not include the halved ad. per_row works on a breakpoint system to provide an <a href="https://www.google.com/design/spec/layout/adaptive-ui.html#" target="_blank">adaptive UI</a></p>
+
+
+<h3 class="md-subhead">Available Options</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>
+                <code hljs language="json">
+per_row: {
+    xxs: 1,
+    xs: 1,
+    sm: 3,
+    md: 4,
+    lg: 5,
+    xl: 6,
+    xxl: 7
+}</code>
+
+            </th>
+        </tr>
+    </thead>
+</table>
+
+<h3 class="md-subhead">Example</h3>
+
+<code hljs language="javascript">
+new RevSlider({
+    ...
+    per_row: {
+        xxs: 1,
+        xs: 1,
+        sm: 2,
+        md: 2,
+        lg: 3,
+        xl: 4,
+        xxl: 5
+    }
+});
+</code>
