@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <!-- inject:js -->
+    <script src="/build/revflicker.min.js"></script>
+    <!-- endinject -->
+
+    <!-- inject:html -->
+    <p class="md-body-1">max_headline allows you to decide how many lines will be allowed for the headline</p>
+
+
+<h3 class="md-subhead">Available Options</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>
+            false(default)
+            </th>
+        </tr>
+    </thead>
+</table>
+
+<h3 class="md-subhead">Example</h3>
+
+<code hljs language="javascript">
+new RevFlicker({
+    ...
+    max_headline: true
+});
+</code>
+    <div id="rev-flicker" ></div>
+<script>
+setTimeout(function() {
+    new RevFlicker({
+        id: 'rev-flicker',
+        url: 'http://trends.revcontent.com/api/v1/',
+        api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+        pub_id : 945,
+        widget_id : 6181,
+        domain : 'apiexamples.powr.com',
+        max_headline: true
+    });
+});
+</script>
+    <!-- endinject -->
+</body>
+</html>
