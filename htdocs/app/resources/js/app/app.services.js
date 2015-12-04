@@ -1,5 +1,47 @@
 app.service('widgets', function() {
     this.data = {
+        'exit-pop': {
+            title: 'RevExit',
+            img: 'exitpop.jpg',
+            description: 'Exit Pop is an API implementation that pops up on a user\'s first impression every 24 hours for non-touch enabled devices (e.g. desktops). When the user mouses off the page they are usually trying to close the window or navigate away from the page. Exit Pop is a great way to give these users one more chance to view your Revcontent API widget.',
+            link: 'revcontent-api-showcase-exitpop-1.0/index.html',
+            bg: '#00A650'
+        },
+        flicker: {
+            title: 'RevFlicker',
+            img: 'flicker.jpg',
+            description: 'With responsive styling and touch enabled gestures Flicker puts the fun into your content slider. You can configure the Flicker widget to show on phone, tablet and desktop and you can even decide how many units to display at various breakpoints. Include Flicker on your page and let the engagement begin!',
+            link: 'revcontent-api-showcase-flicker-1.0/index.html',
+            bg: '#F7F9F8',
+            // preview: true,
+            // demo: true
+        },
+        toaster: {
+            title: 'Mobile RevToaster',
+            img: 'toaster.jpg',
+            description: 'Pop! Content toasters are an engaging way to interact with your readers. The Mobile Toaster will appear as the user pans back to the top of the page and disapear as they scroll back down. Show your reader what\'s trending and get great results with the Mobile Toaster.',
+            link: 'revcontent-api-showcase-toaster-1.0/index.html',
+            bg: '#CFC28E',
+            // preview: true,
+            // demo: true
+        },
+        slider: {
+            title: 'RevSlider',
+            img: 'slider.jpg',
+            description: 'Slider or sometimes called a carousel is an engaging way to showcase Revcontent ads on your site! Give your readers the ability to navigate through all of the ads availible to your widget. Fully responsive and configurable to display as many rows and columns as you like at various breakpoints. Slider is a great choice for any site!',
+            link: 'revcontent-api-showcase-slider-1.0/index.html',
+            bg: '#2E4E5D',
+            // preview: true,
+            // demo: true
+        },
+        sidenav: {
+            title: 'RevSidenav',
+            img: 'sidenav.jpg',
+            description: 'With responsive styling and touch enabled gestures Flicker puts the fun into your content slider. You can configure the Flicker widget to show on phone, tablet and desktop and you can even decide how many units to display at various breakpoints. Include Flicker on your page and let the engagement begin!',
+            link: 'revcontent-api-showcase-sidenav-1.0/index.html',
+            // preview: true,
+            // demo: true
+        },
         instream: {
             title: 'In-stream',
             img: 'instream.jpg',
@@ -20,48 +62,6 @@ app.service('widgets', function() {
             description: 'AJAX-powered infinite scrolling UI’s are everywhere these days, with our API you can easily integrate sponsored content into your own implementation. Utilizing our count and offset request parameters to fuel the implementation, you can create a truly native experience that will engage user’s as they scroll.',
             link: 'revcontent-api-showcase-scrollingexp-1.0/index.html',
             bg: '#DA825E'
-        },
-        toaster: {
-            title: 'Mobile Toaster',
-            img: 'toaster.jpg',
-            description: 'Pop! Content toasters are an engaging way to interact with your readers. The Mobile Toaster will appear as the user pans back to the top of the page and disapear as they scroll back down. Show your reader what\'s trending and get great results with the Mobile Toaster.',
-            link: 'revcontent-api-showcase-toaster-1.0/index.html',
-            bg: '#CFC28E',
-            preview: true,
-            demo: true
-        },
-        'exit-pop': {
-            title: 'Exit Pop',
-            img: 'exitpop.jpg',
-            description: 'Exit Pop is an API implementation that pops up on a user\'s first impression every 24 hours for non-touch enabled devices (e.g. desktops). When the user mouses off the page they are usually trying to close the window or navigate away from the page. Exit Pop is a great way to give these users one more chance to view your Revcontent API widget.',
-            link: 'revcontent-api-showcase-exitpop-1.0/index.html',
-            bg: '#00A650'
-        },
-        slider: {
-            title: 'Slider',
-            img: 'slider.jpg',
-            description: 'Slider or sometimes called a carousel is an engaging way to showcase Revcontent ads on your site! Give your readers the ability to navigate through all of the ads availible to your widget. Fully responsive and configurable to display as many rows and columns as you like at various breakpoints. Slider is a great choice for any site!',
-            link: 'revcontent-api-showcase-slider-1.0/index.html',
-            bg: '#2E4E5D',
-            preview: true,
-            demo: true
-        },
-        flicker: {
-            title: 'Flicker',
-            img: 'flicker.jpg',
-            description: 'With responsive styling and touch enabled gestures Flicker puts the fun into your content slider. You can configure the Flicker widget to show on phone, tablet and desktop and you can even decide how many units to display at various breakpoints. Include Flicker on your page and let the engagement begin!',
-            link: 'revcontent-api-showcase-flicker-1.0/index.html',
-            bg: '#F7F9F8',
-            preview: true,
-            demo: true
-        },
-        sidenav: {
-            title: 'Sidenav',
-            img: 'sidenav.jpg',
-            description: 'With responsive styling and touch enabled gestures Flicker puts the fun into your content slider. You can configure the Flicker widget to show on phone, tablet and desktop and you can even decide how many units to display at various breakpoints. Include Flicker on your page and let the engagement begin!',
-            link: 'revcontent-api-showcase-sidenav-1.0/index.html',
-            preview: true,
-            demo: true
         }
     };
 });
