@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <!-- inject:js -->
+    <script src="/build/revsidenav.min.js"></script>
+    <!-- endinject -->
+
+    <!-- inject:html -->
+    Some dep
+    <script>
+setTimeout(function() {
+    var sidenav = new RevSidenav({
+        api_key : 'bf3f270aa50d127f0f8b8c92a979d76aa1391d38',
+        pub_id : 7846,
+        widget_id : 13523,
+        domain : 'bustle.com'
+    });
+    sidenav.show();
+});
+</script>
+    <!-- endinject -->
+</body>
+</html>
