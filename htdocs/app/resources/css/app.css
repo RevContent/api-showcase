@@ -47,7 +47,7 @@ a:hover, a:focus {
   text-decoration: underline;
 }
 h1, h2, h3, h4, h5, h6 {
-  font-family: Georgia, "Times New Roman", Times, serif;
+  /*font-family: Georgia, "Times New Roman", Times, serif;*/
   margin-bottom: 1rem;
   margin-top: 1rem;
 }
