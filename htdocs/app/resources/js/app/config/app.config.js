@@ -19,8 +19,8 @@ app.run(function($rootScope, $stateParams, $stateManager, $timeout) {
         }
 
         if (fromState.name == 'post_demo_id') {
-            if ($stateParams.id == 'sidenav') {
-                RevSidenav({});
+            if ($stateParams.id == 'shifter') {
+                RevShifter({});
             } else if ($stateParams.id == 'toaster') {
                 RevToaster({});
             }

@@ -8,11 +8,11 @@
             "cdn_url": "http://labs-cdn.revcontent.com/build/revflicker.min.js"
         },
         {
-            "name": "sidenav",
+            "name": "shifter",
             "count": 4,
-            "script": "./build/revsidenav.min.js",
+            "script": "./build/revshifter.min.js",
             "cdn": true,
-            "cdn_url": "http://labs-cdn.revcontent.com/build/revsidenav.min.js"
+            "cdn_url": "http://labs-cdn.revcontent.com/build/revshifter.min.js"
         },
         {
             "name": "slider",
