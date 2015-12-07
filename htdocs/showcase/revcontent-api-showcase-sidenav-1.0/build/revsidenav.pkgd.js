@@ -6873,6 +6873,8 @@ RevSlider({
         // revUtils.append(gridContainerElement, forwardBtn);
         revUtils.append(this.element, this.containerElement);
 
+        // console.log(this.options);
+
         this.grid = new AnyGrid(this.gridElement, { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound});
 
         this.grid.on('resized', function() {
@@ -7277,6 +7279,9 @@ RevSidenav({
 
         // merge options
         this.options = revUtils.extend(defaults, opts);
+        //a hack to make up for revUtils shortcomings
+        this.options.inner_widget_options = revUtils.extend(defaults.inner_widget_options, opts.inner_widget_options);
+
         // param errors
         if (revUtils.validateApiParams(this.options).length) {
             return;
