@@ -55,5 +55,5 @@ gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
 });
 
 gulp.task('watch', function () {
-    gulp.watch(['./js/*', './css/revsidenav.css', '../revcontent-api-showcase-slider-1.0/build/revslider.js'], ['buildjs']);
+    gulp.watch(['../js/revutils.js', '../js/revdialog.js', '../js/revdetect.js', './js/*', './css/revsidenav.css', '../revcontent-api-showcase-slider-1.0/build/revslider.js', '../revcontent-api-showcase-slider-1.0/js/*'], ['buildjs']);
 });

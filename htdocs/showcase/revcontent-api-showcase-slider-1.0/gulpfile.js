@@ -55,5 +55,5 @@ gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
 });
 
 gulp.task('watch', function () {
-    gulp.watch(['./js/*', './css/*'], ['buildjs']);
+    gulp.watch(['../js/revutils.js', '../js/revdialog.js', '../js/revdetect.js', './js/*', './css/*'], ['buildjs']);
 });
