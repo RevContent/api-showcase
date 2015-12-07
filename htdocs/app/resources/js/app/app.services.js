@@ -36,7 +36,6 @@ app.service('widgets', function() {
         },
         sidenav: {
             title: 'RevSidenav',
-            title: 'RevShifter',
             img: 'sidenav.jpg',
             description: 'With responsive styling and touch enabled gestures Flicker puts the fun into your content slider. You can configure the Flicker widget to show on phone, tablet and desktop and you can even decide how many units to display at various breakpoints. Include Flicker on your page and let the engagement begin!',
             link: 'revcontent-api-showcase-sidenav-1.0/index.html',
