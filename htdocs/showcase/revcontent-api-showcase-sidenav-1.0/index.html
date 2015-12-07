@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Content Toaster Example</title>
+    <title>Slider Example</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.css" rel="stylesheet">
@@ -62,13 +62,12 @@
         <!-- /.container -->
     </nav>
 
+
     <!-- Fake Page Content -->
     <div class="container">
-        <div class="alert alert-danger" role="alert">This example only works within a mobile emulator or on a mobile device</div>
-
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Content Toaster
+                <h1 class="page-header">RevSidenav
                     <small>Revcontent Native API</small>
                 </h1>
             </div>
@@ -78,7 +77,7 @@
                 <img alt="" src="http://placehold.it/750x500" class="img-responsive">
             </div>
             <div class="col-md-4">
-                <h3>Scroll down then back up to reveal the Content Toaster...</h3>
+                <h3>This is just a testing title</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
                 <h3>Project Details</h3>
                 <ul>
@@ -95,7 +94,7 @@
                 <img alt="" src="http://placehold.it/750x500" class="img-responsive">
             </div>
             <div class="col-md-4">
-                <h3>Scroll down then back up to reveal the Content Toaster...</h3>
+                <h3>This is just a testing title</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
                 <h3>Project Details</h3>
                 <ul>
@@ -112,7 +111,7 @@
                 <img alt="" src="http://placehold.it/750x500" class="img-responsive">
             </div>
             <div class="col-md-4">
-                <h3>Scroll down then back up to reveal the Content Toaster...</h3>
+                <h3>This is just a testing title</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
                 <h3>Project Details</h3>
                 <ul>
@@ -137,19 +136,19 @@
     </div>
    <!-- /. Fake Page Content -->
 
-    <script src="/build/revsidenav.min.js"></script>
+    <script src="/showcase/revcontent-api-showcase-sidenav-1.0/build/revsidenav.pkgd.js"></script>
 
     <script>
-
-        new RevSidenav({
+        var sidenav = new RevSidenav({
             api_key : 'bf3f270aa50d127f0f8b8c92a979d76aa1391d38',
             pub_id : 7846,
             widget_id : 13523,
-            domain : 'bustle.com',
+            domain : 'bustle.com'
         });
-
+        sidenav.show();
     </script>
 
 </body>
+
 
 </html>

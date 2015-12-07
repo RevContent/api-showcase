@@ -43,6 +43,10 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                     return false;
                 }
 
+                var previousState = function() {
+                    $state.go(($stateManager.previousState && !$stateManager.previousStateDialog) ? $stateManager.previousState : 'home', $stateManager.previousStateParams);
+                }
+
                 $mdDialog.show({
                     templateUrl: 'app/resources/js/app/dialog/post.html',
                     // targetEvent: $mdCardContent.getClickEvent(), // causing bug on history navigation
@@ -72,8 +76,9 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                     }
                 })
                 .then(function(answer) { //close
+                    previousState();
                 }, function() { //cancel
-                    $state.go(($stateManager.previousState && !$stateManager.previousStateDialog) ? $stateManager.previousState : 'home', $stateManager.previousStateParams);
+                    previousState();
                 });
             }],
             onExit: ['$mdDialog', function($mdDialog) {
