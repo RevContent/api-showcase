@@ -34,11 +34,11 @@ app.service('widgets', function() {
             // preview: true,
             // demo: true
         },
-        sidenav: {
-            title: 'RevSidenav',
-            img: 'sidenav.jpg',
-            description: 'Increase revenue and user engagement with the new RevSidenav widget. Monetize on valuable site real estate with the RevSidenav.',
-            link: 'revcontent-api-showcase-sidenav-1.0/index.html',
+        shifter: {
+            title: 'RevShifter',
+            img: 'shifter.jpg',
+            description: 'Increase revenue and user engagement with the new RevShifter widget. Monetize on valuable site real estate with the RevShifter.',
+            link: 'revcontent-api-showcase-shifter-1.0/index.html',
             // preview: true,
             // demo: true
         },

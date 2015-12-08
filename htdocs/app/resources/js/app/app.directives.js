@@ -99,7 +99,7 @@ app.directive('revToaster', ['$timeout', 'options', '$rootScope', function ($tim
   };
 }]);
 
-app.directive('revSidenav', ['$timeout', 'options', '$rootScope', function ($timeout, options, $rootScope) {
+app.directive('revShifter', ['$timeout', 'options', '$rootScope', function ($timeout, options, $rootScope) {
   return {
     restrict: "AE",
     link: function(scope, element, attrs) {
@@ -121,7 +121,7 @@ app.directive('revSidenav', ['$timeout', 'options', '$rootScope', function ($tim
         };
         options.width = 600;
 
-        widget = new RevSidenav({
+        widget = new RevShifter({
             width: options.width,
             devices: options.getDevices(),
             sponsored: options.sponsored,

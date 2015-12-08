@@ -1,0 +1,19 @@
+{
+  "name": "revcontent-api-showcase-shifter-1.0",
+  "version": "1",
+  "ignore": [],
+  "description": "RevShifter",
+  "main": "js/revshifter.js",
+  "dependencies": {
+    "imagesloaded": "~3",
+    "mobile-detect": "~1"
+  },
+  "homepage": "https://api-v2.revcontent.com/",
+  "authors": [
+    "Mike Osterhout"
+  ],
+  "keywords": [
+    "revcontent"
+  ],
+  "license": "MIT"
+}
