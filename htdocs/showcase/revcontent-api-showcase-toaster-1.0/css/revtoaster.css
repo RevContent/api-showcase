@@ -205,13 +205,15 @@ body.rev-toaster-loaded .rev-toaster{
     background-repeat: no-repeat no-repeat;
     fill: currentColor;
     height: 30px;
-    width: 30px;
-    margin-top: -2px;
+    width: 15px;
     color: #c5c5c5;
+    position: relative;
 }
 
 .rev-toaster button.rev-close .icon svg {
-    vertical-align: middle;
+    position: absolute;
+    top: 7px;
+    left: 0;
     width: 15px;
     height: 15px;
 }
