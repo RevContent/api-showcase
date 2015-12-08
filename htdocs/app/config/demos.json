@@ -4,14 +4,14 @@
             "name": "flicker",
             "count": 12,
             "script": "./build/revflicker.min.js",
-            "cdn": true,
+            "cdn": false,
             "cdn_url": "http://labs-cdn.revcontent.com/build/revflicker.min.js"
         },
         {
             "name": "shifter",
             "count": 4,
             "script": "./build/revshifter.min.js",
-            "cdn": true,
+            "cdn": false,
             "cdn_url": "http://labs-cdn.revcontent.com/build/revshifter.min.js"
         },
         {
@@ -25,7 +25,7 @@
             "name": "toaster",
             "count": 4,
             "script": "./build/revtoaster.min.js",
-            "cdn": true,
+            "cdn": false,
             "cdn_url": "http://labs-cdn.revcontent.com/build/revtoaster.min.js"
         }
     ]
