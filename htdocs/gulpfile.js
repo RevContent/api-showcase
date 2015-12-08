@@ -27,12 +27,16 @@ gulp.task('prefix', function() {
 });
 
 gulp.task('tests', function() {
+    var cdnChecks = {};
+
     for (var i = 0; i < demos.tests.length; i++) {
 
-        var name = demos.tests[i].name ;
+        var name = demos.tests[i].name;
         var script = demos.tests[i].script;
         var cdn = demos.tests[i].cdn;
         var cdn_url = demos.tests[i].cdn_url;
+
+        cdnChecks[script] = cdn;
 
         for (var j = 1; j <= demos.tests[i].count; j++) {
 
@@ -45,10 +49,9 @@ gulp.task('tests', function() {
                 }
               }))
               .pipe(inject(gulp.src([script]),{
-                transform: function (filePath, file) {
-                    var path = cdn ? cdn_url : filePath; // this does not work :( always returns flicker b/c its async)
-                    return '<script src="' + filePath + '"></script>';
-
+                transform: function (filePath, file, index, length, targetFile) {
+                    path = cdnChecks['.' + filePath] ? cdn_url : filePath;
+                    return '<script src="' + path + '"></script>';
                 }
               }
               ))
