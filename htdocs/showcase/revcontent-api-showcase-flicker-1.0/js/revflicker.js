@@ -46,9 +46,9 @@ RevFlicker({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevFlicker = factory(window, window.revUtils, window.revDetect, window.revApi);
+    window.RevFlicker = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDialog);
 
-}( window, function factory(window, revUtils, revDetect, revApi) {
+}( window, function factory(window, revUtils, revDetect, revApi, revDialog) {
 'use strict';
 
     var RevFlicker = function(opts) {
@@ -77,7 +77,10 @@ RevFlicker({
             devices: [
                 'phone', 'tablet', 'desktop'
             ],
-            url: 'https://trends.revcontent.com/api/v1/'
+            url: 'https://trends.revcontent.com/api/v1/',
+            headline_size: 2,
+            max_headline: false,
+            text_overlay: false
         };
 
         // merge options
@@ -91,20 +94,27 @@ RevFlicker({
             return;
         }
 
+        this.maxHeadlineHeight = 0;
+
         var that = this;
         //append injrected style
         revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-flicker');
 
         // append a new element to the flicker
-        var flickerElement = document.createElement('div');
-        flickerElement.id = 'rev-flicker';
-        flickerElement.class = 'rev-flicker';
-        var innerElement = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
-        innerElement.style.width = '100%';
-        revUtils.append(innerElement, flickerElement);
+        this.containerElement = document.createElement('div');
+        this.containerElement.id = 'rev-flicker';
+        this.containerElement.setAttribute('class', 'rev-flicker');
+
+        this.flickerElement = document.createElement('div');
+
+        this.innerElement = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
+        this.innerElement.style.width = '100%';
+
+        revUtils.append(this.containerElement, this.flickerElement);
+        revUtils.append(this.innerElement, this.containerElement);
 
         // create flickity
-        this.flickity = new Flickity( flickerElement, {
+        this.flickity = new Flickity( this.flickerElement, {
             prevNextButtons: revDetect.mobile() ? this.options.show_arrows.mobile : this.options.show_arrows.desktop,
             pageDots: this.options.dots,
             cellAlign: 'left',
@@ -118,17 +128,25 @@ RevFlicker({
         this.getContainerWidth();
         this.emitter.on('containerReady', function() {
             that.setUp();
+            that.appendElements();
             that.preData();
+            that.textOverlay();
             that.getData();
         });
+
+        this.ellipsisTimer;
 
         revUtils.addEventListener(window, 'resize', function() {
             that.resize();
         });
+
+        this.flickity.on( 'cellSelect', function() {
+            that.emitter.emit('cellSelect');
+        });
     };
 
     RevFlicker.prototype.resize = function() {
-        this.containerWidth = this.flickity.element.offsetWidth;
+        this.getContainerWidth(true);
 
         this.setUp();
 
@@ -152,37 +170,71 @@ RevFlicker({
             ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
         }
 
+        this.textOverlay();
+
         this.flickity.resize();
 
         if (this.options.next_effect) {
             this.selectedIndex = -1;
             this.nextEffect();
         }
+        this.checkEllipsis();
     };
 
-    RevFlicker.prototype.appendElements = function() {
-        var header = document.createElement('h2');
-        header.innerHTML = this.options.header;
-        revUtils.addClass(header, 'rev-header');
-        revUtils.prepend(this.flickity.element, header);
+    RevFlicker.prototype.checkEllipsis = function() {
+        var that = this;
+        clearTimeout(that.ellipsisTimer);
+        that.ellipsisTimer = setTimeout(function() {
+            that.doEllipsis();
+        }, 300);
+    };
 
-        var sponsored = document.createElement('div');
-        revUtils.addClass(sponsored, 'rev-sponsored');
-        sponsored.innerHTML = '<a href="http://revcontent.com" target="_blank">Sponsored by Revcontent</a>';
-        if (this.options.rev_position == 'top_right') {
-            revUtils.addClass(sponsored, 'top-right')
-            revUtils.prepend(this.flickity.element, sponsored);
-        } else if (this.options.rev_position == 'bottom_left' || this.options.rev_position == 'bottom_right') {
-            revUtils.addClass(sponsored, this.options.rev_position.replace('_', '-'));
-            revUtils.append(this.flickity.element, sponsored);
+    RevFlicker.prototype.doEllipsis = function() {
+        var ads = this.flickity.element.querySelectorAll('.rev-content');
+        if (ads.length > 0) {
+            for (var i = 0; i < ads.length; i++) {
+                var ad = ads[i];
+                var text = ad.querySelectorAll('a')[0].title;
+                var el = ad.querySelectorAll('.rev-headline h3')[0];
+                var newText = revUtils.ellipsisText(el, text, this.headlineHeight);
+                ad.querySelectorAll('.rev-headline h3')[0].innerHTML = newText;
+            }
         }
     };
 
-    RevFlicker.prototype.getContainerWidth = function() {
+    RevFlicker.prototype.appendElements = function() {
+        if (this.header) {
+            revUtils.remove(this.header);
+        }
+        this.header = document.createElement('h2');
+        this.header.innerHTML = this.options.header;
+        revUtils.addClass(this.header, 'rev-header');
+        revUtils.prepend(this.containerElement, this.header);
+
+        if (this.sponsored) {
+            revUtils.remove(this.sponsored);
+        }
+        this.sponsored = document.createElement('div');
+        revUtils.addClass(this.sponsored, 'rev-sponsored');
+        this.sponsored.innerHTML = '<a onclick="revDialog.showDialog();">Sponsored by Revcontent</a>';
+        if (this.options.rev_position == 'top_right') {
+            revUtils.addClass(this.sponsored, 'top-right')
+            revUtils.prepend(this.containerElement, this.sponsored);
+        } else if (this.options.rev_position == 'bottom_left' || this.options.rev_position == 'bottom_right') {
+            revUtils.addClass(this.sponsored, this.options.rev_position.replace('_', '-'));
+            revUtils.append(this.containerElement, this.sponsored);
+        }
+    };
+
+    RevFlicker.prototype.getContainerWidth = function(ready) {
+        if (ready) {
+            this.containerWidth = this.flickity.element.parentNode.offsetWidth;
+            return;
+        }
         // HACK for Chrome - sometimes the width will be 0
         var that = this;
         function check() {
-            var containerWidth = that.flickity.element.offsetWidth;
+            var containerWidth = that.flickity.element.parentNode.offsetWidth;
             if(containerWidth > 0) {
                 that.containerWidth = containerWidth;
                 // emit event so we can continue
@@ -227,13 +279,17 @@ RevFlicker({
         var width = this.containerWidth / this.perRow;
 
         this.margin = ((width * .05).toFixed(2) / 1);
-        this.innerMargin = ((width * .02).toFixed(2) / 1);
 
         // font size is relative to width, other measurements are relative to this font size
         this.headlineFontSize = Math.max(14, ((width * .03).toFixed(2) / 1));
         this.headlineLineHeight = ((this.headlineFontSize * 1.25).toFixed(2) / 1);
-        this.headlineHeight = ((this.headlineLineHeight * 2).toFixed(2) / 1);
-        this.headlineMarginTop = ((this.headlineHeight * .2).toFixed(2) / 1);
+        this.headlineHeight = ((this.headlineLineHeight * this.options.headline_size).toFixed(2) / 1);
+        if (this.options.max_headline && this.getMaxHeadlineHeight() > 0) {
+            this.headlineHeight = this.getMaxHeadlineHeight();
+        }
+        this.headlineMarginTop = ((this.headlineLineHeight * .4).toFixed(2) / 1);
+
+        this.innerMargin = ((this.headlineMarginTop * .3).toFixed(2) / 1);
 
         this.providerFontSize = Math.max(11, ((this.headlineLineHeight / 2).toFixed(2) / 1));
         this.providerLineHeight = ((this.providerFontSize * 1.25).toFixed(2) / 1);
@@ -244,9 +300,72 @@ RevFlicker({
         this.preloaderHeight = Math.round(this.columnWidth * (this.imageHeight / this.imageWidth));
     };
 
+    RevFlicker.prototype.update = function(newOpts, oldOpts) {
+        this.options = revUtils.extend(this.options, newOpts);
+
+        if ( (newOpts.size !== oldOpts.size) ||
+            (newOpts.realSize !== oldOpts.realSize) ||
+            (newOpts.per_row !== oldOpts.per_row) ||
+            (newOpts.headline_size !== oldOpts.headline_size)) {
+            this.resize();
+        }
+
+        if (newOpts.sponsored !== oldOpts.sponsored) {
+            this.preData();
+            this.getData();
+            this.flickity.reloadCells();
+            this.flickity.reposition();
+        }
+
+        if ((newOpts.header !== oldOpts.header) || newOpts.rev_position !== oldOpts.rev_position) {
+            this.appendElements();
+        }
+
+        if (newOpts.next_effect !== oldOpts.next_effect) {
+            this.nextEffect();
+        }
+
+        if (newOpts.text_overlay !== oldOpts.text_overlay) {
+            this.textOverlay();
+            this.flickity.reloadCells();
+            this.flickity.reposition();
+        }
+    };
+
+    RevFlicker.prototype.textOverlay = function() {
+        var ads = this.containerElement.querySelectorAll('.rev-ad');
+        if (this.options.text_overlay) {
+            revUtils.addClass(this.containerElement, 'rev-flicker-text-overlay');
+            for (var i = 0; i < ads.length; i++) {
+                var ad = ads[i];
+                ad.style.height = this.preloaderHeight + 'px';
+                if (!ad.querySelectorAll('.rev-overlay').length) { // add rev-overlay if not already there
+                    ad.querySelectorAll('img')[0].insertAdjacentHTML('afterend', '<div class="rev-overlay"></div>');
+                }
+            }
+        } else {
+            revUtils.removeClass(this.containerElement, 'rev-flicker-text-overlay');
+            for (var i = 0; i < ads.length; i++) {
+                var ad = ads[i];
+                ad.style.height = 'auto';
+            }
+        }
+    }
+
     RevFlicker.prototype.preData = function() {
+
+        var content = this.flickity.element.querySelectorAll('.rev-content');
+        var index = content.length;
+        if (content.length > this.options.sponsored) {
+            var index = this.options.sponsored;
+            for (var i = this.options.sponsored; i < content.length; i++) {
+                revUtils.remove(content[i]);
+            }
+        }
+
         var that = this;
-        for (var i = 0; i < this.options.sponsored; i++) {
+
+        for (var j = index; j < this.options.sponsored; j++) {
             var html = '<div class="rev-ad">' +
                         '<a href="" rel="nofollow" target="_blank">' +
                             '<div class="rev-image" style="height:'+ that.preloaderHeight +'px"><img src=""/></div>' +
@@ -261,7 +380,7 @@ RevFlicker({
 
             revUtils.addClass(cell, 'rev-content');
             // next in line gets special class
-            if (that.options.next_effect && i >= that.perRow) {
+            if (that.options.next_effect && j >= that.perRow) {
                 revUtils.addClass(cell, 'rev-next');
             }
 
@@ -270,33 +389,46 @@ RevFlicker({
             that.flickity.append(cell);
         }
 
-        // append elements
-        that.appendElements();
-
         if (that.options.next_effect) {
             that.selectedIndex = that.flickity.selectedIndex;
-            that.flickity.on( 'cellSelect', function() {
-                that.nextEffect();
-            });
+            that.attachNextEffect();
         }
     };
 
+    RevFlicker.prototype.attachNextEffect = function() {
+        var that = this;
+        this.emitter.on( 'cellSelect', function() {
+            return that.nextEffect();
+        });
+    };
+
     RevFlicker.prototype.nextEffect = function() {
-        if (this.selectedIndex != this.flickity.selectedIndex) { // only do something when index changes
-            this.selectedIndex = this.flickity.selectedIndex;
-            var content = this.flickity.element.querySelectorAll('.rev-content');
-            var nextIndex = this.selectedIndex + this.perRow;
-            var last = this.selectedIndex >= this.options.sponsored - this.perRow;
-            for (var i = 0; i < content.length; i++) {
-                if (last) { // none left to half so all are visible
-                    revUtils.removeClass(content[i], 'rev-next');
-                } else if (i >= nextIndex) {
-                    revUtils.addClass(content[i], 'rev-next');
-                } else {
-                    revUtils.removeClass(content[i], 'rev-next');
+        if (this.options.next_effect) {
+            if (!this.emitter.getListeners('cellSelect').length) {
+                this.attachNextEffect();
+            }
+            if (this.selectedIndex != this.flickity.selectedIndex) { // only do something when index changes
+                this.selectedIndex = this.flickity.selectedIndex;
+                var content = this.flickity.element.querySelectorAll('.rev-content');
+                var nextIndex = this.selectedIndex + this.perRow;
+                var last = this.selectedIndex >= this.options.sponsored - this.perRow;
+                for (var i = 0; i < content.length; i++) {
+                    if (last) { // none left to half so all are visible
+                        revUtils.removeClass(content[i], 'rev-next');
+                    } else if (i >= nextIndex) {
+                        revUtils.addClass(content[i], 'rev-next');
+                    } else {
+                        revUtils.removeClass(content[i], 'rev-next');
+                    }
                 }
             }
+        } else {
+            var content = this.flickity.element.querySelectorAll('.rev-content.rev-next');
+            for (var i = 0; i < content.length; i++) {
+                revUtils.removeClass(content[i], 'rev-next');
+            }
         }
+        return this.options.next_effect ? false : true;
     };
 
     RevFlicker.prototype.getData = function() {
@@ -314,17 +446,45 @@ RevFlicker({
                 var ad = ads[i],
                     data = resp[i];
                 ad.querySelectorAll('a')[0].setAttribute('href', data.url);
+                ad.querySelectorAll('a')[0].title = data.headline;
                 ad.querySelectorAll('img')[0].setAttribute('src', data.image);
                 ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
                 ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
             }
 
             imagesLoaded( that.flickity.element, function() {
-                revUtils.addClass(that.flickity.element, 'loaded');
+                revUtils.addClass(that.containerElement, 'loaded');
+                that.resize();
             });
 
         });
     };
+
+    RevFlicker.prototype.getMaxHeadlineHeight = function() {
+        var maxHeadlineHeight = 0;
+        var that = this;
+        var ads = that.flickity.element.querySelectorAll('.rev-ad');
+        if (ads.length > 0) {
+            var el = ads[0].querySelectorAll('.rev-headline h3')[0];
+            var t = el.cloneNode(true);
+            t.style.visibility = 'hidden';
+            t.style.height = 'auto';
+            revUtils.append(el.parentNode, t);
+            for (var i = 0; i < ads.length; i++) {
+                var ad = ads[i];
+                t.innerHTML = ad.querySelectorAll('a')[0].title;
+                if(t.clientHeight > maxHeadlineHeight) {
+                    maxHeadlineHeight = t.clientHeight;
+                }
+            }
+            revUtils.remove(t);
+            var numLines = Math.ceil(maxHeadlineHeight / that.headlineLineHeight);
+            maxHeadlineHeight = numLines * that.headlineLineHeight;
+        }
+        return maxHeadlineHeight;
+    };
+
+
 
     return RevFlicker;
 

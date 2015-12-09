@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <!-- inject:js -->
+    <script src="/build/revtoaster.min.js"></script>
+    <!-- endinject -->
+
+    <!-- inject:html -->
+    <p class="md-body-1">The header option allows you to change the Trending Now header text</p>
+
+
+<h3 class="md-subhead">Available Options</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Trending Now(default)</th>
+        </tr>
+    </thead>
+</table>
+
+<h3 class="md-subhead">Example</h3>
+
+<code hljs language="javascript">
+new RevToaster({
+    ...
+    header: 'Something cool!'
+});
+</code>
+    <script>
+setTimeout(function() {
+    var toaster = new RevToaster({
+        testing: true,
+        url: 'http://trends.revcontent.com/api/v1/',
+        api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+        pub_id : 945,
+        widget_id : 6181,
+        domain : 'apiexamples.powr.com',
+        header : 'Something Cool!'
+    });
+    toaster.show();
+});
+</script>
+    <!-- endinject -->
+</body>
+</html>

@@ -59,11 +59,17 @@ utils.appendStyle = function(style, namespace) {
     }
 };
 
+//b overwrites a only one level :/
 utils.extend = function( a, b ) {
-  for ( var prop in b ) {
-    a[ prop ] = b[ prop ];
-  }
-  return a;
+    var c = {};
+    for (var prop in a) {
+        c[prop] = a[prop];
+    }
+
+    for ( var prop in b ) {
+        c[ prop ] = b[ prop ];
+    }
+    return c;
 };
 
 utils.inArray = function(array, item) {
@@ -101,7 +107,9 @@ utils.append = function(el, html) {
 }
 
 utils.remove = function(el) {
-    el.parentNode.removeChild(el);
+    if (el) {
+        el.parentNode.removeChild(el);
+    }
 }
 
 utils.next = function(el) {
@@ -145,7 +153,23 @@ utils.addEventListener = function(el, eventName, handler) {
       handler.call(el);
     });
   }
-}
+};
+
+utils.ellipsisText = function(el, text, height) {
+    var ellipText = '';
+    var t = el.cloneNode(true);
+    t.style.visibility = 'hidden';
+    t.style.height = 'auto';
+    this.append(el.parentNode, t);
+    t.innerHTML = text;
+    while (text.length > 0 && (t.clientHeight > height)) {
+        text = text.substr(0, text.length - 1);
+        t.innerHTML = text + "...";
+    }
+    ellipText = t.innerHTML;
+    this.remove(t);
+    return ellipText;
+};
 
 // -----  ----- //
 return utils;

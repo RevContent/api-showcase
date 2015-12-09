@@ -1,0 +1,88 @@
+<md-content layout="column" layout-padding ng-controller="BuilderOptionsCtrl as ctrl">
+
+    <md-list layout="column" layout-padding>
+
+        <md-subheader class="md-accent" class="md-accent">Widget Settings</md-subheader>
+        <md-list-item>
+            <div layout="column" layout-fill>
+                <md-input-container>
+                    <label>Domain</label>
+                    <input ng-model="ctrl.options.domain">
+                </md-input-container>
+
+                <md-input-container>
+                    <label>API Key</label>
+                    <input ng-model="ctrl.options.api_key">
+                </md-input-container>
+
+                <md-input-container>
+                    <label>Publisher ID</label>
+                    <input ng-model="ctrl.options.pub_id">
+                </md-input-container>
+
+                <md-input-container>
+                    <label>Widget ID</label>
+                    <input ng-model="ctrl.options.widget_id">
+                </md-input-container>
+            </div>
+        </md-list-item>
+
+        <md-subheader class="md-accent" class="md-accent">Headline</md-subheader>
+        <md-list-item>
+            <md-input-container>
+                <label>Headline</label>
+                <input ng-model="ctrl.options.header">
+            </md-input-container>
+        </md-list-item>
+
+        <md-subheader class="md-accent" class="md-accent">Rev Position</md-subheader>
+        <md-list-item>
+            <md-select ng-model="ctrl.options.rev_position" aria-label="Rev Position">
+                <md-option ng-repeat="position in ctrl.options.rev_positions" value="{{position.key}}">{{position.value}}</md-option>
+            </md-select>
+        </md-list-item>
+
+        <md-subheader class="md-accent" class="md-accent">Width</md-subheader>
+        <md-list-item>
+            <div layout="column" layout-fill>
+                    <span class="md-body-1">{{ ctrl.options.width }}px</span>
+                    <md-slider flex ng-model="ctrl.options.width" step="25" min="300" max="1200" aria-label="Width"></md-slider>
+                </div>
+            </div>
+        </md-list-item>
+
+        <md-subheader class="md-accent" class="md-accent">Devices</md-subheader>
+        <div layout="column">
+            <div flex="50">
+                <md-checkbox aria-label="Phone" ng-model="ctrl.options.devices.phone">Phone</md-checkbox>
+            </div>
+            <div flex="50">
+                <md-checkbox aria-label="Tablet" ng-model="ctrl.options.devices.tablet">Tablet</md-checkbox>
+            </div>
+            <div flex="50">
+                <md-checkbox aria-label="Desktop" ng-model="ctrl.options.devices.desktop">Desktop</md-checkbox>
+            </div>
+         </div>
+
+        <md-subheader class="md-accent" class="md-accent">Per Row</md-subheader>
+        <md-list-item>
+            <div layout="column" layout-fill>
+                <div flex layout="column">
+                    <span class="md-body-1">{{ ctrl.options.inner_widget.options.per_row }}</span>
+                    <md-slider flex md-discrete ng-model="ctrl.options.inner_widget.options.per_row" step="1" min="1" max="10" aria-label="Rows"></md-slider>
+                </div>
+            </div>
+        </md-list-item>
+
+        <md-subheader class="md-accent" class="md-accent">Rows</md-subheader>
+        <md-list-item>
+            <div layout="column" layout-fill>
+                <div flex layout="column">
+                    <span class="md-body-1">{{ ctrl.options.inner_widget.options.rows }}</span>
+                    <md-slider flex md-discrete ng-model="ctrl.options.inner_widget.options.rows" step="1" min="1" max="10" aria-label="Rows"></md-slider>
+                </div>
+            </div>
+        </md-list-item>
+    </md-list>
+
+</md-content>

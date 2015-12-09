@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <!-- inject:js -->
+    <script src="/build/revtoaster.min.js"></script>
+    <!-- endinject -->
+
+    <!-- inject:html -->
+    <p class="md-body-1">The sponsored option allows you to determine how many sponsored ads will be visible.</p>
+
+
+<h3 class="md-subhead">Available Options</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>1</th>
+        </tr>
+        <tr>
+            <th>2</th>
+        </tr>
+    </thead>
+</table>
+
+<h3 class="md-subhead">Example</h3>
+
+<code hljs language="javascript">
+new RevToaster({
+    ...
+    sponsored: 2
+});
+</code>
+    <script>
+setTimeout(function() {
+    var toaster = new RevToaster({
+        testing: true,
+        url: 'http://trends.revcontent.com/api/v1/',
+        api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+        pub_id : 945,
+        widget_id : 6181,
+        domain : 'apiexamples.powr.com',
+        sponsored: 2
+    });
+    toaster.show();
+});
+</script>
+    <!-- endinject -->
+</body>
+</html>

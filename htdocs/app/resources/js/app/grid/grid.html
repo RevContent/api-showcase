@@ -1,74 +1,24 @@
-<div layout layout-padding class="banner">
-    <div flex class="banner-inner">Hi, We’re <strong>Revcontent</strong>. A native network making brands live up to their full potential. That’s it. And this is our Innovation Lab.</div>
+<div class="container">
+    <div layout layout-padding class="banner">
+        <div flex class="banner-inner">Hi, We’re <strong>Revcontent</strong>. A native network making brands live up to their full potential. That’s it. And this is our Innovation Lab.</div>
+    </div>
+
+    <div class="grid" layout layout-wrap preload-images>
+
+        <div flex="50" ng-repeat="(key, widget) in ctrl.widgets">
+            <md-card ui-sref="post({id: key})">
+                <div>
+                    <div class="preloader" ng-style="{backgroundColor: widget.bg}">
+                        <img class="img-responsive preview" src="/app/resources/img/{{key}}.jpg" alt="Instream">
+                    </div>
+                </div>
+                <md-card-content>
+                    <h2 class="md-title ellipsis" ng-bind="widget.title"></h2>
+                </md-card-content>
+            </md-card>
+        </div>
+
+    </div>
+
+    <div ui-view></div>
 </div>
-
-<div class="grid" layout layout-wrap>
-
-
-    <div flex="50">
-        <md-card ui-sref="post({id: 'instream'})">
-            <img class="img-responsive preview" src="/app/resources/img/instream.jpg" alt="Instream">
-            <md-card-content>
-                <h2 class="md-title ellipsis">In-stream</h2>
-            </md-card-content>
-        </md-card>
-    </div>
-
-    <div flex="50">
-        <md-card ui-sref="post({id: 'end-of-gallery'})">
-            <img class="img-responsive preview" src="/app/resources/img/eog.jpg" alt="End of Gallery">
-            <md-card-content>
-            <h2 class="md-title ellipsis">End of Gallery</h2>
-            </md-card-content>
-        </md-card>
-    </div>
-
-
-    <div flex="50">
-        <md-card ui-sref="post({id: 'scrolling-exp'})">
-            <img class="img-responsive preview" src="/app/resources/img/grid.jpg" alt="Scrolling Experience">
-            <md-card-content>
-                <h2 class="md-title ellipsis">Scrolling Experience</h2>
-            </md-card-content>
-        </md-card>
-    </div>
-
-    <div flex="50">
-        <md-card ui-sref="post({id: 'toaster'})">
-            <img class="img-responsive preview" src="/app/resources/img/toaster.jpg" alt="Toaster">
-            <md-card-content>
-                <h2 class="md-title ellipsis">Mobile Toaster</h2>
-            </md-card-content>
-        </md-card>
-    </div>
-
-    <div flex="50">
-        <md-card ui-sref="post({id: 'exit-pop'})">
-            <img class="img-responsive preview" src="/app/resources/img/exitpop.jpg" alt="Toaster">
-            <md-card-content>
-                <h2 class="md-title ellipsis">Exit Pop</h2>
-            </md-card-content>
-        </md-card>
-    </div>
-
-    <div flex="50">
-        <md-card ui-sref="post({id: 'slider'})">
-            <img class="img-responsive preview" src="/app/resources/img/carousel.jpg" alt="Toaster">
-            <md-card-content>
-                <h2 class="md-title ellipsis">Slider</h2>
-            </md-card-content>
-        </md-card>
-    </div>
-
-    <div flex="50">
-        <md-card ui-sref="post({id: 'flicker'})">
-            <img class="img-responsive preview" src="/app/resources/img/flicker.jpg" alt="Toaster">
-            <md-card-content>
-                <h2 class="md-title ellipsis">Flicker</h2>
-            </md-card-content>
-        </md-card>
-    </div>
-
-</div>
-
-<div ui-view></div>

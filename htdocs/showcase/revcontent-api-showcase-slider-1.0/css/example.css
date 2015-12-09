@@ -56,31 +56,3 @@
   animation-name: fadeOut;
 }
 
-#slider {
-    display: table;
-    width: 100%;
-}
-
-#slider a {
-    color: inherit;
-}
-
-#slider a:hover {
-    text-decoration: none;
-}
-
-#slider > div {
-    display: table-cell;
-    vertical-align: middle;
-    padding: 0 30px;
-}
-
-#slider > div#grid {
-    padding: 0;
-    width: 100%;
-}
-
-#slider > div#grid > div {
-    padding: 10px;
-}
-

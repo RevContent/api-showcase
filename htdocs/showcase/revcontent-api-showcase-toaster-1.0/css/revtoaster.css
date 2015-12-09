@@ -47,7 +47,7 @@ body.rev-toaster-loaded .rev-toaster{
     -moz-transform: none;
     -o-transform: none;
     -webkit-transform: none;
-    z-index: 2147483647;
+    z-index: 147483647;
 }
 
 .rev-toaster .rev-header {
@@ -88,7 +88,7 @@ body.rev-toaster-loaded .rev-toaster{
     border-top: solid 10px transparent;
 }
 
-.rev-toaster .rev-footer {
+.rev-toaster .rev-sponsored {
     text-align: right;
     font-weight: 300;
     font-size: 10px;
@@ -97,21 +97,25 @@ body.rev-toaster-loaded .rev-toaster{
     clear: both;
 }
 
-.rev-toaster .rev-footer a {
+.rev-toaster .rev-sponsored.bottom-left {
+    text-align: left;
+}
+
+.rev-toaster .rev-sponsored a {
     letter-spacing: .1px;
     color: #fff;
     padding: 0 6px 3px;
     display: inline-block;
 }
 
-.rev-toaster .rev-footer a span {
+.rev-toaster .rev-sponsored a span {
     color: #4CC93D;
 }
 
-.rev-toaster .rev-ad {
+.rev-toaster .rev-content {
     padding-bottom: 3px;
     margin-right: 36px;
-    clear: left;
+    clear: left
 }
 
 .rev-toaster .rev-ad a {

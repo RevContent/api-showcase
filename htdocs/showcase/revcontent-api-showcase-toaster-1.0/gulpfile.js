@@ -11,7 +11,7 @@ var autoprefixer = require('gulp-autoprefixer');
 gulp.task('default', ['buildjs']);
 
 gulp.task('minifycss', function() {
-    return gulp.src(['./css/revtoaster.css'])
+    return gulp.src(['./css/revtoaster.css', '../css/revdialog.css'])
         .pipe(concat('revtoaster.min.css'))
         .pipe(autoprefixer({
             browsers: ['> 1%'],
@@ -37,12 +37,13 @@ gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
 
     var banner = ['/**',
       ' * <%= pkg.name %> - <%= pkg.description %>',
+      ' * @date - <%= new Date() %>',
       ' * @version v<%= pkg.version %>',
       ' * @link <%= pkg.homepage %>',
       ' */',
       ''].join('\n');
 
-    return gulp.src(['./vendor/imagesloaded/imagesloaded.pkgd.js', './build/revtoaster.js'])
+    return gulp.src(['./vendor/mobile-detect/mobile-detect.js', './vendor/imagesloaded/imagesloaded.pkgd.js', '../js/revutils.js', '../js/revdialog.js', '../js/revdetect.js', '../js/revapi.js', './build/revtoaster.js'])
         .pipe(concat('revtoaster.pkgd.js'))
         .pipe(gulp.dest('./build'))
         .pipe(uglify({
