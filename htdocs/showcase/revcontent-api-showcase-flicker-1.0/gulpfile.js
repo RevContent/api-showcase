@@ -37,6 +37,7 @@ gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
 
     var banner = ['/**',
       ' * <%= pkg.name %> - <%= pkg.description %>',
+      ' * @date - <%= new Date() %>',
       ' * @version v<%= pkg.version %>',
       ' * @link <%= pkg.homepage %>',
       ' */',
