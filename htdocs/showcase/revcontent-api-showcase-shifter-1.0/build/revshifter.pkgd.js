@@ -7315,7 +7315,7 @@ RevShifter({
 
             this.innerWidget = new RevSlider({
                 element: [this.innerWidgetElement],
-                url: 'http://trends.revcontent.com/api/v1/',
+                url: 'https://trends.revcontent.com/api/v1/',
                 api_key : 'bf3f270aa50d127f0f8b8c92a979d76aa1391d38',
                 pub_id : 7846,
                 widget_id : 13523,
