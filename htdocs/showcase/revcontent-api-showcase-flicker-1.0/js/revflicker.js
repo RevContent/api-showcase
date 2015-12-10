@@ -96,6 +96,8 @@ RevFlicker({
 
         this.maxHeadlineHeight = 0;
 
+        this.impressionTracker = {};
+
         var that = this;
         //append injrected style
         revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-flicker');
@@ -395,6 +397,42 @@ RevFlicker({
         }
     };
 
+    RevFlicker.prototype.registerImpressions = function(initial) {
+        var optionLimit = this.options.internal ? this.options.internal : this.options.sponsored;
+
+        // if its the first time register the intial viewed impressions
+        var count = this.perRow;
+        var offset = 0;
+
+        if (!initial) { //otherwise register the new one
+            count = 1;
+            offset = this.flickity.selectedIndex;
+
+            if ( (offset + (this.perRow - 1)) < optionLimit ) {
+                offset += (this.perRow - 1);
+            }
+        }
+
+        var impressionsUrl = this.options.url + '?&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&api_source=flick';
+
+        impressionsUrl += '&sponsored_count=' + (this.options.internal ? 0 : count) + '&internal_count=' + (this.options.internal ? count : 0) + '&sponsored_offset='+ (this.options.internal ? 0 : offset) +'&internal_offset=' + (this.options.internal ? offset : 0);
+
+        var that = this;
+        // don't do the same one twice, this could be improved I am sure
+        if ( typeof this.impressionTracker[offset + '_' + count] == 'undefined') {
+            revApi.request(impressionsUrl, function() {
+                that.impressionTracker[offset + '_' + count] = true;
+            });
+        }
+    }
+
+    RevFlicker.prototype.attachRegisterImpressions = function() {
+        var that = this;
+        this.flickity.on( 'cellSelect', function() {
+            that.registerImpressions()
+        });
+    };
+
     RevFlicker.prototype.attachNextEffect = function() {
         var that = this;
         this.emitter.on( 'cellSelect', function() {
@@ -436,7 +474,8 @@ RevFlicker({
         var sponsored = this.options.internal ? 0 : this.options.sponsored;
         var internal = this.options.internal ? this.options.internal : 0;
 
-        var url = this.options.url + '?img_h='+ this.imageHeight +'&img_w='+ this.imageWidth +'&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + sponsored + '&internal_count=' + internal + '&sponsored_offset=0&internal_offset=0&api_source=flick';
+        var url = this.options.url + '?uitm=true&img_h='+ this.imageHeight +'&img_w='+ this.imageWidth +'&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + sponsored + '&internal_count=' + internal + '&sponsored_offset=0&internal_offset=0&api_source=flick';
+
         var that = this;
         revApi.request(url, function(resp) {
 
@@ -455,6 +494,8 @@ RevFlicker({
             imagesLoaded( that.flickity.element, function() {
                 revUtils.addClass(that.containerElement, 'loaded');
                 that.resize();
+                that.registerImpressions(true);
+                that.attachRegisterImpressions();
             });
 
         });
