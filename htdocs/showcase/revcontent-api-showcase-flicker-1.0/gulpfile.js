@@ -55,6 +55,6 @@ gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
         .pipe(gulp.dest('../../build'));
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', ['buildjs'], function () {
     gulp.watch(['./js/*', './css/*', './vendor/flickity/dist/flickity.pkgd.js'], ['buildjs']);
 });
