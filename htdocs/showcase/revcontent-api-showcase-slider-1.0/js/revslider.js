@@ -96,7 +96,10 @@ RevSlider({
             ad_border: true,
             headline_size: 2,
             max_headline: false,
-            text_overlay: false
+            text_overlay: false,
+            vertical: false,
+            page_increment: true,
+            sponsored: 25
         };
 
         // merge options
@@ -115,15 +118,7 @@ RevSlider({
 
         revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-slider');
 
-        var backBtn = document.createElement('div');
-        backBtn.id = "back";
-        backBtn.setAttribute('class', 'rev-btn-container');
-        backBtn.innerHTML = '<button id="btn-back" class="rev-btn"><</button>';
-
-        var forwardBtn = document.createElement('div');
-        forwardBtn.id = "forward";
-        forwardBtn.setAttribute('class', 'rev-btn-container');
-        forwardBtn.innerHTML = '<button id="btn-forward" class="rev-btn">></button>';
+        this.contentItems = [];
 
         this.containerElement = document.createElement('div');
         this.containerElement.id = 'rev-slider';
@@ -138,11 +133,15 @@ RevSlider({
         this.element = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
         this.element.style.width = '100%';
 
+
+
         revUtils.append(this.containerElement, gridContainerElement);
-        // revUtils.append(gridContainerElement, backBtn);
+
         revUtils.append(gridContainerElement, this.gridElement);
-        // revUtils.append(gridContainerElement, forwardBtn);
+
         revUtils.append(this.element, this.containerElement);
+
+        this.initButtons();
 
         this.grid = new AnyGrid(this.gridElement, { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound});
 
@@ -151,6 +150,7 @@ RevSlider({
         });
 
         this.page = 1;
+        this.previousPage = 0;
 
         this.setUp();
 
@@ -162,19 +162,112 @@ RevSlider({
             this.appendCell();
         };
 
-        this.textOverlay();
-
         this.grid.reloadItems();
         this.grid.layout();
 
-        // this.attachButtonEvents();
+        this.attachButtonEvents();
+
+        this.textOverlay();
 
         this.ellipsisTimer;
     };
 
+    RevSlider.prototype.createNextPageGrid = function() {
+        var that = this;
+        var gridContainerElement = document.getElementById('rev-slider-grid-container');
+        var previousGridElement = this.gridElement;
+        previousGridElement.id = 'rev-slider-grid-prev';
+
+        var nextGridElement = document.createElement('div');
+        nextGridElement.id = 'rev-slider-grid';
+
+        revUtils.append(gridContainerElement, nextGridElement);
+        var nextGrid = new AnyGrid(nextGridElement, { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound});
+        nextGrid.on('resized', function() {
+            that.resize();
+        });
+
+        nextGridElement.style.position = 'absolute';
+
+        var outClass = 'slideOutLeft';
+        var inClass = 'slideInLeft';
+        if (this.page > this.previousPage) {
+            // slide left or up
+            outClass = (this.options.vertical) ? 'slideOutUp' : 'slideOutLeft';
+            inClass = (this.options.vertical) ? 'slideInUp' : 'slideInLeft';
+        } else {
+            // Slide right or down
+            outClass = (this.options.vertical) ? 'slideOutDown' : 'slideOutRight';
+            inClass = (this.options.vertical) ? 'slideInDown' : 'slideInRight';
+        }
+
+        nextGridElement.style.top = 0;
+        nextGridElement.style.left = 0;
+        revUtils.addClass(previousGridElement, outClass);
+        revUtils.addClass(nextGridElement, inClass);
+
+        for (var i = 0; i < this.limit; i++) {
+            nextGridElement.appendChild(this.createNewCell());
+        };
+
+        var countOffset = ((this.page * this.increment) - this.increment);
+        var endIndex = countOffset + this.limit;
+
+        var ads = nextGridElement.querySelectorAll('.rev-content');
+        var i = 0;
+        var index = i + countOffset;
+        for (index; index < endIndex; i++, index++) {
+            var ad = ads[i],
+                data = this.contentItems[index];
+            ad.style.width = this.columnWidth + 'px';
+            ad.style.marginRight = this.margin + 'px';
+            ad.querySelectorAll('a')[0].setAttribute('href', data.url);
+            ad.querySelectorAll('a')[0].title = data.headline;
+            ad.querySelectorAll('img')[0].setAttribute('src', data.image);
+            ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
+            ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
+
+            ad.querySelectorAll('.rev-image')[0].style.height = this.preloaderHeight + 'px';
+            ad.querySelectorAll('.rev-headline')[0].style.height = this.headlineHeight + 'px';
+            ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
+            ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
+            ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
+            ad.querySelectorAll('.rev-provider')[0].style.margin = this.providerMargin +'px '  + this.innerMargin + 'px ' + this.providerMargin +'px';
+            ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize +'px';
+            ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
+            ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
+        }
+
+        this.textOverlay();
+
+        nextGrid.reloadItems();
+        nextGrid.layout();
+
+        this.grid = nextGrid;
+        this.gridElement = nextGridElement;
+
+        this.checkEllipsis();
+
+        this.gridUpdateTimer = setTimeout(function() {
+            that.updateGrids();
+        }, 1000);
+
+    }
+
+    RevSlider.prototype.updateGrids = function() {
+        var gridContainerElement = document.getElementById('rev-slider-grid-container');
+        var previousGridElement = gridContainerElement.querySelector('#rev-slider-grid-prev');
+        revUtils.remove(previousGridElement);
+        this.gridElement.style.position = 'relative';
+        this.gridElement.className = '';
+        clearTimeout(this.gridUpdateTimer);
+        this.gridUpdateTimer = null;
+    }
+
     RevSlider.prototype.setUp = function() {
         this.grid.layout();
         this.limit = this.getLimit();
+        this.increment = (this.options.page_increment) ? this.limit : 1; //this.options.rows[this.grid.getBreakPoint()]
         var width = this.grid.containerWidth / this.grid.perRow;
 
         if (this.options.image_ratio == 'square') {
@@ -207,6 +300,73 @@ RevSlider({
 
         this.preloaderHeight = (this.grid.columnWidth - (this.padding * 2) - (this.options.ad_border ? 2 : 0)) * (imageHeight / imageWidth);
     };
+
+    RevSlider.prototype.initButtons = function() {
+        var backBtnWrapper = document.createElement('div');
+        backBtnWrapper.id = "back-wrapper";
+        backBtnWrapper.setAttribute('class', 'rev-btn-wrapper');
+
+        var backBtn = document.createElement('div');
+        backBtn.id = "back";
+        backBtn.setAttribute('class', 'rev-btn-container');
+        backBtn.setAttribute('style', 'left: 0px;');
+        var backArrow = (this.options.vertical) ? '&circ;' : '&lsaquo;';
+        backBtn.innerHTML = '<label id="btn-back" class="rev-chevron">'+backArrow+'</label>'; // &lsaquo; &circ;
+
+        revUtils.append(backBtnWrapper, backBtn);
+
+        var forwardBtnWrapper = document.createElement('div');
+        forwardBtnWrapper.id = "forward-wrapper";
+        forwardBtnWrapper.setAttribute('class', 'rev-btn-wrapper');
+
+        var forwardBtn = document.createElement('div');
+        forwardBtn.id = "forward";
+        forwardBtn.setAttribute('class', 'rev-btn-container');
+        forwardBtn.setAttribute('style', 'right: 0px;');
+        var forwardArrow = (this.options.vertical) ? '&caron;' : '&rsaquo;';
+        forwardBtn.innerHTML = '<label id="btn-forward" class="rev-chevron">'+forwardArrow+'</label>'; // &rsaquo; &caron;
+
+        revUtils.append(forwardBtnWrapper, forwardBtn);
+
+        var gridContainerElement = this.containerElement.querySelector('#rev-slider-grid-container');
+        revUtils.append(gridContainerElement, backBtnWrapper);
+        revUtils.append(gridContainerElement, forwardBtnWrapper);
+    }
+
+    RevSlider.prototype.setupButtons = function() {
+        var isMobile = (revDetect.mobile()) ? true : false;
+        var backBtnWrapper = this.containerElement.querySelector('#back-wrapper');
+        var forwardBtnWrapper = this.containerElement.querySelector('#forward-wrapper');
+
+        if ((isMobile && !this.options.show_arrows.mobile) || (!isMobile && !this.options.show_arrows.desktop)) {
+            backBtnWrapper.setAttribute('style', 'display: none;');
+            forwardBtnWrapper.setAttribute('style', 'display: none;');
+        } else {
+            var backBtn = this.containerElement.querySelector('#btn-back');
+            var forwardBtn = this.containerElement.querySelector('#btn-forward');
+
+            if (this.options.vertical) {
+                revUtils.addClass(backBtnWrapper, 'top-bottom');
+                revUtils.addClass(forwardBtnWrapper, 'top-bottom');
+                backBtnWrapper.setAttribute('style', 'padding: ' + this.padding + 'px; top: 0px;');
+                forwardBtnWrapper.setAttribute('style', 'padding: ' + this.padding + 'px; bottom: 0px;');
+                backBtn.innerHTML = '&circ;';
+                forwardBtn.innerHTML = '&caron;';
+                backBtn.setAttribute('style', 'left: 0px; top: 50%;');
+                forwardBtn.setAttribute('style', 'right: 0px; top: 50%;');
+            } else {
+                revUtils.removeClass(backBtnWrapper, 'top-bottom');
+                revUtils.removeClass(forwardBtnWrapper, 'top-bottom');
+                backBtnWrapper.setAttribute('style', 'padding: ' + this.padding + 'px; left: 0px; top: 0px;');
+                forwardBtnWrapper.setAttribute('style', 'padding: ' + this.padding + 'px; right: 0px; top: 0px;');
+                backBtn.innerHTML = '&lsaquo;';
+                forwardBtn.innerHTML = '&rsaquo;';
+                var btnTop = (backBtnWrapper.offsetHeight / 2) - (backBtn.offsetHeight / 2) + 'px';
+                backBtn.setAttribute('style', 'left: 0px; top: ' + btnTop + ';');
+                forwardBtn.setAttribute('style', 'right: 0px; top: ' + btnTop + ';');
+            }
+        }
+    }
 
     RevSlider.prototype.textOverlay = function() {
         var ads = this.containerElement.querySelectorAll('.rev-ad');
@@ -257,11 +417,13 @@ RevSlider({
 
         this.options = revUtils.extend(this.options, newOpts);
 
-        if ( (this.options.size !== oldOpts.size) ||
-             (this.options.realSize !== oldOpts.realSize) ||
-             (this.options.per_row !== oldOpts.per_row) ||
-             (this.options.rows !== oldOpts.rows) ||
-             (this.options.headline_size !== oldOpts.headline_size)) {
+        if ((this.options.size !== oldOpts.size) ||
+            (this.options.realSize !== oldOpts.realSize) ||
+            (this.options.per_row !== oldOpts.per_row) ||
+            (this.options.rows !== oldOpts.rows) ||
+            (this.options.headline_size !== oldOpts.headline_size) ||
+            (this.options.vertical !== oldOpts.vertical) ||
+            (this.options.page_increment !== oldOpts.page_increment)) {
             this.options.perRow = this.options.per_row; // AnyGrid needs camels
             this.resize();
         }
@@ -286,7 +448,7 @@ RevSlider({
 
         if (oldLimit != this.limit) {
             reconfig = (this.limit - oldLimit);
-            this.getData();
+
         }
 
         if (reconfig !== 0) {
@@ -301,6 +463,7 @@ RevSlider({
                 for (var i = 0; i < (this.limit - nodes.length); i++) {
                     this.appendCell();
                 }
+                this.updateDisplay();
             }
         }
 
@@ -332,6 +495,7 @@ RevSlider({
         }
         this.grid.reloadItems();
         this.grid.layout();
+        this.setupButtons();
     };
 
     RevSlider.prototype.checkMaxHeadlineHeightPerRow = function() {
@@ -379,17 +543,21 @@ RevSlider({
     }
 
     RevSlider.prototype.appendCell = function() {
+        this.gridElement.appendChild(this.createNewCell());
+    };
+
+    RevSlider.prototype.createNewCell = function() {
         var html = '<div class="rev-ad" style="'+ (this.options.ad_border ? 'border:1px solid #eee' : '') +'">' +
-                    '<a href="" target="_blank">' +
-                        '<div class="rev-image" style="height:'+ this.preloaderHeight +'px">' +
-                            '<img src=""/>' +
-                        '</div>' +
-                        '<div class="rev-headline" style="height:'+ this.headlineHeight +'px; margin:'+ this.headlineMarginTop +'px ' + this.innerMargin + 'px' + ' 0;">' +
-                            '<h3 style="font-size:'+ this.headlineFontSize +'px; line-height:'+ this.headlineLineHeight +'px;"></h3>' +
-                        '</div>' +
-                        '<div style="margin:' + this.providerMargin +'px '  + this.innerMargin + 'px ' + this.providerMargin +'px;font-size:'+ this.providerFontSize +'px;line-height:'+ this.providerLineHeight +'px;height:'+ this.providerLineHeight +'px;" class="rev-provider"></div>' +
-                    '</a>' +
-                '</div>';
+            '<a href="" target="_blank">' +
+            '<div class="rev-image" style="height:'+ this.preloaderHeight +'px">' +
+            '<img src=""/>' +
+            '</div>' +
+            '<div class="rev-headline" style="height:'+ this.headlineHeight +'px; margin:'+ this.headlineMarginTop +'px ' + this.innerMargin + 'px' + ' 0;">' +
+            '<h3 style="font-size:'+ this.headlineFontSize +'px; line-height:'+ this.headlineLineHeight +'px;"></h3>' +
+            '</div>' +
+            '<div style="margin:' + this.providerMargin +'px '  + this.innerMargin + 'px ' + this.providerMargin +'px;font-size:'+ this.providerFontSize +'px;line-height:'+ this.providerLineHeight +'px;height:'+ this.providerLineHeight +'px;" class="rev-provider"></div>' +
+            '</a>' +
+            '</div>';
         var cell = document.createElement('div');
 
         cell.style.padding = this.padding + 'px';
@@ -398,25 +566,17 @@ RevSlider({
 
         cell.innerHTML = html;
 
-        this.gridElement.appendChild(cell);
-    };
+        return cell;
+    }
 
     RevSlider.prototype.getData = function() {
-        var url = this.options.url + '?api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + this.limit + '&sponsored_offset=' + ((this.page * this.limit) - this.limit) + '&internal_count=0';
+        var url = this.options.url + '?api_key='+ this.options.api_key +'&testing=true&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&internal_count=0'+'&sponsored_count=' + this.options.sponsored;
 
         var that = this;
 
         revApi.request(url, function(resp) {
-            var ads = that.element.querySelectorAll('.rev-ad');
-            for (var i = 0; i < resp.length; i++) {
-                var ad = ads[i],
-                    data = resp[i];
-                ad.querySelectorAll('a')[0].setAttribute('href', data.url);
-                ad.querySelectorAll('a')[0].title = data.headline;
-                ad.querySelectorAll('img')[0].setAttribute('src', data.image);
-                ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
-                ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
-            }
+            that.contentItems = resp;
+            that.updateDisplay();
 
             imagesLoaded( that.gridElement, function() {
                 revUtils.addClass(that.containerElement, 'loaded');
@@ -425,16 +585,46 @@ RevSlider({
         });
     };
 
+    RevSlider.prototype.updateDisplay = function() {
+
+        this.previousPage = 0;
+        this.page = 1;
+
+        var ads = this.element.querySelectorAll('.rev-ad');
+        for (var i = 0; i < this.limit; i++) {
+            var ad = ads[i],
+                data = this.contentItems[i];
+            ad.querySelectorAll('a')[0].setAttribute('href', data.url);
+            ad.querySelectorAll('a')[0].title = data.headline;
+            ad.querySelectorAll('img')[0].setAttribute('src', data.image);
+            ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
+            ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
+        }
+
+
+    }
+
+    RevSlider.prototype.hasMorePages = function() {
+        var pageOffset = (this.options.page_increment) ? 0 : this.limit;
+        return this.contentItems.length - pageOffset  >= (this.page + 1) * this.increment
+    }
+
     RevSlider.prototype.attachButtonEvents = function() {
         var that = this;
-        document.getElementById('btn-forward').addEventListener('click', function() {
-            that.page = that.page + 1;
-            that.getData();
+        document.getElementById('forward').addEventListener('click', function() {
+            if (!that.gridUpdateTimer && that.hasMorePages() ) {
+                that.previousPage = that.page;
+                that.page = that.page + 1;
+                that.createNextPageGrid();
+            }
         });
 
-        document.getElementById('btn-back').addEventListener('click', function() {
-            that.page = Math.max(1, that.page - 1);
-            that.getData();
+        document.getElementById('back').addEventListener('click', function() {
+            if (!that.gridUpdateTimer && that.page > 1) {
+                that.previousPage = that.page;
+                that.page = Math.max(1, that.page - 1);
+                that.createNextPageGrid();
+            }
         });
     };
 

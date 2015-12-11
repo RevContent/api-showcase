@@ -187,6 +187,9 @@ app.service('options', function() {
 
         this.headline_size = 2;
         this.max_headline = false;
+        this.text_overlay = false;
+        this.vertical = false;
+        this.page_increment = true;
     }
 
     this.set();
