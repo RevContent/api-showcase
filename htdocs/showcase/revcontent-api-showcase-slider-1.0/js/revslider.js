@@ -352,8 +352,9 @@ RevSlider({
                 forwardBtnWrapper.setAttribute('style', 'padding: ' + this.padding + 'px; bottom: 0px;');
                 backBtn.innerHTML = '&circ;';
                 forwardBtn.innerHTML = '&caron;';
-                backBtn.setAttribute('style', 'left: 0px; top: 50%;');
-                forwardBtn.setAttribute('style', 'right: 0px; top: 50%;');
+                var btnLeft = (backBtn.parentNode.offsetWidth / 2) - (backBtn.offsetWidth / 2) + 'px';
+                backBtn.setAttribute('style', 'left: ' + btnLeft + '; top: 50%;');
+                forwardBtn.setAttribute('style', 'right: ' + btnLeft + '; top: 50%;');
             } else {
                 revUtils.removeClass(backBtnWrapper, 'top-bottom');
                 revUtils.removeClass(forwardBtnWrapper, 'top-bottom');
@@ -361,7 +362,7 @@ RevSlider({
                 forwardBtnWrapper.setAttribute('style', 'padding: ' + this.padding + 'px; right: 0px; top: 0px;');
                 backBtn.innerHTML = '&lsaquo;';
                 forwardBtn.innerHTML = '&rsaquo;';
-                var btnTop = (backBtnWrapper.offsetHeight / 2) - (backBtn.offsetHeight / 2) + 'px';
+                var btnTop = (backBtn.parentNode.offsetHeight / 2) - (backBtn.offsetHeight / 2) + 'px';
                 backBtn.setAttribute('style', 'left: 0px; top: ' + btnTop + ';');
                 forwardBtn.setAttribute('style', 'right: 0px; top: ' + btnTop + ';');
             }

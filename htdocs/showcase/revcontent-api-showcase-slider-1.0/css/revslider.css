@@ -37,11 +37,11 @@
 }*/
 
 #rev-slider .rev-chevron {
+    position: absolute;
     font-family: arial narrow;
     font-size: 58px;
     color: #000000;
     line-height: .5;
-    height: 100%;
     width: 50px;
     top: 50%;
 }
