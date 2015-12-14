@@ -16,6 +16,12 @@
     overflow: hidden;
 }
 
+#rev-slider #rev-slider-grid-container .rev-border-clip {
+    position: absolute;
+    z-index: 10;
+
+}
+
 #rev-slider {
     clear: both;
     /*margin: 4px;*/
@@ -39,35 +45,37 @@
 #rev-slider .rev-chevron {
     position: absolute;
     font-family: arial narrow;
+    height: 37px;
     font-size: 58px;
-    color: #000000;
+    /*color: #000000;*/
+    color: #ffffff;
     line-height: .5;
-    width: 50px;
     top: 50%;
 }
 
 #rev-slider #rev-slider-grid-container .rev-btn-wrapper {
     position: absolute;
     height: 100%;
-    width: 50px;
+    width: 40px;
     text-align: center;
     z-index: 10;
     user-select: none;
+    opacity: 0;
+    transition: opacity .5s ease-in-out;
 }
 
 #rev-slider #rev-slider-grid-container .top-bottom {
-    height: 50px;
+    height: 40px;
     width: 100%;
 }
 
 #rev-slider #rev-slider-grid-container .rev-btn-container {
-    padding: 5px 10px;
     position: relative;
-    background-color: #cccccc;
+    background-color: #333333;
     opacity: .3;
+    transition: opacity .5s ease-in-out;
     height: 100%;
     text-align: center;
-    transition: opacity .5s ease-in-out;
     border-radius: 4px;
 }
 

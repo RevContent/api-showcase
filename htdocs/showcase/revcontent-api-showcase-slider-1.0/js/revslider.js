@@ -99,7 +99,9 @@ RevSlider({
             text_overlay: false,
             vertical: false,
             page_increment: true,
-            sponsored: 25
+            wrap_pages: true,
+            show_padding: true,
+            sponsored: 45
         };
 
         // merge options
@@ -170,6 +172,8 @@ RevSlider({
         this.textOverlay();
 
         this.ellipsisTimer;
+
+        this.impressionTracker = [];
     };
 
     RevSlider.prototype.createNextPageGrid = function() {
@@ -213,6 +217,8 @@ RevSlider({
         var countOffset = ((this.page * this.increment) - this.increment);
         var endIndex = countOffset + this.limit;
 
+
+
         var ads = nextGridElement.querySelectorAll('.rev-content');
         var i = 0;
         var index = i + countOffset;
@@ -237,6 +243,7 @@ RevSlider({
             ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
             ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
         }
+        this.registerImpressions(countOffset, this.limit);
 
         this.textOverlay();
 
@@ -281,7 +288,7 @@ RevSlider({
             var imageWidth = 800;
         }
 
-        this.padding = ((width * .025).toFixed(2) / 1);
+        this.padding = (this.options.show_padding) ? ((width * .025).toFixed(2) / 1) : 0;
 
         // // font size is relative to width, other measurements are relative to this font size
         this.headlineFontSize = Math.max(14, ((width * .03).toFixed(2) / 1));
@@ -348,8 +355,8 @@ RevSlider({
             if (this.options.vertical) {
                 revUtils.addClass(backBtnWrapper, 'top-bottom');
                 revUtils.addClass(forwardBtnWrapper, 'top-bottom');
-                backBtnWrapper.setAttribute('style', 'padding: ' + this.padding + 'px; top: 0px;');
-                forwardBtnWrapper.setAttribute('style', 'padding: ' + this.padding + 'px; bottom: 0px;');
+                backBtnWrapper.setAttribute('style', 'padding: 0px ' + this.padding + 'px; top: 0px;');
+                forwardBtnWrapper.setAttribute('style', 'padding: 0px ' + this.padding + 'px; bottom: 0px;');
                 backBtn.innerHTML = '&circ;';
                 forwardBtn.innerHTML = '&caron;';
                 var btnLeft = (backBtn.parentNode.offsetWidth / 2) - (backBtn.offsetWidth / 2) + 'px';
@@ -358,13 +365,17 @@ RevSlider({
             } else {
                 revUtils.removeClass(backBtnWrapper, 'top-bottom');
                 revUtils.removeClass(forwardBtnWrapper, 'top-bottom');
-                backBtnWrapper.setAttribute('style', 'padding: ' + this.padding + 'px; left: 0px; top: 0px;');
-                forwardBtnWrapper.setAttribute('style', 'padding: ' + this.padding + 'px; right: 0px; top: 0px;');
+                backBtnWrapper.setAttribute('style', 'padding: ' + this.padding + 'px 0px; left: 0px; top: 0px;');
+                forwardBtnWrapper.setAttribute('style', 'padding: ' + this.padding + 'px 0px; right: 0px; top: 0px;');
                 backBtn.innerHTML = '&lsaquo;';
                 forwardBtn.innerHTML = '&rsaquo;';
                 var btnTop = (backBtn.parentNode.offsetHeight / 2) - (backBtn.offsetHeight / 2) + 'px';
-                backBtn.setAttribute('style', 'left: 0px; top: ' + btnTop + ';');
-                forwardBtn.setAttribute('style', 'right: 0px; top: ' + btnTop + ';');
+                var btnLeft = (backBtn.parentNode.offsetWidth / 2) - (backBtn.offsetWidth / 2) + 'px';
+                backBtn.setAttribute('style', 'left: ' + btnLeft + '; top: ' + btnTop + ';');
+                forwardBtn.setAttribute('style', 'right: ' + btnLeft + '; top: ' + btnTop + ';');
+            }
+            if (!this.options.wrap_pages) {
+                backBtnWrapper.style.display = 'none';
             }
         }
     }
@@ -571,7 +582,7 @@ RevSlider({
     }
 
     RevSlider.prototype.getData = function() {
-        var url = this.options.url + '?api_key='+ this.options.api_key +'&testing=true&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&internal_count=0'+'&sponsored_count=' + this.options.sponsored;
+        var url = this.options.url + '?api_key='+ this.options.api_key +'&uitm=true&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&internal_count=0'+'&sponsored_count=' + this.options.sponsored;
 
         var that = this;
 
@@ -585,6 +596,20 @@ RevSlider({
             });
         });
     };
+
+    RevSlider.prototype.registerImpressions = function(offset, count) {
+        var impressionsUrl = this.options.url + '?&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&api_source=flick';
+
+        impressionsUrl += '&sponsored_count=' + (this.options.internal ? 0 : count) + '&internal_count=' + (this.options.internal ? count : 0) + '&sponsored_offset='+ (this.options.internal ? 0 : offset) +'&internal_offset=' + (this.options.internal ? offset : 0);
+
+        var that = this;
+        // don't do the same one twice, this could be improved I am sure
+        if ( typeof this.impressionTracker[offset + '_' + count] == 'undefined') {
+            revApi.request(impressionsUrl, function() {
+                that.impressionTracker[offset + '_' + count] = true;
+            });
+        }
+    }
 
     RevSlider.prototype.updateDisplay = function() {
 
@@ -601,33 +626,84 @@ RevSlider({
             ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
             ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
         }
-
+        this.registerImpressions(0, this.limit);
 
     }
 
-    RevSlider.prototype.hasMorePages = function() {
+    RevSlider.prototype.hasNextPage = function() {
         var pageOffset = (this.options.page_increment) ? 0 : this.limit;
-        return this.contentItems.length - pageOffset  >= (this.page + 1) * this.increment
+        return this.contentItems.length - pageOffset  >= (this.page + 1) * this.increment;
+    }
+
+    RevSlider.prototype.hasPreviousPage = function() {
+        return (this.page - 1) > 0;
     }
 
     RevSlider.prototype.attachButtonEvents = function() {
         var that = this;
         document.getElementById('forward').addEventListener('click', function() {
-            if (!that.gridUpdateTimer && that.hasMorePages() ) {
-                that.previousPage = that.page;
-                that.page = that.page + 1;
-                that.createNextPageGrid();
-            }
+            that.showNextPage();
         });
 
         document.getElementById('back').addEventListener('click', function() {
-            if (!that.gridUpdateTimer && that.page > 1) {
-                that.previousPage = that.page;
-                that.page = Math.max(1, that.page - 1);
-                that.createNextPageGrid();
-            }
+            that.showPreviousPage();
+        });
+        var gridContainerElement = this.containerElement.querySelector('#rev-slider-grid-container');
+        gridContainerElement.addEventListener('mouseover', function() {
+            var forwardBtnWrapper = that.containerElement.querySelector('#forward-wrapper');
+            var backBtnWrapper = that.containerElement.querySelector('#back-wrapper');
+            forwardBtnWrapper.style.opacity = 1;
+            backBtnWrapper.style.opacity = 1;
+        });
+        gridContainerElement.addEventListener('mouseout', function() {
+            var forwardBtnWrapper = that.containerElement.querySelector('#forward-wrapper');
+            var backBtnWrapper = that.containerElement.querySelector('#back-wrapper');
+            forwardBtnWrapper.style.opacity = 0;
+            backBtnWrapper.style.opacity = 0;
         });
     };
+
+    RevSlider.prototype.showNextPage = function() {
+        if (!this.gridUpdateTimer) {
+            if (!this.hasNextPage() && this.options.wrap_pages) {
+                // Wrap to beginning
+                this.page = 0;
+            }
+            this.previousPage = this.page;
+            this.page = this.page + 1;
+            this.createNextPageGrid();
+            if (!this.hasNextPage() && !this.options.wrap_pages) {
+                // Disable forward button
+                var forwardBtnWrapper = this.containerElement.querySelector('#forward-wrapper');
+                forwardBtnWrapper.style.display = 'none';
+            }
+            if (this.hasPreviousPage()) {
+                var backBtnWrapper = this.containerElement.querySelector('#back-wrapper');
+                backBtnWrapper.style.display = 'block';
+            }
+        }
+    }
+
+    RevSlider.prototype.showPreviousPage = function() {
+        if (!this.gridUpdateTimer) {
+            if (!this.hasPreviousPage() && this.options.wrap_pages) {
+                // Wrap to end
+                // We round up because this is actually to be the previous page
+                this.page = Math.ceil(this.contentItems.length / this.limit);
+            }
+            this.previousPage = this.page;
+            this.page = Math.max(1, this.page - 1);
+            this.createNextPageGrid();
+            if (!this.hasPreviousPage() && !this.options.wrap_pages) {
+                // Disable back button
+                var backBtnWrapper = this.containerElement.querySelector('#back-wrapper');
+                backBtnWrapper.style.display = 'none';
+            } else {
+                var forwardBtnWrapper = this.containerElement.querySelector('#forward-wrapper');
+                forwardBtnWrapper.style.display = 'block';
+            }
+        }
+    }
 
     RevSlider.prototype.getMaxHeadlineHeight = function(rowNum, numItems) {
         var maxHeadlineHeight = 0;
