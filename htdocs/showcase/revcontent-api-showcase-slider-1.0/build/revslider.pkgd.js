@@ -5409,7 +5409,7 @@ RevSlider({
             page_increment: true,
             wrap_pages: true,
             show_padding: true,
-            sponsored: 45
+            pages: 4
         };
 
         // merge options
@@ -5890,7 +5890,8 @@ RevSlider({
     }
 
     RevSlider.prototype.getData = function() {
-        var url = this.options.url + '?api_key='+ this.options.api_key +'&uitm=true&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&internal_count=0'+'&sponsored_count=' + this.options.sponsored;
+        var sponsoredCount = this.options.pages * this.limit
+        var url = this.options.url + '?api_key='+ this.options.api_key +'&uitm=true&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&internal_count=0'+'&sponsored_count=' + sponsoredCount;
 
         var that = this;
 
