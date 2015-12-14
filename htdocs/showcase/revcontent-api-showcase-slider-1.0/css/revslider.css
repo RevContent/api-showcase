@@ -11,7 +11,7 @@
 
 #rev-slider #rev-slider-grid-container {
     position: relative;
-    display: table;
+    /*display: table;*/
     width: 100%;
     overflow: hidden;
 }

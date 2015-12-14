@@ -192,6 +192,8 @@ RevSlider({
         });
 
         nextGridElement.style.position = 'absolute';
+        var gridTop = '-' + this.grid.element.offsetHeight + 'px;';
+        nextGridElement.setAttribute('style', 'position: absolute; top: 0px; left: 0px;');
 
         var outClass = 'slideOutLeft';
         var inClass = 'slideInLeft';
@@ -205,8 +207,6 @@ RevSlider({
             inClass = (this.options.vertical) ? 'slideInDown' : 'slideInRight';
         }
 
-        nextGridElement.style.top = 0;
-        nextGridElement.style.left = 0;
         revUtils.addClass(previousGridElement, outClass);
         revUtils.addClass(nextGridElement, inClass);
 
