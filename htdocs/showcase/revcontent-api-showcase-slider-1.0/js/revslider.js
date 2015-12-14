@@ -689,8 +689,9 @@ RevSlider({
         if (!this.gridUpdateTimer) {
             if (!this.hasPreviousPage() && this.options.wrap_pages) {
                 // Wrap to end
-                // We round up because this is actually to be the previous page
-                this.page = Math.ceil(this.contentItems.length / this.limit);
+                this.page = Math.floor(this.contentItems.length / this.limit);
+                // Add 1 here as it will be subtracted below.
+                this.page += 1;
             }
             this.previousPage = this.page;
             this.page = Math.max(1, this.page - 1);
