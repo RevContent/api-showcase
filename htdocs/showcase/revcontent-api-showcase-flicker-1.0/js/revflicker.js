@@ -484,7 +484,7 @@ RevFlicker({
             for (var i = 0; i < resp.length; i++) {
                 var ad = ads[i],
                     data = resp[i];
-                ad.querySelectorAll('a')[0].setAttribute('href', data.url);
+                ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', ''));
                 ad.querySelectorAll('a')[0].title = data.headline;
                 ad.querySelectorAll('img')[0].setAttribute('src', data.image);
                 ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
