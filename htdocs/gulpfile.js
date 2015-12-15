@@ -36,7 +36,10 @@ gulp.task('tests', function() {
         var cdn = demos.tests[i].cdn;
         var cdn_url = demos.tests[i].cdn_url;
 
-        cdnChecks[script] = cdn_url;
+        cdnChecks[script] = {
+          use_cdn: cdn,
+          url: cdn_url,
+        };
 
         for (var j = 1; j <= demos.tests[i].count; j++) {
 
@@ -50,7 +53,7 @@ gulp.task('tests', function() {
               }))
               .pipe(inject(gulp.src([script]),{
                 transform: function (filePath, file, index, length, targetFile) {
-                    path = cdnChecks['.' + filePath] ? cdnChecks['.' + filePath] : filePath;
+                    path = cdnChecks['.' + filePath].use_cdn ? cdnChecks['.' + filePath].url : filePath;
                     return '<script src="' + path + '"></script>';
                 }
               }
