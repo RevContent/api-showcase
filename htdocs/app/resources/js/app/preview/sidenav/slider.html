@@ -87,14 +87,34 @@
                     <md-radio-button ng-value="true">Vertical</md-radio-button>
                 </md-radio-group>
             </div>
-            <div flex="50">
+            <!--<div flex="50">
                 <span class="md-body-1">Increment</span>
                 <md-radio-group ng-model="ctrl.options.page_increment" layout="row">
                     <md-radio-button ng-value="true">Page</md-radio-button>
                     <md-radio-button ng-value="false">Single</md-radio-button>
                 </md-radio-group>
+            </div>-->
+            <div flex="50">
+                <span class="md-body-1">Wrap Pages?</span>
+                <md-checkbox aria-label="Phone" ng-model="ctrl.options.wrap_pages">{{ ctrl.options.wrap_pages ? 'Yes' : 'No' }}</md-checkbox>
+            </div>
+            <div flex="50">
+                <span class="md-body-1">Wrap Reverse?</span>
+                <md-checkbox aria-label="Phone" ng-model="ctrl.options.wrap_reverse">{{ ctrl.options.wrap_reverse ? 'Yes' : 'No' }}</md-checkbox>
+            </div>
+            <div flex layout="column">
+                <span class="md-body-1">Number of Pages</span>
+                <md-slider ng-class="md-primary" flex md-discrete ng-model="ctrl.options.pages" step="1" min="1" max="10" aria-label="Pages"></md-slider>
             </div>
         </div>
+        </md-list>
+
+        <md-subheader class="md-accent" class="md-accent">Padding</md-subheader>
+        <md-list layout="column" layout-padding>
+            <div flex="50">
+                <span class="md-body-1">Show Padding?</span>
+                <md-checkbox aria-label="Phone" ng-model="ctrl.options.show_padding">{{ ctrl.options.show_padding ? 'Yes' : 'No' }}</md-checkbox>
+            </div>
         </md-list>
 
 

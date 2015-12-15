@@ -73,7 +73,7 @@ RevSlider({
             },
             per_row: {
                 xxs: 1,
-                xs: 1,
+                xs: 2,
                 sm: 3,
                 md: 4,
                 lg: 5,
@@ -100,6 +100,7 @@ RevSlider({
             vertical: false,
             page_increment: true,
             wrap_pages: true,
+            wrap_reverse: true,
             show_padding: true,
             pages: 4
         };
@@ -176,6 +177,43 @@ RevSlider({
         this.impressionTracker = [];
     };
 
+    RevSlider.prototype.getAnimationDuration = function() {
+        var duration = 0.5;
+        if (this.options.vertical) {
+            var gridRows = this.options.rows[this.grid.getBreakPoint()];
+            if (gridRows >= 7) {
+                duration = 2;
+            } else if (gridRows >= 6) {
+                duration = 1.75;
+            } else if (gridRows >= 5) {
+                duration = 1.5;
+            } else if (gridRows >= 4) {
+                duration = 1.25;
+            } else if (gridRows >= 3) {
+                duration = 1;
+            } else if (gridRows >= 2) {
+                duration = 0.75;
+            }
+        } else {
+            var gridWidth = this.grid.containerWidth;
+
+            if (gridWidth >= 1500) {
+                duration = 2;
+            } else if (gridWidth >= 1250) {
+                duration = 1.75;
+            } else if (gridWidth >= 1000) {
+                duration = 1.5;
+            } else if (gridWidth >= 750) {
+                duration = 1.25;
+            } else if (gridWidth >= 500) {
+                duration = 1;
+            } else if (gridWidth >= 250) {
+                duration = 0.75;
+            }
+        }
+        return duration;
+    }
+
     RevSlider.prototype.createNextPageGrid = function() {
         var that = this;
         var gridContainerElement = document.getElementById('rev-slider-grid-container');
@@ -190,13 +228,15 @@ RevSlider({
         nextGrid.on('resized', function() {
             that.resize();
         });
-
         nextGridElement.style.position = 'absolute';
-        var gridTop = '-' + this.grid.element.offsetHeight + 'px;';
-        nextGridElement.setAttribute('style', 'position: absolute; top: 0px; left: 0px;');
 
         var outClass = 'slideOutLeft';
         var inClass = 'slideInLeft';
+
+        var correctedPage = Math.abs(this.page);
+
+
+
         if (this.page > this.previousPage) {
             // slide left or up
             outClass = (this.options.vertical) ? 'slideOutUp' : 'slideOutLeft';
@@ -210,11 +250,17 @@ RevSlider({
         revUtils.addClass(previousGridElement, outClass);
         revUtils.addClass(nextGridElement, inClass);
 
+        var animationDuration = this.getAnimationDuration();
+        nextGridElement.setAttribute('style', 'position: absolute; top: 0px; left: 0px;');
+        nextGridElement.style.animationDuration = animationDuration + 's';
+        previousGridElement.style.animationDuration = animationDuration + 's';
+
         for (var i = 0; i < this.limit; i++) {
             nextGridElement.appendChild(this.createNewCell());
         };
 
-        var countOffset = ((this.page * this.increment) - this.increment);
+
+        var countOffset = ((correctedPage * this.increment) - this.increment);
         var endIndex = countOffset + this.limit;
 
 
@@ -227,7 +273,7 @@ RevSlider({
                 data = this.contentItems[index];
             ad.style.width = this.columnWidth + 'px';
             ad.style.marginRight = this.margin + 'px';
-            ad.querySelectorAll('a')[0].setAttribute('href', data.url);
+            ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', ''));
             ad.querySelectorAll('a')[0].title = data.headline;
             ad.querySelectorAll('img')[0].setAttribute('src', data.image);
             ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
@@ -257,7 +303,7 @@ RevSlider({
 
         this.gridUpdateTimer = setTimeout(function() {
             that.updateGrids();
-        }, 1000);
+        }, animationDuration * 1000);
 
     }
 
@@ -265,6 +311,7 @@ RevSlider({
         var gridContainerElement = document.getElementById('rev-slider-grid-container');
         var previousGridElement = gridContainerElement.querySelector('#rev-slider-grid-prev');
         revUtils.remove(previousGridElement);
+        //this.gridElement.setAttribute('style', 'position: relative;');
         this.gridElement.style.position = 'relative';
         this.gridElement.className = '';
         clearTimeout(this.gridUpdateTimer);
@@ -435,7 +482,8 @@ RevSlider({
             (this.options.rows !== oldOpts.rows) ||
             (this.options.headline_size !== oldOpts.headline_size) ||
             (this.options.vertical !== oldOpts.vertical) ||
-            (this.options.page_increment !== oldOpts.page_increment)) {
+            (this.options.page_increment !== oldOpts.page_increment) ||
+            (this.options.show_padding !== oldOpts.show_padding)) {
             this.options.perRow = this.options.per_row; // AnyGrid needs camels
             this.resize();
         }
@@ -448,6 +496,10 @@ RevSlider({
             this.textOverlay();
             this.grid.reloadItems();
             this.grid.layout();
+        }
+
+        if (this.options.pages !== oldOpts.pages) {
+            this.getData();
         }
     };
 
@@ -621,7 +673,7 @@ RevSlider({
         for (var i = 0; i < this.limit; i++) {
             var ad = ads[i],
                 data = this.contentItems[i];
-            ad.querySelectorAll('a')[0].setAttribute('href', data.url);
+            ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', ''));
             ad.querySelectorAll('a')[0].title = data.headline;
             ad.querySelectorAll('img')[0].setAttribute('src', data.image);
             ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
@@ -632,12 +684,19 @@ RevSlider({
     }
 
     RevSlider.prototype.hasNextPage = function() {
-        var pageOffset = (this.options.page_increment) ? 0 : this.limit;
-        return this.contentItems.length - pageOffset  >= (this.page + 1) * this.increment;
+        //var pageOffset = (this.options.page_increment) ? 0 : this.limit;
+        var correctedPage = Math.abs(this.page);
+        return this.contentItems.length  >= (correctedPage * this.increment) + this.increment;
     }
 
     RevSlider.prototype.hasPreviousPage = function() {
-        return (this.page - 1) > 0;
+        var correctedPage = Math.abs(this.page);
+        return (correctedPage - 1) > 0;
+    }
+
+    RevSlider.prototype.hasMorePages = function() {
+        var correctedPage = Math.abs(this.page);
+        return this.contentItems.length  >= (correctedPage * this.increment) + this.increment;
     }
 
     RevSlider.prototype.attachButtonEvents = function() {
@@ -666,9 +725,11 @@ RevSlider({
 
     RevSlider.prototype.showNextPage = function() {
         if (!this.gridUpdateTimer) {
-            if (!this.hasNextPage() && this.options.wrap_pages) {
-                // Wrap to beginning
-                this.page = 0;
+            if (this.options.wrap_pages) {
+                if (!this.hasMorePages() || this.page === -1) {
+                    // wrap or reverse
+                    this.page = (this.options.wrap_reverse) ? this.page * -1 : 0;
+                }
             }
             this.previousPage = this.page;
             this.page = this.page + 1;
@@ -687,14 +748,21 @@ RevSlider({
 
     RevSlider.prototype.showPreviousPage = function() {
         if (!this.gridUpdateTimer) {
-            if (!this.hasPreviousPage() && this.options.wrap_pages) {
-                // Wrap to end
-                this.page = Math.floor(this.contentItems.length / this.limit);
-                // Add 1 here as it will be subtracted below.
-                this.page += 1;
+            if (this.options.wrap_pages) {
+                if (this.options.wrap_reverse) {
+                    if (!this.hasMorePages() || this.page === 1) {
+                        // Reverse direction
+                        this.page = this.page * -1;
+                    }
+                } else if (!this.hasPreviousPage()) {
+                    // Wrap to end
+                    this.page = Math.floor(this.contentItems.length / this.limit);
+                    // Add 1 here as it will be subtracted below.
+                    this.page += 1;
+                }
             }
             this.previousPage = this.page;
-            this.page = Math.max(1, this.page - 1);
+            this.page =this.page - 1;
             this.createNextPageGrid();
             if (!this.hasPreviousPage() && !this.options.wrap_pages) {
                 // Disable back button

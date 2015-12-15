@@ -31,8 +31,8 @@ app.service('widgets', function() {
             description: 'RevSlider is an engaging carousel and a great way to showcase Revcontent ads on your site! Give your readers the ability to navigate through all of the ads availible to your widget. Fully responsive and configurable to display as many rows and columns as you like at various breakpoints. RevSlider is a great choice for any site!',
             link: 'revcontent-api-showcase-slider-1.0/index.html',
             bg: '#2E4E5D',
-            //preview: true,
-            //demo: true
+            preview: true,
+            demo: true
         },
         shifter: {
             title: 'RevShifter',
@@ -190,6 +190,10 @@ app.service('options', function() {
         this.text_overlay = false;
         this.vertical = false;
         this.page_increment = true;
+        this.wrap_pages = true;
+        this.wrap_reverse = false;
+        this.show_padding = true;
+        this.pages = 4;
     }
 
     this.set();

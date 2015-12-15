@@ -195,6 +195,10 @@
     background: #fff;
 }
 
+#rev-slider .rev-content.blur{
+    filter: blur(3px);
+}
+
 #rev-slider .rev-content {
     transition: opacity .5s ease-in-out;
     opacity: 1;
@@ -260,6 +264,7 @@
  *  Left Slide transforms
  */
 .slideOutLeft{
+    filter: blur(1px);
     animation-name: slideOutLeft;
     animation-duration: 1s;
     animation-timing-function: ease-in-out;
@@ -272,6 +277,7 @@
 }
 
 .slideInLeft{
+    filter: blur(1px);
     animation-name: slideInLeft;
     animation-duration: 1s;
     animation-timing-function: ease-in-out;
@@ -287,6 +293,7 @@
  *  Right Slide transforms
  */
 .slideOutRight{
+    filter: blur(1px);
     animation-name: slideOutRight;
     animation-duration: 1s;
     animation-timing-function: ease-in-out;
@@ -299,6 +306,7 @@
 }
 
 .slideInRight{
+    filter: blur(1px);
     animation-name: slideInRight;
     animation-duration: 1s;
     animation-timing-function: ease-in-out;
@@ -314,6 +322,7 @@
  *  Up Slide transforms
  */
 .slideOutUp{
+    filter: blur(1px);
     animation-name: slideOutUp;
     animation-duration: 1s;
     animation-timing-function: ease-in-out;
@@ -326,6 +335,7 @@
 }
 
 .slideInUp{
+    filter: blur(1px);
     animation-name: slideInUp;
     animation-duration: 1s;
     animation-timing-function: ease-in-out;
@@ -341,6 +351,7 @@
  *  Down Slide transforms
  */
 .slideOutDown{
+    filter: blur(1px);
     animation-name: slideOutDown;
     animation-duration: 1s;
     animation-timing-function: ease-in-out;
@@ -353,6 +364,7 @@
 }
 
 .slideInDown{
+    filter: blur(1px);
     animation-name: slideInDown;
     animation-duration: 1s;
     animation-timing-function: ease-in-out;
