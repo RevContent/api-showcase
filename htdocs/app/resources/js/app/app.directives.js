@@ -93,8 +93,6 @@ app.directive('revToaster', ['$timeout', 'options', '$rootScope', function ($tim
         $timeout(function() {
             widget.show();
         });
-
-
     }
   };
 }]);
@@ -112,13 +110,8 @@ app.directive('revShifter', ['$timeout', 'options', '$rootScope', function ($tim
             widget.hide();
         });
 
-        options.inner_widget = {
-            name: 'slider',
-            options: {
-                per_row: 3,
-                rows: 10
-            }
-        };
+        options.inner_widget_options = {};
+
         options.width = 600;
 
         widget = new RevShifter({
@@ -131,7 +124,8 @@ app.directive('revShifter', ['$timeout', 'options', '$rootScope', function ($tim
             widget_id : options.widget_id,
             domain : options.domain,
             rev_position: options.rev_position,
-            inner_widget: options.inner_widget
+            inner_widget_options: options.inner_widget_options,
+            show_on_load: true,
         });
 
         var watcher = scope.$watch(function() { return options }, function(newOpts, oldOpts) {
@@ -141,12 +135,6 @@ app.directive('revShifter', ['$timeout', 'options', '$rootScope', function ($tim
                 });
             }
         }, true);
-
-        $timeout(function() {
-            widget.show();
-        });
-
-
     }
   };
 }]);
