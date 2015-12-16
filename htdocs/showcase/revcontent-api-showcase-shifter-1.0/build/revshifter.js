@@ -36,8 +36,9 @@ RevShifter({
     var instance;
     var defaults = {
         testing: false,
-        width: 300,
+        size: 300,
         inner_widget: 'slider',
+        side: 'top',
         inner_widget_options: {
             header: 'Trending Now',
             per_row: {
@@ -51,6 +52,10 @@ RevShifter({
             },
             rows: 10
         },
+        show_on_load: false,
+        retract_on_load: true,
+        retract_time: 4000,
+        retract_duration: 2000,
         rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right'),
         sponsored: 10,
         internal: false,
@@ -92,43 +97,79 @@ RevShifter({
             return;
         }
 
-        revUtils.appendStyle('/* inject:css */.rev-shifter{-ms-overflow-style:-ms-autohiding-scrollbar;-webkit-text-size-adjust:100%;text-size-adjust:100%;box-sizing:border-box;cursor:default;text-rendering:optimizeLegibility;background:#fff;position:fixed;-webkit-transition:.5s;transition:.5s;width:100%;padding:30px 10px 10px;bottom:0;right:0;-webkit-transition-property:-webkit-transform;transition-property:transform;transform:translateX(100%);-ms-transform:translateX(100%);-moz-transform:translateX(100%);-o-transform:translateX(100%);-webkit-transform:translateX(100%);overflow-y:scroll;border-left:1px solid #dcdcdc}.rev-shifter .rev-close{position:absolute;top:0;right:0;cursor:pointer;padding:10px;fill:#555}.rev-shifter *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}.rev-shifter a,.rev-shifter a:focus,.rev-shifter a:hover{text-decoration:none}body.rev-shifter-loaded{margin:0}body.rev-shifter-open .rev-shifter{top:0;right:0;transform:none;-ms-transform:none;-moz-transform:none;-o-transform:none;-webkit-transform:none;z-index:2147483647}/* endinject */', 'rev-shifter');
+        revUtils.appendStyle('/* inject:css */.rev-shifter{-ms-overflow-style:-ms-autohiding-scrollbar;-webkit-text-size-adjust:100%;text-size-adjust:100%;box-sizing:border-box;cursor:default;text-rendering:optimizeLegibility;background:#fff;position:fixed;width:100%;padding:30px 10px 10px;-webkit-transition-property:-webkit-transform,height,box-shadow;transition-property:transform,height,box-shadow;border-left:1px solid #dcdcdc;box-shadow:none}body .rev-shifter.top{box-shadow:inset 0 -7px 9px -7px #000}.rev-shifter #rev-slider-grid{-webkit-transition-property:height;transition-property:height}.rev-shifter.top .rev-content{-webkit-transition-property:-webkit-transform,opacity,width,top,left!important;transition-property:transform,opacity,width,top,left!important;-webkit-transition-duration:2.5s!important;transition-duration:2.5s!important;-webkit-transform:none!important;transform:none!important}.rev-shifter.right{right:0;bottom:0;height:100%;-webkit-transform:translateX(100%);transform:translateX(100%)}.rev-shifter.left{left:0;bottom:0;height:100%;-webkit-transform:translateX(-100%);transform:translateX(-100%)}.rev-shifter.top{top:0;width:100%;-webkit-transform:translateY(-100%);transform:translateY(-100%)}.rev-shifter #rev-slider-grid-container{overflow:hidden}.rev-shifter.top #rev-slider{display:inline-block}.rev-shifter.top #rev-slider,.rev-shifter.top #rev-slider .rev-sponsored{margin-top:0;-webkit-transition-duration:2.5s;transition-duration:2.5s;-webkit-transition-property:margin-top;transition-property:margin-top}body.retracted .rev-shifter.top #rev-slider{margin-top:-28px}body.retracted .rev-shifter.top #rev-slider .rev-sponsored{margin-top:-24px}.rev-shifter .rev-close{position:absolute;top:0;right:0;cursor:pointer;padding:10px;fill:#555;z-index:1}.rev-shifter *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}.rev-shifter a,.rev-shifter a:focus,.rev-shifter a:hover{text-decoration:none}.rev-shifter .rev-toggle{position:absolute;z-index:10001;background-color:#000;text-align:center;line-height:0;cursor:pointer;opacity:.8}.rev-shifter.right .rev-toggle{top:50%;height:100px;vertical-align:middle;left:-30px;margin-top:-50px}.rev-shifter.top .rev-toggle{bottom:-30px;left:50%;width:100px;margin-left:-50px;border-radius:0 0 3px 3px}.rev-shifter .rev-toggle svg{fill:#fff}.rev-shifter.left .rev-toggle svg,.rev-shifter.right .rev-toggle svg{top:50%;margin-top:-18px}body.rev-shifter-loaded{margin:0}body{-webkit-transition-property:margin-top!important;transition-property:margin-top!important}body.rev-shifter-open{margin-top:0}body.rev-shifter-no-transform .rev-shifter{-webkit-transform:none;transform:none;z-index:2147483647}body.rev-shifter-open .rev-shifter{top:0;right:0;-webkit-transform:none!important;transform:none!important;z-index:2147483647}/* endinject */', 'rev-shifter');
 
         this.init = function() {
             this.element = document.createElement('div');
             this.innerWidgetElement = document.createElement('div');
-            this.element.style.width = this.options.width + 'px';
             this.element.style.zIndex = '10001';
-            this.element.style.height = '100%';
             this.element.id = 'rev-shifter';
-            this.element.setAttribute('class', 'rev-shifter');
+            revUtils.addClass(this.element, 'rev-shifter');
+            revUtils.addClass(this.element, this.options.side);
 
             this.closeElement = document.createElement('div');
-            this.closeElement.setAttribute('class', 'rev-close');
             this.closeElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>';
+            revUtils.addClass(this.closeElement, 'rev-close');
             revUtils.append(this.element, this.closeElement);
 
             revUtils.append(this.element, this.innerWidgetElement);
 
+            this.toggleElement = document.createElement('div');
+            revUtils.addClass(this.toggleElement, 'rev-toggle');
+            revUtils.append(this.element, this.toggleElement);
+
             revUtils.append(document.body, this.element);
+
+            if (this.options.side == 'top') {
+                this.options.inner_widget_options.rows = 2;
+            }
 
             this.innerWidget = new RevSlider({
                 element: [this.innerWidgetElement],
-                url: 'https://trends.revcontent.com/api/v1/',
-                api_key : 'bf3f270aa50d127f0f8b8c92a979d76aa1391d38',
-                pub_id : 7846,
-                widget_id : 13523,
-                domain : 'bustle.com',
+                api_key : this.options.api_key,
+                pub_id : this.options.pub_id,
+                widget_id : this.options.widget_id,
+                domain : this.options.domain,
                 rev_position: 'top_right',
+                header : this.options.inner_widget_options.header,
                 per_row: this.options.inner_widget_options.per_row,
-                rows: this.options.inner_widget_options.rows
+                rows: this.options.inner_widget_options.rows,
+                rev_position: 'bottom_right',
+                text_overlay: true,
+                max_headline: true
             });
 
+            this.size = this.element.clientHeight;
+            this.difference = (this.size - this.innerWidget.grid.maxHeight);
+
+            if (typeof this.options.inner_widget_options.per_row === 'object') {
+                this.options.single_per_row = {};
+                for (var prop in this.options.inner_widget_options.per_row) {
+                    this.options.single_per_row[prop] = (this.options.inner_widget_options.per_row[prop] * this.options.inner_widget_options.rows);
+                }
+            } else {
+                this.options.single_per_row = (this.options.inner_widget_options.per_row * this.options.inner_widget_options.rows);
+            }
+
+            if (this.options.side == 'left' || this.options.side == 'right') {
+                this.element.style.width = this.options.size + 'px';
+            }
+
+            this.handleTransform();
+
+            this.toggleElementInnerHtml();
+
             this.attachButtonEvents();
+
+            if (this.options.show_on_load) {
+                this.show(this.options.retract_on_load);
+            }
         };
 
         this.update = function(newOpts, oldOpts) {
             this.options = revUtils.extend(defaults, newOpts);
+            //a hack to make up for revUtils shortcomings
+            this.options.inner_widget_options = revUtils.extend(defaults.inner_widget_options, newOpts.inner_widget_options);
 
             if (this.visible != newOpts.visible) {
                 if (newOpts.visible) {
@@ -140,37 +181,131 @@ RevShifter({
 
             if (this.options.width !== oldOpts.width) {
                 this.element.style.width = this.options.width + 'px';
-            }
-
-            if (this.options.width !== oldOpts.width) {
                 this.innerWidget.resize();
             }
 
             if ( (this.options.size !== oldOpts.size) ||
                 (this.options.realSize !== oldOpts.realSize) ||
+                (this.options.inner_widget_options.header !== oldOpts.inner_widget_options.header) ||
                 (this.options.inner_widget_options.per_row !== oldOpts.inner_widget_options.per_row) ||
                 (this.options.inner_widget_options.rows !== oldOpts.inner_widget_options.rows)) {
                 this.innerWidget.update(this.options.inner_widget_options,  oldOpts.inner_widget_options);
             }
         };
 
+        this.handleTransform = function() {
+            this.element.style.transitionDuration = this.options.retract_duration + 'ms';
+            this.element.style.WebkitTransitionDuration = this.options.retract_duration + 'ms';
 
-        this.show = function() {
-            this.visible = true;
-            revUtils.addClass(document.body, 'rev-shifter-open');
+            document.body.style.transitionDuration = this.options.retract_duration + 'ms';
+            document.body.style.WebkitTransitionDuration = this.options.retract_duration + 'ms'
+
+            this.innerWidget.gridElement.style.transitionDuration =  this.options.retract_duration + 'ms';
+            this.innerWidget.gridElement.style.WebkitTransitionDuration =  this.options.retract_duration + 'ms';;
+        };
+
+        this.transformBody = function(retract) {
+            if (this.options.side !== 'top') {
+                return;
+            }
+            if (retract) {
+                document.body.style.marginTop = (this.innerWidget.grid.maxHeight + this.difference - 28 - 18) + 'px';
+            } else {
+                document.body.style.marginTop = this.size + 'px';
+            }
         }
+
+        this.retract = function() {
+            if (this.options.side !== 'top') {
+                return;
+            }
+            this.retracted = true;
+            revUtils.addClass(document.body, 'retracted');
+            this.toggleElementInnerHtml();
+
+            // if (this.options.side == 'top') {
+                this.innerWidget.update({
+                    per_row: this.options.single_per_row,
+                    rows: 1
+                });
+            // }
+            this.transformBody(true);
+        };
+
+        this.show = function(retract) {
+            this.visible = true;
+            this.retracted = false;
+
+            revUtils.addClass(document.body, 'rev-shifter-no-transform');
+
+            this.transformBody();
+
+            revUtils.removeClass(document.body, 'retracted');
+
+            this.toggleElementInnerHtml();
+
+            this.innerWidget.update({
+                per_row: this.options.inner_widget_options.per_row,
+                rows: this.options.inner_widget_options.rows
+            });
+
+            if (retract) {
+                var that = this;
+                setTimeout(function() {
+                    that.retract();
+                }, this.options.retract_time);
+            };
+        };
 
         this.hide = function() {
             this.visible = false;
-            revUtils.removeClass(document.body, 'rev-shifter-open');
-        }
+            revUtils.removeClass(document.body, 'rev-shifter-no-transform');
+            document.body.style.marginTop = 0;
+            this.toggleElementInnerHtml();
+        };
+
+        this.toggle = function() {
+            if (this.retracted || !this.visible) {
+                this.show();
+            } else {
+                if (this.options.side == 'top') {
+                    this.retract();
+                } else {
+                    this.hide();
+                }
+
+            }
+        };
+
+        this.toggleElementInnerHtml = function() {
+            switch(this.options.side){
+                case 'top':
+                    if (this.retracted || !this.visible) { // down arrow
+                        this.toggleElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36"><path d="M24.88 12.88L18 19.76l-6.88-6.88L9 15l9 9 9-9z"/></svg>';
+                    } else { // up arrow
+                        this.toggleElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36"><path d="M18 12l-9 9 2.12 2.12L18 16.24l6.88 6.88L27 21z"/></svg>';
+                    }
+                    break;
+                case 'right':
+                    if (this.retracted || !this.visible) { // left arrow
+                        this.toggleElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36"><path d="M23.12 11.12L21 9l-9 9 9 9 2.12-2.12L16.24 18z"/></svg>';
+                    } else { // right arrow
+                        this.toggleElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36"><path d="M15 9l-2.12 2.12L19.76 18l-6.88 6.88L15 27l9-9z"/></svg>';
+                    }
+                    break;
+            }
+        };
 
         this.attachButtonEvents = function() {
             var that = this;
             this.closeElement.addEventListener('click', function() {
                 that.hide();
             });
-        }
+
+            this.toggleElement.addEventListener('click', function() {
+                that.toggle();
+            });
+        };
 
         this.init();
     };
