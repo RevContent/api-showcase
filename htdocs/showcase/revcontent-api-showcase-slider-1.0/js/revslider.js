@@ -254,6 +254,7 @@ RevSlider({
 
 
     RevSlider.prototype.update = function(newOpts, oldOpts) {
+        oldOpts = oldOpts ? oldOpts : this.options;
 
         this.options = revUtils.extend(this.options, newOpts);
 
