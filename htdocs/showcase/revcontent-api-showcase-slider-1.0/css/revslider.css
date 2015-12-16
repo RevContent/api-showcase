@@ -6,7 +6,7 @@
 }
 
 #rev-slider #rev-slider-grid-container {
-    display: table;
+    clear: both;
     width: 100%;
 }
 
@@ -91,9 +91,9 @@
 }
 
 #rev-slider .rev-image img {
-    position: absolute;
-    top: 0;
-    left: 0;
+    display: block;
+    max-width: 100%;
+    height: auto;
     transition: opacity .5s ease-in-out;
     opacity: 0;
 }
@@ -143,16 +143,6 @@
     border-radius: 5px;
     overflow: hidden;
     background: #fff;
-}
-
-#rev-slider .rev-content {
-    transition: opacity .5s ease-in-out;
-    opacity: 1;
-}
-
-#rev-slider .rev-content.rev-next {
-    transition: opacity .5s ease-in-out;
-    opacity: .5;
 }
 
 #rev-slider.rev-slider-text-overlay .rev-ad {
