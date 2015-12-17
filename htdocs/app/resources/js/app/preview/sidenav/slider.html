@@ -87,20 +87,20 @@
                     <md-radio-button ng-value="true">Vertical</md-radio-button>
                 </md-radio-group>
             </div>
-            <!--<div flex="50">
+            <div flex="50">
                 <span class="md-body-1">Increment</span>
                 <md-radio-group ng-model="ctrl.options.page_increment" layout="row">
                     <md-radio-button ng-value="true">Page</md-radio-button>
                     <md-radio-button ng-value="false">Single</md-radio-button>
                 </md-radio-group>
-            </div>-->
+            </div>
             <div flex="50">
                 <span class="md-body-1">Wrap Pages?</span>
                 <md-checkbox aria-label="Phone" ng-model="ctrl.options.wrap_pages">{{ ctrl.options.wrap_pages ? 'Yes' : 'No' }}</md-checkbox>
             </div>
             <div flex="50">
                 <span class="md-body-1">Wrap Reverse?</span>
-                <md-checkbox aria-label="Phone" ng-model="ctrl.options.wrap_reverse">{{ ctrl.options.wrap_reverse ? 'Yes' : 'No' }}</md-checkbox>
+                <md-checkbox aria-label="Phone" ng-disabled="!ctrl.options.page_increment" ng-model="ctrl.options.wrap_reverse">{{ ctrl.options.wrap_reverse ? 'Yes' : 'No' }}</md-checkbox>
             </div>
             <div flex layout="column">
                 <span class="md-body-1">Number of Pages</span>

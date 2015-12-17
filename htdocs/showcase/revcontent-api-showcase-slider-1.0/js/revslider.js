@@ -98,9 +98,9 @@ RevSlider({
             max_headline: false,
             text_overlay: false,
             vertical: false,
-            page_increment: true,
+            page_increment: false,
             wrap_pages: true,
-            wrap_reverse: true,
+            wrap_reverse: false, // if page_increment is false, this must be false
             show_padding: true,
             pages: 4
         };
@@ -148,7 +148,10 @@ RevSlider({
 
         this.grid = new AnyGrid(this.gridElement, { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound});
 
-        this.grid.on('resized', function() {
+        /*this.grid.on('resized', function() {
+            that.resize();
+        });*/
+        revUtils.addEventListener(window, 'resize', function() {
             that.resize();
         });
 
@@ -211,6 +214,9 @@ RevSlider({
                 duration = 0.75;
             }
         }
+        if (!this.options.page_increment) {
+            duration = duration * .5;
+        }
         return duration;
     }
 
@@ -225,93 +231,67 @@ RevSlider({
 
         revUtils.append(gridContainerElement, nextGridElement);
         var nextGrid = new AnyGrid(nextGridElement, { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound});
-        nextGrid.on('resized', function() {
-            that.resize();
-        });
-        nextGridElement.style.position = 'absolute';
-
-        var outClass = 'slideOutLeft';
-        var inClass = 'slideInLeft';
-
-        var correctedPage = Math.abs(this.page);
-
-
-
-        if (this.page > this.previousPage) {
-            // slide left or up
-            outClass = (this.options.vertical) ? 'slideOutUp' : 'slideOutLeft';
-            inClass = (this.options.vertical) ? 'slideInUp' : 'slideInLeft';
-        } else {
-            // Slide right or down
-            outClass = (this.options.vertical) ? 'slideOutDown' : 'slideOutRight';
-            inClass = (this.options.vertical) ? 'slideInDown' : 'slideInRight';
-        }
-
-        revUtils.addClass(previousGridElement, outClass);
-        revUtils.addClass(nextGridElement, inClass);
 
         var animationDuration = this.getAnimationDuration();
-        nextGridElement.setAttribute('style', 'position: absolute; top: 0px; left: 0px;');
-        nextGridElement.style.animationDuration = animationDuration + 's';
-        previousGridElement.style.animationDuration = animationDuration + 's';
+
+        var width = (this.options.page_increment) ? this.grid.containerWidth : this.grid.containerWidth / this.grid.perRow;
+        var rowHeight = this.gridElement.offsetHeight / this.options.rows[this.grid.getBreakPoint()];
+        var height = (this.options.page_increment) ? this.gridElement.offsetHeight : rowHeight;
+        var newTop = 0;
+        var newLeft = 0;
+        var topLeft = 'left';
+        if (this.page > this.previousPage) { // slide left or up
+            if (this.options.vertical) { // up
+                topLeft = 'top';
+                newTop = height;
+            } else { // left
+                newLeft = width;
+            }
+        } else { // Slide right or down
+            if (this.options.vertical) { // down
+                topLeft = 'top';
+                newTop = height * -1;
+            } else { // right
+                newLeft = width * -1;
+            }
+        }
+        nextGridElement.setAttribute('style', 'position: absolute; top: '+newTop+'px; left: '+newLeft+'px;');
+        nextGridElement.style.transition = topLeft + ' ' + animationDuration + 's';
+        nextGridElement.style.transitionTimingFunction = 'ease-in-out';
+        previousGridElement.setAttribute('style', 'position: absolute; top: 0px; left: 0px; z-index: 5');
+        previousGridElement.style.transition = topLeft + ' ' + animationDuration + 's';
+        previousGridElement.style.transitionTimingFunction = 'ease-in-out';
+        setTimeout(function () {
+            if (that.options.vertical) {
+                nextGridElement.style.top = '0px';
+                previousGridElement.style.top = (newTop * -1) + 'px';
+            } else {
+                nextGridElement.style.left = '0px';
+                previousGridElement.style.left = (newLeft * -1) + 'px';
+            }
+        }, 50);
 
         for (var i = 0; i < this.limit; i++) {
             nextGridElement.appendChild(this.createNewCell());
         };
 
-
-        var countOffset = ((correctedPage * this.increment) - this.increment);
-        var endIndex = countOffset + this.limit;
-
-
-
-        var ads = nextGridElement.querySelectorAll('.rev-content');
-        var i = 0;
-        var index = i + countOffset;
-        for (index; index < endIndex; i++, index++) {
-            var ad = ads[i],
-                data = this.contentItems[index];
-            ad.style.width = this.columnWidth + 'px';
-            ad.style.marginRight = this.margin + 'px';
-            ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', ''));
-            ad.querySelectorAll('a')[0].title = data.headline;
-            ad.querySelectorAll('img')[0].setAttribute('src', data.image);
-            ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
-            ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
-
-            ad.querySelectorAll('.rev-image')[0].style.height = this.preloaderHeight + 'px';
-            ad.querySelectorAll('.rev-headline')[0].style.height = this.headlineHeight + 'px';
-            ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
-            ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
-            ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.margin = this.providerMargin +'px '  + this.innerMargin + 'px ' + this.providerMargin +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
-            ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
-        }
-        this.registerImpressions(countOffset, this.limit);
-
-        this.textOverlay();
-
-        nextGrid.reloadItems();
-        nextGrid.layout();
-
         this.grid = nextGrid;
         this.gridElement = nextGridElement;
-
+        this.updateDisplayedItems();
         this.checkEllipsis();
+        this.textOverlay();
+        this.grid.reloadItems();
+        this.grid.layout();
 
         this.gridUpdateTimer = setTimeout(function() {
             that.updateGrids();
         }, animationDuration * 1000);
-
     }
 
     RevSlider.prototype.updateGrids = function() {
         var gridContainerElement = document.getElementById('rev-slider-grid-container');
         var previousGridElement = gridContainerElement.querySelector('#rev-slider-grid-prev');
         revUtils.remove(previousGridElement);
-        //this.gridElement.setAttribute('style', 'position: relative;');
         this.gridElement.style.position = 'relative';
         this.gridElement.className = '';
         clearTimeout(this.gridUpdateTimer);
@@ -321,7 +301,8 @@ RevSlider({
     RevSlider.prototype.setUp = function() {
         this.grid.layout();
         this.limit = this.getLimit();
-        this.increment = (this.options.page_increment) ? this.limit : 1; //this.options.rows[this.grid.getBreakPoint()]
+        var rowsCols = (this.options.vertical) ? this.grid.perRow : this.options.rows[this.grid.getBreakPoint()];
+        this.increment = (this.options.page_increment) ? this.limit : rowsCols;
         var width = this.grid.containerWidth / this.grid.perRow;
 
         if (this.options.image_ratio == 'square') {
@@ -488,6 +469,10 @@ RevSlider({
             this.resize();
         }
 
+        if (!this.options.page_increment) {
+            this.options.wrap_reverse = false;
+        }
+
         if ((this.options.header !== oldOpts.header) || this.options.rev_position !== oldOpts.rev_position) {
             this.appendElements();
         }
@@ -504,6 +489,10 @@ RevSlider({
     };
 
     RevSlider.prototype.resize = function() {
+        var gridContainerElement = document.getElementById('rev-slider-grid-container');
+        gridContainerElement.style.height = '';
+        gridContainerElement.style.width = '100%';
+
         var oldLimit = this.limit;
         this.grid.option(this.options);
         this.setUp();
@@ -527,7 +516,7 @@ RevSlider({
                 for (var i = 0; i < (this.limit - nodes.length); i++) {
                     this.appendCell();
                 }
-                this.updateDisplay();
+                this.resetDisplay();
             }
         }
 
@@ -559,6 +548,8 @@ RevSlider({
         }
         this.grid.reloadItems();
         this.grid.layout();
+        gridContainerElement.style.height = this.gridElement.offsetHeight + 'px';
+        gridContainerElement.style.width = this.gridElement.offsetWidth + 'px';
         this.setupButtons();
     };
 
@@ -585,7 +576,7 @@ RevSlider({
         clearTimeout(that.ellipsisTimer);
         that.ellipsisTimer = setTimeout(function() {
             that.doEllipsis();
-        }, 300);
+        }, 10);
     };
 
     RevSlider.prototype.doEllipsis = function() {
@@ -641,7 +632,7 @@ RevSlider({
 
         revApi.request(url, function(resp) {
             that.contentItems = resp;
-            that.updateDisplay();
+            that.resetDisplay();
 
             imagesLoaded( that.gridElement, function() {
                 revUtils.addClass(that.containerElement, 'loaded');
@@ -664,23 +655,55 @@ RevSlider({
         }
     }
 
-    RevSlider.prototype.updateDisplay = function() {
-
+    RevSlider.prototype.resetDisplay = function() {
         this.previousPage = 0;
         this.page = 1;
+        this.updateDisplayedItems();
+    }
 
-        var ads = this.element.querySelectorAll('.rev-ad');
+    RevSlider.prototype.updateDisplayedItems = function() {
+        var correctedPage = Math.abs(this.page);
+        var countOffset = ((correctedPage * this.increment) - this.increment);
+        var endIndex = countOffset + this.limit;
+        var moreItemsNeeded = 0;
+        if (endIndex > this.contentItems.length) {
+            endIndex = this.contentItems.length;
+            moreItemsNeeded = this.limit - (endIndex - countOffset);
+        }
+        var itemsToDisplay = [];
+        for (var i = 0; countOffset < endIndex; i++, countOffset++) {
+            itemsToDisplay[i] = this.contentItems[countOffset];
+        }
+        for (var i = 0; i < moreItemsNeeded; i++) {
+            itemsToDisplay[itemsToDisplay.length] = this.contentItems[i];
+        }
+        var ads = this.gridElement.querySelectorAll('.rev-ad');
+        var contentIndex = 0;
+        var rowCount = 0;
+        var contentIncrement = (this.options.vertical) ? 1 : this.options.rows[this.grid.getBreakPoint()];
         for (var i = 0; i < this.limit; i++) {
             var ad = ads[i],
-                data = this.contentItems[i];
+                data = itemsToDisplay[contentIndex];
             ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', ''));
             ad.querySelectorAll('a')[0].title = data.headline;
             ad.querySelectorAll('img')[0].setAttribute('src', data.image);
             ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
             ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
+            ad.querySelectorAll('.rev-image')[0].style.height = this.preloaderHeight + 'px';
+            ad.querySelectorAll('.rev-headline')[0].style.height = this.headlineHeight + 'px';
+            ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
+            ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
+            ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
+            ad.querySelectorAll('.rev-provider')[0].style.margin = this.providerMargin +'px '  + this.innerMargin + 'px ' + this.providerMargin +'px';
+            ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize +'px';
+            ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
+            ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
+            contentIndex += contentIncrement;
+            if (!this.options.vertical && contentIndex > this.limit - 1) {
+                contentIndex = ++rowCount;
+            }
         }
         this.registerImpressions(0, this.limit);
-
     }
 
     RevSlider.prototype.hasNextPage = function() {
@@ -756,13 +779,13 @@ RevSlider({
                     }
                 } else if (!this.hasPreviousPage()) {
                     // Wrap to end
-                    this.page = Math.floor(this.contentItems.length / this.limit);
+                    this.page = Math.floor(this.contentItems.length / this.increment);
                     // Add 1 here as it will be subtracted below.
                     this.page += 1;
                 }
             }
             this.previousPage = this.page;
-            this.page =this.page - 1;
+            this.page = this.page - 1;
             this.createNextPageGrid();
             if (!this.hasPreviousPage() && !this.options.wrap_pages) {
                 // Disable back button

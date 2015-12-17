@@ -16,12 +16,6 @@
     overflow: hidden;
 }
 
-#rev-slider #rev-slider-grid-container .rev-border-clip {
-    position: absolute;
-    z-index: 10;
-
-}
-
 #rev-slider {
     clear: both;
     /*margin: 4px;*/
