@@ -85,7 +85,7 @@ RevSlider({
             header: 'Trending Now',
             rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right'),
             show_arrows: {
-                mobile: false,
+                mobile: true,
                 desktop: true
             },
             internal: false,
@@ -98,9 +98,9 @@ RevSlider({
             max_headline: false,
             text_overlay: false,
             vertical: false,
-            page_increment: false,
+            page_increment: true,
             wrap_pages: true,
-            wrap_reverse: false, // if page_increment is false, this must be false
+            wrap_reverse: true, // if page_increment is false, this must be false
             show_padding: true,
             pages: 4
         };
@@ -170,8 +170,6 @@ RevSlider({
 
         this.grid.reloadItems();
         this.grid.layout();
-
-        this.attachButtonEvents();
 
         this.textOverlay();
 
@@ -342,7 +340,7 @@ RevSlider({
         backBtnWrapper.setAttribute('class', 'rev-btn-wrapper');
 
         var backBtn = document.createElement('div');
-        backBtn.id = "back";
+        backBtn.id = "back-btn-container";
         backBtn.setAttribute('class', 'rev-btn-container');
         backBtn.setAttribute('style', 'left: 0px;');
         var backArrow = (this.options.vertical) ? '&circ;' : '&lsaquo;';
@@ -355,7 +353,7 @@ RevSlider({
         forwardBtnWrapper.setAttribute('class', 'rev-btn-wrapper');
 
         var forwardBtn = document.createElement('div');
-        forwardBtn.id = "forward";
+        forwardBtn.id = "forward-btn-container";
         forwardBtn.setAttribute('class', 'rev-btn-container');
         forwardBtn.setAttribute('style', 'right: 0px;');
         var forwardArrow = (this.options.vertical) ? '&caron;' : '&rsaquo;';
@@ -366,12 +364,27 @@ RevSlider({
         var gridContainerElement = this.containerElement.querySelector('#rev-slider-grid-container');
         revUtils.append(gridContainerElement, backBtnWrapper);
         revUtils.append(gridContainerElement, forwardBtnWrapper);
+
+        var isMobile = (revDetect.mobile()) ? true : false;
+        if (isMobile) {
+            forwardBtn.style.opacity = .3;
+            backBtn.style.opacity = .3;
+            forwardBtnWrapper.style.opacity = 1;
+            backBtnWrapper.style.opacity = 1;
+        } else {
+            forwardBtnWrapper.style.opacity = 0;
+            backBtnWrapper.style.opacity = 0;
+        }
+
+        this.attachButtonEvents();
     }
 
     RevSlider.prototype.setupButtons = function() {
         var isMobile = (revDetect.mobile()) ? true : false;
         var backBtnWrapper = this.containerElement.querySelector('#back-wrapper');
         var forwardBtnWrapper = this.containerElement.querySelector('#forward-wrapper');
+        var backBtnContainer = this.containerElement.querySelector('#back-btn-container');
+        var forwardBtnContainer = this.containerElement.querySelector('#forward-btn-container');
 
         if ((isMobile && !this.options.show_arrows.mobile) || (!isMobile && !this.options.show_arrows.desktop)) {
             backBtnWrapper.setAttribute('style', 'display: none;');
@@ -381,6 +394,8 @@ RevSlider({
             var forwardBtn = this.containerElement.querySelector('#btn-forward');
 
             if (this.options.vertical) {
+                backBtnContainer.style.borderRadius = '4px 4px 0px 0px';
+                forwardBtnContainer.style.borderRadius = '0px 0px 4px 4px';
                 revUtils.addClass(backBtnWrapper, 'top-bottom');
                 revUtils.addClass(forwardBtnWrapper, 'top-bottom');
                 backBtnWrapper.setAttribute('style', 'padding: 0px ' + this.padding + 'px; top: 0px;');
@@ -391,6 +406,8 @@ RevSlider({
                 backBtn.setAttribute('style', 'left: ' + btnLeft + '; top: 50%;');
                 forwardBtn.setAttribute('style', 'right: ' + btnLeft + '; top: 50%;');
             } else {
+                backBtnContainer.style.borderRadius = '4px 0px 0px 4px';
+                forwardBtnContainer.style.borderRadius = '0px 4px 4px 0px';
                 revUtils.removeClass(backBtnWrapper, 'top-bottom');
                 revUtils.removeClass(forwardBtnWrapper, 'top-bottom');
                 backBtnWrapper.setAttribute('style', 'padding: ' + this.padding + 'px 0px; left: 0px; top: 0px;');
@@ -401,6 +418,10 @@ RevSlider({
                 var btnLeft = (backBtn.parentNode.offsetWidth / 2) - (backBtn.offsetWidth / 2) + 'px';
                 backBtn.setAttribute('style', 'left: ' + btnLeft + '; top: ' + btnTop + ';');
                 forwardBtn.setAttribute('style', 'right: ' + btnLeft + '; top: ' + btnTop + ';');
+            }
+            if (!isMobile) {
+                forwardBtnWrapper.style.opacity = 0;
+                backBtnWrapper.style.opacity = 0;
             }
             if (!this.options.wrap_pages) {
                 backBtnWrapper.style.display = 'none';
@@ -724,26 +745,29 @@ RevSlider({
 
     RevSlider.prototype.attachButtonEvents = function() {
         var that = this;
-        document.getElementById('forward').addEventListener('click', function() {
+        var forwardBtnContainer = that.containerElement.querySelector('#forward-btn-container');
+        var backBtnContainer = that.containerElement.querySelector('#back-btn-container');
+        forwardBtnContainer.addEventListener('click', function() {
             that.showNextPage();
         });
 
-        document.getElementById('back').addEventListener('click', function() {
+        backBtnContainer.addEventListener('click', function() {
             that.showPreviousPage();
         });
-        var gridContainerElement = this.containerElement.querySelector('#rev-slider-grid-container');
-        gridContainerElement.addEventListener('mouseover', function() {
-            var forwardBtnWrapper = that.containerElement.querySelector('#forward-wrapper');
-            var backBtnWrapper = that.containerElement.querySelector('#back-wrapper');
-            forwardBtnWrapper.style.opacity = 1;
-            backBtnWrapper.style.opacity = 1;
-        });
-        gridContainerElement.addEventListener('mouseout', function() {
-            var forwardBtnWrapper = that.containerElement.querySelector('#forward-wrapper');
-            var backBtnWrapper = that.containerElement.querySelector('#back-wrapper');
-            forwardBtnWrapper.style.opacity = 0;
-            backBtnWrapper.style.opacity = 0;
-        });
+        var isMobile = (revDetect.mobile()) ? true : false;
+        var forwardBtnWrapper = that.containerElement.querySelector('#forward-wrapper');
+        var backBtnWrapper = that.containerElement.querySelector('#back-wrapper');
+        if (!isMobile) {
+            var gridContainerElement = this.containerElement.querySelector('#rev-slider-grid-container');
+            gridContainerElement.addEventListener('mouseover', function () {
+                forwardBtnWrapper.style.opacity = 1;
+                backBtnWrapper.style.opacity = 1;
+            });
+            gridContainerElement.addEventListener('mouseout', function () {
+                forwardBtnWrapper.style.opacity = 0;
+                backBtnWrapper.style.opacity = 0;
+            });
+        }
     };
 
     RevSlider.prototype.showNextPage = function() {
