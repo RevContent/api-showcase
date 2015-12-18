@@ -136,7 +136,17 @@ RevSlider({
         this.element = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
         this.element.style.width = '100%';
 
-
+        // Utility for detecting swipe gestures
+        this.hammer = new Hammer.Manager(gridContainerElement, null);
+        this.hammer.add( new Hammer.Swipe({ direction: Hammer.DIRECTION_ALL, threshold: 10 }) );
+        this.hammer.on("swipe", function(event) {
+            // event.direction: 2 = left, 4 = right, 8 = up, 16 = down
+            if (event.direction === 2 || event.direction === 8) {
+                that.showNextPage();
+            } else if (event.direction === 4 || event.direction === 16) {
+                that.showPreviousPage();
+            }
+        });
 
         revUtils.append(this.containerElement, gridContainerElement);
 
