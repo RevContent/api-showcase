@@ -353,8 +353,8 @@ RevSlider({
         backBtn.id = "back-btn-container";
         backBtn.setAttribute('class', 'rev-btn-container');
         backBtn.setAttribute('style', 'left: 0px;');
-        var backArrow = (this.options.vertical) ? '&circ;' : '&lsaquo;';
-        backBtn.innerHTML = '<label id="btn-back" class="rev-chevron">'+backArrow+'</label>'; // &lsaquo; &circ;
+        //var backArrow = (this.options.vertical) ? '&circ;' : '&lsaquo;';
+        backBtn.innerHTML = '<label id="btn-back" class="rev-chevron">&lsaquo;</label>'; // &lsaquo; &circ;
 
         revUtils.append(backBtnWrapper, backBtn);
 
@@ -366,8 +366,8 @@ RevSlider({
         forwardBtn.id = "forward-btn-container";
         forwardBtn.setAttribute('class', 'rev-btn-container');
         forwardBtn.setAttribute('style', 'right: 0px;');
-        var forwardArrow = (this.options.vertical) ? '&caron;' : '&rsaquo;';
-        forwardBtn.innerHTML = '<label id="btn-forward" class="rev-chevron">'+forwardArrow+'</label>'; // &rsaquo; &caron;
+        //var forwardArrow = (this.options.vertical) ? '&caron;' : '&rsaquo;';
+        forwardBtn.innerHTML = '<label id="btn-forward" class="rev-chevron">&rsaquo;</label>'; // &rsaquo; &caron;
 
         revUtils.append(forwardBtnWrapper, forwardBtn);
 
@@ -402,6 +402,7 @@ RevSlider({
         } else {
             var backBtn = this.containerElement.querySelector('#btn-back');
             var forwardBtn = this.containerElement.querySelector('#btn-forward');
+            var transform = 'rotate(0deg)';
 
             if (this.options.vertical) {
                 backBtnContainer.style.borderRadius = '4px 4px 0px 0px';
@@ -410,11 +411,7 @@ RevSlider({
                 revUtils.addClass(forwardBtnWrapper, 'top-bottom');
                 backBtnWrapper.setAttribute('style', 'padding: 0px ' + this.padding + 'px; top: 0px;');
                 forwardBtnWrapper.setAttribute('style', 'padding: 0px ' + this.padding + 'px; bottom: 0px;');
-                backBtn.innerHTML = '&circ;';
-                forwardBtn.innerHTML = '&caron;';
-                var btnLeft = (backBtn.parentNode.offsetWidth / 2) - (backBtn.offsetWidth / 2) + 'px';
-                backBtn.setAttribute('style', 'left: ' + btnLeft + '; top: 50%;');
-                forwardBtn.setAttribute('style', 'right: ' + btnLeft + '; top: 50%;');
+                transform = "rotate(90deg)";
             } else {
                 backBtnContainer.style.borderRadius = '4px 0px 0px 4px';
                 forwardBtnContainer.style.borderRadius = '0px 4px 4px 0px';
@@ -422,13 +419,12 @@ RevSlider({
                 revUtils.removeClass(forwardBtnWrapper, 'top-bottom');
                 backBtnWrapper.setAttribute('style', 'padding: ' + this.padding + 'px 0px; left: 0px; top: 0px;');
                 forwardBtnWrapper.setAttribute('style', 'padding: ' + this.padding + 'px 0px; right: 0px; top: 0px;');
-                backBtn.innerHTML = '&lsaquo;';
-                forwardBtn.innerHTML = '&rsaquo;';
-                var btnTop = (backBtn.parentNode.offsetHeight / 2) - (backBtn.offsetHeight / 2) + 'px';
-                var btnLeft = (backBtn.parentNode.offsetWidth / 2) - (backBtn.offsetWidth / 2) + 'px';
-                backBtn.setAttribute('style', 'left: ' + btnLeft + '; top: ' + btnTop + ';');
-                forwardBtn.setAttribute('style', 'right: ' + btnLeft + '; top: ' + btnTop + ';');
             }
+            var btnTop = (backBtn.parentNode.offsetHeight / 2) - (backBtn.offsetHeight / 2) + 'px';
+            var btnLeft = (backBtn.parentNode.offsetWidth / 2) - (backBtn.offsetWidth / 2) + 'px';
+            backBtn.setAttribute('style', 'left: ' + btnLeft + '; top: ' + btnTop + '; transform: ' + transform + ';');
+            forwardBtn.setAttribute('style', 'right: ' + btnLeft + '; top: ' + btnTop + '; transform: ' + transform + ';');
+
             if (!isMobile) {
                 forwardBtnWrapper.style.opacity = 0;
                 backBtnWrapper.style.opacity = 0;
@@ -633,7 +629,7 @@ RevSlider({
     };
 
     RevSlider.prototype.createNewCell = function() {
-        var html = '<div class="rev-ad" style="'+ (this.options.ad_border ? 'border:1px solid #eee' : '') +'">' +
+        var html = '<div class="rev-ad" style="'+ (this.options.ad_border ? 'border:1px solid #eee' : '') +'" onmousedown="return false">' +
             '<a href="" target="_blank">' +
             '<div class="rev-image" style="height:'+ this.preloaderHeight +'px">' +
             '<img src=""/>' +
