@@ -15,6 +15,7 @@
     width: 100%;
     overflow: hidden;
     user-select: none;
+    /*background-color: #fff;*/
 }
 
 #rev-slider {
@@ -133,6 +134,7 @@
     position: relative;
     transition: background .5s ease-in-out;
     background: #eee;
+    overflow: hidden;
 }
 
 #rev-slider .rev-image img {
@@ -165,7 +167,7 @@
 
 #rev-slider .rev-headline {
     margin-top: 12px;
-    height: 40px;
+    /*height: 40px;*/
     overflow: hidden;
 }
 
@@ -187,7 +189,7 @@
 #rev-slider .rev-ad {
     border-radius: 5px;
     overflow: hidden;
-    background: #fff;
+    /*background: #fff;*/
 }
 
 #rev-slider .rev-content.blur{

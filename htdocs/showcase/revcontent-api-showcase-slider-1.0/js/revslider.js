@@ -93,7 +93,7 @@ RevSlider({
                 'phone', 'tablet', 'desktop'
             ],
             url: 'https://trends.revcontent.com/api/v1/',
-            ad_border: true,
+            ad_border: false,
             headline_size: 2,
             max_headline: false,
             text_overlay: false,
@@ -282,9 +282,11 @@ RevSlider({
         for (var i = 0; i < this.limit; i++) {
             nextGridElement.appendChild(this.createNewCell());
         };
+        this.removeBorderPadding(nextGridElement);
 
         this.grid = nextGrid;
         this.gridElement = nextGridElement;
+
         this.updateDisplayedItems();
         this.checkEllipsis();
         this.textOverlay();
@@ -335,7 +337,7 @@ RevSlider({
         }
         this.headlineMarginTop = ((this.headlineLineHeight * .4).toFixed(2) / 1);
 
-        this.innerMargin = ((this.headlineMarginTop * .3).toFixed(2) / 1);
+        this.innerMargin = ((this.headlineMarginTop * .2).toFixed(2) / 1);
 
         this.providerFontSize = Math.max(11, ((this.headlineLineHeight / 2).toFixed(2) / 1));
         this.providerLineHeight = ((this.providerFontSize * 1.25).toFixed(2) / 1);
@@ -471,7 +473,7 @@ RevSlider({
         revUtils.addClass(this.sponsored, 'rev-sponsored');
         this.sponsored.innerHTML = '<a onclick="revDialog.showDialog();">Sponsored by Revcontent</a>';
         if (this.options.rev_position == 'top_right') {
-            revUtils.addClass(this.sponsored, 'top-right')
+            revUtils.addClass(this.sponsored, 'top-right');
             revUtils.prepend(this.containerElement, this.sponsored);
         } else if (this.options.rev_position == 'bottom_left' || this.options.rev_position == 'bottom_right') {
             revUtils.addClass(this.sponsored, this.options.rev_position.replace('_', '-'));
@@ -553,12 +555,10 @@ RevSlider({
             var ad = ads[i];
 
             ad.style.width = this.columnWidth + 'px';
-            ad.style.marginRight = this.margin + 'px';
-
+            //ad.style.marginright = this.margin + 'px';
             ad.querySelectorAll('.rev-image')[0].style.height = this.preloaderHeight + 'px';
-            ad.querySelectorAll('.rev-headline')[0].style.height = this.headlineHeight + 'px';
+            ad.querySelectorAll('.rev-headline')[0].style.maxheight = this.headlineHeight + 'px';
             ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
-
             ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
             ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
             ad.querySelectorAll('.rev-provider')[0].style.margin = this.providerMargin +'px '  + this.innerMargin + 'px ' + this.providerMargin +'px';
@@ -566,6 +566,8 @@ RevSlider({
             ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
             ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
         }
+
+        this.removeBorderPadding(this.gridElement);
 
         this.textOverlay();
 
@@ -580,6 +582,19 @@ RevSlider({
         this.setupButtons();
     };
 
+    RevSlider.prototype.removeBorderPadding = function(gridEl) {
+        var ads = gridEl.querySelectorAll('.rev-content');
+        var rows = this.options.rows[this.grid.getBreakPoint()];
+        for (var i = 0; i < ads.length; i++) {
+            var ad = ads[i];
+            if (i == 0 || i == this.limit/rows) { // Remove padding left
+                ad.style.paddingLeft = '0px';
+            } else if (i == this.limit-1 || i == (this.limit/rows)-1) { // remove padding right
+                ad.style.paddingRight = '0px';
+            }
+        }
+    }
+
     RevSlider.prototype.checkMaxHeadlineHeightPerRow = function() {
         var itemsPerRow = this.grid.getPerRow();
         var currentRowNum = 0;
@@ -591,7 +606,7 @@ RevSlider({
                     var currentHeadlineHeight = this.getMaxHeadlineHeight(++currentRowNum, itemsPerRow);
                 }
                 var ad = ads[i];
-                ad.querySelectorAll('.rev-headline')[0].style.height = currentHeadlineHeight + 'px';
+                ad.querySelectorAll('.rev-headline')[0].style.maxheight = currentHeadlineHeight + 'px';
             }
         }
 
@@ -634,10 +649,12 @@ RevSlider({
             '<div class="rev-image" style="height:'+ this.preloaderHeight +'px">' +
             '<img src=""/>' +
             '</div>' +
-            '<div class="rev-headline" style="height:'+ this.headlineHeight +'px; margin:'+ this.headlineMarginTop +'px ' + this.innerMargin + 'px' + ' 0;">' +
+            '<div>' +
+            '<div class="rev-headline" style="max-height:'+ this.headlineHeight +'px; margin:'+ this.headlineMarginTop +'px ' + this.innerMargin + 'px' + ' 0;">' +
             '<h3 style="font-size:'+ this.headlineFontSize +'px; line-height:'+ this.headlineLineHeight +'px;"></h3>' +
             '</div>' +
             '<div style="margin:' + this.providerMargin +'px '  + this.innerMargin + 'px ' + this.providerMargin +'px;font-size:'+ this.providerFontSize +'px;line-height:'+ this.providerLineHeight +'px;height:'+ this.providerLineHeight +'px;" class="rev-provider"></div>' +
+            '</div>' +
             '</a>' +
             '</div>';
         var cell = document.createElement('div');
@@ -717,7 +734,7 @@ RevSlider({
             ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
             ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
             ad.querySelectorAll('.rev-image')[0].style.height = this.preloaderHeight + 'px';
-            ad.querySelectorAll('.rev-headline')[0].style.height = this.headlineHeight + 'px';
+            ad.querySelectorAll('.rev-headline')[0].style.maxheight = this.headlineHeight + 'px';
             ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
             ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
             ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
