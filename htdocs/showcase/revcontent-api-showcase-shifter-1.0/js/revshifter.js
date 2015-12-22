@@ -55,7 +55,7 @@ RevShifter({
         show_on_load: false,
         retract_on_load: true,
         retract_time: 4000,
-        retract_duration: 2000,
+        retract_duration: 2500,
         rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right'),
         sponsored: 10,
         internal: false,
@@ -130,17 +130,20 @@ RevShifter({
                 pub_id : this.options.pub_id,
                 widget_id : this.options.widget_id,
                 domain : this.options.domain,
-                rev_position: 'top_right',
+                rev_position: 'bottom_right',
                 header : this.options.inner_widget_options.header,
                 per_row: this.options.inner_widget_options.per_row,
                 rows: this.options.inner_widget_options.rows,
-                rev_position: 'bottom_right',
                 text_overlay: true,
-                max_headline: true
+                max_headline: true,
+                stacked: true,
+                transition_duration: this.options.retract_duration + 'ms',
+                is_layout_instant: true
             });
 
             this.size = this.element.clientHeight;
             this.difference = (this.size - this.innerWidget.grid.maxHeight);
+            this.showSize = this.innerWidget.grid.rows[0].height;
 
             if (typeof this.options.inner_widget_options.per_row === 'object') {
                 this.options.single_per_row = {};
@@ -193,15 +196,37 @@ RevShifter({
             }
         };
 
+        this.applyTransitionCss = function(element) {
+            element.style.transitionDuration = this.options.retract_duration + 'ms';
+            element.style.WebkitTransitionDuration = this.options.retract_duration + 'ms';
+            element.style.MozTransitionDuration = this.options.retract_duration + 'ms';
+            element.style.OTransitionDuration = this.options.retract_duration + 'ms';
+        };
+
         this.handleTransform = function() {
-            this.element.style.transitionDuration = this.options.retract_duration + 'ms';
-            this.element.style.WebkitTransitionDuration = this.options.retract_duration + 'ms';
+            this.applyTransitionCss(this.element);
+            this.applyTransitionCss(document.body);
+            this.applyTransitionCss(this.innerWidget.gridElement);
+            this.applyTransitionCss(this.element.querySelector('#rev-slider'));
+            this.applyTransitionCss(this.element.querySelector('#rev-slider .rev-sponsored'));
 
-            document.body.style.transitionDuration = this.options.retract_duration + 'ms';
-            document.body.style.WebkitTransitionDuration = this.options.retract_duration + 'ms'
+            var content = this.element.querySelectorAll('.rev-content');
+            for (var i = 0; i < content.length; i++) {
+                this.applyTransitionCss(content[i]);
+            }
 
-            this.innerWidget.gridElement.style.transitionDuration =  this.options.retract_duration + 'ms';
-            this.innerWidget.gridElement.style.WebkitTransitionDuration =  this.options.retract_duration + 'ms';;
+            var ads = this.element.querySelectorAll('.rev-ad');
+            for (var i = 0; i < ads.length; i++) {
+                this.applyTransitionCss(ads[i]);
+            }
+
+            var imgs = this.element.querySelectorAll('.rev-image');
+            for (var i = 0; i < imgs.length; i++) { // special case that also needs background transitioned
+                imgs[i].style.transition = 'background .5s ease-in-out, height ' + this.options.retract_duration + 'ms';
+                imgs[i].style.WebkitTransition = 'background .5s ease-in-out, height ' + this.options.retract_duration + 'ms';
+                imgs[i].style.MozTransition = 'background .5s ease-in-out, height ' + this.options.retract_duration + 'ms';
+                imgs[i].style.OTransition = 'background .5s ease-in-out, height ' + this.options.retract_duration + 'ms';
+            }
         };
 
         this.transformBody = function(retract) {
@@ -213,7 +238,7 @@ RevShifter({
             } else {
                 document.body.style.marginTop = this.size + 'px';
             }
-        }
+        };
 
         this.retract = function() {
             if (this.options.side !== 'top') {
@@ -223,12 +248,20 @@ RevShifter({
             revUtils.addClass(document.body, 'retracted');
             this.toggleElementInnerHtml();
 
-            // if (this.options.side == 'top') {
-                this.innerWidget.update({
-                    per_row: this.options.single_per_row,
-                    rows: 1
-                });
-            // }
+            this.innerWidget.grid.option({ // not instant
+                isLayoutInstant: false,
+                itemHeight: (this.showSize / 2)
+            });
+
+            this.innerWidget.update({ // one row
+                per_row: this.options.single_per_row,
+                rows: 1
+            });
+
+            this.innerWidget.grid.option({ // back to instant
+                isLayoutInstant: true
+            });
+
             this.transformBody(true);
         };
 
@@ -244,9 +277,18 @@ RevShifter({
 
             this.toggleElementInnerHtml();
 
-            this.innerWidget.update({
+            this.innerWidget.grid.option({ // not instant
+                isLayoutInstant: false,
+                itemHeight: this.showSize
+            });
+
+            this.innerWidget.update({ // back to default rows
                 per_row: this.options.inner_widget_options.per_row,
                 rows: this.options.inner_widget_options.rows
+            });
+
+            this.innerWidget.grid.option({ // back to instant
+                isLayoutInstant: true
             });
 
             if (retract) {
@@ -254,7 +296,7 @@ RevShifter({
                 setTimeout(function() {
                     that.retract();
                 }, this.options.retract_time);
-            };
+            }
         };
 
         this.hide = function() {

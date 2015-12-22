@@ -11,7 +11,7 @@
     width: 100%;
     padding: 10px;
     padding-top: 30px;
-    transition-property: transform, height, box-shadow;
+    transition-property: transform, height;
     border-left: 1px solid #dcdcdc;
     box-shadow: none;
 }
@@ -24,10 +24,12 @@ body .rev-shifter.top {
     transition-property: height;
 }
 
+.rev-shifter.top .rev-content .rev-ad {
+    transition-property: height;
+}
+
 .rev-shifter.top .rev-content {
-    transition-property: transform, opacity, width, top, left !important;
-    transition-duration: 2500ms !important;
-    transform: none !important;
+    transition-property: width, height;
 }
 
 .rev-shifter.right {
@@ -56,13 +58,6 @@ body .rev-shifter.top {
 
 .rev-shifter.top #rev-slider {
     display: inline-block;
-}
-
-.rev-shifter.top #rev-slider,
-.rev-shifter.top #rev-slider .rev-sponsored {
-    margin-top: 0;
-    transition-duration: 2500ms;
-    transition-property: margin-top;
 }
 
 body.retracted .rev-shifter.top #rev-slider {
