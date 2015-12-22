@@ -151,10 +151,6 @@ RevSlider({
         revUtils.append(this.containerElement, gridContainerElement);
 
         revUtils.append(gridContainerElement, this.gridElement);
-        var paddingOffset = this.padding * 2;
-        this.gridElement.style.position = 'absolute';
-        this.gridElement.style.height = (gridContainerElement.offsetHeight + paddingOffset) + 'px';
-        this.gridElement.style.width = (gridContainerElement.offsetWidth + paddingOffset) + 'px';
 
         revUtils.append(this.element, this.containerElement);
 
@@ -184,6 +180,8 @@ RevSlider({
 
         this.grid.reloadItems();
         this.grid.layout();
+
+        this.resize();
 
         this.textOverlay();
 
@@ -245,7 +243,7 @@ RevSlider({
         var paddingOffset = this.padding * 2;
         nextGridElement.style.position = 'absolute';
         var gridHeight = gridContainerElement.offsetHeight + paddingOffset;
-        var gridWidth = gridContainerElement.offsetWidth + paddingOffset;
+        var gridWidth = gridContainerElement.offsetWidth + paddingOffset + 1;
         nextGridElement.style.height = gridHeight + 'px';
         nextGridElement.style.width = gridWidth + 'px';
 
@@ -539,6 +537,7 @@ RevSlider({
         var cellHeight = this.preloaderHeight + this.headlineHeight +
                          this.headlineMarginTop + this.providerLineHeight +
                          this.providerMargin*2;
+        cellHeight += (this.options.ad_border) ? 2 : 0;
         return cellHeight;
     }
 
@@ -579,8 +578,9 @@ RevSlider({
         for (var i = 0; i < ads.length; i++) {
             var ad = ads[i];
 
+            ad.querySelectorAll('.rev-ad')[0].style.height = this.getCellHeight() + 'px';
+
             ad.style.width = this.columnWidth + 'px';
-            //ad.style.height = this.getCellHeight() + 'px';
             ad.querySelectorAll('.rev-image')[0].style.height = this.preloaderHeight + 'px';
             ad.querySelectorAll('.rev-headline')[0].style.maxheight = this.headlineHeight + 'px';
             ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
@@ -599,21 +599,29 @@ RevSlider({
         }
         this.grid.reloadItems();
         this.grid.layout();
-        //this.gridElement.style.position = 'absolute';
 
-        var paddingOffset = this.padding * 2;
-        gridContainerElement.style.height = ((this.getCellHeight() * 2) + paddingOffset) + 'px';
-
-        this.gridElement.style.position = 'absolute';
-        this.gridElement.style.height = (gridContainerElement.offsetHeight + paddingOffset) + 'px';
-        this.gridElement.style.width = (gridContainerElement.offsetWidth + paddingOffset) + 'px';
-        this.gridElement.style.top = '-'+this.padding+'px';
-        this.gridElement.style.left = '-'+this.padding+'px';
-        this.grid.layout();
+        this.setContainerAndGridHeights();
 
         this.setupButtons();
 
     };
+
+    RevSlider.prototype.setContainerAndGridHeights = function() {
+        var gridContainerElement = document.getElementById('rev-slider-grid-container');
+        var paddingOffset = this.padding * 2;
+        var numRows = this.options.rows[this.grid.getBreakPoint()];
+        var rowsPaddingOffset = paddingOffset * (numRows - 1);
+        var newContHeight = ((this.getCellHeight() * numRows) + rowsPaddingOffset);
+        gridContainerElement.style.height = newContHeight + 'px';
+
+        this.gridElement.style.position = 'absolute';
+        this.gridElement.style.height = (gridContainerElement.offsetHeight + paddingOffset) + 'px';
+        this.gridElement.style.width = (gridContainerElement.offsetWidth + paddingOffset + 1) + 'px';
+        this.gridElement.style.top = '-'+this.padding+'px';
+        this.gridElement.style.left = '-'+this.padding+'px';
+        this.grid.reloadItems();
+        this.grid.layout();
+    }
 
     RevSlider.prototype.checkMaxHeadlineHeightPerRow = function() {
         var itemsPerRow = this.grid.getPerRow();
