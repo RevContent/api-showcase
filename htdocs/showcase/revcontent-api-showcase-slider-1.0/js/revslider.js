@@ -534,10 +534,13 @@ RevSlider({
     };
 
     RevSlider.prototype.getCellHeight = function() {
-        var cellHeight = this.preloaderHeight + this.headlineHeight +
-                         this.headlineMarginTop + this.providerLineHeight +
-                         this.providerMargin*2;
-        cellHeight += (this.options.ad_border) ? 2 : 0;
+        var cellHeight = this.preloaderHeight;
+        if (!this.options.text_overlay) {
+            cellHeight += this.headlineHeight +
+            this.headlineMarginTop + this.providerLineHeight +
+            this.providerMargin*2;
+            cellHeight += (this.options.ad_border) ? 2 : 0;
+        }
         return cellHeight;
     }
 
@@ -631,7 +634,7 @@ RevSlider({
         if (ads.length > 0) {
             for (var i = 0; i < ads.length; i++) {
                 if (i > 0 && i % itemsPerRow == 0) {
-                    var currentHeadlineHeight = this.getMaxHeadlineHeight(++currentRowNum, itemsPerRow);
+                    currentHeadlineHeight = this.getMaxHeadlineHeight(++currentRowNum, itemsPerRow);
                 }
                 var ad = ads[i];
                 ad.querySelectorAll('.rev-headline')[0].style.maxheight = currentHeadlineHeight + 'px';
@@ -677,12 +680,12 @@ RevSlider({
             '<div class="rev-image" style="height:'+ this.preloaderHeight +'px">' +
             '<img src=""/>' +
             '</div>' +
-            '<div>' +
+            /*'<div>' +*/
             '<div class="rev-headline" style="max-height:'+ this.headlineHeight +'px; margin:'+ this.headlineMarginTop +'px ' + this.innerMargin + 'px' + ' 0;">' +
             '<h3 style="font-size:'+ this.headlineFontSize +'px; line-height:'+ this.headlineLineHeight +'px;"></h3>' +
             '</div>' +
             '<div style="margin:' + this.providerMargin +'px '  + this.innerMargin + 'px ' + this.providerMargin +'px;font-size:'+ this.providerFontSize +'px;line-height:'+ this.providerLineHeight +'px;height:'+ this.providerLineHeight +'px;" class="rev-provider"></div>' +
-            '</div>' +
+            /*'</div>' +*/
             '</a>' +
             '</div>';
         var cell = document.createElement('div');
