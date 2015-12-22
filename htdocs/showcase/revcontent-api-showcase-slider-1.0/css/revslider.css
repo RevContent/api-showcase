@@ -1,11 +1,11 @@
 #rev-slider,
-#rev-slider #rev-slider-grid-container,
-#rev-slider #rev-slider-grid {
+#rev-slider #rev-slider-grid-container  {
     padding: 0;
     width: 100%;
 }
 
 #rev-slider #rev-slider-grid {
+    position: absolute;
     padding: 0;
 }
 
@@ -189,7 +189,7 @@
 #rev-slider .rev-ad {
     border-radius: 5px;
     overflow: hidden;
-    /*background: #fff;*/
+    background: #fff;
 }
 
 #rev-slider .rev-content.blur{

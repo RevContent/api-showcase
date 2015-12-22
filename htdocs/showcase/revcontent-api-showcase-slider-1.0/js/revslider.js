@@ -93,7 +93,7 @@ RevSlider({
                 'phone', 'tablet', 'desktop'
             ],
             url: 'https://trends.revcontent.com/api/v1/',
-            ad_border: false,
+            ad_border: true,
             headline_size: 2,
             max_headline: false,
             text_overlay: false,
@@ -151,6 +151,10 @@ RevSlider({
         revUtils.append(this.containerElement, gridContainerElement);
 
         revUtils.append(gridContainerElement, this.gridElement);
+        var paddingOffset = this.padding * 2;
+        this.gridElement.style.position = 'absolute';
+        this.gridElement.style.height = (gridContainerElement.offsetHeight + paddingOffset) + 'px';
+        this.gridElement.style.width = (gridContainerElement.offsetWidth + paddingOffset) + 'px';
 
         revUtils.append(this.element, this.containerElement);
 
@@ -236,53 +240,65 @@ RevSlider({
 
         var nextGridElement = document.createElement('div');
         nextGridElement.id = 'rev-slider-grid';
-
         revUtils.append(gridContainerElement, nextGridElement);
+
+        var paddingOffset = this.padding * 2;
+        nextGridElement.style.position = 'absolute';
+        var gridHeight = gridContainerElement.offsetHeight + paddingOffset;
+        var gridWidth = gridContainerElement.offsetWidth + paddingOffset;
+        nextGridElement.style.height = gridHeight + 'px';
+        nextGridElement.style.width = gridWidth + 'px';
+
         var nextGrid = new AnyGrid(nextGridElement, { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound});
 
         var animationDuration = this.getAnimationDuration();
 
-        var width = (this.options.page_increment) ? this.grid.containerWidth : this.grid.containerWidth / this.grid.perRow;
+        var width = (this.options.page_increment) ? this.gridElement.offsetWidth : this.gridElement.offsetWidth / this.grid.perRow;
         var rowHeight = this.gridElement.offsetHeight / this.options.rows[this.grid.getBreakPoint()];
         var height = (this.options.page_increment) ? this.gridElement.offsetHeight : rowHeight;
         var newTop = 0;
         var newLeft = 0;
+        var invertedPadding = this.padding*-1;
         var topLeft = 'left';
         if (this.page > this.previousPage) { // slide left or up
             if (this.options.vertical) { // up
                 topLeft = 'top';
-                newTop = height;
+                newTop = height + invertedPadding;
+                newLeft = invertedPadding;
             } else { // left
-                newLeft = width;
+                newTop = invertedPadding;
+                newLeft = width + invertedPadding;
             }
         } else { // Slide right or down
             if (this.options.vertical) { // down
                 topLeft = 'top';
-                newTop = height * -1;
+                newTop = (height * -1) + invertedPadding;
+                newLeft = invertedPadding;
             } else { // right
-                newLeft = width * -1;
+                newTop = invertedPadding;
+                newLeft = (width * -1) + invertedPadding;
             }
         }
-        nextGridElement.setAttribute('style', 'position: absolute; top: '+newTop+'px; left: '+newLeft+'px;');
+        nextGridElement.setAttribute('style', 'position: absolute; top: '+newTop+'px; left: '+newLeft+'px; width: '+gridWidth+'px; height: '+gridHeight+'px;');
         nextGridElement.style.transition = topLeft + ' ' + animationDuration + 's';
         nextGridElement.style.transitionTimingFunction = 'ease-in-out';
-        previousGridElement.setAttribute('style', 'position: absolute; top: 0px; left: 0px; z-index: 5');
+        previousGridElement.setAttribute('style', 'position: absolute; top: '+invertedPadding+'px; left: '+invertedPadding+'px; z-index: 5; width: '+gridWidth+'px; height: '+gridHeight+'px;');
         previousGridElement.style.transition = topLeft + ' ' + animationDuration + 's';
         previousGridElement.style.transitionTimingFunction = 'ease-in-out';
         setTimeout(function () {
             if (that.options.vertical) {
-                nextGridElement.style.top = '0px';
+                nextGridElement.style.top = invertedPadding+'px';
                 previousGridElement.style.top = (newTop * -1) + 'px';
             } else {
-                nextGridElement.style.left = '0px';
-                previousGridElement.style.left = (newLeft * -1) + 'px';
+                nextGridElement.style.left = invertedPadding +'px';
+                previousGridElement.style.left = (newLeft * -1)+(invertedPadding*2) + 'px';
             }
         }, 50);
 
         for (var i = 0; i < this.limit; i++) {
             nextGridElement.appendChild(this.createNewCell());
         };
-        this.removeBorderPadding(nextGridElement);
+
 
         this.grid = nextGrid;
         this.gridElement = nextGridElement;
@@ -293,6 +309,7 @@ RevSlider({
         this.grid.reloadItems();
         this.grid.layout();
 
+
         this.gridUpdateTimer = setTimeout(function() {
             that.updateGrids();
         }, animationDuration * 1000);
@@ -302,7 +319,8 @@ RevSlider({
         var gridContainerElement = document.getElementById('rev-slider-grid-container');
         var previousGridElement = gridContainerElement.querySelector('#rev-slider-grid-prev');
         revUtils.remove(previousGridElement);
-        this.gridElement.style.position = 'relative';
+        //this.gridElement.style.position = 'relative';
+        this.gridElement.style.transition = '';
         this.gridElement.className = '';
         clearTimeout(this.gridUpdateTimer);
         this.gridUpdateTimer = null;
@@ -411,16 +429,16 @@ RevSlider({
                 forwardBtnContainer.style.borderRadius = '0px 0px 4px 4px';
                 revUtils.addClass(backBtnWrapper, 'top-bottom');
                 revUtils.addClass(forwardBtnWrapper, 'top-bottom');
-                backBtnWrapper.setAttribute('style', 'padding: 0px ' + this.padding + 'px; top: 0px;');
-                forwardBtnWrapper.setAttribute('style', 'padding: 0px ' + this.padding + 'px; bottom: 0px;');
+                backBtnWrapper.setAttribute('style', 'padding: 0px 0px; top: 0px;');
+                forwardBtnWrapper.setAttribute('style', 'padding: 0px 0px; bottom: 0px;');
                 transform = "rotate(90deg)";
             } else {
                 backBtnContainer.style.borderRadius = '4px 0px 0px 4px';
                 forwardBtnContainer.style.borderRadius = '0px 4px 4px 0px';
                 revUtils.removeClass(backBtnWrapper, 'top-bottom');
                 revUtils.removeClass(forwardBtnWrapper, 'top-bottom');
-                backBtnWrapper.setAttribute('style', 'padding: ' + this.padding + 'px 0px; left: 0px; top: 0px;');
-                forwardBtnWrapper.setAttribute('style', 'padding: ' + this.padding + 'px 0px; right: 0px; top: 0px;');
+                backBtnWrapper.setAttribute('style', 'padding: 0px 0px; left: 0px; top: 0px;');
+                forwardBtnWrapper.setAttribute('style', 'padding: 0px 0px; right: 0px; top: 0px;');
             }
             var btnTop = (backBtn.parentNode.offsetHeight / 2) - (backBtn.offsetHeight / 2) + 'px';
             var btnLeft = (backBtn.parentNode.offsetWidth / 2) - (backBtn.offsetWidth / 2) + 'px';
@@ -452,7 +470,7 @@ RevSlider({
             revUtils.removeClass(this.containerElement, 'rev-slider-text-overlay');
             for (var i = 0; i < ads.length; i++) {
                 var ad = ads[i];
-                ad.style.height = 'auto';
+                //ad.style.height = 'auto';
             }
         }
     };
@@ -517,6 +535,13 @@ RevSlider({
         }
     };
 
+    RevSlider.prototype.getCellHeight = function() {
+        var cellHeight = this.preloaderHeight + this.headlineHeight +
+                         this.headlineMarginTop + this.providerLineHeight +
+                         this.providerMargin*2;
+        return cellHeight;
+    }
+
     RevSlider.prototype.resize = function() {
         var gridContainerElement = document.getElementById('rev-slider-grid-container');
         gridContainerElement.style.height = '';
@@ -555,7 +580,7 @@ RevSlider({
             var ad = ads[i];
 
             ad.style.width = this.columnWidth + 'px';
-            //ad.style.marginright = this.margin + 'px';
+            //ad.style.height = this.getCellHeight() + 'px';
             ad.querySelectorAll('.rev-image')[0].style.height = this.preloaderHeight + 'px';
             ad.querySelectorAll('.rev-headline')[0].style.maxheight = this.headlineHeight + 'px';
             ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
@@ -566,9 +591,6 @@ RevSlider({
             ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
             ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
         }
-
-        this.removeBorderPadding(this.gridElement);
-
         this.textOverlay();
 
         this.checkEllipsis();
@@ -577,23 +599,21 @@ RevSlider({
         }
         this.grid.reloadItems();
         this.grid.layout();
-        gridContainerElement.style.height = this.gridElement.offsetHeight + 'px';
-        gridContainerElement.style.width = this.gridElement.offsetWidth + 'px';
-        this.setupButtons();
-    };
+        //this.gridElement.style.position = 'absolute';
 
-    RevSlider.prototype.removeBorderPadding = function(gridEl) {
-        var ads = gridEl.querySelectorAll('.rev-content');
-        var rows = this.options.rows[this.grid.getBreakPoint()];
-        for (var i = 0; i < ads.length; i++) {
-            var ad = ads[i];
-            if (i == 0 || i == this.limit/rows) { // Remove padding left
-                ad.style.paddingLeft = '0px';
-            } else if (i == this.limit-1 || i == (this.limit/rows)-1) { // remove padding right
-                ad.style.paddingRight = '0px';
-            }
-        }
-    }
+        var paddingOffset = this.padding * 2;
+        gridContainerElement.style.height = ((this.getCellHeight() * 2) + paddingOffset) + 'px';
+
+        this.gridElement.style.position = 'absolute';
+        this.gridElement.style.height = (gridContainerElement.offsetHeight + paddingOffset) + 'px';
+        this.gridElement.style.width = (gridContainerElement.offsetWidth + paddingOffset) + 'px';
+        this.gridElement.style.top = '-'+this.padding+'px';
+        this.gridElement.style.left = '-'+this.padding+'px';
+        this.grid.layout();
+
+        this.setupButtons();
+
+    };
 
     RevSlider.prototype.checkMaxHeadlineHeightPerRow = function() {
         var itemsPerRow = this.grid.getPerRow();
@@ -644,7 +664,7 @@ RevSlider({
     };
 
     RevSlider.prototype.createNewCell = function() {
-        var html = '<div class="rev-ad" style="'+ (this.options.ad_border ? 'border:1px solid #eee' : '') +'" onmousedown="return false">' +
+        var html = '<div class="rev-ad" style="height: '+ this.getCellHeight() + 'px;' + (this.options.ad_border ? 'border:1px solid #eee' : '') +'" onmousedown="return false">' +
             '<a href="" target="_blank">' +
             '<div class="rev-image" style="height:'+ this.preloaderHeight +'px">' +
             '<img src=""/>' +
@@ -660,6 +680,7 @@ RevSlider({
         var cell = document.createElement('div');
 
         cell.style.padding = this.padding + 'px';
+        //cell.style.height = this.getCellHeight() + 'px';
 
         revUtils.addClass(cell, 'rev-content');
 
