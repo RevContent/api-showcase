@@ -100,7 +100,8 @@ RevSlider({
             max_headline: false,
             text_overlay: false,
             is_layout_instant: false,
-            transition_duration: 0
+            transition_duration: 0,
+            adjust_gutter: true
         };
 
         // merge options
@@ -154,7 +155,8 @@ RevSlider({
             perRow: this.options.per_row,
             isLayoutInstant: this.options.is_layout_instant,
             transitionDuration: this.options.transition_duration,
-            isResizeBound: this.options.is_resize_bound
+            isResizeBound: this.options.is_resize_bound,
+            adjust_gutter: this.options.adjust_gutter
         });
 
         this.grid.on('resized', function() {
