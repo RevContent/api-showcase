@@ -2388,564 +2388,488 @@ define(function () {
     }
 })());
 /*!
- * imagesLoaded PACKAGED v3.2.0
+ * imagesLoaded PACKAGED v4.0.0
  * JavaScript is all like "You images are done yet or what?"
  * MIT License
  */
 
 /*!
- * EventEmitter v4.2.6 - git.io/ee
- * Oliver Caldwell
- * MIT license
+ * EventEmitter v4.2.11 - git.io/ee
+ * Unlicense - http://unlicense.org/
+ * Oliver Caldwell - http://oli.me.uk/
  * @preserve
  */
 
-(function () {
-	'use strict';
+;(function () {
+    'use strict';
 
-	/**
-	 * Class for managing events.
-	 * Can be extended to provide event functionality in other classes.
-	 *
-	 * @class EventEmitter Manages event registering and emitting.
-	 */
-	function EventEmitter() {}
+    /**
+     * Class for managing events.
+     * Can be extended to provide event functionality in other classes.
+     *
+     * @class EventEmitter Manages event registering and emitting.
+     */
+    function EventEmitter() {}
 
-	// Shortcuts to improve speed and size
-	var proto = EventEmitter.prototype;
-	var exports = this;
-	var originalGlobalValue = exports.EventEmitter;
+    // Shortcuts to improve speed and size
+    var proto = EventEmitter.prototype;
+    var exports = this;
+    var originalGlobalValue = exports.EventEmitter;
 
-	/**
-	 * Finds the index of the listener for the event in it's storage array.
-	 *
-	 * @param {Function[]} listeners Array of listeners to search through.
-	 * @param {Function} listener Method to look for.
-	 * @return {Number} Index of the specified listener, -1 if not found
-	 * @api private
-	 */
-	function indexOfListener(listeners, listener) {
-		var i = listeners.length;
-		while (i--) {
-			if (listeners[i].listener === listener) {
-				return i;
-			}
-		}
+    /**
+     * Finds the index of the listener for the event in its storage array.
+     *
+     * @param {Function[]} listeners Array of listeners to search through.
+     * @param {Function} listener Method to look for.
+     * @return {Number} Index of the specified listener, -1 if not found
+     * @api private
+     */
+    function indexOfListener(listeners, listener) {
+        var i = listeners.length;
+        while (i--) {
+            if (listeners[i].listener === listener) {
+                return i;
+            }
+        }
 
-		return -1;
-	}
+        return -1;
+    }
 
-	/**
-	 * Alias a method while keeping the context correct, to allow for overwriting of target method.
-	 *
-	 * @param {String} name The name of the target method.
-	 * @return {Function} The aliased method
-	 * @api private
-	 */
-	function alias(name) {
-		return function aliasClosure() {
-			return this[name].apply(this, arguments);
-		};
-	}
+    /**
+     * Alias a method while keeping the context correct, to allow for overwriting of target method.
+     *
+     * @param {String} name The name of the target method.
+     * @return {Function} The aliased method
+     * @api private
+     */
+    function alias(name) {
+        return function aliasClosure() {
+            return this[name].apply(this, arguments);
+        };
+    }
 
-	/**
-	 * Returns the listener array for the specified event.
-	 * Will initialise the event object and listener arrays if required.
-	 * Will return an object if you use a regex search. The object contains keys for each matched event. So /ba[rz]/ might return an object containing bar and baz. But only if you have either defined them with defineEvent or added some listeners to them.
-	 * Each property in the object response is an array of listener functions.
-	 *
-	 * @param {String|RegExp} evt Name of the event to return the listeners from.
-	 * @return {Function[]|Object} All listener functions for the event.
-	 */
-	proto.getListeners = function getListeners(evt) {
-		var events = this._getEvents();
-		var response;
-		var key;
+    /**
+     * Returns the listener array for the specified event.
+     * Will initialise the event object and listener arrays if required.
+     * Will return an object if you use a regex search. The object contains keys for each matched event. So /ba[rz]/ might return an object containing bar and baz. But only if you have either defined them with defineEvent or added some listeners to them.
+     * Each property in the object response is an array of listener functions.
+     *
+     * @param {String|RegExp} evt Name of the event to return the listeners from.
+     * @return {Function[]|Object} All listener functions for the event.
+     */
+    proto.getListeners = function getListeners(evt) {
+        var events = this._getEvents();
+        var response;
+        var key;
 
-		// Return a concatenated array of all matching events if
-		// the selector is a regular expression.
-		if (typeof evt === 'object') {
-			response = {};
-			for (key in events) {
-				if (events.hasOwnProperty(key) && evt.test(key)) {
-					response[key] = events[key];
-				}
-			}
-		}
-		else {
-			response = events[evt] || (events[evt] = []);
-		}
+        // Return a concatenated array of all matching events if
+        // the selector is a regular expression.
+        if (evt instanceof RegExp) {
+            response = {};
+            for (key in events) {
+                if (events.hasOwnProperty(key) && evt.test(key)) {
+                    response[key] = events[key];
+                }
+            }
+        }
+        else {
+            response = events[evt] || (events[evt] = []);
+        }
 
-		return response;
-	};
+        return response;
+    };
 
-	/**
-	 * Takes a list of listener objects and flattens it into a list of listener functions.
-	 *
-	 * @param {Object[]} listeners Raw listener objects.
-	 * @return {Function[]} Just the listener functions.
-	 */
-	proto.flattenListeners = function flattenListeners(listeners) {
-		var flatListeners = [];
-		var i;
+    /**
+     * Takes a list of listener objects and flattens it into a list of listener functions.
+     *
+     * @param {Object[]} listeners Raw listener objects.
+     * @return {Function[]} Just the listener functions.
+     */
+    proto.flattenListeners = function flattenListeners(listeners) {
+        var flatListeners = [];
+        var i;
 
-		for (i = 0; i < listeners.length; i += 1) {
-			flatListeners.push(listeners[i].listener);
-		}
+        for (i = 0; i < listeners.length; i += 1) {
+            flatListeners.push(listeners[i].listener);
+        }
 
-		return flatListeners;
-	};
+        return flatListeners;
+    };
 
-	/**
-	 * Fetches the requested listeners via getListeners but will always return the results inside an object. This is mainly for internal use but others may find it useful.
-	 *
-	 * @param {String|RegExp} evt Name of the event to return the listeners from.
-	 * @return {Object} All listener functions for an event in an object.
-	 */
-	proto.getListenersAsObject = function getListenersAsObject(evt) {
-		var listeners = this.getListeners(evt);
-		var response;
+    /**
+     * Fetches the requested listeners via getListeners but will always return the results inside an object. This is mainly for internal use but others may find it useful.
+     *
+     * @param {String|RegExp} evt Name of the event to return the listeners from.
+     * @return {Object} All listener functions for an event in an object.
+     */
+    proto.getListenersAsObject = function getListenersAsObject(evt) {
+        var listeners = this.getListeners(evt);
+        var response;
 
-		if (listeners instanceof Array) {
-			response = {};
-			response[evt] = listeners;
-		}
+        if (listeners instanceof Array) {
+            response = {};
+            response[evt] = listeners;
+        }
 
-		return response || listeners;
-	};
+        return response || listeners;
+    };
 
-	/**
-	 * Adds a listener function to the specified event.
-	 * The listener will not be added if it is a duplicate.
-	 * If the listener returns true then it will be removed after it is called.
-	 * If you pass a regular expression as the event name then the listener will be added to all events that match it.
-	 *
-	 * @param {String|RegExp} evt Name of the event to attach the listener to.
-	 * @param {Function} listener Method to be called when the event is emitted. If the function returns true then it will be removed after calling.
-	 * @return {Object} Current instance of EventEmitter for chaining.
-	 */
-	proto.addListener = function addListener(evt, listener) {
-		var listeners = this.getListenersAsObject(evt);
-		var listenerIsWrapped = typeof listener === 'object';
-		var key;
+    /**
+     * Adds a listener function to the specified event.
+     * The listener will not be added if it is a duplicate.
+     * If the listener returns true then it will be removed after it is called.
+     * If you pass a regular expression as the event name then the listener will be added to all events that match it.
+     *
+     * @param {String|RegExp} evt Name of the event to attach the listener to.
+     * @param {Function} listener Method to be called when the event is emitted. If the function returns true then it will be removed after calling.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.addListener = function addListener(evt, listener) {
+        var listeners = this.getListenersAsObject(evt);
+        var listenerIsWrapped = typeof listener === 'object';
+        var key;
 
-		for (key in listeners) {
-			if (listeners.hasOwnProperty(key) && indexOfListener(listeners[key], listener) === -1) {
-				listeners[key].push(listenerIsWrapped ? listener : {
-					listener: listener,
-					once: false
-				});
-			}
-		}
+        for (key in listeners) {
+            if (listeners.hasOwnProperty(key) && indexOfListener(listeners[key], listener) === -1) {
+                listeners[key].push(listenerIsWrapped ? listener : {
+                    listener: listener,
+                    once: false
+                });
+            }
+        }
 
-		return this;
-	};
+        return this;
+    };
 
-	/**
-	 * Alias of addListener
-	 */
-	proto.on = alias('addListener');
+    /**
+     * Alias of addListener
+     */
+    proto.on = alias('addListener');
 
-	/**
-	 * Semi-alias of addListener. It will add a listener that will be
-	 * automatically removed after it's first execution.
-	 *
-	 * @param {String|RegExp} evt Name of the event to attach the listener to.
-	 * @param {Function} listener Method to be called when the event is emitted. If the function returns true then it will be removed after calling.
-	 * @return {Object} Current instance of EventEmitter for chaining.
-	 */
-	proto.addOnceListener = function addOnceListener(evt, listener) {
-		return this.addListener(evt, {
-			listener: listener,
-			once: true
-		});
-	};
+    /**
+     * Semi-alias of addListener. It will add a listener that will be
+     * automatically removed after its first execution.
+     *
+     * @param {String|RegExp} evt Name of the event to attach the listener to.
+     * @param {Function} listener Method to be called when the event is emitted. If the function returns true then it will be removed after calling.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.addOnceListener = function addOnceListener(evt, listener) {
+        return this.addListener(evt, {
+            listener: listener,
+            once: true
+        });
+    };
 
-	/**
-	 * Alias of addOnceListener.
-	 */
-	proto.once = alias('addOnceListener');
+    /**
+     * Alias of addOnceListener.
+     */
+    proto.once = alias('addOnceListener');
 
-	/**
-	 * Defines an event name. This is required if you want to use a regex to add a listener to multiple events at once. If you don't do this then how do you expect it to know what event to add to? Should it just add to every possible match for a regex? No. That is scary and bad.
-	 * You need to tell it what event names should be matched by a regex.
-	 *
-	 * @param {String} evt Name of the event to create.
-	 * @return {Object} Current instance of EventEmitter for chaining.
-	 */
-	proto.defineEvent = function defineEvent(evt) {
-		this.getListeners(evt);
-		return this;
-	};
+    /**
+     * Defines an event name. This is required if you want to use a regex to add a listener to multiple events at once. If you don't do this then how do you expect it to know what event to add to? Should it just add to every possible match for a regex? No. That is scary and bad.
+     * You need to tell it what event names should be matched by a regex.
+     *
+     * @param {String} evt Name of the event to create.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.defineEvent = function defineEvent(evt) {
+        this.getListeners(evt);
+        return this;
+    };
 
-	/**
-	 * Uses defineEvent to define multiple events.
-	 *
-	 * @param {String[]} evts An array of event names to define.
-	 * @return {Object} Current instance of EventEmitter for chaining.
-	 */
-	proto.defineEvents = function defineEvents(evts) {
-		for (var i = 0; i < evts.length; i += 1) {
-			this.defineEvent(evts[i]);
-		}
-		return this;
-	};
+    /**
+     * Uses defineEvent to define multiple events.
+     *
+     * @param {String[]} evts An array of event names to define.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.defineEvents = function defineEvents(evts) {
+        for (var i = 0; i < evts.length; i += 1) {
+            this.defineEvent(evts[i]);
+        }
+        return this;
+    };
 
-	/**
-	 * Removes a listener function from the specified event.
-	 * When passed a regular expression as the event name, it will remove the listener from all events that match it.
-	 *
-	 * @param {String|RegExp} evt Name of the event to remove the listener from.
-	 * @param {Function} listener Method to remove from the event.
-	 * @return {Object} Current instance of EventEmitter for chaining.
-	 */
-	proto.removeListener = function removeListener(evt, listener) {
-		var listeners = this.getListenersAsObject(evt);
-		var index;
-		var key;
+    /**
+     * Removes a listener function from the specified event.
+     * When passed a regular expression as the event name, it will remove the listener from all events that match it.
+     *
+     * @param {String|RegExp} evt Name of the event to remove the listener from.
+     * @param {Function} listener Method to remove from the event.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.removeListener = function removeListener(evt, listener) {
+        var listeners = this.getListenersAsObject(evt);
+        var index;
+        var key;
 
-		for (key in listeners) {
-			if (listeners.hasOwnProperty(key)) {
-				index = indexOfListener(listeners[key], listener);
+        for (key in listeners) {
+            if (listeners.hasOwnProperty(key)) {
+                index = indexOfListener(listeners[key], listener);
 
-				if (index !== -1) {
-					listeners[key].splice(index, 1);
-				}
-			}
-		}
+                if (index !== -1) {
+                    listeners[key].splice(index, 1);
+                }
+            }
+        }
 
-		return this;
-	};
+        return this;
+    };
 
-	/**
-	 * Alias of removeListener
-	 */
-	proto.off = alias('removeListener');
+    /**
+     * Alias of removeListener
+     */
+    proto.off = alias('removeListener');
 
-	/**
-	 * Adds listeners in bulk using the manipulateListeners method.
-	 * If you pass an object as the second argument you can add to multiple events at once. The object should contain key value pairs of events and listeners or listener arrays. You can also pass it an event name and an array of listeners to be added.
-	 * You can also pass it a regular expression to add the array of listeners to all events that match it.
-	 * Yeah, this function does quite a bit. That's probably a bad thing.
-	 *
-	 * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to add to multiple events at once.
-	 * @param {Function[]} [listeners] An optional array of listener functions to add.
-	 * @return {Object} Current instance of EventEmitter for chaining.
-	 */
-	proto.addListeners = function addListeners(evt, listeners) {
-		// Pass through to manipulateListeners
-		return this.manipulateListeners(false, evt, listeners);
-	};
+    /**
+     * Adds listeners in bulk using the manipulateListeners method.
+     * If you pass an object as the second argument you can add to multiple events at once. The object should contain key value pairs of events and listeners or listener arrays. You can also pass it an event name and an array of listeners to be added.
+     * You can also pass it a regular expression to add the array of listeners to all events that match it.
+     * Yeah, this function does quite a bit. That's probably a bad thing.
+     *
+     * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to add to multiple events at once.
+     * @param {Function[]} [listeners] An optional array of listener functions to add.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.addListeners = function addListeners(evt, listeners) {
+        // Pass through to manipulateListeners
+        return this.manipulateListeners(false, evt, listeners);
+    };
 
-	/**
-	 * Removes listeners in bulk using the manipulateListeners method.
-	 * If you pass an object as the second argument you can remove from multiple events at once. The object should contain key value pairs of events and listeners or listener arrays.
-	 * You can also pass it an event name and an array of listeners to be removed.
-	 * You can also pass it a regular expression to remove the listeners from all events that match it.
-	 *
-	 * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to remove from multiple events at once.
-	 * @param {Function[]} [listeners] An optional array of listener functions to remove.
-	 * @return {Object} Current instance of EventEmitter for chaining.
-	 */
-	proto.removeListeners = function removeListeners(evt, listeners) {
-		// Pass through to manipulateListeners
-		return this.manipulateListeners(true, evt, listeners);
-	};
+    /**
+     * Removes listeners in bulk using the manipulateListeners method.
+     * If you pass an object as the second argument you can remove from multiple events at once. The object should contain key value pairs of events and listeners or listener arrays.
+     * You can also pass it an event name and an array of listeners to be removed.
+     * You can also pass it a regular expression to remove the listeners from all events that match it.
+     *
+     * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to remove from multiple events at once.
+     * @param {Function[]} [listeners] An optional array of listener functions to remove.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.removeListeners = function removeListeners(evt, listeners) {
+        // Pass through to manipulateListeners
+        return this.manipulateListeners(true, evt, listeners);
+    };
 
-	/**
-	 * Edits listeners in bulk. The addListeners and removeListeners methods both use this to do their job. You should really use those instead, this is a little lower level.
-	 * The first argument will determine if the listeners are removed (true) or added (false).
-	 * If you pass an object as the second argument you can add/remove from multiple events at once. The object should contain key value pairs of events and listeners or listener arrays.
-	 * You can also pass it an event name and an array of listeners to be added/removed.
-	 * You can also pass it a regular expression to manipulate the listeners of all events that match it.
-	 *
-	 * @param {Boolean} remove True if you want to remove listeners, false if you want to add.
-	 * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to add/remove from multiple events at once.
-	 * @param {Function[]} [listeners] An optional array of listener functions to add/remove.
-	 * @return {Object} Current instance of EventEmitter for chaining.
-	 */
-	proto.manipulateListeners = function manipulateListeners(remove, evt, listeners) {
-		var i;
-		var value;
-		var single = remove ? this.removeListener : this.addListener;
-		var multiple = remove ? this.removeListeners : this.addListeners;
+    /**
+     * Edits listeners in bulk. The addListeners and removeListeners methods both use this to do their job. You should really use those instead, this is a little lower level.
+     * The first argument will determine if the listeners are removed (true) or added (false).
+     * If you pass an object as the second argument you can add/remove from multiple events at once. The object should contain key value pairs of events and listeners or listener arrays.
+     * You can also pass it an event name and an array of listeners to be added/removed.
+     * You can also pass it a regular expression to manipulate the listeners of all events that match it.
+     *
+     * @param {Boolean} remove True if you want to remove listeners, false if you want to add.
+     * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to add/remove from multiple events at once.
+     * @param {Function[]} [listeners] An optional array of listener functions to add/remove.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.manipulateListeners = function manipulateListeners(remove, evt, listeners) {
+        var i;
+        var value;
+        var single = remove ? this.removeListener : this.addListener;
+        var multiple = remove ? this.removeListeners : this.addListeners;
 
-		// If evt is an object then pass each of it's properties to this method
-		if (typeof evt === 'object' && !(evt instanceof RegExp)) {
-			for (i in evt) {
-				if (evt.hasOwnProperty(i) && (value = evt[i])) {
-					// Pass the single listener straight through to the singular method
-					if (typeof value === 'function') {
-						single.call(this, i, value);
-					}
-					else {
-						// Otherwise pass back to the multiple function
-						multiple.call(this, i, value);
-					}
-				}
-			}
-		}
-		else {
-			// So evt must be a string
-			// And listeners must be an array of listeners
-			// Loop over it and pass each one to the multiple method
-			i = listeners.length;
-			while (i--) {
-				single.call(this, evt, listeners[i]);
-			}
-		}
+        // If evt is an object then pass each of its properties to this method
+        if (typeof evt === 'object' && !(evt instanceof RegExp)) {
+            for (i in evt) {
+                if (evt.hasOwnProperty(i) && (value = evt[i])) {
+                    // Pass the single listener straight through to the singular method
+                    if (typeof value === 'function') {
+                        single.call(this, i, value);
+                    }
+                    else {
+                        // Otherwise pass back to the multiple function
+                        multiple.call(this, i, value);
+                    }
+                }
+            }
+        }
+        else {
+            // So evt must be a string
+            // And listeners must be an array of listeners
+            // Loop over it and pass each one to the multiple method
+            i = listeners.length;
+            while (i--) {
+                single.call(this, evt, listeners[i]);
+            }
+        }
 
-		return this;
-	};
+        return this;
+    };
 
-	/**
-	 * Removes all listeners from a specified event.
-	 * If you do not specify an event then all listeners will be removed.
-	 * That means every event will be emptied.
-	 * You can also pass a regex to remove all events that match it.
-	 *
-	 * @param {String|RegExp} [evt] Optional name of the event to remove all listeners for. Will remove from every event if not passed.
-	 * @return {Object} Current instance of EventEmitter for chaining.
-	 */
-	proto.removeEvent = function removeEvent(evt) {
-		var type = typeof evt;
-		var events = this._getEvents();
-		var key;
+    /**
+     * Removes all listeners from a specified event.
+     * If you do not specify an event then all listeners will be removed.
+     * That means every event will be emptied.
+     * You can also pass a regex to remove all events that match it.
+     *
+     * @param {String|RegExp} [evt] Optional name of the event to remove all listeners for. Will remove from every event if not passed.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.removeEvent = function removeEvent(evt) {
+        var type = typeof evt;
+        var events = this._getEvents();
+        var key;
 
-		// Remove different things depending on the state of evt
-		if (type === 'string') {
-			// Remove all listeners for the specified event
-			delete events[evt];
-		}
-		else if (type === 'object') {
-			// Remove all events matching the regex.
-			for (key in events) {
-				if (events.hasOwnProperty(key) && evt.test(key)) {
-					delete events[key];
-				}
-			}
-		}
-		else {
-			// Remove all listeners in all events
-			delete this._events;
-		}
+        // Remove different things depending on the state of evt
+        if (type === 'string') {
+            // Remove all listeners for the specified event
+            delete events[evt];
+        }
+        else if (evt instanceof RegExp) {
+            // Remove all events matching the regex.
+            for (key in events) {
+                if (events.hasOwnProperty(key) && evt.test(key)) {
+                    delete events[key];
+                }
+            }
+        }
+        else {
+            // Remove all listeners in all events
+            delete this._events;
+        }
 
-		return this;
-	};
+        return this;
+    };
 
-	/**
-	 * Alias of removeEvent.
-	 *
-	 * Added to mirror the node API.
-	 */
-	proto.removeAllListeners = alias('removeEvent');
+    /**
+     * Alias of removeEvent.
+     *
+     * Added to mirror the node API.
+     */
+    proto.removeAllListeners = alias('removeEvent');
 
-	/**
-	 * Emits an event of your choice.
-	 * When emitted, every listener attached to that event will be executed.
-	 * If you pass the optional argument array then those arguments will be passed to every listener upon execution.
-	 * Because it uses `apply`, your array of arguments will be passed as if you wrote them out separately.
-	 * So they will not arrive within the array on the other side, they will be separate.
-	 * You can also pass a regular expression to emit to all events that match it.
-	 *
-	 * @param {String|RegExp} evt Name of the event to emit and execute listeners for.
-	 * @param {Array} [args] Optional array of arguments to be passed to each listener.
-	 * @return {Object} Current instance of EventEmitter for chaining.
-	 */
-	proto.emitEvent = function emitEvent(evt, args) {
-		var listeners = this.getListenersAsObject(evt);
-		var listener;
-		var i;
-		var key;
-		var response;
+    /**
+     * Emits an event of your choice.
+     * When emitted, every listener attached to that event will be executed.
+     * If you pass the optional argument array then those arguments will be passed to every listener upon execution.
+     * Because it uses `apply`, your array of arguments will be passed as if you wrote them out separately.
+     * So they will not arrive within the array on the other side, they will be separate.
+     * You can also pass a regular expression to emit to all events that match it.
+     *
+     * @param {String|RegExp} evt Name of the event to emit and execute listeners for.
+     * @param {Array} [args] Optional array of arguments to be passed to each listener.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.emitEvent = function emitEvent(evt, args) {
+        var listenersMap = this.getListenersAsObject(evt);
+        var listeners;
+        var listener;
+        var i;
+        var key;
+        var response;
 
-		for (key in listeners) {
-			if (listeners.hasOwnProperty(key)) {
-				i = listeners[key].length;
+        for (key in listenersMap) {
+            if (listenersMap.hasOwnProperty(key)) {
+                listeners = listenersMap[key].slice(0);
+                i = listeners.length;
 
-				while (i--) {
-					// If the listener returns true then it shall be removed from the event
-					// The function is executed either with a basic call or an apply if there is an args array
-					listener = listeners[key][i];
+                while (i--) {
+                    // If the listener returns true then it shall be removed from the event
+                    // The function is executed either with a basic call or an apply if there is an args array
+                    listener = listeners[i];
 
-					if (listener.once === true) {
-						this.removeListener(evt, listener.listener);
-					}
+                    if (listener.once === true) {
+                        this.removeListener(evt, listener.listener);
+                    }
 
-					response = listener.listener.apply(this, args || []);
+                    response = listener.listener.apply(this, args || []);
 
-					if (response === this._getOnceReturnValue()) {
-						this.removeListener(evt, listener.listener);
-					}
-				}
-			}
-		}
+                    if (response === this._getOnceReturnValue()) {
+                        this.removeListener(evt, listener.listener);
+                    }
+                }
+            }
+        }
 
-		return this;
-	};
+        return this;
+    };
 
-	/**
-	 * Alias of emitEvent
-	 */
-	proto.trigger = alias('emitEvent');
+    /**
+     * Alias of emitEvent
+     */
+    proto.trigger = alias('emitEvent');
 
-	/**
-	 * Subtly different from emitEvent in that it will pass its arguments on to the listeners, as opposed to taking a single array of arguments to pass on.
-	 * As with emitEvent, you can pass a regex in place of the event name to emit to all events that match it.
-	 *
-	 * @param {String|RegExp} evt Name of the event to emit and execute listeners for.
-	 * @param {...*} Optional additional arguments to be passed to each listener.
-	 * @return {Object} Current instance of EventEmitter for chaining.
-	 */
-	proto.emit = function emit(evt) {
-		var args = Array.prototype.slice.call(arguments, 1);
-		return this.emitEvent(evt, args);
-	};
+    /**
+     * Subtly different from emitEvent in that it will pass its arguments on to the listeners, as opposed to taking a single array of arguments to pass on.
+     * As with emitEvent, you can pass a regex in place of the event name to emit to all events that match it.
+     *
+     * @param {String|RegExp} evt Name of the event to emit and execute listeners for.
+     * @param {...*} Optional additional arguments to be passed to each listener.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.emit = function emit(evt) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        return this.emitEvent(evt, args);
+    };
 
-	/**
-	 * Sets the current value to check against when executing listeners. If a
-	 * listeners return value matches the one set here then it will be removed
-	 * after execution. This value defaults to true.
-	 *
-	 * @param {*} value The new value to check for when executing listeners.
-	 * @return {Object} Current instance of EventEmitter for chaining.
-	 */
-	proto.setOnceReturnValue = function setOnceReturnValue(value) {
-		this._onceReturnValue = value;
-		return this;
-	};
+    /**
+     * Sets the current value to check against when executing listeners. If a
+     * listeners return value matches the one set here then it will be removed
+     * after execution. This value defaults to true.
+     *
+     * @param {*} value The new value to check for when executing listeners.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.setOnceReturnValue = function setOnceReturnValue(value) {
+        this._onceReturnValue = value;
+        return this;
+    };
 
-	/**
-	 * Fetches the current value to check against when executing listeners. If
-	 * the listeners return value matches this one then it should be removed
-	 * automatically. It will return true by default.
-	 *
-	 * @return {*|Boolean} The current value to check for or the default, true.
-	 * @api private
-	 */
-	proto._getOnceReturnValue = function _getOnceReturnValue() {
-		if (this.hasOwnProperty('_onceReturnValue')) {
-			return this._onceReturnValue;
-		}
-		else {
-			return true;
-		}
-	};
+    /**
+     * Fetches the current value to check against when executing listeners. If
+     * the listeners return value matches this one then it should be removed
+     * automatically. It will return true by default.
+     *
+     * @return {*|Boolean} The current value to check for or the default, true.
+     * @api private
+     */
+    proto._getOnceReturnValue = function _getOnceReturnValue() {
+        if (this.hasOwnProperty('_onceReturnValue')) {
+            return this._onceReturnValue;
+        }
+        else {
+            return true;
+        }
+    };
 
-	/**
-	 * Fetches the events object and creates one if required.
-	 *
-	 * @return {Object} The events storage object.
-	 * @api private
-	 */
-	proto._getEvents = function _getEvents() {
-		return this._events || (this._events = {});
-	};
+    /**
+     * Fetches the events object and creates one if required.
+     *
+     * @return {Object} The events storage object.
+     * @api private
+     */
+    proto._getEvents = function _getEvents() {
+        return this._events || (this._events = {});
+    };
 
-	/**
-	 * Reverts the global {@link EventEmitter} to its previous value and returns a reference to this version.
-	 *
-	 * @return {Function} Non conflicting EventEmitter class.
-	 */
-	EventEmitter.noConflict = function noConflict() {
-		exports.EventEmitter = originalGlobalValue;
-		return EventEmitter;
-	};
+    /**
+     * Reverts the global {@link EventEmitter} to its previous value and returns a reference to this version.
+     *
+     * @return {Function} Non conflicting EventEmitter class.
+     */
+    EventEmitter.noConflict = function noConflict() {
+        exports.EventEmitter = originalGlobalValue;
+        return EventEmitter;
+    };
 
-	// Expose the class either via AMD, CommonJS or the global object
-	if (typeof define === 'function' && define.amd) {
-		define('eventEmitter/EventEmitter',[],function () {
-			return EventEmitter;
-		});
-	}
-	else if (typeof module === 'object' && module.exports){
-		module.exports = EventEmitter;
-	}
-	else {
-		this.EventEmitter = EventEmitter;
-	}
+    // Expose the class either via AMD, CommonJS or the global object
+    if (typeof define === 'function' && define.amd) {
+        define('eventEmitter/EventEmitter',[],function () {
+            return EventEmitter;
+        });
+    }
+    else if (typeof module === 'object' && module.exports){
+        module.exports = EventEmitter;
+    }
+    else {
+        exports.EventEmitter = EventEmitter;
+    }
 }.call(this));
 
 /*!
- * eventie v1.0.4
- * event binding helper
- *   eventie.bind( elem, 'click', myFn )
- *   eventie.unbind( elem, 'click', myFn )
- */
-
-/*jshint browser: true, undef: true, unused: true */
-/*global define: false */
-
-( function( window ) {
-
-
-
-var docElem = document.documentElement;
-
-var bind = function() {};
-
-function getIEEvent( obj ) {
-  var event = window.event;
-  // add event.target
-  event.target = event.target || event.srcElement || obj;
-  return event;
-}
-
-if ( docElem.addEventListener ) {
-  bind = function( obj, type, fn ) {
-    obj.addEventListener( type, fn, false );
-  };
-} else if ( docElem.attachEvent ) {
-  bind = function( obj, type, fn ) {
-    obj[ type + fn ] = fn.handleEvent ?
-      function() {
-        var event = getIEEvent( obj );
-        fn.handleEvent.call( fn, event );
-      } :
-      function() {
-        var event = getIEEvent( obj );
-        fn.call( obj, event );
-      };
-    obj.attachEvent( "on" + type, obj[ type + fn ] );
-  };
-}
-
-var unbind = function() {};
-
-if ( docElem.removeEventListener ) {
-  unbind = function( obj, type, fn ) {
-    obj.removeEventListener( type, fn, false );
-  };
-} else if ( docElem.detachEvent ) {
-  unbind = function( obj, type, fn ) {
-    obj.detachEvent( "on" + type, obj[ type + fn ] );
-    try {
-      delete obj[ type + fn ];
-    } catch ( err ) {
-      // can't delete window object properties
-      obj[ type + fn ] = undefined;
-    }
-  };
-}
-
-var eventie = {
-  bind: bind,
-  unbind: unbind
-};
-
-// transport
-if ( typeof define === 'function' && define.amd ) {
-  // AMD
-  define( 'eventie/eventie',eventie );
-} else {
-  // browser global
-  window.eventie = eventie;
-}
-
-})( this );
-
-/*!
- * imagesLoaded v3.2.0
+ * imagesLoaded v4.0.0
  * JavaScript is all like "You images are done yet or what?"
  * MIT License
  */
@@ -2958,24 +2882,21 @@ if ( typeof define === 'function' && define.amd ) {
   if ( typeof define == 'function' && define.amd ) {
     // AMD
     define( [
-      'eventEmitter/EventEmitter',
-      'eventie/eventie'
-    ], function( EventEmitter, eventie ) {
-      return factory( window, EventEmitter, eventie );
+      'eventEmitter/EventEmitter'
+    ], function( EventEmitter ) {
+      return factory( window, EventEmitter );
     });
   } else if ( typeof module == 'object' && module.exports ) {
     // CommonJS
     module.exports = factory(
       window,
-      require('wolfy87-eventemitter'),
-      require('eventie')
+      require('wolfy87-eventemitter')
     );
   } else {
     // browser global
     window.imagesLoaded = factory(
       window,
-      window.EventEmitter,
-      window.eventie
+      window.EventEmitter
     );
   }
 
@@ -2983,7 +2904,7 @@ if ( typeof define === 'function' && define.amd ) {
 
 // --------------------------  factory -------------------------- //
 
-function factory( window, EventEmitter, eventie ) {
+function factory( window, EventEmitter ) {
 
 
 
@@ -3000,15 +2921,10 @@ function extend( a, b ) {
   return a;
 }
 
-var objToString = Object.prototype.toString;
-function isArray( obj ) {
-  return objToString.call( obj ) == '[object Array]';
-}
-
 // turn element or nodeList into an array
 function makeArray( obj ) {
   var ary = [];
-  if ( isArray( obj ) ) {
+  if ( Array.isArray( obj ) ) {
     // use object if already an array
     ary = obj;
   } else if ( typeof obj.length == 'number' ) {
@@ -3023,309 +2939,303 @@ function makeArray( obj ) {
   return ary;
 }
 
-  // -------------------------- imagesLoaded -------------------------- //
+// -------------------------- imagesLoaded -------------------------- //
 
-  /**
-   * @param {Array, Element, NodeList, String} elem
-   * @param {Object or Function} options - if function, use as callback
-   * @param {Function} onAlways - callback function
-   */
-  function ImagesLoaded( elem, options, onAlways ) {
-    // coerce ImagesLoaded() without new, to be new ImagesLoaded()
-    if ( !( this instanceof ImagesLoaded ) ) {
-      return new ImagesLoaded( elem, options, onAlways );
+/**
+ * @param {Array, Element, NodeList, String} elem
+ * @param {Object or Function} options - if function, use as callback
+ * @param {Function} onAlways - callback function
+ */
+function ImagesLoaded( elem, options, onAlways ) {
+  // coerce ImagesLoaded() without new, to be new ImagesLoaded()
+  if ( !( this instanceof ImagesLoaded ) ) {
+    return new ImagesLoaded( elem, options, onAlways );
+  }
+  // use elem as selector string
+  if ( typeof elem == 'string' ) {
+    elem = document.querySelectorAll( elem );
+  }
+
+  this.elements = makeArray( elem );
+  this.options = extend( {}, this.options );
+
+  if ( typeof options == 'function' ) {
+    onAlways = options;
+  } else {
+    extend( this.options, options );
+  }
+
+  if ( onAlways ) {
+    this.on( 'always', onAlways );
+  }
+
+  this.getImages();
+
+  if ( $ ) {
+    // add jQuery Deferred object
+    this.jqDeferred = new $.Deferred();
+  }
+
+  // HACK check async to allow time to bind listeners
+  setTimeout( function() {
+    this.check();
+  }.bind( this ));
+}
+
+ImagesLoaded.prototype = Object.create( EventEmitter.prototype );
+
+ImagesLoaded.prototype.options = {};
+
+ImagesLoaded.prototype.getImages = function() {
+  this.images = [];
+
+  // filter & find items if we have an item selector
+  this.elements.forEach( this.addElementImages, this );
+};
+
+/**
+ * @param {Node} element
+ */
+ImagesLoaded.prototype.addElementImages = function( elem ) {
+  // filter siblings
+  if ( elem.nodeName == 'IMG' ) {
+    this.addImage( elem );
+  }
+  // get background image on element
+  if ( this.options.background === true ) {
+    this.addElementBackgroundImages( elem );
+  }
+
+  // find children
+  // no non-element nodes, #143
+  var nodeType = elem.nodeType;
+  if ( !nodeType || !elementNodeTypes[ nodeType ] ) {
+    return;
+  }
+  var childImgs = elem.querySelectorAll('img');
+  // concat childElems to filterFound array
+  for ( var i=0; i < childImgs.length; i++ ) {
+    var img = childImgs[i];
+    this.addImage( img );
+  }
+
+  // get child background images
+  if ( typeof this.options.background == 'string' ) {
+    var children = elem.querySelectorAll( this.options.background );
+    for ( i=0; i < children.length; i++ ) {
+      var child = children[i];
+      this.addElementBackgroundImages( child );
     }
-    // use elem as selector string
-    if ( typeof elem == 'string' ) {
-      elem = document.querySelectorAll( elem );
+  }
+};
+
+var elementNodeTypes = {
+  1: true,
+  9: true,
+  11: true
+};
+
+ImagesLoaded.prototype.addElementBackgroundImages = function( elem ) {
+  var style = getComputedStyle( elem );
+  if ( !style ) {
+    // Firefox returns null if in a hidden iframe https://bugzil.la/548397
+    return;
+  }
+  // get url inside url("...")
+  var reURL = /url\((['"])?(.*?)\1\)/gi;
+  var matches = reURL.exec( style.backgroundImage );
+  while ( matches !== null ) {
+    var url = matches && matches[2];
+    if ( url ) {
+      this.addBackground( url, elem );
     }
+    matches = reURL.exec( style.backgroundImage );
+  }
+};
 
-    this.elements = makeArray( elem );
-    this.options = extend( {}, this.options );
+/**
+ * @param {Image} img
+ */
+ImagesLoaded.prototype.addImage = function( img ) {
+  var loadingImage = new LoadingImage( img );
+  this.images.push( loadingImage );
+};
 
-    if ( typeof options == 'function' ) {
-      onAlways = options;
-    } else {
-      extend( this.options, options );
-    }
+ImagesLoaded.prototype.addBackground = function( url, elem ) {
+  var background = new Background( url, elem );
+  this.images.push( background );
+};
 
-    if ( onAlways ) {
-      this.on( 'always', onAlways );
-    }
+ImagesLoaded.prototype.check = function() {
+  var _this = this;
+  this.progressedCount = 0;
+  this.hasAnyBroken = false;
+  // complete if no images
+  if ( !this.images.length ) {
+    this.complete();
+    return;
+  }
 
-    this.getImages();
-
-    if ( $ ) {
-      // add jQuery Deferred object
-      this.jqDeferred = new $.Deferred();
-    }
-
-    // HACK check async to allow time to bind listeners
-    var _this = this;
+  function onProgress( image, elem, message ) {
+    // HACK - Chrome triggers event before object properties have changed. #83
     setTimeout( function() {
-      _this.check();
+      _this.progress( image, elem, message );
     });
   }
 
-  ImagesLoaded.prototype = new EventEmitter();
+  this.images.forEach( function( loadingImage ) {
+    loadingImage.once( 'progress', onProgress );
+    loadingImage.check();
+  });
+};
 
-  ImagesLoaded.prototype.options = {};
-
-  ImagesLoaded.prototype.getImages = function() {
-    this.images = [];
-
-    // filter & find items if we have an item selector
-    for ( var i=0; i < this.elements.length; i++ ) {
-      var elem = this.elements[i];
-      this.addElementImages( elem );
-    }
-  };
-
-  /**
-   * @param {Node} element
-   */
-  ImagesLoaded.prototype.addElementImages = function( elem ) {
-    // filter siblings
-    if ( elem.nodeName == 'IMG' ) {
-      this.addImage( elem );
-    }
-    // get background image on element
-    if ( this.options.background === true ) {
-      this.addElementBackgroundImages( elem );
-    }
-
-    // find children
-    // no non-element nodes, #143
-    var nodeType = elem.nodeType;
-    if ( !nodeType || !elementNodeTypes[ nodeType ] ) {
-      return;
-    }
-    var childImgs = elem.querySelectorAll('img');
-    // concat childElems to filterFound array
-    for ( var i=0; i < childImgs.length; i++ ) {
-      var img = childImgs[i];
-      this.addImage( img );
-    }
-
-    // get child background images
-    if ( typeof this.options.background == 'string' ) {
-      var children = elem.querySelectorAll( this.options.background );
-      for ( i=0; i < children.length; i++ ) {
-        var child = children[i];
-        this.addElementBackgroundImages( child );
-      }
-    }
-  };
-
-  var elementNodeTypes = {
-    1: true,
-    9: true,
-    11: true
-  };
-
-  ImagesLoaded.prototype.addElementBackgroundImages = function( elem ) {
-    var style = getStyle( elem );
-    // get url inside url("...")
-    var reURL = /url\(['"]*([^'"\)]+)['"]*\)/gi;
-    var matches = reURL.exec( style.backgroundImage );
-    while ( matches !== null ) {
-      var url = matches && matches[1];
-      if ( url ) {
-        this.addBackground( url, elem );
-      }
-      matches = reURL.exec( style.backgroundImage );
-    }
-  };
-
-  // IE8
-  var getStyle = window.getComputedStyle || function( elem ) {
-    return elem.currentStyle;
-  };
-
-  /**
-   * @param {Image} img
-   */
-  ImagesLoaded.prototype.addImage = function( img ) {
-    var loadingImage = new LoadingImage( img );
-    this.images.push( loadingImage );
-  };
-
-  ImagesLoaded.prototype.addBackground = function( url, elem ) {
-    var background = new Background( url, elem );
-    this.images.push( background );
-  };
-
-  ImagesLoaded.prototype.check = function() {
-    var _this = this;
-    this.progressedCount = 0;
-    this.hasAnyBroken = false;
-    // complete if no images
-    if ( !this.images.length ) {
-      this.complete();
-      return;
-    }
-
-    function onProgress( image, elem, message ) {
-      // HACK - Chrome triggers event before object properties have changed. #83
-      setTimeout( function() {
-        _this.progress( image, elem, message );
-      });
-    }
-
-    for ( var i=0; i < this.images.length; i++ ) {
-      var loadingImage = this.images[i];
-      loadingImage.once( 'progress', onProgress );
-      loadingImage.check();
-    }
-  };
-
-  ImagesLoaded.prototype.progress = function( image, elem, message ) {
-    this.progressedCount++;
-    this.hasAnyBroken = this.hasAnyBroken || !image.isLoaded;
-    // progress event
-    this.emit( 'progress', this, image, elem );
-    if ( this.jqDeferred && this.jqDeferred.notify ) {
-      this.jqDeferred.notify( this, image );
-    }
-    // check if completed
-    if ( this.progressedCount == this.images.length ) {
-      this.complete();
-    }
-
-    if ( this.options.debug && console ) {
-      console.log( 'progress: ' + message, image, elem );
-    }
-  };
-
-  ImagesLoaded.prototype.complete = function() {
-    var eventName = this.hasAnyBroken ? 'fail' : 'done';
-    this.isComplete = true;
-    this.emit( eventName, this );
-    this.emit( 'always', this );
-    if ( this.jqDeferred ) {
-      var jqMethod = this.hasAnyBroken ? 'reject' : 'resolve';
-      this.jqDeferred[ jqMethod ]( this );
-    }
-  };
-
-  // --------------------------  -------------------------- //
-
-  function LoadingImage( img ) {
-    this.img = img;
+ImagesLoaded.prototype.progress = function( image, elem, message ) {
+  this.progressedCount++;
+  this.hasAnyBroken = this.hasAnyBroken || !image.isLoaded;
+  // progress event
+  this.emit( 'progress', this, image, elem );
+  if ( this.jqDeferred && this.jqDeferred.notify ) {
+    this.jqDeferred.notify( this, image );
+  }
+  // check if completed
+  if ( this.progressedCount == this.images.length ) {
+    this.complete();
   }
 
-  LoadingImage.prototype = new EventEmitter();
+  if ( this.options.debug && console ) {
+    console.log( 'progress: ' + message, image, elem );
+  }
+};
 
-  LoadingImage.prototype.check = function() {
-    // If complete is true and browser supports natural sizes,
-    // try to check for image status manually.
-    var isComplete = this.getIsImageComplete();
-    if ( isComplete ) {
-      // report based on naturalWidth
-      this.confirm( this.img.naturalWidth !== 0, 'naturalWidth' );
-      return;
-    }
+ImagesLoaded.prototype.complete = function() {
+  var eventName = this.hasAnyBroken ? 'fail' : 'done';
+  this.isComplete = true;
+  this.emit( eventName, this );
+  this.emit( 'always', this );
+  if ( this.jqDeferred ) {
+    var jqMethod = this.hasAnyBroken ? 'reject' : 'resolve';
+    this.jqDeferred[ jqMethod ]( this );
+  }
+};
 
-    // If none of the checks above matched, simulate loading on detached element.
-    this.proxyImage = new Image();
-    eventie.bind( this.proxyImage, 'load', this );
-    eventie.bind( this.proxyImage, 'error', this );
-    // bind to image as well for Firefox. #191
-    eventie.bind( this.img, 'load', this );
-    eventie.bind( this.img, 'error', this );
-    this.proxyImage.src = this.img.src;
-  };
+// --------------------------  -------------------------- //
 
-  LoadingImage.prototype.getIsImageComplete = function() {
-    return this.img.complete && this.img.naturalWidth !== undefined;
-  };
+function LoadingImage( img ) {
+  this.img = img;
+}
 
-  LoadingImage.prototype.confirm = function( isLoaded, message ) {
-    this.isLoaded = isLoaded;
-    this.emit( 'progress', this, this.img, message );
-  };
+LoadingImage.prototype = Object.create( EventEmitter.prototype );
 
-  // ----- events ----- //
-
-  // trigger specified handler for event type
-  LoadingImage.prototype.handleEvent = function( event ) {
-    var method = 'on' + event.type;
-    if ( this[ method ] ) {
-      this[ method ]( event );
-    }
-  };
-
-  LoadingImage.prototype.onload = function() {
-    this.confirm( true, 'onload' );
-    this.unbindEvents();
-  };
-
-  LoadingImage.prototype.onerror = function() {
-    this.confirm( false, 'onerror' );
-    this.unbindEvents();
-  };
-
-  LoadingImage.prototype.unbindEvents = function() {
-    eventie.unbind( this.proxyImage, 'load', this );
-    eventie.unbind( this.proxyImage, 'error', this );
-    eventie.unbind( this.img, 'load', this );
-    eventie.unbind( this.img, 'error', this );
-  };
-
-  // -------------------------- Background -------------------------- //
-
-  function Background( url, element ) {
-    this.url = url;
-    this.element = element;
-    this.img = new Image();
+LoadingImage.prototype.check = function() {
+  // If complete is true and browser supports natural sizes,
+  // try to check for image status manually.
+  var isComplete = this.getIsImageComplete();
+  if ( isComplete ) {
+    // report based on naturalWidth
+    this.confirm( this.img.naturalWidth !== 0, 'naturalWidth' );
+    return;
   }
 
-  // inherit LoadingImage prototype
-  Background.prototype = new LoadingImage();
+  // If none of the checks above matched, simulate loading on detached element.
+  this.proxyImage = new Image();
+  this.proxyImage.addEventListener( 'load', this );
+  this.proxyImage.addEventListener( 'error', this );
+  // bind to image as well for Firefox. #191
+  this.img.addEventListener( 'load', this );
+  this.img.addEventListener( 'error', this );
+  this.proxyImage.src = this.img.src;
+};
 
-  Background.prototype.check = function() {
-    eventie.bind( this.img, 'load', this );
-    eventie.bind( this.img, 'error', this );
-    this.img.src = this.url;
-    // check if image is already complete
-    var isComplete = this.getIsImageComplete();
-    if ( isComplete ) {
-      this.confirm( this.img.naturalWidth !== 0, 'naturalWidth' );
-      this.unbindEvents();
-    }
+LoadingImage.prototype.getIsImageComplete = function() {
+  return this.img.complete && this.img.naturalWidth !== undefined;
+};
+
+LoadingImage.prototype.confirm = function( isLoaded, message ) {
+  this.isLoaded = isLoaded;
+  this.emit( 'progress', this, this.img, message );
+};
+
+// ----- events ----- //
+
+// trigger specified handler for event type
+LoadingImage.prototype.handleEvent = function( event ) {
+  var method = 'on' + event.type;
+  if ( this[ method ] ) {
+    this[ method ]( event );
+  }
+};
+
+LoadingImage.prototype.onload = function() {
+  this.confirm( true, 'onload' );
+  this.unbindEvents();
+};
+
+LoadingImage.prototype.onerror = function() {
+  this.confirm( false, 'onerror' );
+  this.unbindEvents();
+};
+
+LoadingImage.prototype.unbindEvents = function() {
+  this.proxyImage.removeEventListener( 'load', this );
+  this.proxyImage.removeEventListener( 'error', this );
+  this.img.removeEventListener( 'load', this );
+  this.img.removeEventListener( 'error', this );
+};
+
+// -------------------------- Background -------------------------- //
+
+function Background( url, element ) {
+  this.url = url;
+  this.element = element;
+  this.img = new Image();
+}
+
+// inherit LoadingImage prototype
+Background.prototype = Object.create( LoadingImage.prototype );
+
+Background.prototype.check = function() {
+  this.img.addEventListener( 'load', this );
+  this.img.addEventListener( 'error', this );
+  this.img.src = this.url;
+  // check if image is already complete
+  var isComplete = this.getIsImageComplete();
+  if ( isComplete ) {
+    this.confirm( this.img.naturalWidth !== 0, 'naturalWidth' );
+    this.unbindEvents();
+  }
+};
+
+Background.prototype.unbindEvents = function() {
+  this.img.addEventListener( 'load', this );
+  this.img.addEventListener( 'error', this );
+};
+
+Background.prototype.confirm = function( isLoaded, message ) {
+  this.isLoaded = isLoaded;
+  this.emit( 'progress', this, this.element, message );
+};
+
+// -------------------------- jQuery -------------------------- //
+
+ImagesLoaded.makeJQueryPlugin = function( jQuery ) {
+  jQuery = jQuery || window.jQuery;
+  if ( !jQuery ) {
+    return;
+  }
+  // set local variable
+  $ = jQuery;
+  // $().imagesLoaded()
+  $.fn.imagesLoaded = function( options, callback ) {
+    var instance = new ImagesLoaded( this, options, callback );
+    return instance.jqDeferred.promise( $(this) );
   };
+};
+// try making plugin
+ImagesLoaded.makeJQueryPlugin();
 
-  Background.prototype.unbindEvents = function() {
-    eventie.unbind( this.img, 'load', this );
-    eventie.unbind( this.img, 'error', this );
-  };
+// --------------------------  -------------------------- //
 
-  Background.prototype.confirm = function( isLoaded, message ) {
-    this.isLoaded = isLoaded;
-    this.emit( 'progress', this, this.element, message );
-  };
-
-  // -------------------------- jQuery -------------------------- //
-
-  ImagesLoaded.makeJQueryPlugin = function( jQuery ) {
-    jQuery = jQuery || window.jQuery;
-    if ( !jQuery ) {
-      return;
-    }
-    // set local variable
-    $ = jQuery;
-    // $().imagesLoaded()
-    $.fn.imagesLoaded = function( options, callback ) {
-      var instance = new ImagesLoaded( this, options, callback );
-      return instance.jqDeferred.promise( $(this) );
-    };
-  };
-  // try making plugin
-  ImagesLoaded.makeJQueryPlugin();
-
-  // --------------------------  -------------------------- //
-
-  return ImagesLoaded;
+return ImagesLoaded;
 
 });
 
@@ -4105,20 +4015,22 @@ if ( typeof define === 'function' && define.amd ) {
      * @return {Object} Current instance of EventEmitter for chaining.
      */
     proto.emitEvent = function emitEvent(evt, args) {
-        var listeners = this.getListenersAsObject(evt);
+        var listenersMap = this.getListenersAsObject(evt);
+        var listeners;
         var listener;
         var i;
         var key;
         var response;
 
-        for (key in listeners) {
-            if (listeners.hasOwnProperty(key)) {
-                i = listeners[key].length;
+        for (key in listenersMap) {
+            if (listenersMap.hasOwnProperty(key)) {
+                listeners = listenersMap[key].slice(0);
+                i = listeners.length;
 
                 while (i--) {
                     // If the listener returns true then it shall be removed from the event
                     // The function is executed either with a basic call or an apply if there is an args array
-                    listener = listeners[key][i];
+                    listener = listeners[i];
 
                     if (listener.once === true) {
                         this.removeListener(evt, listener.listener);
@@ -4817,14 +4729,19 @@ Item.prototype.getPosition = function() {
   var layoutOptions = this.layout.options;
   var isOriginLeft = layoutOptions.isOriginLeft;
   var isOriginTop = layoutOptions.isOriginTop;
-  var x = parseInt( style[ isOriginLeft ? 'left' : 'right' ], 10 );
-  var y = parseInt( style[ isOriginTop ? 'top' : 'bottom' ], 10 );
+  var xValue = style[ isOriginLeft ? 'left' : 'right' ];
+  var yValue = style[ isOriginTop ? 'top' : 'bottom' ];
+  // convert percent to pixels
+  var layoutSize = this.layout.size;
+  var x = xValue.indexOf('%') != -1 ?
+    ( parseFloat( xValue ) / 100 ) * layoutSize.width : parseInt( xValue, 10 );
+  var y = yValue.indexOf('%') != -1 ?
+    ( parseFloat( yValue ) / 100 ) * layoutSize.height : parseInt( yValue, 10 );
 
   // clean up 'auto' or other non-integer values
   x = isNaN( x ) ? 0 : x;
   y = isNaN( y ) ? 0 : y;
   // remove padding from measurement
-  var layoutSize = this.layout.size;
   x -= isOriginLeft ? layoutSize.paddingLeft : layoutSize.paddingRight;
   y -= isOriginTop ? layoutSize.paddingTop : layoutSize.paddingBottom;
 
@@ -4844,10 +4761,8 @@ Item.prototype.layoutPosition = function() {
   var xResetProperty = layoutOptions.isOriginLeft ? 'right' : 'left';
 
   var x = this.position.x + layoutSize[ xPadding ];
-  // set in percentage
-  x = layoutOptions.percentPosition && !layoutOptions.isHorizontal ?
-    ( ( x / layoutSize.width ) * 100 ) + '%' : x + 'px';
-  style[ xProperty ] = x;
+  // set in percentage or pixels
+  style[ xProperty ] = this.getXValue( x );
   // reset other property
   style[ xResetProperty ] = '';
 
@@ -4857,10 +4772,8 @@ Item.prototype.layoutPosition = function() {
   var yResetProperty = layoutOptions.isOriginTop ? 'bottom' : 'top';
 
   var y = this.position.y + layoutSize[ yPadding ];
-  // set in percentage
-  y = layoutOptions.percentPosition && layoutOptions.isHorizontal ?
-    ( ( y / layoutSize.height ) * 100 ) + '%' : y + 'px';
-  style[ yProperty ] = y;
+  // set in percentage or pixels
+  style[ yProperty ] = this.getYValue( y );
   // reset other property
   style[ yResetProperty ] = '';
 
@@ -4868,15 +4781,17 @@ Item.prototype.layoutPosition = function() {
   this.emitEvent( 'layout', [ this ] );
 };
 
+Item.prototype.getXValue = function( x ) {
+  var layoutOptions = this.layout.options;
+  return layoutOptions.percentPosition && !layoutOptions.isHorizontal ?
+    ( ( x / this.layout.size.width ) * 100 ) + '%' : x + 'px';
+};
 
-// transform translate function
-var translate = is3d ?
-  function( x, y ) {
-    return 'translate3d(' + x + 'px, ' + y + 'px, 0)';
-  } :
-  function( x, y ) {
-    return 'translate(' + x + 'px, ' + y + 'px)';
-  };
+Item.prototype.getYValue = function( y ) {
+  var layoutOptions = this.layout.options;
+  return layoutOptions.percentPosition && layoutOptions.isHorizontal ?
+    ( ( y / this.layout.size.height ) * 100 ) + '%' : y + 'px';
+};
 
 
 Item.prototype._transitionTo = function( x, y ) {
@@ -4901,11 +4816,7 @@ Item.prototype._transitionTo = function( x, y ) {
   var transX = x - curX;
   var transY = y - curY;
   var transitionStyle = {};
-  // flip cooridinates if origin on right or bottom
-  var layoutOptions = this.layout.options;
-  transX = layoutOptions.isOriginLeft ? transX : -transX;
-  transY = layoutOptions.isOriginTop ? transY : -transY;
-  transitionStyle.transform = translate( transX, transY );
+  transitionStyle.transform = this.getTranslate( transX, transY );
 
   this.transition({
     to: transitionStyle,
@@ -4914,6 +4825,19 @@ Item.prototype._transitionTo = function( x, y ) {
     },
     isCleaning: true
   });
+};
+
+Item.prototype.getTranslate = function( x, y ) {
+  // flip cooridinates if origin on right or bottom
+  var layoutOptions = this.layout.options;
+  x = layoutOptions.isOriginLeft ? x : -x;
+  y = layoutOptions.isOriginTop ? y : -y;
+
+  if ( is3d ) {
+    return 'translate3d(' + x + 'px, ' + y + 'px, 0)';
+  }
+
+  return 'translate(' + x + 'px, ' + y + 'px)';
 };
 
 // non transition + transform support
@@ -4995,28 +4919,36 @@ Item.prototype._transition = function( args ) {
 
 };
 
-var itemTransitionProperties = transformProperty && ( utils.toDashed( transformProperty ) +
-  ',opacity' );
+// dash before all cap letters, including first for
+// WebkitTransform => -webkit-transform
+function toDashedAll( str ) {
+  return str.replace( /([A-Z])/g, function( $1 ) {
+    return '-' + $1.toLowerCase();
+  });
+}
+
+var transitionProps = 'opacity,' +
+  toDashedAll( vendorProperties.transform || 'transform' );
 
 Item.prototype.enableTransition = function(/* style */) {
-  // only enable if not already transitioning
-  // bug in IE10 were re-setting transition style will prevent
-  // transitionend event from triggering
+  // HACK changing transitionProperty during a transition
+  // will cause transition to jump
   if ( this.isTransitioning ) {
     return;
   }
 
-  // make transition: foo, bar, baz from style object
-  // TODO uncomment this bit when IE10 bug is resolved
-  // var transitionValue = [];
+  // make `transition: foo, bar, baz` from style object
+  // HACK un-comment this when enableTransition can work
+  // while a transition is happening
+  // var transitionValues = [];
   // for ( var prop in style ) {
   //   // dash-ify camelCased properties like WebkitTransition
-  //   transitionValue.push( toDash( prop ) );
+  //   prop = vendorProperties[ prop ] || prop;
+  //   transitionValues.push( toDashedAll( prop ) );
   // }
   // enable transition styles
-  // HACK always enable transform,opacity for IE10
   this.css({
-    transitionProperty: itemTransitionProperties,
+    transitionProperty: transitionProps,
     transitionDuration: this.layout.options.transitionDuration
   });
   // listen for transition end event
@@ -5219,7 +5151,7 @@ return Item;
 }));
 
 /*!
- * Outlayer v1.4.0
+ * Outlayer v1.4.2
  * the brains and guts of a layout library
  * MIT license
  */
@@ -5634,7 +5566,7 @@ Outlayer.prototype._setContainerMeasure = function( measure, isWidth ) {
 Outlayer.prototype._emitCompleteOnItems = function( eventName, items ) {
   var _this = this;
   function onComplete() {
-    _this.emitEvent( eventName + 'Complete', [ items ] );
+    _this.dispatchEvent( eventName + 'Complete', null, [ items ] );
   }
 
   var count = items.length;
@@ -5655,6 +5587,32 @@ Outlayer.prototype._emitCompleteOnItems = function( eventName, items ) {
   for ( var i=0, len = items.length; i < len; i++ ) {
     var item = items[i];
     item.once( eventName, tick );
+  }
+};
+
+/**
+ * emits events via eventEmitter and jQuery events
+ * @param {String} type - name of event
+ * @param {Event} event - original event
+ * @param {Array} args - extra arguments
+ */
+Outlayer.prototype.dispatchEvent = function( type, event, args ) {
+  // add original event to arguments
+  var emitArgs = event ? [ event ].concat( args ) : args;
+  this.emitEvent( type, emitArgs );
+
+  if ( jQuery ) {
+    // set this.$element
+    this.$element = this.$element || jQuery( this.element );
+    if ( event ) {
+      // create jQuery event
+      var $event = jQuery.Event( event );
+      $event.type = type;
+      this.$element.trigger( $event, args );
+    } else {
+      // just trigger with type if no event available
+      this.$element.trigger( type, args );
+    }
   }
 };
 
@@ -6130,7 +6088,8 @@ return Outlayer;
 'use strict';
 
 var AnyGrid = Outlayer.create( 'anyGrid', {
-    masonry: true,
+    masonry: false,
+    stacked: false,
     perRow: {
         xxs: 1,
         xs: 1,
@@ -6151,11 +6110,11 @@ var AnyGrid = Outlayer.create( 'anyGrid', {
 
 AnyGrid.prototype.getBreakPoint = function() {
     return this.breakPoint;
-}
+};
 
 AnyGrid.prototype.getPerRow = function() {
     return this.perRow;
-}
+};
 
 AnyGrid.prototype.resize = function() {
     if ( !this.isResizeBound || !this.needsResizeLayout() ) {
@@ -6169,33 +6128,41 @@ AnyGrid.prototype.resize = function() {
 AnyGrid.prototype._setUp = function() {
     this.getSize();
 
-    this.containerWidth = Math.floor(this.size.outerWidth);
+    var containerWidth = Math.floor(this.size.outerWidth);
 
-    if (this.containerWidth >= 1500) {
+    if (containerWidth >= 1500) {
         this.perRow = this.options.perRow.xxl;
-        this.breakPoint = 'xxl'
-    }else if (this.containerWidth >= 1250) {
+        this.breakPoint = 'xxl';
+    }else if (containerWidth >= 1250) {
         this.perRow = this.options.perRow.xl;
-        this.breakPoint = 'xl'
-    }else if (this.containerWidth >= 1000) {
+        this.breakPoint = 'xl';
+    }else if (containerWidth >= 1000) {
         this.perRow = this.options.perRow.lg;
-        this.breakPoint = 'lg'
-    }else if (this.containerWidth >= 750) {
+        this.breakPoint = 'lg';
+    }else if (containerWidth >= 750) {
         this.perRow = this.options.perRow.md;
-        this.breakPoint = 'md'
-    }else if (this.containerWidth >= 500) {
+        this.breakPoint = 'md';
+    }else if (containerWidth >= 500) {
         this.perRow = this.options.perRow.sm;
-        this.breakPoint = 'sm'
-    }else if (this.containerWidth >= 250) {
+        this.breakPoint = 'sm';
+    }else if (containerWidth >= 250) {
         this.perRow = this.options.perRow.xs;
-        this.breakPoint = 'xs'
+        this.breakPoint = 'xs';
     }else {
         this.perRow = this.options.perRow.xxs;
-        this.breakPoint = 'xxs'
+        this.breakPoint = 'xxs';
     }
 
     if (!this.perRow) { // try to just set it to what was passed
         this.perRow = parseInt(this.options.perRow);
+    }
+
+    this.containerWidth = containerWidth;
+
+    if (this.options.adjust_gutter && this.items.length) {
+        this.itemPadding = getSize(this.items[0].element).paddingLeft;
+        this.element.parentNode.style.marginLeft = (this.itemPadding * -1) + 'px';
+        this.containerWidth = containerWidth + (this.itemPadding * 2);
     }
 
     this.columnWidth = (this.containerWidth / this.perRow);
@@ -6207,11 +6174,11 @@ AnyGrid.prototype._setUp = function() {
     this.rows = {};
     for (var i = 0; i < this.cols; i++) {
         this.columns[i] = 0;
-    };
+    }
 
     this.maxHeight = 0;
     this.itemIndex = 0;
-}
+};
 
 AnyGrid.prototype._create = function() {
     var that = this;
@@ -6230,8 +6197,6 @@ AnyGrid.prototype._resetLayout = function() {
 };
 
 AnyGrid.prototype._getItemLayoutPosition = function( item ) {
-    item.element.style.width = this.columnWidth + 'px';
-
     item.getSize();
 
     var column = this.itemIndex % this.cols;
@@ -6239,30 +6204,46 @@ AnyGrid.prototype._getItemLayoutPosition = function( item ) {
     var x = column * this.columnWidth;
     var y = this.columns[column];
 
+    var itemHeight = (this.options.itemHeight ? this.options.itemHeight : item.size.height);
+
     if (this.options.masonry) {
-        this.columns[column] = this.columns[column] + item.size.height;
+        this.columns[column] = this.columns[column] + itemHeight;
+        this.maxHeight = Math.max(this.maxHeight, this.columns[column]);
+    } else if (this.options.stacked) {
+        var rows = (this.items.length / this.cols);
+        column = Math.floor(this.itemIndex / rows);
+        var row = (Math.floor((this.itemIndex + 1) / (column + 1)) - 1);
+
+        x = column * this.columnWidth;
+        y = this.columns[column];
+
+        this.columns[column] = this.columns[column] + itemHeight;
+
         this.maxHeight = Math.max(this.maxHeight, this.columns[column]);
     } else {
         var row = Math.floor( this.itemIndex / this.cols );
         var firstColumn = (row > 0);
 
         if (firstColumn) {
-            this.columns[column] = this.rows[(row - 1)].maxHeight + item.size.height;
+            this.columns[column] = this.rows[(row - 1)].maxHeight + itemHeight;
         } else {
-            this.columns[column] = this.columns[column] + item.size.height;
-        }
-
-        this.rows[row] = this.rows[row] || {};
-        if (!this.rows[row].maxHeight || (this.columns[column] > this.rows[row].maxHeight)) {
-            this.rows[row].maxHeight = this.columns[column];
+            this.columns[column] = this.columns[column] + itemHeight;
         }
 
         if (firstColumn) {
             y = this.rows[(row - 1)].maxHeight;
-            this.maxHeight = Math.max(this.maxHeight, y + item.size.height);
+            this.maxHeight = Math.max(this.maxHeight, y + itemHeight);
         } else { // if it's the fist row y = 0 and maxHeight is just the height of the tallest item
-            this.maxHeight = Math.max(this.maxHeight, item.size.height);
+            this.maxHeight = Math.max(this.maxHeight, itemHeight);
         }
+    }
+
+    this.rows[row] = this.rows[row] || {};
+    if (!this.rows[row].maxHeight || (this.columns[column] > this.rows[row].maxHeight)) {
+        this.rows[row].maxHeight = this.columns[column];
+    }
+    if (!this.rows[row].height || (itemHeight > this.rows[row].height)) {
+        this.rows[row].height = itemHeight;
     }
 
     this.itemIndex++;
@@ -6273,6 +6254,17 @@ AnyGrid.prototype._getItemLayoutPosition = function( item ) {
     };
 };
 
+AnyGrid.prototype._postLayout = function() {
+    this.resizeItems();
+    this.resizeContainer();
+};
+
+AnyGrid.prototype.resizeItems = function() {
+    for (var i = 0; i < this.items.length; i++) {
+        this.items[i].element.style.width = this.columnWidth + 'px';
+    }
+};
+
 AnyGrid.prototype._getContainerSize = function() {
     return {
         height: this.maxHeight
@@ -6280,6 +6272,109 @@ AnyGrid.prototype._getContainerSize = function() {
 };
 
 return AnyGrid;
+
+}));
+//Overriding to add height and width to transitionProps.
+( function( window, factory ) {
+'use strict';
+  // universal module definition
+    // browser global
+    window.AnyGrid = window.AnyGrid || {};
+    window.AnyGrid.Item = factory(
+      window.Outlayer
+    );
+
+}( window, function factory( Outlayer ) {
+'use strict';
+
+// -------------------------- Item -------------------------- //
+
+var transitionProperty = getStyleProperty('transition');
+var transformProperty = getStyleProperty('transform');
+var supportsCSS3 = transitionProperty && transformProperty;
+var is3d = !!getStyleProperty('perspective');
+
+var transitionEndEvent = {
+  WebkitTransition: 'webkitTransitionEnd',
+  MozTransition: 'transitionend',
+  OTransition: 'otransitionend',
+  transition: 'transitionend'
+}[ transitionProperty ];
+
+// properties that could have vendor prefix
+var prefixableProperties = [
+  'transform',
+  'transition',
+  'transitionDuration',
+  'transitionProperty'
+];
+
+// cache all vendor properties
+var vendorProperties = ( function() {
+  var cache = {};
+  for ( var i=0, len = prefixableProperties.length; i < len; i++ ) {
+    var prop = prefixableProperties[i];
+    var supportedProp = getStyleProperty( prop );
+    if ( supportedProp && supportedProp !== prop ) {
+      cache[ prop ] = supportedProp;
+    }
+  }
+  return cache;
+})();
+
+
+// sub-class Outlayer Item
+function Item() {
+  Outlayer.Item.apply( this, arguments );
+}
+
+Item.prototype = new Outlayer.Item();
+
+// dash before all cap letters, including first for
+// WebkitTransform => -webkit-transform
+function toDashedAll( str ) {
+  return str.replace( /([A-Z])/g, function( $1 ) {
+    return '-' + $1.toLowerCase();
+  });
+}
+
+var transitionProps = 'opacity, height, width,' +
+  toDashedAll( vendorProperties.transform || 'transform' );
+
+Item.prototype.enableTransition = function(/* style */) {
+  // HACK changing transitionProperty during a transition
+  // will cause transition to jump
+  if ( this.isTransitioning ) {
+    return;
+  }
+
+  // make `transition: foo, bar, baz` from style object
+  // HACK un-comment this when enableTransition can work
+  // while a transition is happening
+  // var transitionValues = [];
+  // for ( var prop in style ) {
+  //   // dash-ify camelCased properties like WebkitTransition
+  //   prop = vendorProperties[ prop ] || prop;
+  //   transitionValues.push( toDashedAll( prop ) );
+  // }
+  // enable transition styles
+  this.css({
+    transitionProperty: transitionProps,
+    transitionDuration: this.layout.options.transitionDuration
+  });
+  // listen for transition end event
+  this.element.addEventListener( transitionEndEvent, this, false );
+};
+
+
+// Item.prototype._create = function() {
+//   // assign id, used for original-order sorting
+//   this.id = this.layout.itemGUID++;
+//   Outlayer.Item.prototype._create.call( this );
+//   this.sortData = {};
+// };
+
+return Item;
 
 }));
 /**
@@ -6791,6 +6886,8 @@ RevSlider({
 
         var defaults = {
             element: false,
+            masonry: false,
+            stacked: false,
             rows: {
                 xxs: 2,
                 xs: 2,
@@ -6825,7 +6922,10 @@ RevSlider({
             ad_border: true,
             headline_size: 2,
             max_headline: false,
-            text_overlay: false
+            text_overlay: false,
+            is_layout_instant: false,
+            transition_duration: 0,
+            adjust_gutter: true
         };
 
         // merge options
@@ -6873,7 +6973,15 @@ RevSlider({
         // revUtils.append(gridContainerElement, forwardBtn);
         revUtils.append(this.element, this.containerElement);
 
-        this.grid = new AnyGrid(this.gridElement, { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound});
+        this.grid = new AnyGrid(this.gridElement, {
+            masonry: this.options.masonry,
+            stacked: this.options.stacked,
+            perRow: this.options.per_row,
+            isLayoutInstant: this.options.is_layout_instant,
+            transitionDuration: this.options.transition_duration,
+            isResizeBound: this.options.is_resize_bound,
+            adjust_gutter: this.options.adjust_gutter
+        });
 
         this.grid.on('resized', function() {
             that.resize();
@@ -7257,7 +7365,7 @@ RevShifter({
         show_on_load: false,
         retract_on_load: true,
         retract_time: 4000,
-        retract_duration: 2000,
+        retract_duration: 2500,
         rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right'),
         sponsored: 10,
         internal: false,
@@ -7299,7 +7407,7 @@ RevShifter({
             return;
         }
 
-        revUtils.appendStyle('/* inject:css */.rev-shifter{-ms-overflow-style:-ms-autohiding-scrollbar;-webkit-text-size-adjust:100%;text-size-adjust:100%;box-sizing:border-box;cursor:default;text-rendering:optimizeLegibility;background:#fff;position:fixed;width:100%;padding:30px 10px 10px;-webkit-transition-property:-webkit-transform,height,box-shadow;transition-property:transform,height,box-shadow;border-left:1px solid #dcdcdc;box-shadow:none}body .rev-shifter.top{box-shadow:inset 0 -7px 9px -7px #000}.rev-shifter #rev-slider-grid{-webkit-transition-property:height;transition-property:height}.rev-shifter.top .rev-content{-webkit-transition-property:-webkit-transform,opacity,width,top,left!important;transition-property:transform,opacity,width,top,left!important;-webkit-transition-duration:2.5s!important;transition-duration:2.5s!important;-webkit-transform:none!important;transform:none!important}.rev-shifter.right{right:0;bottom:0;height:100%;-webkit-transform:translateX(100%);transform:translateX(100%)}.rev-shifter.left{left:0;bottom:0;height:100%;-webkit-transform:translateX(-100%);transform:translateX(-100%)}.rev-shifter.top{top:0;width:100%;-webkit-transform:translateY(-100%);transform:translateY(-100%)}.rev-shifter #rev-slider-grid-container{overflow:hidden}.rev-shifter.top #rev-slider{display:inline-block}.rev-shifter.top #rev-slider,.rev-shifter.top #rev-slider .rev-sponsored{margin-top:0;-webkit-transition-duration:2.5s;transition-duration:2.5s;-webkit-transition-property:margin-top;transition-property:margin-top}body.retracted .rev-shifter.top #rev-slider{margin-top:-28px}body.retracted .rev-shifter.top #rev-slider .rev-sponsored{margin-top:-24px}.rev-shifter .rev-close{position:absolute;top:0;right:0;cursor:pointer;padding:10px;fill:#555;z-index:1}.rev-shifter *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}.rev-shifter a,.rev-shifter a:focus,.rev-shifter a:hover{text-decoration:none}.rev-shifter .rev-toggle{position:absolute;z-index:10001;background-color:#000;text-align:center;line-height:0;cursor:pointer;opacity:.8}.rev-shifter.right .rev-toggle{top:50%;height:100px;vertical-align:middle;left:-30px;margin-top:-50px}.rev-shifter.top .rev-toggle{bottom:-30px;left:50%;width:100px;margin-left:-50px;border-radius:0 0 3px 3px}.rev-shifter .rev-toggle svg{fill:#fff}.rev-shifter.left .rev-toggle svg,.rev-shifter.right .rev-toggle svg{top:50%;margin-top:-18px}body.rev-shifter-loaded{margin:0}body{-webkit-transition-property:margin-top!important;transition-property:margin-top!important}body.rev-shifter-open{margin-top:0}body.rev-shifter-no-transform .rev-shifter{-webkit-transform:none;transform:none;z-index:2147483647}body.rev-shifter-open .rev-shifter{top:0;right:0;-webkit-transform:none!important;transform:none!important;z-index:2147483647}/* endinject */', 'rev-shifter');
+        revUtils.appendStyle('/* inject:css */.rev-shifter{-ms-overflow-style:-ms-autohiding-scrollbar;-webkit-text-size-adjust:100%;text-size-adjust:100%;box-sizing:border-box;cursor:default;text-rendering:optimizeLegibility;background:#fff;position:fixed;width:100%;padding:30px 10px 10px;-webkit-transition-property:-webkit-transform,height;transition-property:transform,height;box-shadow:none}body .rev-shifter.top{box-shadow:inset 0 -7px 9px -7px #000}.rev-shifter #rev-slider-grid,.rev-shifter.top .rev-content .rev-ad{-webkit-transition-property:height;transition-property:height}.rev-shifter.top .rev-content{-webkit-transition-property:width,height;transition-property:width,height}.rev-shifter.right{right:0;bottom:0;height:100%;border-left:1px solid #dcdcdc;-webkit-transform:translateX(100%);transform:translateX(100%)}.rev-shifter.left{left:0;bottom:0;height:100%;border-right:1px solid #dcdcdc;-webkit-transform:translateX(-100%);transform:translateX(-100%)}.rev-shifter.top{top:0;width:100%;-webkit-transform:translateY(-100%);transform:translateY(-100%)}.rev-shifter.top #rev-slider{display:inline-block}body.retracted .rev-shifter.top #rev-slider{margin-top:-28px}body.retracted .rev-shifter.top #rev-slider .rev-sponsored{margin-top:-24px}.rev-shifter .rev-close{position:absolute;top:0;right:0;cursor:pointer;padding:10px;fill:#555;z-index:1}.rev-shifter *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}.rev-shifter a,.rev-shifter a:focus,.rev-shifter a:hover{text-decoration:none}.rev-shifter .rev-toggle{position:absolute;z-index:10001;background-color:#000;text-align:center;line-height:0;cursor:pointer;opacity:.8}.rev-shifter.right .rev-toggle{top:50%;height:100px;vertical-align:middle;left:-30px;margin-top:-50px}.rev-shifter.top .rev-toggle{bottom:-30px;left:50%;width:100px;margin-left:-50px;border-radius:0 0 3px 3px}.rev-shifter .rev-toggle svg{fill:#fff}.rev-shifter.left .rev-toggle svg,.rev-shifter.right .rev-toggle svg{top:50%;margin-top:-18px}body.rev-shifter-loaded{margin:0}body{-webkit-transition-property:margin-top!important;transition-property:margin-top!important}body.rev-shifter-open{margin-top:0}body.rev-shifter-no-transform .rev-shifter{-webkit-transform:none;transform:none;z-index:2147483647}body.rev-shifter-open .rev-shifter{top:0;right:0;-webkit-transform:none!important;transform:none!important;z-index:2147483647}/* endinject */', 'rev-shifter');
 
         this.init = function() {
             this.element = document.createElement('div');
@@ -7332,17 +7440,20 @@ RevShifter({
                 pub_id : this.options.pub_id,
                 widget_id : this.options.widget_id,
                 domain : this.options.domain,
-                rev_position: 'top_right',
+                rev_position: 'bottom_right',
                 header : this.options.inner_widget_options.header,
                 per_row: this.options.inner_widget_options.per_row,
                 rows: this.options.inner_widget_options.rows,
-                rev_position: 'bottom_right',
                 text_overlay: true,
-                max_headline: true
+                max_headline: true,
+                stacked: true,
+                transition_duration: this.options.retract_duration + 'ms',
+                is_layout_instant: true
             });
 
             this.size = this.element.clientHeight;
             this.difference = (this.size - this.innerWidget.grid.maxHeight);
+            this.showSize = this.innerWidget.grid.rows[0].height;
 
             if (typeof this.options.inner_widget_options.per_row === 'object') {
                 this.options.single_per_row = {};
@@ -7395,15 +7506,37 @@ RevShifter({
             }
         };
 
+        this.applyTransitionCss = function(element) {
+            element.style.transitionDuration = this.options.retract_duration + 'ms';
+            element.style.WebkitTransitionDuration = this.options.retract_duration + 'ms';
+            element.style.MozTransitionDuration = this.options.retract_duration + 'ms';
+            element.style.OTransitionDuration = this.options.retract_duration + 'ms';
+        };
+
         this.handleTransform = function() {
-            this.element.style.transitionDuration = this.options.retract_duration + 'ms';
-            this.element.style.WebkitTransitionDuration = this.options.retract_duration + 'ms';
+            this.applyTransitionCss(this.element);
+            this.applyTransitionCss(document.body);
+            this.applyTransitionCss(this.innerWidget.gridElement);
+            this.applyTransitionCss(this.element.querySelector('#rev-slider'));
+            this.applyTransitionCss(this.element.querySelector('#rev-slider .rev-sponsored'));
 
-            document.body.style.transitionDuration = this.options.retract_duration + 'ms';
-            document.body.style.WebkitTransitionDuration = this.options.retract_duration + 'ms'
+            var content = this.element.querySelectorAll('.rev-content');
+            for (var i = 0; i < content.length; i++) {
+                this.applyTransitionCss(content[i]);
+            }
 
-            this.innerWidget.gridElement.style.transitionDuration =  this.options.retract_duration + 'ms';
-            this.innerWidget.gridElement.style.WebkitTransitionDuration =  this.options.retract_duration + 'ms';;
+            var ads = this.element.querySelectorAll('.rev-ad');
+            for (var i = 0; i < ads.length; i++) {
+                this.applyTransitionCss(ads[i]);
+            }
+
+            var imgs = this.element.querySelectorAll('.rev-image');
+            for (var i = 0; i < imgs.length; i++) { // special case that also needs background transitioned
+                imgs[i].style.transition = 'background .5s ease-in-out, height ' + this.options.retract_duration + 'ms';
+                imgs[i].style.WebkitTransition = 'background .5s ease-in-out, height ' + this.options.retract_duration + 'ms';
+                imgs[i].style.MozTransition = 'background .5s ease-in-out, height ' + this.options.retract_duration + 'ms';
+                imgs[i].style.OTransition = 'background .5s ease-in-out, height ' + this.options.retract_duration + 'ms';
+            }
         };
 
         this.transformBody = function(retract) {
@@ -7415,7 +7548,7 @@ RevShifter({
             } else {
                 document.body.style.marginTop = this.size + 'px';
             }
-        }
+        };
 
         this.retract = function() {
             if (this.options.side !== 'top') {
@@ -7425,12 +7558,20 @@ RevShifter({
             revUtils.addClass(document.body, 'retracted');
             this.toggleElementInnerHtml();
 
-            // if (this.options.side == 'top') {
-                this.innerWidget.update({
-                    per_row: this.options.single_per_row,
-                    rows: 1
-                });
-            // }
+            this.innerWidget.grid.option({ // not instant
+                isLayoutInstant: false,
+                itemHeight: (this.showSize / 2)
+            });
+
+            this.innerWidget.update({ // one row
+                per_row: this.options.single_per_row,
+                rows: 1
+            });
+
+            this.innerWidget.grid.option({ // back to instant
+                isLayoutInstant: true
+            });
+
             this.transformBody(true);
         };
 
@@ -7446,9 +7587,18 @@ RevShifter({
 
             this.toggleElementInnerHtml();
 
-            this.innerWidget.update({
+            this.innerWidget.grid.option({ // not instant
+                isLayoutInstant: false,
+                itemHeight: this.showSize
+            });
+
+            this.innerWidget.update({ // back to default rows
                 per_row: this.options.inner_widget_options.per_row,
                 rows: this.options.inner_widget_options.rows
+            });
+
+            this.innerWidget.grid.option({ // back to instant
+                isLayoutInstant: true
             });
 
             if (retract) {
@@ -7456,7 +7606,7 @@ RevShifter({
                 setTimeout(function() {
                     that.retract();
                 }, this.options.retract_time);
-            };
+            }
         };
 
         this.hide = function() {

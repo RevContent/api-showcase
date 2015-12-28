@@ -55,7 +55,7 @@ RevShifter({
         show_on_load: false,
         retract_on_load: true,
         retract_time: 4000,
-        retract_duration: 2000,
+        retract_duration: 2500,
         rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right'),
         sponsored: 10,
         internal: false,
@@ -97,7 +97,7 @@ RevShifter({
             return;
         }
 
-        revUtils.appendStyle('/* inject:css */.rev-shifter{-ms-overflow-style:-ms-autohiding-scrollbar;-webkit-text-size-adjust:100%;text-size-adjust:100%;box-sizing:border-box;cursor:default;text-rendering:optimizeLegibility;background:#fff;position:fixed;width:100%;padding:30px 10px 10px;-webkit-transition-property:-webkit-transform,height,box-shadow;transition-property:transform,height,box-shadow;border-left:1px solid #dcdcdc;box-shadow:none}body .rev-shifter.top{box-shadow:inset 0 -7px 9px -7px #000}.rev-shifter #rev-slider-grid{-webkit-transition-property:height;transition-property:height}.rev-shifter.top .rev-content{-webkit-transition-property:-webkit-transform,opacity,width,top,left!important;transition-property:transform,opacity,width,top,left!important;-webkit-transition-duration:2.5s!important;transition-duration:2.5s!important;-webkit-transform:none!important;transform:none!important}.rev-shifter.right{right:0;bottom:0;height:100%;-webkit-transform:translateX(100%);transform:translateX(100%)}.rev-shifter.left{left:0;bottom:0;height:100%;-webkit-transform:translateX(-100%);transform:translateX(-100%)}.rev-shifter.top{top:0;width:100%;-webkit-transform:translateY(-100%);transform:translateY(-100%)}.rev-shifter #rev-slider-grid-container{overflow:hidden}.rev-shifter.top #rev-slider{display:inline-block}.rev-shifter.top #rev-slider,.rev-shifter.top #rev-slider .rev-sponsored{margin-top:0;-webkit-transition-duration:2.5s;transition-duration:2.5s;-webkit-transition-property:margin-top;transition-property:margin-top}body.retracted .rev-shifter.top #rev-slider{margin-top:-28px}body.retracted .rev-shifter.top #rev-slider .rev-sponsored{margin-top:-24px}.rev-shifter .rev-close{position:absolute;top:0;right:0;cursor:pointer;padding:10px;fill:#555;z-index:1}.rev-shifter *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}.rev-shifter a,.rev-shifter a:focus,.rev-shifter a:hover{text-decoration:none}.rev-shifter .rev-toggle{position:absolute;z-index:10001;background-color:#000;text-align:center;line-height:0;cursor:pointer;opacity:.8}.rev-shifter.right .rev-toggle{top:50%;height:100px;vertical-align:middle;left:-30px;margin-top:-50px}.rev-shifter.top .rev-toggle{bottom:-30px;left:50%;width:100px;margin-left:-50px;border-radius:0 0 3px 3px}.rev-shifter .rev-toggle svg{fill:#fff}.rev-shifter.left .rev-toggle svg,.rev-shifter.right .rev-toggle svg{top:50%;margin-top:-18px}body.rev-shifter-loaded{margin:0}body{-webkit-transition-property:margin-top!important;transition-property:margin-top!important}body.rev-shifter-open{margin-top:0}body.rev-shifter-no-transform .rev-shifter{-webkit-transform:none;transform:none;z-index:2147483647}body.rev-shifter-open .rev-shifter{top:0;right:0;-webkit-transform:none!important;transform:none!important;z-index:2147483647}/* endinject */', 'rev-shifter');
+        revUtils.appendStyle('/* inject:css */.rev-shifter{-ms-overflow-style:-ms-autohiding-scrollbar;-webkit-text-size-adjust:100%;text-size-adjust:100%;box-sizing:border-box;cursor:default;text-rendering:optimizeLegibility;background:#fff;position:fixed;width:100%;padding:30px 10px 10px;-webkit-transition-property:-webkit-transform,height;transition-property:transform,height;box-shadow:none}body .rev-shifter.top{box-shadow:inset 0 -7px 9px -7px #000}.rev-shifter #rev-slider-grid,.rev-shifter.top .rev-content .rev-ad{-webkit-transition-property:height;transition-property:height}.rev-shifter.top .rev-content{-webkit-transition-property:width,height;transition-property:width,height}.rev-shifter.right{right:0;bottom:0;height:100%;border-left:1px solid #dcdcdc;-webkit-transform:translateX(100%);transform:translateX(100%)}.rev-shifter.left{left:0;bottom:0;height:100%;border-right:1px solid #dcdcdc;-webkit-transform:translateX(-100%);transform:translateX(-100%)}.rev-shifter.top{top:0;width:100%;-webkit-transform:translateY(-100%);transform:translateY(-100%)}.rev-shifter.top #rev-slider{display:inline-block}body.retracted .rev-shifter.top #rev-slider{margin-top:-28px}body.retracted .rev-shifter.top #rev-slider .rev-sponsored{margin-top:-24px}.rev-shifter .rev-close{position:absolute;top:0;right:0;cursor:pointer;padding:10px;fill:#555;z-index:1}.rev-shifter *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}.rev-shifter a,.rev-shifter a:focus,.rev-shifter a:hover{text-decoration:none}.rev-shifter .rev-toggle{position:absolute;z-index:10001;background-color:#000;text-align:center;line-height:0;cursor:pointer;opacity:.8}.rev-shifter.right .rev-toggle{top:50%;height:100px;vertical-align:middle;left:-30px;margin-top:-50px}.rev-shifter.top .rev-toggle{bottom:-30px;left:50%;width:100px;margin-left:-50px;border-radius:0 0 3px 3px}.rev-shifter .rev-toggle svg{fill:#fff}.rev-shifter.left .rev-toggle svg,.rev-shifter.right .rev-toggle svg{top:50%;margin-top:-18px}body.rev-shifter-loaded{margin:0}body{-webkit-transition-property:margin-top!important;transition-property:margin-top!important}body.rev-shifter-open{margin-top:0}body.rev-shifter-no-transform .rev-shifter{-webkit-transform:none;transform:none;z-index:2147483647}body.rev-shifter-open .rev-shifter{top:0;right:0;-webkit-transform:none!important;transform:none!important;z-index:2147483647}/* endinject */', 'rev-shifter');
 
         this.init = function() {
             this.element = document.createElement('div');
@@ -130,17 +130,20 @@ RevShifter({
                 pub_id : this.options.pub_id,
                 widget_id : this.options.widget_id,
                 domain : this.options.domain,
-                rev_position: 'top_right',
+                rev_position: 'bottom_right',
                 header : this.options.inner_widget_options.header,
                 per_row: this.options.inner_widget_options.per_row,
                 rows: this.options.inner_widget_options.rows,
-                rev_position: 'bottom_right',
                 text_overlay: true,
-                max_headline: true
+                max_headline: true,
+                stacked: true,
+                transition_duration: this.options.retract_duration + 'ms',
+                is_layout_instant: true
             });
 
             this.size = this.element.clientHeight;
             this.difference = (this.size - this.innerWidget.grid.maxHeight);
+            this.showSize = this.innerWidget.grid.rows[0].height;
 
             if (typeof this.options.inner_widget_options.per_row === 'object') {
                 this.options.single_per_row = {};
@@ -193,15 +196,37 @@ RevShifter({
             }
         };
 
+        this.applyTransitionCss = function(element) {
+            element.style.transitionDuration = this.options.retract_duration + 'ms';
+            element.style.WebkitTransitionDuration = this.options.retract_duration + 'ms';
+            element.style.MozTransitionDuration = this.options.retract_duration + 'ms';
+            element.style.OTransitionDuration = this.options.retract_duration + 'ms';
+        };
+
         this.handleTransform = function() {
-            this.element.style.transitionDuration = this.options.retract_duration + 'ms';
-            this.element.style.WebkitTransitionDuration = this.options.retract_duration + 'ms';
+            this.applyTransitionCss(this.element);
+            this.applyTransitionCss(document.body);
+            this.applyTransitionCss(this.innerWidget.gridElement);
+            this.applyTransitionCss(this.element.querySelector('#rev-slider'));
+            this.applyTransitionCss(this.element.querySelector('#rev-slider .rev-sponsored'));
 
-            document.body.style.transitionDuration = this.options.retract_duration + 'ms';
-            document.body.style.WebkitTransitionDuration = this.options.retract_duration + 'ms'
+            var content = this.element.querySelectorAll('.rev-content');
+            for (var i = 0; i < content.length; i++) {
+                this.applyTransitionCss(content[i]);
+            }
 
-            this.innerWidget.gridElement.style.transitionDuration =  this.options.retract_duration + 'ms';
-            this.innerWidget.gridElement.style.WebkitTransitionDuration =  this.options.retract_duration + 'ms';;
+            var ads = this.element.querySelectorAll('.rev-ad');
+            for (var i = 0; i < ads.length; i++) {
+                this.applyTransitionCss(ads[i]);
+            }
+
+            var imgs = this.element.querySelectorAll('.rev-image');
+            for (var i = 0; i < imgs.length; i++) { // special case that also needs background transitioned
+                imgs[i].style.transition = 'background .5s ease-in-out, height ' + this.options.retract_duration + 'ms';
+                imgs[i].style.WebkitTransition = 'background .5s ease-in-out, height ' + this.options.retract_duration + 'ms';
+                imgs[i].style.MozTransition = 'background .5s ease-in-out, height ' + this.options.retract_duration + 'ms';
+                imgs[i].style.OTransition = 'background .5s ease-in-out, height ' + this.options.retract_duration + 'ms';
+            }
         };
 
         this.transformBody = function(retract) {
@@ -213,7 +238,7 @@ RevShifter({
             } else {
                 document.body.style.marginTop = this.size + 'px';
             }
-        }
+        };
 
         this.retract = function() {
             if (this.options.side !== 'top') {
@@ -223,12 +248,20 @@ RevShifter({
             revUtils.addClass(document.body, 'retracted');
             this.toggleElementInnerHtml();
 
-            // if (this.options.side == 'top') {
-                this.innerWidget.update({
-                    per_row: this.options.single_per_row,
-                    rows: 1
-                });
-            // }
+            this.innerWidget.grid.option({ // not instant
+                isLayoutInstant: false,
+                itemHeight: (this.showSize / 2)
+            });
+
+            this.innerWidget.update({ // one row
+                per_row: this.options.single_per_row,
+                rows: 1
+            });
+
+            this.innerWidget.grid.option({ // back to instant
+                isLayoutInstant: true
+            });
+
             this.transformBody(true);
         };
 
@@ -244,9 +277,18 @@ RevShifter({
 
             this.toggleElementInnerHtml();
 
-            this.innerWidget.update({
+            this.innerWidget.grid.option({ // not instant
+                isLayoutInstant: false,
+                itemHeight: this.showSize
+            });
+
+            this.innerWidget.update({ // back to default rows
                 per_row: this.options.inner_widget_options.per_row,
                 rows: this.options.inner_widget_options.rows
+            });
+
+            this.innerWidget.grid.option({ // back to instant
+                isLayoutInstant: true
             });
 
             if (retract) {
@@ -254,7 +296,7 @@ RevShifter({
                 setTimeout(function() {
                     that.retract();
                 }, this.options.retract_time);
-            };
+            }
         };
 
         this.hide = function() {

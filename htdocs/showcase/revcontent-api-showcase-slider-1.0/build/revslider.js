@@ -62,6 +62,8 @@ RevSlider({
 
         var defaults = {
             element: false,
+            masonry: false,
+            stacked: false,
             rows: {
                 xxs: 2,
                 xs: 2,
@@ -96,7 +98,10 @@ RevSlider({
             ad_border: true,
             headline_size: 2,
             max_headline: false,
-            text_overlay: false
+            text_overlay: false,
+            is_layout_instant: false,
+            transition_duration: 0,
+            adjust_gutter: true
         };
 
         // merge options
@@ -144,7 +149,15 @@ RevSlider({
         // revUtils.append(gridContainerElement, forwardBtn);
         revUtils.append(this.element, this.containerElement);
 
-        this.grid = new AnyGrid(this.gridElement, { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound});
+        this.grid = new AnyGrid(this.gridElement, {
+            masonry: this.options.masonry,
+            stacked: this.options.stacked,
+            perRow: this.options.per_row,
+            isLayoutInstant: this.options.is_layout_instant,
+            transitionDuration: this.options.transition_duration,
+            isResizeBound: this.options.is_resize_bound,
+            adjust_gutter: this.options.adjust_gutter
+        });
 
         this.grid.on('resized', function() {
             that.resize();
