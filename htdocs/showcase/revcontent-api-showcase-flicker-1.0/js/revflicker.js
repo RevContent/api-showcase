@@ -363,7 +363,7 @@ RevFlicker({
             revUtils.removeClass(this.containerElement, 'rev-flicker-text-overlay');
             for (var i = 0; i < ads.length; i++) {
                 var ad = ads[i];
-                ad.style.height = this.getCellHeight + 'px';
+                ad.style.height = this.getCellHeight() + 'px';
             }
         }
     }
