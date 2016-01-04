@@ -285,7 +285,7 @@ RevFlicker({
 
         // font size is relative to width, other measurements are relative to this font size
         this.headlineFontSize = Math.max(14, ((width * .03).toFixed(2) / 1));
-        this.headlineLineHeight = ((this.headlineFontSize * 1.25).toFixed(2) / 1);
+        this.headlineLineHeight = ((this.headlineFontSize * 1.2).toFixed(2) / 1);
         this.headlineHeight = ((this.headlineLineHeight * this.options.headline_size).toFixed(2) / 1);
         if (this.options.max_headline && this.getMaxHeadlineHeight() > 0) {
             this.headlineHeight = this.getMaxHeadlineHeight();
@@ -295,7 +295,7 @@ RevFlicker({
         this.innerMargin = ((this.headlineMarginTop * .3).toFixed(2) / 1);
 
         this.providerFontSize = Math.max(11, ((this.headlineLineHeight / 2).toFixed(2) / 1));
-        this.providerLineHeight = ((this.providerFontSize * 1.8).toFixed(2) / 1);
+        this.providerLineHeight = ((this.providerFontSize * 1.5).toFixed(2) / 1);
 
         this.columnWidth = (((this.containerWidth - (this.margin * this.perRow)) / (this.perRow + (1/2))).toFixed(2) / 1);
 
