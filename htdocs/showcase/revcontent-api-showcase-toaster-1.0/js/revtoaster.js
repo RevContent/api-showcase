@@ -90,7 +90,8 @@ RevToaster({
 
         this.init = function() {
             this.revToaster = document.createElement('div');
-            this.revToaster.className = 'rev-toaster';
+            this.revToaster.id = 'rev-toaster';
+            this.revToaster.setAttribute('class', 'rev-toaster');
 
             this.containerElement = document.createElement('div');
             this.containerElement.className = 'rev-content-container';
