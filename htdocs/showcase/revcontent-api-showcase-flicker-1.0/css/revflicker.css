@@ -116,7 +116,8 @@
 }
 
 #rev-flicker .rev-provider {
-    color: #888;
+    color: #999;
+    font-weight: 600;
 }
 
 #rev-flicker .rev-ad {
