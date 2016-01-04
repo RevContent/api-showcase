@@ -206,6 +206,7 @@ app.directive('revFlicker', ['$location', '$timeout', 'options', function ($loca
 
         options.next_effect = true;
         options.text_overlay = false;
+        options.ad_border = true;
 
         $timeout(function() {
             widget = new RevFlicker({
@@ -222,7 +223,8 @@ app.directive('revFlicker', ['$location', '$timeout', 'options', function ($loca
                 next_effect: options.next_effect,
                 headline_size: options.headline_size,
                 max_headline: options.max_headline,
-                text_overlay: options.text_overlay
+                text_overlay: options.text_overlay,
+                ad_border: options.ad_border
             });
         });
 
