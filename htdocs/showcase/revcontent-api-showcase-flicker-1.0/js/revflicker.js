@@ -160,9 +160,10 @@ RevFlicker({
 
             ad.style.width = this.columnWidth + 'px';
             ad.style.marginRight = this.margin + 'px';
+            ad.querySelectorAll('.rev-ad')[0].style.height = this.getCellHeight() + 'px';
 
             ad.querySelectorAll('.rev-image')[0].style.height = this.preloaderHeight + 'px';
-            ad.querySelectorAll('.rev-headline')[0].style.height = this.headlineHeight + 'px';
+            ad.querySelectorAll('.rev-headline')[0].style.maxHeight = this.headlineHeight + 'px';
             ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
 
             ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
@@ -362,9 +363,19 @@ RevFlicker({
             revUtils.removeClass(this.containerElement, 'rev-flicker-text-overlay');
             for (var i = 0; i < ads.length; i++) {
                 var ad = ads[i];
-                ad.style.height = 'auto';
+                ad.style.height = this.getCellHeight + 'px';
             }
         }
+    }
+
+    RevFlicker.prototype.getCellHeight = function() {
+        var cellHeight = this.preloaderHeight;
+        if (!this.options.text_overlay) {
+            cellHeight += this.headlineHeight +
+                this.headlineMarginTop + this.providerLineHeight ;
+            cellHeight += (this.options.ad_border) ? 2 : 0;
+        }
+        return cellHeight;
     }
 
     RevFlicker.prototype.preData = function() {
@@ -381,10 +392,10 @@ RevFlicker({
         var that = this;
 
         for (var j = index; j < this.options.sponsored; j++) {
-            var html = '<div class="rev-ad" style="border-width:' + (that.options.ad_border ? '1px' : '0') + '">' +
+            var html = '<div class="rev-ad" style="height: '+ that.getCellHeight() +'px; border-width:' + (that.options.ad_border ? '1px' : '0') + '">' +
                         '<a href="" rel="nofollow" target="_blank">' +
                             '<div class="rev-image" style="height:'+ that.preloaderHeight +'px"><img src=""/></div>' +
-                            '<div class="rev-headline" style="height:'+ that.headlineHeight +'px; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>' +
+                            '<div class="rev-headline" style="max-height:'+ that.headlineHeight +'px; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>' +
                             '<div style="margin: 0 '  + that.innerMargin + 'px 0;font-size:'+ that.providerFontSize +'px;line-height:'+ that.providerLineHeight +'px;height:'+ that.providerLineHeight +'px;" class="rev-provider"></div>' +
                         '</a>' +
                     '</div>';
