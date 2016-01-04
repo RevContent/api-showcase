@@ -80,7 +80,8 @@ RevFlicker({
             url: 'https://trends.revcontent.com/api/v1/',
             headline_size: 2,
             max_headline: false,
-            text_overlay: false
+            text_overlay: false,
+            ad_border: true
         };
 
         // merge options
@@ -166,7 +167,7 @@ RevFlicker({
 
             ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
             ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.margin = this.providerMargin +'px '  + this.innerMargin + 'px ' + this.providerMargin +'px';
+            ad.querySelectorAll('.rev-provider')[0].style.margin = '0 '  + this.innerMargin + 'px 0';
             ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize +'px';
             ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
             ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
@@ -284,7 +285,7 @@ RevFlicker({
 
         // font size is relative to width, other measurements are relative to this font size
         this.headlineFontSize = Math.max(14, ((width * .03).toFixed(2) / 1));
-        this.headlineLineHeight = ((this.headlineFontSize * 1.25).toFixed(2) / 1);
+        this.headlineLineHeight = ((this.headlineFontSize * 1.2).toFixed(2) / 1);
         this.headlineHeight = ((this.headlineLineHeight * this.options.headline_size).toFixed(2) / 1);
         if (this.options.max_headline && this.getMaxHeadlineHeight() > 0) {
             this.headlineHeight = this.getMaxHeadlineHeight();
@@ -294,12 +295,11 @@ RevFlicker({
         this.innerMargin = ((this.headlineMarginTop * .3).toFixed(2) / 1);
 
         this.providerFontSize = Math.max(11, ((this.headlineLineHeight / 2).toFixed(2) / 1));
-        this.providerLineHeight = ((this.providerFontSize * 1.25).toFixed(2) / 1);
-        this.providerMargin = ((this.providerLineHeight * .2).toFixed(2) / 1);
+        this.providerLineHeight = ((this.providerFontSize * 1.5).toFixed(2) / 1);
 
         this.columnWidth = (((this.containerWidth - (this.margin * this.perRow)) / (this.perRow + (1/2))).toFixed(2) / 1);
 
-        this.preloaderHeight = Math.round(this.columnWidth * (this.imageHeight / this.imageWidth));
+        this.preloaderHeight = Math.round((this.columnWidth - ( this.options.ad_border ? 2 : 0 )) * (this.imageHeight / this.imageWidth));
     };
 
     RevFlicker.prototype.update = function(newOpts, oldOpts) {
@@ -332,7 +332,20 @@ RevFlicker({
             this.flickity.reloadCells();
             this.flickity.reposition();
         }
+
+        if (newOpts.ad_border !== oldOpts.ad_border) {
+            this.adBorder();
+            this.resize();
+        }
     };
+
+    RevFlicker.prototype.adBorder = function() {
+        var ads = this.containerElement.querySelectorAll('.rev-ad');
+        for (var i = 0; i < ads.length; i++) {
+            var ad = ads[i];
+            ad.style.borderWidth = (this.options.ad_border ? '1px' : '0')
+        }
+    }
 
     RevFlicker.prototype.textOverlay = function() {
         var ads = this.containerElement.querySelectorAll('.rev-ad');
@@ -368,11 +381,11 @@ RevFlicker({
         var that = this;
 
         for (var j = index; j < this.options.sponsored; j++) {
-            var html = '<div class="rev-ad">' +
+            var html = '<div class="rev-ad" style="border-width:' + (that.options.ad_border ? '1px' : '0') + '">' +
                         '<a href="" rel="nofollow" target="_blank">' +
                             '<div class="rev-image" style="height:'+ that.preloaderHeight +'px"><img src=""/></div>' +
                             '<div class="rev-headline" style="height:'+ that.headlineHeight +'px; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>' +
-                            '<div style="margin:' + that.providerMargin +'px '  + that.innerMargin + 'px ' + that.providerMargin +'px;font-size:'+ that.providerFontSize +'px;line-height:'+ that.providerLineHeight +'px;height:'+ that.providerLineHeight +'px;" class="rev-provider"></div>' +
+                            '<div style="margin: 0 '  + that.innerMargin + 'px 0;font-size:'+ that.providerFontSize +'px;line-height:'+ that.providerLineHeight +'px;height:'+ that.providerLineHeight +'px;" class="rev-provider"></div>' +
                         '</a>' +
                     '</div>';
             var cell = document.createElement('div');
