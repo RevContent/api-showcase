@@ -1,4 +1,4 @@
-app.controller('PreviewCtrl', function($stateParams, $mdToast, $rootScope, $scope, $http, $timeout, $mdBottomSheet, $mdSidenav, $mdToast, options, slider, widgets) {
+app.controller('PreviewCtrl', function($stateParams, $mdToast, $rootScope, $scope, $http, $timeout, $mdBottomSheet, $mdSidenav, $mdToast, options, slider, widgets, $localStorage) {
 
     this.id = $stateParams.id ? $stateParams.id : 'flicker';
 
@@ -7,6 +7,12 @@ app.controller('PreviewCtrl', function($stateParams, $mdToast, $rootScope, $scop
     this.slider = slider;
 
     this.visible = true;
+
+    var watcher = $rootScope.$watch(function() { return options; }, function(newOpts, oldOpts) {
+        if (newOpts != oldOpts) {
+            $localStorage.options = newOpts;
+        }
+    }, true);
 
     var widgetSizeToastVisible = false;
     var widgetSizeToastTimeout = false;
