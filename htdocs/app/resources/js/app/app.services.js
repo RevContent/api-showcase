@@ -72,18 +72,19 @@ app.service('$stateManager', function() {
 
     this.setPath = function(stickyPath) {
         this.stickyPath = stickyPath;
-    }
+    };
+
     this.getPath = function() {
         return this.stickyPath;
-    }
+    };
 
     this.setOriginPath = function(originPath) {
         this.originPath = originPath;
-    }
+    };
 
     this.getOriginPath = function() {
         return this.originPath;
-    }
+    };
 });
 
 app.service('$mdCardContent', function() {
@@ -100,13 +101,13 @@ app.service('$mdCardContent', function() {
 
 app.service('slider', function(options) {
     this.type = 'Discrete';
-    this.value = options.sizes[(options.size - 1)]
+    this.value = options.sizes[(options.size - 1)];
     this.max = options.sizes[(options.sizes.length - 1)];
     this.min = options.sizes[0];
 });
 
 
-app.service('options', function() {
+app.service('options', function($rootScope, $localStorage) {
 
     this.set = function() {
         this.domain = 'apiexamples.powr.com';
@@ -134,7 +135,7 @@ app.service('options', function() {
               }
             }
             return devices;
-        }
+        };
 
         this.header = 'Trending Now';
 
@@ -187,7 +188,9 @@ app.service('options', function() {
 
         this.headline_size = 2;
         this.max_headline = false;
-    }
+
+        angular.extend(this, $localStorage.options);
+    };
 
     this.set();
 });
