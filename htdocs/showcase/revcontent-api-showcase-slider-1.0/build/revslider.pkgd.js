@@ -4834,7 +4834,7 @@ AnyGrid.prototype._setUp = function() {
 
     if (this.options.adjust_gutter && this.items.length) {
         this.itemPadding = getSize(this.items[0].element).paddingLeft;
-        //this.element.parentNode.style.marginLeft = (this.itemPadding * -1) + 'px';
+        this.element.parentNode.style.marginLeft = (this.itemPadding * -1) + 'px';
         measureContainerWidth = this.containerWidth + (this.itemPadding * 2);
     }
 
@@ -4852,6 +4852,23 @@ AnyGrid.prototype._setUp = function() {
     this.maxHeight = 0;
     this.itemIndex = 0;
 };
+
+AnyGrid.prototype._setContainerAndGridHeights = function() {
+    var gridContainerElement = this.element.parentNode;
+    var paddingOffset = this.itemPadding * 2;
+    var numRows = this.options.rows[this.grid.getBreakPoint()];
+    var rowsPaddingOffset = paddingOffset * (numRows - 1);
+    var newContHeight = ((this.getCellHeight() * numRows) + rowsPaddingOffset);
+    gridContainerElement.style.height = newContHeight + 'px';
+
+    this.gridElement.style.position = 'absolute';
+    this.gridElement.style.height = (gridContainerElement.offsetHeight + paddingOffset) + 'px';
+    this.gridElement.style.width = (gridContainerElement.offsetWidth + paddingOffset + 1) + 'px';
+    this.gridElement.style.top = '-'+this.padding+'px';
+    this.gridElement.style.left = '-'+this.padding+'px';
+    this.grid.reloadItems();
+    this.grid.layout();
+}
 
 AnyGrid.prototype._create = function() {
     var that = this;
@@ -5739,7 +5756,7 @@ RevSlider({
         }
         this.sponsored = document.createElement('div');
         revUtils.addClass(this.sponsored, 'rev-sponsored');
-        this.sponsored.innerHTML = '<a onclick="revDialog.showDialog();">Sponsored by Revcontent</a>';
+        this.sponsored.innerHTML = '<a href="javascript:;" onclick="revDialog.showDialog();">Sponsored by Revcontent</a>';
         if (this.options.rev_position == 'top_right') {
             revUtils.addClass(this.sponsored, 'top-right')
             revUtils.prepend(this.containerElement, this.sponsored);
