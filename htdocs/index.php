@@ -16,6 +16,7 @@
 
         <script src="app/resources/vendor/jquery/dist/jquery.js"></script>
         <script src="app/resources/vendor/angular/angular.js"></script>
+        <script src="app/resources/vendor/ngstorage/ngStorage.js"></script>
         <script src="app/resources/vendor/angular-aria/angular-aria.js"></script>
         <script src="app/resources/vendor/angular-animate/angular-animate.js"></script>
         <script src="app/resources/vendor/angular-ui-router/release/angular-ui-router.js"></script>
