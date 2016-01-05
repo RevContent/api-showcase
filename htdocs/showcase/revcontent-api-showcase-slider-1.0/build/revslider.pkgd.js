@@ -16,7 +16,7 @@ define(function () {
         "Dell": "Dell.*Streak|Dell.*Aero|Dell.*Venue|DELL.*Venue Pro|Dell Flash|Dell Smoke|Dell Mini 3iX|XCD28|XCD35|\\b001DL\\b|\\b101DL\\b|\\bGS01\\b",
         "Motorola": "Motorola|DROIDX|DROID BIONIC|\\bDroid\\b.*Build|Android.*Xoom|HRI39|MOT-|A1260|A1680|A555|A853|A855|A953|A955|A956|Motorola.*ELECTRIFY|Motorola.*i1|i867|i940|MB200|MB300|MB501|MB502|MB508|MB511|MB520|MB525|MB526|MB611|MB612|MB632|MB810|MB855|MB860|MB861|MB865|MB870|ME501|ME502|ME511|ME525|ME600|ME632|ME722|ME811|ME860|ME863|ME865|MT620|MT710|MT716|MT720|MT810|MT870|MT917|Motorola.*TITANIUM|WX435|WX445|XT300|XT301|XT311|XT316|XT317|XT319|XT320|XT390|XT502|XT530|XT531|XT532|XT535|XT603|XT610|XT611|XT615|XT681|XT701|XT702|XT711|XT720|XT800|XT806|XT860|XT862|XT875|XT882|XT883|XT894|XT901|XT907|XT909|XT910|XT912|XT928|XT926|XT915|XT919|XT925|XT1021|\\bMoto E\\b",
         "Samsung": "Samsung|SM-G9250|GT-19300|SGH-I337|BGT-S5230|GT-B2100|GT-B2700|GT-B2710|GT-B3210|GT-B3310|GT-B3410|GT-B3730|GT-B3740|GT-B5510|GT-B5512|GT-B5722|GT-B6520|GT-B7300|GT-B7320|GT-B7330|GT-B7350|GT-B7510|GT-B7722|GT-B7800|GT-C3010|GT-C3011|GT-C3060|GT-C3200|GT-C3212|GT-C3212I|GT-C3262|GT-C3222|GT-C3300|GT-C3300K|GT-C3303|GT-C3303K|GT-C3310|GT-C3322|GT-C3330|GT-C3350|GT-C3500|GT-C3510|GT-C3530|GT-C3630|GT-C3780|GT-C5010|GT-C5212|GT-C6620|GT-C6625|GT-C6712|GT-E1050|GT-E1070|GT-E1075|GT-E1080|GT-E1081|GT-E1085|GT-E1087|GT-E1100|GT-E1107|GT-E1110|GT-E1120|GT-E1125|GT-E1130|GT-E1160|GT-E1170|GT-E1175|GT-E1180|GT-E1182|GT-E1200|GT-E1210|GT-E1225|GT-E1230|GT-E1390|GT-E2100|GT-E2120|GT-E2121|GT-E2152|GT-E2220|GT-E2222|GT-E2230|GT-E2232|GT-E2250|GT-E2370|GT-E2550|GT-E2652|GT-E3210|GT-E3213|GT-I5500|GT-I5503|GT-I5700|GT-I5800|GT-I5801|GT-I6410|GT-I6420|GT-I7110|GT-I7410|GT-I7500|GT-I8000|GT-I8150|GT-I8160|GT-I8190|GT-I8320|GT-I8330|GT-I8350|GT-I8530|GT-I8700|GT-I8703|GT-I8910|GT-I9000|GT-I9001|GT-I9003|GT-I9010|GT-I9020|GT-I9023|GT-I9070|GT-I9082|GT-I9100|GT-I9103|GT-I9220|GT-I9250|GT-I9300|GT-I9305|GT-I9500|GT-I9505|GT-M3510|GT-M5650|GT-M7500|GT-M7600|GT-M7603|GT-M8800|GT-M8910|GT-N7000|GT-S3110|GT-S3310|GT-S3350|GT-S3353|GT-S3370|GT-S3650|GT-S3653|GT-S3770|GT-S3850|GT-S5210|GT-S5220|GT-S5229|GT-S5230|GT-S5233|GT-S5250|GT-S5253|GT-S5260|GT-S5263|GT-S5270|GT-S5300|GT-S5330|GT-S5350|GT-S5360|GT-S5363|GT-S5369|GT-S5380|GT-S5380D|GT-S5560|GT-S5570|GT-S5600|GT-S5603|GT-S5610|GT-S5620|GT-S5660|GT-S5670|GT-S5690|GT-S5750|GT-S5780|GT-S5830|GT-S5839|GT-S6102|GT-S6500|GT-S7070|GT-S7200|GT-S7220|GT-S7230|GT-S7233|GT-S7250|GT-S7500|GT-S7530|GT-S7550|GT-S7562|GT-S7710|GT-S8000|GT-S8003|GT-S8500|GT-S8530|GT-S8600|SCH-A310|SCH-A530|SCH-A570|SCH-A610|SCH-A630|SCH-A650|SCH-A790|SCH-A795|SCH-A850|SCH-A870|SCH-A890|SCH-A930|SCH-A950|SCH-A970|SCH-A990|SCH-I100|SCH-I110|SCH-I400|SCH-I405|SCH-I500|SCH-I510|SCH-I515|SCH-I600|SCH-I730|SCH-I760|SCH-I770|SCH-I830|SCH-I910|SCH-I920|SCH-I959|SCH-LC11|SCH-N150|SCH-N300|SCH-R100|SCH-R300|SCH-R351|SCH-R400|SCH-R410|SCH-T300|SCH-U310|SCH-U320|SCH-U350|SCH-U360|SCH-U365|SCH-U370|SCH-U380|SCH-U410|SCH-U430|SCH-U450|SCH-U460|SCH-U470|SCH-U490|SCH-U540|SCH-U550|SCH-U620|SCH-U640|SCH-U650|SCH-U660|SCH-U700|SCH-U740|SCH-U750|SCH-U810|SCH-U820|SCH-U900|SCH-U940|SCH-U960|SCS-26UC|SGH-A107|SGH-A117|SGH-A127|SGH-A137|SGH-A157|SGH-A167|SGH-A177|SGH-A187|SGH-A197|SGH-A227|SGH-A237|SGH-A257|SGH-A437|SGH-A517|SGH-A597|SGH-A637|SGH-A657|SGH-A667|SGH-A687|SGH-A697|SGH-A707|SGH-A717|SGH-A727|SGH-A737|SGH-A747|SGH-A767|SGH-A777|SGH-A797|SGH-A817|SGH-A827|SGH-A837|SGH-A847|SGH-A867|SGH-A877|SGH-A887|SGH-A897|SGH-A927|SGH-B100|SGH-B130|SGH-B200|SGH-B220|SGH-C100|SGH-C110|SGH-C120|SGH-C130|SGH-C140|SGH-C160|SGH-C170|SGH-C180|SGH-C200|SGH-C207|SGH-C210|SGH-C225|SGH-C230|SGH-C417|SGH-C450|SGH-D307|SGH-D347|SGH-D357|SGH-D407|SGH-D415|SGH-D780|SGH-D807|SGH-D980|SGH-E105|SGH-E200|SGH-E315|SGH-E316|SGH-E317|SGH-E335|SGH-E590|SGH-E635|SGH-E715|SGH-E890|SGH-F300|SGH-F480|SGH-I200|SGH-I300|SGH-I320|SGH-I550|SGH-I577|SGH-I600|SGH-I607|SGH-I617|SGH-I627|SGH-I637|SGH-I677|SGH-I700|SGH-I717|SGH-I727|SGH-i747M|SGH-I777|SGH-I780|SGH-I827|SGH-I847|SGH-I857|SGH-I896|SGH-I897|SGH-I900|SGH-I907|SGH-I917|SGH-I927|SGH-I937|SGH-I997|SGH-J150|SGH-J200|SGH-L170|SGH-L700|SGH-M110|SGH-M150|SGH-M200|SGH-N105|SGH-N500|SGH-N600|SGH-N620|SGH-N625|SGH-N700|SGH-N710|SGH-P107|SGH-P207|SGH-P300|SGH-P310|SGH-P520|SGH-P735|SGH-P777|SGH-Q105|SGH-R210|SGH-R220|SGH-R225|SGH-S105|SGH-S307|SGH-T109|SGH-T119|SGH-T139|SGH-T209|SGH-T219|SGH-T229|SGH-T239|SGH-T249|SGH-T259|SGH-T309|SGH-T319|SGH-T329|SGH-T339|SGH-T349|SGH-T359|SGH-T369|SGH-T379|SGH-T409|SGH-T429|SGH-T439|SGH-T459|SGH-T469|SGH-T479|SGH-T499|SGH-T509|SGH-T519|SGH-T539|SGH-T559|SGH-T589|SGH-T609|SGH-T619|SGH-T629|SGH-T639|SGH-T659|SGH-T669|SGH-T679|SGH-T709|SGH-T719|SGH-T729|SGH-T739|SGH-T746|SGH-T749|SGH-T759|SGH-T769|SGH-T809|SGH-T819|SGH-T839|SGH-T919|SGH-T929|SGH-T939|SGH-T959|SGH-T989|SGH-U100|SGH-U200|SGH-U800|SGH-V205|SGH-V206|SGH-X100|SGH-X105|SGH-X120|SGH-X140|SGH-X426|SGH-X427|SGH-X475|SGH-X495|SGH-X497|SGH-X507|SGH-X600|SGH-X610|SGH-X620|SGH-X630|SGH-X700|SGH-X820|SGH-X890|SGH-Z130|SGH-Z150|SGH-Z170|SGH-ZX10|SGH-ZX20|SHW-M110|SPH-A120|SPH-A400|SPH-A420|SPH-A460|SPH-A500|SPH-A560|SPH-A600|SPH-A620|SPH-A660|SPH-A700|SPH-A740|SPH-A760|SPH-A790|SPH-A800|SPH-A820|SPH-A840|SPH-A880|SPH-A900|SPH-A940|SPH-A960|SPH-D600|SPH-D700|SPH-D710|SPH-D720|SPH-I300|SPH-I325|SPH-I330|SPH-I350|SPH-I500|SPH-I600|SPH-I700|SPH-L700|SPH-M100|SPH-M220|SPH-M240|SPH-M300|SPH-M305|SPH-M320|SPH-M330|SPH-M350|SPH-M360|SPH-M370|SPH-M380|SPH-M510|SPH-M540|SPH-M550|SPH-M560|SPH-M570|SPH-M580|SPH-M610|SPH-M620|SPH-M630|SPH-M800|SPH-M810|SPH-M850|SPH-M900|SPH-M910|SPH-M920|SPH-M930|SPH-N100|SPH-N200|SPH-N240|SPH-N300|SPH-N400|SPH-Z400|SWC-E100|SCH-i909|GT-N7100|GT-N7105|SCH-I535|SM-N900A|SGH-I317|SGH-T999L|GT-S5360B|GT-I8262|GT-S6802|GT-S6312|GT-S6310|GT-S5312|GT-S5310|GT-I9105|GT-I8510|GT-S6790N|SM-G7105|SM-N9005|GT-S5301|GT-I9295|GT-I9195|SM-C101|GT-S7392|GT-S7560|GT-B7610|GT-I5510|GT-S7582|GT-S7530E|GT-I8750|SM-G9006V|SM-G9008V|SM-G9009D|SM-G900A|SM-G900D|SM-G900F|SM-G900H|SM-G900I|SM-G900J|SM-G900K|SM-G900L|SM-G900M|SM-G900P|SM-G900R4|SM-G900S|SM-G900T|SM-G900V|SM-G900W8|SHV-E160K|SCH-P709|SCH-P729|SM-T2558|GT-I9205",
-        "LG": "\\bLG\\b;|LG[- ]?(C800|C900|E400|E610|E900|E-900|F160|F180K|F180L|F180S|730|855|L160|LS740|LS840|LS970|LU6200|MS690|MS695|MS770|MS840|MS870|MS910|P500|P700|P705|VM696|AS680|AS695|AX840|C729|E970|GS505|272|C395|E739BK|E960|L55C|L75C|LS696|LS860|P769BK|P350|P500|P509|P870|UN272|US730|VS840|VS950|LN272|LN510|LS670|LS855|LW690|MN270|MN510|P509|P769|P930|UN200|UN270|UN510|UN610|US670|US740|US760|UX265|UX840|VN271|VN530|VS660|VS700|VS740|VS750|VS910|VS920|VS930|VX9200|VX11000|AX840A|LW770|P506|P925|P999|E612|D955|D802|MS323)",
+        "LG": "\\bLG\\b;|LG[- ]?(C800|C900|E400|E610|E900|E-900|F160|F180K|F180L|F180S|730|855|L160|LS740|LS840|LS970|LU6200|MS690|MS695|MS770|MS840|MS870|MS910|P500|P700|P705|VM696|AS680|AS695|AX840|C729|E970|GS505|272|C395|E739BK|E960|L55C|L75C|LS696|LS860|P769BK|P350|P500|P509|P870|UN272|US730|VS840|VS950|LN272|LN510|LS670|LS855|LW690|MN270|MN510|P509|P769|P930|UN200|UN270|UN510|UN610|US670|US740|US760|UX265|UX840|VN271|VN530|VS660|VS700|VS740|VS750|VS910|VS920|VS930|VX9200|VX11000|AX840A|LW770|P506|P925|P999|E612|D955|D802)",
         "Sony": "SonyST|SonyLT|SonyEricsson|SonyEricssonLT15iv|LT18i|E10i|LT28h|LT26w|SonyEricssonMT27i|C5303|C6902|C6903|C6906|C6943|D2533",
         "Asus": "Asus.*Galaxy|PadFone.*Mobile",
         "Micromax": "Micromax.*\\b(A210|A92|A88|A72|A111|A110Q|A115|A116|A110|A90S|A26|A51|A35|A54|A25|A27|A89|A68|A65|A57|A90)\\b",
@@ -37,7 +37,7 @@ define(function () {
     "tablets": {
         "iPad": "iPad|iPad.*Mobile",
         "NexusTablet": "Android.*Nexus[\\s]+(7|9|10)",
-        "SamsungTablet": "SAMSUNG.*Tablet|Galaxy.*Tab|SC-01C|GT-P1000|GT-P1003|GT-P1010|GT-P3105|GT-P6210|GT-P6800|GT-P6810|GT-P7100|GT-P7300|GT-P7310|GT-P7500|GT-P7510|SCH-I800|SCH-I815|SCH-I905|SGH-I957|SGH-I987|SGH-T849|SGH-T859|SGH-T869|SPH-P100|GT-P3100|GT-P3108|GT-P3110|GT-P5100|GT-P5110|GT-P6200|GT-P7320|GT-P7511|GT-N8000|GT-P8510|SGH-I497|SPH-P500|SGH-T779|SCH-I705|SCH-I915|GT-N8013|GT-P3113|GT-P5113|GT-P8110|GT-N8010|GT-N8005|GT-N8020|GT-P1013|GT-P6201|GT-P7501|GT-N5100|GT-N5105|GT-N5110|SHV-E140K|SHV-E140L|SHV-E140S|SHV-E150S|SHV-E230K|SHV-E230L|SHV-E230S|SHW-M180K|SHW-M180L|SHW-M180S|SHW-M180W|SHW-M300W|SHW-M305W|SHW-M380K|SHW-M380S|SHW-M380W|SHW-M430W|SHW-M480K|SHW-M480S|SHW-M480W|SHW-M485W|SHW-M486W|SHW-M500W|GT-I9228|SCH-P739|SCH-I925|GT-I9200|GT-P5200|GT-P5210|GT-P5210X|SM-T311|SM-T310|SM-T310X|SM-T210|SM-T210R|SM-T211|SM-P600|SM-P601|SM-P605|SM-P900|SM-P901|SM-T217|SM-T217A|SM-T217S|SM-P6000|SM-T3100|SGH-I467|XE500|SM-T110|GT-P5220|GT-I9200X|GT-N5110X|GT-N5120|SM-P905|SM-T111|SM-T2105|SM-T315|SM-T320|SM-T320X|SM-T321|SM-T520|SM-T525|SM-T530NU|SM-T230NU|SM-T330NU|SM-T900|XE500T1C|SM-P605V|SM-P905V|SM-T337V|SM-T537V|SM-T707V|SM-T807V|SM-P600X|SM-P900X|SM-T210X|SM-T230|SM-T230X|SM-T325|GT-P7503|SM-T531|SM-T330|SM-T530|SM-T705|SM-T705C|SM-T535|SM-T331|SM-T800|SM-T700|SM-T537|SM-T807|SM-P907A|SM-T337A|SM-T537A|SM-T707A|SM-T807A|SM-T237|SM-T807P|SM-P607T|SM-T217T|SM-T337T|SM-T807T|SM-T116NQ|SM-P550|SM-T350|SM-T550|SM-T9000|SM-P9000|SM-T705Y|SM-T805|GT-P3113|SM-T710|SM-T810|SM-T360|SM-T533|SM-T113|SM-T335|SM-T715",
+        "SamsungTablet": "SAMSUNG.*Tablet|Galaxy.*Tab|SC-01C|GT-P1000|GT-P1003|GT-P1010|GT-P3105|GT-P6210|GT-P6800|GT-P6810|GT-P7100|GT-P7300|GT-P7310|GT-P7500|GT-P7510|SCH-I800|SCH-I815|SCH-I905|SGH-I957|SGH-I987|SGH-T849|SGH-T859|SGH-T869|SPH-P100|GT-P3100|GT-P3108|GT-P3110|GT-P5100|GT-P5110|GT-P6200|GT-P7320|GT-P7511|GT-N8000|GT-P8510|SGH-I497|SPH-P500|SGH-T779|SCH-I705|SCH-I915|GT-N8013|GT-P3113|GT-P5113|GT-P8110|GT-N8010|GT-N8005|GT-N8020|GT-P1013|GT-P6201|GT-P7501|GT-N5100|GT-N5105|GT-N5110|SHV-E140K|SHV-E140L|SHV-E140S|SHV-E150S|SHV-E230K|SHV-E230L|SHV-E230S|SHW-M180K|SHW-M180L|SHW-M180S|SHW-M180W|SHW-M300W|SHW-M305W|SHW-M380K|SHW-M380S|SHW-M380W|SHW-M430W|SHW-M480K|SHW-M480S|SHW-M480W|SHW-M485W|SHW-M486W|SHW-M500W|GT-I9228|SCH-P739|SCH-I925|GT-I9200|GT-P5200|GT-P5210|GT-P5210X|SM-T311|SM-T310|SM-T310X|SM-T210|SM-T210R|SM-T211|SM-P600|SM-P601|SM-P605|SM-P900|SM-P901|SM-T217|SM-T217A|SM-T217S|SM-P6000|SM-T3100|SGH-I467|XE500|SM-T110|GT-P5220|GT-I9200X|GT-N5110X|GT-N5120|SM-P905|SM-T111|SM-T2105|SM-T315|SM-T320|SM-T320X|SM-T321|SM-T520|SM-T525|SM-T530NU|SM-T230NU|SM-T330NU|SM-T900|XE500T1C|SM-P605V|SM-P905V|SM-T337V|SM-T537V|SM-T707V|SM-T807V|SM-P600X|SM-P900X|SM-T210X|SM-T230|SM-T230X|SM-T325|GT-P7503|SM-T531|SM-T330|SM-T530|SM-T705|SM-T705C|SM-T535|SM-T331|SM-T800|SM-T700|SM-T537|SM-T807|SM-P907A|SM-T337A|SM-T537A|SM-T707A|SM-T807A|SM-T237|SM-T807P|SM-P607T|SM-T217T|SM-T337T|SM-T807T|SM-T116NQ|SM-P550|SM-T350|SM-T550|SM-T9000|SM-P9000|SM-T705Y|SM-T805|GT-P3113|SM-T710|SM-T810|SM-T360",
         "Kindle": "Kindle|Silk.*Accelerated|Android.*\\b(KFOT|KFTT|KFJWI|KFJWA|KFOTE|KFSOWI|KFTHWI|KFTHWA|KFAPWI|KFAPWA|WFJWAE|KFSAWA|KFSAWI|KFASWI)\\b",
         "SurfaceTablet": "Windows NT [0-9.]+; ARM;.*(Tablet|ARMBJS)",
         "HPTablet": "HP Slate (7|8|10)|HP ElitePad 900|hp-tablet|EliteBook.*Touch|HP 8|Slate 21|HP SlateBook 10",
@@ -134,7 +134,6 @@ define(function () {
         "DigmaTablet": "\\b(iDx10|iDx9|iDx8|iDx7|iDxD7|iDxD8|iDsQ8|iDsQ7|iDsQ8|iDsD10|iDnD7|3TS804H|iDsQ11|iDj7|iDs10)\\b",
         "EvolioTablet": "ARIA_Mini_wifi|Aria[ _]Mini|Evolio X10|Evolio X7|Evolio X8|\\bEvotab\\b|\\bNeura\\b",
         "LavaTablet": "QPAD E704|\\bIvoryS\\b|E-TAB IVORY|\\bE-TAB\\b",
-        "AocTablet": "MW0811|MW0812|MW0922|MTK8382",
         "CelkonTablet": "CT695|CT888|CT[\\s]?910|CT7 Tab|CT9 Tab|CT3 Tab|CT2 Tab|CT1 Tab|C820|C720|\\bCT-1\\b",
         "WolderTablet": "miTab \\b(DIAMOND|SPACE|BROOKLYN|NEO|FLY|MANHATTAN|FUNK|EVOLUTION|SKY|GOCAR|IRON|GENIUS|POP|MINT|EPSILON|BROADWAY|JUMP|HOP|LEGEND|NEW AGE|LINE|ADVANCE|FEEL|FOLLOW|LIKE|LINK|LIVE|THINK|FREEDOM|CHICAGO|CLEVELAND|BALTIMORE-GH|IOWA|BOSTON|SEATTLE|PHOENIX|DALLAS|IN 101|MasterChef)\\b",
         "MiTablet": "\\bMI PAD\\b|\\bHM NOTE 1W\\b",
@@ -143,7 +142,7 @@ define(function () {
         "LeaderTablet": "TBLT10Q|TBLT10I|TBL-10WDKB|TBL-10WDKBO2013|TBL-W230V2|TBL-W450|TBL-W500|SV572|TBLT7I|TBA-AC7-8G|TBLT79|TBL-8W16|TBL-10W32|TBL-10WKB|TBL-W100",
         "UbislateTablet": "UbiSlate[\\s]?7C",
         "PocketBookTablet": "Pocketbook",
-        "Hudl": "Hudl HT7S3|Hudl 2",
+        "Hudl": "Hudl HT7S3",
         "TelstraTablet": "T-Hub2",
         "GenericTablet": "Android.*\\b97D\\b|Tablet(?!.*PC)|BNTV250A|MID-WCDMA|LogicPD Zoom2|\\bA7EB\\b|CatNova8|A1_07|CT704|CT1002|\\bM721\\b|rk30sdk|\\bEVOTAB\\b|M758A|ET904|ALUMIUM10|Smartfren Tab|Endeavour 1010|Tablet-PC-4|Tagi Tab|\\bM6pro\\b|CT1020W|arc 10HD|\\bJolla\\b|\\bTP750\\b"
     },
@@ -153,7 +152,7 @@ define(function () {
         "PalmOS": "PalmOS|avantgo|blazer|elaine|hiptop|palm|plucker|xiino",
         "SymbianOS": "Symbian|SymbOS|Series60|Series40|SYB-[0-9]+|\\bS60\\b",
         "WindowsMobileOS": "Windows CE.*(PPC|Smartphone|Mobile|[0-9]{3}x[0-9]{3})|Window Mobile|Windows Phone [0-9.]+|WCE;",
-        "WindowsPhoneOS": "Windows Phone 10.0|Windows Phone 8.1|Windows Phone 8.0|Windows Phone OS|XBLWP7|ZuneWP7|Windows NT 6.[23]; ARM;",
+        "WindowsPhoneOS": "Windows Phone 8.1|Windows Phone 8.0|Windows Phone OS|XBLWP7|ZuneWP7|Windows NT 6.[23]; ARM;",
         "iOS": "\\biPhone.*Mobile|\\biPod|\\biPad",
         "MeeGoOS": "MeeGo",
         "MaemoOS": "Maemo",
@@ -748,9 +747,9 @@ define(function () {
          * AudioSonicTablet, AMPETablet, SkkTablet, TecnoTablet, JXDTablet, iJoyTablet,
          * FX2Tablet, XoroTablet, ViewsonicTablet, OdysTablet, CaptivaTablet,
          * IconbitTablet, TeclastTablet, OndaTablet, JaytechTablet, BlaupunktTablet,
-         * DigmaTablet, EvolioTablet, LavaTablet, AocTablet, CelkonTablet, WolderTablet,
-         * MiTablet, NibiruTablet, NexoTablet, LeaderTablet, UbislateTablet,
-         * PocketBookTablet, Hudl, TelstraTablet, GenericTablet</tt><br>
+         * DigmaTablet, EvolioTablet, LavaTablet, CelkonTablet, WolderTablet, MiTablet,
+         * NibiruTablet, NexoTablet, LeaderTablet, UbislateTablet, PocketBookTablet, Hudl,
+         * TelstraTablet, GenericTablet</tt><br>
          * <br>
          * If the device is not detected by the regular expressions from Mobile-Detect, a test is made against
          * the patterns of <a href="http://detectmobilebrowsers.com/">detectmobilebrowsers.com</a>. If this test
@@ -972,488 +971,564 @@ define(function () {
     }
 })());
 /*!
- * imagesLoaded PACKAGED v4.0.0
+ * imagesLoaded PACKAGED v3.2.0
  * JavaScript is all like "You images are done yet or what?"
  * MIT License
  */
 
 /*!
- * EventEmitter v4.2.11 - git.io/ee
- * Unlicense - http://unlicense.org/
- * Oliver Caldwell - http://oli.me.uk/
+ * EventEmitter v4.2.6 - git.io/ee
+ * Oliver Caldwell
+ * MIT license
  * @preserve
  */
 
-;(function () {
-    'use strict';
+(function () {
+	'use strict';
 
-    /**
-     * Class for managing events.
-     * Can be extended to provide event functionality in other classes.
-     *
-     * @class EventEmitter Manages event registering and emitting.
-     */
-    function EventEmitter() {}
+	/**
+	 * Class for managing events.
+	 * Can be extended to provide event functionality in other classes.
+	 *
+	 * @class EventEmitter Manages event registering and emitting.
+	 */
+	function EventEmitter() {}
 
-    // Shortcuts to improve speed and size
-    var proto = EventEmitter.prototype;
-    var exports = this;
-    var originalGlobalValue = exports.EventEmitter;
+	// Shortcuts to improve speed and size
+	var proto = EventEmitter.prototype;
+	var exports = this;
+	var originalGlobalValue = exports.EventEmitter;
 
-    /**
-     * Finds the index of the listener for the event in its storage array.
-     *
-     * @param {Function[]} listeners Array of listeners to search through.
-     * @param {Function} listener Method to look for.
-     * @return {Number} Index of the specified listener, -1 if not found
-     * @api private
-     */
-    function indexOfListener(listeners, listener) {
-        var i = listeners.length;
-        while (i--) {
-            if (listeners[i].listener === listener) {
-                return i;
-            }
-        }
+	/**
+	 * Finds the index of the listener for the event in it's storage array.
+	 *
+	 * @param {Function[]} listeners Array of listeners to search through.
+	 * @param {Function} listener Method to look for.
+	 * @return {Number} Index of the specified listener, -1 if not found
+	 * @api private
+	 */
+	function indexOfListener(listeners, listener) {
+		var i = listeners.length;
+		while (i--) {
+			if (listeners[i].listener === listener) {
+				return i;
+			}
+		}
 
-        return -1;
-    }
+		return -1;
+	}
 
-    /**
-     * Alias a method while keeping the context correct, to allow for overwriting of target method.
-     *
-     * @param {String} name The name of the target method.
-     * @return {Function} The aliased method
-     * @api private
-     */
-    function alias(name) {
-        return function aliasClosure() {
-            return this[name].apply(this, arguments);
-        };
-    }
+	/**
+	 * Alias a method while keeping the context correct, to allow for overwriting of target method.
+	 *
+	 * @param {String} name The name of the target method.
+	 * @return {Function} The aliased method
+	 * @api private
+	 */
+	function alias(name) {
+		return function aliasClosure() {
+			return this[name].apply(this, arguments);
+		};
+	}
 
-    /**
-     * Returns the listener array for the specified event.
-     * Will initialise the event object and listener arrays if required.
-     * Will return an object if you use a regex search. The object contains keys for each matched event. So /ba[rz]/ might return an object containing bar and baz. But only if you have either defined them with defineEvent or added some listeners to them.
-     * Each property in the object response is an array of listener functions.
-     *
-     * @param {String|RegExp} evt Name of the event to return the listeners from.
-     * @return {Function[]|Object} All listener functions for the event.
-     */
-    proto.getListeners = function getListeners(evt) {
-        var events = this._getEvents();
-        var response;
-        var key;
+	/**
+	 * Returns the listener array for the specified event.
+	 * Will initialise the event object and listener arrays if required.
+	 * Will return an object if you use a regex search. The object contains keys for each matched event. So /ba[rz]/ might return an object containing bar and baz. But only if you have either defined them with defineEvent or added some listeners to them.
+	 * Each property in the object response is an array of listener functions.
+	 *
+	 * @param {String|RegExp} evt Name of the event to return the listeners from.
+	 * @return {Function[]|Object} All listener functions for the event.
+	 */
+	proto.getListeners = function getListeners(evt) {
+		var events = this._getEvents();
+		var response;
+		var key;
 
-        // Return a concatenated array of all matching events if
-        // the selector is a regular expression.
-        if (evt instanceof RegExp) {
-            response = {};
-            for (key in events) {
-                if (events.hasOwnProperty(key) && evt.test(key)) {
-                    response[key] = events[key];
-                }
-            }
-        }
-        else {
-            response = events[evt] || (events[evt] = []);
-        }
+		// Return a concatenated array of all matching events if
+		// the selector is a regular expression.
+		if (typeof evt === 'object') {
+			response = {};
+			for (key in events) {
+				if (events.hasOwnProperty(key) && evt.test(key)) {
+					response[key] = events[key];
+				}
+			}
+		}
+		else {
+			response = events[evt] || (events[evt] = []);
+		}
 
-        return response;
-    };
+		return response;
+	};
 
-    /**
-     * Takes a list of listener objects and flattens it into a list of listener functions.
-     *
-     * @param {Object[]} listeners Raw listener objects.
-     * @return {Function[]} Just the listener functions.
-     */
-    proto.flattenListeners = function flattenListeners(listeners) {
-        var flatListeners = [];
-        var i;
+	/**
+	 * Takes a list of listener objects and flattens it into a list of listener functions.
+	 *
+	 * @param {Object[]} listeners Raw listener objects.
+	 * @return {Function[]} Just the listener functions.
+	 */
+	proto.flattenListeners = function flattenListeners(listeners) {
+		var flatListeners = [];
+		var i;
 
-        for (i = 0; i < listeners.length; i += 1) {
-            flatListeners.push(listeners[i].listener);
-        }
+		for (i = 0; i < listeners.length; i += 1) {
+			flatListeners.push(listeners[i].listener);
+		}
 
-        return flatListeners;
-    };
+		return flatListeners;
+	};
 
-    /**
-     * Fetches the requested listeners via getListeners but will always return the results inside an object. This is mainly for internal use but others may find it useful.
-     *
-     * @param {String|RegExp} evt Name of the event to return the listeners from.
-     * @return {Object} All listener functions for an event in an object.
-     */
-    proto.getListenersAsObject = function getListenersAsObject(evt) {
-        var listeners = this.getListeners(evt);
-        var response;
+	/**
+	 * Fetches the requested listeners via getListeners but will always return the results inside an object. This is mainly for internal use but others may find it useful.
+	 *
+	 * @param {String|RegExp} evt Name of the event to return the listeners from.
+	 * @return {Object} All listener functions for an event in an object.
+	 */
+	proto.getListenersAsObject = function getListenersAsObject(evt) {
+		var listeners = this.getListeners(evt);
+		var response;
 
-        if (listeners instanceof Array) {
-            response = {};
-            response[evt] = listeners;
-        }
+		if (listeners instanceof Array) {
+			response = {};
+			response[evt] = listeners;
+		}
 
-        return response || listeners;
-    };
+		return response || listeners;
+	};
 
-    /**
-     * Adds a listener function to the specified event.
-     * The listener will not be added if it is a duplicate.
-     * If the listener returns true then it will be removed after it is called.
-     * If you pass a regular expression as the event name then the listener will be added to all events that match it.
-     *
-     * @param {String|RegExp} evt Name of the event to attach the listener to.
-     * @param {Function} listener Method to be called when the event is emitted. If the function returns true then it will be removed after calling.
-     * @return {Object} Current instance of EventEmitter for chaining.
-     */
-    proto.addListener = function addListener(evt, listener) {
-        var listeners = this.getListenersAsObject(evt);
-        var listenerIsWrapped = typeof listener === 'object';
-        var key;
+	/**
+	 * Adds a listener function to the specified event.
+	 * The listener will not be added if it is a duplicate.
+	 * If the listener returns true then it will be removed after it is called.
+	 * If you pass a regular expression as the event name then the listener will be added to all events that match it.
+	 *
+	 * @param {String|RegExp} evt Name of the event to attach the listener to.
+	 * @param {Function} listener Method to be called when the event is emitted. If the function returns true then it will be removed after calling.
+	 * @return {Object} Current instance of EventEmitter for chaining.
+	 */
+	proto.addListener = function addListener(evt, listener) {
+		var listeners = this.getListenersAsObject(evt);
+		var listenerIsWrapped = typeof listener === 'object';
+		var key;
 
-        for (key in listeners) {
-            if (listeners.hasOwnProperty(key) && indexOfListener(listeners[key], listener) === -1) {
-                listeners[key].push(listenerIsWrapped ? listener : {
-                    listener: listener,
-                    once: false
-                });
-            }
-        }
+		for (key in listeners) {
+			if (listeners.hasOwnProperty(key) && indexOfListener(listeners[key], listener) === -1) {
+				listeners[key].push(listenerIsWrapped ? listener : {
+					listener: listener,
+					once: false
+				});
+			}
+		}
 
-        return this;
-    };
+		return this;
+	};
 
-    /**
-     * Alias of addListener
-     */
-    proto.on = alias('addListener');
+	/**
+	 * Alias of addListener
+	 */
+	proto.on = alias('addListener');
 
-    /**
-     * Semi-alias of addListener. It will add a listener that will be
-     * automatically removed after its first execution.
-     *
-     * @param {String|RegExp} evt Name of the event to attach the listener to.
-     * @param {Function} listener Method to be called when the event is emitted. If the function returns true then it will be removed after calling.
-     * @return {Object} Current instance of EventEmitter for chaining.
-     */
-    proto.addOnceListener = function addOnceListener(evt, listener) {
-        return this.addListener(evt, {
-            listener: listener,
-            once: true
-        });
-    };
+	/**
+	 * Semi-alias of addListener. It will add a listener that will be
+	 * automatically removed after it's first execution.
+	 *
+	 * @param {String|RegExp} evt Name of the event to attach the listener to.
+	 * @param {Function} listener Method to be called when the event is emitted. If the function returns true then it will be removed after calling.
+	 * @return {Object} Current instance of EventEmitter for chaining.
+	 */
+	proto.addOnceListener = function addOnceListener(evt, listener) {
+		return this.addListener(evt, {
+			listener: listener,
+			once: true
+		});
+	};
 
-    /**
-     * Alias of addOnceListener.
-     */
-    proto.once = alias('addOnceListener');
+	/**
+	 * Alias of addOnceListener.
+	 */
+	proto.once = alias('addOnceListener');
 
-    /**
-     * Defines an event name. This is required if you want to use a regex to add a listener to multiple events at once. If you don't do this then how do you expect it to know what event to add to? Should it just add to every possible match for a regex? No. That is scary and bad.
-     * You need to tell it what event names should be matched by a regex.
-     *
-     * @param {String} evt Name of the event to create.
-     * @return {Object} Current instance of EventEmitter for chaining.
-     */
-    proto.defineEvent = function defineEvent(evt) {
-        this.getListeners(evt);
-        return this;
-    };
+	/**
+	 * Defines an event name. This is required if you want to use a regex to add a listener to multiple events at once. If you don't do this then how do you expect it to know what event to add to? Should it just add to every possible match for a regex? No. That is scary and bad.
+	 * You need to tell it what event names should be matched by a regex.
+	 *
+	 * @param {String} evt Name of the event to create.
+	 * @return {Object} Current instance of EventEmitter for chaining.
+	 */
+	proto.defineEvent = function defineEvent(evt) {
+		this.getListeners(evt);
+		return this;
+	};
 
-    /**
-     * Uses defineEvent to define multiple events.
-     *
-     * @param {String[]} evts An array of event names to define.
-     * @return {Object} Current instance of EventEmitter for chaining.
-     */
-    proto.defineEvents = function defineEvents(evts) {
-        for (var i = 0; i < evts.length; i += 1) {
-            this.defineEvent(evts[i]);
-        }
-        return this;
-    };
+	/**
+	 * Uses defineEvent to define multiple events.
+	 *
+	 * @param {String[]} evts An array of event names to define.
+	 * @return {Object} Current instance of EventEmitter for chaining.
+	 */
+	proto.defineEvents = function defineEvents(evts) {
+		for (var i = 0; i < evts.length; i += 1) {
+			this.defineEvent(evts[i]);
+		}
+		return this;
+	};
 
-    /**
-     * Removes a listener function from the specified event.
-     * When passed a regular expression as the event name, it will remove the listener from all events that match it.
-     *
-     * @param {String|RegExp} evt Name of the event to remove the listener from.
-     * @param {Function} listener Method to remove from the event.
-     * @return {Object} Current instance of EventEmitter for chaining.
-     */
-    proto.removeListener = function removeListener(evt, listener) {
-        var listeners = this.getListenersAsObject(evt);
-        var index;
-        var key;
+	/**
+	 * Removes a listener function from the specified event.
+	 * When passed a regular expression as the event name, it will remove the listener from all events that match it.
+	 *
+	 * @param {String|RegExp} evt Name of the event to remove the listener from.
+	 * @param {Function} listener Method to remove from the event.
+	 * @return {Object} Current instance of EventEmitter for chaining.
+	 */
+	proto.removeListener = function removeListener(evt, listener) {
+		var listeners = this.getListenersAsObject(evt);
+		var index;
+		var key;
 
-        for (key in listeners) {
-            if (listeners.hasOwnProperty(key)) {
-                index = indexOfListener(listeners[key], listener);
+		for (key in listeners) {
+			if (listeners.hasOwnProperty(key)) {
+				index = indexOfListener(listeners[key], listener);
 
-                if (index !== -1) {
-                    listeners[key].splice(index, 1);
-                }
-            }
-        }
+				if (index !== -1) {
+					listeners[key].splice(index, 1);
+				}
+			}
+		}
 
-        return this;
-    };
+		return this;
+	};
 
-    /**
-     * Alias of removeListener
-     */
-    proto.off = alias('removeListener');
+	/**
+	 * Alias of removeListener
+	 */
+	proto.off = alias('removeListener');
 
-    /**
-     * Adds listeners in bulk using the manipulateListeners method.
-     * If you pass an object as the second argument you can add to multiple events at once. The object should contain key value pairs of events and listeners or listener arrays. You can also pass it an event name and an array of listeners to be added.
-     * You can also pass it a regular expression to add the array of listeners to all events that match it.
-     * Yeah, this function does quite a bit. That's probably a bad thing.
-     *
-     * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to add to multiple events at once.
-     * @param {Function[]} [listeners] An optional array of listener functions to add.
-     * @return {Object} Current instance of EventEmitter for chaining.
-     */
-    proto.addListeners = function addListeners(evt, listeners) {
-        // Pass through to manipulateListeners
-        return this.manipulateListeners(false, evt, listeners);
-    };
+	/**
+	 * Adds listeners in bulk using the manipulateListeners method.
+	 * If you pass an object as the second argument you can add to multiple events at once. The object should contain key value pairs of events and listeners or listener arrays. You can also pass it an event name and an array of listeners to be added.
+	 * You can also pass it a regular expression to add the array of listeners to all events that match it.
+	 * Yeah, this function does quite a bit. That's probably a bad thing.
+	 *
+	 * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to add to multiple events at once.
+	 * @param {Function[]} [listeners] An optional array of listener functions to add.
+	 * @return {Object} Current instance of EventEmitter for chaining.
+	 */
+	proto.addListeners = function addListeners(evt, listeners) {
+		// Pass through to manipulateListeners
+		return this.manipulateListeners(false, evt, listeners);
+	};
 
-    /**
-     * Removes listeners in bulk using the manipulateListeners method.
-     * If you pass an object as the second argument you can remove from multiple events at once. The object should contain key value pairs of events and listeners or listener arrays.
-     * You can also pass it an event name and an array of listeners to be removed.
-     * You can also pass it a regular expression to remove the listeners from all events that match it.
-     *
-     * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to remove from multiple events at once.
-     * @param {Function[]} [listeners] An optional array of listener functions to remove.
-     * @return {Object} Current instance of EventEmitter for chaining.
-     */
-    proto.removeListeners = function removeListeners(evt, listeners) {
-        // Pass through to manipulateListeners
-        return this.manipulateListeners(true, evt, listeners);
-    };
+	/**
+	 * Removes listeners in bulk using the manipulateListeners method.
+	 * If you pass an object as the second argument you can remove from multiple events at once. The object should contain key value pairs of events and listeners or listener arrays.
+	 * You can also pass it an event name and an array of listeners to be removed.
+	 * You can also pass it a regular expression to remove the listeners from all events that match it.
+	 *
+	 * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to remove from multiple events at once.
+	 * @param {Function[]} [listeners] An optional array of listener functions to remove.
+	 * @return {Object} Current instance of EventEmitter for chaining.
+	 */
+	proto.removeListeners = function removeListeners(evt, listeners) {
+		// Pass through to manipulateListeners
+		return this.manipulateListeners(true, evt, listeners);
+	};
 
-    /**
-     * Edits listeners in bulk. The addListeners and removeListeners methods both use this to do their job. You should really use those instead, this is a little lower level.
-     * The first argument will determine if the listeners are removed (true) or added (false).
-     * If you pass an object as the second argument you can add/remove from multiple events at once. The object should contain key value pairs of events and listeners or listener arrays.
-     * You can also pass it an event name and an array of listeners to be added/removed.
-     * You can also pass it a regular expression to manipulate the listeners of all events that match it.
-     *
-     * @param {Boolean} remove True if you want to remove listeners, false if you want to add.
-     * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to add/remove from multiple events at once.
-     * @param {Function[]} [listeners] An optional array of listener functions to add/remove.
-     * @return {Object} Current instance of EventEmitter for chaining.
-     */
-    proto.manipulateListeners = function manipulateListeners(remove, evt, listeners) {
-        var i;
-        var value;
-        var single = remove ? this.removeListener : this.addListener;
-        var multiple = remove ? this.removeListeners : this.addListeners;
+	/**
+	 * Edits listeners in bulk. The addListeners and removeListeners methods both use this to do their job. You should really use those instead, this is a little lower level.
+	 * The first argument will determine if the listeners are removed (true) or added (false).
+	 * If you pass an object as the second argument you can add/remove from multiple events at once. The object should contain key value pairs of events and listeners or listener arrays.
+	 * You can also pass it an event name and an array of listeners to be added/removed.
+	 * You can also pass it a regular expression to manipulate the listeners of all events that match it.
+	 *
+	 * @param {Boolean} remove True if you want to remove listeners, false if you want to add.
+	 * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to add/remove from multiple events at once.
+	 * @param {Function[]} [listeners] An optional array of listener functions to add/remove.
+	 * @return {Object} Current instance of EventEmitter for chaining.
+	 */
+	proto.manipulateListeners = function manipulateListeners(remove, evt, listeners) {
+		var i;
+		var value;
+		var single = remove ? this.removeListener : this.addListener;
+		var multiple = remove ? this.removeListeners : this.addListeners;
 
-        // If evt is an object then pass each of its properties to this method
-        if (typeof evt === 'object' && !(evt instanceof RegExp)) {
-            for (i in evt) {
-                if (evt.hasOwnProperty(i) && (value = evt[i])) {
-                    // Pass the single listener straight through to the singular method
-                    if (typeof value === 'function') {
-                        single.call(this, i, value);
-                    }
-                    else {
-                        // Otherwise pass back to the multiple function
-                        multiple.call(this, i, value);
-                    }
-                }
-            }
-        }
-        else {
-            // So evt must be a string
-            // And listeners must be an array of listeners
-            // Loop over it and pass each one to the multiple method
-            i = listeners.length;
-            while (i--) {
-                single.call(this, evt, listeners[i]);
-            }
-        }
+		// If evt is an object then pass each of it's properties to this method
+		if (typeof evt === 'object' && !(evt instanceof RegExp)) {
+			for (i in evt) {
+				if (evt.hasOwnProperty(i) && (value = evt[i])) {
+					// Pass the single listener straight through to the singular method
+					if (typeof value === 'function') {
+						single.call(this, i, value);
+					}
+					else {
+						// Otherwise pass back to the multiple function
+						multiple.call(this, i, value);
+					}
+				}
+			}
+		}
+		else {
+			// So evt must be a string
+			// And listeners must be an array of listeners
+			// Loop over it and pass each one to the multiple method
+			i = listeners.length;
+			while (i--) {
+				single.call(this, evt, listeners[i]);
+			}
+		}
 
-        return this;
-    };
+		return this;
+	};
 
-    /**
-     * Removes all listeners from a specified event.
-     * If you do not specify an event then all listeners will be removed.
-     * That means every event will be emptied.
-     * You can also pass a regex to remove all events that match it.
-     *
-     * @param {String|RegExp} [evt] Optional name of the event to remove all listeners for. Will remove from every event if not passed.
-     * @return {Object} Current instance of EventEmitter for chaining.
-     */
-    proto.removeEvent = function removeEvent(evt) {
-        var type = typeof evt;
-        var events = this._getEvents();
-        var key;
+	/**
+	 * Removes all listeners from a specified event.
+	 * If you do not specify an event then all listeners will be removed.
+	 * That means every event will be emptied.
+	 * You can also pass a regex to remove all events that match it.
+	 *
+	 * @param {String|RegExp} [evt] Optional name of the event to remove all listeners for. Will remove from every event if not passed.
+	 * @return {Object} Current instance of EventEmitter for chaining.
+	 */
+	proto.removeEvent = function removeEvent(evt) {
+		var type = typeof evt;
+		var events = this._getEvents();
+		var key;
 
-        // Remove different things depending on the state of evt
-        if (type === 'string') {
-            // Remove all listeners for the specified event
-            delete events[evt];
-        }
-        else if (evt instanceof RegExp) {
-            // Remove all events matching the regex.
-            for (key in events) {
-                if (events.hasOwnProperty(key) && evt.test(key)) {
-                    delete events[key];
-                }
-            }
-        }
-        else {
-            // Remove all listeners in all events
-            delete this._events;
-        }
+		// Remove different things depending on the state of evt
+		if (type === 'string') {
+			// Remove all listeners for the specified event
+			delete events[evt];
+		}
+		else if (type === 'object') {
+			// Remove all events matching the regex.
+			for (key in events) {
+				if (events.hasOwnProperty(key) && evt.test(key)) {
+					delete events[key];
+				}
+			}
+		}
+		else {
+			// Remove all listeners in all events
+			delete this._events;
+		}
 
-        return this;
-    };
+		return this;
+	};
 
-    /**
-     * Alias of removeEvent.
-     *
-     * Added to mirror the node API.
-     */
-    proto.removeAllListeners = alias('removeEvent');
+	/**
+	 * Alias of removeEvent.
+	 *
+	 * Added to mirror the node API.
+	 */
+	proto.removeAllListeners = alias('removeEvent');
 
-    /**
-     * Emits an event of your choice.
-     * When emitted, every listener attached to that event will be executed.
-     * If you pass the optional argument array then those arguments will be passed to every listener upon execution.
-     * Because it uses `apply`, your array of arguments will be passed as if you wrote them out separately.
-     * So they will not arrive within the array on the other side, they will be separate.
-     * You can also pass a regular expression to emit to all events that match it.
-     *
-     * @param {String|RegExp} evt Name of the event to emit and execute listeners for.
-     * @param {Array} [args] Optional array of arguments to be passed to each listener.
-     * @return {Object} Current instance of EventEmitter for chaining.
-     */
-    proto.emitEvent = function emitEvent(evt, args) {
-        var listenersMap = this.getListenersAsObject(evt);
-        var listeners;
-        var listener;
-        var i;
-        var key;
-        var response;
+	/**
+	 * Emits an event of your choice.
+	 * When emitted, every listener attached to that event will be executed.
+	 * If you pass the optional argument array then those arguments will be passed to every listener upon execution.
+	 * Because it uses `apply`, your array of arguments will be passed as if you wrote them out separately.
+	 * So they will not arrive within the array on the other side, they will be separate.
+	 * You can also pass a regular expression to emit to all events that match it.
+	 *
+	 * @param {String|RegExp} evt Name of the event to emit and execute listeners for.
+	 * @param {Array} [args] Optional array of arguments to be passed to each listener.
+	 * @return {Object} Current instance of EventEmitter for chaining.
+	 */
+	proto.emitEvent = function emitEvent(evt, args) {
+		var listeners = this.getListenersAsObject(evt);
+		var listener;
+		var i;
+		var key;
+		var response;
 
-        for (key in listenersMap) {
-            if (listenersMap.hasOwnProperty(key)) {
-                listeners = listenersMap[key].slice(0);
-                i = listeners.length;
+		for (key in listeners) {
+			if (listeners.hasOwnProperty(key)) {
+				i = listeners[key].length;
 
-                while (i--) {
-                    // If the listener returns true then it shall be removed from the event
-                    // The function is executed either with a basic call or an apply if there is an args array
-                    listener = listeners[i];
+				while (i--) {
+					// If the listener returns true then it shall be removed from the event
+					// The function is executed either with a basic call or an apply if there is an args array
+					listener = listeners[key][i];
 
-                    if (listener.once === true) {
-                        this.removeListener(evt, listener.listener);
-                    }
+					if (listener.once === true) {
+						this.removeListener(evt, listener.listener);
+					}
 
-                    response = listener.listener.apply(this, args || []);
+					response = listener.listener.apply(this, args || []);
 
-                    if (response === this._getOnceReturnValue()) {
-                        this.removeListener(evt, listener.listener);
-                    }
-                }
-            }
-        }
+					if (response === this._getOnceReturnValue()) {
+						this.removeListener(evt, listener.listener);
+					}
+				}
+			}
+		}
 
-        return this;
-    };
+		return this;
+	};
 
-    /**
-     * Alias of emitEvent
-     */
-    proto.trigger = alias('emitEvent');
+	/**
+	 * Alias of emitEvent
+	 */
+	proto.trigger = alias('emitEvent');
 
-    /**
-     * Subtly different from emitEvent in that it will pass its arguments on to the listeners, as opposed to taking a single array of arguments to pass on.
-     * As with emitEvent, you can pass a regex in place of the event name to emit to all events that match it.
-     *
-     * @param {String|RegExp} evt Name of the event to emit and execute listeners for.
-     * @param {...*} Optional additional arguments to be passed to each listener.
-     * @return {Object} Current instance of EventEmitter for chaining.
-     */
-    proto.emit = function emit(evt) {
-        var args = Array.prototype.slice.call(arguments, 1);
-        return this.emitEvent(evt, args);
-    };
+	/**
+	 * Subtly different from emitEvent in that it will pass its arguments on to the listeners, as opposed to taking a single array of arguments to pass on.
+	 * As with emitEvent, you can pass a regex in place of the event name to emit to all events that match it.
+	 *
+	 * @param {String|RegExp} evt Name of the event to emit and execute listeners for.
+	 * @param {...*} Optional additional arguments to be passed to each listener.
+	 * @return {Object} Current instance of EventEmitter for chaining.
+	 */
+	proto.emit = function emit(evt) {
+		var args = Array.prototype.slice.call(arguments, 1);
+		return this.emitEvent(evt, args);
+	};
 
-    /**
-     * Sets the current value to check against when executing listeners. If a
-     * listeners return value matches the one set here then it will be removed
-     * after execution. This value defaults to true.
-     *
-     * @param {*} value The new value to check for when executing listeners.
-     * @return {Object} Current instance of EventEmitter for chaining.
-     */
-    proto.setOnceReturnValue = function setOnceReturnValue(value) {
-        this._onceReturnValue = value;
-        return this;
-    };
+	/**
+	 * Sets the current value to check against when executing listeners. If a
+	 * listeners return value matches the one set here then it will be removed
+	 * after execution. This value defaults to true.
+	 *
+	 * @param {*} value The new value to check for when executing listeners.
+	 * @return {Object} Current instance of EventEmitter for chaining.
+	 */
+	proto.setOnceReturnValue = function setOnceReturnValue(value) {
+		this._onceReturnValue = value;
+		return this;
+	};
 
-    /**
-     * Fetches the current value to check against when executing listeners. If
-     * the listeners return value matches this one then it should be removed
-     * automatically. It will return true by default.
-     *
-     * @return {*|Boolean} The current value to check for or the default, true.
-     * @api private
-     */
-    proto._getOnceReturnValue = function _getOnceReturnValue() {
-        if (this.hasOwnProperty('_onceReturnValue')) {
-            return this._onceReturnValue;
-        }
-        else {
-            return true;
-        }
-    };
+	/**
+	 * Fetches the current value to check against when executing listeners. If
+	 * the listeners return value matches this one then it should be removed
+	 * automatically. It will return true by default.
+	 *
+	 * @return {*|Boolean} The current value to check for or the default, true.
+	 * @api private
+	 */
+	proto._getOnceReturnValue = function _getOnceReturnValue() {
+		if (this.hasOwnProperty('_onceReturnValue')) {
+			return this._onceReturnValue;
+		}
+		else {
+			return true;
+		}
+	};
 
-    /**
-     * Fetches the events object and creates one if required.
-     *
-     * @return {Object} The events storage object.
-     * @api private
-     */
-    proto._getEvents = function _getEvents() {
-        return this._events || (this._events = {});
-    };
+	/**
+	 * Fetches the events object and creates one if required.
+	 *
+	 * @return {Object} The events storage object.
+	 * @api private
+	 */
+	proto._getEvents = function _getEvents() {
+		return this._events || (this._events = {});
+	};
 
-    /**
-     * Reverts the global {@link EventEmitter} to its previous value and returns a reference to this version.
-     *
-     * @return {Function} Non conflicting EventEmitter class.
-     */
-    EventEmitter.noConflict = function noConflict() {
-        exports.EventEmitter = originalGlobalValue;
-        return EventEmitter;
-    };
+	/**
+	 * Reverts the global {@link EventEmitter} to its previous value and returns a reference to this version.
+	 *
+	 * @return {Function} Non conflicting EventEmitter class.
+	 */
+	EventEmitter.noConflict = function noConflict() {
+		exports.EventEmitter = originalGlobalValue;
+		return EventEmitter;
+	};
 
-    // Expose the class either via AMD, CommonJS or the global object
-    if (typeof define === 'function' && define.amd) {
-        define('eventEmitter/EventEmitter',[],function () {
-            return EventEmitter;
-        });
-    }
-    else if (typeof module === 'object' && module.exports){
-        module.exports = EventEmitter;
-    }
-    else {
-        exports.EventEmitter = EventEmitter;
-    }
+	// Expose the class either via AMD, CommonJS or the global object
+	if (typeof define === 'function' && define.amd) {
+		define('eventEmitter/EventEmitter',[],function () {
+			return EventEmitter;
+		});
+	}
+	else if (typeof module === 'object' && module.exports){
+		module.exports = EventEmitter;
+	}
+	else {
+		this.EventEmitter = EventEmitter;
+	}
 }.call(this));
 
 /*!
- * imagesLoaded v4.0.0
+ * eventie v1.0.4
+ * event binding helper
+ *   eventie.bind( elem, 'click', myFn )
+ *   eventie.unbind( elem, 'click', myFn )
+ */
+
+/*jshint browser: true, undef: true, unused: true */
+/*global define: false */
+
+( function( window ) {
+
+
+
+var docElem = document.documentElement;
+
+var bind = function() {};
+
+function getIEEvent( obj ) {
+  var event = window.event;
+  // add event.target
+  event.target = event.target || event.srcElement || obj;
+  return event;
+}
+
+if ( docElem.addEventListener ) {
+  bind = function( obj, type, fn ) {
+    obj.addEventListener( type, fn, false );
+  };
+} else if ( docElem.attachEvent ) {
+  bind = function( obj, type, fn ) {
+    obj[ type + fn ] = fn.handleEvent ?
+      function() {
+        var event = getIEEvent( obj );
+        fn.handleEvent.call( fn, event );
+      } :
+      function() {
+        var event = getIEEvent( obj );
+        fn.call( obj, event );
+      };
+    obj.attachEvent( "on" + type, obj[ type + fn ] );
+  };
+}
+
+var unbind = function() {};
+
+if ( docElem.removeEventListener ) {
+  unbind = function( obj, type, fn ) {
+    obj.removeEventListener( type, fn, false );
+  };
+} else if ( docElem.detachEvent ) {
+  unbind = function( obj, type, fn ) {
+    obj.detachEvent( "on" + type, obj[ type + fn ] );
+    try {
+      delete obj[ type + fn ];
+    } catch ( err ) {
+      // can't delete window object properties
+      obj[ type + fn ] = undefined;
+    }
+  };
+}
+
+var eventie = {
+  bind: bind,
+  unbind: unbind
+};
+
+// transport
+if ( typeof define === 'function' && define.amd ) {
+  // AMD
+  define( 'eventie/eventie',eventie );
+} else {
+  // browser global
+  window.eventie = eventie;
+}
+
+})( this );
+
+/*!
+ * imagesLoaded v3.2.0
  * JavaScript is all like "You images are done yet or what?"
  * MIT License
  */
@@ -1466,21 +1541,24 @@ define(function () {
   if ( typeof define == 'function' && define.amd ) {
     // AMD
     define( [
-      'eventEmitter/EventEmitter'
-    ], function( EventEmitter ) {
-      return factory( window, EventEmitter );
+      'eventEmitter/EventEmitter',
+      'eventie/eventie'
+    ], function( EventEmitter, eventie ) {
+      return factory( window, EventEmitter, eventie );
     });
   } else if ( typeof module == 'object' && module.exports ) {
     // CommonJS
     module.exports = factory(
       window,
-      require('wolfy87-eventemitter')
+      require('wolfy87-eventemitter'),
+      require('eventie')
     );
   } else {
     // browser global
     window.imagesLoaded = factory(
       window,
-      window.EventEmitter
+      window.EventEmitter,
+      window.eventie
     );
   }
 
@@ -1488,7 +1566,7 @@ define(function () {
 
 // --------------------------  factory -------------------------- //
 
-function factory( window, EventEmitter ) {
+function factory( window, EventEmitter, eventie ) {
 
 
 
@@ -1505,10 +1583,15 @@ function extend( a, b ) {
   return a;
 }
 
+var objToString = Object.prototype.toString;
+function isArray( obj ) {
+  return objToString.call( obj ) == '[object Array]';
+}
+
 // turn element or nodeList into an array
 function makeArray( obj ) {
   var ary = [];
-  if ( Array.isArray( obj ) ) {
+  if ( isArray( obj ) ) {
     // use object if already an array
     ary = obj;
   } else if ( typeof obj.length == 'number' ) {
@@ -1523,303 +1606,309 @@ function makeArray( obj ) {
   return ary;
 }
 
-// -------------------------- imagesLoaded -------------------------- //
+  // -------------------------- imagesLoaded -------------------------- //
 
-/**
- * @param {Array, Element, NodeList, String} elem
- * @param {Object or Function} options - if function, use as callback
- * @param {Function} onAlways - callback function
- */
-function ImagesLoaded( elem, options, onAlways ) {
-  // coerce ImagesLoaded() without new, to be new ImagesLoaded()
-  if ( !( this instanceof ImagesLoaded ) ) {
-    return new ImagesLoaded( elem, options, onAlways );
-  }
-  // use elem as selector string
-  if ( typeof elem == 'string' ) {
-    elem = document.querySelectorAll( elem );
-  }
-
-  this.elements = makeArray( elem );
-  this.options = extend( {}, this.options );
-
-  if ( typeof options == 'function' ) {
-    onAlways = options;
-  } else {
-    extend( this.options, options );
-  }
-
-  if ( onAlways ) {
-    this.on( 'always', onAlways );
-  }
-
-  this.getImages();
-
-  if ( $ ) {
-    // add jQuery Deferred object
-    this.jqDeferred = new $.Deferred();
-  }
-
-  // HACK check async to allow time to bind listeners
-  setTimeout( function() {
-    this.check();
-  }.bind( this ));
-}
-
-ImagesLoaded.prototype = Object.create( EventEmitter.prototype );
-
-ImagesLoaded.prototype.options = {};
-
-ImagesLoaded.prototype.getImages = function() {
-  this.images = [];
-
-  // filter & find items if we have an item selector
-  this.elements.forEach( this.addElementImages, this );
-};
-
-/**
- * @param {Node} element
- */
-ImagesLoaded.prototype.addElementImages = function( elem ) {
-  // filter siblings
-  if ( elem.nodeName == 'IMG' ) {
-    this.addImage( elem );
-  }
-  // get background image on element
-  if ( this.options.background === true ) {
-    this.addElementBackgroundImages( elem );
-  }
-
-  // find children
-  // no non-element nodes, #143
-  var nodeType = elem.nodeType;
-  if ( !nodeType || !elementNodeTypes[ nodeType ] ) {
-    return;
-  }
-  var childImgs = elem.querySelectorAll('img');
-  // concat childElems to filterFound array
-  for ( var i=0; i < childImgs.length; i++ ) {
-    var img = childImgs[i];
-    this.addImage( img );
-  }
-
-  // get child background images
-  if ( typeof this.options.background == 'string' ) {
-    var children = elem.querySelectorAll( this.options.background );
-    for ( i=0; i < children.length; i++ ) {
-      var child = children[i];
-      this.addElementBackgroundImages( child );
+  /**
+   * @param {Array, Element, NodeList, String} elem
+   * @param {Object or Function} options - if function, use as callback
+   * @param {Function} onAlways - callback function
+   */
+  function ImagesLoaded( elem, options, onAlways ) {
+    // coerce ImagesLoaded() without new, to be new ImagesLoaded()
+    if ( !( this instanceof ImagesLoaded ) ) {
+      return new ImagesLoaded( elem, options, onAlways );
     }
-  }
-};
-
-var elementNodeTypes = {
-  1: true,
-  9: true,
-  11: true
-};
-
-ImagesLoaded.prototype.addElementBackgroundImages = function( elem ) {
-  var style = getComputedStyle( elem );
-  if ( !style ) {
-    // Firefox returns null if in a hidden iframe https://bugzil.la/548397
-    return;
-  }
-  // get url inside url("...")
-  var reURL = /url\((['"])?(.*?)\1\)/gi;
-  var matches = reURL.exec( style.backgroundImage );
-  while ( matches !== null ) {
-    var url = matches && matches[2];
-    if ( url ) {
-      this.addBackground( url, elem );
+    // use elem as selector string
+    if ( typeof elem == 'string' ) {
+      elem = document.querySelectorAll( elem );
     }
-    matches = reURL.exec( style.backgroundImage );
-  }
-};
 
-/**
- * @param {Image} img
- */
-ImagesLoaded.prototype.addImage = function( img ) {
-  var loadingImage = new LoadingImage( img );
-  this.images.push( loadingImage );
-};
+    this.elements = makeArray( elem );
+    this.options = extend( {}, this.options );
 
-ImagesLoaded.prototype.addBackground = function( url, elem ) {
-  var background = new Background( url, elem );
-  this.images.push( background );
-};
+    if ( typeof options == 'function' ) {
+      onAlways = options;
+    } else {
+      extend( this.options, options );
+    }
 
-ImagesLoaded.prototype.check = function() {
-  var _this = this;
-  this.progressedCount = 0;
-  this.hasAnyBroken = false;
-  // complete if no images
-  if ( !this.images.length ) {
-    this.complete();
-    return;
-  }
+    if ( onAlways ) {
+      this.on( 'always', onAlways );
+    }
 
-  function onProgress( image, elem, message ) {
-    // HACK - Chrome triggers event before object properties have changed. #83
+    this.getImages();
+
+    if ( $ ) {
+      // add jQuery Deferred object
+      this.jqDeferred = new $.Deferred();
+    }
+
+    // HACK check async to allow time to bind listeners
+    var _this = this;
     setTimeout( function() {
-      _this.progress( image, elem, message );
+      _this.check();
     });
   }
 
-  this.images.forEach( function( loadingImage ) {
-    loadingImage.once( 'progress', onProgress );
-    loadingImage.check();
-  });
-};
+  ImagesLoaded.prototype = new EventEmitter();
 
-ImagesLoaded.prototype.progress = function( image, elem, message ) {
-  this.progressedCount++;
-  this.hasAnyBroken = this.hasAnyBroken || !image.isLoaded;
-  // progress event
-  this.emit( 'progress', this, image, elem );
-  if ( this.jqDeferred && this.jqDeferred.notify ) {
-    this.jqDeferred.notify( this, image );
-  }
-  // check if completed
-  if ( this.progressedCount == this.images.length ) {
-    this.complete();
-  }
+  ImagesLoaded.prototype.options = {};
 
-  if ( this.options.debug && console ) {
-    console.log( 'progress: ' + message, image, elem );
-  }
-};
+  ImagesLoaded.prototype.getImages = function() {
+    this.images = [];
 
-ImagesLoaded.prototype.complete = function() {
-  var eventName = this.hasAnyBroken ? 'fail' : 'done';
-  this.isComplete = true;
-  this.emit( eventName, this );
-  this.emit( 'always', this );
-  if ( this.jqDeferred ) {
-    var jqMethod = this.hasAnyBroken ? 'reject' : 'resolve';
-    this.jqDeferred[ jqMethod ]( this );
-  }
-};
-
-// --------------------------  -------------------------- //
-
-function LoadingImage( img ) {
-  this.img = img;
-}
-
-LoadingImage.prototype = Object.create( EventEmitter.prototype );
-
-LoadingImage.prototype.check = function() {
-  // If complete is true and browser supports natural sizes,
-  // try to check for image status manually.
-  var isComplete = this.getIsImageComplete();
-  if ( isComplete ) {
-    // report based on naturalWidth
-    this.confirm( this.img.naturalWidth !== 0, 'naturalWidth' );
-    return;
-  }
-
-  // If none of the checks above matched, simulate loading on detached element.
-  this.proxyImage = new Image();
-  this.proxyImage.addEventListener( 'load', this );
-  this.proxyImage.addEventListener( 'error', this );
-  // bind to image as well for Firefox. #191
-  this.img.addEventListener( 'load', this );
-  this.img.addEventListener( 'error', this );
-  this.proxyImage.src = this.img.src;
-};
-
-LoadingImage.prototype.getIsImageComplete = function() {
-  return this.img.complete && this.img.naturalWidth !== undefined;
-};
-
-LoadingImage.prototype.confirm = function( isLoaded, message ) {
-  this.isLoaded = isLoaded;
-  this.emit( 'progress', this, this.img, message );
-};
-
-// ----- events ----- //
-
-// trigger specified handler for event type
-LoadingImage.prototype.handleEvent = function( event ) {
-  var method = 'on' + event.type;
-  if ( this[ method ] ) {
-    this[ method ]( event );
-  }
-};
-
-LoadingImage.prototype.onload = function() {
-  this.confirm( true, 'onload' );
-  this.unbindEvents();
-};
-
-LoadingImage.prototype.onerror = function() {
-  this.confirm( false, 'onerror' );
-  this.unbindEvents();
-};
-
-LoadingImage.prototype.unbindEvents = function() {
-  this.proxyImage.removeEventListener( 'load', this );
-  this.proxyImage.removeEventListener( 'error', this );
-  this.img.removeEventListener( 'load', this );
-  this.img.removeEventListener( 'error', this );
-};
-
-// -------------------------- Background -------------------------- //
-
-function Background( url, element ) {
-  this.url = url;
-  this.element = element;
-  this.img = new Image();
-}
-
-// inherit LoadingImage prototype
-Background.prototype = Object.create( LoadingImage.prototype );
-
-Background.prototype.check = function() {
-  this.img.addEventListener( 'load', this );
-  this.img.addEventListener( 'error', this );
-  this.img.src = this.url;
-  // check if image is already complete
-  var isComplete = this.getIsImageComplete();
-  if ( isComplete ) {
-    this.confirm( this.img.naturalWidth !== 0, 'naturalWidth' );
-    this.unbindEvents();
-  }
-};
-
-Background.prototype.unbindEvents = function() {
-  this.img.addEventListener( 'load', this );
-  this.img.addEventListener( 'error', this );
-};
-
-Background.prototype.confirm = function( isLoaded, message ) {
-  this.isLoaded = isLoaded;
-  this.emit( 'progress', this, this.element, message );
-};
-
-// -------------------------- jQuery -------------------------- //
-
-ImagesLoaded.makeJQueryPlugin = function( jQuery ) {
-  jQuery = jQuery || window.jQuery;
-  if ( !jQuery ) {
-    return;
-  }
-  // set local variable
-  $ = jQuery;
-  // $().imagesLoaded()
-  $.fn.imagesLoaded = function( options, callback ) {
-    var instance = new ImagesLoaded( this, options, callback );
-    return instance.jqDeferred.promise( $(this) );
+    // filter & find items if we have an item selector
+    for ( var i=0; i < this.elements.length; i++ ) {
+      var elem = this.elements[i];
+      this.addElementImages( elem );
+    }
   };
-};
-// try making plugin
-ImagesLoaded.makeJQueryPlugin();
 
-// --------------------------  -------------------------- //
+  /**
+   * @param {Node} element
+   */
+  ImagesLoaded.prototype.addElementImages = function( elem ) {
+    // filter siblings
+    if ( elem.nodeName == 'IMG' ) {
+      this.addImage( elem );
+    }
+    // get background image on element
+    if ( this.options.background === true ) {
+      this.addElementBackgroundImages( elem );
+    }
 
-return ImagesLoaded;
+    // find children
+    // no non-element nodes, #143
+    var nodeType = elem.nodeType;
+    if ( !nodeType || !elementNodeTypes[ nodeType ] ) {
+      return;
+    }
+    var childImgs = elem.querySelectorAll('img');
+    // concat childElems to filterFound array
+    for ( var i=0; i < childImgs.length; i++ ) {
+      var img = childImgs[i];
+      this.addImage( img );
+    }
+
+    // get child background images
+    if ( typeof this.options.background == 'string' ) {
+      var children = elem.querySelectorAll( this.options.background );
+      for ( i=0; i < children.length; i++ ) {
+        var child = children[i];
+        this.addElementBackgroundImages( child );
+      }
+    }
+  };
+
+  var elementNodeTypes = {
+    1: true,
+    9: true,
+    11: true
+  };
+
+  ImagesLoaded.prototype.addElementBackgroundImages = function( elem ) {
+    var style = getStyle( elem );
+    // get url inside url("...")
+    var reURL = /url\(['"]*([^'"\)]+)['"]*\)/gi;
+    var matches = reURL.exec( style.backgroundImage );
+    while ( matches !== null ) {
+      var url = matches && matches[1];
+      if ( url ) {
+        this.addBackground( url, elem );
+      }
+      matches = reURL.exec( style.backgroundImage );
+    }
+  };
+
+  // IE8
+  var getStyle = window.getComputedStyle || function( elem ) {
+    return elem.currentStyle;
+  };
+
+  /**
+   * @param {Image} img
+   */
+  ImagesLoaded.prototype.addImage = function( img ) {
+    var loadingImage = new LoadingImage( img );
+    this.images.push( loadingImage );
+  };
+
+  ImagesLoaded.prototype.addBackground = function( url, elem ) {
+    var background = new Background( url, elem );
+    this.images.push( background );
+  };
+
+  ImagesLoaded.prototype.check = function() {
+    var _this = this;
+    this.progressedCount = 0;
+    this.hasAnyBroken = false;
+    // complete if no images
+    if ( !this.images.length ) {
+      this.complete();
+      return;
+    }
+
+    function onProgress( image, elem, message ) {
+      // HACK - Chrome triggers event before object properties have changed. #83
+      setTimeout( function() {
+        _this.progress( image, elem, message );
+      });
+    }
+
+    for ( var i=0; i < this.images.length; i++ ) {
+      var loadingImage = this.images[i];
+      loadingImage.once( 'progress', onProgress );
+      loadingImage.check();
+    }
+  };
+
+  ImagesLoaded.prototype.progress = function( image, elem, message ) {
+    this.progressedCount++;
+    this.hasAnyBroken = this.hasAnyBroken || !image.isLoaded;
+    // progress event
+    this.emit( 'progress', this, image, elem );
+    if ( this.jqDeferred && this.jqDeferred.notify ) {
+      this.jqDeferred.notify( this, image );
+    }
+    // check if completed
+    if ( this.progressedCount == this.images.length ) {
+      this.complete();
+    }
+
+    if ( this.options.debug && console ) {
+      console.log( 'progress: ' + message, image, elem );
+    }
+  };
+
+  ImagesLoaded.prototype.complete = function() {
+    var eventName = this.hasAnyBroken ? 'fail' : 'done';
+    this.isComplete = true;
+    this.emit( eventName, this );
+    this.emit( 'always', this );
+    if ( this.jqDeferred ) {
+      var jqMethod = this.hasAnyBroken ? 'reject' : 'resolve';
+      this.jqDeferred[ jqMethod ]( this );
+    }
+  };
+
+  // --------------------------  -------------------------- //
+
+  function LoadingImage( img ) {
+    this.img = img;
+  }
+
+  LoadingImage.prototype = new EventEmitter();
+
+  LoadingImage.prototype.check = function() {
+    // If complete is true and browser supports natural sizes,
+    // try to check for image status manually.
+    var isComplete = this.getIsImageComplete();
+    if ( isComplete ) {
+      // report based on naturalWidth
+      this.confirm( this.img.naturalWidth !== 0, 'naturalWidth' );
+      return;
+    }
+
+    // If none of the checks above matched, simulate loading on detached element.
+    this.proxyImage = new Image();
+    eventie.bind( this.proxyImage, 'load', this );
+    eventie.bind( this.proxyImage, 'error', this );
+    // bind to image as well for Firefox. #191
+    eventie.bind( this.img, 'load', this );
+    eventie.bind( this.img, 'error', this );
+    this.proxyImage.src = this.img.src;
+  };
+
+  LoadingImage.prototype.getIsImageComplete = function() {
+    return this.img.complete && this.img.naturalWidth !== undefined;
+  };
+
+  LoadingImage.prototype.confirm = function( isLoaded, message ) {
+    this.isLoaded = isLoaded;
+    this.emit( 'progress', this, this.img, message );
+  };
+
+  // ----- events ----- //
+
+  // trigger specified handler for event type
+  LoadingImage.prototype.handleEvent = function( event ) {
+    var method = 'on' + event.type;
+    if ( this[ method ] ) {
+      this[ method ]( event );
+    }
+  };
+
+  LoadingImage.prototype.onload = function() {
+    this.confirm( true, 'onload' );
+    this.unbindEvents();
+  };
+
+  LoadingImage.prototype.onerror = function() {
+    this.confirm( false, 'onerror' );
+    this.unbindEvents();
+  };
+
+  LoadingImage.prototype.unbindEvents = function() {
+    eventie.unbind( this.proxyImage, 'load', this );
+    eventie.unbind( this.proxyImage, 'error', this );
+    eventie.unbind( this.img, 'load', this );
+    eventie.unbind( this.img, 'error', this );
+  };
+
+  // -------------------------- Background -------------------------- //
+
+  function Background( url, element ) {
+    this.url = url;
+    this.element = element;
+    this.img = new Image();
+  }
+
+  // inherit LoadingImage prototype
+  Background.prototype = new LoadingImage();
+
+  Background.prototype.check = function() {
+    eventie.bind( this.img, 'load', this );
+    eventie.bind( this.img, 'error', this );
+    this.img.src = this.url;
+    // check if image is already complete
+    var isComplete = this.getIsImageComplete();
+    if ( isComplete ) {
+      this.confirm( this.img.naturalWidth !== 0, 'naturalWidth' );
+      this.unbindEvents();
+    }
+  };
+
+  Background.prototype.unbindEvents = function() {
+    eventie.unbind( this.img, 'load', this );
+    eventie.unbind( this.img, 'error', this );
+  };
+
+  Background.prototype.confirm = function( isLoaded, message ) {
+    this.isLoaded = isLoaded;
+    this.emit( 'progress', this, this.element, message );
+  };
+
+  // -------------------------- jQuery -------------------------- //
+
+  ImagesLoaded.makeJQueryPlugin = function( jQuery ) {
+    jQuery = jQuery || window.jQuery;
+    if ( !jQuery ) {
+      return;
+    }
+    // set local variable
+    $ = jQuery;
+    // $().imagesLoaded()
+    $.fn.imagesLoaded = function( options, callback ) {
+      var instance = new ImagesLoaded( this, options, callback );
+      return instance.jqDeferred.promise( $(this) );
+    };
+  };
+  // try making plugin
+  ImagesLoaded.makeJQueryPlugin();
+
+  // --------------------------  -------------------------- //
+
+  return ImagesLoaded;
 
 });
 
@@ -4745,7 +4834,7 @@ AnyGrid.prototype._setUp = function() {
 
     if (this.options.adjust_gutter && this.items.length) {
         this.itemPadding = getSize(this.items[0].element).paddingLeft;
-        this.element.parentNode.style.marginLeft = (this.itemPadding * -1) + 'px';
+        //this.element.parentNode.style.marginLeft = (this.itemPadding * -1) + 'px';
         measureContainerWidth = this.containerWidth + (this.itemPadding * 2);
     }
 
@@ -5223,10 +5312,10 @@ return utils;
                                     '</a>' +
                                 '</div>' +
                                 '<div class="rd-content">' +
-                                    '<div class="rc-about rc-modal-content">' +
-                                        '<a href="http://www.revcontent.com" target="_blank" class="rc-logo"></a>' +
+                                    '<div class="rd-about rd-modal-content">' +
+                                        '<a href="http://www.revcontent.com" target="_blank" class="rd-logo"></a>' +
                                         '<p id="main">The content you see here is paid for by the advertiser or content provider whose link you click on, and is recommended to you by <a href="http://www.revcontent.com" target="_blank">Revcontent</a>. As the leading platform for native advertising and content recommendation, <a href="http://www.revcontent.com" target="_blank">Revcontent</a> uses interest based targeting to select content that we think will be of particular interest to you. We encourage you to view our <a href="http://faq.revcontent.com/support/solutions/articles/5000615200-revcontent-s-privacy-policy">Privacy Policy</a> and your opt out options here: <a class="rc-opt-out-link" href="http://faq.revcontent.com/support/solutions/articles/5000615200" target="_blank">Opt Out Options</a></p>' +
-                                        '<div class="rc-well">' +
+                                        '<div class="rd-well">' +
                                     	'<h2>Want your content to appear on sites like this?</h2>' +
                                     	'<p><a href="http://www.revcontent.com" target="_blank">Increase your visitor engagement now!</a></p>' +
                                         '</div>' +
@@ -5521,7 +5610,7 @@ RevSlider({
 
         var that = this;
 
-        revUtils.appendStyle('/* inject:css */#rev-slider a,#rev-slider a:focus,#rev-slider a:hover{text-decoration:none}#rev-slider,#rev-slider #rev-slider-grid,#rev-slider #rev-slider-grid-container{padding:0;width:100%}#rev-slider #rev-slider-grid-container{display:table;width:100%}#rev-slider{clear:both}#rev-slider *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-slider #rev-slider-grid-container .rev-btn-container{padding:0 30px}#rev-slider a{color:inherit}#rev-slider:focus{outline:0}#rev-slider .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-slider .rev-sponsored{line-height:24px;font-size:12px}#rev-slider .rev-sponsored.bottom-right,#rev-slider .rev-sponsored.top-right{float:right}#rev-slider .rev-sponsored.top-right a{vertical-align:-5px}#rev-slider .rev-sponsored a{color:#999}#rev-slider .rev-ad a{display:block;color:#222}#rev-slider .rev-image{position:relative;-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee}#rev-slider .rev-image img{position:absolute;top:0;left:0;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-slider.loaded .rev-image{background:0 0}#rev-slider.loaded .rev-image img{opacity:1}#rev-slider .rev-headline,#rev-slider .rev-provider{margin:0 10px;text-align:left}#rev-slider .rev-headline{margin-top:12px;height:40px;overflow:hidden}#rev-slider .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-slider .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px}#rev-slider .rev-ad{border-radius:5px;overflow:hidden;background:#fff}#rev-slider .rev-content{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-slider .rev-content.rev-next{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:.5}#rev-slider.rev-slider-text-overlay .rev-ad{position:relative}#rev-slider.rev-slider-text-overlay .rev-ad a{height:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-headline{position:absolute;bottom:4px;color:#fff;text-shadow:1px 1px rgba(0,0,0,.8);height:auto!important}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{border-radius:5px;position:absolute;top:0;height:100%;width:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;content:"";display:block}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after{background:-webkit-linear-gradient(top,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%);background:linear-gradient(to bottom,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{opacity:0;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%);background:linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:after{opacity:0}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:before{opacity:1}#rev-opt-out .rd-close-button{position:absolute;cursor:pointer;right:10px;z-index:10}#rev-opt-out a{cursor:pointer!important}#rev-opt-out .rd-box-wrap{display:none;z-index:2147483641}#rev-opt-out .rd-box-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}#rev-opt-out .rd-vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}#rev-opt-out .rd-box{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}#rev-opt-out .rd-normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}#rev-opt-out .rd-full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}#rev-opt-out .rd-header{height:20px;position:absolute;right:0}#rev-opt-out .rc-about{font-family:Arial,sans-serif;font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}#rev-opt-out .rc-about .rc-logo{background:url(https://www.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}#rev-opt-out .rc-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}#rev-opt-out .rc-about p#main{text-align:left}#rev-opt-out .rc-about h2{color:#777;font-family:Arial,sans-serif;font-size:16px;line-height:18px}#rev-opt-out .rc-about a{color:#00cb43}#rev-opt-out .rc-well{border:1px solid #E0E0E0;padding:20px;text-align:center;border-radius:2px;margin:20px 0 0}#rev-opt-out .rc-well h2{margin-top:0}#rev-opt-out .rc-well p{margin-bottom:0}#rev-opt-out .rc-opt-out{text-align:center}#rev-opt-out .rc-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-slider');
+        revUtils.appendStyle('/* inject:css */#rev-slider a,#rev-slider a:focus,#rev-slider a:hover{text-decoration:none}#rev-slider,#rev-slider #rev-slider-grid,#rev-slider #rev-slider-grid-container{padding:0;width:100%}#rev-slider #rev-slider-grid-container{display:table;width:100%}#rev-slider{clear:both}#rev-slider *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-slider #rev-slider-grid-container .rev-btn-container{padding:0 30px}#rev-slider a{color:inherit}#rev-slider:focus{outline:0}#rev-slider .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-slider .rev-sponsored{line-height:24px;font-size:12px}#rev-slider .rev-sponsored.bottom-right,#rev-slider .rev-sponsored.top-right{float:right}#rev-slider .rev-sponsored.top-right a{vertical-align:-5px}#rev-slider .rev-sponsored a{color:#999}#rev-slider .rev-ad a{display:block;color:#222}#rev-slider .rev-image{position:relative;-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee}#rev-slider .rev-image img{position:absolute;top:0;left:0;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-slider.loaded .rev-image{background:0 0}#rev-slider.loaded .rev-image img{opacity:1}#rev-slider .rev-headline,#rev-slider .rev-provider{margin:0 10px;text-align:left}#rev-slider .rev-headline{margin-top:12px;height:40px;overflow:hidden}#rev-slider .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-slider .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px}#rev-slider .rev-ad{border-radius:5px;overflow:hidden;background:#fff}#rev-slider .rev-content{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-slider .rev-content.rev-next{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:.5}#rev-slider.rev-slider-text-overlay .rev-ad{position:relative}#rev-slider.rev-slider-text-overlay .rev-ad a{height:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-headline{position:absolute;bottom:4px;color:#fff;text-shadow:1px 1px rgba(0,0,0,.8);height:auto!important}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{border-radius:5px;position:absolute;top:0;height:100%;width:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;content:"";display:block}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after{background:-webkit-linear-gradient(top,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%);background:linear-gradient(to bottom,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{opacity:0;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%);background:linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:after{opacity:0}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:before{opacity:1}#rev-opt-out .rd-close-button{position:absolute;cursor:pointer;right:10px;z-index:10}#rev-opt-out a{cursor:pointer!important}#rev-opt-out .rd-box-wrap{display:none;z-index:2147483641}#rev-opt-out .rd-box-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}#rev-opt-out .rd-vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}#rev-opt-out .rd-box{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}#rev-opt-out .rd-normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}#rev-opt-out .rd-full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}#rev-opt-out .rd-header{height:20px;position:absolute;right:0}#rev-opt-out .rd-about{font-family:Arial,sans-serif;font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}#rev-opt-out .rd-about .rd-logo{background:url(https://www.revcontent.com/assets/img/rd-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}#rev-opt-out .rd-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}#rev-opt-out .rd-about p#main{text-align:left}#rev-opt-out .rd-about h2{color:#777;font-family:Arial,sans-serif;font-size:16px;line-height:18px}#rev-opt-out .rd-about a{color:#00cb43}#rev-opt-out .rd-well{border:1px solid #E0E0E0;padding:20px;text-align:center;border-radius:2px;margin:20px 0 0}#rev-opt-out .rd-well h2{margin-top:0}#rev-opt-out .rd-well p{margin-bottom:0}#rev-opt-out .rd-opt-out{text-align:center}#rev-opt-out .rd-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-slider');
 
         var backBtn = document.createElement('div');
         backBtn.id = "back";
