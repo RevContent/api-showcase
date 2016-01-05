@@ -154,7 +154,7 @@ if ( typeof define === 'function' && define.amd ) {
  * class helper functions
  * from bonzo https://github.com/ded/bonzo
  * MIT license
- *
+ * 
  * classie.has( elem, 'my-class' ) -> true/false
  * classie.add( elem, 'my-new-class' )
  * classie.remove( elem, 'my-unwanted-class' )
@@ -243,7 +243,7 @@ if ( typeof define === 'function' && define.amd ) {
  */
 
 ;(function () {
-
+    
 
     /**
      * Class for managing events.
@@ -1190,7 +1190,7 @@ if ( typeof define === 'function' && define.amd ) {
 
 ( function( ElemProto ) {
 
-
+  
 
   var matchesMethod = ( function() {
     // check for the standard method name first
@@ -1296,7 +1296,7 @@ if ( typeof define === 'function' && define.amd ) {
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -1346,7 +1346,7 @@ utils.modulo = function( num, div ) {
 };
 
 // ----- isArray ----- //
-
+  
 var objToString = Object.prototype.toString;
 utils.isArray = function( obj ) {
   return objToString.call( obj ) == '[object Array]';
@@ -1559,7 +1559,7 @@ return utils;
 }));
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -1653,7 +1653,7 @@ return Cell;
 }));
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -1921,7 +1921,7 @@ return proto;
  */
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -2670,7 +2670,7 @@ return Flickity;
 /*global define: false, module: false, require: false */
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -2987,7 +2987,7 @@ return Unipointer;
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -3345,7 +3345,7 @@ return Unidragger;
 }));
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -3718,7 +3718,7 @@ return Flickity;
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -3832,7 +3832,7 @@ return TapListener;
 // -------------------------- prev/next button -------------------------- //
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4092,7 +4092,7 @@ return Flickity;
 }));
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4277,7 +4277,7 @@ return Flickity;
 }));
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4463,7 +4463,7 @@ return Flickity;
 }));
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4640,7 +4640,7 @@ return Flickity;
 }));
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4772,7 +4772,7 @@ return Flickity;
  */
 
 ( function( window, factory ) {
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4813,7 +4813,7 @@ return Flickity;
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4949,7 +4949,7 @@ return Flickity;
  * MIT License
  */
 
-( function( window, factory ) {
+( function( window, factory ) { 
   // universal module definition
 
   /*global define: false, module: false, require: false */
@@ -5288,7 +5288,7 @@ function makeArray( obj ) {
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-
+  
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -6578,10 +6578,10 @@ return utils;
                                     '</a>' +
                                 '</div>' +
                                 '<div class="rd-content">' +
-                                    '<div class="rc-about rc-modal-content">' +
-                                        '<a href="http://www.revcontent.com" target="_blank" class="rc-logo"></a>' +
+                                    '<div class="rd-about rd-modal-content">' +
+                                        '<a href="http://www.revcontent.com" target="_blank" class="rd-logo"></a>' +
                                         '<p id="main">The content you see here is paid for by the advertiser or content provider whose link you click on, and is recommended to you by <a href="http://www.revcontent.com" target="_blank">Revcontent</a>. As the leading platform for native advertising and content recommendation, <a href="http://www.revcontent.com" target="_blank">Revcontent</a> uses interest based targeting to select content that we think will be of particular interest to you. We encourage you to view our <a href="http://faq.revcontent.com/support/solutions/articles/5000615200-revcontent-s-privacy-policy">Privacy Policy</a> and your opt out options here: <a class="rc-opt-out-link" href="http://faq.revcontent.com/support/solutions/articles/5000615200" target="_blank">Opt Out Options</a></p>' +
-                                        '<div class="rc-well">' +
+                                        '<div class="rd-well">' +
                                     	'<h2>Want your content to appear on sites like this?</h2>' +
                                     	'<p><a href="http://www.revcontent.com" target="_blank">Increase your visitor engagement now!</a></p>' +
                                         '</div>' +
@@ -6864,7 +6864,7 @@ RevFlicker({
 
         var that = this;
         //append injrected style
-        revUtils.appendStyle('/* inject:css */#rev-flicker:focus,.flickity-enabled:focus{outline:0}#rev-flicker,#rev-flicker .flickity-viewport,#rev-flicker .rev-flicker{clear:both}.flickity-enabled{position:relative}.flickity-viewport{overflow:hidden;position:relative;height:100%}.flickity-slider{position:absolute;width:100%;height:100%}.flickity-enabled.is-draggable{-webkit-tap-highlight-color:transparent;tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.flickity-enabled.is-draggable .flickity-viewport{cursor:move;cursor:-webkit-grab;cursor:grab}.flickity-enabled.is-draggable .flickity-viewport.is-pointer-down{cursor:-webkit-grabbing;cursor:grabbing}.flickity-prev-next-button{position:absolute;top:50%;width:44px;height:44px;border:none;border-radius:50%;background:#fff;background:hsla(0,0%,100%,.75);cursor:pointer;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}.flickity-prev-next-button:hover{background:#fff}.flickity-prev-next-button:focus{outline:0;box-shadow:0 0 0 5px #09F}.flickity-prev-next-button:active{filter:alpha(opacity=60);opacity:.6}.flickity-prev-next-button.previous{left:10px}.flickity-prev-next-button.next{right:10px}.flickity-rtl .flickity-prev-next-button.previous{left:auto;right:10px}.flickity-rtl .flickity-prev-next-button.next{right:auto;left:10px}.flickity-prev-next-button:disabled{filter:alpha(opacity=30);opacity:.3;cursor:auto}.flickity-prev-next-button svg{position:absolute;left:20%;top:20%;width:60%;height:60%}.flickity-prev-next-button .arrow{fill:#333}.flickity-prev-next-button.no-svg{color:#333;font-size:26px}.flickity-page-dots{position:absolute;width:100%;bottom:-25px;padding:0;margin:0;list-style:none;text-align:center;line-height:1}.flickity-rtl .flickity-page-dots{direction:rtl}.flickity-page-dots .dot{display:inline-block;width:10px;height:10px;margin:0 8px;background:#333;border-radius:50%;filter:alpha(opacity=25);opacity:.25;cursor:pointer}.flickity-page-dots .dot.is-selected{filter:alpha(opacity=100);opacity:1}#rev-flicker *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-flicker .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-flicker .rev-sponsored{line-height:24px;font-size:12px}#rev-flicker .rev-sponsored.bottom-right,#rev-flicker .rev-sponsored.top-right{float:right}#rev-flicker .rev-sponsored.top-right a{vertical-align:-5px}#rev-flicker .flickity-prev-next-button{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-flicker .flickity-prev-next-button:disabled{opacity:0}#rev-flicker .rev-sponsored a{color:#999}#rev-flicker a,#rev-flicker a:focus,#rev-flicker a:hover{text-decoration:none}#rev-flicker .rev-ad a{display:block;color:#222}#rev-flicker .rev-image{-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee}#rev-flicker .rev-image img{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-flicker.loaded .rev-image{background:0 0}#rev-flicker.loaded .rev-image img{opacity:1}#rev-flicker .rev-headline,#rev-flicker .rev-provider{margin:0;text-align:left}#rev-flicker .rev-headline{margin:0;height:40px;overflow:hidden}#rev-flicker .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-flicker .rev-provider{color:#999;font-weight:600}#rev-flicker .rev-ad{border-style:solid;border-color:#eee;border-radius:5px;overflow:hidden;background:#fff}#rev-flicker .rev-content{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-flicker .rev-content.rev-next{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:.5}#rev-flicker.rev-flicker-text-overlay .rev-ad{position:relative}#rev-flicker.rev-flicker-text-overlay .rev-ad a{height:100%}#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-headline{position:absolute;bottom:4px;color:#fff;text-shadow:1px 1px rgba(0,0,0,.8);height:auto!important}#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay,#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:after,#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:before{border-radius:5px;position:absolute;top:0;height:100%;width:100%}#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:after,#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:before{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;content:"";display:block}#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:after{background:-webkit-linear-gradient(top,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%);background:linear-gradient(to bottom,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%)}#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:before{opacity:0;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%);background:linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%)}#rev-flicker.rev-flicker-text-overlay .rev-ad a:hover .rev-overlay:after{opacity:0}#rev-flicker.rev-flicker-text-overlay .rev-ad a:hover .rev-overlay:before{opacity:1}#rev-opt-out .rd-close-button{position:absolute;cursor:pointer;right:10px;z-index:10}#rev-opt-out a{cursor:pointer!important}#rev-opt-out .rd-box-wrap{display:none;z-index:2147483641}#rev-opt-out .rd-box-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}#rev-opt-out .rd-vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}#rev-opt-out .rd-box{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}#rev-opt-out .rd-normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}#rev-opt-out .rd-full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}#rev-opt-out .rd-header{height:20px;position:absolute;right:0}#rev-opt-out .rc-about{font-family:Arial,sans-serif;font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}#rev-opt-out .rc-about .rc-logo{background:url(https://www.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}#rev-opt-out .rc-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}#rev-opt-out .rc-about p#main{text-align:left}#rev-opt-out .rc-about h2{color:#777;font-family:Arial,sans-serif;font-size:16px;line-height:18px}#rev-opt-out .rc-about a{color:#00cb43}#rev-opt-out .rc-well{border:1px solid #E0E0E0;padding:20px;text-align:center;border-radius:2px;margin:20px 0 0}#rev-opt-out .rc-well h2{margin-top:0}#rev-opt-out .rc-well p{margin-bottom:0}#rev-opt-out .rc-opt-out{text-align:center}#rev-opt-out .rc-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-flicker');
+        revUtils.appendStyle('/* inject:css */#rev-flicker:focus,.flickity-enabled:focus{outline:0}#rev-flicker,#rev-flicker .flickity-viewport,#rev-flicker .rev-flicker{clear:both}.flickity-enabled{position:relative}.flickity-viewport{overflow:hidden;position:relative;height:100%}.flickity-slider{position:absolute;width:100%;height:100%}.flickity-enabled.is-draggable{-webkit-tap-highlight-color:transparent;tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.flickity-enabled.is-draggable .flickity-viewport{cursor:move;cursor:grab}.flickity-enabled.is-draggable .flickity-viewport.is-pointer-down{cursor:grabbing}.flickity-prev-next-button{position:absolute;top:50%;width:44px;height:44px;border:none;border-radius:50%;background:#fff;background:hsla(0,0%,100%,.75);cursor:pointer;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}.flickity-prev-next-button:hover{background:#fff}.flickity-prev-next-button:focus{outline:0;box-shadow:0 0 0 5px #09F}.flickity-prev-next-button:active{filter:alpha(opacity=60);opacity:.6}.flickity-prev-next-button.previous{left:10px}.flickity-prev-next-button.next{right:10px}.flickity-rtl .flickity-prev-next-button.previous{left:auto;right:10px}.flickity-rtl .flickity-prev-next-button.next{right:auto;left:10px}.flickity-prev-next-button:disabled{filter:alpha(opacity=30);opacity:.3;cursor:auto}.flickity-prev-next-button svg{position:absolute;left:20%;top:20%;width:60%;height:60%}.flickity-prev-next-button .arrow{fill:#333}.flickity-prev-next-button.no-svg{color:#333;font-size:26px}.flickity-page-dots{position:absolute;width:100%;bottom:-25px;padding:0;margin:0;list-style:none;text-align:center;line-height:1}.flickity-rtl .flickity-page-dots{direction:rtl}.flickity-page-dots .dot{display:inline-block;width:10px;height:10px;margin:0 8px;background:#333;border-radius:50%;filter:alpha(opacity=25);opacity:.25;cursor:pointer}.flickity-page-dots .dot.is-selected{filter:alpha(opacity=100);opacity:1}#rev-flicker *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-flicker .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-flicker .rev-sponsored{line-height:24px;font-size:12px}#rev-flicker .rev-sponsored.bottom-right,#rev-flicker .rev-sponsored.top-right{float:right}#rev-flicker .rev-sponsored.top-right a{vertical-align:-5px}#rev-flicker .flickity-prev-next-button{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-flicker .flickity-prev-next-button:disabled{opacity:0}#rev-flicker .rev-sponsored a{color:#999}#rev-flicker a,#rev-flicker a:focus,#rev-flicker a:hover{text-decoration:none}#rev-flicker .rev-ad a{display:block;color:#222}#rev-flicker .rev-image{-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee}#rev-flicker .rev-image img{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-flicker.loaded .rev-image{background:0 0}#rev-flicker.loaded .rev-image img{opacity:1}#rev-flicker .rev-headline,#rev-flicker .rev-provider{margin:0;text-align:left}#rev-flicker .rev-headline{margin:0;height:40px;overflow:hidden}#rev-flicker .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-flicker .rev-provider{color:#999;font-weight:600}#rev-flicker .rev-ad{border-style:solid;border-color:#eee;border-radius:5px;overflow:hidden;background:#fff}#rev-flicker .rev-content{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-flicker .rev-content.rev-next{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:.5}#rev-flicker.rev-flicker-text-overlay .rev-ad{position:relative}#rev-flicker.rev-flicker-text-overlay .rev-ad a{height:100%}#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-headline{position:absolute;bottom:4px;color:#fff;text-shadow:1px 1px rgba(0,0,0,.8);height:auto!important}#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay,#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:after,#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:before{border-radius:5px;position:absolute;top:0;height:100%;width:100%}#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:after,#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:before{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;content:"";display:block}#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:after{background:-webkit-linear-gradient(top,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%);background:linear-gradient(to bottom,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%)}#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:before{opacity:0;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%);background:linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%)}#rev-flicker.rev-flicker-text-overlay .rev-ad a:hover .rev-overlay:after{opacity:0}#rev-flicker.rev-flicker-text-overlay .rev-ad a:hover .rev-overlay:before{opacity:1}#rev-opt-out .rd-close-button{position:absolute;cursor:pointer;right:10px;z-index:10}#rev-opt-out a{cursor:pointer!important}#rev-opt-out .rd-box-wrap{display:none;z-index:2147483641}#rev-opt-out .rd-box-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}#rev-opt-out .rd-vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}#rev-opt-out .rd-box{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}#rev-opt-out .rd-normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}#rev-opt-out .rd-full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}#rev-opt-out .rd-header{height:20px;position:absolute;right:0}#rev-opt-out .rd-about{font-family:Arial,sans-serif;font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}#rev-opt-out .rd-about .rd-logo{background:url(https://www.revcontent.com/assets/img/rd-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}#rev-opt-out .rd-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}#rev-opt-out .rd-about p#main{text-align:left}#rev-opt-out .rd-about h2{color:#777;font-family:Arial,sans-serif;font-size:16px;line-height:18px}#rev-opt-out .rd-about a{color:#00cb43}#rev-opt-out .rd-well{border:1px solid #E0E0E0;padding:20px;text-align:center;border-radius:2px;margin:20px 0 0}#rev-opt-out .rd-well h2{margin-top:0}#rev-opt-out .rd-well p{margin-bottom:0}#rev-opt-out .rd-opt-out{text-align:center}#rev-opt-out .rd-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-flicker');
 
         // append a new element to the flicker
         this.containerElement = document.createElement('div');
