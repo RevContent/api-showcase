@@ -17,7 +17,7 @@ app.directive('preloadImages', ['$location', '$mdCardContent', function ($locati
                 angular.element(element).find('.preloader img').addClass('loaded');
             });
         }
-    }
+    };
 }]);
 
 app.directive('widgetMenu', ['widgets', '$stateParams', '$window', '$state', function (widgets, $stateParams, $window, $state) {
@@ -39,7 +39,7 @@ app.directive('widgetMenu', ['widgets', '$stateParams', '$window', '$state', fun
                 return;
             }
             $window.open('/showcase/' + widget.link, '_blank');
-        }
+        };
     }
   };
 }]);
@@ -48,8 +48,6 @@ app.directive('revToaster', ['$timeout', 'options', '$rootScope', function ($tim
   return {
     restrict: "AE",
     link: function(scope, element, attrs) {
-
-        options.set();
 
         var widget;
         //close this thing when changing states, otherwise it just stays open on other pages
@@ -70,6 +68,8 @@ app.directive('revToaster', ['$timeout', 'options', '$rootScope', function ($tim
             }
         };
 
+        options.set();
+
         widget = new RevToaster({
             api_key : options.api_key,
             pub_id : options.pub_id,
@@ -82,7 +82,7 @@ app.directive('revToaster', ['$timeout', 'options', '$rootScope', function ($tim
             devices: options.getDevices(),
         });
 
-        var watcher = scope.$watch(function() { return options }, function(newOpts, oldOpts) {
+        var watcher = scope.$watch(function() { return options; }, function(newOpts, oldOpts) {
             if (newOpts != oldOpts) {
                 $timeout(function() {
                     widget.update(newOpts, oldOpts);
@@ -103,9 +103,6 @@ app.directive('revShifter', ['$timeout', 'options', '$rootScope', function ($tim
   return {
     restrict: "AE",
     link: function(scope, element, attrs) {
-
-        options.set();
-
         var widget;
         //close this thing when changing states, otherwise it just stays open on other pages
         $rootScope.$on("$stateChangeStart", function() {
@@ -121,6 +118,8 @@ app.directive('revShifter', ['$timeout', 'options', '$rootScope', function ($tim
         };
         options.width = 600;
 
+        options.set();
+
         widget = new RevShifter({
             width: options.width,
             devices: options.getDevices(),
@@ -134,7 +133,7 @@ app.directive('revShifter', ['$timeout', 'options', '$rootScope', function ($tim
             inner_widget: options.inner_widget
         });
 
-        var watcher = scope.$watch(function() { return options }, function(newOpts, oldOpts) {
+        var watcher = scope.$watch(function() { return options; }, function(newOpts, oldOpts) {
             if (newOpts != oldOpts) {
                 $timeout(function() {
                     widget.update(newOpts, oldOpts);
@@ -159,11 +158,11 @@ app.directive('revSlider', ['$timeout', 'options', function ($timeout, options) 
     },
     link: function(scope, element, attrs) {
 
-        options.set();
-
         var widget;
 
         options.text_overlay = false;
+
+        options.set();
 
         $timeout(function() {
             widget = new RevSlider({
@@ -199,14 +198,13 @@ app.directive('revFlicker', ['$location', '$timeout', 'options', function ($loca
   return {
     restrict: "AE",
     link: function(scope, element, attrs) {
-
-        options.set();
-
         var widget;
 
         options.next_effect = true;
         options.text_overlay = false;
         options.ad_border = true;
+
+        options.set();
 
         $timeout(function() {
             widget = new RevFlicker({
@@ -228,7 +226,7 @@ app.directive('revFlicker', ['$location', '$timeout', 'options', function ($loca
             });
         });
 
-        var watcher = scope.$watch(function() { return options }, function(newOpts, oldOpts) {
+        var watcher = scope.$watch(function() { return options; }, function(newOpts, oldOpts) {
             if (newOpts != oldOpts) {
                 $timeout(function() {
                     widget.update(newOpts, oldOpts);
