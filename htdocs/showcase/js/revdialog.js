@@ -83,10 +83,10 @@
                                     '</a>' +
                                 '</div>' +
                                 '<div class="rd-content">' +
-                                    '<div class="rc-about rc-modal-content">' +
-                                        '<a href="http://www.revcontent.com" target="_blank" class="rc-logo"></a>' +
+                                    '<div class="rd-about rd-modal-content">' +
+                                        '<a href="http://www.revcontent.com" target="_blank" class="rd-logo"></a>' +
                                         '<p id="main">The content you see here is paid for by the advertiser or content provider whose link you click on, and is recommended to you by <a href="http://www.revcontent.com" target="_blank">Revcontent</a>. As the leading platform for native advertising and content recommendation, <a href="http://www.revcontent.com" target="_blank">Revcontent</a> uses interest based targeting to select content that we think will be of particular interest to you. We encourage you to view our <a href="http://faq.revcontent.com/support/solutions/articles/5000615200-revcontent-s-privacy-policy">Privacy Policy</a> and your opt out options here: <a class="rc-opt-out-link" href="http://faq.revcontent.com/support/solutions/articles/5000615200" target="_blank">Opt Out Options</a></p>' +
-                                        '<div class="rc-well">' +
+                                        '<div class="rd-well">' +
                                     	'<h2>Want your content to appear on sites like this?</h2>' +
                                     	'<p><a href="http://www.revcontent.com" target="_blank">Increase your visitor engagement now!</a></p>' +
                                         '</div>' +
