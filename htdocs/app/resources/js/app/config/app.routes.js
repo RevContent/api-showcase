@@ -1,6 +1,6 @@
 app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider', function($stateProvider, $locationProvider, $urlMatcherFactoryProvider) {
 
-    $urlMatcherFactoryProvider.strictMode(false)
+    $urlMatcherFactoryProvider.strictMode(false);
 
     $locationProvider.html5Mode({
         enabled: true
@@ -45,7 +45,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
 
                 var previousState = function() {
                     $state.go(($stateManager.previousState && !$stateManager.previousStateDialog) ? $stateManager.previousState : 'home', $stateManager.previousStateParams);
-                }
+                };
 
                 $mdDialog.show({
                     templateUrl: 'app/resources/js/app/dialog/post.html',
@@ -86,29 +86,61 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
             }]
         })
         .state('post_preview', {
-            url: "/{id}/preview",
+            url: "/{id}/preview?options",
             sticky: true,
             views: {
                 main: {
                     templateUrl: function($stateParams) {
-                        return 'app/resources/js/app/preview/'+ $stateParams.id +'.html'
+                        return 'app/resources/js/app/preview/'+ $stateParams.id +'.html';
                     },
                     controller: 'PreviewCtrl',
                     controllerAs: 'ctrl'
                 },
                 sidenav: {
                     templateUrl: function($stateParams) {
-                        return 'app/resources/js/app/preview/sidenav/'+ $stateParams.id +'.html'
+                        return 'app/resources/js/app/preview/sidenav/'+ $stateParams.id +'.html';
                     }
                 }
             }
+        })
+        .state('post_preview.link', {
+            url: "/link",
+            dialog: true,
+            onEnter: ['$stateParams', '$state', '$mdDialog', '$location', '$mdCardContent', '$stateManager', 'options', function($stateParams, $state, $mdDialog, $location, $mdCardContent, $stateManager, options) {
+
+                var previousState = function() {
+                    $state.go('post_preview', {id: $stateParams.id});
+                };
+
+                $mdDialog.show({
+                    templateUrl: 'app/resources/js/app/dialog/demo-link.html',
+                    clickOutsideToClose: true,
+                    controller: function($scope) {
+                        $scope.url =  $location.$$protocol + '://' +
+                                        $location.$$host +
+                                        ($location.$$port ? ':' + $location.$$port : '') + '/' +
+                                        $stateParams.id + '/preview?options=' +
+                                        encodeURIComponent(JSON.stringify(options));
+                    },
+                    onComplete: function() {
+                    }
+                })
+                .then(function(answer) { //close
+                    previousState();
+                }, function() { //cancel
+                    previousState();
+                });
+            }],
+            onExit: ['$mdDialog', function($mdDialog) {
+                $mdDialog.hide();
+            }]
         })
         .state('post_demos', {
             url: "/{id}/demos",
             views: {
                 main: {
                     templateUrl: function($stateParams) {
-                        return 'app/resources/js/app/demo/'+ $stateParams.id +'/index.html'
+                        return 'app/resources/js/app/demo/'+ $stateParams.id +'/index.html';
                     },
                     controller: 'DemosCtrl',
                     controllerAs: 'demo'
@@ -122,7 +154,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
             views: {
                 main: {
                     templateUrl: function($stateParams) {
-                        return 'app/resources/js/app/demo/'+ $stateParams.id +'/demo.html'
+                        return 'app/resources/js/app/demo/'+ $stateParams.id +'/demo.html';
                     },
                     controller: 'DemoCtrl',
                     controllerAs: 'demo'
@@ -130,7 +162,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                 sidenav: false,
                 sidenavDemo: {
                     templateUrl: function($stateParams) {
-                        return 'app/resources/js/app/demo/navigation/'+ $stateParams.id +'.html'
+                        return 'app/resources/js/app/demo/navigation/'+ $stateParams.id +'.html';
                     },
                     controller: 'DemoCtrl',
                     controllerAs: 'demoSidenav'
