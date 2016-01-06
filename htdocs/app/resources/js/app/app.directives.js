@@ -55,9 +55,9 @@ app.directive('revToaster', ['$timeout', 'options', '$rootScope', function ($tim
             widget.hide();
         });
 
-        options.rev_position = 'bottom_right';
-        options.sponsored = 2;
-        options.rev_positions = {
+        options.rev_position = options.rev_position ? options.rev_position : 'bottom_right';
+        options.sponsored = options.sponsored ? options.sponsored : 2;
+        options.rev_positions = options.rev_positions ? options.rev_positions : {
             bottom_left: {
                 key: 'bottom_left',
                 value: 'Bottom Left',
@@ -109,14 +109,14 @@ app.directive('revShifter', ['$timeout', 'options', '$rootScope', function ($tim
             widget.hide();
         });
 
-        options.inner_widget = {
+        options.inner_widget = options.inner_widget ? options.inner_widget : {
             name: 'slider',
             options: {
                 per_row: 3,
                 rows: 10
             }
         };
-        options.width = 600;
+        options.width = options.width ? options.width : 600;
 
         options.set();
 
@@ -160,7 +160,7 @@ app.directive('revSlider', ['$timeout', 'options', function ($timeout, options) 
 
         var widget;
 
-        options.text_overlay = false;
+        options.text_overlay = options.text_overlay ? options.text_overlay : false;
 
         options.set();
 
@@ -200,9 +200,9 @@ app.directive('revFlicker', ['$location', '$timeout', 'options', function ($loca
     link: function(scope, element, attrs) {
         var widget;
 
-        options.next_effect = true;
-        options.text_overlay = false;
-        options.ad_border = true;
+        options.next_effect  = options.next_effect ? options.next_effect : true;
+        options.text_overlay = options.text_overlay ? options.text_overlay : false;
+        options.ad_border    = options.ad_border ? options.ad_border : true;
 
         options.set();
 
@@ -222,7 +222,8 @@ app.directive('revFlicker', ['$location', '$timeout', 'options', function ($loca
                 headline_size: options.headline_size,
                 max_headline: options.max_headline,
                 text_overlay: options.text_overlay,
-                ad_border: options.ad_border
+                ad_border: options.ad_border,
+                image_ratio: options.image_ratio
             });
         });
 
