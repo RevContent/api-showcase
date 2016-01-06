@@ -1,5 +1,7 @@
 <md-content layout="column" layout-padding ng-controller="BuilderOptionsCtrl as ctrl">
 
+    <md-button class="md-primary md-raised" ng-click="ctrl.getLink()">Get Link</md-button>
+
     <md-list layout="column" layout-padding>
 
         <md-subheader class="md-accent" class="md-accent">Widget Settings</md-subheader>
@@ -46,6 +48,13 @@
         <md-list-item>
             <md-select ng-model="ctrl.options.rev_position" aria-label="Rev Position">
                 <md-option ng-repeat="position in ctrl.options.rev_positions" value="{{position.key}}">{{position.value}}</md-option>
+            </md-select>
+        </md-list-item>
+
+        <md-subheader class="md-accent" class="md-accent">Image Ratio</md-subheader>
+        <md-list-item>
+            <md-select ng-model="ctrl.options.image_ratio" aria-label="Image Ratio">
+                <md-option ng-repeat="image_ratio in ctrl.options.image_ratios" value="{{image_ratio.key}}">{{image_ratio.value}}</md-option>
             </md-select>
         </md-list-item>
 

@@ -5,5 +5,6 @@ var app = angular.module('app', [
     'ngMaterial',
     'ngMessages',
     'hljs',
-    'ng.deviceDetector'
+    'ng.deviceDetector',
+    'ngStorage'
 ]);
