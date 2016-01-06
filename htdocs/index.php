@@ -69,7 +69,7 @@
                                         <img src="app/resources/img/revcontent-labs.png" alt="Revcontent Innovation Lab">
                                     </a>
                                 </div>
-                                <md-menu layout="row" layout-align="center center" hide-gt-sm style="margin-left:auto;margin-right:0;padding:0;">
+                                <md-menu layout="row" layout-align="center center" hide-gt-xs style="margin-left:auto;margin-right:0;padding:0;">
                                     <md-button ng-click="$mdOpenMenu($event)" class="md-icon-button" aria-label="Open sample menu">
                                         <md-icon>
                                             <svg xmlns="http://www.w3.org/2000/svg" fit="" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M4 27h28v-3H4v3zm0-8h28v-3H4v3zM4 8v3h28V8H4z"/></svg>
@@ -88,7 +88,7 @@
                                     </md-menu-content>
                                 </md-menu>
 
-                                <div id="menu_desktop" hide-sm  flex="30" flex-md="50" layout="row" layout-align="center end" layout-padding>
+                                <div id="menu_desktop" hide-xs  flex="30" flex-md="50" layout="row" layout-align="center end" layout-padding>
 
                                     <a class="md-button" ui-sref="docs" tabindex="0">
                                         <span>Docs</span>
