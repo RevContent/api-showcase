@@ -255,7 +255,7 @@ RevSlider({
         }
         this.sponsored = document.createElement('div');
         revUtils.addClass(this.sponsored, 'rev-sponsored');
-        this.sponsored.innerHTML = '<a onclick="revDialog.showDialog();">Sponsored by Revcontent</a>';
+        this.sponsored.innerHTML = '<a href="javascript:;" onclick="revDialog.showDialog();">Sponsored by Revcontent</a>';
         if (this.options.rev_position == 'top_right') {
             revUtils.addClass(this.sponsored, 'top-right')
             revUtils.prepend(this.containerElement, this.sponsored);

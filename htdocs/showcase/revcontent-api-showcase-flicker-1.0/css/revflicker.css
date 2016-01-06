@@ -103,7 +103,6 @@
 
 #rev-flicker .rev-headline {
     margin: 0;
-    height: 40px;
     overflow: hidden;
 }
 
@@ -116,14 +115,13 @@
 }
 
 #rev-flicker .rev-provider {
-    font-size: 12px;
-    color: #888;
-    line-height: 30px;
-    height: 30px;
+    color: #999;
+    font-weight: 600;
 }
 
 #rev-flicker .rev-ad {
-    border: 1px solid #eee;
+    border-style: solid;
+    border-color: #eee;
     border-radius: 5px;
     overflow: hidden;
     background: #fff;

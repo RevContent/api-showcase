@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.0.0-rc2
+ * v1.0.1
  */
 goog.provide('ng.material.components.tooltip');
 goog.require('ng.material.core');
@@ -64,11 +64,12 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
 
     $mdTheming(element);
 
-    var parent        = getParentWithPointerEvents(),
+    var parent        = $mdUtil.getParentWithPointerEvents(element),
         content       = angular.element(element[0].getElementsByClassName('md-content')[0]),
-        current       = getNearestContentElement(),
-        tooltipParent = angular.element(current || document.body),
-        debouncedOnResize = $$rAF.throttle(function () { if (scope.visible) positionTooltip(); });
+        tooltipParent = angular.element(document.body),
+        debouncedOnResize = $$rAF.throttle(function () { updatePosition(); });
+
+    if ($animate.pin) $animate.pin(element, parent);
 
     // Initialize element
 
@@ -76,8 +77,8 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     manipulateElement();
     bindEvents();
 
-    // Default origin transform point is 'left top'
-    // positionTooltip() is always relative to top left
+    // Default origin transform point is 'center top'
+    // positionTooltip() is always relative to center top
     updateContentOrigin();
 
     configureWatchers();
@@ -89,7 +90,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     }
 
     function updateContentOrigin() {
-      var origin = 'left top';
+      var origin = 'center top';
       switch (scope.direction) {
         case 'left'  : origin =  'right center';  break;
         case 'right' : origin =  'left center';   break;
@@ -111,7 +112,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
         else hideTooltip();
       });
 
-      scope.$watch('direction', positionTooltip );
+      scope.$watch('direction', updatePosition );
     }
 
     function addAriaLabel () {
@@ -125,57 +126,46 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       element.attr('role', 'tooltip');
     }
 
-    /**
-     * Scan up dom hierarchy for enabled parent;
-     */
-    function getParentWithPointerEvents () {
-      var parent = element.parent();
-
-      // jqLite might return a non-null, but still empty, parent; so check for parent and length
-      while (hasComputedStyleValue('pointer-events','none', parent)) {
-        parent = parent.parent();
-      }
-
-      return parent;
-    }
-
-     function getNearestContentElement () {
-       var current = element.parent()[0];
-       // Look for the nearest parent md-content, stopping at the rootElement.
-       while (current && current !== $rootElement[0] && current !== document.body && current.nodeName !== 'MD-CONTENT') {
-         current = current.parentNode;
-       }
-       return current;
-     }
-
-
-    function hasComputedStyleValue(key, value, target) {
-      var hasValue = false;
-
-      if ( target && target.length  ) {
-        key    = attr.$normalize(key);
-        target = target[0] || element[0];
-
-        var computedStyles = $window.getComputedStyle(target);
-        hasValue = angular.isDefined(computedStyles[key]) && (computedStyles[key] == value);
-      }
-
-      return hasValue;
-    }
-
     function bindEvents () {
       var mouseActive = false;
 
       var ngWindow = angular.element($window);
+
+      // add an mutationObserver when there is support for it
+      // and the need for it in the form of viable host(parent[0])
+      if (parent[0] && 'MutationObserver' in $window) {
+        // use an mutationObserver to tackle #2602
+        var attributeObserver = new MutationObserver(function(mutations) {
+          mutations
+            .forEach(function (mutation) {
+              if (mutation.attributeName === 'disabled' && parent[0].disabled) {
+                setVisible(false);
+                scope.$digest(); // make sure the elements gets updated
+              }
+            });
+        });
+
+        attributeObserver.observe(parent[0], { attributes: true});
+      }
 
       // Store whether the element was focused when the window loses focus.
       var windowBlurHandler = function() {
         elementFocusedOnWindowBlur = document.activeElement === parent[0];
       };
       var elementFocusedOnWindowBlur = false;
+
+      function windowScrollHandler() {
+        setVisible(false);
+      }
+      
       ngWindow.on('blur', windowBlurHandler);
+      ngWindow.on('resize', debouncedOnResize);
+      document.addEventListener('scroll', windowScrollHandler, true);
       scope.$on('$destroy', function() {
         ngWindow.off('blur', windowBlurHandler);
+        ngWindow.off('resize', debouncedOnResize);
+        document.removeEventListener('scroll', windowScrollHandler, true);
+        attributeObserver && attributeObserver.disconnect();
       });
 
       var enterHandler = function(e) {
@@ -202,7 +192,6 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       parent.on('focus mouseenter touchstart', enterHandler );
 
 
-      angular.element($window).on('resize', debouncedOnResize);
     }
 
     function setVisible (value) {
@@ -227,13 +216,13 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
 
       // Check if we should display it or not.
       // This handles hide-* and show-* along with any user defined css
-      if ( hasComputedStyleValue('display','none') ) {
+      if ( $mdUtil.hasComputedStyle(element, 'display', 'none')) {
         scope.visible = false;
         element.detach();
         return;
       }
 
-      positionTooltip();
+      updatePosition();
 
       angular.forEach([element, content], function (element) {
         $animate.addClass(element, 'md-show');
@@ -254,22 +243,26 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
           });
     }
 
-    function positionTooltip() {
+    function updatePosition() {
       if ( !scope.visible ) return;
 
+      updateContentOrigin();
+      positionTooltip();
+    }
+
+    function positionTooltip() {
       var tipRect = $mdUtil.offsetRect(element, tooltipParent);
       var parentRect = $mdUtil.offsetRect(parent, tooltipParent);
       var newPosition = getPosition(scope.direction);
+      var offsetParent = element.prop('offsetParent');
 
       // If the user provided a direction, just nudge the tooltip onto the screen
       // Otherwise, recalculate based on 'top' since default is 'bottom'
       if (scope.direction) {
         newPosition = fitInParent(newPosition);
-      } else if (newPosition.top > element.prop('offsetParent').scrollHeight - tipRect.height - TOOLTIP_WINDOW_EDGE_SPACE) {
+      } else if (offsetParent && newPosition.top > offsetParent.scrollHeight - tipRect.height - TOOLTIP_WINDOW_EDGE_SPACE) {
         newPosition = fitInParent(getPosition('top'));
       }
-
-      updateContentOrigin();
 
       element.css({
         left: newPosition.left + 'px',

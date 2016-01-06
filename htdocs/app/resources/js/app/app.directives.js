@@ -17,7 +17,7 @@ app.directive('preloadImages', ['$location', '$mdCardContent', function ($locati
                 angular.element(element).find('.preloader img').addClass('loaded');
             });
         }
-    }
+    };
 }]);
 
 app.directive('widgetMenu', ['widgets', '$stateParams', '$window', '$state', function (widgets, $stateParams, $window, $state) {
@@ -39,7 +39,7 @@ app.directive('widgetMenu', ['widgets', '$stateParams', '$window', '$state', fun
                 return;
             }
             $window.open('/showcase/' + widget.link, '_blank');
-        }
+        };
     }
   };
 }]);
@@ -49,17 +49,15 @@ app.directive('revToaster', ['$timeout', 'options', '$rootScope', function ($tim
     restrict: "AE",
     link: function(scope, element, attrs) {
 
-        options.set();
-
         var widget;
         //close this thing when changing states, otherwise it just stays open on other pages
         $rootScope.$on("$stateChangeStart", function() {
             widget.hide();
         });
 
-        options.rev_position = 'bottom_right';
-        options.sponsored = 2;
-        options.rev_positions = {
+        options.rev_position = options.rev_position ? options.rev_position : 'bottom_right';
+        options.sponsored = options.sponsored ? options.sponsored : 2;
+        options.rev_positions = options.rev_positions ? options.rev_positions : {
             bottom_left: {
                 key: 'bottom_left',
                 value: 'Bottom Left',
@@ -69,6 +67,8 @@ app.directive('revToaster', ['$timeout', 'options', '$rootScope', function ($tim
                 value: 'Bottom Right',
             }
         };
+
+        options.set();
 
         widget = new RevToaster({
             api_key : options.api_key,
@@ -82,7 +82,7 @@ app.directive('revToaster', ['$timeout', 'options', '$rootScope', function ($tim
             devices: options.getDevices(),
         });
 
-        var watcher = scope.$watch(function() { return options }, function(newOpts, oldOpts) {
+        var watcher = scope.$watch(function() { return options; }, function(newOpts, oldOpts) {
             if (newOpts != oldOpts) {
                 $timeout(function() {
                     widget.update(newOpts, oldOpts);
@@ -93,6 +93,8 @@ app.directive('revToaster', ['$timeout', 'options', '$rootScope', function ($tim
         $timeout(function() {
             widget.show();
         });
+
+
     }
   };
 }]);
@@ -101,18 +103,22 @@ app.directive('revShifter', ['$timeout', 'options', '$rootScope', function ($tim
   return {
     restrict: "AE",
     link: function(scope, element, attrs) {
-
-        options.set();
-
         var widget;
         //close this thing when changing states, otherwise it just stays open on other pages
         $rootScope.$on("$stateChangeStart", function() {
             widget.hide();
         });
 
-        options.inner_widget_options = {};
+        options.inner_widget = options.inner_widget ? options.inner_widget : {
+            name: 'slider',
+            options: {
+                per_row: 3,
+                rows: 10
+            }
+        };
+        options.width = options.width ? options.width : 600;
 
-        options.width = 600;
+        options.set();
 
         widget = new RevShifter({
             width: options.width,
@@ -124,17 +130,22 @@ app.directive('revShifter', ['$timeout', 'options', '$rootScope', function ($tim
             widget_id : options.widget_id,
             domain : options.domain,
             rev_position: options.rev_position,
-            inner_widget_options: options.inner_widget_options,
-            show_on_load: true,
+            inner_widget: options.inner_widget
         });
 
-        var watcher = scope.$watch(function() { return options }, function(newOpts, oldOpts) {
+        var watcher = scope.$watch(function() { return options; }, function(newOpts, oldOpts) {
             if (newOpts != oldOpts) {
                 $timeout(function() {
                     widget.update(newOpts, oldOpts);
                 });
             }
         }, true);
+
+        $timeout(function() {
+            widget.show();
+        });
+
+
     }
   };
 }]);
@@ -147,11 +158,11 @@ app.directive('revSlider', ['$timeout', 'options', function ($timeout, options) 
     },
     link: function(scope, element, attrs) {
 
-        options.set();
-
         var widget;
 
-        options.text_overlay = false;
+        options.text_overlay = options.text_overlay ? options.text_overlay : false;
+
+        options.set();
 
         $timeout(function() {
             widget = new RevSlider({
@@ -187,13 +198,13 @@ app.directive('revFlicker', ['$location', '$timeout', 'options', function ($loca
   return {
     restrict: "AE",
     link: function(scope, element, attrs) {
-
-        options.set();
-
         var widget;
 
-        options.next_effect = true;
-        options.text_overlay = false;
+        options.next_effect  = options.next_effect ? options.next_effect : true;
+        options.text_overlay = options.text_overlay ? options.text_overlay : false;
+        options.ad_border    = options.ad_border ? options.ad_border : true;
+
+        options.set();
 
         $timeout(function() {
             widget = new RevFlicker({
@@ -210,11 +221,13 @@ app.directive('revFlicker', ['$location', '$timeout', 'options', function ($loca
                 next_effect: options.next_effect,
                 headline_size: options.headline_size,
                 max_headline: options.max_headline,
-                text_overlay: options.text_overlay
+                text_overlay: options.text_overlay,
+                ad_border: options.ad_border,
+                image_ratio: options.image_ratio
             });
         });
 
-        var watcher = scope.$watch(function() { return options }, function(newOpts, oldOpts) {
+        var watcher = scope.$watch(function() { return options; }, function(newOpts, oldOpts) {
             if (newOpts != oldOpts) {
                 $timeout(function() {
                     widget.update(newOpts, oldOpts);
