@@ -102,7 +102,8 @@ RevSlider({
             wrap_pages: true,
             wrap_reverse: true, // if page_increment is false, this must be false
             show_padding: true,
-            pages: 4
+            pages: 4,
+            text_right: false
         };
 
         // merge options
@@ -541,6 +542,9 @@ RevSlider({
             this.providerMargin*2;
             cellHeight += (this.options.ad_border) ? 2 : 0;
         }
+        if (this.options.text_right) {
+            cellHeight = cellHeight/2.7;
+        }
         return cellHeight;
     }
 
@@ -583,7 +587,15 @@ RevSlider({
 
             ad.querySelectorAll('.rev-ad')[0].style.height = this.getCellHeight() + 'px';
 
-            ad.style.width = this.columnWidth + 'px';
+            //ad.style.width = this.grid.columnWidth + 'px';
+
+            if (this.options.text_right) {
+                var paddingOffset = this.padding * 2;
+                var halfWidth = ((this.grid.columnWidth - paddingOffset) / 2);
+                ad.querySelectorAll('#rev-headline-brand')[0].style.width = halfWidth + 'px';
+                ad.querySelectorAll('a')[0].style.display = 'inline-flex';
+                ad.querySelectorAll('.rev-image')[0].style.width = halfWidth + 'px';
+            }
             ad.querySelectorAll('.rev-image')[0].style.height = this.preloaderHeight + 'px';
             ad.querySelectorAll('.rev-headline')[0].style.maxheight = this.headlineHeight + 'px';
             ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
@@ -593,6 +605,8 @@ RevSlider({
             ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize +'px';
             ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
             ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
+
+
         }
         this.textOverlay();
 
@@ -680,12 +694,12 @@ RevSlider({
             '<div class="rev-image" style="height:'+ this.preloaderHeight +'px">' +
             '<img src=""/>' +
             '</div>' +
-            /*'<div>' +*/
+            '<div id="rev-headline-brand">' +
             '<div class="rev-headline" style="max-height:'+ this.headlineHeight +'px; margin:'+ this.headlineMarginTop +'px ' + this.innerMargin + 'px' + ' 0;">' +
             '<h3 style="font-size:'+ this.headlineFontSize +'px; line-height:'+ this.headlineLineHeight +'px;"></h3>' +
             '</div>' +
             '<div style="margin:' + this.providerMargin +'px '  + this.innerMargin + 'px ' + this.providerMargin +'px;font-size:'+ this.providerFontSize +'px;line-height:'+ this.providerLineHeight +'px;height:'+ this.providerLineHeight +'px;" class="rev-provider"></div>' +
-            /*'</div>' +*/
+            '</div>' +
             '</a>' +
             '</div>';
         var cell = document.createElement('div');
@@ -760,6 +774,14 @@ RevSlider({
         for (var i = 0; i < this.limit; i++) {
             var ad = ads[i],
                 data = itemsToDisplay[contentIndex];
+
+            if (this.options.text_right) {
+                var paddingOffset = this.padding * 2;
+                var halfWidth = ((this.grid.columnWidth - paddingOffset) / 2);
+                ad.querySelectorAll('#rev-headline-brand')[0].style.width = halfWidth + 'px';
+                ad.querySelectorAll('a')[0].style.display = 'inline-flex';
+                ad.querySelectorAll('.rev-image')[0].style.width = halfWidth + 'px';
+            }
             ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', ''));
             ad.querySelectorAll('a')[0].title = data.headline;
             ad.querySelectorAll('img')[0].setAttribute('src', data.image);

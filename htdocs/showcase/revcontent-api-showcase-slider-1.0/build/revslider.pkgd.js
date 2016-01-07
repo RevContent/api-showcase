@@ -2688,20 +2688,22 @@ if ( typeof define === 'function' && define.amd ) {
      * @return {Object} Current instance of EventEmitter for chaining.
      */
     proto.emitEvent = function emitEvent(evt, args) {
-        var listeners = this.getListenersAsObject(evt);
+        var listenersMap = this.getListenersAsObject(evt);
+        var listeners;
         var listener;
         var i;
         var key;
         var response;
 
-        for (key in listeners) {
-            if (listeners.hasOwnProperty(key)) {
-                i = listeners[key].length;
+        for (key in listenersMap) {
+            if (listenersMap.hasOwnProperty(key)) {
+                listeners = listenersMap[key].slice(0);
+                i = listeners.length;
 
                 while (i--) {
                     // If the listener returns true then it shall be removed from the event
                     // The function is executed either with a basic call or an apply if there is an args array
-                    listener = listeners[key][i];
+                    listener = listeners[i];
 
                     if (listener.once === true) {
                         this.removeListener(evt, listener.listener);
@@ -3400,14 +3402,19 @@ Item.prototype.getPosition = function() {
   var layoutOptions = this.layout.options;
   var isOriginLeft = layoutOptions.isOriginLeft;
   var isOriginTop = layoutOptions.isOriginTop;
-  var x = parseInt( style[ isOriginLeft ? 'left' : 'right' ], 10 );
-  var y = parseInt( style[ isOriginTop ? 'top' : 'bottom' ], 10 );
+  var xValue = style[ isOriginLeft ? 'left' : 'right' ];
+  var yValue = style[ isOriginTop ? 'top' : 'bottom' ];
+  // convert percent to pixels
+  var layoutSize = this.layout.size;
+  var x = xValue.indexOf('%') != -1 ?
+    ( parseFloat( xValue ) / 100 ) * layoutSize.width : parseInt( xValue, 10 );
+  var y = yValue.indexOf('%') != -1 ?
+    ( parseFloat( yValue ) / 100 ) * layoutSize.height : parseInt( yValue, 10 );
 
   // clean up 'auto' or other non-integer values
   x = isNaN( x ) ? 0 : x;
   y = isNaN( y ) ? 0 : y;
   // remove padding from measurement
-  var layoutSize = this.layout.size;
   x -= isOriginLeft ? layoutSize.paddingLeft : layoutSize.paddingRight;
   y -= isOriginTop ? layoutSize.paddingTop : layoutSize.paddingBottom;
 
@@ -3427,10 +3434,8 @@ Item.prototype.layoutPosition = function() {
   var xResetProperty = layoutOptions.isOriginLeft ? 'right' : 'left';
 
   var x = this.position.x + layoutSize[ xPadding ];
-  // set in percentage
-  x = layoutOptions.percentPosition && !layoutOptions.isHorizontal ?
-    ( ( x / layoutSize.width ) * 100 ) + '%' : x + 'px';
-  style[ xProperty ] = x;
+  // set in percentage or pixels
+  style[ xProperty ] = this.getXValue( x );
   // reset other property
   style[ xResetProperty ] = '';
 
@@ -3440,10 +3445,8 @@ Item.prototype.layoutPosition = function() {
   var yResetProperty = layoutOptions.isOriginTop ? 'bottom' : 'top';
 
   var y = this.position.y + layoutSize[ yPadding ];
-  // set in percentage
-  y = layoutOptions.percentPosition && layoutOptions.isHorizontal ?
-    ( ( y / layoutSize.height ) * 100 ) + '%' : y + 'px';
-  style[ yProperty ] = y;
+  // set in percentage or pixels
+  style[ yProperty ] = this.getYValue( y );
   // reset other property
   style[ yResetProperty ] = '';
 
@@ -3451,15 +3454,17 @@ Item.prototype.layoutPosition = function() {
   this.emitEvent( 'layout', [ this ] );
 };
 
+Item.prototype.getXValue = function( x ) {
+  var layoutOptions = this.layout.options;
+  return layoutOptions.percentPosition && !layoutOptions.isHorizontal ?
+    ( ( x / this.layout.size.width ) * 100 ) + '%' : x + 'px';
+};
 
-// transform translate function
-var translate = is3d ?
-  function( x, y ) {
-    return 'translate3d(' + x + 'px, ' + y + 'px, 0)';
-  } :
-  function( x, y ) {
-    return 'translate(' + x + 'px, ' + y + 'px)';
-  };
+Item.prototype.getYValue = function( y ) {
+  var layoutOptions = this.layout.options;
+  return layoutOptions.percentPosition && layoutOptions.isHorizontal ?
+    ( ( y / this.layout.size.height ) * 100 ) + '%' : y + 'px';
+};
 
 
 Item.prototype._transitionTo = function( x, y ) {
@@ -3484,11 +3489,7 @@ Item.prototype._transitionTo = function( x, y ) {
   var transX = x - curX;
   var transY = y - curY;
   var transitionStyle = {};
-  // flip cooridinates if origin on right or bottom
-  var layoutOptions = this.layout.options;
-  transX = layoutOptions.isOriginLeft ? transX : -transX;
-  transY = layoutOptions.isOriginTop ? transY : -transY;
-  transitionStyle.transform = translate( transX, transY );
+  transitionStyle.transform = this.getTranslate( transX, transY );
 
   this.transition({
     to: transitionStyle,
@@ -3497,6 +3498,19 @@ Item.prototype._transitionTo = function( x, y ) {
     },
     isCleaning: true
   });
+};
+
+Item.prototype.getTranslate = function( x, y ) {
+  // flip cooridinates if origin on right or bottom
+  var layoutOptions = this.layout.options;
+  x = layoutOptions.isOriginLeft ? x : -x;
+  y = layoutOptions.isOriginTop ? y : -y;
+
+  if ( is3d ) {
+    return 'translate3d(' + x + 'px, ' + y + 'px, 0)';
+  }
+
+  return 'translate(' + x + 'px, ' + y + 'px)';
 };
 
 // non transition + transform support
@@ -3578,28 +3592,36 @@ Item.prototype._transition = function( args ) {
 
 };
 
-var itemTransitionProperties = transformProperty && ( utils.toDashed( transformProperty ) +
-  ',opacity' );
+// dash before all cap letters, including first for
+// WebkitTransform => -webkit-transform
+function toDashedAll( str ) {
+  return str.replace( /([A-Z])/g, function( $1 ) {
+    return '-' + $1.toLowerCase();
+  });
+}
+
+var transitionProps = 'opacity,' +
+  toDashedAll( vendorProperties.transform || 'transform' );
 
 Item.prototype.enableTransition = function(/* style */) {
-  // only enable if not already transitioning
-  // bug in IE10 were re-setting transition style will prevent
-  // transitionend event from triggering
+  // HACK changing transitionProperty during a transition
+  // will cause transition to jump
   if ( this.isTransitioning ) {
     return;
   }
 
-  // make transition: foo, bar, baz from style object
-  // TODO uncomment this bit when IE10 bug is resolved
-  // var transitionValue = [];
+  // make `transition: foo, bar, baz` from style object
+  // HACK un-comment this when enableTransition can work
+  // while a transition is happening
+  // var transitionValues = [];
   // for ( var prop in style ) {
   //   // dash-ify camelCased properties like WebkitTransition
-  //   transitionValue.push( toDash( prop ) );
+  //   prop = vendorProperties[ prop ] || prop;
+  //   transitionValues.push( toDashedAll( prop ) );
   // }
   // enable transition styles
-  // HACK always enable transform,opacity for IE10
   this.css({
-    transitionProperty: itemTransitionProperties,
+    transitionProperty: transitionProps,
     transitionDuration: this.layout.options.transitionDuration
   });
   // listen for transition end event
@@ -3802,7 +3824,7 @@ return Item;
 }));
 
 /*!
- * Outlayer v1.4.0
+ * Outlayer v1.4.2
  * the brains and guts of a layout library
  * MIT license
  */
@@ -4217,7 +4239,7 @@ Outlayer.prototype._setContainerMeasure = function( measure, isWidth ) {
 Outlayer.prototype._emitCompleteOnItems = function( eventName, items ) {
   var _this = this;
   function onComplete() {
-    _this.emitEvent( eventName + 'Complete', [ items ] );
+    _this.dispatchEvent( eventName + 'Complete', null, [ items ] );
   }
 
   var count = items.length;
@@ -4238,6 +4260,32 @@ Outlayer.prototype._emitCompleteOnItems = function( eventName, items ) {
   for ( var i=0, len = items.length; i < len; i++ ) {
     var item = items[i];
     item.once( eventName, tick );
+  }
+};
+
+/**
+ * emits events via eventEmitter and jQuery events
+ * @param {String} type - name of event
+ * @param {Event} event - original event
+ * @param {Array} args - extra arguments
+ */
+Outlayer.prototype.dispatchEvent = function( type, event, args ) {
+  // add original event to arguments
+  var emitArgs = event ? [ event ].concat( args ) : args;
+  this.emitEvent( type, emitArgs );
+
+  if ( jQuery ) {
+    // set this.$element
+    this.$element = this.$element || jQuery( this.element );
+    if ( event ) {
+      // create jQuery event
+      var $event = jQuery.Event( event );
+      $event.type = type;
+      this.$element.trigger( $event, args );
+    } else {
+      // just trigger with type if no event available
+      this.$element.trigger( type, args );
+    }
   }
 };
 
@@ -4713,7 +4761,8 @@ return Outlayer;
 'use strict';
 
 var AnyGrid = Outlayer.create( 'anyGrid', {
-    masonry: true,
+    masonry: false,
+    stacked: false,
     perRow: {
         xxs: 1,
         xs: 1,
@@ -4734,11 +4783,11 @@ var AnyGrid = Outlayer.create( 'anyGrid', {
 
 AnyGrid.prototype.getBreakPoint = function() {
     return this.breakPoint;
-}
+};
 
 AnyGrid.prototype.getPerRow = function() {
     return this.perRow;
-}
+};
 
 AnyGrid.prototype.resize = function() {
     if ( !this.isResizeBound || !this.needsResizeLayout() ) {
@@ -4756,40 +4805,71 @@ AnyGrid.prototype._setUp = function() {
 
     if (this.containerWidth >= 1500) {
         this.perRow = this.options.perRow.xxl;
-        this.breakPoint = 'xxl'
+        this.breakPoint = 'xxl';
     }else if (this.containerWidth >= 1250) {
         this.perRow = this.options.perRow.xl;
-        this.breakPoint = 'xl'
+        this.breakPoint = 'xl';
     }else if (this.containerWidth >= 1000) {
         this.perRow = this.options.perRow.lg;
-        this.breakPoint = 'lg'
+        this.breakPoint = 'lg';
     }else if (this.containerWidth >= 750) {
         this.perRow = this.options.perRow.md;
-        this.breakPoint = 'md'
+        this.breakPoint = 'md';
     }else if (this.containerWidth >= 500) {
         this.perRow = this.options.perRow.sm;
-        this.breakPoint = 'sm'
+        this.breakPoint = 'sm';
     }else if (this.containerWidth >= 250) {
         this.perRow = this.options.perRow.xs;
-        this.breakPoint = 'xs'
+        this.breakPoint = 'xs';
     }else {
         this.perRow = this.options.perRow.xxs;
-        this.breakPoint = 'xxs'
+        this.breakPoint = 'xxs';
     }
 
-    this.columnWidth = (this.containerWidth / this.perRow);
+    if (!this.perRow) { // try to just set it to what was passed
+        this.perRow = parseInt(this.options.perRow);
+    }
 
-    this.cols = Math.floor( this.containerWidth / this.columnWidth );
+    var measureContainerWidth = this.containerWidth;
+
+    if (this.options.adjust_gutter && this.items.length) {
+        this.itemPadding = getSize(this.items[0].element).paddingLeft;
+        //this.element.parentNode.style.marginLeft = (this.itemPadding * -1) + 'px';
+        this._setContainerAndGridHeights();
+        measureContainerWidth = this.containerWidth; // + (this.itemPadding * 2);
+
+    }
+
+    this.columnWidth = (measureContainerWidth / this.perRow);
+
+    this.cols = Math.floor( measureContainerWidth / this.columnWidth );
     this.cols = Math.max( this.cols, 1 );
 
-    this.columns = [];
-    this.rows = [];
+    this.columns = {};
+    this.rows = {};
     for (var i = 0; i < this.cols; i++) {
         this.columns[i] = 0;
-    };
+    }
 
     this.maxHeight = 0;
     this.itemIndex = 0;
+};
+
+AnyGrid.prototype._setContainerAndGridHeights = function() {
+    this.itemPadding = getSize(this.items[0].element).paddingLeft;
+    var gridContainerElement = this.element.parentNode;
+    var paddingOffset = this.itemPadding * 2;
+    var numRows = this.items.length/this.perRow;
+    var rowsPaddingOffset = paddingOffset * (numRows - 1);
+    var itemHeight = (this.options.itemHeight ? this.options.itemHeight : getSize(this.items[0].element).height);
+    var newContHeight = ((itemHeight * numRows) - rowsPaddingOffset);
+    gridContainerElement.style.height = newContHeight + 'px';
+
+    this.element.style.position = 'absolute';
+    this.element.style.height = (gridContainerElement.offsetHeight + paddingOffset) + 'px';
+    this.element.style.width = (gridContainerElement.offsetWidth + paddingOffset + 1) + 'px';
+    this.element.style.top = '-'+this.itemPadding+'px';
+    this.element.style.left = '-'+this.itemPadding+'px';
 }
 
 AnyGrid.prototype._create = function() {
@@ -4809,8 +4889,6 @@ AnyGrid.prototype._resetLayout = function() {
 };
 
 AnyGrid.prototype._getItemLayoutPosition = function( item ) {
-    item.element.style.width = this.columnWidth + 'px';
-
     item.getSize();
 
     var column = this.itemIndex % this.cols;
@@ -4818,30 +4896,46 @@ AnyGrid.prototype._getItemLayoutPosition = function( item ) {
     var x = column * this.columnWidth;
     var y = this.columns[column];
 
+    var itemHeight = (this.options.itemHeight ? this.options.itemHeight : item.size.height);
+
     if (this.options.masonry) {
-        this.columns[column] = this.columns[column] + item.size.height;
+        this.columns[column] = this.columns[column] + itemHeight;
+        this.maxHeight = Math.max(this.maxHeight, this.columns[column]);
+    } else if (this.options.stacked) {
+        var rows = (this.items.length / this.cols);
+        column = Math.floor(this.itemIndex / rows);
+        var row = (Math.floor((this.itemIndex + 1) / (column + 1)) - 1);
+
+        x = column * this.columnWidth;
+        y = this.columns[column];
+
+        this.columns[column] = this.columns[column] + itemHeight;
+
         this.maxHeight = Math.max(this.maxHeight, this.columns[column]);
     } else {
         var row = Math.floor( this.itemIndex / this.cols );
         var firstColumn = (row > 0);
 
         if (firstColumn) {
-            this.columns[column] = this.rows[(row - 1)].maxHeight + item.size.height;
+            this.columns[column] = this.rows[(row - 1)].maxHeight + itemHeight;
         } else {
-            this.columns[column] = this.columns[column] + item.size.height;
-        }
-
-        this.rows[row] = this.rows[row] || {};
-        if (!this.rows[row].maxHeight || (this.columns[column] > this.rows[row].maxHeight)) {
-            this.rows[row].maxHeight = this.columns[column];
+            this.columns[column] = this.columns[column] + itemHeight;
         }
 
         if (firstColumn) {
             y = this.rows[(row - 1)].maxHeight;
-            this.maxHeight = Math.max(this.maxHeight, y + item.size.height);
+            this.maxHeight = Math.max(this.maxHeight, y + itemHeight);
         } else { // if it's the fist row y = 0 and maxHeight is just the height of the tallest item
-            this.maxHeight = Math.max(this.maxHeight, item.size.height);
+            this.maxHeight = Math.max(this.maxHeight, itemHeight);
         }
+    }
+
+    this.rows[row] = this.rows[row] || {};
+    if (!this.rows[row].maxHeight || (this.columns[column] > this.rows[row].maxHeight)) {
+        this.rows[row].maxHeight = this.columns[column];
+    }
+    if (!this.rows[row].height || (itemHeight > this.rows[row].height)) {
+        this.rows[row].height = itemHeight;
     }
 
     this.itemIndex++;
@@ -4852,6 +4946,18 @@ AnyGrid.prototype._getItemLayoutPosition = function( item ) {
     };
 };
 
+AnyGrid.prototype._postLayout = function() {
+    this.resizeItems();
+    this.resizeContainer();
+
+};
+
+AnyGrid.prototype.resizeItems = function() {
+    for (var i = 0; i < this.items.length; i++) {
+        this.items[i].element.style.width = this.columnWidth + 'px';
+    }
+};
+
 AnyGrid.prototype._getContainerSize = function() {
     return {
         height: this.maxHeight
@@ -4859,6 +4965,109 @@ AnyGrid.prototype._getContainerSize = function() {
 };
 
 return AnyGrid;
+
+}));
+//Overriding to add height and width to transitionProps.
+( function( window, factory ) {
+'use strict';
+  // universal module definition
+    // browser global
+    window.AnyGrid = window.AnyGrid || {};
+    window.AnyGrid.Item = factory(
+      window.Outlayer
+    );
+
+}( window, function factory( Outlayer ) {
+'use strict';
+
+// -------------------------- Item -------------------------- //
+
+var transitionProperty = getStyleProperty('transition');
+var transformProperty = getStyleProperty('transform');
+var supportsCSS3 = transitionProperty && transformProperty;
+var is3d = !!getStyleProperty('perspective');
+
+var transitionEndEvent = {
+  WebkitTransition: 'webkitTransitionEnd',
+  MozTransition: 'transitionend',
+  OTransition: 'otransitionend',
+  transition: 'transitionend'
+}[ transitionProperty ];
+
+// properties that could have vendor prefix
+var prefixableProperties = [
+  'transform',
+  'transition',
+  'transitionDuration',
+  'transitionProperty'
+];
+
+// cache all vendor properties
+var vendorProperties = ( function() {
+  var cache = {};
+  for ( var i=0, len = prefixableProperties.length; i < len; i++ ) {
+    var prop = prefixableProperties[i];
+    var supportedProp = getStyleProperty( prop );
+    if ( supportedProp && supportedProp !== prop ) {
+      cache[ prop ] = supportedProp;
+    }
+  }
+  return cache;
+})();
+
+
+// sub-class Outlayer Item
+function Item() {
+  Outlayer.Item.apply( this, arguments );
+}
+
+Item.prototype = new Outlayer.Item();
+
+// dash before all cap letters, including first for
+// WebkitTransform => -webkit-transform
+function toDashedAll( str ) {
+  return str.replace( /([A-Z])/g, function( $1 ) {
+    return '-' + $1.toLowerCase();
+  });
+}
+
+var transitionProps = 'opacity, height, width,' +
+  toDashedAll( vendorProperties.transform || 'transform' );
+
+Item.prototype.enableTransition = function(/* style */) {
+  // HACK changing transitionProperty during a transition
+  // will cause transition to jump
+  if ( this.isTransitioning ) {
+    return;
+  }
+
+  // make `transition: foo, bar, baz` from style object
+  // HACK un-comment this when enableTransition can work
+  // while a transition is happening
+  // var transitionValues = [];
+  // for ( var prop in style ) {
+  //   // dash-ify camelCased properties like WebkitTransition
+  //   prop = vendorProperties[ prop ] || prop;
+  //   transitionValues.push( toDashedAll( prop ) );
+  // }
+  // enable transition styles
+  this.css({
+    transitionProperty: transitionProps,
+    transitionDuration: this.layout.options.transitionDuration
+  });
+  // listen for transition end event
+  this.element.addEventListener( transitionEndEvent, this, false );
+};
+
+
+// Item.prototype._create = function() {
+//   // assign id, used for original-order sorting
+//   this.id = this.layout.itemGUID++;
+//   Outlayer.Item.prototype._create.call( this );
+//   this.sortData = {};
+// };
+
+return Item;
 
 }));
 /*! Hammer.JS - v2.0.4 - 2014-09-28
@@ -5417,7 +5626,8 @@ RevSlider({
             wrap_pages: true,
             wrap_reverse: true, // if page_increment is false, this must be false
             show_padding: true,
-            pages: 4
+            pages: 4,
+            text_right: false
         };
 
         // merge options
@@ -5434,7 +5644,7 @@ RevSlider({
 
         var that = this;
 
-        revUtils.appendStyle('/* inject:css */#rev-slider a,#rev-slider a:focus,#rev-slider a:hover{text-decoration:none}#rev-slider,#rev-slider #rev-slider-grid-container{padding:0;width:100%}#rev-slider #rev-slider-grid{position:absolute;padding:0}#rev-slider #rev-slider-grid-container{position:relative;width:100%;overflow:hidden;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}#rev-slider{clear:both}#rev-slider *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-slider .rev-chevron{position:absolute;font-family:arial narrow;height:37px;font-size:58px;color:#fff;line-height:.5;top:50%}.rc-about,.rc-about h2{font-family:Arial,sans-serif}#rev-slider #rev-slider-grid-container .rev-btn-wrapper{position:absolute;height:100%;width:40px;text-align:center;z-index:10;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out}#rev-slider #rev-slider-grid-container .top-bottom{height:40px;width:100%}#rev-slider #rev-slider-grid-container .rev-btn-container{position:relative;background-color:#333;opacity:.3;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;height:100%;text-align:center;border-radius:4px}#rev-slider #rev-slider-grid-container .rev-btn-container:hover{opacity:.8}#rev-slider a{color:inherit}#rev-slider:focus{outline:0}#rev-slider .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-slider .rev-sponsored{line-height:24px;font-size:12px}#rev-slider .rev-sponsored.bottom-right,#rev-slider .rev-sponsored.top-right{float:right}#rev-slider .rev-sponsored.top-right a{vertical-align:-5px}#rev-slider .rev-sponsored a{color:#999}#rev-slider .rev-ad a{display:block;color:#222}#rev-slider .rev-image{position:relative;-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee;overflow:hidden}#rev-slider .rev-image img{position:absolute;top:0;left:0;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-slider.loaded .rev-image{background:0 0}#rev-slider.loaded .rev-image img{opacity:1}#rev-slider .rev-headline,#rev-slider .rev-provider{margin:0 10px;text-align:left}#rev-slider .rev-headline{margin-top:12px;overflow:hidden}#rev-slider .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-slider .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px}#rev-slider .rev-ad{border-radius:5px;overflow:hidden;background:#fff}#rev-slider .rev-content.blur{-webkit-filter:blur(3px);filter:blur(3px)}#rev-slider .rev-content{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-slider .rev-content.rev-next{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:.5}#rev-slider.rev-slider-text-overlay .rev-ad{position:relative}#rev-slider.rev-slider-text-overlay .rev-ad a{height:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-headline{position:absolute;bottom:4px;color:#fff;text-shadow:1px 1px rgba(0,0,0,.8);height:auto!important}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{border-radius:5px;position:absolute;top:0;height:100%;width:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;content:"";display:block}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after{background:-webkit-linear-gradient(top,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%);background:linear-gradient(to bottom,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{opacity:0;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%);background:linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:after{opacity:0}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:before{opacity:1}.slideOutLeft{-webkit-filter:blur(1px);filter:blur(1px);-webkit-animation-name:slideOutLeft;animation-name:slideOutLeft;-webkit-animation-duration:1s;animation-duration:1s;-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out;visibility:visible!important}.slideInLeft,.slideOutRight{-webkit-filter:blur(1px);-webkit-animation-duration:1s;-webkit-animation-timing-function:ease-in-out;visibility:visible!important}@-webkit-keyframes slideOutLeft{0%{-webkit-transform:translateX(0);transform:translateX(0)}100%{-webkit-transform:translateX(-100%);transform:translateX(-100%)}}@keyframes slideOutLeft{0%{-webkit-transform:translateX(0);transform:translateX(0)}100%{-webkit-transform:translateX(-100%);transform:translateX(-100%)}}.slideInLeft{filter:blur(1px);-webkit-animation-name:slideInLeft;animation-name:slideInLeft;animation-duration:1s;animation-timing-function:ease-in-out}@-webkit-keyframes slideInLeft{0%{-webkit-transform:translateX(100%);transform:translateX(100%)}100%{-webkit-transform:translateX(0);transform:translateX(0)}}@keyframes slideInLeft{0%{-webkit-transform:translateX(100%);transform:translateX(100%)}100%{-webkit-transform:translateX(0);transform:translateX(0)}}.slideOutRight{filter:blur(1px);-webkit-animation-name:slideOutRight;animation-name:slideOutRight;animation-duration:1s;animation-timing-function:ease-in-out}.slideInRight,.slideOutUp{-webkit-filter:blur(1px);-webkit-animation-duration:1s;-webkit-animation-timing-function:ease-in-out}@-webkit-keyframes slideOutRight{0%{-webkit-transform:translateX(0);transform:translateX(0)}100%{-webkit-transform:translateX(100%);transform:translateX(100%)}}@keyframes slideOutRight{0%{-webkit-transform:translateX(0);transform:translateX(0)}100%{-webkit-transform:translateX(100%);transform:translateX(100%)}}.slideInRight{filter:blur(1px);-webkit-animation-name:slideInRight;animation-name:slideInRight;animation-duration:1s;animation-timing-function:ease-in-out;visibility:visible!important}@-webkit-keyframes slideInRight{0%{-webkit-transform:translateX(-100%);transform:translateX(-100%)}100%{-webkit-transform:translateX(0);transform:translateX(0)}}@keyframes slideInRight{0%{-webkit-transform:translateX(-100%);transform:translateX(-100%)}100%{-webkit-transform:translateX(0);transform:translateX(0)}}.slideOutUp{filter:blur(1px);-webkit-animation-name:slideOutUp;animation-name:slideOutUp;animation-duration:1s;animation-timing-function:ease-in-out;visibility:visible!important}.slideInUp,.slideOutDown{-webkit-filter:blur(1px);-webkit-animation-duration:1s;-webkit-animation-timing-function:ease-in-out;visibility:visible!important}@-webkit-keyframes slideOutUp{0%{-webkit-transform:translateY(0);transform:translateY(0)}100%{-webkit-transform:translateY(-100%);transform:translateY(-100%)}}@keyframes slideOutUp{0%{-webkit-transform:translateY(0);transform:translateY(0)}100%{-webkit-transform:translateY(-100%);transform:translateY(-100%)}}.slideInUp{filter:blur(1px);-webkit-animation-name:slideInUp;animation-name:slideInUp;animation-duration:1s;animation-timing-function:ease-in-out}@-webkit-keyframes slideInUp{0%{-webkit-transform:translateY(100%);transform:translateY(100%)}100%{-webkit-transform:translateY(0);transform:translateY(0)}}@keyframes slideInUp{0%{-webkit-transform:translateY(100%);transform:translateY(100%)}100%{-webkit-transform:translateY(0);transform:translateY(0)}}.slideOutDown{filter:blur(1px);-webkit-animation-name:slideOutDown;animation-name:slideOutDown;animation-duration:1s;animation-timing-function:ease-in-out}@-webkit-keyframes slideOutDown{0%{-webkit-transform:translateY(0);transform:translateY(0)}100%{-webkit-transform:translateY(100%);transform:translateY(100%)}}@keyframes slideOutDown{0%{-webkit-transform:translateY(0);transform:translateY(0)}100%{-webkit-transform:translateY(100%);transform:translateY(100%)}}.slideInDown{-webkit-filter:blur(1px);filter:blur(1px);-webkit-animation-name:slideInDown;animation-name:slideInDown;-webkit-animation-duration:1s;animation-duration:1s;-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out;visibility:visible!important}@-webkit-keyframes slideInDown{0%{-webkit-transform:translateY(-100%);transform:translateY(-100%)}100%{-webkit-transform:translateY(0);transform:translateY(0)}}@keyframes slideInDown{0%{-webkit-transform:translateY(-100%);transform:translateY(-100%)}100%{-webkit-transform:translateY(0);transform:translateY(0)}}#rev-opt-out .rd-close-button{position:absolute;cursor:pointer;right:10px;z-index:10}a{cursor:pointer!important}#rev-opt-out .rd-box-wrap{display:none;z-index:2147483641}#rev-opt-out .rd-box-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}#rev-opt-out .rd-vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}#rev-opt-out .rd-box{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}#rev-opt-out .rd-normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}#rev-opt-out .rd-full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}#rev-opt-out .rd-header{height:20px;position:absolute;right:0}.rc-about{font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}.rc-about .rc-logo{background:url(https://www.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}.rc-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}.rc-about p#main{text-align:left}.rc-opt-out,.rc-well{text-align:center}.rc-about h2{color:#777;font-size:16px;line-height:18px}.rc-about a{color:#00cb43}.rc-well{border:1px solid #E0E0E0;padding:20px;border-radius:2px;margin:20px 0 0}.rc-well h2{margin-top:0}.rc-well p{margin-bottom:0}.rc-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-slider');
+        revUtils.appendStyle('/* inject:css */#rev-slider a,#rev-slider a:focus,#rev-slider a:hover{text-decoration:none}#rev-slider,#rev-slider #rev-slider-grid-container{padding:0;width:100%}#rev-slider #rev-slider-grid{position:absolute;padding:0}#rev-slider #rev-slider-grid-container{position:relative;width:100%;overflow:hidden;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}#rev-slider{clear:both}#rev-slider *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-slider .rev-chevron{position:absolute;font-family:arial narrow;height:37px;font-size:58px;color:#fff;line-height:.5;top:50%}.rc-about,.rc-about h2{font-family:Arial,sans-serif}#rev-slider #rev-slider-grid-container .rev-btn-wrapper{position:absolute;height:100%;width:40px;text-align:center;z-index:10;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out}#rev-slider #rev-slider-grid-container .top-bottom{height:40px;width:100%}#rev-slider #rev-slider-grid-container .rev-btn-container{position:relative;background-color:#333;opacity:.3;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;height:100%;text-align:center;border-radius:4px}#rev-slider #rev-slider-grid-container .rev-btn-container:hover{opacity:.8}#rev-slider a{color:inherit}#rev-slider:focus{outline:0}#rev-slider .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-slider .rev-sponsored{line-height:24px;font-size:12px}#rev-slider .rev-sponsored.bottom-right,#rev-slider .rev-sponsored.top-right{float:right}#rev-slider .rev-sponsored.top-right a{vertical-align:-5px}#rev-slider .rev-sponsored a{color:#999}#rev-slider .rev-ad a{display:block;color:#222}#rev-slider .rev-image{position:relative;-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee;overflow:hidden}#rev-slider .rev-image img{position:absolute;top:0;left:0;width:100%;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-slider.loaded .rev-image{background:0 0}#rev-slider.loaded .rev-image img{opacity:1}#rev-slider .rev-headline,#rev-slider .rev-provider{margin:0 10px;text-align:left}#rev-slider .rev-headline{margin-top:12px;overflow:hidden}#rev-slider .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-slider .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px}#rev-slider .rev-ad{border-radius:5px;overflow:hidden;background:#fff}#rev-slider .rev-content.blur{-webkit-filter:blur(3px);filter:blur(3px)}#rev-slider .rev-content{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-slider .rev-content.rev-next{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:.5}#rev-slider.rev-slider-text-overlay .rev-ad{position:relative}#rev-slider.rev-slider-text-overlay .rev-ad a{height:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-headline{position:absolute;bottom:4px;color:#fff;text-shadow:1px 1px rgba(0,0,0,.8);height:auto!important}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{border-radius:5px;position:absolute;top:0;height:100%;width:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;content:"";display:block}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after{background:-webkit-linear-gradient(top,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%);background:linear-gradient(to bottom,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{opacity:0;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%);background:linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:after{opacity:0}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:before{opacity:1}.slideOutLeft{-webkit-filter:blur(1px);filter:blur(1px);-webkit-animation-name:slideOutLeft;animation-name:slideOutLeft;-webkit-animation-duration:1s;animation-duration:1s;-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out;visibility:visible!important}.slideInLeft,.slideOutRight{-webkit-filter:blur(1px);-webkit-animation-duration:1s;-webkit-animation-timing-function:ease-in-out;visibility:visible!important}@-webkit-keyframes slideOutLeft{0%{-webkit-transform:translateX(0);transform:translateX(0)}100%{-webkit-transform:translateX(-100%);transform:translateX(-100%)}}@keyframes slideOutLeft{0%{-webkit-transform:translateX(0);transform:translateX(0)}100%{-webkit-transform:translateX(-100%);transform:translateX(-100%)}}.slideInLeft{filter:blur(1px);-webkit-animation-name:slideInLeft;animation-name:slideInLeft;animation-duration:1s;animation-timing-function:ease-in-out}@-webkit-keyframes slideInLeft{0%{-webkit-transform:translateX(100%);transform:translateX(100%)}100%{-webkit-transform:translateX(0);transform:translateX(0)}}@keyframes slideInLeft{0%{-webkit-transform:translateX(100%);transform:translateX(100%)}100%{-webkit-transform:translateX(0);transform:translateX(0)}}.slideOutRight{filter:blur(1px);-webkit-animation-name:slideOutRight;animation-name:slideOutRight;animation-duration:1s;animation-timing-function:ease-in-out}.slideInRight,.slideOutUp{-webkit-filter:blur(1px);-webkit-animation-duration:1s;-webkit-animation-timing-function:ease-in-out}@-webkit-keyframes slideOutRight{0%{-webkit-transform:translateX(0);transform:translateX(0)}100%{-webkit-transform:translateX(100%);transform:translateX(100%)}}@keyframes slideOutRight{0%{-webkit-transform:translateX(0);transform:translateX(0)}100%{-webkit-transform:translateX(100%);transform:translateX(100%)}}.slideInRight{filter:blur(1px);-webkit-animation-name:slideInRight;animation-name:slideInRight;animation-duration:1s;animation-timing-function:ease-in-out;visibility:visible!important}@-webkit-keyframes slideInRight{0%{-webkit-transform:translateX(-100%);transform:translateX(-100%)}100%{-webkit-transform:translateX(0);transform:translateX(0)}}@keyframes slideInRight{0%{-webkit-transform:translateX(-100%);transform:translateX(-100%)}100%{-webkit-transform:translateX(0);transform:translateX(0)}}.slideOutUp{filter:blur(1px);-webkit-animation-name:slideOutUp;animation-name:slideOutUp;animation-duration:1s;animation-timing-function:ease-in-out;visibility:visible!important}.slideInUp,.slideOutDown{-webkit-filter:blur(1px);-webkit-animation-duration:1s;-webkit-animation-timing-function:ease-in-out;visibility:visible!important}@-webkit-keyframes slideOutUp{0%{-webkit-transform:translateY(0);transform:translateY(0)}100%{-webkit-transform:translateY(-100%);transform:translateY(-100%)}}@keyframes slideOutUp{0%{-webkit-transform:translateY(0);transform:translateY(0)}100%{-webkit-transform:translateY(-100%);transform:translateY(-100%)}}.slideInUp{filter:blur(1px);-webkit-animation-name:slideInUp;animation-name:slideInUp;animation-duration:1s;animation-timing-function:ease-in-out}@-webkit-keyframes slideInUp{0%{-webkit-transform:translateY(100%);transform:translateY(100%)}100%{-webkit-transform:translateY(0);transform:translateY(0)}}@keyframes slideInUp{0%{-webkit-transform:translateY(100%);transform:translateY(100%)}100%{-webkit-transform:translateY(0);transform:translateY(0)}}.slideOutDown{filter:blur(1px);-webkit-animation-name:slideOutDown;animation-name:slideOutDown;animation-duration:1s;animation-timing-function:ease-in-out}@-webkit-keyframes slideOutDown{0%{-webkit-transform:translateY(0);transform:translateY(0)}100%{-webkit-transform:translateY(100%);transform:translateY(100%)}}@keyframes slideOutDown{0%{-webkit-transform:translateY(0);transform:translateY(0)}100%{-webkit-transform:translateY(100%);transform:translateY(100%)}}.slideInDown{-webkit-filter:blur(1px);filter:blur(1px);-webkit-animation-name:slideInDown;animation-name:slideInDown;-webkit-animation-duration:1s;animation-duration:1s;-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out;visibility:visible!important}@-webkit-keyframes slideInDown{0%{-webkit-transform:translateY(-100%);transform:translateY(-100%)}100%{-webkit-transform:translateY(0);transform:translateY(0)}}@keyframes slideInDown{0%{-webkit-transform:translateY(-100%);transform:translateY(-100%)}100%{-webkit-transform:translateY(0);transform:translateY(0)}}#rev-opt-out .rd-close-button{position:absolute;cursor:pointer;right:10px;z-index:10}a{cursor:pointer!important}#rev-opt-out .rd-box-wrap{display:none;z-index:2147483641}#rev-opt-out .rd-box-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}#rev-opt-out .rd-vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}#rev-opt-out .rd-box{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}#rev-opt-out .rd-normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}#rev-opt-out .rd-full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}#rev-opt-out .rd-header{height:20px;position:absolute;right:0}.rc-about{font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}.rc-about .rc-logo{background:url(https://www.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}.rc-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}.rc-about p#main{text-align:left}.rc-opt-out,.rc-well{text-align:center}.rc-about h2{color:#777;font-size:16px;line-height:18px}.rc-about a{color:#00cb43}.rc-well{border:1px solid #E0E0E0;padding:20px;border-radius:2px;margin:20px 0 0}.rc-well h2{margin-top:0}.rc-well p{margin-bottom:0}.rc-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-slider');
 
         this.contentItems = [];
 
@@ -5856,6 +6066,9 @@ RevSlider({
             this.providerMargin*2;
             cellHeight += (this.options.ad_border) ? 2 : 0;
         }
+        if (this.options.text_right) {
+            cellHeight = cellHeight/2.7;
+        }
         return cellHeight;
     }
 
@@ -5898,7 +6111,15 @@ RevSlider({
 
             ad.querySelectorAll('.rev-ad')[0].style.height = this.getCellHeight() + 'px';
 
-            ad.style.width = this.columnWidth + 'px';
+            //ad.style.width = this.grid.columnWidth + 'px';
+
+            if (this.options.text_right) {
+                var paddingOffset = this.padding * 2;
+                var halfWidth = ((this.grid.columnWidth - paddingOffset) / 2);
+                ad.querySelectorAll('#rev-headline-brand')[0].style.width = halfWidth + 'px';
+                ad.querySelectorAll('a')[0].style.display = 'inline-flex';
+                ad.querySelectorAll('.rev-image')[0].style.width = halfWidth + 'px';
+            }
             ad.querySelectorAll('.rev-image')[0].style.height = this.preloaderHeight + 'px';
             ad.querySelectorAll('.rev-headline')[0].style.maxheight = this.headlineHeight + 'px';
             ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
@@ -5908,6 +6129,8 @@ RevSlider({
             ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize +'px';
             ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
             ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
+
+
         }
         this.textOverlay();
 
@@ -5995,12 +6218,12 @@ RevSlider({
             '<div class="rev-image" style="height:'+ this.preloaderHeight +'px">' +
             '<img src=""/>' +
             '</div>' +
-            /*'<div>' +*/
+            '<div id="rev-headline-brand">' +
             '<div class="rev-headline" style="max-height:'+ this.headlineHeight +'px; margin:'+ this.headlineMarginTop +'px ' + this.innerMargin + 'px' + ' 0;">' +
             '<h3 style="font-size:'+ this.headlineFontSize +'px; line-height:'+ this.headlineLineHeight +'px;"></h3>' +
             '</div>' +
             '<div style="margin:' + this.providerMargin +'px '  + this.innerMargin + 'px ' + this.providerMargin +'px;font-size:'+ this.providerFontSize +'px;line-height:'+ this.providerLineHeight +'px;height:'+ this.providerLineHeight +'px;" class="rev-provider"></div>' +
-            /*'</div>' +*/
+            '</div>' +
             '</a>' +
             '</div>';
         var cell = document.createElement('div');
@@ -6075,6 +6298,14 @@ RevSlider({
         for (var i = 0; i < this.limit; i++) {
             var ad = ads[i],
                 data = itemsToDisplay[contentIndex];
+
+            if (this.options.text_right) {
+                var paddingOffset = this.padding * 2;
+                var halfWidth = ((this.grid.columnWidth - paddingOffset) / 2);
+                ad.querySelectorAll('#rev-headline-brand')[0].style.width = halfWidth + 'px';
+                ad.querySelectorAll('a')[0].style.display = 'inline-flex';
+                ad.querySelectorAll('.rev-image')[0].style.width = halfWidth + 'px';
+            }
             ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', ''));
             ad.querySelectorAll('a')[0].title = data.headline;
             ad.querySelectorAll('img')[0].setAttribute('src', data.image);
