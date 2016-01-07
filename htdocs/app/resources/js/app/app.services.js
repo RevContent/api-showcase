@@ -72,18 +72,19 @@ app.service('$stateManager', function() {
 
     this.setPath = function(stickyPath) {
         this.stickyPath = stickyPath;
-    }
+    };
+
     this.getPath = function() {
         return this.stickyPath;
-    }
+    };
 
     this.setOriginPath = function(originPath) {
         this.originPath = originPath;
-    }
+    };
 
     this.getOriginPath = function() {
         return this.originPath;
-    }
+    };
 });
 
 app.service('$mdCardContent', function() {
@@ -100,101 +101,126 @@ app.service('$mdCardContent', function() {
 
 app.service('slider', function(options) {
     this.type = 'Discrete';
-    this.value = options.sizes[(options.size - 1)]
+    this.value = options.sizes[(options.size - 1)];
     this.max = options.sizes[(options.sizes.length - 1)];
     this.min = options.sizes[0];
 });
 
 
-app.service('options', function() {
+app.service('options', function($rootScope, $localStorage, $stateParams) {
 
-    this.set = function() {
-        this.domain = 'apiexamples.powr.com';
-        this.api_key = '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b';
-        this.widget_id = 6181;
-        this.pub_id = 945;
-        this.visible = true;
+    this.domain = 'apiexamples.powr.com';
+    this.api_key = '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b';
+    this.widget_id = 6181;
+    this.pub_id = 945;
+    this.visible = true;
 
-        this.size = 4;
+    this.size = 4;
 
-        this.sponsored = 10;
+    this.sponsored = 10;
 
-        this.devices = {
-            phone: true,
-            tablet: true,
-            desktop: true
-        };
+    this.devices = {
+        phone: true,
+        tablet: true,
+        desktop: true
+    };
 
-        this.getDevices = function() {
-            var devices = [];
-            for (var device in this.devices) {
-              if (this.devices.hasOwnProperty(device)) {
-                if (this.devices[device])
-                    devices.push(device);
-              }
-            }
-            return devices;
+    this.header = 'Trending Now';
+
+    this.rev_positions = {
+        top_right: {
+            key: 'top_right',
+            value: 'Top Right',
+        },
+        bottom_left: {
+            key: 'bottom_left',
+            value: 'Bottom Left',
+        },
+        bottom_right: {
+            key: 'bottom_right',
+            value: 'Bottom Right',
         }
+    };
 
-        this.header = 'Trending Now';
+    this.rev_position = this.rev_positions.top_right.key;
 
-        this.rev_positions = {
-            top_right: {
-                key: 'top_right',
-                value: 'Top Right',
-            },
-            bottom_left: {
-                key: 'bottom_left',
-                value: 'Bottom Left',
-            },
-            bottom_right: {
-                key: 'bottom_right',
-                value: 'Bottom Right',
-            }
-        };
+    this.image_ratios = {
+        wide_rectangle: {
+            key: 'wide_rectangle',
+            value: 'Wide Recangle',
+        },
+        rectangle: {
+            key: 'rectangle',
+            value: 'Rectangle',
+        },
+        square: {
+            key: 'square',
+            value: 'Square',
+        }
+    };
 
-        this.rev_position = this.rev_positions.top_right.key;
+    this.image_ratio = this.image_ratios.wide_rectangle.key;
 
-        this.sizes = [
-            150,
-            250,
-            500,
-            750,
-            1000,
-            1250,
-            1500
-        ];
+    this.sizes = [
+        150,
+        250,
+        500,
+        750,
+        1000,
+        1250,
+        1500
+    ];
 
-        this.rows = {
-            xxs: 2,
-            xs: 2,
-            sm: 2,
-            md: 2,
-            lg: 2,
-            xl: 2,
-            xxl: 2
-        };
+    this.rows = {
+        xxs: 2,
+        xs: 2,
+        sm: 2,
+        md: 2,
+        lg: 2,
+        xl: 2,
+        xxl: 2
+    };
 
-        this.per_row = {
-            xxs: 1,
-            xs: 1,
-            sm: 3,
-            md: 4,
-            lg: 5,
-            xl: 6,
-            xxl: 7
-        };
+    this.per_row = {
+        xxs: 1,
+        xs: 1,
+        sm: 3,
+        md: 4,
+        lg: 5,
+        xl: 6,
+        xxl: 7
+    };
 
-        this.headline_size = 2;
-        this.max_headline = false;
-        this.text_overlay = false;
-        this.vertical = false;
-        this.page_increment = true;
-        this.wrap_pages = true;
-        this.wrap_reverse = false;
-        this.show_padding = true;
-        this.pages = 4;
-    }
+    this.headline_size = 2;
+    this.max_headline = false;
+    this.text_overlay = false;
+    this.vertical = false;
+    this.page_increment = true;
+    this.wrap_pages = true;
+    this.wrap_reverse = false;
+    this.show_padding = true;
+    this.pages = 4;
 
-    this.set();
+    this.set = function(options) {
+        if (options) {
+            angular.extend(this, options);
+            $localStorage.options = angular.extend(this, options);
+        } else {
+            angular.extend(this, $localStorage.options);
+        }
+    };
+
+    this.set(($stateParams.options ? JSON.parse(decodeURIComponent($stateParams.options)) : false));
+
+
+    this.getDevices = function() {
+        var devices = [];
+        for (var device in this.devices) {
+          if (this.devices.hasOwnProperty(device)) {
+            if (this.devices[device])
+                devices.push(device);
+          }
+        }
+        return devices;
+    };
 });
