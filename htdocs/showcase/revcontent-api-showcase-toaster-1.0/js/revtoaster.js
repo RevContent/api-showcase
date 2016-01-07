@@ -90,7 +90,8 @@ RevToaster({
 
         this.init = function() {
             this.revToaster = document.createElement('div');
-            this.revToaster.className = 'rev-toaster';
+            this.revToaster.id = 'rev-toaster';
+            this.revToaster.setAttribute('class', 'rev-toaster');
 
             this.containerElement = document.createElement('div');
             this.containerElement.className = 'rev-content-container';
@@ -168,7 +169,7 @@ RevToaster({
             }
             this.sponsored = document.createElement('div');
             this.sponsored.className = 'rev-sponsored';
-            this.sponsored.innerHTML = '<a onclick="revDialog.showDialog()">Sponsored by Revcontent</a>';
+            this.sponsored.innerHTML = '<a href="javascript:;" onclick="revDialog.showDialog()">Sponsored by Revcontent</a>';
 
             if (this.options.rev_position == 'top_right') {
                 revUtils.addClass(this.sponsored, 'top-right')

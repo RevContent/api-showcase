@@ -1,4 +1,4 @@
-app.controller('PreviewCtrl', function($stateParams, $mdToast, $rootScope, $scope, $http, $timeout, $mdBottomSheet, $mdSidenav, $mdToast, options, slider, widgets) {
+app.controller('PreviewCtrl', function($stateParams, $mdToast, $rootScope, $scope, $http, $timeout, $mdBottomSheet, $mdSidenav, $mdToast, options, slider, widgets, $localStorage) {
 
     this.id = $stateParams.id ? $stateParams.id : 'flicker';
 
@@ -7,6 +7,12 @@ app.controller('PreviewCtrl', function($stateParams, $mdToast, $rootScope, $scop
     this.slider = slider;
 
     this.visible = true;
+
+    var watcher = $rootScope.$watch(function() { return options; }, function(newOpts, oldOpts) {
+        if (newOpts != oldOpts) {
+            $localStorage.options = newOpts;
+        }
+    }, true);
 
     var widgetSizeToastVisible = false;
     var widgetSizeToastTimeout = false;
@@ -45,7 +51,7 @@ app.controller('PreviewCtrl', function($stateParams, $mdToast, $rootScope, $scop
 
     this.toggleVisible = function() { //this does not work well with the internal widget closing
         this.options.visible = !this.options.visible;
-    }
+    };
 
     this.sliderChange = function() {
         showWidgetSizeToast();
@@ -69,17 +75,12 @@ app.controller('PreviewCtrl', function($stateParams, $mdToast, $rootScope, $scop
 });
 
 
-app.controller('BuilderOptionsCtrl', function($stateParams, $mdToast, $rootScope, $scope, $http, $timeout, $mdBottomSheet, $mdSidenav, options) {
-
+app.controller('BuilderOptionsCtrl', function($stateParams, $mdToast, $rootScope, $scope, $http, $timeout, $mdBottomSheet, $mdSidenav, options, $state) {
     this.options = options;
 
-    // var timeout;
-    // this.optionChange = function() {
-    //     $timeout.cancel(timeout);
-    //     timeout = $timeout(function() {
-    //         $rootScope.$broadcast('dataChange');
-    //     }, 700);
-    // };
+    this.getLink = function() {
+        $state.go('post_preview.link', {id: $stateParams.id});
+    };
 });
 
 app.controller('ToastCtrl', function($stateParams, $mdToast, $rootScope, $scope, $http, $timeout, $mdBottomSheet, $mdSidenav, options, slider) {

@@ -48,11 +48,11 @@
     "jquery": "~1.11"
   },
   "homepage": "https://github.com/christopherthielen/ui-router-extras",
-  "_release": "a79191de10",
+  "_release": "3a2469d86e",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "a79191de10faf91256a875581328919ec3db6ee3"
+    "commit": "3a2469d86e677364fb465f06604d1d17a3d6d7bb"
   },
   "_source": "git://github.com/christopherthielen/ui-router-extras.git",
   "_target": "master",
