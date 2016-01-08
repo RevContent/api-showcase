@@ -5632,7 +5632,7 @@ RevSlider({
             wrap_reverse: true, // if page_increment is false, this must be false
             show_padding: true,
             pages: 4,
-            text_right: true
+            text_right: false
         };
 
         // merge options
