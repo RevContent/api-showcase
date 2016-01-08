@@ -103,7 +103,7 @@ RevSlider({
             wrap_reverse: true, // if page_increment is false, this must be false
             show_padding: true,
             pages: 4,
-            text_right: false
+            text_right: true
         };
 
         // merge options
@@ -533,6 +533,10 @@ RevSlider({
 
         if (this.options.text_overlay !== oldOpts.text_overlay) {
             this.textOverlay();
+            this.grid.reloadItems();
+            this.grid.layout();
+        }
+        if (this.options.text_right !== oldOpts.text_right) {
             this.grid.reloadItems();
             this.grid.layout();
         }

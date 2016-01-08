@@ -200,6 +200,7 @@ app.service('options', function($rootScope, $localStorage, $stateParams) {
     this.wrap_reverse = false;
     this.show_padding = true;
     this.pages = 4;
+    this.text_right = false;
 
     this.set = function(options) {
         if (options) {

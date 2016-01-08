@@ -161,6 +161,7 @@ app.directive('revSlider', ['$timeout', 'options', function ($timeout, options) 
         var widget;
 
         options.text_overlay = options.text_overlay ? options.text_overlay : false;
+        options.text_right = options.text_right ? options.text_right : false;
 
         options.set();
 
@@ -181,7 +182,8 @@ app.directive('revSlider', ['$timeout', 'options', function ($timeout, options) 
                 max_headline: options.max_headline,
                 text_overlay: options.text_overlay,
                 vertical: options.vertical,
-                page_increment: options.page_increment
+                page_increment: options.page_increment,
+                text_right: options.text_right
             });
         });
 

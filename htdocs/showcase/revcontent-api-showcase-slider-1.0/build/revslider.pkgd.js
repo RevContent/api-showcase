@@ -4834,11 +4834,8 @@ AnyGrid.prototype._setUp = function() {
 
     if (this.options.adjust_gutter && this.items.length) {
         this.itemPadding = getSize(this.items[0].element).paddingLeft;
-        //this.element.parentNode.style.marginLeft = (this.itemPadding * -1) + 'px';
         this._setContainerAndGridHeights();
-        //measureContainerWidth = this.containerWidth;// + (this.itemPadding * 2);
         measureContainerWidth = this.element.offsetWidth;
-
     }
 
     this.columnWidth = (measureContainerWidth / this.perRow);
@@ -5635,7 +5632,7 @@ RevSlider({
             wrap_reverse: true, // if page_increment is false, this must be false
             show_padding: true,
             pages: 4,
-            text_right: false
+            text_right: true
         };
 
         // merge options
@@ -6065,6 +6062,10 @@ RevSlider({
 
         if (this.options.text_overlay !== oldOpts.text_overlay) {
             this.textOverlay();
+            this.grid.reloadItems();
+            this.grid.layout();
+        }
+        if (this.options.text_right !== oldOpts.text_right) {
             this.grid.reloadItems();
             this.grid.layout();
         }
