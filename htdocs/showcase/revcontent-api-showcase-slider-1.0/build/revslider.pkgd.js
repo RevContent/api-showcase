@@ -4836,7 +4836,8 @@ AnyGrid.prototype._setUp = function() {
         this.itemPadding = getSize(this.items[0].element).paddingLeft;
         //this.element.parentNode.style.marginLeft = (this.itemPadding * -1) + 'px';
         this._setContainerAndGridHeights();
-        measureContainerWidth = this.containerWidth; // + (this.itemPadding * 2);
+        //measureContainerWidth = this.containerWidth;// + (this.itemPadding * 2);
+        measureContainerWidth = this.element.offsetWidth;
 
     }
 
@@ -4856,20 +4857,27 @@ AnyGrid.prototype._setUp = function() {
 };
 
 AnyGrid.prototype._setContainerAndGridHeights = function() {
+    var previousLeft = this.element.offsetLeft;
+    var previousTop = this.element.offsetTop;
+    if (previousLeft === Math.round(this.itemPadding)*-1) {
+        previousLeft = 0;
+    }
+    if (previousTop === Math.round(this.itemPadding)*-1) {
+        previousTop = 0;
+    }
     this.itemPadding = getSize(this.items[0].element).paddingLeft;
     var gridContainerElement = this.element.parentNode;
     var paddingOffset = this.itemPadding * 2;
     var numRows = this.items.length/this.perRow;
-    var rowsPaddingOffset = paddingOffset * (numRows - 1);
     var itemHeight = (this.options.itemHeight ? this.options.itemHeight : getSize(this.items[0].element).height);
-    var newContHeight = ((itemHeight * numRows) - rowsPaddingOffset);
+    var newContHeight = ((itemHeight * numRows) - paddingOffset);
     gridContainerElement.style.height = newContHeight + 'px';
 
     this.element.style.position = 'absolute';
     this.element.style.height = (gridContainerElement.offsetHeight + paddingOffset) + 'px';
-    this.element.style.width = (gridContainerElement.offsetWidth + paddingOffset + 1) + 'px';
-    this.element.style.top = '-'+this.itemPadding+'px';
-    this.element.style.left = '-'+this.itemPadding+'px';
+    this.element.style.width = (gridContainerElement.offsetWidth + paddingOffset) + 'px';
+    this.element.style.top = previousTop - this.itemPadding+'px';
+    this.element.style.left = previousLeft - this.itemPadding+'px';
 }
 
 AnyGrid.prototype._create = function() {
@@ -5681,7 +5689,7 @@ RevSlider({
 
         this.initButtons();
 
-        this.grid = new AnyGrid(this.gridElement, { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound});
+        this.grid = new AnyGrid(this.gridElement, { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound, adjust_gutter: true});
 
         /*this.grid.on('resized', function() {
             that.resize();
@@ -5765,16 +5773,16 @@ RevSlider({
         nextGridElement.id = 'rev-slider-grid';
         revUtils.append(gridContainerElement, nextGridElement);
 
-        var paddingOffset = this.padding * 2;
-        nextGridElement.style.position = 'absolute';
-        var gridHeight = gridContainerElement.offsetHeight + paddingOffset;
-        var gridWidth = gridContainerElement.offsetWidth + paddingOffset + 1;
-        nextGridElement.style.height = gridHeight + 'px';
-        nextGridElement.style.width = gridWidth + 'px';
+        //var paddingOffset = this.padding * 2;
+        //nextGridElement.style.position = 'absolute';
+        //var gridHeight = gridContainerElement.offsetHeight + paddingOffset;
+        //var gridWidth = gridContainerElement.offsetWidth + paddingOffset + 1;
+        //nextGridElement.style.height = gridHeight + 'px';
+        //nextGridElement.style.width = gridWidth + 'px';
 
-        var nextGrid = new AnyGrid(nextGridElement, { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound});
+        var nextGrid = new AnyGrid(nextGridElement, { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound, adjust_gutter:true});
 
-        var animationDuration = this.getAnimationDuration();
+        var animationDuration = 1.75; //this.getAnimationDuration();
 
         var width = (this.options.page_increment) ? this.gridElement.offsetWidth : this.gridElement.offsetWidth / this.grid.perRow;
         var rowHeight = this.gridElement.offsetHeight / this.options.rows[this.grid.getBreakPoint()];
@@ -5790,7 +5798,7 @@ RevSlider({
                 newLeft = invertedPadding;
             } else { // left
                 newTop = invertedPadding;
-                newLeft = width + invertedPadding;
+                newLeft = width;// + invertedPadding*2;
             }
         } else { // Slide right or down
             if (this.options.vertical) { // down
@@ -5799,24 +5807,32 @@ RevSlider({
                 newLeft = invertedPadding;
             } else { // right
                 newTop = invertedPadding;
-                newLeft = (width * -1) + invertedPadding;
+                newLeft = (width * -1);// - invertedPadding*2;
             }
         }
-        nextGridElement.setAttribute('style', 'position: absolute; top: '+newTop+'px; left: '+newLeft+'px; width: '+gridWidth+'px; height: '+gridHeight+'px;');
-        nextGridElement.style.transition = topLeft + ' ' + animationDuration + 's';
-        nextGridElement.style.transitionTimingFunction = 'ease-in-out';
-        previousGridElement.setAttribute('style', 'position: absolute; top: '+invertedPadding+'px; left: '+invertedPadding+'px; z-index: 5; width: '+gridWidth+'px; height: '+gridHeight+'px;');
-        previousGridElement.style.transition = topLeft + ' ' + animationDuration + 's';
-        previousGridElement.style.transitionTimingFunction = 'ease-in-out';
+        //nextGridElement.setAttribute('style', 'position: absolute; top: '+newTop+'px; left: '+newLeft+'px; width: '+gridWidth+'px; height: '+gridHeight+'px;');
+        nextGridElement.style.top = newTop+'px';
+        nextGridElement.style.left = newLeft+'px';
+        //nextGridElement.style.transition = topLeft + ' ' + animationDuration + 's';
+        //nextGridElement.style.transitionTimingFunction = 'ease-in-out';
+        //previousGridElement.setAttribute('style', 'position: absolute; top: '+invertedPadding+'px; left: '+invertedPadding+'px; z-index: 5; width: '+gridWidth+'px; height: '+gridHeight+'px;');
+        previousGridElement.style.top = invertedPadding+'px';
+        previousGridElement.style.left = invertedPadding+'px';
+        //previousGridElement.style.transition = topLeft + ' ' + animationDuration + 's';
+        //previousGridElement.style.transitionTimingFunction = 'ease-in-out';
         setTimeout(function () {
+            nextGridElement.style.transition = topLeft + ' ' + animationDuration + 's';
+            nextGridElement.style.transitionTimingFunction = 'ease-in-out';
+            previousGridElement.style.transition = topLeft + ' ' + animationDuration + 's';
+            previousGridElement.style.transitionTimingFunction = 'ease-in-out';
             if (that.options.vertical) {
                 nextGridElement.style.top = invertedPadding+'px';
                 previousGridElement.style.top = (newTop * -1) + 'px';
             } else {
                 nextGridElement.style.left = invertedPadding +'px';
-                previousGridElement.style.left = (newLeft * -1)+(invertedPadding*2) + 'px';
+                previousGridElement.style.left = (newLeft * -1) + invertedPadding + 'px';
             }
-        }, 50);
+        }, 0);
 
         for (var i = 0; i < this.limit; i++) {
             nextGridElement.appendChild(this.createNewCell());
@@ -6073,9 +6089,9 @@ RevSlider({
     }
 
     RevSlider.prototype.resize = function() {
-        var gridContainerElement = document.getElementById('rev-slider-grid-container');
-        gridContainerElement.style.height = '';
-        gridContainerElement.style.width = '100%';
+        //var gridContainerElement = document.getElementById('rev-slider-grid-container');
+        //gridContainerElement.style.height = '';
+        //gridContainerElement.style.width = '100%';
 
         var oldLimit = this.limit;
         this.grid.option(this.options);
@@ -6141,7 +6157,7 @@ RevSlider({
         this.grid.reloadItems();
         this.grid.layout();
 
-        this.setContainerAndGridHeights();
+        //this.setContainerAndGridHeights();
 
         this.setupButtons();
 
