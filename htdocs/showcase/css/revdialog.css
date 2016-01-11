@@ -5,7 +5,7 @@
     z-index: 10;
 }
 
-a {
+#rev-opt-out a {
     cursor: pointer !important;
 }
 
@@ -84,7 +84,7 @@ a {
     bottom: 10px;*/
 }
 
-.rc-about {
+#rev-opt-out .rd-about {
     font-family: Arial, sans-serif;
     font-size: 14px;
     text-align: left;
@@ -94,13 +94,13 @@ a {
     color: #333;
     padding: 15px;
 }
-.rc-about .rc-logo {
+#rev-opt-out .rd-about .rd-logo {
     background: transparent url(https://www.revcontent.com/assets/img/rc-logo.png) no-repeat bottom center;
     width: 220px;
     height: 48px;
     display: block; margin: 0 auto;
 }
-.rc-about p {
+#rev-opt-out .rd-about p {
     margin: 16px 0;
     color: #555;
     font-size: 14px;
@@ -108,22 +108,22 @@ a {
 
 }
 
-.rc-about p#main{
+#rev-opt-out .rd-about p#main{
     text-align: left;
 }
 
-.rc-about h2 {
+#rev-opt-out .rd-about h2 {
     color: #777;
     font-family: Arial, sans-serif;
 }
-.rc-about h2 {
+#rev-opt-out .rd-about h2 {
     font-size: 16px;
     line-height: 18px;
 }
-.rc-about a {
+#rev-opt-out .rd-about a {
     color: #00cb43;
 }
-.rc-well {
+#rev-opt-out .rd-well {
     border: 1px solid #E0E0E0;
     padding: 20px;
     text-align: center;
@@ -131,16 +131,16 @@ a {
     margin: 20px 0;
     margin-bottom: 0;
 }
-.rc-well h2 {
+#rev-opt-out .rd-well h2 {
     margin-top: 0;
 }
-.rc-well p {
+#rev-opt-out .rd-well p {
     margin-bottom: 0;
 }
-.rc-opt-out {
+#rev-opt-out .rd-opt-out {
     text-align: center;
 }
-.rc-opt-out a {
+#rev-opt-out .rd-opt-out a {
     margin-top: 6px;
     display: inline-block;
 }
