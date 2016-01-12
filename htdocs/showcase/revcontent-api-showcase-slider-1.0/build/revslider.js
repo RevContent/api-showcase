@@ -120,7 +120,9 @@ RevSlider({
 
         var that = this;
 
-        revUtils.appendStyle('/* inject:css */#rev-slider a,#rev-slider a:focus,#rev-slider a:hover{text-decoration:none}#rev-slider,#rev-slider #rev-slider-grid-container{padding:0;width:100%}#rev-slider #rev-slider-grid{position:absolute;padding:0}#rev-slider #rev-slider-grid-container{position:relative;width:100%;overflow:hidden;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}#rev-slider{clear:both}#rev-slider *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-slider .rev-chevron{position:absolute;font-family:arial narrow;height:37px;font-size:58px;color:#fff;line-height:.5;top:50%}#rev-slider #rev-slider-grid-container .rev-btn-wrapper{position:absolute;height:100%;width:40px;text-align:center;z-index:10;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out}#rev-slider #rev-slider-grid-container .top-bottom{height:40px;width:100%}#rev-slider #rev-slider-grid-container .rev-btn-container{position:relative;background-color:#333;opacity:.3;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;height:100%;text-align:center;border-radius:4px}#rev-slider #rev-slider-grid-container .rev-btn-container:hover{opacity:.8}#rev-slider a{color:inherit}#rev-slider:focus{outline:0}#rev-slider .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-slider .rev-sponsored{line-height:24px;font-size:12px}#rev-slider .rev-sponsored.bottom-right,#rev-slider .rev-sponsored.top-right{float:right}#rev-slider .rev-sponsored.top-right a{vertical-align:-5px}#rev-slider .rev-sponsored a{color:#999}#rev-slider .rev-ad a{display:block;color:#222}#rev-slider .rev-image{position:relative;-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee;overflow:hidden}#rev-slider .rev-image img{position:absolute;top:0;left:0;width:100%;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-slider.loaded .rev-image{background:0 0}#rev-slider.loaded .rev-image img{opacity:1}#rev-slider .rev-headline,#rev-slider .rev-provider{margin:0 10px;text-align:left}#rev-slider .rev-headline{margin-top:12px;overflow:hidden}#rev-slider .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-slider .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px}#rev-slider .rev-ad{border-radius:5px;overflow:hidden;background:#fff}#rev-slider .rev-content.blur{-webkit-filter:blur(3px);filter:blur(3px)}#rev-slider .rev-content{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-slider .rev-content.rev-next{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:.5}#rev-slider.rev-slider-text-overlay .rev-ad{position:relative}#rev-slider.rev-slider-text-overlay .rev-ad a{height:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-headline{position:absolute;bottom:4px;color:#fff;text-shadow:1px 1px rgba(0,0,0,.8);height:auto!important}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{border-radius:5px;position:absolute;top:0;height:100%;width:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;content:"";display:block}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after{background:-webkit-linear-gradient(top,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%);background:linear-gradient(to bottom,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{opacity:0;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%);background:linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:after{opacity:0}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:before{opacity:1}.slideOutLeft{-webkit-filter:blur(1px);filter:blur(1px);-webkit-animation-name:slideOutLeft;animation-name:slideOutLeft;-webkit-animation-duration:1s;animation-duration:1s;-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out;visibility:visible!important}.slideInLeft,.slideOutRight{-webkit-filter:blur(1px);-webkit-animation-duration:1s;-webkit-animation-timing-function:ease-in-out;visibility:visible!important}@-webkit-keyframes slideOutLeft{0%{-webkit-transform:translateX(0);transform:translateX(0)}100%{-webkit-transform:translateX(-100%);transform:translateX(-100%)}}@keyframes slideOutLeft{0%{-webkit-transform:translateX(0);transform:translateX(0)}100%{-webkit-transform:translateX(-100%);transform:translateX(-100%)}}.slideInLeft{filter:blur(1px);-webkit-animation-name:slideInLeft;animation-name:slideInLeft;animation-duration:1s;animation-timing-function:ease-in-out}@-webkit-keyframes slideInLeft{0%{-webkit-transform:translateX(100%);transform:translateX(100%)}100%{-webkit-transform:translateX(0);transform:translateX(0)}}@keyframes slideInLeft{0%{-webkit-transform:translateX(100%);transform:translateX(100%)}100%{-webkit-transform:translateX(0);transform:translateX(0)}}.slideOutRight{filter:blur(1px);-webkit-animation-name:slideOutRight;animation-name:slideOutRight;animation-duration:1s;animation-timing-function:ease-in-out}.slideInRight,.slideOutUp{-webkit-filter:blur(1px);-webkit-animation-duration:1s;-webkit-animation-timing-function:ease-in-out}@-webkit-keyframes slideOutRight{0%{-webkit-transform:translateX(0);transform:translateX(0)}100%{-webkit-transform:translateX(100%);transform:translateX(100%)}}@keyframes slideOutRight{0%{-webkit-transform:translateX(0);transform:translateX(0)}100%{-webkit-transform:translateX(100%);transform:translateX(100%)}}.slideInRight{filter:blur(1px);-webkit-animation-name:slideInRight;animation-name:slideInRight;animation-duration:1s;animation-timing-function:ease-in-out;visibility:visible!important}@-webkit-keyframes slideInRight{0%{-webkit-transform:translateX(-100%);transform:translateX(-100%)}100%{-webkit-transform:translateX(0);transform:translateX(0)}}@keyframes slideInRight{0%{-webkit-transform:translateX(-100%);transform:translateX(-100%)}100%{-webkit-transform:translateX(0);transform:translateX(0)}}.slideOutUp{filter:blur(1px);-webkit-animation-name:slideOutUp;animation-name:slideOutUp;animation-duration:1s;animation-timing-function:ease-in-out;visibility:visible!important}.slideInUp,.slideOutDown{-webkit-filter:blur(1px);-webkit-animation-duration:1s;-webkit-animation-timing-function:ease-in-out;visibility:visible!important}@-webkit-keyframes slideOutUp{0%{-webkit-transform:translateY(0);transform:translateY(0)}100%{-webkit-transform:translateY(-100%);transform:translateY(-100%)}}@keyframes slideOutUp{0%{-webkit-transform:translateY(0);transform:translateY(0)}100%{-webkit-transform:translateY(-100%);transform:translateY(-100%)}}.slideInUp{filter:blur(1px);-webkit-animation-name:slideInUp;animation-name:slideInUp;animation-duration:1s;animation-timing-function:ease-in-out}@-webkit-keyframes slideInUp{0%{-webkit-transform:translateY(100%);transform:translateY(100%)}100%{-webkit-transform:translateY(0);transform:translateY(0)}}@keyframes slideInUp{0%{-webkit-transform:translateY(100%);transform:translateY(100%)}100%{-webkit-transform:translateY(0);transform:translateY(0)}}.slideOutDown{filter:blur(1px);-webkit-animation-name:slideOutDown;animation-name:slideOutDown;animation-duration:1s;animation-timing-function:ease-in-out}@-webkit-keyframes slideOutDown{0%{-webkit-transform:translateY(0);transform:translateY(0)}100%{-webkit-transform:translateY(100%);transform:translateY(100%)}}@keyframes slideOutDown{0%{-webkit-transform:translateY(0);transform:translateY(0)}100%{-webkit-transform:translateY(100%);transform:translateY(100%)}}.slideInDown{-webkit-filter:blur(1px);filter:blur(1px);-webkit-animation-name:slideInDown;animation-name:slideInDown;-webkit-animation-duration:1s;animation-duration:1s;-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out;visibility:visible!important}@-webkit-keyframes slideInDown{0%{-webkit-transform:translateY(-100%);transform:translateY(-100%)}100%{-webkit-transform:translateY(0);transform:translateY(0)}}@keyframes slideInDown{0%{-webkit-transform:translateY(-100%);transform:translateY(-100%)}100%{-webkit-transform:translateY(0);transform:translateY(0)}}#rev-opt-out .rd-close-button{position:absolute;cursor:pointer;right:10px;z-index:10}#rev-opt-out a{cursor:pointer!important}#rev-opt-out .rd-box-wrap{display:none;z-index:2147483641}#rev-opt-out .rd-box-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}#rev-opt-out .rd-vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}#rev-opt-out .rd-box{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}#rev-opt-out .rd-normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}#rev-opt-out .rd-full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}#rev-opt-out .rd-header{height:20px;position:absolute;right:0}#rev-opt-out .rd-about{font-family:Arial,sans-serif;font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}#rev-opt-out .rd-about .rd-logo{background:url(https://www.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}#rev-opt-out .rd-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}#rev-opt-out .rd-about p#main{text-align:left}#rev-opt-out .rd-about h2{color:#777;font-family:Arial,sans-serif;font-size:16px;line-height:18px}#rev-opt-out .rd-about a{color:#00cb43}#rev-opt-out .rd-well{border:1px solid #E0E0E0;padding:20px;text-align:center;border-radius:2px;margin:20px 0 0}#rev-opt-out .rd-well h2{margin-top:0}#rev-opt-out .rd-well p{margin-bottom:0}#rev-opt-out .rd-opt-out{text-align:center}#rev-opt-out .rd-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-slider');
+        this.moblie = (revDetect.mobile()) ? true : false;
+
+        revUtils.appendStyle('/* inject:css */#rev-slider a,#rev-slider a:focus,#rev-slider a:hover{text-decoration:none}#rev-slider,#rev-slider #rev-slider-grid-container{padding:0;width:100%}#rev-slider #rev-slider-grid{padding:0}#rev-slider #rev-slider-grid-container{clear:both;position:relative;width:100%}#rev-slider #rev-slider-inner{width:100%;clear:both;overflow:hidden}#rev-slider{clear:both}#rev-slider *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-slider .rev-chevron{position:absolute;font-family:arial narrow;height:37px;font-size:58px;color:#fff;line-height:.5;top:50%}#rev-slider #rev-slider-inner .rev-btn-wrapper{position:absolute;height:100%;width:40px;text-align:center;z-index:10;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out}#rev-slider #rev-slider-inner .top-bottom{height:40px;width:100%}#rev-slider #rev-slider-inner .rev-btn-container{position:relative;background-color:#333;opacity:.3;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;height:100%;text-align:center;border-radius:4px}#rev-slider #rev-slider-inner .rev-btn-container:hover{opacity:.8}#rev-slider #rev-slider-inner:hover #back-wrapper,#rev-slider #rev-slider-inner:hover #forward-wrapper{opacity:1!important}#rev-slider a{color:inherit}#rev-slider:focus{outline:0}#rev-slider .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-slider .rev-sponsored{line-height:24px;font-size:12px}#rev-slider .rev-sponsored.bottom-right,#rev-slider .rev-sponsored.top-right{float:right}#rev-slider .rev-sponsored.top-right a{vertical-align:-5px}#rev-slider .rev-sponsored a{color:#999}#rev-slider .rev-ad a{display:block;color:#222}#rev-slider .rev-image{position:relative;-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee;overflow:hidden}#rev-slider .rev-image img{position:absolute;top:0;left:0;width:100%;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-slider.loaded .rev-image{background:0 0}#rev-slider.loaded .rev-image img{opacity:1}#rev-slider .rev-headline,#rev-slider .rev-provider{margin:0 10px;text-align:left}#rev-slider .rev-headline{margin-top:12px;overflow:hidden}#rev-slider .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-slider .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px}#rev-slider .rev-ad{border-radius:5px;overflow:hidden;background:#fff}#rev-slider .rev-content.blur{-webkit-filter:blur(3px);filter:blur(3px)}#rev-slider .rev-content{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-slider .rev-content.rev-next{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:.5}#rev-slider.rev-slider-text-overlay .rev-ad{position:relative}#rev-slider.rev-slider-text-overlay .rev-ad a{height:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-headline{position:absolute;bottom:4px;color:#fff;text-shadow:1px 1px rgba(0,0,0,.8);height:auto!important}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{border-radius:5px;position:absolute;top:0;height:100%;width:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;content:"";display:block}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after{background:-webkit-linear-gradient(top,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%);background:linear-gradient(to bottom,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{opacity:0;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%);background:linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:after{opacity:0}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:before{opacity:1}#rev-opt-out .rd-close-button{position:absolute;cursor:pointer;right:10px;z-index:10}#rev-opt-out a{cursor:pointer!important}#rev-opt-out .rd-box-wrap{display:none;z-index:2147483641}#rev-opt-out .rd-box-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}#rev-opt-out .rd-vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}#rev-opt-out .rd-box{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}#rev-opt-out .rd-normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}#rev-opt-out .rd-full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}#rev-opt-out .rd-header{height:20px;position:absolute;right:0}#rev-opt-out .rd-about{font-family:Arial,sans-serif;font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}#rev-opt-out .rd-about .rd-logo{background:url(https://www.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}#rev-opt-out .rd-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}#rev-opt-out .rd-about p#main{text-align:left}#rev-opt-out .rd-about h2{color:#777;font-family:Arial,sans-serif;font-size:16px;line-height:18px}#rev-opt-out .rd-about a{color:#00cb43}#rev-opt-out .rd-well{border:1px solid #E0E0E0;padding:20px;text-align:center;border-radius:2px;margin:20px 0 0}#rev-opt-out .rd-well h2{margin-top:0}#rev-opt-out .rd-well p{margin-bottom:0}#rev-opt-out .rd-opt-out{text-align:center}#rev-opt-out .rd-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-slider');
 
         this.contentItems = [];
 
@@ -128,8 +130,11 @@ RevSlider({
         this.containerElement.id = 'rev-slider';
         this.containerElement.class = 'rev-slider';
 
-        var gridContainerElement = document.createElement('div');
-        gridContainerElement.id = 'rev-slider-grid-container';
+        this.innerElement = document.createElement('div');
+        this.innerElement.id = 'rev-slider-inner';
+
+        this.gridContainerElement = document.createElement('div');
+        this.gridContainerElement.id = 'rev-slider-grid-container';
 
         this.gridElement = document.createElement('div');
         this.gridElement.id = 'rev-slider-grid';
@@ -137,34 +142,17 @@ RevSlider({
         this.element = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
         this.element.style.width = '100%';
 
-        // Utility for detecting swipe gestures
-        this.hammer = new Hammer.Manager(gridContainerElement, null);
-        this.hammer.add( new Hammer.Swipe({ direction: Hammer.DIRECTION_ALL, threshold: 10 }) );
-        this.hammer.on("swipe", function(event) {
-            // event.direction: 2 = left, 4 = right, 8 = up, 16 = down
-            if (event.direction === 2 || event.direction === 8) {
-                that.showNextPage();
-            } else if (event.direction === 4 || event.direction === 16) {
-                that.showPreviousPage();
-            }
-        });
+        revUtils.append(this.containerElement, this.innerElement);
 
-        revUtils.append(this.containerElement, gridContainerElement);
+        revUtils.append(this.innerElement, this.gridContainerElement);
 
-        revUtils.append(gridContainerElement, this.gridElement);
+        revUtils.append(this.gridContainerElement, this.gridElement);
 
         revUtils.append(this.element, this.containerElement);
 
         this.initButtons();
 
-        this.grid = new AnyGrid(this.gridElement, { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound, adjust_gutter: true});
-
-        /*this.grid.on('resized', function() {
-            that.resize();
-        });*/
-        revUtils.addEventListener(window, 'resize', function() {
-            that.resize();
-        });
+        this.grid = new AnyGrid(this.gridElement, this.gridOptions());
 
         this.page = 1;
         this.previousPage = 0;
@@ -176,13 +164,13 @@ RevSlider({
         this.appendElements();
 
         for (var i = 0; i < this.limit; i++) {
-            this.appendCell();
+            this.gridElement.appendChild(this.createNewCell());
         };
 
         this.grid.reloadItems();
         this.grid.layout();
 
-        this.resize();
+        this.setupButtons();
 
         this.textOverlay();
 
@@ -191,82 +179,86 @@ RevSlider({
         this.impressionTracker = [];
     };
 
-    RevSlider.prototype.getAnimationDuration = function() {
-        var duration = 0.5;
-        if (this.options.vertical) {
-            var gridRows = this.options.rows[this.grid.getBreakPoint()];
-            if (gridRows >= 7) {
-                duration = 2;
-            } else if (gridRows >= 6) {
-                duration = 1.75;
-            } else if (gridRows >= 5) {
-                duration = 1.5;
-            } else if (gridRows >= 4) {
-                duration = 1.25;
-            } else if (gridRows >= 3) {
-                duration = 1;
-            } else if (gridRows >= 2) {
-                duration = 0.75;
-            }
-        } else {
-            var gridWidth = this.grid.containerWidth;
+    RevSlider.prototype.gridOptions = function() {
+        return { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound, adjust_gutter:true };   
+    }; 
 
-            if (gridWidth >= 1500) {
-                duration = 2;
-            } else if (gridWidth >= 1250) {
-                duration = 1.75;
-            } else if (gridWidth >= 1000) {
-                duration = 1.5;
-            } else if (gridWidth >= 750) {
-                duration = 1.25;
-            } else if (gridWidth >= 500) {
-                duration = 1;
-            } else if (gridWidth >= 250) {
-                duration = 0.75;
-            }
-        }
-        if (!this.options.page_increment) {
-            duration = duration * .5;
-        }
-        return duration;
-    }
+    // RevSlider.prototype.getAnimationDuration = function() {
+    //     var duration = 0.5;
+    //     if (this.options.vertical) {
+    //         var gridRows = this.options.rows[this.grid.getBreakPoint()];
+    //         if (gridRows >= 7) {
+    //             duration = 2;
+    //         } else if (gridRows >= 6) {
+    //             duration = 1.75;
+    //         } else if (gridRows >= 5) {
+    //             duration = 1.5;
+    //         } else if (gridRows >= 4) {
+    //             duration = 1.25;
+    //         } else if (gridRows >= 3) {
+    //             duration = 1;
+    //         } else if (gridRows >= 2) {
+    //             duration = 0.75;
+    //         }
+    //     } else {
+    //         var gridWidth = this.grid.containerWidth;
+
+    //         if (gridWidth >= 1500) {
+    //             duration = 2;
+    //         } else if (gridWidth >= 1250) {
+    //             duration = 1.75;
+    //         } else if (gridWidth >= 1000) {
+    //             duration = 1.5;
+    //         } else if (gridWidth >= 750) {
+    //             duration = 1.25;
+    //         } else if (gridWidth >= 500) {
+    //             duration = 1;
+    //         } else if (gridWidth >= 250) {
+    //             duration = 0.75;
+    //         }
+    //     }
+    //     if (!this.options.page_increment) {
+    //         duration = duration * .5;
+    //     }
+    //     return duration;
+    // };
 
     RevSlider.prototype.createNextPageGrid = function() {
         var that = this;
-        var gridContainerElement = document.getElementById('rev-slider-grid-container');
+
         var previousGridElement = this.gridElement;
         previousGridElement.id = 'rev-slider-grid-prev';
 
         var nextGridElement = document.createElement('div');
         nextGridElement.id = 'rev-slider-grid';
-        revUtils.append(gridContainerElement, nextGridElement);
 
-        //var paddingOffset = this.padding * 2;
-        //nextGridElement.style.position = 'absolute';
-        //var gridHeight = gridContainerElement.offsetHeight + paddingOffset;
-        //var gridWidth = gridContainerElement.offsetWidth + paddingOffset + 1;
-        //nextGridElement.style.height = gridHeight + 'px';
-        //nextGridElement.style.width = gridWidth + 'px';
+        var nextGrid = new AnyGrid(nextGridElement, this.gridOptions());
 
-        var nextGrid = new AnyGrid(nextGridElement, { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound, adjust_gutter:true});
+        nextGridElement.style.position = 'absolute';
+        nextGridElement.style.height =  this.grid.size.height + 'px';
+        nextGridElement.style.width =  this.grid.size.width + 'px';
 
-        var animationDuration = 1.75; //this.getAnimationDuration();
+        revUtils.append(this.gridContainerElement, nextGridElement);
+        
+        var animationDuration = 1.75; //this.getAnimationDuration(); TODO: make dynamic
 
         var width = (this.options.page_increment) ? this.gridElement.offsetWidth : this.gridElement.offsetWidth / this.grid.perRow;
+
         var rowHeight = this.gridElement.offsetHeight / this.options.rows[this.grid.getBreakPoint()];
         var height = (this.options.page_increment) ? this.gridElement.offsetHeight : rowHeight;
         var newTop = 0;
         var newLeft = 0;
         var invertedPadding = this.padding*-1;
         var topLeft = 'left';
+
         if (this.page > this.previousPage) { // slide left or up
             if (this.options.vertical) { // up
                 topLeft = 'top';
                 newTop = height + invertedPadding;
                 newLeft = invertedPadding;
             } else { // left
-                newTop = invertedPadding;
-                newLeft = width;// + invertedPadding*2;
+                newTop = 0;
+                newLeft = width + this.grid.itemPadding;
             }
         } else { // Slide right or down
             if (this.options.vertical) { // down
@@ -274,38 +266,19 @@ RevSlider({
                 newTop = (height * -1) + invertedPadding;
                 newLeft = invertedPadding;
             } else { // right
-                newTop = invertedPadding;
-                newLeft = (width * -1);// - invertedPadding*2;
+                newTop = 0;
+                newLeft = ((width + this.grid.itemPadding) * -1);// - invertedPadding*2;
             }
         }
-        //nextGridElement.setAttribute('style', 'position: absolute; top: '+newTop+'px; left: '+newLeft+'px; width: '+gridWidth+'px; height: '+gridHeight+'px;');
-        nextGridElement.style.top = newTop+'px';
-        nextGridElement.style.left = newLeft+'px';
-        //nextGridElement.style.transition = topLeft + ' ' + animationDuration + 's';
-        //nextGridElement.style.transitionTimingFunction = 'ease-in-out';
-        //previousGridElement.setAttribute('style', 'position: absolute; top: '+invertedPadding+'px; left: '+invertedPadding+'px; z-index: 5; width: '+gridWidth+'px; height: '+gridHeight+'px;');
-        previousGridElement.style.top = invertedPadding+'px';
-        previousGridElement.style.left = invertedPadding+'px';
-        //previousGridElement.style.transition = topLeft + ' ' + animationDuration + 's';
-        //previousGridElement.style.transitionTimingFunction = 'ease-in-out';
-        setTimeout(function () {
-            nextGridElement.style.transition = topLeft + ' ' + animationDuration + 's';
-            nextGridElement.style.transitionTimingFunction = 'ease-in-out';
-            previousGridElement.style.transition = topLeft + ' ' + animationDuration + 's';
-            previousGridElement.style.transitionTimingFunction = 'ease-in-out';
-            if (that.options.vertical) {
-                nextGridElement.style.top = invertedPadding+'px';
-                previousGridElement.style.top = (newTop * -1) + 'px';
-            } else {
-                nextGridElement.style.left = invertedPadding +'px';
-                previousGridElement.style.left = (newLeft * -1) + invertedPadding + 'px';
-            }
-        }, 0);
+
+        nextGridElement.style.top = newTop + 'px';
+        nextGridElement.style.left = newLeft + 'px';
+
+        previousGridElement.style.left = 0;
 
         for (var i = 0; i < this.limit; i++) {
             nextGridElement.appendChild(this.createNewCell());
         };
-
 
         this.grid = nextGrid;
         this.gridElement = nextGridElement;
@@ -316,11 +289,30 @@ RevSlider({
         this.grid.reloadItems();
         this.grid.layout();
 
+        setTimeout(function () {
+            nextGridElement.style.position = 'absolute';
 
-        this.gridUpdateTimer = setTimeout(function() {
+            nextGridElement.style.transition = topLeft + ' ' + animationDuration + 's';
+            nextGridElement.style.transitionTimingFunction = 'ease-in-out';
+
+            previousGridElement.style.transition = topLeft + ' ' + animationDuration + 's';
+            previousGridElement.style.transitionTimingFunction = 'ease-in-out';
+
+
+            if (that.options.vertical) {
+                nextGridElement.style.top = invertedPadding+'px';
+                previousGridElement.style.top = (newTop * -1) + 'px';
+            } else {
+                nextGridElement.style.left = 0;
+                previousGridElement.style.left = (newLeft * -1) + invertedPadding + 'px';
+            }
+        }, 0);
+
+        setTimeout(function() {
+            nextGridElement.style.position = 'relative';
             that.updateGrids();
         }, animationDuration * 1000);
-    }
+    };
 
     RevSlider.prototype.updateGrids = function() {
         var gridContainerElement = document.getElementById('rev-slider-grid-container');
@@ -329,9 +321,7 @@ RevSlider({
         //this.gridElement.style.position = 'relative';
         this.gridElement.style.transition = '';
         this.gridElement.className = '';
-        clearTimeout(this.gridUpdateTimer);
-        this.gridUpdateTimer = null;
-    }
+    };
 
     RevSlider.prototype.setUp = function() {
         this.grid.layout();
@@ -372,95 +362,87 @@ RevSlider({
     };
 
     RevSlider.prototype.initButtons = function() {
-        var backBtnWrapper = document.createElement('div');
-        backBtnWrapper.id = "back-wrapper";
-        backBtnWrapper.setAttribute('class', 'rev-btn-wrapper');
+        this.backBtn = document.createElement('div');
+        this.backBtn.id = "back-wrapper";
+        this.backBtn.setAttribute('class', 'rev-btn-wrapper');
 
-        var backBtn = document.createElement('div');
-        backBtn.id = "back-btn-container";
-        backBtn.setAttribute('class', 'rev-btn-container');
-        backBtn.setAttribute('style', 'left: 0px;');
+        var backBtnHtml = document.createElement('div');
+        backBtnHtml.id = "back-btn-container";
+        backBtnHtml.setAttribute('class', 'rev-btn-container');
+        backBtnHtml.setAttribute('style', 'left: 0px;');
         //var backArrow = (this.options.vertical) ? '&circ;' : '&lsaquo;';
-        backBtn.innerHTML = '<label id="btn-back" class="rev-chevron">&lsaquo;</label>'; // &lsaquo; &circ;
+        backBtnHtml.innerHTML = '<label id="btn-back" class="rev-chevron">&lsaquo;</label>'; // &lsaquo; &circ;
 
-        revUtils.append(backBtnWrapper, backBtn);
+        this.forwardBtn = document.createElement('div');
+        this.forwardBtn.id = "forward-wrapper";
+        this.forwardBtn.setAttribute('class', 'rev-btn-wrapper');
 
-        var forwardBtnWrapper = document.createElement('div');
-        forwardBtnWrapper.id = "forward-wrapper";
-        forwardBtnWrapper.setAttribute('class', 'rev-btn-wrapper');
-
-        var forwardBtn = document.createElement('div');
-        forwardBtn.id = "forward-btn-container";
-        forwardBtn.setAttribute('class', 'rev-btn-container');
-        forwardBtn.setAttribute('style', 'right: 0px;');
+        var forwardBtnHtml = document.createElement('div');
+        forwardBtnHtml.id = "forward-btn-container";
+        forwardBtnHtml.setAttribute('class', 'rev-btn-container');
+        forwardBtnHtml.setAttribute('style', 'right: 0px;');
         //var forwardArrow = (this.options.vertical) ? '&caron;' : '&rsaquo;';
-        forwardBtn.innerHTML = '<label id="btn-forward" class="rev-chevron">&rsaquo;</label>'; // &rsaquo; &caron;
-
-        revUtils.append(forwardBtnWrapper, forwardBtn);
+        forwardBtnHtml.innerHTML = '<label id="btn-forward" class="rev-chevron">&rsaquo;</label>'; // &rsaquo; &caron;
 
         var gridContainerElement = this.containerElement.querySelector('#rev-slider-grid-container');
-        revUtils.append(gridContainerElement, backBtnWrapper);
-        revUtils.append(gridContainerElement, forwardBtnWrapper);
 
-        var isMobile = (revDetect.mobile()) ? true : false;
-        if (isMobile) {
-            forwardBtn.style.opacity = .3;
-            backBtn.style.opacity = .3;
-            forwardBtnWrapper.style.opacity = 1;
-            backBtnWrapper.style.opacity = 1;
+        revUtils.append(this.forwardBtn, forwardBtnHtml);
+        revUtils.append(this.backBtn, backBtnHtml);
+        revUtils.append(this.innerElement, this.backBtn);
+        revUtils.append(this.innerElement, this.forwardBtn);
+
+        if (this.mobile) {
+            forwardBtnHtml.style.opacity = .3;
+            backBtnHtml.style.opacity = .3;
+            this.forwardBtn.style.opacity = 1;
+            this.backBtn.style.opacity = 1;
         } else {
-            forwardBtnWrapper.style.opacity = 0;
-            backBtnWrapper.style.opacity = 0;
+            this.forwardBtn.style.opacity = 0;
+            this.backBtn.style.opacity = 0;
         }
 
         this.attachButtonEvents();
-    }
+    };
 
     RevSlider.prototype.setupButtons = function() {
-        var isMobile = (revDetect.mobile()) ? true : false;
-        var backBtnWrapper = this.containerElement.querySelector('#back-wrapper');
-        var forwardBtnWrapper = this.containerElement.querySelector('#forward-wrapper');
-        var backBtnContainer = this.containerElement.querySelector('#back-btn-container');
-        var forwardBtnContainer = this.containerElement.querySelector('#forward-btn-container');
-
-        if ((isMobile && !this.options.show_arrows.mobile) || (!isMobile && !this.options.show_arrows.desktop)) {
-            backBtnWrapper.setAttribute('style', 'display: none;');
-            forwardBtnWrapper.setAttribute('style', 'display: none;');
+        if ((this.mobile && !this.options.show_arrows.mobile) || (!this.mobile && !this.options.show_arrows.desktop)) {
+            this.backBtn.setAttribute('style', 'display: none;');
+            this.forwardBtn.setAttribute('style', 'display: none;');
         } else {
-            var backBtn = this.containerElement.querySelector('#btn-back');
-            var forwardBtn = this.containerElement.querySelector('#btn-forward');
+            // var backBtn = this.containerElement.querySelector('#btn-back');
+            // var forwardBtn = this.containerElement.querySelector('#btn-forward');
             var transform = 'rotate(0deg)';
 
             if (this.options.vertical) {
-                backBtnContainer.style.borderRadius = '4px 4px 0px 0px';
-                forwardBtnContainer.style.borderRadius = '0px 0px 4px 4px';
-                revUtils.addClass(backBtnWrapper, 'top-bottom');
-                revUtils.addClass(forwardBtnWrapper, 'top-bottom');
-                backBtnWrapper.setAttribute('style', 'padding: 0px 0px; top: 0px;');
-                forwardBtnWrapper.setAttribute('style', 'padding: 0px 0px; bottom: 0px;');
+                revUtils.removeClass(this.backBtn, 'side');
+                revUtils.removeClass(this.forwardBtn, 'side');
+
+                revUtils.addClass(this.backBtn, 'top-bottom');
+                revUtils.addClass(this.forwardBtn, 'top-bottom');
+
+                this.backBtn.setAttribute('style', 'padding: 0px 0px; top: 0px;');
+                this.forwardBtn.setAttribute('style', 'padding: 0px 0px; bottom: 0px;');
                 transform = "rotate(90deg)";
             } else {
-                backBtnContainer.style.borderRadius = '4px 0px 0px 4px';
-                forwardBtnContainer.style.borderRadius = '0px 4px 4px 0px';
-                revUtils.removeClass(backBtnWrapper, 'top-bottom');
-                revUtils.removeClass(forwardBtnWrapper, 'top-bottom');
-                backBtnWrapper.setAttribute('style', 'padding: 0px 0px; left: 0px; top: 0px;');
-                forwardBtnWrapper.setAttribute('style', 'padding: 0px 0px; right: 0px; top: 0px;');
-            }
-            var btnTop = (backBtn.parentNode.offsetHeight / 2) - (backBtn.offsetHeight / 2) + 'px';
-            var btnLeft = (backBtn.parentNode.offsetWidth / 2) - (backBtn.offsetWidth / 2) + 'px';
-            backBtn.setAttribute('style', 'left: ' + btnLeft + '; top: ' + btnTop + '; transform: ' + transform + ';');
-            forwardBtn.setAttribute('style', 'right: ' + btnLeft + '; top: ' + btnTop + '; transform: ' + transform + ';');
+                revUtils.addClass(this.backBtn, 'side');
+                revUtils.addClass(this.forwardBtn, 'side');
 
-            if (!isMobile) {
-                forwardBtnWrapper.style.opacity = 0;
-                backBtnWrapper.style.opacity = 0;
+                revUtils.removeClass(this.backBtn, 'top-bottom');
+                revUtils.removeClass(this.forwardBtn, 'top-bottom');
+
+                this.backBtn.setAttribute('style', 'padding: 0px 0px; left: 0px; top: 0px;');
+                this.forwardBtn.setAttribute('style', 'padding: 0px 0px; right: 0px; top: 0px;');
+            }
+
+            if (!this.mobile) {
+                this.forwardBtn.style.opacity = 0;
+                this.backBtn.style.opacity = 0;
             }
             if (!this.options.wrap_pages) {
-                backBtnWrapper.style.display = 'none';
+                this.backBtn.style.display = 'none';
             }
         }
-    }
+    };
 
     RevSlider.prototype.textOverlay = function() {
         var ads = this.containerElement.querySelectorAll('.rev-ad');
@@ -586,7 +568,7 @@ RevSlider({
                 };
             } else {
                 for (var i = 0; i < (this.limit - nodes.length); i++) {
-                    this.appendCell();
+                    this.gridElement.appendChild(this.createNewCell());
                 }
                 this.resetDisplay();
             }
@@ -629,28 +611,8 @@ RevSlider({
         this.grid.reloadItems();
         this.grid.layout();
 
-        //this.setContainerAndGridHeights();
-
         this.setupButtons();
-
     };
-
-    RevSlider.prototype.setContainerAndGridHeights = function() {
-        var gridContainerElement = document.getElementById('rev-slider-grid-container');
-        var paddingOffset = this.padding * 2;
-        var numRows = this.options.rows[this.grid.getBreakPoint()];
-        var rowsPaddingOffset = paddingOffset * (numRows - 1);
-        var newContHeight = ((this.getCellHeight() * numRows) + rowsPaddingOffset);
-        gridContainerElement.style.height = newContHeight + 'px';
-
-        this.gridElement.style.position = 'absolute';
-        this.gridElement.style.height = (gridContainerElement.offsetHeight + paddingOffset) + 'px';
-        this.gridElement.style.width = (gridContainerElement.offsetWidth + paddingOffset + 1) + 'px';
-        this.gridElement.style.top = '-'+this.padding+'px';
-        this.gridElement.style.left = '-'+this.padding+'px';
-        this.grid.reloadItems();
-        this.grid.layout();
-    }
 
     RevSlider.prototype.checkMaxHeadlineHeightPerRow = function() {
         var itemsPerRow = this.grid.getPerRow();
@@ -666,8 +628,7 @@ RevSlider({
                 ad.querySelectorAll('.rev-headline')[0].style.maxheight = currentHeadlineHeight + 'px';
             }
         }
-
-    }
+    };
 
 
     RevSlider.prototype.checkEllipsis = function() {
@@ -694,10 +655,6 @@ RevSlider({
     RevSlider.prototype.getLimit = function() {
         // can pass object for rows or just single value for all breakpoints
         return this.grid.getPerRow() * (this.options.rows[this.grid.getBreakPoint()] ? this.options.rows[this.grid.getBreakPoint()] : this.options.rows);
-    }
-
-    RevSlider.prototype.appendCell = function() {
-        this.gridElement.appendChild(this.createNewCell());
     };
 
     RevSlider.prototype.createNewCell = function() {
@@ -834,29 +791,13 @@ RevSlider({
 
     RevSlider.prototype.attachButtonEvents = function() {
         var that = this;
-        var forwardBtnContainer = that.containerElement.querySelector('#forward-btn-container');
-        var backBtnContainer = that.containerElement.querySelector('#back-btn-container');
-        forwardBtnContainer.addEventListener('click', function() {
+        this.forwardBtn.addEventListener('click', function() {
             that.showNextPage();
         });
 
-        backBtnContainer.addEventListener('click', function() {
+        this.backBtn.addEventListener('click', function() {
             that.showPreviousPage();
         });
-        var isMobile = (revDetect.mobile()) ? true : false;
-        var forwardBtnWrapper = that.containerElement.querySelector('#forward-wrapper');
-        var backBtnWrapper = that.containerElement.querySelector('#back-wrapper');
-        if (!isMobile) {
-            var gridContainerElement = this.containerElement.querySelector('#rev-slider-grid-container');
-            gridContainerElement.addEventListener('mouseover', function () {
-                forwardBtnWrapper.style.opacity = 1;
-                backBtnWrapper.style.opacity = 1;
-            });
-            gridContainerElement.addEventListener('mouseout', function () {
-                forwardBtnWrapper.style.opacity = 0;
-                backBtnWrapper.style.opacity = 0;
-            });
-        }
     };
 
     RevSlider.prototype.showNextPage = function() {
