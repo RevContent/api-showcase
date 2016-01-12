@@ -148,12 +148,6 @@ RevSlider({
 
         this.grid = new AnyGrid(this.gridElement, { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound, adjust_gutter: true});
 
-        /*this.grid.on('resized', function() {
-            that.resize();
-        });*/
-        revUtils.addEventListener(window, 'resize', function() {
-            that.resize();
-        });
 
         this.page = 1;
         this.previousPage = 0;
