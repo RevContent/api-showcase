@@ -579,7 +579,7 @@ RevSlider({
                 };
             } else {
                 for (var i = 0; i < (this.limit - nodes.length); i++) {
-                    this.appendCell();
+                    this.gridElement.appendChild(this.createNewCell());
                 }
                 this.resetDisplay();
             }
@@ -687,10 +687,6 @@ RevSlider({
     RevSlider.prototype.getLimit = function() {
         // can pass object for rows or just single value for all breakpoints
         return this.grid.getPerRow() * (this.options.rows[this.grid.getBreakPoint()] ? this.options.rows[this.grid.getBreakPoint()] : this.options.rows);
-    }
-
-    RevSlider.prototype.appendCell = function() {
-        this.gridElement.appendChild(this.createNewCell());
     };
 
     RevSlider.prototype.createNewCell = function() {
