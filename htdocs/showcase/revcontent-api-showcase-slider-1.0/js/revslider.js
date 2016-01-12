@@ -616,28 +616,8 @@ RevSlider({
         this.grid.reloadItems();
         this.grid.layout();
 
-        //this.setContainerAndGridHeights();
-
         this.setupButtons();
-
     };
-
-    RevSlider.prototype.setContainerAndGridHeights = function() {
-        var gridContainerElement = document.getElementById('rev-slider-grid-container');
-        var paddingOffset = this.padding * 2;
-        var numRows = this.options.rows[this.grid.getBreakPoint()];
-        var rowsPaddingOffset = paddingOffset * (numRows - 1);
-        var newContHeight = ((this.getCellHeight() * numRows) + rowsPaddingOffset);
-        gridContainerElement.style.height = newContHeight + 'px';
-
-        this.gridElement.style.position = 'absolute';
-        this.gridElement.style.height = (gridContainerElement.offsetHeight + paddingOffset) + 'px';
-        this.gridElement.style.width = (gridContainerElement.offsetWidth + paddingOffset + 1) + 'px';
-        this.gridElement.style.top = '-'+this.padding+'px';
-        this.gridElement.style.left = '-'+this.padding+'px';
-        this.grid.reloadItems();
-        this.grid.layout();
-    }
 
     RevSlider.prototype.checkMaxHeadlineHeightPerRow = function() {
         var itemsPerRow = this.grid.getPerRow();
@@ -653,8 +633,7 @@ RevSlider({
                 ad.querySelectorAll('.rev-headline')[0].style.maxheight = currentHeadlineHeight + 'px';
             }
         }
-
-    }
+    };
 
 
     RevSlider.prototype.checkEllipsis = function() {
