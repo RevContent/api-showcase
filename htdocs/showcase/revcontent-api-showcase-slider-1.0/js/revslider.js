@@ -316,8 +316,6 @@ RevSlider({
         //this.gridElement.style.position = 'relative';
         this.gridElement.style.transition = '';
         this.gridElement.className = '';
-        clearTimeout(this.gridUpdateTimer);
-        this.gridUpdateTimer = null;
     }
 
     RevSlider.prototype.setUp = function() {
