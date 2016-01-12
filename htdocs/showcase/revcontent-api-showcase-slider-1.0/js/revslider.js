@@ -146,8 +146,7 @@ RevSlider({
 
         this.initButtons();
 
-        this.grid = new AnyGrid(this.gridElement, { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound, adjust_gutter: true});
-
+        this.grid = new AnyGrid(this.gridElement, this.gridOptions());
 
         this.page = 1;
         this.previousPage = 0;
@@ -234,6 +233,7 @@ RevSlider({
         //var gridWidth = gridContainerElement.offsetWidth + paddingOffset + 1;
         //nextGridElement.style.height = gridHeight + 'px';
         //nextGridElement.style.width = gridWidth + 'px';
+        var nextGrid = new AnyGrid(nextGridElement, this.gridOptions());
 
         var nextGrid = new AnyGrid(nextGridElement, { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound, adjust_gutter:true});
 
