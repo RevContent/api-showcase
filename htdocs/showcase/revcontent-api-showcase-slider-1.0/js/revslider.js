@@ -357,95 +357,87 @@ RevSlider({
     };
 
     RevSlider.prototype.initButtons = function() {
-        var backBtnWrapper = document.createElement('div');
-        backBtnWrapper.id = "back-wrapper";
-        backBtnWrapper.setAttribute('class', 'rev-btn-wrapper');
+        this.backBtn = document.createElement('div');
+        this.backBtn.id = "back-wrapper";
+        this.backBtn.setAttribute('class', 'rev-btn-wrapper');
 
-        var backBtn = document.createElement('div');
-        backBtn.id = "back-btn-container";
-        backBtn.setAttribute('class', 'rev-btn-container');
-        backBtn.setAttribute('style', 'left: 0px;');
+        var backBtnHtml = document.createElement('div');
+        backBtnHtml.id = "back-btn-container";
+        backBtnHtml.setAttribute('class', 'rev-btn-container');
+        backBtnHtml.setAttribute('style', 'left: 0px;');
         //var backArrow = (this.options.vertical) ? '&circ;' : '&lsaquo;';
-        backBtn.innerHTML = '<label id="btn-back" class="rev-chevron">&lsaquo;</label>'; // &lsaquo; &circ;
+        backBtnHtml.innerHTML = '<label id="btn-back" class="rev-chevron">&lsaquo;</label>'; // &lsaquo; &circ;
 
-        revUtils.append(backBtnWrapper, backBtn);
+        this.forwardBtn = document.createElement('div');
+        this.forwardBtn.id = "forward-wrapper";
+        this.forwardBtn.setAttribute('class', 'rev-btn-wrapper');
 
-        var forwardBtnWrapper = document.createElement('div');
-        forwardBtnWrapper.id = "forward-wrapper";
-        forwardBtnWrapper.setAttribute('class', 'rev-btn-wrapper');
-
-        var forwardBtn = document.createElement('div');
-        forwardBtn.id = "forward-btn-container";
-        forwardBtn.setAttribute('class', 'rev-btn-container');
-        forwardBtn.setAttribute('style', 'right: 0px;');
+        var forwardBtnHtml = document.createElement('div');
+        forwardBtnHtml.id = "forward-btn-container";
+        forwardBtnHtml.setAttribute('class', 'rev-btn-container');
+        forwardBtnHtml.setAttribute('style', 'right: 0px;');
         //var forwardArrow = (this.options.vertical) ? '&caron;' : '&rsaquo;';
-        forwardBtn.innerHTML = '<label id="btn-forward" class="rev-chevron">&rsaquo;</label>'; // &rsaquo; &caron;
-
-        revUtils.append(forwardBtnWrapper, forwardBtn);
+        forwardBtnHtml.innerHTML = '<label id="btn-forward" class="rev-chevron">&rsaquo;</label>'; // &rsaquo; &caron;
 
         var gridContainerElement = this.containerElement.querySelector('#rev-slider-grid-container');
-        revUtils.append(gridContainerElement, backBtnWrapper);
-        revUtils.append(gridContainerElement, forwardBtnWrapper);
 
-        var isMobile = (revDetect.mobile()) ? true : false;
-        if (isMobile) {
-            forwardBtn.style.opacity = .3;
-            backBtn.style.opacity = .3;
-            forwardBtnWrapper.style.opacity = 1;
-            backBtnWrapper.style.opacity = 1;
+        revUtils.append(this.forwardBtn, forwardBtnHtml);
+        revUtils.append(this.backBtn, backBtnHtml);
+        revUtils.append(this.innerElement, this.backBtn);
+        revUtils.append(this.innerElement, this.forwardBtn);
+
+        if (this.mobile) {
+            forwardBtnHtml.style.opacity = .3;
+            backBtnHtml.style.opacity = .3;
+            this.forwardBtn.style.opacity = 1;
+            this.backBtn.style.opacity = 1;
         } else {
-            forwardBtnWrapper.style.opacity = 0;
-            backBtnWrapper.style.opacity = 0;
+            this.forwardBtn.style.opacity = 0;
+            this.backBtn.style.opacity = 0;
         }
 
         this.attachButtonEvents();
-    }
+    };
 
     RevSlider.prototype.setupButtons = function() {
-        var isMobile = (revDetect.mobile()) ? true : false;
-        var backBtnWrapper = this.containerElement.querySelector('#back-wrapper');
-        var forwardBtnWrapper = this.containerElement.querySelector('#forward-wrapper');
-        var backBtnContainer = this.containerElement.querySelector('#back-btn-container');
-        var forwardBtnContainer = this.containerElement.querySelector('#forward-btn-container');
-
-        if ((isMobile && !this.options.show_arrows.mobile) || (!isMobile && !this.options.show_arrows.desktop)) {
-            backBtnWrapper.setAttribute('style', 'display: none;');
-            forwardBtnWrapper.setAttribute('style', 'display: none;');
+        if ((this.mobile && !this.options.show_arrows.mobile) || (!this.mobile && !this.options.show_arrows.desktop)) {
+            this.backBtn.setAttribute('style', 'display: none;');
+            this.forwardBtn.setAttribute('style', 'display: none;');
         } else {
-            var backBtn = this.containerElement.querySelector('#btn-back');
-            var forwardBtn = this.containerElement.querySelector('#btn-forward');
+            // var backBtn = this.containerElement.querySelector('#btn-back');
+            // var forwardBtn = this.containerElement.querySelector('#btn-forward');
             var transform = 'rotate(0deg)';
 
             if (this.options.vertical) {
-                backBtnContainer.style.borderRadius = '4px 4px 0px 0px';
-                forwardBtnContainer.style.borderRadius = '0px 0px 4px 4px';
-                revUtils.addClass(backBtnWrapper, 'top-bottom');
-                revUtils.addClass(forwardBtnWrapper, 'top-bottom');
-                backBtnWrapper.setAttribute('style', 'padding: 0px 0px; top: 0px;');
-                forwardBtnWrapper.setAttribute('style', 'padding: 0px 0px; bottom: 0px;');
+                revUtils.removeClass(this.backBtn, 'side');
+                revUtils.removeClass(this.forwardBtn, 'side');
+
+                revUtils.addClass(this.backBtn, 'top-bottom');
+                revUtils.addClass(this.forwardBtn, 'top-bottom');
+
+                this.backBtn.setAttribute('style', 'padding: 0px 0px; top: 0px;');
+                this.forwardBtn.setAttribute('style', 'padding: 0px 0px; bottom: 0px;');
                 transform = "rotate(90deg)";
             } else {
-                backBtnContainer.style.borderRadius = '4px 0px 0px 4px';
-                forwardBtnContainer.style.borderRadius = '0px 4px 4px 0px';
-                revUtils.removeClass(backBtnWrapper, 'top-bottom');
-                revUtils.removeClass(forwardBtnWrapper, 'top-bottom');
-                backBtnWrapper.setAttribute('style', 'padding: 0px 0px; left: 0px; top: 0px;');
-                forwardBtnWrapper.setAttribute('style', 'padding: 0px 0px; right: 0px; top: 0px;');
-            }
-            var btnTop = (backBtn.parentNode.offsetHeight / 2) - (backBtn.offsetHeight / 2) + 'px';
-            var btnLeft = (backBtn.parentNode.offsetWidth / 2) - (backBtn.offsetWidth / 2) + 'px';
-            backBtn.setAttribute('style', 'left: ' + btnLeft + '; top: ' + btnTop + '; transform: ' + transform + ';');
-            forwardBtn.setAttribute('style', 'right: ' + btnLeft + '; top: ' + btnTop + '; transform: ' + transform + ';');
+                revUtils.addClass(this.backBtn, 'side');
+                revUtils.addClass(this.forwardBtn, 'side');
 
-            if (!isMobile) {
-                forwardBtnWrapper.style.opacity = 0;
-                backBtnWrapper.style.opacity = 0;
+                revUtils.removeClass(this.backBtn, 'top-bottom');
+                revUtils.removeClass(this.forwardBtn, 'top-bottom');
+
+                this.backBtn.setAttribute('style', 'padding: 0px 0px; left: 0px; top: 0px;');
+                this.forwardBtn.setAttribute('style', 'padding: 0px 0px; right: 0px; top: 0px;');
+            }
+
+            if (!this.mobile) {
+                this.forwardBtn.style.opacity = 0;
+                this.backBtn.style.opacity = 0;
             }
             if (!this.options.wrap_pages) {
-                backBtnWrapper.style.display = 'none';
+                this.backBtn.style.display = 'none';
             }
         }
-    }
+    };
 
     RevSlider.prototype.textOverlay = function() {
         var ads = this.containerElement.querySelectorAll('.rev-ad');
@@ -794,29 +786,13 @@ RevSlider({
 
     RevSlider.prototype.attachButtonEvents = function() {
         var that = this;
-        var forwardBtnContainer = that.containerElement.querySelector('#forward-btn-container');
-        var backBtnContainer = that.containerElement.querySelector('#back-btn-container');
-        forwardBtnContainer.addEventListener('click', function() {
+        this.forwardBtn.addEventListener('click', function() {
             that.showNextPage();
         });
 
-        backBtnContainer.addEventListener('click', function() {
+        this.backBtn.addEventListener('click', function() {
             that.showPreviousPage();
         });
-        var isMobile = (revDetect.mobile()) ? true : false;
-        var forwardBtnWrapper = that.containerElement.querySelector('#forward-wrapper');
-        var backBtnWrapper = that.containerElement.querySelector('#back-wrapper');
-        if (!isMobile) {
-            var gridContainerElement = this.containerElement.querySelector('#rev-slider-grid-container');
-            gridContainerElement.addEventListener('mouseover', function () {
-                forwardBtnWrapper.style.opacity = 1;
-                backBtnWrapper.style.opacity = 1;
-            });
-            gridContainerElement.addEventListener('mouseout', function () {
-                forwardBtnWrapper.style.opacity = 0;
-                backBtnWrapper.style.opacity = 0;
-            });
-        }
     };
 
     RevSlider.prototype.showNextPage = function() {
