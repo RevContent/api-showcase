@@ -159,7 +159,7 @@ RevSlider({
         this.appendElements();
 
         for (var i = 0; i < this.limit; i++) {
-            this.appendCell();
+            this.gridElement.appendChild(this.createNewCell());
         };
 
         this.grid.reloadItems();
