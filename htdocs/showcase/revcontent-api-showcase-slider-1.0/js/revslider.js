@@ -180,45 +180,49 @@ RevSlider({
         this.impressionTracker = [];
     };
 
-    RevSlider.prototype.getAnimationDuration = function() {
-        var duration = 0.5;
-        if (this.options.vertical) {
-            var gridRows = this.options.rows[this.grid.getBreakPoint()];
-            if (gridRows >= 7) {
-                duration = 2;
-            } else if (gridRows >= 6) {
-                duration = 1.75;
-            } else if (gridRows >= 5) {
-                duration = 1.5;
-            } else if (gridRows >= 4) {
-                duration = 1.25;
-            } else if (gridRows >= 3) {
-                duration = 1;
-            } else if (gridRows >= 2) {
-                duration = 0.75;
-            }
-        } else {
-            var gridWidth = this.grid.containerWidth;
+    RevSlider.prototype.gridOptions = function() {
+        return { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound, adjust_gutter:true };   
+    };
 
-            if (gridWidth >= 1500) {
-                duration = 2;
-            } else if (gridWidth >= 1250) {
-                duration = 1.75;
-            } else if (gridWidth >= 1000) {
-                duration = 1.5;
-            } else if (gridWidth >= 750) {
-                duration = 1.25;
-            } else if (gridWidth >= 500) {
-                duration = 1;
-            } else if (gridWidth >= 250) {
-                duration = 0.75;
-            }
-        }
-        if (!this.options.page_increment) {
-            duration = duration * .5;
-        }
-        return duration;
-    }
+    // RevSlider.prototype.getAnimationDuration = function() {
+    //     var duration = 0.5;
+    //     if (this.options.vertical) {
+    //         var gridRows = this.options.rows[this.grid.getBreakPoint()];
+    //         if (gridRows >= 7) {
+    //             duration = 2;
+    //         } else if (gridRows >= 6) {
+    //             duration = 1.75;
+    //         } else if (gridRows >= 5) {
+    //             duration = 1.5;
+    //         } else if (gridRows >= 4) {
+    //             duration = 1.25;
+    //         } else if (gridRows >= 3) {
+    //             duration = 1;
+    //         } else if (gridRows >= 2) {
+    //             duration = 0.75;
+    //         }
+    //     } else {
+    //         var gridWidth = this.grid.containerWidth;
+
+    //         if (gridWidth >= 1500) {
+    //             duration = 2;
+    //         } else if (gridWidth >= 1250) {
+    //             duration = 1.75;
+    //         } else if (gridWidth >= 1000) {
+    //             duration = 1.5;
+    //         } else if (gridWidth >= 750) {
+    //             duration = 1.25;
+    //         } else if (gridWidth >= 500) {
+    //             duration = 1;
+    //         } else if (gridWidth >= 250) {
+    //             duration = 0.75;
+    //         }
+    //     }
+    //     if (!this.options.page_increment) {
+    //         duration = duration * .5;
+    //     }
+    //     return duration;
+    // };
 
     RevSlider.prototype.createNextPageGrid = function() {
         var that = this;
