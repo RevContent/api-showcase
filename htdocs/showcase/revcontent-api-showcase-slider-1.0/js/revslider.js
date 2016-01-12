@@ -171,7 +171,7 @@ RevSlider({
         this.grid.reloadItems();
         this.grid.layout();
 
-        this.resize();
+        this.setupButtons();
 
         this.textOverlay();
 
