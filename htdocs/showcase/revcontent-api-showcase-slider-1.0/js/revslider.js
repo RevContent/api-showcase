@@ -181,7 +181,7 @@ RevSlider({
 
     RevSlider.prototype.gridOptions = function() {
         return { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound, adjust_gutter:true };   
-    };
+    }; 
 
     // RevSlider.prototype.getAnimationDuration = function() {
     //     var duration = 0.5;
