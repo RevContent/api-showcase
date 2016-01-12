@@ -120,6 +120,8 @@ RevSlider({
 
         var that = this;
 
+        this.moblie = (revDetect.mobile()) ? true : false;
+
         revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-slider');
 
         this.contentItems = [];
