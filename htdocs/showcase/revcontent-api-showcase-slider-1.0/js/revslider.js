@@ -130,8 +130,11 @@ RevSlider({
         this.containerElement.id = 'rev-slider';
         this.containerElement.class = 'rev-slider';
 
-        var gridContainerElement = document.createElement('div');
-        gridContainerElement.id = 'rev-slider-grid-container';
+        this.innerElement = document.createElement('div');
+        this.innerElement.id = 'rev-slider-inner';
+
+        this.gridContainerElement = document.createElement('div');
+        this.gridContainerElement.id = 'rev-slider-grid-container';
 
         this.gridElement = document.createElement('div');
         this.gridElement.id = 'rev-slider-grid';
@@ -139,10 +142,11 @@ RevSlider({
         this.element = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
         this.element.style.width = '100%';
 
+        revUtils.append(this.containerElement, this.innerElement);
 
-        revUtils.append(this.containerElement, gridContainerElement);
+        revUtils.append(this.innerElement, this.gridContainerElement);
 
-        revUtils.append(gridContainerElement, this.gridElement);
+        revUtils.append(this.gridContainerElement, this.gridElement);
 
         revUtils.append(this.element, this.containerElement);
 
