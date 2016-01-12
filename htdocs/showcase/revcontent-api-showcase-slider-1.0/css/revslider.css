@@ -5,17 +5,19 @@
 }
 
 #rev-slider #rev-slider-grid {
-    position: absolute;
     padding: 0;
 }
 
 #rev-slider #rev-slider-grid-container {
+    clear: both;
     position: relative;
-    /*display: table;*/
     width: 100%;
+}
+
+#rev-slider #rev-slider-inner {
+    width: 100%;
+    clear: both;
     overflow: hidden;
-    user-select: none;
-    /*background-color: #fff;*/
 }
 
 #rev-slider {
@@ -49,7 +51,7 @@
     top: 50%;
 }
 
-#rev-slider #rev-slider-grid-container .rev-btn-wrapper {
+#rev-slider #rev-slider-inner .rev-btn-wrapper {
     position: absolute;
     height: 100%;
     width: 40px;
@@ -60,12 +62,12 @@
     transition: opacity .5s ease-in-out;
 }
 
-#rev-slider #rev-slider-grid-container .top-bottom {
+#rev-slider #rev-slider-inner .top-bottom {
     height: 40px;
     width: 100%;
 }
 
-#rev-slider #rev-slider-grid-container .rev-btn-container {
+#rev-slider #rev-slider-inner .rev-btn-container {
     position: relative;
     background-color: #333333;
     opacity: .3;
@@ -75,9 +77,13 @@
     border-radius: 4px;
 }
 
-#rev-slider #rev-slider-grid-container .rev-btn-container:hover {
+#rev-slider #rev-slider-inner .rev-btn-container:hover {
     opacity: .8;
+}
 
+#rev-slider #rev-slider-inner:hover #back-wrapper,
+#rev-slider #rev-slider-inner:hover #forward-wrapper{
+    opacity: 1 !important;
 }
 
 #rev-slider a {
