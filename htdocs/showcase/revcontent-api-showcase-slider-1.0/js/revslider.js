@@ -243,31 +243,23 @@ RevSlider({
         var animationDuration = 1.75; //this.getAnimationDuration(); TODO: make dynamic
 
         var width = (this.options.page_increment) ? this.gridElement.offsetWidth : this.gridElement.offsetWidth / this.grid.perRow;
-
-        var rowHeight = this.gridElement.offsetHeight / this.options.rows[this.grid.getBreakPoint()];
-        var height = (this.options.page_increment) ? this.gridElement.offsetHeight : rowHeight;
         var newTop = 0;
         var newLeft = 0;
-        var invertedPadding = this.padding*-1;
-        var topLeft = 'left';
+        var position = 'left';
 
         if (this.page > this.previousPage) { // slide left or up
             if (this.options.vertical) { // up
-                topLeft = 'top';
-                newTop = height + invertedPadding;
-                newLeft = invertedPadding;
+                position = 'top';
+                newTop = this.grid.maxHeight;
             } else { // left
-                newTop = 0;
                 newLeft = width + this.grid.itemPadding;
             }
         } else { // Slide right or down
             if (this.options.vertical) { // down
-                topLeft = 'top';
-                newTop = (height * -1) + invertedPadding;
-                newLeft = invertedPadding;
+                position = 'top';
+                newTop = (this.grid.maxHeight * -1);
             } else { // right
-                newTop = 0;
-                newLeft = ((width + this.grid.itemPadding) * -1);// - invertedPadding*2;
+                newLeft = ((width + this.grid.itemPadding) * -1);
             }
         }
 
@@ -292,19 +284,20 @@ RevSlider({
         setTimeout(function () {
             nextGridElement.style.position = 'absolute';
 
-            nextGridElement.style.transition = topLeft + ' ' + animationDuration + 's';
+            // TODO: use transformation for better performance
+            nextGridElement.style.transition = position + ' ' + animationDuration + 's';
             nextGridElement.style.transitionTimingFunction = 'ease-in-out';
 
-            previousGridElement.style.transition = topLeft + ' ' + animationDuration + 's';
+            previousGridElement.style.transition = position + ' ' + animationDuration + 's';
             previousGridElement.style.transitionTimingFunction = 'ease-in-out';
 
 
             if (that.options.vertical) {
-                nextGridElement.style.top = invertedPadding+'px';
+                nextGridElement.style.top = 0;
                 previousGridElement.style.top = (newTop * -1) + 'px';
             } else {
                 nextGridElement.style.left = 0;
-                previousGridElement.style.left = (newLeft * -1) + invertedPadding + 'px';
+                previousGridElement.style.left = (newLeft * -1) + 'px';
             }
         }, 0);
 
