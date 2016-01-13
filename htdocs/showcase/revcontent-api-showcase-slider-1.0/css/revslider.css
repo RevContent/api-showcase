@@ -14,6 +14,11 @@
     width: 100%;
 }
 
+#rev-slider #rev-slider-grid-container {
+    transition: transform;
+    transition-timing-function: ease-in-out;
+}
+
 #rev-slider #rev-slider-inner {
     width: 100%;
     clear: both;
