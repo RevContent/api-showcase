@@ -168,7 +168,6 @@ app.directive('revSlider', ['$timeout', 'options', function ($timeout, options) 
         $timeout(function() {
             widget = new RevSlider({
                 element: element,
-                is_resize_bound: false,
                 devices: options.getDevices(),
                 header: options.header,
                 api_key : options.api_key,
