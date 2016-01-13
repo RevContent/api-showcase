@@ -318,9 +318,10 @@ RevSlider({
         var gridContainerElement = document.getElementById('rev-slider-grid-container');
         var previousGridElement = gridContainerElement.querySelector('#rev-slider-grid-prev');
         revUtils.remove(previousGridElement);
-        //this.gridElement.style.position = 'relative';
+
         this.gridElement.style.transition = '';
         this.gridElement.className = '';
+        this.updating = false;
     };
 
     RevSlider.prototype.setUp = function() {
@@ -801,7 +802,8 @@ RevSlider({
     };
 
     RevSlider.prototype.showNextPage = function() {
-        if (!this.gridUpdateTimer) {
+        if (!this.updating) {
+            this.updating = true;
             if (this.options.wrap_pages) {
                 if (!this.hasMorePages() || this.page === -1) {
                     // wrap or reverse
@@ -824,7 +826,8 @@ RevSlider({
     }
 
     RevSlider.prototype.showPreviousPage = function() {
-        if (!this.gridUpdateTimer) {
+        if (!this.updating) {
+            this.updating = true;
             if (this.options.wrap_pages) {
                 if (this.options.wrap_reverse) {
                     if (!this.hasMorePages() || this.page === 1) {
