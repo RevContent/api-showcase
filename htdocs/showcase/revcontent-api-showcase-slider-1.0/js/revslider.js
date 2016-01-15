@@ -160,6 +160,9 @@ RevSlider({
         this.grid = new AnyGrid(this.gridElement, this.gridOptions());
 
         this.setMultipliers();
+
+        this.grid.option({gutter: this.getPadding()});
+
         this.page = 1;
         this.previousPage = 0;
 
@@ -187,14 +190,20 @@ RevSlider({
         this.impressionTracker = [];
     };
 
+    RevSlider.prototype.getPadding = function(){
+        this.padding = ((this.grid.columnWidth * this.marginMultiplier).toFixed(2) / 1);
+        return this.padding;
+    };
+
     RevSlider.prototype.setMultipliers = function() {
         this.fontSizeMultiplier = Math.round( (.04 + Number((this.options.multipliers.font_size * .01).toFixed(2))) * 100 ) / 100;
         this.marginMultiplier = Math.round( (.05 + Number((this.options.multipliers.margin * .01).toFixed(2))) * 100 ) / 100;
         this.paddingMultiplier = Math.round( (.01 + Number((this.options.multipliers.padding * .01).toFixed(2))) * 100 ) / 100;
     };
+
     RevSlider.prototype.gridOptions = function() {
-        return { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound, adjust_gutter:true };   
-    }; 
+        return { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound, adjustGutter:true, gutter: this.padding };
+    };
 
     // RevSlider.prototype.getAnimationDuration = function() {
     //     var duration = 0.5;
@@ -244,10 +253,10 @@ RevSlider({
         this.gridElement = document.createElement('div');
         this.gridElement.id = 'rev-slider-grid';
 
+        revUtils.append(this.gridContainerElement, this.gridElement);
+
         this.grid = new AnyGrid(this.gridElement, this.gridOptions());
 
-        revUtils.append(this.gridContainerElement, this.gridElement);
-        
         var animationDuration = 1.75; //this.getAnimationDuration(); TODO: make dynamic
 
         var nextGridTransform = 'none';
