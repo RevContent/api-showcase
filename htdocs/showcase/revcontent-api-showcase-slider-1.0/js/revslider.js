@@ -165,7 +165,7 @@ RevSlider({
 
         for (var i = 0; i < this.limit; i++) {
             this.gridElement.appendChild(this.createNewCell());
-        };
+        }
 
         this.grid.reloadItems();
         this.grid.layout();
@@ -263,7 +263,7 @@ RevSlider({
 
         for (var i = 0; i < this.limit; i++) {
             this.gridElement.appendChild(this.createNewCell());
-        };
+        }
 
         this.updateDisplayedItems();
         this.checkEllipsis();
@@ -512,7 +512,7 @@ RevSlider({
             cellHeight = cellHeight/2.7;
         }
         return cellHeight;
-    }
+    };
 
     RevSlider.prototype.resize = function() {
         //var gridContainerElement = document.getElementById('rev-slider-grid-container');
@@ -537,7 +537,7 @@ RevSlider({
                     if (i >= this.limit) {
                         this.grid.remove(nodes[i]);
                     }
-                };
+                }
             } else {
                 for (var i = 0; i < (this.limit - nodes.length); i++) {
                     this.gridElement.appendChild(this.createNewCell());
@@ -571,8 +571,6 @@ RevSlider({
             ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize +'px';
             ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
             ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
-
-
         }
         this.textOverlay();
 
@@ -653,7 +651,7 @@ RevSlider({
         cell.innerHTML = html;
 
         return cell;
-    }
+    };
 
     RevSlider.prototype.getData = function() {
         var sponsoredCount = this.options.pages * this.limit
@@ -684,13 +682,13 @@ RevSlider({
                 that.impressionTracker[offset + '_' + count] = true;
             });
         }
-    }
+    };
 
     RevSlider.prototype.resetDisplay = function() {
         this.previousPage = 0;
         this.page = 1;
         this.updateDisplayedItems();
-    }
+    };
 
     RevSlider.prototype.updateDisplayedItems = function() {
         var correctedPage = Math.abs(this.page);
@@ -743,23 +741,23 @@ RevSlider({
             }
         }
         this.registerImpressions(0, this.limit);
-    }
+    };
 
     RevSlider.prototype.hasNextPage = function() {
         //var pageOffset = (this.options.page_increment) ? 0 : this.limit;
         var correctedPage = Math.abs(this.page);
         return this.contentItems.length  >= (correctedPage * this.increment) + this.increment;
-    }
+    };
 
     RevSlider.prototype.hasPreviousPage = function() {
         var correctedPage = Math.abs(this.page);
         return (correctedPage - 1) > 0;
-    }
+    };
 
     RevSlider.prototype.hasMorePages = function() {
         var correctedPage = Math.abs(this.page);
         return this.contentItems.length  >= (correctedPage * this.increment) + this.increment;
-    }
+    };
 
     RevSlider.prototype.attachButtonEvents = function() {
         var that = this;
@@ -794,7 +792,7 @@ RevSlider({
                 backBtnWrapper.style.display = 'block';
             }
         }
-    }
+    };
 
     RevSlider.prototype.showPreviousPage = function() {
         if (!this.updating) {
@@ -824,7 +822,7 @@ RevSlider({
                 forwardBtnWrapper.style.display = 'block';
             }
         }
-    }
+    };
 
     RevSlider.prototype.getMaxHeadlineHeight = function(rowNum, numItems) {
         var maxHeadlineHeight = 0;
