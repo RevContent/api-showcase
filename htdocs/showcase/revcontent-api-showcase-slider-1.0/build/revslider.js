@@ -103,7 +103,12 @@ RevSlider({
             wrap_reverse: true, // if page_increment is false, this must be false
             show_padding: true,
             pages: 4,
-            text_right: false
+            text_right: false,
+            multipliers: {
+                font_size: 0,
+                margin: 0,
+                padding: 0
+            }
         };
 
         // merge options
@@ -154,6 +159,10 @@ RevSlider({
 
         this.grid = new AnyGrid(this.gridElement, this.gridOptions());
 
+        this.setMultipliers();
+
+        this.grid.option({gutter: this.getPadding()});
+
         this.page = 1;
         this.previousPage = 0;
 
@@ -165,7 +174,7 @@ RevSlider({
 
         for (var i = 0; i < this.limit; i++) {
             this.gridElement.appendChild(this.createNewCell());
-        };
+        }
 
         this.grid.reloadItems();
         this.grid.layout();
@@ -181,9 +190,20 @@ RevSlider({
         this.impressionTracker = [];
     };
 
+    RevSlider.prototype.getPadding = function(){
+        this.padding = ((this.grid.columnWidth * this.marginMultiplier).toFixed(2) / 1);
+        return this.padding;
+    };
+
+    RevSlider.prototype.setMultipliers = function() {
+        this.fontSizeMultiplier = Math.round( (.04 + Number((this.options.multipliers.font_size * .01).toFixed(2))) * 100 ) / 100;
+        this.marginMultiplier = Math.round( (.05 + Number((this.options.multipliers.margin * .01).toFixed(2))) * 100 ) / 100;
+        this.paddingMultiplier = Math.round( (.01 + Number((this.options.multipliers.padding * .01).toFixed(2))) * 100 ) / 100;
+    };
+
     RevSlider.prototype.gridOptions = function() {
-        return { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound, adjust_gutter:true };   
-    }; 
+        return { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound, adjustGutter:true, gutter: this.padding };
+    };
 
     // RevSlider.prototype.getAnimationDuration = function() {
     //     var duration = 0.5;
@@ -233,10 +253,10 @@ RevSlider({
         this.gridElement = document.createElement('div');
         this.gridElement.id = 'rev-slider-grid';
 
+        revUtils.append(this.gridContainerElement, this.gridElement);
+
         this.grid = new AnyGrid(this.gridElement, this.gridOptions());
 
-        revUtils.append(this.gridContainerElement, this.gridElement);
-        
         var animationDuration = 1.75; //this.getAnimationDuration(); TODO: make dynamic
 
         var nextGridTransform = 'none';
@@ -263,7 +283,7 @@ RevSlider({
 
         for (var i = 0; i < this.limit; i++) {
             this.gridElement.appendChild(this.createNewCell());
-        };
+        }
 
         this.updateDisplayedItems();
         this.checkEllipsis();
@@ -300,22 +320,20 @@ RevSlider({
         this.limit = this.getLimit();
         var rowsCols = (this.options.vertical) ? this.grid.perRow : this.options.rows[this.grid.getBreakPoint()];
         this.increment = (this.options.page_increment) ? this.limit : rowsCols;
-        var width = this.grid.containerWidth / this.grid.perRow;
 
         if (this.options.image_ratio == 'square') {
-            var imageHeight = 400;
-            var imageWidth = 400;
+            this.imageHeight = 400;
+            this.imageWidth = 400;
         } else if (this.options.image_ratio == 'rectangle') {
-            var imageHeight = 300;
-            var imageWidth = 400;
+            this.imageHeight = 300;
+            this.imageWidth = 400;
         } else if (this.options.image_ratio == 'wide_rectangle') {
-            var imageHeight = 450;
-            var imageWidth = 800;
+            this.imageHeight = 450;
+            this.imageWidth = 800;
         }
 
-        this.padding = (this.options.show_padding) ? ((width * .025).toFixed(2) / 1) : 0;
+        var width = this.grid.containerWidth / this.grid.perRow;
 
-        // // font size is relative to width, other measurements are relative to this font size
         this.headlineFontSize = Math.max(14, ((width * .03).toFixed(2) / 1));
         this.headlineLineHeight = ((this.headlineFontSize * 1.25).toFixed(2) / 1);
         this.headlineHeight = ((this.headlineLineHeight * this.options.headline_size).toFixed(2) / 1);
@@ -324,13 +342,14 @@ RevSlider({
         }
         this.headlineMarginTop = ((this.headlineLineHeight * .4).toFixed(2) / 1);
 
-        this.innerMargin = ((this.headlineMarginTop * .2).toFixed(2) / 1);
+        this.innerMargin = Math.max(0, ((width * this.paddingMultiplier).toFixed(2) / 1));
 
-        this.providerFontSize = Math.max(11, ((this.headlineLineHeight / 2).toFixed(2) / 1));
-        this.providerLineHeight = ((this.providerFontSize * 1.25).toFixed(2) / 1);
-        this.providerMargin = ((this.providerLineHeight * .2).toFixed(2) / 1);
+        this.providerFontSize = ((this.headlineLineHeight / 2).toFixed(2)) / 1;
+        this.providerFontSize = this.providerFontSize < 11 ? 11 : this.providerFontSize;
 
-        this.preloaderHeight = (this.grid.columnWidth - (this.padding * 2) - (this.options.ad_border ? 2 : 0)) * (imageHeight / imageWidth);
+        this.providerLineHeight = Math.round(((this.providerFontSize * 1.8).toFixed(2) / 1));
+
+        this.preloaderHeight = Math.round((this.grid.columnWidth - (this.padding * 2) - ( this.options.ad_border ? 2 : 0 )) * (this.imageHeight / this.imageWidth));
     };
 
     RevSlider.prototype.initButtons = function() {
@@ -504,15 +523,14 @@ RevSlider({
         var cellHeight = this.preloaderHeight;
         if (!this.options.text_overlay) {
             cellHeight += this.headlineHeight +
-            this.headlineMarginTop + this.providerLineHeight +
-            this.providerMargin*2;
+            this.headlineMarginTop + this.providerLineHeight
             cellHeight += (this.options.ad_border) ? 2 : 0;
         }
         if (this.options.text_right) {
             cellHeight = cellHeight/2.7;
         }
         return cellHeight;
-    }
+    };
 
     RevSlider.prototype.resize = function() {
         //var gridContainerElement = document.getElementById('rev-slider-grid-container');
@@ -537,7 +555,7 @@ RevSlider({
                     if (i >= this.limit) {
                         this.grid.remove(nodes[i]);
                     }
-                };
+                }
             } else {
                 for (var i = 0; i < (this.limit - nodes.length); i++) {
                     this.gridElement.appendChild(this.createNewCell());
@@ -567,12 +585,10 @@ RevSlider({
             ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
             ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
             ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.margin = this.providerMargin +'px '  + this.innerMargin + 'px ' + this.providerMargin +'px';
+            ad.querySelectorAll('.rev-provider')[0].style.margin = '0 '  + this.innerMargin + 'px 0';
             ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize +'px';
             ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
             ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
-
-
         }
         this.textOverlay();
 
@@ -639,21 +655,20 @@ RevSlider({
             '<div class="rev-headline" style="max-height:'+ this.headlineHeight +'px; margin:'+ this.headlineMarginTop +'px ' + this.innerMargin + 'px' + ' 0;">' +
             '<h3 style="font-size:'+ this.headlineFontSize +'px; line-height:'+ this.headlineLineHeight +'px;"></h3>' +
             '</div>' +
-            '<div style="margin:' + this.providerMargin +'px '  + this.innerMargin + 'px ' + this.providerMargin +'px;font-size:'+ this.providerFontSize +'px;line-height:'+ this.providerLineHeight +'px;height:'+ this.providerLineHeight +'px;" class="rev-provider"></div>' +
+            '<div style="margin:0 '  + this.innerMargin + 'px 0;font-size:'+ this.providerFontSize +'px;line-height:'+ this.providerLineHeight +'px;height:'+ this.providerLineHeight +'px;" class="rev-provider"></div>' +
             '</div>' +
             '</a>' +
             '</div>';
         var cell = document.createElement('div');
 
         cell.style.padding = this.padding + 'px';
-        //cell.style.height = this.getCellHeight() + 'px';
 
         revUtils.addClass(cell, 'rev-content');
 
         cell.innerHTML = html;
 
         return cell;
-    }
+    };
 
     RevSlider.prototype.getData = function() {
         var sponsoredCount = this.options.pages * this.limit
@@ -684,13 +699,13 @@ RevSlider({
                 that.impressionTracker[offset + '_' + count] = true;
             });
         }
-    }
+    };
 
     RevSlider.prototype.resetDisplay = function() {
         this.previousPage = 0;
         this.page = 1;
         this.updateDisplayedItems();
-    }
+    };
 
     RevSlider.prototype.updateDisplayedItems = function() {
         var correctedPage = Math.abs(this.page);
@@ -733,7 +748,7 @@ RevSlider({
             ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
             ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
             ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.margin = this.providerMargin +'px '  + this.innerMargin + 'px ' + this.providerMargin +'px';
+            ad.querySelectorAll('.rev-provider')[0].style.margin = '0 '  + this.innerMargin + 'px 0';
             ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize +'px';
             ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
             ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
@@ -743,23 +758,23 @@ RevSlider({
             }
         }
         this.registerImpressions(0, this.limit);
-    }
+    };
 
     RevSlider.prototype.hasNextPage = function() {
         //var pageOffset = (this.options.page_increment) ? 0 : this.limit;
         var correctedPage = Math.abs(this.page);
         return this.contentItems.length  >= (correctedPage * this.increment) + this.increment;
-    }
+    };
 
     RevSlider.prototype.hasPreviousPage = function() {
         var correctedPage = Math.abs(this.page);
         return (correctedPage - 1) > 0;
-    }
+    };
 
     RevSlider.prototype.hasMorePages = function() {
         var correctedPage = Math.abs(this.page);
         return this.contentItems.length  >= (correctedPage * this.increment) + this.increment;
-    }
+    };
 
     RevSlider.prototype.attachButtonEvents = function() {
         var that = this;
@@ -794,7 +809,7 @@ RevSlider({
                 backBtnWrapper.style.display = 'block';
             }
         }
-    }
+    };
 
     RevSlider.prototype.showPreviousPage = function() {
         if (!this.updating) {
@@ -824,7 +839,7 @@ RevSlider({
                 forwardBtnWrapper.style.display = 'block';
             }
         }
-    }
+    };
 
     RevSlider.prototype.getMaxHeadlineHeight = function(rowNum, numItems) {
         var maxHeadlineHeight = 0;
