@@ -103,7 +103,12 @@ RevSlider({
             wrap_reverse: true, // if page_increment is false, this must be false
             show_padding: true,
             pages: 4,
-            text_right: false
+            text_right: false,
+            multipliers: {
+                font_size: 0,
+                margin: 0,
+                padding: 0
+            }
         };
 
         // merge options
@@ -154,6 +159,7 @@ RevSlider({
 
         this.grid = new AnyGrid(this.gridElement, this.gridOptions());
 
+        this.setMultipliers();
         this.page = 1;
         this.previousPage = 0;
 
@@ -181,6 +187,11 @@ RevSlider({
         this.impressionTracker = [];
     };
 
+    RevSlider.prototype.setMultipliers = function() {
+        this.fontSizeMultiplier = Math.round( (.04 + Number((this.options.multipliers.font_size * .01).toFixed(2))) * 100 ) / 100;
+        this.marginMultiplier = Math.round( (.05 + Number((this.options.multipliers.margin * .01).toFixed(2))) * 100 ) / 100;
+        this.paddingMultiplier = Math.round( (.01 + Number((this.options.multipliers.padding * .01).toFixed(2))) * 100 ) / 100;
+    };
     RevSlider.prototype.gridOptions = function() {
         return { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound, adjust_gutter:true };   
     }; 
@@ -300,22 +311,20 @@ RevSlider({
         this.limit = this.getLimit();
         var rowsCols = (this.options.vertical) ? this.grid.perRow : this.options.rows[this.grid.getBreakPoint()];
         this.increment = (this.options.page_increment) ? this.limit : rowsCols;
-        var width = this.grid.containerWidth / this.grid.perRow;
 
         if (this.options.image_ratio == 'square') {
-            var imageHeight = 400;
-            var imageWidth = 400;
+            this.imageHeight = 400;
+            this.imageWidth = 400;
         } else if (this.options.image_ratio == 'rectangle') {
-            var imageHeight = 300;
-            var imageWidth = 400;
+            this.imageHeight = 300;
+            this.imageWidth = 400;
         } else if (this.options.image_ratio == 'wide_rectangle') {
-            var imageHeight = 450;
-            var imageWidth = 800;
+            this.imageHeight = 450;
+            this.imageWidth = 800;
         }
 
-        this.padding = (this.options.show_padding) ? ((width * .025).toFixed(2) / 1) : 0;
+        var width = this.grid.containerWidth / this.grid.perRow;
 
-        // // font size is relative to width, other measurements are relative to this font size
         this.headlineFontSize = Math.max(14, ((width * .03).toFixed(2) / 1));
         this.headlineLineHeight = ((this.headlineFontSize * 1.25).toFixed(2) / 1);
         this.headlineHeight = ((this.headlineLineHeight * this.options.headline_size).toFixed(2) / 1);
@@ -324,13 +333,14 @@ RevSlider({
         }
         this.headlineMarginTop = ((this.headlineLineHeight * .4).toFixed(2) / 1);
 
-        this.innerMargin = ((this.headlineMarginTop * .2).toFixed(2) / 1);
+        this.innerMargin = Math.max(0, ((width * this.paddingMultiplier).toFixed(2) / 1));
 
-        this.providerFontSize = Math.max(11, ((this.headlineLineHeight / 2).toFixed(2) / 1));
-        this.providerLineHeight = ((this.providerFontSize * 1.25).toFixed(2) / 1);
-        this.providerMargin = ((this.providerLineHeight * .2).toFixed(2) / 1);
+        this.providerFontSize = ((this.headlineLineHeight / 2).toFixed(2)) / 1;
+        this.providerFontSize = this.providerFontSize < 11 ? 11 : this.providerFontSize;
 
-        this.preloaderHeight = (this.grid.columnWidth - (this.padding * 2) - (this.options.ad_border ? 2 : 0)) * (imageHeight / imageWidth);
+        this.providerLineHeight = Math.round(((this.providerFontSize * 1.8).toFixed(2) / 1));
+
+        this.preloaderHeight = Math.round((this.grid.columnWidth - (this.padding * 2) - ( this.options.ad_border ? 2 : 0 )) * (this.imageHeight / this.imageWidth));
     };
 
     RevSlider.prototype.initButtons = function() {
