@@ -125,7 +125,7 @@ RevSlider({
 
         var that = this;
 
-        this.moblie = (revDetect.mobile()) ? true : false;
+        this.mobile = (revDetect.mobile()) ? true : false;
 
         revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-slider');
 
