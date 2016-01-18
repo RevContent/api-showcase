@@ -726,7 +726,7 @@ RevSlider({
         var ads = this.gridElement.querySelectorAll('.rev-ad');
         var contentIndex = 0;
         var rowCount = 0;
-        var contentIncrement = (this.options.vertical) ? 1 : this.options.rows[this.grid.getBreakPoint()];
+        var contentIncrement = (this.options.vertical) ? 1 : ((typeof this.options.rows == 'object') ? this.options.rows[this.grid.getBreakPoint()] : this.options.rows);
         for (var i = 0; i < this.limit; i++) {
             var ad = ads[i],
                 data = itemsToDisplay[contentIndex];
