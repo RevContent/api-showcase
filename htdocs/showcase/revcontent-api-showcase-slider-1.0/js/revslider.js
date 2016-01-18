@@ -280,6 +280,8 @@ RevSlider({
         }
 
         this.gridElement.style.transform = nextGridTransform;
+        this.gridElement.style.MsTransform = nextGridTransform;
+        this.gridElement.style.WebkitTransform = nextGridTransform;
 
         for (var i = 0; i < this.limit; i++) {
             this.gridElement.appendChild(this.createNewCell());
@@ -293,7 +295,10 @@ RevSlider({
         this.grid.layout();
 
         this.gridContainerElement.style.transitionDuration = animationDuration + 's';
+        this.gridContainerElement.style.WebkitTransitionDuration = animationDuration + 's';
         this.gridContainerElement.style.transform = gridContainerTransform;
+        this.gridContainerElement.style.MsTransform = gridContainerTransform;
+        this.gridContainerElement.style.WebkitTransform = gridContainerTransform;
 
         setTimeout(function() {
             that.gridElement.style.position = 'relative';
@@ -303,10 +308,16 @@ RevSlider({
 
     RevSlider.prototype.updateGrids = function(oldGrid) {
         this.gridElement.style.transform = 'none';
+        this.gridElement.style.MsTransform = 'none';
+        this.gridElement.style.WebkitTransform = 'none';
         this.gridElement.className = '';
 
         this.gridContainerElement.style.transitionDuration = '0s';
+        this.gridContainerElement.style.WebkitTransitionDuration = '0s';
+
         this.gridContainerElement.style.transform = 'none';
+        this.gridContainerElement.style.MsTransform = 'none';
+        this.gridContainerElement.style.WebkitTransform = 'none';
 
         oldGrid.remove();
         oldGrid.destroy();
