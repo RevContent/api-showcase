@@ -361,8 +361,7 @@ RevSlider({
         backBtnHtml.id = "back-btn-container";
         backBtnHtml.setAttribute('class', 'rev-btn-container');
         backBtnHtml.setAttribute('style', 'left: 0px;');
-        //var backArrow = (this.options.vertical) ? '&circ;' : '&lsaquo;';
-        backBtnHtml.innerHTML = '<label id="btn-back" class="rev-chevron">&lsaquo;</label>'; // &lsaquo; &circ;
+        backBtnHtml.innerHTML = '<label id="btn-back" class="rev-chevron"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36"><path d="M24.88 12.88L18 19.76l-6.88-6.88L9 15l9 9 9-9z"/><path d="M0 0h36v36H0z" fill="none"/></svg></label>';
 
         this.forwardBtn = document.createElement('div');
         this.forwardBtn.id = "forward-wrapper";
@@ -372,8 +371,7 @@ RevSlider({
         forwardBtnHtml.id = "forward-btn-container";
         forwardBtnHtml.setAttribute('class', 'rev-btn-container');
         forwardBtnHtml.setAttribute('style', 'right: 0px;');
-        //var forwardArrow = (this.options.vertical) ? '&caron;' : '&rsaquo;';
-        forwardBtnHtml.innerHTML = '<label id="btn-forward" class="rev-chevron">&rsaquo;</label>'; // &rsaquo; &caron;
+        forwardBtnHtml.innerHTML = '<label id="btn-forward" class="rev-chevron"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36"><path d="M18 12l-9 9 2.12 2.12L18 16.24l6.88 6.88L27 21z"/></svg></label>';
 
         var gridContainerElement = this.containerElement.querySelector('#rev-slider-grid-container');
 
