@@ -22,6 +22,14 @@
             "cdn_url": "http://labs-cdn.revcontent.com/build/revslider.min.js"
         },
         {
+            "name": "exit",
+            "templates": [],
+            "script": "./build/revexit.min.js",
+            "cdn": true,
+            "cdn_url": "http://trends-stg.revcontent.com/build/js/revexit.min.js?w=6181&p=945&k=3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b&d=apiexamples.powr.com&x=both&t=true",
+            "script_id": "rev2exit"
+        },
+        {
             "name": "toaster",
             "templates": ["./tests/templates/sickchirpse.com.html"],
             "script": "./build/revtoaster.min.js",
