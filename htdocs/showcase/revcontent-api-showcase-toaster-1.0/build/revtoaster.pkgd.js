@@ -1999,7 +1999,8 @@ utils.setCookie = function(cname, cvalue, exdays) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
     var expires = "expires="+d.toUTCString();
-    document.cookie = cname + "=" + cvalue + "; " + expires;
+    var cpath = "; path=/; domain=" + top.location.host;
+    document.cookie = cname + "=" + cvalue + "; " + expires + cpath;
 };
 
 utils.getCookie = function(cname) {
