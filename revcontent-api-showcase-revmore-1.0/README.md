@@ -1,4 +1,4 @@
-# Mobile Toaster
+# Mobile RevMore
 
 Studies show that Facebook-referred mobile users never reach the bottom of the article. By truncating the page, RevMore increase the visibility of content recommendations from standard Revcontent widgets. The new page layout also improves the user experience for mobile users by allowing people to engage with as much of the article as they wish.
 
