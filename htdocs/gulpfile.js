@@ -45,6 +45,7 @@ gulp.task('tests', function() {
         data[name] = {
           use_cdn: demos.tests[i].cdn,
           url: demos.tests[i].cdn_url,
+          script_id: demos.tests[i].script_id,
         };
 
         for (var j = 1; j <= folders.length; j++) {
@@ -66,7 +67,8 @@ gulp.task('tests', function() {
                     var widget = parts[parts.length - 1].replace('rev', '').replace('.min.js', '');//holy hack again
 
                     var path = data[widget].use_cdn ? data[widget].url : filePath;
-                    return '<script src="' + path + '"></script>';
+                    var id = data[widget].script_id ? ' id="'+ data[widget].script_id +'"' : '';
+                    return '<script'+ id +' src="' + path + '"></script>';
                   }
                 }
                 ))
