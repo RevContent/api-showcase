@@ -129,62 +129,65 @@
             var exit_expired = $('body').attr('data-revexit') == 'expired' ? true : false;
             if (false == exit_expired && revExitMobile == false && exitMode != "mobileonly" && (exitMode == "desktop" || exitMode == "desktop+mobile")) {
                 //console.log("event1");
-                revcontentAddEvent(document, "mouseout", function(e) {
-                    e = e ? e : window.event;
-                    var revcontentfrom = e.relatedTarget || e.toElement;
-                    var mouse_x = e.clientX;
-                    var mouse_y = e.clientY;
-                    var viewport_dimensions = {width: $(window).width(), height: $(window).height()};
+                window.rxMouseOutEvent = function(e){
 
-                    var fire_rx = false;
+                        e = e ? e : window.event;
+                        var revcontentfrom = e.relatedTarget || e.toElement;
+                        var mouse_x = e.clientX;
+                        var mouse_y = e.clientY;
+                        var viewport_dimensions = {width: $(window).width(), height: $(window).height()};
 
-                    // Exit on ALL regions
-                    if(exit_regions.indexOf("all") !== -1) {
-                        if (mouse_x <= 0 || (mouse_x >= viewport_dimensions.width) || mouse_y <= 0 || mouse_y >= viewport_dimensions.height) {
-                            console.log("Exiting from ALL zones");
-                            fire_rx = true;
+                        var fire_rx = false;
+
+                        // Exit on ALL regions
+                        if(exit_regions.indexOf("all") !== -1) {
+                            if (mouse_x <= 0 || (mouse_x >= viewport_dimensions.width) || mouse_y <= 0 || mouse_y >= viewport_dimensions.height) {
+                                console.log("Exiting from ALL zones");
+                                fire_rx = true;
+                            }
                         }
-                    }
 
-                    // Exit on TOP
-                    if(exit_regions.indexOf("all") === -1 && exit_regions.indexOf("top") !== -1) {
-                        if (mouse_y <= 0 && mouse_y < viewport_dimensions.height) {
-                            console.log("Exiting from TOP zone");
-                            fire_rx = true;
+                        // Exit on TOP
+                        if(exit_regions.indexOf("all") === -1 && exit_regions.indexOf("top") !== -1) {
+                            if (mouse_y <= 0 && mouse_y < viewport_dimensions.height) {
+                                console.log("Exiting from TOP zone");
+                                fire_rx = true;
+                            }
                         }
-                    }
 
-                    // Exit on LEFT
-                    if(exit_regions.indexOf("all") === -1 && exit_regions.indexOf("left") !== -1) {
-                        if (mouse_x <= 0 && mouse_x < viewport_dimensions.width) {
-                            console.log("Exiting from LEFT zone");
-                            fire_rx = true;
+                        // Exit on LEFT
+                        if(exit_regions.indexOf("all") === -1 && exit_regions.indexOf("left") !== -1) {
+                            if (mouse_x <= 0 && mouse_x < viewport_dimensions.width) {
+                                console.log("Exiting from LEFT zone");
+                                fire_rx = true;
+                            }
                         }
-                    }
 
-                    // Exit on BOTTOM
-                    if(exit_regions.indexOf("all") === -1 && exit_regions.indexOf("bottom") !== -1) {
-                        if (mouse_y > 0 && mouse_y >= viewport_dimensions.height) {
-                            console.log("Exiting from BOTTOM zone");
-                            fire_rx = true;
+                        // Exit on BOTTOM
+                        if(exit_regions.indexOf("all") === -1 && exit_regions.indexOf("bottom") !== -1) {
+                            if (mouse_y > 0 && mouse_y >= viewport_dimensions.height) {
+                                console.log("Exiting from BOTTOM zone");
+                                fire_rx = true;
+                            }
                         }
-                    }
 
-                    // Exit on RIGHT
-                    if(exit_regions.indexOf("all") === -1 && exit_regions.indexOf("right") !== -1) {
-                        if (mouse_x > 0 && mouse_x >= viewport_dimensions.width) {
-                            console.log("Exiting from RIGHT zone");
-                            fire_rx = true;
+                        // Exit on RIGHT
+                        if(exit_regions.indexOf("all") === -1 && exit_regions.indexOf("right") !== -1) {
+                            if (mouse_x > 0 && mouse_x >= viewport_dimensions.width) {
+                                console.log("Exiting from RIGHT zone");
+                                fire_rx = true;
+                            }
                         }
-                    }
 
-                    if(true === fire_rx){
-                        if ($('body').attr('data-revexit') === undefined || revcontentexitvars.t == "true") {
-                            revcontentExecute(revcontentexitvars, revExitMobile, revExitIPhone, revExitIPad, enableSubscriptions);
+                        if(true === fire_rx){
+                            if ($('body').attr('data-revexit') === undefined || revcontentexitvars.t == "true") {
+                                revcontentExecute(revcontentexitvars, revExitMobile, revExitIPhone, revExitIPad, enableSubscriptions);
+                            }
                         }
-                    }
 
-                });
+                }
+                revcontentDelEvent(document, "mouseout", rxMouseOutEvent);
+                revcontentAddEvent(document, "mouseout", rxMouseOutEvent);
             } else if (false === exit_expired && revExitMobile == true && exitMode != "desktop" && (exitMode == "desktop+mobile" || exitMode == "mobileonly" || exitMode == "mobile")) {
                 //console.log("event2");
                 var idleTimer = null;
@@ -247,6 +250,17 @@
         }
         else if (obj.attachEvent) {
             obj.attachEvent("on" + evt, fn);
+        }
+
+    }
+
+    function revcontentDelEvent(obj, evt, fn) {
+
+        if (obj.removeEventListener) {
+            obj.removeEventListener(evt, fn, false);
+        }
+        else if (obj.detachEvent) {
+            obj.detachEvent("on" + evt, fn);
         }
 
     }

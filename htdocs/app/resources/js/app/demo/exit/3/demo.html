@@ -1,0 +1,51 @@
+<script type="text/javascript">
+    (function(window, document, undefined){
+
+
+        var Demo2 = {
+            init: function(){
+
+                var rxScriptTag = document.getElementById('rev2exit');
+                var rxParent = rxScriptTag.parentNode;
+                var rxSrc = rxScriptTag.getAttribute('src');
+                var rxHost = top.location.origin + '/build/revexit.min.js';
+                var rxParams = 'w=6181&p=945&k=3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b&d=apiexamples.powr.com&x=both&t=true';
+                rxParams += '&i=rndm&po=all';
+
+                rxParent.removeChild(rxScriptTag);
+
+                var newScriptTag = document.createElement('script');
+                newScriptTag.id = 'rev2exit';
+                newScriptTag.src = rxHost + '?' + rxParams;
+
+                rxParent.appendChild(newScriptTag);
+
+
+
+            }
+        };
+
+        function clearEvent(obj, evt, fn) {
+
+            if (obj.removeEventListener) {
+                obj.removeEventListener(evt, fn, false);
+            }
+            else if (obj.detachEvent) {
+                obj.detachEvent("on" + evt, fn);
+            }
+
+        }
+
+        document.onreadystatechange = function () {
+            if (document.readyState == "complete") {
+
+
+                    Demo2.init();
+
+
+            }
+        }
+
+    }(window, document));
+
+</script>
