@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <!-- inject:js -->
+    <!-- endinject -->
+
+    <!-- inject:html -->
+    <p class="md-body-1">RevExit</p>
+
+<h3 class="md-subhead">Create RevExit with Provider Labels ON for "ALL" Ads</h3>
+<p>NOTE: This parameter depends on the <strong>I</strong> Parameter for Internal Ad Setting. For the purposes of this demo, <strong>i</strong> has been set to "<strong>rndm</strong>" for random placement of internal ad units.</p>
+<p>NOTE: To trigger RevExit on desktop, simply leave mouseout of the page viewport, on Mobile/Tablet you must scroll first then wait approx 6 seconds.</p>
+<ul>
+    <li><strong>po</strong> Parameter = "all"</li>
+</ul>
+
+<p> Available options for this setting include: </p>
+<ul>
+    <li>all</li>
+    <li>sponsored</li>
+    <li>internal (Default)</li>
+    <li>off</li>
+</ul>
+
+<code hljs language="javascript">
+    <script id="rev2exit" src="http://labs-cdn.revcontent.com/build/revexit.min.js?w=6181&p=945&k=3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b&d=apiexamples.powr.com&x=both&t=true&i=rndm&po=all"></script>
+</code>
+    <script type="text/javascript">
+    (function(window, document, undefined){
+
+
+        var Demo2 = {
+            init: function(){
+
+                var rxScriptTag = document.getElementById('rev2exit');
+                var rxParent = rxScriptTag.parentNode;
+                var rxSrc = rxScriptTag.getAttribute('src');
+                var rxHost = top.location.origin + '/build/revexit.min.js';
+                var rxParams = 'w=6181&p=945&k=3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b&d=apiexamples.powr.com&x=both&t=true';
+                rxParams += '&i=rndm&po=all';
+
+                rxParent.removeChild(rxScriptTag);
+
+                var newScriptTag = document.createElement('script');
+                newScriptTag.id = 'rev2exit';
+                newScriptTag.src = rxHost + '?' + rxParams;
+
+                rxParent.appendChild(newScriptTag);
+
+
+
+            }
+        };
+
+        function clearEvent(obj, evt, fn) {
+
+            if (obj.removeEventListener) {
+                obj.removeEventListener(evt, fn, false);
+            }
+            else if (obj.detachEvent) {
+                obj.detachEvent("on" + evt, fn);
+            }
+
+        }
+
+        document.onreadystatechange = function () {
+            if (document.readyState == "complete") {
+
+
+                    Demo2.init();
+
+
+            }
+        }
+
+    }(window, document));
+
+</script>
+    <!-- endinject -->
+</body>
+</html>
