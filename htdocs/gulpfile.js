@@ -41,10 +41,12 @@ gulp.task('tests', function() {
         var name = demos.tests[i].name;
         var folders = getFolders('./app/resources/js/app/demo/' + name);
         var script = demos.tests[i].script;
+        var auto_inject = demos.tests[i].auto_inject ? true : false;
 
         data[name] = {
           use_cdn: demos.tests[i].cdn,
           url: demos.tests[i].cdn_url,
+          script_id: demos.tests[i].script_id,
         };
 
         for (var j = 1; j <= folders.length; j++) {
@@ -66,7 +68,8 @@ gulp.task('tests', function() {
                     var widget = parts[parts.length - 1].replace('rev', '').replace('.min.js', '');//holy hack again
 
                     var path = data[widget].use_cdn ? data[widget].url : filePath;
-                    return '<script src="' + path + '"></script>';
+                    var id = data[widget].script_id ? ' id="'+ data[widget].script_id +'"' : '';
+                    return auto_inject ? '<script'+ id +' src="' + path + '"></script>' : '';
                   }
                 }
                 ))
