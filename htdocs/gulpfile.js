@@ -41,6 +41,7 @@ gulp.task('tests', function() {
         var name = demos.tests[i].name;
         var folders = getFolders('./app/resources/js/app/demo/' + name);
         var script = demos.tests[i].script;
+        var auto_inject = demos.tests[i].auto_inject ? true : false;
 
         data[name] = {
           use_cdn: demos.tests[i].cdn,
@@ -68,7 +69,7 @@ gulp.task('tests', function() {
 
                     var path = data[widget].use_cdn ? data[widget].url : filePath;
                     var id = data[widget].script_id ? ' id="'+ data[widget].script_id +'"' : '';
-                    return '<script'+ id +' src="' + path + '"></script>';
+                    return auto_inject ? '<script'+ id +' src="' + path + '"></script>' : '';
                   }
                 }
                 ))

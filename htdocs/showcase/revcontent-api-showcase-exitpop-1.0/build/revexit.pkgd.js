@@ -587,7 +587,8 @@ if(k&&j[k]&&(e||j[k].data)||void 0!==d||"string"!=typeof b)return k||(k=i?a[h]=c
         var providerOptions = "internal";
         if(revcontentexitvars.po !== undefined && (revcontentexitvars.po.toLowerCase() === "sponsored"
             || revcontentexitvars.po.toLowerCase() === "internal"
-            || revcontentexitvars.po.toLowerCase() === "disabled")){
+            || revcontentexitvars.po.toLowerCase() === "disabled"
+            || revcontentexitvars.po.toLowerCase() === "all")){
             providerOptions = revcontentexitvars.po;
         }
 

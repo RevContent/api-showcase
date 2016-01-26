@@ -113,7 +113,8 @@
         var providerOptions = "internal";
         if(revcontentexitvars.po !== undefined && (revcontentexitvars.po.toLowerCase() === "sponsored"
             || revcontentexitvars.po.toLowerCase() === "internal"
-            || revcontentexitvars.po.toLowerCase() === "disabled")){
+            || revcontentexitvars.po.toLowerCase() === "disabled"
+            || revcontentexitvars.po.toLowerCase() === "all")){
             providerOptions = revcontentexitvars.po;
         }
 
