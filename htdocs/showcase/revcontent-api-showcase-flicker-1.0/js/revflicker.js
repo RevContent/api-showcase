@@ -46,9 +46,9 @@ RevFlicker({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevFlicker = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDialog);
+    window.RevFlicker = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDialog, window.revDisclose);
 
-}( window, function factory(window, revUtils, revDetect, revApi, revDialog) {
+}( window, function factory(window, revUtils, revDetect, revApi, revDialog, revDisclose) {
 'use strict';
 
     var RevFlicker = function(opts) {
@@ -81,7 +81,8 @@ RevFlicker({
             headline_size: 2,
             max_headline: false,
             text_overlay: false,
-            ad_border: true
+            ad_border: true,
+            disclosure_text: revDisclose.defaultDisclosureText
         };
 
         // merge options
@@ -220,7 +221,7 @@ RevFlicker({
         }
         this.sponsored = document.createElement('div');
         revUtils.addClass(this.sponsored, 'rev-sponsored');
-        this.sponsored.innerHTML = '<a href="javascript:;" onclick="revDialog.showDialog();">Sponsored by Revcontent</a>';
+        this.sponsored.innerHTML = revDisclose.getDisclosure(this.options.disclosure_text, revDialog.showDialog, revDialog);
         if (this.options.rev_position == 'top_right') {
             revUtils.addClass(this.sponsored, 'top-right')
             revUtils.prepend(this.containerElement, this.sponsored);
