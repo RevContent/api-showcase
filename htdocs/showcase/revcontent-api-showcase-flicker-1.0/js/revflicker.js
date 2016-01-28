@@ -39,7 +39,8 @@ RevFlicker({
         'phone', 'tablet', 'desktop'
     ],
     url: 'https://trends.revcontent.com/api/v1/',
-    disclosure_text: revDisclose.defaultDisclosureText
+    disclosure_text: revDisclose.defaultDisclosureText,
+    hide_provider: false
 });
 */
 
@@ -401,7 +402,7 @@ RevFlicker({
                         '<a href="" rel="nofollow" target="_blank">' +
                             '<div class="rev-image" style="height:'+ that.preloaderHeight +'px"><img src=""/></div>' +
                             '<div class="rev-headline" style="max-height:'+ that.headlineHeight +'px; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>' +
-                            ( that.options.hide_provider === false ? revDisclose.getProvider(".rev-provider", "margin: 0 '  + that.innerMargin + 'px 0;font-size:'+ that.providerFontSize +'px;line-height:'+ that.providerLineHeight +'px;height:'+ that.providerLineHeight +'px;") : '') +
+                            ( that.options.hide_provider === false ? revDisclose.getProvider(".rev-provider", 'margin: 0 '  + that.innerMargin + 'px 0;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;height:' + that.providerLineHeight + 'px;') : '') +
                         '</a>' +
                     '</div>';
             var cell = document.createElement('div');
