@@ -26,9 +26,9 @@ RevToaster({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevToaster = factory(window, window.revUtils, window.revDetect, window.revApi);
+    window.RevToaster = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDisclose);
 
-}( window, function factory(window, revUtils, revDetect, revApi) {
+}( window, function factory(window, revUtils, revDetect, revApi, revDisclose) {
 'use strict';
 
     // ----- vars ----- //
@@ -45,7 +45,8 @@ RevToaster({
         rev_position: 'bottom_right',
         devices: [
             'phone', 'tablet', 'desktop'
-        ]
+        ],
+        disclosure_text: revDisclose.defaultDisclosureText
     };
     // var options;
     var lastScrollTop = 0;
@@ -169,7 +170,7 @@ RevToaster({
             }
             this.sponsored = document.createElement('div');
             this.sponsored.className = 'rev-sponsored';
-            this.sponsored.innerHTML = '<a href="javascript:;" onclick="revDialog.showDialog()">Sponsored by Revcontent</a>';
+            this.sponsored.innerHTML = revDisclose.getDisclosure(this.options.disclosure_text, revDialog.showDialog, revDialog);
 
             if (this.options.rev_position == 'top_right') {
                 revUtils.addClass(this.sponsored, 'top-right')
