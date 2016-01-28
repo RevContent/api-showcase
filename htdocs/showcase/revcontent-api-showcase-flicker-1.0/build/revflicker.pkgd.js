@@ -7316,7 +7316,7 @@ RevFlicker({
         var cellHeight = this.preloaderHeight;
         if (!this.options.text_overlay) {
             cellHeight += this.headlineHeight +
-                this.headlineMarginTop + this.providerLineHeight ;
+                this.headlineMarginTop + (this.options.hide_provider ? 0 : this.providerLineHeight) ;
             cellHeight += (this.options.ad_border) ? 2 : 0;
         }
         return cellHeight;
