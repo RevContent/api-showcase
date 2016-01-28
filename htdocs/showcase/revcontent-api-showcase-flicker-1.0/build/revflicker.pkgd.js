@@ -6810,7 +6810,7 @@ return utils;
         }
     };
 
-    RevDisclose.prototype.getTemplate = function () {
+    RevDisclose.prototype.getSponsorTemplate = function () {
         console.log("RevDisclose: Building Disclosure HTML...");
         var self = this;
         self.disclosureHtml = '<a href="javascript:;" onclick="revDisclose.onClickHandler(revDisclose.onClickHandlerObject ? revDisclose.onClickHandlerObject : null);">' + self.disclosureText + '</a>';
@@ -6823,7 +6823,18 @@ return utils;
         var self = this;
         self.setDisclosureText(disclosureText);
         self.setOnClickHandler(onClickHandler, HandlerObject);
-        return self.getTemplate();
+        return self.getSponsorTemplate();
+    };
+
+    RevDisclose.prototype.getProviderTemplate = function(className, styles){
+        var self = this;
+        var providerHtml = '<div class="' + className + '" style="' + styles + '"></div>';
+        return providerHtml;
+    };
+
+    RevDisclose.prototype.getProvider = function(className, styles) {
+        var self = this;
+        return self.getProviderTemplate(className, styles);
     };
 
     window.revDisclose = new RevDisclose();
@@ -6964,7 +6975,8 @@ RevFlicker({
     devices: [
         'phone', 'tablet', 'desktop'
     ],
-    url: 'https://trends.revcontent.com/api/v1/'
+    url: 'https://trends.revcontent.com/api/v1/',
+    disclosure_text: revDisclose.defaultDisclosureText
 });
 */
 
@@ -7008,7 +7020,8 @@ RevFlicker({
             max_headline: false,
             text_overlay: false,
             ad_border: true,
-            disclosure_text: revDisclose.defaultDisclosureText
+            disclosure_text: revDisclose.defaultDisclosureText,
+            hide_provider: false
         };
 
         // merge options
@@ -7095,10 +7108,12 @@ RevFlicker({
 
             ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
             ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.margin = '0 '  + this.innerMargin + 'px 0';
-            ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
-            ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
+            if(this.options.hide_provider === false) {
+                ad.querySelectorAll('.rev-provider')[0].style.margin = '0 ' + this.innerMargin + 'px 0';
+                ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize + 'px';
+                ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
+                ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight + 'px';
+            }
         }
 
         this.textOverlay();
@@ -7323,7 +7338,7 @@ RevFlicker({
                         '<a href="" rel="nofollow" target="_blank">' +
                             '<div class="rev-image" style="height:'+ that.preloaderHeight +'px"><img src=""/></div>' +
                             '<div class="rev-headline" style="max-height:'+ that.headlineHeight +'px; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>' +
-                            '<div style="margin: 0 '  + that.innerMargin + 'px 0;font-size:'+ that.providerFontSize +'px;line-height:'+ that.providerLineHeight +'px;height:'+ that.providerLineHeight +'px;" class="rev-provider"></div>' +
+                            ( that.options.hide_provider === false ? revDisclose.getProvider(".rev-provider", "margin: 0 '  + that.innerMargin + 'px 0;font-size:'+ that.providerFontSize +'px;line-height:'+ that.providerLineHeight +'px;height:'+ that.providerLineHeight +'px;") : '') +
                         '</a>' +
                     '</div>';
             var cell = document.createElement('div');
@@ -7439,7 +7454,9 @@ RevFlicker({
                 ad.querySelectorAll('a')[0].title = data.headline;
                 ad.querySelectorAll('img')[0].setAttribute('src', data.image);
                 ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
-                ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
+                if(this.options.hide_provider === false){
+                    ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
+                }
             }
 
             imagesLoaded( that.flickity.element, function() {
