@@ -1403,7 +1403,7 @@ return utils;
 
     RevDisclose.prototype.getProviderTemplate = function(className, styles){
         var self = this;
-        var providerHtml = '<div class="' + className + '" style="' + styles + '"></div>';
+        var providerHtml = '<div class="' + (className ? className.toString() : '') + '" style="' + (styles ? styles.toString() : '') + '"></div>';
         return providerHtml;
     };
 

@@ -2346,7 +2346,7 @@ return utils;
 
     RevDisclose.prototype.getProviderTemplate = function(className, styles){
         var self = this;
-        var providerHtml = '<div class="' + className + '" style="' + styles + '"></div>';
+        var providerHtml = '<div class="' + (className ? className.toString() : '') + '" style="' + (styles ? styles.toString() : '') + '"></div>';
         return providerHtml;
     };
 
@@ -2474,6 +2474,8 @@ RevToaster({
     header: 'Trending Today',
     closed_hours: 24,
     sponsored: 2,
+    disclosure_text: revDisclose.defaultDisclosureText,
+    hide_provider: false
 });
 */
 
@@ -2501,7 +2503,8 @@ RevToaster({
         devices: [
             'phone', 'tablet', 'desktop'
         ],
-        disclosure_text: revDisclose.defaultDisclosureText
+        disclosure_text: revDisclose.defaultDisclosureText,
+        hide_provider: false
     };
     // var options;
     var lastScrollTop = 0;
@@ -2677,7 +2680,7 @@ RevToaster({
                             '<div class="rev-headline">' +
                                 '<h3></h3>' +
                             '</div>' +
-                            '<div class="rev-provider"></div>' +
+                            (revDisclose.getProvider('rev-provider')) +
                         '</a>' +
                     '</div>';
             var cell = document.createElement('div');
@@ -2705,7 +2708,10 @@ RevToaster({
                     ad.querySelectorAll('a')[0].setAttribute('href', data.url);
                     ad.querySelectorAll('img')[0].setAttribute('src', data.image);
                     ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
-                    ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
+                    if(that.options.hide_provider === false) {
+                        ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
+                    }
+
                 }
                 if (show) {
                     that.show();
