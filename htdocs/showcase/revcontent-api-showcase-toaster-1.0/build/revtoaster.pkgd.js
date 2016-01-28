@@ -2328,7 +2328,7 @@ return utils;
         }
     };
 
-    RevDisclose.prototype.getTemplate = function () {
+    RevDisclose.prototype.getSponsorTemplate = function () {
         console.log("RevDisclose: Building Disclosure HTML...");
         var self = this;
         self.disclosureHtml = '<a href="javascript:;" onclick="revDisclose.onClickHandler(revDisclose.onClickHandlerObject ? revDisclose.onClickHandlerObject : null);">' + self.disclosureText + '</a>';
@@ -2341,7 +2341,18 @@ return utils;
         var self = this;
         self.setDisclosureText(disclosureText);
         self.setOnClickHandler(onClickHandler, HandlerObject);
-        return self.getTemplate();
+        return self.getSponsorTemplate();
+    };
+
+    RevDisclose.prototype.getProviderTemplate = function(className, styles){
+        var self = this;
+        var providerHtml = '<div class="' + className + '" style="' + styles + '"></div>';
+        return providerHtml;
+    };
+
+    RevDisclose.prototype.getProvider = function(className, styles) {
+        var self = this;
+        return self.getProviderTemplate(className, styles);
     };
 
     window.revDisclose = new RevDisclose();

@@ -7090,6 +7090,7 @@ RevFlicker({
     };
 
     RevFlicker.prototype.resize = function() {
+        var that = this;
         this.getContainerWidth(true);
 
         this.setUp();
@@ -7109,7 +7110,7 @@ RevFlicker({
 
             ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
             ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
-            if(this.options.hide_provider === false) {
+            if(that.options.hide_provider === false) {
                 ad.querySelectorAll('.rev-provider')[0].style.margin = '0 ' + this.innerMargin + 'px 0';
                 ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize + 'px';
                 ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
@@ -7339,7 +7340,7 @@ RevFlicker({
                         '<a href="" rel="nofollow" target="_blank">' +
                             '<div class="rev-image" style="height:'+ that.preloaderHeight +'px"><img src=""/></div>' +
                             '<div class="rev-headline" style="max-height:'+ that.headlineHeight +'px; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>' +
-                            ( that.options.hide_provider === false ? revDisclose.getProvider(".rev-provider", 'margin: 0 '  + that.innerMargin + 'px 0;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;height:' + that.providerLineHeight + 'px;') : '') +
+                            ( that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'margin: 0 '  + that.innerMargin + 'px 0;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;height:' + that.providerLineHeight + 'px;') : '') +
                         '</a>' +
                     '</div>';
             var cell = document.createElement('div');
@@ -7455,7 +7456,7 @@ RevFlicker({
                 ad.querySelectorAll('a')[0].title = data.headline;
                 ad.querySelectorAll('img')[0].setAttribute('src', data.image);
                 ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
-                if(this.options.hide_provider === false){
+                if(that.options.hide_provider === false){
                     ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
                 }
             }
