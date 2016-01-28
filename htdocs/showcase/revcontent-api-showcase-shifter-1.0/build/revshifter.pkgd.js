@@ -6905,7 +6905,7 @@ return utils;
 
     RevDisclose.prototype.getProviderTemplate = function(className, styles){
         var self = this;
-        var providerHtml = '<div class="' + className + '" style="' + styles + '"></div>';
+        var providerHtml = '<div class="' + (className ? className.toString() : '') + '" style="' + (styles ? styles.toString() : '') + '"></div>';
         return providerHtml;
     };
 
@@ -7059,7 +7059,9 @@ RevSlider({
         'phone', 'tablet', 'desktop'
     ],
     url: 'https://trends.revcontent.com/api/v1/',
-    ad_border: true
+    ad_border: true,
+    disclosure_text: revDisclose.defaultDisclosureText,
+    hide_provider: false
 });
 */
 
@@ -7111,7 +7113,8 @@ RevSlider({
             headline_size: 2,
             max_headline: false,
             text_overlay: false,
-            disclosure_text: revDisclose.defaultDisclosureText
+            disclosure_text: revDisclose.defaultDisclosureText,
+            hide_provider: false
         };
 
         // merge options
@@ -7293,6 +7296,7 @@ RevSlider({
     };
 
     RevSlider.prototype.resize = function() {
+        var that = this;
         var oldLimit = this.limit;
         this.grid.option(this.options);
         this.setUp();
@@ -7333,10 +7337,12 @@ RevSlider({
 
             ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
             ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.margin = this.providerMargin +'px '  + this.innerMargin + 'px ' + this.providerMargin +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
-            ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
+            if(that.options.hide_provider === false) {
+                ad.querySelectorAll('.rev-provider')[0].style.margin = this.providerMargin + 'px ' + this.innerMargin + 'px ' + this.providerMargin + 'px';
+                ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize + 'px';
+                ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
+                ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight + 'px';
+            }
         }
 
         this.textOverlay();
@@ -7394,6 +7400,7 @@ RevSlider({
     }
 
     RevSlider.prototype.appendCell = function() {
+        var that = this;
         var html = '<div class="rev-ad" style="'+ (this.options.ad_border ? 'border:1px solid #eee' : '') +'">' +
                     '<a href="" target="_blank">' +
                         '<div class="rev-image" style="height:'+ this.preloaderHeight +'px">' +
@@ -7402,7 +7409,7 @@ RevSlider({
                         '<div class="rev-headline" style="height:'+ this.headlineHeight +'px; margin:'+ this.headlineMarginTop +'px ' + this.innerMargin + 'px' + ' 0;">' +
                             '<h3 style="font-size:'+ this.headlineFontSize +'px; line-height:'+ this.headlineLineHeight +'px;"></h3>' +
                         '</div>' +
-                        '<div style="margin:' + this.providerMargin +'px '  + this.innerMargin + 'px ' + this.providerMargin +'px;font-size:'+ this.providerFontSize +'px;line-height:'+ this.providerLineHeight +'px;height:'+ this.providerLineHeight +'px;" class="rev-provider"></div>' +
+                        (that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'margin:' + that.providerMargin +'px '  + that.innerMargin + 'px ' + that.providerMargin + 'px;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;height:' + that.providerLineHeight + 'px;') : '') +
                     '</a>' +
                 '</div>';
         var cell = document.createElement('div');
@@ -7430,7 +7437,9 @@ RevSlider({
                 ad.querySelectorAll('a')[0].title = data.headline;
                 ad.querySelectorAll('img')[0].setAttribute('src', data.image);
                 ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
-                ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
+                if(that.options.hide_provider === false) {
+                    ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
+                }
             }
 
             imagesLoaded( that.gridElement, function() {
@@ -7507,6 +7516,8 @@ RevShifter({
     header: 'Trending Today',
     closed_hours: 24,
     sponsored: 2,
+    disclosure_text: revDisclose.defaultDisclosureText,
+    hide_provider: false
 });
 */
 
@@ -7545,7 +7556,8 @@ RevShifter({
             'phone', 'tablet', 'desktop'
         ],
         url: 'https://trends.revcontent.com/api/v1/',
-        disclosure_text: revDisclose.defaultDisclosureText
+        disclosure_text: revDisclose.defaultDisclosureText,
+        hide_provider: false
     };
 
     RevShifter = function(opts) {
@@ -7610,7 +7622,8 @@ RevShifter({
                 rev_position: 'top_right',
                 per_row: this.options.inner_widget_options.per_row,
                 rows: this.options.inner_widget_options.rows,
-                disclosure_text: this.options.disclosure_text
+                disclosure_text: this.options.disclosure_text,
+                hide_provider: this.options.hide_provider
             });
 
             this.attachButtonEvents();

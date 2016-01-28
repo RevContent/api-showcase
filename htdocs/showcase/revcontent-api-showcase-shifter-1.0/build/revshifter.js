@@ -20,6 +20,8 @@ RevShifter({
     header: 'Trending Today',
     closed_hours: 24,
     sponsored: 2,
+    disclosure_text: revDisclose.defaultDisclosureText,
+    hide_provider: false
 });
 */
 
@@ -58,7 +60,8 @@ RevShifter({
             'phone', 'tablet', 'desktop'
         ],
         url: 'https://trends.revcontent.com/api/v1/',
-        disclosure_text: revDisclose.defaultDisclosureText
+        disclosure_text: revDisclose.defaultDisclosureText,
+        hide_provider: false
     };
 
     RevShifter = function(opts) {
@@ -123,7 +126,8 @@ RevShifter({
                 rev_position: 'top_right',
                 per_row: this.options.inner_widget_options.per_row,
                 rows: this.options.inner_widget_options.rows,
-                disclosure_text: this.options.disclosure_text
+                disclosure_text: this.options.disclosure_text,
+                hide_provider: this.options.hide_provider
             });
 
             this.attachButtonEvents();
