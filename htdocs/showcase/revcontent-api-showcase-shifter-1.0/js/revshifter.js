@@ -27,9 +27,9 @@ RevShifter({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevShifter = factory(window, window.revUtils, window.revDetect);
+    window.RevShifter = factory(window, window.revUtils, window.revDetect, window.revDisclose);
 
-}( window, function factory(window, revUtils, revDetect) {
+}( window, function factory(window, revUtils, revDetect, revDisclose) {
 'use strict';
 
     var RevShifter;
@@ -57,7 +57,8 @@ RevShifter({
         devices: [
             'phone', 'tablet', 'desktop'
         ],
-        url: 'https://trends.revcontent.com/api/v1/'
+        url: 'https://trends.revcontent.com/api/v1/',
+        disclosure_text: revDisclose.defaultDisclosureText
     };
 
     RevShifter = function(opts) {
@@ -121,7 +122,8 @@ RevShifter({
                 domain : 'bustle.com',
                 rev_position: 'top_right',
                 per_row: this.options.inner_widget_options.per_row,
-                rows: this.options.inner_widget_options.rows
+                rows: this.options.inner_widget_options.rows,
+                disclosure_text: this.options.disclosure_text
             });
 
             this.attachButtonEvents();

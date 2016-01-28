@@ -5152,16 +5152,16 @@ return utils;
 
     var RevDialog = function() {
         var that = this;
-        this.id = 'rev-opt-out';
+        that.id = 'rev-opt-out';
         //this.url = url;
         //setTimeout(function() {that.render();}, 100);
-        this.resizeEnd;
+        that.resizeEnd;
 
-        this.addEventHandler(window, 'load', function() {
+        that.addEventHandler(window, 'load', function() {
             that.render();
         });
 
-        this.addEventHandler(window, 'resize', function() {
+        that.addEventHandler(window, 'resize', function() {
             clearTimeout(that.resizeEnd);
             that.resizeEnd = setTimeout(function() {
                 that.resize();
@@ -5177,13 +5177,14 @@ return utils;
     }
 
     RevDialog.prototype.resize = function() {
-        this.containerWidth = document.documentElement.clientWidth;
-        this.containerHeight = document.documentElement.clientHeight;
-        if (this.containerHeight < 455) {
-            this.setFullHeight();
-        } else if (this.containerHeight >= 455) {
-            this.setNormalHeight();
-            this.centerDialog();
+        var that = this;
+        that.containerWidth = document.documentElement.clientWidth;
+        that.containerHeight = document.documentElement.clientHeight;
+        if (that.containerHeight < 455) {
+            that.setFullHeight();
+        } else if (that.containerHeight >= 455) {
+            that.setNormalHeight();
+            that.centerDialog();
         }
     };
 
@@ -5251,9 +5252,10 @@ return utils;
 
 
 
-    RevDialog.prototype.showDialog = function() {
+    RevDialog.prototype.showDialog = function(injectedDialog) {
+        var that = injectedDialog || this;
         document.querySelector('.rd-box-wrap').style.display = 'block';
-        this.resize();
+        that.resize();
         return false;
     };
 
@@ -5314,6 +5316,86 @@ return utils;
     return rD;
 
 }));
+/**
+ * RevDisclose (Branding + Disclosure Options)
+ *
+ */
+
+(function (window, document, undefined) {
+    'use strict';
+    console.log("Entering RevDisclose Namespace...");
+    var RevDisclose = function () {
+        var self = this;
+        self.plainText = false;
+        self.disclosureText = null;
+        self.disclosureHtml = '';
+        self.defaultDisclosureText = 'Sponsored by Revcontent';
+        self.disclosureTextLimit = 50;
+        self.onClickHandler = false;
+        self.onClickHandlerObject = null;
+        self.defaultOnClick = function () {
+
+        };
+        self.hooks = [];
+        self.init();
+    };
+
+    RevDisclose.prototype.init = function () {
+        console.log("RevDisclose: Initializing...");
+        var self = this;
+        document.onreadystatechange = function () {
+            if (document.readyState == "complete") {
+                console.log("RevDisclose: Document is READY!...");
+
+            }
+        }
+    };
+
+    RevDisclose.prototype.truncateDisclosure = function () {
+        console.log("RevDisclose: Initializing...");
+        var self = this;
+        self.disclosureText = self.disclosureText.toString().substring(0, self.disclosureTextLimit).replace(/['"]+/g, '');
+    };
+
+    RevDisclose.prototype.setDisclosureText = function(disclosure){
+        console.log("RevDisclose: Setting Disclosure Text Label to: "  + disclosure.toString());
+        var self = this;
+        self.disclosureText = (disclosure.length > 2) ? disclosure.toString() : self.defaultDisclosureText;
+        self.truncateDisclosure();
+    };
+
+    RevDisclose.prototype.setOnClickHandler = function (handler, handlerObject) {
+        console.log("RevDisclose: Setting onClick Handler for Disclosure text...");
+        var self = this;
+        if (typeof handler === 'function') {
+            self.onClickHandler = handler;
+        }
+        if (typeof handlerObject === 'object') {
+            self.onClickHandlerObject = handlerObject;
+        }
+    };
+
+    RevDisclose.prototype.getTemplate = function () {
+        console.log("RevDisclose: Building Disclosure HTML...");
+        var self = this;
+        self.disclosureHtml = '<a href="javascript:;" onclick="revDisclose.onClickHandler(revDisclose.onClickHandlerObject ? revDisclose.onClickHandlerObject : null);">' + self.disclosureText + '</a>';
+        console.log("RevDisclose: " + self.disclosureHtml);
+        return self.plainText ? self.disclosureText : self.disclosureHtml;
+    };
+
+    RevDisclose.prototype.getDisclosure = function (disclosureText, onClickHandler, HandlerObject) {
+        console.log("RevDisclose: Attaching Disclosure Text and onClick Event Function...");
+        var self = this;
+        self.setDisclosureText(disclosureText);
+        self.setOnClickHandler(onClickHandler, HandlerObject);
+        return self.getTemplate();
+    };
+
+    window.revDisclose = new RevDisclose();
+
+    return window.revDisclose;
+
+}(window, document));
 /**
  * Revcontent detect
  */
@@ -5462,9 +5544,9 @@ RevSlider({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevSlider = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDialog);
+    window.RevSlider = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDialog, window.revDisclose);
 
-}( window, function factory(window, revUtils, revDetect, revApi, revDialog) {
+}( window, function factory(window, revUtils, revDetect, revApi, revDialog, revDisclose) {
 'use strict';
 
     var RevSlider = function(opts) {
@@ -5505,7 +5587,8 @@ RevSlider({
             ad_border: true,
             headline_size: 2,
             max_headline: false,
-            text_overlay: false
+            text_overlay: false,
+            disclosure_text: revDisclose.defaultDisclosureText
         };
 
         // merge options
@@ -5651,7 +5734,7 @@ RevSlider({
         }
         this.sponsored = document.createElement('div');
         revUtils.addClass(this.sponsored, 'rev-sponsored');
-        this.sponsored.innerHTML = '<a href="javascript:;" onclick="revDialog.showDialog();">Sponsored by Revcontent</a>';
+        this.sponsored.innerHTML = revDisclose.getDisclosure(this.options.disclosure_text, revDialog.showDialog, revDialog);
         if (this.options.rev_position == 'top_right') {
             revUtils.addClass(this.sponsored, 'top-right')
             revUtils.prepend(this.containerElement, this.sponsored);
