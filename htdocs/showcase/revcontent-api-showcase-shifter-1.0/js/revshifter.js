@@ -158,19 +158,19 @@ RevShifter({
         this.show = function() {
             this.visible = true;
             revUtils.addClass(document.body, 'rev-shifter-open');
-        }
+        };
 
         this.hide = function() {
             this.visible = false;
             revUtils.removeClass(document.body, 'rev-shifter-open');
-        }
+        };
 
         this.attachButtonEvents = function() {
             var that = this;
             this.closeElement.addEventListener('click', function() {
                 that.hide();
             });
-        }
+        };
 
         this.init();
     };
