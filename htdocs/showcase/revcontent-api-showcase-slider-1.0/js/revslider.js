@@ -329,6 +329,8 @@ RevSlider({
         this.gridContainerElement.style.MsTransform = 'none';
         this.gridContainerElement.style.WebkitTransform = 'none';
 
+        this.gridContainerElement.style.width = 'auto';
+
         oldGrid.remove();
         oldGrid.destroy();
         revUtils.remove(oldGrid.element);
@@ -496,7 +498,7 @@ RevSlider({
             revUtils.addClass(this.sponsored, this.options.rev_position.replace('_', '-'));
             revUtils.append(this.containerElement, this.sponsored);
         }
-    }
+    };
 
 
     RevSlider.prototype.update = function(newOpts, oldOpts) {
@@ -542,7 +544,7 @@ RevSlider({
         var cellHeight = this.preloaderHeight;
         if (!this.options.text_overlay) {
             cellHeight += this.headlineHeight +
-            this.headlineMarginTop + this.providerLineHeight
+            this.headlineMarginTop + this.providerLineHeight;
             cellHeight += (this.options.ad_border) ? 2 : 0;
         }
         if (this.options.text_right) {
@@ -628,7 +630,7 @@ RevSlider({
         var ads = this.element.querySelectorAll('.rev-content');
         if (ads.length > 0) {
             for (var i = 0; i < ads.length; i++) {
-                if (i > 0 && i % itemsPerRow == 0) {
+                if (i > 0 && (i % itemsPerRow) == 0) {
                     currentHeadlineHeight = this.getMaxHeadlineHeight(++currentRowNum, itemsPerRow);
                 }
                 var ad = ads[i];
@@ -690,7 +692,7 @@ RevSlider({
     };
 
     RevSlider.prototype.getData = function() {
-        var sponsoredCount = this.options.pages * this.limit
+        var sponsoredCount = this.options.pages * this.limit;
         var url = this.options.url + '?api_key='+ this.options.api_key +'&uitm=true&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&internal_count=0'+'&sponsored_count=' + sponsoredCount;
 
         var that = this;
