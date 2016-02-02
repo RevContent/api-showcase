@@ -246,42 +246,51 @@ RevSlider({
     // };
 
     RevSlider.prototype.createNextPageGrid = function() {
-        var that = this;
+        var containerWidth = this.gridContainerElement.parentElement.offsetWidth;
+        var containerHeight = this.gridContainerElement.parentElement.offsetHeight;
+
+        var animationDuration = 1.75; //this.getAnimationDuration(); TODO: make dynamic
+
+        if (this.page > this.previousPage) { // slide left or up
+            var insert = 'append';
+            if (this.options.vertical) { // up
+                var gridContainerTransform = 'translateY(-50%)';
+            } else { // left
+                var gridContainerTransform = 'translateX(-'+ (containerWidth) +'px)';
+            }
+        } else { // Slide right or down
+            var insert = 'prepend';
+            if (this.options.vertical) { // down
+                this.gridContainerElement.style.transform = 'translateY(-'+ containerHeight +'px)';
+                this.gridContainerElement.style.MsTransform = 'translateY(-'+ containerHeight +'px)';
+                this.gridContainerElement.style.WebkitTransform = 'translateY(-'+ containerHeight +'px)';
+                var gridContainerTransform = 'translateY(0px)';
+            } else { // right
+                this.gridContainerElement.style.transform = 'translateX(-'+ containerWidth +'px)';
+                this.gridContainerElement.style.MsTransform = 'translateX(-'+ containerWidth +'px)';
+                this.gridContainerElement.style.WebkitTransform = 'translateX(-'+ containerWidth +'px)';
+                var gridContainerTransform = 'translateX(0px)';
+            }
+        }
 
         var oldGrid = this.grid;
 
         this.gridElement = document.createElement('div');
         this.gridElement.id = 'rev-slider-grid';
 
-        revUtils.append(this.gridContainerElement, this.gridElement);
+        revUtils[insert](this.gridContainerElement, this.gridElement);
 
         this.grid = new AnyGrid(this.gridElement, this.gridOptions());
 
-        var animationDuration = 1.75; //this.getAnimationDuration(); TODO: make dynamic
+        if (!this.options.vertical) {
+            oldGrid.element.style.width = containerWidth + 'px';
+            oldGrid.element.style.float = 'left';
 
-        var nextGridTransform = 'none';
-        var gridContainerTransform = 'none';
+            this.grid.element.style.width = containerWidth + 'px';
+            this.grid.element.style.float = 'left';
 
-        if (this.page > this.previousPage) { // slide left or up
-            if (this.options.vertical) { // up
-                gridContainerTransform = 'translateY(-50%)';
-            } else { // left
-                nextGridTransform = 'translate(100%, -100%)';
-                gridContainerTransform = 'translateX(-100%)';
-            }
-        } else { // Slide right or down
-            if (this.options.vertical) { // down
-                nextGridTransform = 'translateY(-200%)';
-                gridContainerTransform = 'translateY(50%)';
-            } else { // right
-                nextGridTransform = 'translate(-100%, -100%)';
-                gridContainerTransform = 'translateX(100%)';
-            }
+            this.gridContainerElement.style.width = (containerWidth * 2) + 'px';
         }
-
-        this.gridElement.style.transform = nextGridTransform;
-        this.gridElement.style.MsTransform = nextGridTransform;
-        this.gridElement.style.WebkitTransform = nextGridTransform;
 
         for (var i = 0; i < this.limit; i++) {
             this.gridElement.appendChild(this.createNewCell());
@@ -300,6 +309,7 @@ RevSlider({
         this.gridContainerElement.style.MsTransform = gridContainerTransform;
         this.gridContainerElement.style.WebkitTransform = gridContainerTransform;
 
+        var that = this;
         setTimeout(function() {
             that.gridElement.style.position = 'relative';
             that.updateGrids(oldGrid);
