@@ -208,6 +208,12 @@
     border-radius: 5px;
     overflow: hidden;
     background: #fff;
+    z-index: 1;
+}
+
+#rev-slider .rev-ad img {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 
 #rev-slider .rev-content.blur{
