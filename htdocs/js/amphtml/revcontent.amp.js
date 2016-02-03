@@ -3,16 +3,16 @@
  * (For AMPHTML)
  */
 
-(function(window, document, undefind){
+(function(window, document, undefined){
     'use_strict';
 
     var RevAMP = function(){
       var self = this;
         self.data = window.data;
-        self.serve_protocol = self.data.ssl === 'true' ? 'https://' : 'http://';
-        self.serve_host = self.data.endpoint;
-        self.serve_script = '/serve.js.php';
-        self.serve_url = null;
+        self.serveProtocol = self.data.ssl === 'true' ? 'https://' : 'http://';
+        self.serveHost = self.data.endpoint;
+        self.serveScript = '/serve.js.php';
+        self.serveUrl = null;
         self.defaultWrapperId = "rcjsload_2ff711";
         self.rcjsload = null;
         self.rcel = null;
@@ -36,8 +36,8 @@
         self.rcel.id = 'rc_' + Math.floor(Math.random() * 1000);
         self.rcel.type = 'text/javascript';
         self.serveParameters = "?uitm=1&w=" + self.data.id + "&t=" + self.rcel.id + "&c=" + (new Date()).getTime() + "&width=" + (window.outerWidth || document.documentElement.clientWidth);
-        self.serve_url = self.serve_protocol + self.serve_host + self.serve_script + self.serveParameters;
-        self.rcel.src = serve_url;
+        self.serveUrl = self.serveProtocol + self.serveHost + self.serveScript + self.serveParameters;
+        self.rcel.src = self.serveUrl;
         self.rcel.async = true;
         var rcds = document.getElementById(self.rcjsload.id);
         rcds.appendChild(self.rcel);
