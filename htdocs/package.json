@@ -19,6 +19,8 @@
     "gulp-header": "~1",
     "gulp-ng-annotate": "~0.5.2",
     "gulp-util": "~2.2.20",
-    "gulp-notify": "~2.2.0"
-  }
+    "gulp-notify": "~2.2.0",
+    "gulp-preprocess": "^1.2.0",
+    "gulp-strip-debug": "^1.0.2"
+}
 }
