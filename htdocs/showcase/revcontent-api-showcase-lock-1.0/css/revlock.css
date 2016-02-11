@@ -46,4 +46,6 @@ body {
     background: linear-gradient(to bottom, rgba(255,255,255,.35) 0%,rgba(255,255,255,1) 100%);
 }
 
-
+#rev-lock #rev-slider #rev-slider-container .rev-btn-container {
+    border-radius: 0;
+}
