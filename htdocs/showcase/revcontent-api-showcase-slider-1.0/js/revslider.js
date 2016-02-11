@@ -181,9 +181,7 @@ RevSlider({
 
         this.appendElements();
 
-        for (var i = 0; i < this.limit; i++) {
-            this.gridElement.appendChild(this.createNewCell());
-        }
+        this.createCells(this.grid.cols);
 
         this.grid.reloadItems();
         this.grid.layout();
@@ -203,7 +201,15 @@ RevSlider({
         this.impressionTracker = [];
     };
 
-    RevSlider.prototype.getPadding = function(){
+    RevSlider.prototype.createCells = function(cols) {
+        var rows = this.limit / cols;
+        for (var i = 0; i < this.limit; i++) {
+            var row = Math.floor( i / cols ) + 1;
+            this.gridElement.appendChild(this.createNewCell((row == 1), (row == rows)));
+        }
+    };
+
+    RevSlider.prototype.getPadding = function() {
         this.padding = ((this.grid.columnWidth * this.marginMultiplier).toFixed(2) / 1);
         return this.padding;
     };
@@ -305,9 +311,7 @@ RevSlider({
             this.gridContainerElement.style.width = (containerWidth * 2) + 'px';
         }
 
-        for (var i = 0; i < this.limit; i++) {
-            this.gridElement.appendChild(this.createNewCell());
-        }
+        this.createCells(oldGrid.cols);
 
         this.updateDisplayedItems();
         this.checkEllipsis();
@@ -682,7 +686,7 @@ RevSlider({
         return this.grid.getPerRow() * (this.options.rows[this.grid.getBreakPoint()] ? this.options.rows[this.grid.getBreakPoint()] : this.options.rows);
     };
 
-    RevSlider.prototype.createNewCell = function() {
+    RevSlider.prototype.createNewCell = function(first, last) {
         var html = '<div class="rev-ad" style="height: '+ this.getCellHeight() + 'px;' + (this.options.ad_border ? 'border:1px solid #eee' : '') +'" onmousedown="return false">' +
             '<a href="" target="_blank">' +
             '<div class="rev-image" style="height:'+ this.preloaderHeight +'px">' +
@@ -698,7 +702,14 @@ RevSlider({
             '</div>';
         var cell = document.createElement('div');
 
-        cell.style.padding = this.padding + 'px';
+        var padding = this.padding + 'px';
+        if (first) {
+            padding =  (this.options.buttons.position == 'outside' ? '0 ' : '0 ') + padding + ' ' + padding + ' ' + padding;
+        } else if (last) {
+            padding = padding + ' ' + padding + ' ' +(this.options.buttons.position == 'outside' ? '0 ' : '0 ') + padding;
+        }
+
+        cell.style.padding = padding;
 
         revUtils.addClass(cell, 'rev-content');
 
