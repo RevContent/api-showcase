@@ -265,34 +265,40 @@ RevSlider({
     // };
 
     RevSlider.prototype.createNextPageGrid = function() {
-        var containerWidth = this.gridContainerElement.parentElement.offsetWidth;
-        var containerHeight = this.gridContainerElement.parentElement.offsetHeight;
+        var containerWidth = this.innerElement.offsetWidth;
+        var containerHeight = this.innerElement.offsetHeight;
 
         var animationDuration = 1.75; //this.getAnimationDuration(); TODO: make dynamic
 
         if (this.page > this.previousPage) { // slide left or up
             var insert = 'append';
             if (this.options.vertical) { // up
-                var gridContainerTransform = 'translateY(-50%)';
+                var margin = 'marginBottom';
+                var gridContainerTransform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
             } else { // left
-                var gridContainerTransform = 'translateX(-'+ (containerWidth) +'px)';
+                var margin = 'marginRight';
+                var gridContainerTransform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
             }
         } else { // Slide right or down
             var insert = 'prepend';
             if (this.options.vertical) { // down
-                this.gridContainerElement.style.transform = 'translateY(-'+ containerHeight +'px)';
-                this.gridContainerElement.style.MsTransform = 'translateY(-'+ containerHeight +'px)';
-                this.gridContainerElement.style.WebkitTransform = 'translateY(-'+ containerHeight +'px)';
+                var margin = 'marginTop';
+                this.gridContainerElement.style.transform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
+                this.gridContainerElement.style.MsTransform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
+                this.gridContainerElement.style.WebkitTransform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
                 var gridContainerTransform = 'translateY(0px)';
             } else { // right
-                this.gridContainerElement.style.transform = 'translateX(-'+ containerWidth +'px)';
-                this.gridContainerElement.style.MsTransform = 'translateX(-'+ containerWidth +'px)';
-                this.gridContainerElement.style.WebkitTransform = 'translateX(-'+ containerWidth +'px)';
+                var margin = 'marginLeft';
+                this.gridContainerElement.style.transform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
+                this.gridContainerElement.style.MsTransform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
+                this.gridContainerElement.style.WebkitTransform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
                 var gridContainerTransform = 'translateX(0px)';
             }
         }
 
         var oldGrid = this.grid;
+
+        this.gridElement.style[margin] = (this.padding * 2) + 'px';
 
         this.gridElement = document.createElement('div');
         this.gridElement.id = 'rev-slider-grid';
@@ -308,7 +314,7 @@ RevSlider({
             this.grid.element.style.width = containerWidth + 'px';
             this.grid.element.style.float = 'left';
 
-            this.gridContainerElement.style.width = (containerWidth * 2) + 'px';
+            this.gridContainerElement.style.width = ((containerWidth * 2) + (this.padding * 2)) + 'px';
         }
 
         this.createCells(oldGrid.cols);
@@ -328,7 +334,6 @@ RevSlider({
 
         var that = this;
         setTimeout(function() {
-            that.gridElement.style.position = 'relative';
             that.updateGrids(oldGrid);
         }, animationDuration * 1000);
     };
@@ -345,8 +350,6 @@ RevSlider({
         this.gridContainerElement.style.transform = 'none';
         this.gridContainerElement.style.MsTransform = 'none';
         this.gridContainerElement.style.WebkitTransform = 'none';
-
-        this.gridContainerElement.style.width = 'auto';
 
         oldGrid.remove();
         oldGrid.destroy();
