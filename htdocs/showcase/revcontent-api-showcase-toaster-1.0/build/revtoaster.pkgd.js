@@ -2274,11 +2274,12 @@ return utils;
  *
  */
 
-(function (window, document, undefined) {
+(function (window, document, dialog, undefined) {
     'use strict';
     console.log("Entering RevDisclose Namespace...");
     var RevDisclose = function () {
         var self = this;
+        self.dialog = dialog;
         self.plainText = false;
         self.disclosureText = null;
         self.disclosureHtml = '';
@@ -2301,6 +2302,14 @@ return utils;
                 console.log("RevDisclose: Document is READY!...");
 
             }
+        }
+    };
+
+    RevDisclose.prototype.setDialog = function(dialog){
+        console.log("RevDisclose: Manually Setting Dialog Object");
+        var self = this;
+        if(typeof dialog === "object"){
+            self.dialog = dialog;
         }
     };
 
@@ -2336,11 +2345,15 @@ return utils;
         return self.plainText ? self.disclosureText : self.disclosureHtml;
     };
 
-    RevDisclose.prototype.getDisclosure = function (disclosureText, onClickHandler, HandlerObject) {
+    RevDisclose.prototype.getDisclosure = function (disclosureText) {
         console.log("RevDisclose: Attaching Disclosure Text and onClick Event Function...");
         var self = this;
         self.setDisclosureText(disclosureText);
-        self.setOnClickHandler(onClickHandler, HandlerObject);
+        if(typeof self.dialog === "object") {
+            self.setOnClickHandler(self.dialog.showDialog, self.dialog);
+        } else {
+            self.setOnClickHandler(self.defaultOnClick);
+        }
         return self.getSponsorTemplate();
     };
 
@@ -2359,7 +2372,7 @@ return utils;
 
     return window.revDisclose;
 
-}(window, document));
+}(window, document, window.revDialog));
 /**
  * Revcontent detect
  */
