@@ -47,7 +47,13 @@ RevLock({
             },
             devices: [
                 'phone', 'tablet', 'desktop'
-            ]
+            ],
+            buttons: {
+                forward: true,
+                back: false,
+                size: 40,
+                position: 'outside',
+            }
         };
 
         // merge options
@@ -110,7 +116,8 @@ RevLock({
                 per_row: this.options.inner_widget_options.per_row,
                 rows: this.options.inner_widget_options.rows,
                 image_ratio: 'rectangle',
-                vertical: true
+                vertical: true,
+                buttons: this.options.buttons
             });
 
             this.totalHeight = this.top + this.element.offsetHeight + 'px';
