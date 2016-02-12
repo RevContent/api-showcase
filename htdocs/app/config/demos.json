@@ -35,7 +35,7 @@
         },
         {
             "name": "toaster",
-            "templates": ["./tests/templates/sickchirpse.com.html"],
+            "templates": ["./tests/templates/sickchirpse.com.html", "./tests/templates/alphatrendz.com.html"],
             "script": "./build/revtoaster.min.js",
             "cdn": false,
             "cdn_url": "http://labs-cdn.revcontent.com/build/revtoaster.min.js",
