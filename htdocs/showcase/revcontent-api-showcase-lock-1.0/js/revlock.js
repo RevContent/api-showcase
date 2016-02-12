@@ -81,6 +81,9 @@ RevLock({
 
         this.init = function() {
 
+            this.bodyPadding = getComputedStyle(document.body)['padding'];//IE9+
+            document.body.style.padding = '0';//make sure we don't have any strange paddings
+
             this.wrapper = document.createElement("div");
             this.wrapper.id = "rev-lock-wrapper";
             while (document.body.firstChild) {
@@ -142,6 +145,7 @@ RevLock({
             var that = this;
             this.unlockBtn.addEventListener('click', function() {
                 that.wrapper.style.height = 'auto';
+                document.body.style.padding = that.bodyPadding;// reset any body padding
                 revUtils.addClass(that.element, 'unlocked');
                 setTimeout(function() {
                     revUtils.remove(that.element);
