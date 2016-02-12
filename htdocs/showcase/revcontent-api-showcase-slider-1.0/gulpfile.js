@@ -43,7 +43,7 @@ gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
       ' */',
       ''].join('\n');
 
-    return gulp.src(['./vendor/mobile-detect/mobile-detect.js', './vendor/imagesloaded/imagesloaded.pkgd.js', './vendor/any-grid/dist/any-grid.js', './vendor/hammerjs/hammer.min.js', '../js/revutils.js', '../js/revdialog.js', '../js/revdetect.js', '../js/revapi.js', './build/revslider.js'])
+    return gulp.src(['./vendor/mobile-detect/mobile-detect.js', './vendor/imagesloaded/imagesloaded.pkgd.js', './vendor/any-grid/dist/any-grid.js', '../js/revutils.js', '../js/revdialog.js', '../js/revdetect.js', '../js/revapi.js', './build/revslider.js'])
         .pipe(concat('revslider.pkgd.js'))
         .pipe(gulp.dest('./build'))
         .pipe(uglify({
@@ -56,5 +56,5 @@ gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
 });
 
 gulp.task('watch', ['buildjs'], function () {
-    gulp.watch(['../js/revutils.js', '../js/revdialog.js', '../js/revdetect.js', './js/*', './css/*'], ['buildjs']);
+    gulp.watch(['../js/revutils.js', '../js/revdialog.js', '../js/revdetect.js', './vendor/any-grid/dist/any-grid.js', './js/*', './css/*'], ['buildjs']);
 });
