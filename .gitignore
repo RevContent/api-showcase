@@ -1,0 +1,7 @@
+html
+.vagrant
+.hhvm.hhbc
+htdocs/node_modules
+htdocs/showcase/**/node_modules
+htdocs/showcase/**/vendor
+htdocs/app/resources/vendor/material-design-icons
