@@ -5,28 +5,41 @@
             "templates": [],
             "script": "./build/revflicker.min.js",
             "cdn": false,
-            "cdn_url": "http://labs-cdn.revcontent.com/build/revflicker.min.js"
+            "cdn_url": "http://labs-cdn.revcontent.com/build/revflicker.min.js",
+            "auto_inject": true
         },
         {
             "name": "shifter",
             "templates": [],
             "script": "./build/revshifter.min.js",
             "cdn": false,
-            "cdn_url": "http://labs-cdn.revcontent.com/build/revshifter.min.js"
+            "cdn_url": "http://labs-cdn.revcontent.com/build/revshifter.min.js",
+            "auto_inject": true
         },
         {
             "name": "slider",
             "templates": [],
             "script": "./build/revslider.min.js",
             "cdn": false,
-            "cdn_url": "http://labs-cdn.revcontent.com/build/revslider.min.js"
+            "cdn_url": "http://labs-cdn.revcontent.com/build/revslider.min.js",
+            "auto_inject": true
+        },
+        {
+            "name": "exit",
+            "templates": [],
+            "script": "./build/revexit.min.js?w=6181&p=945&k=3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b&d=apiexamples.powr.com&x=both&t=true",
+            "cdn": false,
+            "cdn_url": "http://labs-cdn.revcontent.com/build/revexit.min.js?w=6181&p=945&k=3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b&d=apiexamples.powr.com&x=both&t=true",
+            "script_id": "rev2exit",
+            "auto_inject": false
         },
         {
             "name": "toaster",
-            "templates": ["./tests/templates/sickchirpse.com.html"],
+            "templates": ["./tests/templates/sickchirpse.com.html", "./tests/templates/alphatrendz.com.html"],
             "script": "./build/revtoaster.min.js",
             "cdn": false,
-            "cdn_url": "http://labs-cdn.revcontent.com/build/revtoaster.min.js"
+            "cdn_url": "http://labs-cdn.revcontent.com/build/revtoaster.min.js",
+            "auto_inject": true
         }
     ]
 }

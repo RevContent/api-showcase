@@ -1,4 +1,5 @@
 var gulp      = require('gulp');
+var header       = require('gulp-header');
 var fs        = require('fs');
 var path      = require('path');
 var sourcemaps = require('gulp-sourcemaps');
@@ -12,7 +13,8 @@ var notify    = require("gulp-notify");
 var autoprefixer = require('gulp-autoprefixer');
 var demos          = require('./app/config/demos.json');
 var inject       = require('gulp-inject');
-
+var stripDebug   = require('gulp-strip-debug');
+var preprocess   = require('gulp-preprocess');
 var preprocessor = 'sass';
 
 gulp.task('default', ['prefix', 'tests']);
@@ -41,10 +43,12 @@ gulp.task('tests', function() {
         var name = demos.tests[i].name;
         var folders = getFolders('./app/resources/js/app/demo/' + name);
         var script = demos.tests[i].script;
+        var auto_inject = demos.tests[i].auto_inject ? true : false;
 
         data[name] = {
           use_cdn: demos.tests[i].cdn,
           url: demos.tests[i].cdn_url,
+          script_id: demos.tests[i].script_id,
         };
 
         for (var j = 1; j <= folders.length; j++) {
@@ -66,7 +70,8 @@ gulp.task('tests', function() {
                     var widget = parts[parts.length - 1].replace('rev', '').replace('.min.js', '');//holy hack again
 
                     var path = data[widget].use_cdn ? data[widget].url : filePath;
-                    return '<script src="' + path + '"></script>';
+                    var id = data[widget].script_id ? ' id="'+ data[widget].script_id +'"' : '';
+                    return auto_inject ? '<script'+ id +' src="' + path + '"></script>' : '';
                   }
                 }
                 ))
@@ -117,6 +122,27 @@ gulp.task('tests-files', ['tests'], function() {
           .pipe(gulp.dest('./tests/' + name ));
     };
 });
+
+gulp.task('amphtml', [], function() {
+
+    var banner = ['/**',
+        ' * Revcontent - AMPHTML Network Service',
+        ' * @date - <%= new Date() %>',
+        ' * @version v1.0.0',
+        ' * @link http://labs.revcontent.com',
+        ' */',
+        ''].join('\n');
+
+    return gulp.src(['./js/amphtml/revcontent.amp.js'])
+        .pipe(uglify({
+            mangle: false
+        }))
+        .pipe(stripDebug())
+        .pipe(rename('revcontent.amp.min.js'))
+        .pipe(header(banner, {} ))
+        .pipe(gulp.dest('./build/amphtml'));
+});
+
 
 // gulp.task('minifycss', function() {
 //     gulp.src('web/css/app.css')

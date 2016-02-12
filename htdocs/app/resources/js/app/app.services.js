@@ -56,13 +56,20 @@ app.service('widgets', function() {
             link: 'revcontent-api-showcase-endofgallery-1.0/index.html',
             bg: '#847F6C'
         },
-        'scrolling-exp': {
-            title: 'Scrolling Experience',
-            img: 'grid.jpg',
-            description: 'AJAX-powered infinite scrolling UI’s are everywhere these days, with our API you can easily integrate sponsored content into your own implementation. Utilizing our count and offset request parameters to fuel the implementation, you can create a truly native experience that will engage user’s as they scroll.',
-            link: 'revcontent-api-showcase-scrollingexp-1.0/index.html',
+        'revmore': {
+            title: 'Mobile RevMore',
+            img: 'revmore.jpg',
+            description: 'Studies show that Facebook-referred mobile users never reach the bottom of the article. By truncating the page, RevMore increase the visibility of content recommendations from standard Revcontent widgets.',
+            link: 'revcontent-api-showcase-revmore-1.0/index.html',
             bg: '#DA825E'
         }
+        //'scrolling-exp': {
+          //  title: 'Scrolling Experience',
+          //  img: 'grid.jpg',
+          //  description: 'AJAX-powered infinite scrolling UI’s are everywhere these days, with our API you can easily integrate sponsored content into your own implementation. Utilizing our count and offset request parameters to fuel the implementation, you can create a truly native experience that will engage user’s as they scroll.',
+          //  link: 'revcontent-api-showcase-scrollingexp-1.0/index.html',
+          //  bg: '#DA825E'
+        //}
     };
 });
 
