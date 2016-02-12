@@ -5549,26 +5549,39 @@ RevSlider({
     };
 
     RevSlider.prototype.appendElements = function() {
-        if (this.header) {
-            revUtils.remove(this.header);
+
+        if (this.head) {
+            revUtils.remove(this.head);
         }
+        this.head = document.createElement('div');
+        revUtils.addClass(this.head, 'rev-head');
+        revUtils.prepend(this.containerElement, this.head);
+
+        if (this.foot) {
+            revUtils.remove(this.foot);
+        }
+        var sponsoredFoot = (this.options.rev_position == 'bottom_left' || this.options.rev_position == 'bottom_right');
+        if (sponsoredFoot) {
+            this.foot = document.createElement('div');
+            revUtils.addClass(this.foot, 'rev-foot');
+            revUtils.append(this.containerElement, this.foot);
+        }
+
         this.header = document.createElement('h2');
         this.header.innerHTML = this.options.header;
         revUtils.addClass(this.header, 'rev-header');
-        revUtils.prepend(this.containerElement, this.header);
+        revUtils.append(this.head, this.header);
 
-        if (this.sponsored) {
-            revUtils.remove(this.sponsored);
-        }
         this.sponsored = document.createElement('div');
-        revUtils.addClass(this.sponsored, 'rev-sponsored');
         this.sponsored.innerHTML = '<a href="javascript:;" onclick="revDialog.showDialog();">Sponsored by Revcontent</a>';
+        revUtils.addClass(this.sponsored, 'rev-sponsored');
+
         if (this.options.rev_position == 'top_right') {
             revUtils.addClass(this.sponsored, 'top-right');
-            revUtils.prepend(this.containerElement, this.sponsored);
-        } else if (this.options.rev_position == 'bottom_left' || this.options.rev_position == 'bottom_right') {
+            revUtils.prepend(this.head, this.sponsored);
+        } else if (sponsoredFoot) {
             revUtils.addClass(this.sponsored, this.options.rev_position.replace('_', '-'));
-            revUtils.append(this.containerElement, this.sponsored);
+            revUtils.append(this.foot, this.sponsored);
         }
     };
 
