@@ -202,7 +202,7 @@ body.rev-toaster-loaded #rev-toaster{
     right: 8px;
 }
 
-#rev-toaster button.rev-close .icon {
+#rev-toaster button.rev-close .rev-icon {
     margin: auto;
     background-repeat: no-repeat no-repeat;
     fill: currentColor;
@@ -212,7 +212,7 @@ body.rev-toaster-loaded #rev-toaster{
     position: relative;
 }
 
-#rev-toaster button.rev-close .icon svg {
+#rev-toaster button.rev-close .rev-icon svg {
     position: absolute;
     top: 7px;
     left: 0;

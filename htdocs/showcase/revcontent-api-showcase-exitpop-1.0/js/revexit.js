@@ -584,7 +584,7 @@
             }
 
             for (i = 0; i < revpayload.length; i++) {
-                revpayload1 = revpayload1 + "<div class='revexititem' id='revexititem_"+i+"'><a rel='nofollow' title='"+revpayload[i].headline+"' href='"+revpayload[i].url+"' target='_blank'><div class='revexitimgholder' style='background-image: url(http:"+ revpayload[i].image +");'><div class='revexititemmask'><div class='revexitheadlinewrap'><div class='revexitheadline'>"+ revpayload[i].headline + revcontentAdProviderLabel(revcontentexitvars.po, revpayload[i].type, revpayload[i].brand) + "</div></div></div></div></a></div>";
+                revpayload1 = revpayload1 + "<div class='revexititem' id='revexititem_"+i+"'><a rel='nofollow' title='"+revpayload[i].headline+"' href='"+revpayload[i].url+"' target='_blank'><div class='revexitimgholder' style='background-image: url(" + revUrlPrefixer(revpayload[i].image) +");'><div class='revexititemmask'><div class='revexitheadlinewrap'><div class='revexitheadline'>"+ revpayload[i].headline + revcontentAdProviderLabel(revcontentexitvars.po, revpayload[i].type, revpayload[i].brand) + "</div></div></div></div></a></div>";
             }
 
             var revexit_package = "<style id='revexit_style'>" + revstyle + styles_panel3x2 + "</style><div id='revexitmask' class='revexitmaskwrap'><div id='revexitunit' class='revexitunitwrap' style='display:none;'><div id='revexitheader'><span href='#' id='revexitcloseme'></span><span class='rxlabel'>BEFORE YOU GO, CHECK OUT MORE</span> <a href='javascript:;' rel='nofollow' id='revexitsponsor' onclick='revDialog.showDialog();'>" + revcontentDisclosureLabel(revcontentexitvars.dl) + "</a></div><div id='revexitadpanel'>"+revpayload1+"<div style='clear:both;display:block;'></div></div></div>";
@@ -688,6 +688,13 @@
             + '</span>';
 
         return labelHtml;
+    }
+
+    function revUrlPrefixer(url){
+        if(!/(^http:\/\/|^https:\/\/|^\/\/)/i.test(url)){
+            url = '//' + url;
+        }
+        return url;
     }
 
 })}),'2.1.4');
