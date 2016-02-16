@@ -45,7 +45,9 @@ RevSlider({
         'phone', 'tablet', 'desktop'
     ],
     url: 'https://trends.revcontent.com/api/v1/',
-    ad_border: true
+    ad_border: true,
+    disclosure_text: revDisclose.defaultDisclosureText,
+    hide_provider: false
 });
 */
 
@@ -53,9 +55,9 @@ RevSlider({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevSlider = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDialog);
+    window.RevSlider = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDisclose);
 
-}( window, function factory(window, revUtils, revDetect, revApi, revDialog) {
+}( window, function factory(window, revUtils, revDetect, revApi, revDisclose) {
 'use strict';
 
     var RevSlider = function(opts) {
@@ -96,7 +98,9 @@ RevSlider({
             ad_border: true,
             headline_size: 2,
             max_headline: false,
-            text_overlay: false
+            text_overlay: false,
+            disclosure_text: revDisclose.defaultDisclosureText,
+            hide_provider: false
         };
 
         // merge options
@@ -242,7 +246,7 @@ RevSlider({
         }
         this.sponsored = document.createElement('div');
         revUtils.addClass(this.sponsored, 'rev-sponsored');
-        this.sponsored.innerHTML = '<a href="javascript:;" onclick="revDialog.showDialog();">Sponsored by Revcontent</a>';
+        this.sponsored.innerHTML = revDisclose.getDisclosure(this.options.disclosure_text);
         if (this.options.rev_position == 'top_right') {
             revUtils.addClass(this.sponsored, 'top-right')
             revUtils.prepend(this.containerElement, this.sponsored);
@@ -278,6 +282,7 @@ RevSlider({
     };
 
     RevSlider.prototype.resize = function() {
+        var that = this;
         var oldLimit = this.limit;
         this.grid.option(this.options);
         this.setUp();
@@ -318,10 +323,12 @@ RevSlider({
 
             ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
             ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.margin = this.providerMargin +'px '  + this.innerMargin + 'px ' + this.providerMargin +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
-            ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
+            if(that.options.hide_provider === false) {
+                ad.querySelectorAll('.rev-provider')[0].style.margin = this.providerMargin + 'px ' + this.innerMargin + 'px ' + this.providerMargin + 'px';
+                ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize + 'px';
+                ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
+                ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight + 'px';
+            }
         }
 
         this.textOverlay();
@@ -379,6 +386,7 @@ RevSlider({
     }
 
     RevSlider.prototype.appendCell = function() {
+        var that = this;
         var html = '<div class="rev-ad" style="'+ (this.options.ad_border ? 'border:1px solid #eee' : '') +'">' +
                     '<a href="" target="_blank">' +
                         '<div class="rev-image" style="height:'+ this.preloaderHeight +'px">' +
@@ -387,7 +395,7 @@ RevSlider({
                         '<div class="rev-headline" style="height:'+ this.headlineHeight +'px; margin:'+ this.headlineMarginTop +'px ' + this.innerMargin + 'px' + ' 0;">' +
                             '<h3 style="font-size:'+ this.headlineFontSize +'px; line-height:'+ this.headlineLineHeight +'px;"></h3>' +
                         '</div>' +
-                        '<div style="margin:' + this.providerMargin +'px '  + this.innerMargin + 'px ' + this.providerMargin +'px;font-size:'+ this.providerFontSize +'px;line-height:'+ this.providerLineHeight +'px;height:'+ this.providerLineHeight +'px;" class="rev-provider"></div>' +
+                        (that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'margin:' + that.providerMargin +'px '  + that.innerMargin + 'px ' + that.providerMargin + 'px;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;height:' + that.providerLineHeight + 'px;') : '') +
                     '</a>' +
                 '</div>';
         var cell = document.createElement('div');
@@ -415,7 +423,9 @@ RevSlider({
                 ad.querySelectorAll('a')[0].title = data.headline;
                 ad.querySelectorAll('img')[0].setAttribute('src', data.image);
                 ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
-                ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
+                if(that.options.hide_provider === false) {
+                    ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
+                }
             }
 
             imagesLoaded( that.gridElement, function() {

@@ -19,6 +19,8 @@ RevToaster({
     header: 'Trending Today',
     closed_hours: 24,
     sponsored: 2,
+    disclosure_text: revDisclose.defaultDisclosureText,
+    hide_provider: false
 });
 */
 
@@ -26,9 +28,9 @@ RevToaster({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevToaster = factory(window, window.revUtils, window.revDetect, window.revApi);
+    window.RevToaster = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDisclose);
 
-}( window, function factory(window, revUtils, revDetect, revApi) {
+}( window, function factory(window, revUtils, revDetect, revApi, revDisclose) {
 'use strict';
 
     // ----- vars ----- //
@@ -45,7 +47,9 @@ RevToaster({
         rev_position: 'bottom_right',
         devices: [
             'phone', 'tablet', 'desktop'
-        ]
+        ],
+        disclosure_text: revDisclose.defaultDisclosureText,
+        hide_provider: false
     };
     // var options;
     var lastScrollTop = 0;
@@ -169,7 +173,7 @@ RevToaster({
             }
             this.sponsored = document.createElement('div');
             this.sponsored.className = 'rev-sponsored';
-            this.sponsored.innerHTML = '<a href="javascript:;" onclick="revDialog.showDialog()">Sponsored by Revcontent</a>';
+            this.sponsored.innerHTML = revDisclose.getDisclosure(this.options.disclosure_text, revDialog.showDialog, revDialog);
 
             if (this.options.rev_position == 'top_right') {
                 revUtils.addClass(this.sponsored, 'top-right')
@@ -221,7 +225,7 @@ RevToaster({
                             '<div class="rev-headline">' +
                                 '<h3></h3>' +
                             '</div>' +
-                            '<div class="rev-provider"></div>' +
+                            (revDisclose.getProvider('rev-provider')) +
                         '</a>' +
                     '</div>';
             var cell = document.createElement('div');
@@ -249,7 +253,10 @@ RevToaster({
                     ad.querySelectorAll('a')[0].setAttribute('href', data.url);
                     ad.querySelectorAll('img')[0].setAttribute('src', data.image);
                     ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
-                    ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
+                    if(that.options.hide_provider === false) {
+                        ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
+                    }
+
                 }
                 if (show) {
                     that.show();
