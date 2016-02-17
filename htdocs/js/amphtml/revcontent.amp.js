@@ -10,7 +10,7 @@
       var self = this;
         self.data = window.data;
         self.defaultHost = "trends.revcontent.com";
-        self.isSecure = ((self.data.ssl !== undefined) ? true : false);
+        self.isSecure = ((self.data.ssl !== undefined && self.data.ssl != "true") ? false : true);
         self.serveProtocol = (self.isSecure === true ? 'https://' : 'http://');
         self.serveHost = ((self.data.endpoint !== undefined) ? self.data.endpoint : self.defaultHost);
         self.serveScript = '/serve.js.php';
@@ -40,7 +40,7 @@
         self.rcel = document.createElement("script");
         self.rcel.id = 'rc_' + Math.floor(Math.random() * 1000);
         self.rcel.type = 'text/javascript';
-        self.serveParameters = '?' + (self.testing === true ? 'uitm=1&' : '') + "w=" + self.data.id + "&t=" + self.rcel.id + "&c=" + (new Date()).getTime() + "&width=" + (self.forceWidth || self.defaultWidth);
+        self.serveParameters = '?' + (self.testing === true ? 'uitm=1&' : '') + "w=" + self.data.id + "&t=" + self.rcel.id + "&c=" + (new Date()).getTime() + "&width=" + (self.forceWidth || self.viewportWidth);
         self.serveUrl = self.serveProtocol + self.serveHost + self.serveScript + self.serveParameters;
         self.rcel.src = self.serveUrl;
         self.rcel.async = true;
@@ -57,5 +57,5 @@
 
     var RevcontentNetwork = new RevAMP();
     RevcontentNetwork.init();
-    
+
 }(window, document));
