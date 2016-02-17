@@ -12,14 +12,16 @@
         self.defaultHost = "trends.revcontent.com";
         self.isSecure = ((self.data.ssl !== undefined) ? true : false);
         self.serveProtocol = (self.isSecure === true ? 'https://' : 'http://');
-        self.serveHost = (self.data.endpoint !== undefined ? self.data.endpoint : self.defaultHost);
+        self.serveHost = ((self.data.endpoint !== undefined) ? self.data.endpoint : self.defaultHost);
         self.serveScript = '/serve.js.php';
         self.serveUrl = null;
+        self.forceWidth = ((self.data.width !== undefined) ? self.data.width : undefined);
         self.defaultWrapperId = "rcjsload_2ff711";
+        self.viewportWidth = self.forceWidth || (window.outerWidth || document.documentElement.clientWidth);
         self.rcjsload = null;
         self.rcel = null;
         self.serveParameters = null;
-        self.testing = (self.data.testing !== undefined ? true : false);
+        self.testing = ((self.data.testing !== undefined) ? true : false);
         self.unlisten = window.context.onResizeSuccess(function(requestedHeight) {
 
 
@@ -38,7 +40,7 @@
         self.rcel = document.createElement("script");
         self.rcel.id = 'rc_' + Math.floor(Math.random() * 1000);
         self.rcel.type = 'text/javascript';
-        self.serveParameters = '?' + (self.testing === true ? 'uitm=1&' : '') + "w=" + self.data.id + "&t=" + self.rcel.id + "&c=" + (new Date()).getTime() + "&width=" + (window.outerWidth || document.documentElement.clientWidth);
+        self.serveParameters = '?' + (self.testing === true ? 'uitm=1&' : '') + "w=" + self.data.id + "&t=" + self.rcel.id + "&c=" + (new Date()).getTime() + "&width=" + (self.forceWidth || self.defaultWidth);
         self.serveUrl = self.serveProtocol + self.serveHost + self.serveScript + self.serveParameters;
         self.rcel.src = self.serveUrl;
         self.rcel.async = true;
@@ -55,6 +57,5 @@
 
     var RevcontentNetwork = new RevAMP();
     RevcontentNetwork.init();
-
-
+    
 }(window, document));
