@@ -11,16 +11,16 @@
 
     var RevDialog = function() {
         var that = this;
-        this.id = 'rev-opt-out';
+        that.id = 'rev-opt-out';
         //this.url = url;
         //setTimeout(function() {that.render();}, 100);
-        this.resizeEnd;
+        that.resizeEnd;
 
-        this.addEventHandler(window, 'load', function() {
+        that.addEventHandler(window, 'load', function() {
             that.render();
         });
 
-        this.addEventHandler(window, 'resize', function() {
+        that.addEventHandler(window, 'resize', function() {
             clearTimeout(that.resizeEnd);
             that.resizeEnd = setTimeout(function() {
                 that.resize();
@@ -36,13 +36,14 @@
     }
 
     RevDialog.prototype.resize = function() {
-        this.containerWidth = document.documentElement.clientWidth;
-        this.containerHeight = document.documentElement.clientHeight;
-        if (this.containerHeight < 455) {
-            this.setFullHeight();
-        } else if (this.containerHeight >= 455) {
-            this.setNormalHeight();
-            this.centerDialog();
+        var that = this;
+        that.containerWidth = document.documentElement.clientWidth;
+        that.containerHeight = document.documentElement.clientHeight;
+        if (that.containerHeight < 455) {
+            that.setFullHeight();
+        } else if (that.containerHeight >= 455) {
+            that.setNormalHeight();
+            that.centerDialog();
         }
     };
 
@@ -110,9 +111,10 @@
 
 
 
-    RevDialog.prototype.showDialog = function() {
+    RevDialog.prototype.showDialog = function(injectedDialog) {
+        var that = injectedDialog || this;
         document.querySelector('.rd-box-wrap').style.display = 'block';
-        this.resize();
+        that.resize();
         return false;
     };
 

@@ -1162,16 +1162,16 @@ return utils;
 
     var RevDialog = function() {
         var that = this;
-        this.id = 'rev-opt-out';
+        that.id = 'rev-opt-out';
         //this.url = url;
         //setTimeout(function() {that.render();}, 100);
-        this.resizeEnd;
+        that.resizeEnd;
 
-        this.addEventHandler(window, 'load', function() {
+        that.addEventHandler(window, 'load', function() {
             that.render();
         });
 
-        this.addEventHandler(window, 'resize', function() {
+        that.addEventHandler(window, 'resize', function() {
             clearTimeout(that.resizeEnd);
             that.resizeEnd = setTimeout(function() {
                 that.resize();
@@ -1187,13 +1187,14 @@ return utils;
     }
 
     RevDialog.prototype.resize = function() {
-        this.containerWidth = document.documentElement.clientWidth;
-        this.containerHeight = document.documentElement.clientHeight;
-        if (this.containerHeight < 455) {
-            this.setFullHeight();
-        } else if (this.containerHeight >= 455) {
-            this.setNormalHeight();
-            this.centerDialog();
+        var that = this;
+        that.containerWidth = document.documentElement.clientWidth;
+        that.containerHeight = document.documentElement.clientHeight;
+        if (that.containerHeight < 455) {
+            that.setFullHeight();
+        } else if (that.containerHeight >= 455) {
+            that.setNormalHeight();
+            that.centerDialog();
         }
     };
 
@@ -1261,9 +1262,10 @@ return utils;
 
 
 
-    RevDialog.prototype.showDialog = function() {
+    RevDialog.prototype.showDialog = function(injectedDialog) {
+        var that = injectedDialog || this;
         document.querySelector('.rd-box-wrap').style.display = 'block';
-        this.resize();
+        that.resize();
         return false;
     };
 
@@ -1324,6 +1326,110 @@ return utils;
     return rD;
 
 }));
+/**
+ * RevDisclose (Branding + Disclosure Options)
+ *
+ */
+
+(function (window, document, dialog, undefined) {
+    'use strict';
+    console.log("Entering RevDisclose Namespace...");
+    var RevDisclose = function () {
+        var self = this;
+        self.dialog = dialog;
+        self.plainText = false;
+        self.disclosureText = null;
+        self.disclosureHtml = '';
+        self.defaultDisclosureText = 'Sponsored by Revcontent';
+        self.disclosureTextLimit = 50;
+        self.onClickHandler = false;
+        self.onClickHandlerObject = null;
+        self.defaultOnClick = function () {
+
+        };
+        self.hooks = [];
+        self.init();
+    };
+
+    RevDisclose.prototype.init = function () {
+        console.log("RevDisclose: Initializing...");
+        var self = this;
+        document.onreadystatechange = function () {
+            if (document.readyState == "complete") {
+                console.log("RevDisclose: Document is READY!...");
+
+            }
+        }
+    };
+
+    RevDisclose.prototype.setDialog = function(dialog){
+        console.log("RevDisclose: Manually Setting Dialog Object");
+        var self = this;
+        if(typeof dialog === "object"){
+            self.dialog = dialog;
+        }
+    };
+
+    RevDisclose.prototype.truncateDisclosure = function () {
+        console.log("RevDisclose: Initializing...");
+        var self = this;
+        self.disclosureText = self.disclosureText.toString().substring(0, self.disclosureTextLimit).replace(/['"]+/g, '');
+    };
+
+    RevDisclose.prototype.setDisclosureText = function(disclosure){
+        console.log("RevDisclose: Setting Disclosure Text Label to: "  + disclosure.toString());
+        var self = this;
+        self.disclosureText = (disclosure.length > 2) ? disclosure.toString() : self.defaultDisclosureText;
+        self.truncateDisclosure();
+    };
+
+    RevDisclose.prototype.setOnClickHandler = function (handler, handlerObject) {
+        console.log("RevDisclose: Setting onClick Handler for Disclosure text...");
+        var self = this;
+        if (typeof handler === 'function') {
+            self.onClickHandler = handler;
+        }
+        if (typeof handlerObject === 'object') {
+            self.onClickHandlerObject = handlerObject;
+        }
+    };
+
+    RevDisclose.prototype.getSponsorTemplate = function () {
+        console.log("RevDisclose: Building Disclosure HTML...");
+        var self = this;
+        self.disclosureHtml = '<a href="javascript:;" onclick="revDisclose.onClickHandler(revDisclose.onClickHandlerObject ? revDisclose.onClickHandlerObject : null);">' + self.disclosureText + '</a>';
+        console.log("RevDisclose: " + self.disclosureHtml);
+        return self.plainText ? self.disclosureText : self.disclosureHtml;
+    };
+
+    RevDisclose.prototype.getDisclosure = function (disclosureText) {
+        console.log("RevDisclose: Attaching Disclosure Text and onClick Event Function...");
+        var self = this;
+        self.setDisclosureText(disclosureText);
+        if(typeof self.dialog === "object") {
+            self.setOnClickHandler(self.dialog.showDialog, self.dialog);
+        } else {
+            self.setOnClickHandler(self.defaultOnClick);
+        }
+        return self.getSponsorTemplate();
+    };
+
+    RevDisclose.prototype.getProviderTemplate = function(className, styles){
+        var self = this;
+        var providerHtml = '<div class="' + (className ? className.toString() : '') + '" style="' + (styles ? styles.toString() : '') + '"></div>';
+        return providerHtml;
+    };
+
+    RevDisclose.prototype.getProvider = function(className, styles) {
+        var self = this;
+        return self.getProviderTemplate(className, styles);
+    };
+
+    window.revDisclose = new RevDisclose();
+
+    return window.revDisclose;
+
+}(window, document, window.revDialog));
 /**
  * Revcontent detect
  */
@@ -2391,488 +2497,123 @@ define(function () {
     }
 })());
 /*!
- * imagesLoaded PACKAGED v4.0.0
+ * imagesLoaded PACKAGED v4.1.0
  * JavaScript is all like "You images are done yet or what?"
  * MIT License
  */
 
-/*!
- * EventEmitter v4.2.11 - git.io/ee
- * Unlicense - http://unlicense.org/
- * Oliver Caldwell - http://oli.me.uk/
- * @preserve
+/**
+ * EvEmitter v1.0.1
+ * Lil' event emitter
+ * MIT License
  */
 
-;(function () {
-    'use strict';
+/* jshint unused: true, undef: true, strict: true */
 
-    /**
-     * Class for managing events.
-     * Can be extended to provide event functionality in other classes.
-     *
-     * @class EventEmitter Manages event registering and emitting.
-     */
-    function EventEmitter() {}
+( function( global, factory ) {
+  // universal module definition
+  /* jshint strict: false */ /* globals define, module */
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD - RequireJS
+    define( 'ev-emitter/ev-emitter',factory );
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS - Browserify, Webpack
+    module.exports = factory();
+  } else {
+    // Browser globals
+    global.EvEmitter = factory();
+  }
 
-    // Shortcuts to improve speed and size
-    var proto = EventEmitter.prototype;
-    var exports = this;
-    var originalGlobalValue = exports.EventEmitter;
+}( this, function() {
 
-    /**
-     * Finds the index of the listener for the event in its storage array.
-     *
-     * @param {Function[]} listeners Array of listeners to search through.
-     * @param {Function} listener Method to look for.
-     * @return {Number} Index of the specified listener, -1 if not found
-     * @api private
-     */
-    function indexOfListener(listeners, listener) {
-        var i = listeners.length;
-        while (i--) {
-            if (listeners[i].listener === listener) {
-                return i;
-            }
-        }
 
-        return -1;
+
+function EvEmitter() {}
+
+var proto = EvEmitter.prototype;
+
+proto.on = function( eventName, listener ) {
+  if ( !eventName || !listener ) {
+    return;
+  }
+  // set events hash
+  var events = this._events = this._events || {};
+  // set listeners array
+  var listeners = events[ eventName ] = events[ eventName ] || [];
+  // only add once
+  if ( listeners.indexOf( listener ) == -1 ) {
+    listeners.push( listener );
+  }
+
+  return this;
+};
+
+proto.once = function( eventName, listener ) {
+  if ( !eventName || !listener ) {
+    return;
+  }
+  // add event
+  this.on( eventName, listener );
+  // set once flag
+  // set onceEvents hash
+  var onceEvents = this._onceEvents = this._onceEvents || {};
+  // set onceListeners array
+  var onceListeners = onceEvents[ eventName ] = onceEvents[ eventName ] || [];
+  // set flag
+  onceListeners[ listener ] = true;
+
+  return this;
+};
+
+proto.off = function( eventName, listener ) {
+  var listeners = this._events && this._events[ eventName ];
+  if ( !listeners || !listeners.length ) {
+    return;
+  }
+  var index = listeners.indexOf( listener );
+  if ( index != -1 ) {
+    listeners.splice( index, 1 );
+  }
+
+  return this;
+};
+
+proto.emitEvent = function( eventName, args ) {
+  var listeners = this._events && this._events[ eventName ];
+  if ( !listeners || !listeners.length ) {
+    return;
+  }
+  var i = 0;
+  var listener = listeners[i];
+  args = args || [];
+  // once stuff
+  var onceListeners = this._onceEvents && this._onceEvents[ eventName ];
+
+  while ( listener ) {
+    var isOnce = onceListeners && onceListeners[ listener ];
+    if ( isOnce ) {
+      // remove listener
+      // remove before trigger to prevent recursion
+      this.off( eventName, listener );
+      // unset once flag
+      delete onceListeners[ listener ];
     }
+    // trigger listener
+    listener.apply( this, args );
+    // get next listener
+    i += isOnce ? 0 : 1;
+    listener = listeners[i];
+  }
 
-    /**
-     * Alias a method while keeping the context correct, to allow for overwriting of target method.
-     *
-     * @param {String} name The name of the target method.
-     * @return {Function} The aliased method
-     * @api private
-     */
-    function alias(name) {
-        return function aliasClosure() {
-            return this[name].apply(this, arguments);
-        };
-    }
+  return this;
+};
 
-    /**
-     * Returns the listener array for the specified event.
-     * Will initialise the event object and listener arrays if required.
-     * Will return an object if you use a regex search. The object contains keys for each matched event. So /ba[rz]/ might return an object containing bar and baz. But only if you have either defined them with defineEvent or added some listeners to them.
-     * Each property in the object response is an array of listener functions.
-     *
-     * @param {String|RegExp} evt Name of the event to return the listeners from.
-     * @return {Function[]|Object} All listener functions for the event.
-     */
-    proto.getListeners = function getListeners(evt) {
-        var events = this._getEvents();
-        var response;
-        var key;
+return EvEmitter;
 
-        // Return a concatenated array of all matching events if
-        // the selector is a regular expression.
-        if (evt instanceof RegExp) {
-            response = {};
-            for (key in events) {
-                if (events.hasOwnProperty(key) && evt.test(key)) {
-                    response[key] = events[key];
-                }
-            }
-        }
-        else {
-            response = events[evt] || (events[evt] = []);
-        }
-
-        return response;
-    };
-
-    /**
-     * Takes a list of listener objects and flattens it into a list of listener functions.
-     *
-     * @param {Object[]} listeners Raw listener objects.
-     * @return {Function[]} Just the listener functions.
-     */
-    proto.flattenListeners = function flattenListeners(listeners) {
-        var flatListeners = [];
-        var i;
-
-        for (i = 0; i < listeners.length; i += 1) {
-            flatListeners.push(listeners[i].listener);
-        }
-
-        return flatListeners;
-    };
-
-    /**
-     * Fetches the requested listeners via getListeners but will always return the results inside an object. This is mainly for internal use but others may find it useful.
-     *
-     * @param {String|RegExp} evt Name of the event to return the listeners from.
-     * @return {Object} All listener functions for an event in an object.
-     */
-    proto.getListenersAsObject = function getListenersAsObject(evt) {
-        var listeners = this.getListeners(evt);
-        var response;
-
-        if (listeners instanceof Array) {
-            response = {};
-            response[evt] = listeners;
-        }
-
-        return response || listeners;
-    };
-
-    /**
-     * Adds a listener function to the specified event.
-     * The listener will not be added if it is a duplicate.
-     * If the listener returns true then it will be removed after it is called.
-     * If you pass a regular expression as the event name then the listener will be added to all events that match it.
-     *
-     * @param {String|RegExp} evt Name of the event to attach the listener to.
-     * @param {Function} listener Method to be called when the event is emitted. If the function returns true then it will be removed after calling.
-     * @return {Object} Current instance of EventEmitter for chaining.
-     */
-    proto.addListener = function addListener(evt, listener) {
-        var listeners = this.getListenersAsObject(evt);
-        var listenerIsWrapped = typeof listener === 'object';
-        var key;
-
-        for (key in listeners) {
-            if (listeners.hasOwnProperty(key) && indexOfListener(listeners[key], listener) === -1) {
-                listeners[key].push(listenerIsWrapped ? listener : {
-                    listener: listener,
-                    once: false
-                });
-            }
-        }
-
-        return this;
-    };
-
-    /**
-     * Alias of addListener
-     */
-    proto.on = alias('addListener');
-
-    /**
-     * Semi-alias of addListener. It will add a listener that will be
-     * automatically removed after its first execution.
-     *
-     * @param {String|RegExp} evt Name of the event to attach the listener to.
-     * @param {Function} listener Method to be called when the event is emitted. If the function returns true then it will be removed after calling.
-     * @return {Object} Current instance of EventEmitter for chaining.
-     */
-    proto.addOnceListener = function addOnceListener(evt, listener) {
-        return this.addListener(evt, {
-            listener: listener,
-            once: true
-        });
-    };
-
-    /**
-     * Alias of addOnceListener.
-     */
-    proto.once = alias('addOnceListener');
-
-    /**
-     * Defines an event name. This is required if you want to use a regex to add a listener to multiple events at once. If you don't do this then how do you expect it to know what event to add to? Should it just add to every possible match for a regex? No. That is scary and bad.
-     * You need to tell it what event names should be matched by a regex.
-     *
-     * @param {String} evt Name of the event to create.
-     * @return {Object} Current instance of EventEmitter for chaining.
-     */
-    proto.defineEvent = function defineEvent(evt) {
-        this.getListeners(evt);
-        return this;
-    };
-
-    /**
-     * Uses defineEvent to define multiple events.
-     *
-     * @param {String[]} evts An array of event names to define.
-     * @return {Object} Current instance of EventEmitter for chaining.
-     */
-    proto.defineEvents = function defineEvents(evts) {
-        for (var i = 0; i < evts.length; i += 1) {
-            this.defineEvent(evts[i]);
-        }
-        return this;
-    };
-
-    /**
-     * Removes a listener function from the specified event.
-     * When passed a regular expression as the event name, it will remove the listener from all events that match it.
-     *
-     * @param {String|RegExp} evt Name of the event to remove the listener from.
-     * @param {Function} listener Method to remove from the event.
-     * @return {Object} Current instance of EventEmitter for chaining.
-     */
-    proto.removeListener = function removeListener(evt, listener) {
-        var listeners = this.getListenersAsObject(evt);
-        var index;
-        var key;
-
-        for (key in listeners) {
-            if (listeners.hasOwnProperty(key)) {
-                index = indexOfListener(listeners[key], listener);
-
-                if (index !== -1) {
-                    listeners[key].splice(index, 1);
-                }
-            }
-        }
-
-        return this;
-    };
-
-    /**
-     * Alias of removeListener
-     */
-    proto.off = alias('removeListener');
-
-    /**
-     * Adds listeners in bulk using the manipulateListeners method.
-     * If you pass an object as the second argument you can add to multiple events at once. The object should contain key value pairs of events and listeners or listener arrays. You can also pass it an event name and an array of listeners to be added.
-     * You can also pass it a regular expression to add the array of listeners to all events that match it.
-     * Yeah, this function does quite a bit. That's probably a bad thing.
-     *
-     * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to add to multiple events at once.
-     * @param {Function[]} [listeners] An optional array of listener functions to add.
-     * @return {Object} Current instance of EventEmitter for chaining.
-     */
-    proto.addListeners = function addListeners(evt, listeners) {
-        // Pass through to manipulateListeners
-        return this.manipulateListeners(false, evt, listeners);
-    };
-
-    /**
-     * Removes listeners in bulk using the manipulateListeners method.
-     * If you pass an object as the second argument you can remove from multiple events at once. The object should contain key value pairs of events and listeners or listener arrays.
-     * You can also pass it an event name and an array of listeners to be removed.
-     * You can also pass it a regular expression to remove the listeners from all events that match it.
-     *
-     * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to remove from multiple events at once.
-     * @param {Function[]} [listeners] An optional array of listener functions to remove.
-     * @return {Object} Current instance of EventEmitter for chaining.
-     */
-    proto.removeListeners = function removeListeners(evt, listeners) {
-        // Pass through to manipulateListeners
-        return this.manipulateListeners(true, evt, listeners);
-    };
-
-    /**
-     * Edits listeners in bulk. The addListeners and removeListeners methods both use this to do their job. You should really use those instead, this is a little lower level.
-     * The first argument will determine if the listeners are removed (true) or added (false).
-     * If you pass an object as the second argument you can add/remove from multiple events at once. The object should contain key value pairs of events and listeners or listener arrays.
-     * You can also pass it an event name and an array of listeners to be added/removed.
-     * You can also pass it a regular expression to manipulate the listeners of all events that match it.
-     *
-     * @param {Boolean} remove True if you want to remove listeners, false if you want to add.
-     * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to add/remove from multiple events at once.
-     * @param {Function[]} [listeners] An optional array of listener functions to add/remove.
-     * @return {Object} Current instance of EventEmitter for chaining.
-     */
-    proto.manipulateListeners = function manipulateListeners(remove, evt, listeners) {
-        var i;
-        var value;
-        var single = remove ? this.removeListener : this.addListener;
-        var multiple = remove ? this.removeListeners : this.addListeners;
-
-        // If evt is an object then pass each of its properties to this method
-        if (typeof evt === 'object' && !(evt instanceof RegExp)) {
-            for (i in evt) {
-                if (evt.hasOwnProperty(i) && (value = evt[i])) {
-                    // Pass the single listener straight through to the singular method
-                    if (typeof value === 'function') {
-                        single.call(this, i, value);
-                    }
-                    else {
-                        // Otherwise pass back to the multiple function
-                        multiple.call(this, i, value);
-                    }
-                }
-            }
-        }
-        else {
-            // So evt must be a string
-            // And listeners must be an array of listeners
-            // Loop over it and pass each one to the multiple method
-            i = listeners.length;
-            while (i--) {
-                single.call(this, evt, listeners[i]);
-            }
-        }
-
-        return this;
-    };
-
-    /**
-     * Removes all listeners from a specified event.
-     * If you do not specify an event then all listeners will be removed.
-     * That means every event will be emptied.
-     * You can also pass a regex to remove all events that match it.
-     *
-     * @param {String|RegExp} [evt] Optional name of the event to remove all listeners for. Will remove from every event if not passed.
-     * @return {Object} Current instance of EventEmitter for chaining.
-     */
-    proto.removeEvent = function removeEvent(evt) {
-        var type = typeof evt;
-        var events = this._getEvents();
-        var key;
-
-        // Remove different things depending on the state of evt
-        if (type === 'string') {
-            // Remove all listeners for the specified event
-            delete events[evt];
-        }
-        else if (evt instanceof RegExp) {
-            // Remove all events matching the regex.
-            for (key in events) {
-                if (events.hasOwnProperty(key) && evt.test(key)) {
-                    delete events[key];
-                }
-            }
-        }
-        else {
-            // Remove all listeners in all events
-            delete this._events;
-        }
-
-        return this;
-    };
-
-    /**
-     * Alias of removeEvent.
-     *
-     * Added to mirror the node API.
-     */
-    proto.removeAllListeners = alias('removeEvent');
-
-    /**
-     * Emits an event of your choice.
-     * When emitted, every listener attached to that event will be executed.
-     * If you pass the optional argument array then those arguments will be passed to every listener upon execution.
-     * Because it uses `apply`, your array of arguments will be passed as if you wrote them out separately.
-     * So they will not arrive within the array on the other side, they will be separate.
-     * You can also pass a regular expression to emit to all events that match it.
-     *
-     * @param {String|RegExp} evt Name of the event to emit and execute listeners for.
-     * @param {Array} [args] Optional array of arguments to be passed to each listener.
-     * @return {Object} Current instance of EventEmitter for chaining.
-     */
-    proto.emitEvent = function emitEvent(evt, args) {
-        var listenersMap = this.getListenersAsObject(evt);
-        var listeners;
-        var listener;
-        var i;
-        var key;
-        var response;
-
-        for (key in listenersMap) {
-            if (listenersMap.hasOwnProperty(key)) {
-                listeners = listenersMap[key].slice(0);
-                i = listeners.length;
-
-                while (i--) {
-                    // If the listener returns true then it shall be removed from the event
-                    // The function is executed either with a basic call or an apply if there is an args array
-                    listener = listeners[i];
-
-                    if (listener.once === true) {
-                        this.removeListener(evt, listener.listener);
-                    }
-
-                    response = listener.listener.apply(this, args || []);
-
-                    if (response === this._getOnceReturnValue()) {
-                        this.removeListener(evt, listener.listener);
-                    }
-                }
-            }
-        }
-
-        return this;
-    };
-
-    /**
-     * Alias of emitEvent
-     */
-    proto.trigger = alias('emitEvent');
-
-    /**
-     * Subtly different from emitEvent in that it will pass its arguments on to the listeners, as opposed to taking a single array of arguments to pass on.
-     * As with emitEvent, you can pass a regex in place of the event name to emit to all events that match it.
-     *
-     * @param {String|RegExp} evt Name of the event to emit and execute listeners for.
-     * @param {...*} Optional additional arguments to be passed to each listener.
-     * @return {Object} Current instance of EventEmitter for chaining.
-     */
-    proto.emit = function emit(evt) {
-        var args = Array.prototype.slice.call(arguments, 1);
-        return this.emitEvent(evt, args);
-    };
-
-    /**
-     * Sets the current value to check against when executing listeners. If a
-     * listeners return value matches the one set here then it will be removed
-     * after execution. This value defaults to true.
-     *
-     * @param {*} value The new value to check for when executing listeners.
-     * @return {Object} Current instance of EventEmitter for chaining.
-     */
-    proto.setOnceReturnValue = function setOnceReturnValue(value) {
-        this._onceReturnValue = value;
-        return this;
-    };
-
-    /**
-     * Fetches the current value to check against when executing listeners. If
-     * the listeners return value matches this one then it should be removed
-     * automatically. It will return true by default.
-     *
-     * @return {*|Boolean} The current value to check for or the default, true.
-     * @api private
-     */
-    proto._getOnceReturnValue = function _getOnceReturnValue() {
-        if (this.hasOwnProperty('_onceReturnValue')) {
-            return this._onceReturnValue;
-        }
-        else {
-            return true;
-        }
-    };
-
-    /**
-     * Fetches the events object and creates one if required.
-     *
-     * @return {Object} The events storage object.
-     * @api private
-     */
-    proto._getEvents = function _getEvents() {
-        return this._events || (this._events = {});
-    };
-
-    /**
-     * Reverts the global {@link EventEmitter} to its previous value and returns a reference to this version.
-     *
-     * @return {Function} Non conflicting EventEmitter class.
-     */
-    EventEmitter.noConflict = function noConflict() {
-        exports.EventEmitter = originalGlobalValue;
-        return EventEmitter;
-    };
-
-    // Expose the class either via AMD, CommonJS or the global object
-    if (typeof define === 'function' && define.amd) {
-        define('eventEmitter/EventEmitter',[],function () {
-            return EventEmitter;
-        });
-    }
-    else if (typeof module === 'object' && module.exports){
-        module.exports = EventEmitter;
-    }
-    else {
-        exports.EventEmitter = EventEmitter;
-    }
-}.call(this));
+}));
 
 /*!
- * imagesLoaded v4.0.0
+ * imagesLoaded v4.1.0
  * JavaScript is all like "You images are done yet or what?"
  * MIT License
  */
@@ -2885,21 +2626,21 @@ define(function () {
   if ( typeof define == 'function' && define.amd ) {
     // AMD
     define( [
-      'eventEmitter/EventEmitter'
-    ], function( EventEmitter ) {
-      return factory( window, EventEmitter );
+      'ev-emitter/ev-emitter'
+    ], function( EvEmitter ) {
+      return factory( window, EvEmitter );
     });
   } else if ( typeof module == 'object' && module.exports ) {
     // CommonJS
     module.exports = factory(
       window,
-      require('wolfy87-eventemitter')
+      require('ev-emitter')
     );
   } else {
     // browser global
     window.imagesLoaded = factory(
       window,
-      window.EventEmitter
+      window.EvEmitter
     );
   }
 
@@ -2907,7 +2648,7 @@ define(function () {
 
 // --------------------------  factory -------------------------- //
 
-function factory( window, EventEmitter ) {
+function factory( window, EvEmitter ) {
 
 
 
@@ -2985,7 +2726,7 @@ function ImagesLoaded( elem, options, onAlways ) {
   }.bind( this ));
 }
 
-ImagesLoaded.prototype = Object.create( EventEmitter.prototype );
+ImagesLoaded.prototype = Object.create( EvEmitter.prototype );
 
 ImagesLoaded.prototype.options = {};
 
@@ -3096,7 +2837,7 @@ ImagesLoaded.prototype.progress = function( image, elem, message ) {
   this.progressedCount++;
   this.hasAnyBroken = this.hasAnyBroken || !image.isLoaded;
   // progress event
-  this.emit( 'progress', this, image, elem );
+  this.emitEvent( 'progress', [ this, image, elem ] );
   if ( this.jqDeferred && this.jqDeferred.notify ) {
     this.jqDeferred.notify( this, image );
   }
@@ -3113,8 +2854,8 @@ ImagesLoaded.prototype.progress = function( image, elem, message ) {
 ImagesLoaded.prototype.complete = function() {
   var eventName = this.hasAnyBroken ? 'fail' : 'done';
   this.isComplete = true;
-  this.emit( eventName, this );
-  this.emit( 'always', this );
+  this.emitEvent( eventName, [ this ] );
+  this.emitEvent( 'always', [ this ] );
   if ( this.jqDeferred ) {
     var jqMethod = this.hasAnyBroken ? 'reject' : 'resolve';
     this.jqDeferred[ jqMethod ]( this );
@@ -3127,7 +2868,7 @@ function LoadingImage( img ) {
   this.img = img;
 }
 
-LoadingImage.prototype = Object.create( EventEmitter.prototype );
+LoadingImage.prototype = Object.create( EvEmitter.prototype );
 
 LoadingImage.prototype.check = function() {
   // If complete is true and browser supports natural sizes,
@@ -3155,7 +2896,7 @@ LoadingImage.prototype.getIsImageComplete = function() {
 
 LoadingImage.prototype.confirm = function( isLoaded, message ) {
   this.isLoaded = isLoaded;
-  this.emit( 'progress', this, this.img, message );
+  this.emitEvent( 'progress', [ this, this.img, message ] );
 };
 
 // ----- events ----- //
@@ -3209,13 +2950,13 @@ Background.prototype.check = function() {
 };
 
 Background.prototype.unbindEvents = function() {
-  this.img.addEventListener( 'load', this );
-  this.img.addEventListener( 'error', this );
+  this.img.removeEventListener( 'load', this );
+  this.img.removeEventListener( 'error', this );
 };
 
 Background.prototype.confirm = function( isLoaded, message ) {
   this.isLoaded = isLoaded;
-  this.emit( 'progress', this, this.element, message );
+  this.emitEvent( 'progress', [ this, this.element, message ] );
 };
 
 // -------------------------- jQuery -------------------------- //
@@ -6108,7 +5849,10 @@ var AnyGrid = Outlayer.create( 'anyGrid', {
     },
     visibleStyle: {
         opacity: 1
-    }
+    },
+    adjustGutter: false,
+    gutter: false
+
 });
 
 AnyGrid.prototype.getBreakPoint = function() {
@@ -6162,8 +5906,8 @@ AnyGrid.prototype._setUp = function() {
 
     var measureContainerWidth = this.containerWidth;
 
-    if (this.options.adjust_gutter && this.items.length) {
-        this.itemPadding = getSize(this.items[0].element).paddingLeft;
+    if (this.options.adjustGutter && (this.items.length || this.options.gutter)) {
+        this.itemPadding = this.options.gutter ? this.options.gutter : getSize(this.items[0].element).paddingLeft;
         this.element.parentNode.style.marginLeft = (this.itemPadding * -1) + 'px';
         measureContainerWidth = this.containerWidth + (this.itemPadding * 2);
     }
@@ -6182,7 +5926,6 @@ AnyGrid.prototype._setUp = function() {
     this.maxHeight = 0;
     this.itemIndex = 0;
 };
-
 AnyGrid.prototype._create = function() {
     var that = this;
 
@@ -6466,7 +6209,8 @@ utils.setCookie = function(cname, cvalue, exdays) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
     var expires = "expires="+d.toUTCString();
-    document.cookie = cname + "=" + cvalue + "; " + expires;
+    var cpath = "; path=/; domain=" + top.location.host;
+    document.cookie = cname + "=" + cvalue + "; " + expires + cpath;
 };
 
 utils.getCookie = function(cname) {
@@ -6570,16 +6314,16 @@ return utils;
 
     var RevDialog = function() {
         var that = this;
-        this.id = 'rev-opt-out';
+        that.id = 'rev-opt-out';
         //this.url = url;
         //setTimeout(function() {that.render();}, 100);
-        this.resizeEnd;
+        that.resizeEnd;
 
-        this.addEventHandler(window, 'load', function() {
+        that.addEventHandler(window, 'load', function() {
             that.render();
         });
 
-        this.addEventHandler(window, 'resize', function() {
+        that.addEventHandler(window, 'resize', function() {
             clearTimeout(that.resizeEnd);
             that.resizeEnd = setTimeout(function() {
                 that.resize();
@@ -6595,13 +6339,14 @@ return utils;
     }
 
     RevDialog.prototype.resize = function() {
-        this.containerWidth = document.documentElement.clientWidth;
-        this.containerHeight = document.documentElement.clientHeight;
-        if (this.containerHeight < 455) {
-            this.setFullHeight();
-        } else if (this.containerHeight >= 455) {
-            this.setNormalHeight();
-            this.centerDialog();
+        var that = this;
+        that.containerWidth = document.documentElement.clientWidth;
+        that.containerHeight = document.documentElement.clientHeight;
+        if (that.containerHeight < 455) {
+            that.setFullHeight();
+        } else if (that.containerHeight >= 455) {
+            that.setNormalHeight();
+            that.centerDialog();
         }
     };
 
@@ -6669,9 +6414,10 @@ return utils;
 
 
 
-    RevDialog.prototype.showDialog = function() {
+    RevDialog.prototype.showDialog = function(injectedDialog) {
+        var that = injectedDialog || this;
         document.querySelector('.rd-box-wrap').style.display = 'block';
-        this.resize();
+        that.resize();
         return false;
     };
 
@@ -6732,6 +6478,110 @@ return utils;
     return rD;
 
 }));
+/**
+ * RevDisclose (Branding + Disclosure Options)
+ *
+ */
+
+(function (window, document, dialog, undefined) {
+    'use strict';
+    console.log("Entering RevDisclose Namespace...");
+    var RevDisclose = function () {
+        var self = this;
+        self.dialog = dialog;
+        self.plainText = false;
+        self.disclosureText = null;
+        self.disclosureHtml = '';
+        self.defaultDisclosureText = 'Sponsored by Revcontent';
+        self.disclosureTextLimit = 50;
+        self.onClickHandler = false;
+        self.onClickHandlerObject = null;
+        self.defaultOnClick = function () {
+
+        };
+        self.hooks = [];
+        self.init();
+    };
+
+    RevDisclose.prototype.init = function () {
+        console.log("RevDisclose: Initializing...");
+        var self = this;
+        document.onreadystatechange = function () {
+            if (document.readyState == "complete") {
+                console.log("RevDisclose: Document is READY!...");
+
+            }
+        }
+    };
+
+    RevDisclose.prototype.setDialog = function(dialog){
+        console.log("RevDisclose: Manually Setting Dialog Object");
+        var self = this;
+        if(typeof dialog === "object"){
+            self.dialog = dialog;
+        }
+    };
+
+    RevDisclose.prototype.truncateDisclosure = function () {
+        console.log("RevDisclose: Initializing...");
+        var self = this;
+        self.disclosureText = self.disclosureText.toString().substring(0, self.disclosureTextLimit).replace(/['"]+/g, '');
+    };
+
+    RevDisclose.prototype.setDisclosureText = function(disclosure){
+        console.log("RevDisclose: Setting Disclosure Text Label to: "  + disclosure.toString());
+        var self = this;
+        self.disclosureText = (disclosure.length > 2) ? disclosure.toString() : self.defaultDisclosureText;
+        self.truncateDisclosure();
+    };
+
+    RevDisclose.prototype.setOnClickHandler = function (handler, handlerObject) {
+        console.log("RevDisclose: Setting onClick Handler for Disclosure text...");
+        var self = this;
+        if (typeof handler === 'function') {
+            self.onClickHandler = handler;
+        }
+        if (typeof handlerObject === 'object') {
+            self.onClickHandlerObject = handlerObject;
+        }
+    };
+
+    RevDisclose.prototype.getSponsorTemplate = function () {
+        console.log("RevDisclose: Building Disclosure HTML...");
+        var self = this;
+        self.disclosureHtml = '<a href="javascript:;" onclick="revDisclose.onClickHandler(revDisclose.onClickHandlerObject ? revDisclose.onClickHandlerObject : null);">' + self.disclosureText + '</a>';
+        console.log("RevDisclose: " + self.disclosureHtml);
+        return self.plainText ? self.disclosureText : self.disclosureHtml;
+    };
+
+    RevDisclose.prototype.getDisclosure = function (disclosureText) {
+        console.log("RevDisclose: Attaching Disclosure Text and onClick Event Function...");
+        var self = this;
+        self.setDisclosureText(disclosureText);
+        if(typeof self.dialog === "object") {
+            self.setOnClickHandler(self.dialog.showDialog, self.dialog);
+        } else {
+            self.setOnClickHandler(self.defaultOnClick);
+        }
+        return self.getSponsorTemplate();
+    };
+
+    RevDisclose.prototype.getProviderTemplate = function(className, styles){
+        var self = this;
+        var providerHtml = '<div class="' + (className ? className.toString() : '') + '" style="' + (styles ? styles.toString() : '') + '"></div>';
+        return providerHtml;
+    };
+
+    RevDisclose.prototype.getProvider = function(className, styles) {
+        var self = this;
+        return self.getProviderTemplate(className, styles);
+    };
+
+    window.revDisclose = new RevDisclose();
+
+    return window.revDisclose;
+
+}(window, document, window.revDialog));
 /**
  * Revcontent detect
  */
@@ -6872,7 +6722,9 @@ RevSlider({
         'phone', 'tablet', 'desktop'
     ],
     url: 'https://trends.revcontent.com/api/v1/',
-    ad_border: true
+    ad_border: true,
+    disclosure_text: revDisclose.defaultDisclosureText,
+    hide_provider: false
 });
 */
 
@@ -6880,9 +6732,9 @@ RevSlider({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevSlider = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDialog);
+    window.RevSlider = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDisclose);
 
-}( window, function factory(window, revUtils, revDetect, revApi, revDialog) {
+}( window, function factory(window, revUtils, revDetect, revApi, revDisclose) {
 'use strict';
 
     var RevSlider = function(opts) {
@@ -6923,7 +6775,9 @@ RevSlider({
             ad_border: true,
             headline_size: 2,
             max_headline: false,
-            text_overlay: false
+            text_overlay: false,
+            disclosure_text: revDisclose.defaultDisclosureText,
+            hide_provider: false
         };
 
         // merge options
@@ -6940,7 +6794,7 @@ RevSlider({
 
         var that = this;
 
-        revUtils.appendStyle('/* inject:css */#rev-slider a,#rev-slider a:focus,#rev-slider a:hover{text-decoration:none}#rev-slider,#rev-slider #rev-slider-grid,#rev-slider #rev-slider-grid-container{padding:0;width:100%}#rev-slider #rev-slider-grid-container{display:table;width:100%}#rev-slider{clear:both}#rev-slider *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-slider #rev-slider-grid-container .rev-btn-container{padding:0 30px}#rev-slider a{color:inherit}#rev-slider:focus{outline:0}#rev-slider .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-slider .rev-sponsored{line-height:24px;font-size:12px}#rev-slider .rev-sponsored.bottom-right,#rev-slider .rev-sponsored.top-right{float:right}#rev-slider .rev-sponsored.top-right a{vertical-align:-5px}#rev-slider .rev-sponsored a{color:#999}#rev-slider .rev-ad a{display:block;color:#222}#rev-slider .rev-image{position:relative;-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee}#rev-slider .rev-image img{position:absolute;top:0;left:0;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-slider.loaded .rev-image{background:0 0}#rev-slider.loaded .rev-image img{opacity:1}#rev-slider .rev-headline,#rev-slider .rev-provider{margin:0 10px;text-align:left}#rev-slider .rev-headline{margin-top:12px;height:40px;overflow:hidden}#rev-slider .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-slider .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px}#rev-slider .rev-ad{border-radius:5px;overflow:hidden;background:#fff}#rev-slider .rev-content{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-slider .rev-content.rev-next{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:.5}#rev-slider.rev-slider-text-overlay .rev-ad{position:relative}#rev-slider.rev-slider-text-overlay .rev-ad a{height:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-headline{position:absolute;bottom:4px;color:#fff;text-shadow:1px 1px rgba(0,0,0,.8);height:auto!important}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{border-radius:5px;position:absolute;top:0;height:100%;width:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;content:"";display:block}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after{background:-webkit-linear-gradient(top,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%);background:linear-gradient(to bottom,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{opacity:0;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%);background:linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:after{opacity:0}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:before{opacity:1}#rev-opt-out .rd-close-button{position:absolute;cursor:pointer;right:10px;z-index:10}#rev-opt-out a{cursor:pointer!important}#rev-opt-out .rd-box-wrap{display:none;z-index:2147483641}#rev-opt-out .rd-box-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}#rev-opt-out .rd-vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}#rev-opt-out .rd-box{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}#rev-opt-out .rd-normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}#rev-opt-out .rd-full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}#rev-opt-out .rd-header{height:20px;position:absolute;right:0}#rev-opt-out .rd-about{font-family:Arial,sans-serif;font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}#rev-opt-out .rd-about .rd-logo{background:url(https://www.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}#rev-opt-out .rd-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}#rev-opt-out .rd-about p#main{text-align:left}#rev-opt-out .rd-about h2{color:#777;font-family:Arial,sans-serif;font-size:16px;line-height:18px}#rev-opt-out .rd-about a{color:#00cb43}#rev-opt-out .rd-well{border:1px solid #E0E0E0;padding:20px;text-align:center;border-radius:2px;margin:20px 0 0}#rev-opt-out .rd-well h2{margin-top:0}#rev-opt-out .rd-well p{margin-bottom:0}#rev-opt-out .rd-opt-out{text-align:center}#rev-opt-out .rd-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-slider');
+        revUtils.appendStyle('/* inject:css */#rev-slider a,#rev-slider a:focus,#rev-slider a:hover{text-decoration:none}#rev-slider,#rev-slider #rev-slider-grid,#rev-slider #rev-slider-grid-container{padding:0;width:100%}#rev-slider #rev-slider-grid-container{display:table;width:100%}#rev-slider{clear:both}#rev-slider *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-slider #rev-slider-grid-container .rev-btn-container{padding:0 30px}#rev-slider a{color:inherit}#rev-slider:focus{outline:0}#rev-slider .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-slider .rev-sponsored{line-height:24px;font-size:12px}#rev-slider .rev-sponsored.bottom-right,#rev-slider .rev-sponsored.top-right{float:right}#rev-slider .rev-sponsored.top-right a{vertical-align:-5px}#rev-slider .rev-sponsored a{color:#999}#rev-slider .rev-ad a{display:block;color:#222}#rev-slider .rev-image{position:relative;-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee}#rev-slider .rev-image img{position:absolute;top:0;left:0;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-slider.loaded .rev-image{background:0 0}#rev-slider.loaded .rev-image img{opacity:1}#rev-slider .rev-headline,#rev-slider .rev-provider{margin:0 10px;text-align:left}#rev-slider .rev-headline{margin-top:12px;height:40px;overflow:hidden}#rev-slider .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-slider .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px}#rev-slider .rev-ad{border-radius:5px;overflow:hidden;background:#fff}#rev-slider .rev-content{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-slider .rev-content.rev-next{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:.5}#rev-slider.rev-slider-text-overlay .rev-ad{position:relative}#rev-slider.rev-slider-text-overlay .rev-ad a{height:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-headline{position:absolute;bottom:4px;color:#fff;text-shadow:1px 1px rgba(0,0,0,.8);height:auto!important}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{border-radius:5px;position:absolute;top:0;height:100%;width:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;content:"";display:block}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after{background:-webkit-linear-gradient(top,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%);background:linear-gradient(to bottom,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{opacity:0;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%);background:linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:after{opacity:0}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:before{opacity:1}#rev-opt-out .rd-close-button{position:absolute;cursor:pointer;right:10px;z-index:10}#rev-opt-out a{cursor:pointer!important}#rev-opt-out .rd-box-wrap{display:none;z-index:2147483641}#rev-opt-out .rd-box-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}#rev-opt-out .rd-vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}#rev-opt-out .rd-box{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}#rev-opt-out .rd-normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}#rev-opt-out .rd-full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}#rev-opt-out .rd-header{height:20px;position:absolute;right:0}#rev-opt-out .rd-about{font-family:Arial,sans-serif;font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}#rev-opt-out .rd-about .rd-logo{background:url(https://serve.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}#rev-opt-out .rd-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}#rev-opt-out .rd-about p#main{text-align:left}#rev-opt-out .rd-about h2{color:#777;font-family:Arial,sans-serif;font-size:16px;line-height:18px}#rev-opt-out .rd-about a{color:#00cb43}#rev-opt-out .rd-well{border:1px solid #E0E0E0;padding:20px;text-align:center;border-radius:2px;margin:20px 0 0}#rev-opt-out .rd-well h2{margin-top:0}#rev-opt-out .rd-well p{margin-bottom:0}#rev-opt-out .rd-opt-out{text-align:center}#rev-opt-out .rd-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-slider');
 
         var backBtn = document.createElement('div');
         backBtn.id = "back";
@@ -7069,7 +6923,7 @@ RevSlider({
         }
         this.sponsored = document.createElement('div');
         revUtils.addClass(this.sponsored, 'rev-sponsored');
-        this.sponsored.innerHTML = '<a href="javascript:;" onclick="revDialog.showDialog();">Sponsored by Revcontent</a>';
+        this.sponsored.innerHTML = revDisclose.getDisclosure(this.options.disclosure_text);
         if (this.options.rev_position == 'top_right') {
             revUtils.addClass(this.sponsored, 'top-right')
             revUtils.prepend(this.containerElement, this.sponsored);
@@ -7105,6 +6959,7 @@ RevSlider({
     };
 
     RevSlider.prototype.resize = function() {
+        var that = this;
         var oldLimit = this.limit;
         this.grid.option(this.options);
         this.setUp();
@@ -7145,10 +7000,12 @@ RevSlider({
 
             ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
             ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.margin = this.providerMargin +'px '  + this.innerMargin + 'px ' + this.providerMargin +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
-            ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
+            if(that.options.hide_provider === false) {
+                ad.querySelectorAll('.rev-provider')[0].style.margin = this.providerMargin + 'px ' + this.innerMargin + 'px ' + this.providerMargin + 'px';
+                ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize + 'px';
+                ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
+                ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight + 'px';
+            }
         }
 
         this.textOverlay();
@@ -7206,6 +7063,7 @@ RevSlider({
     }
 
     RevSlider.prototype.appendCell = function() {
+        var that = this;
         var html = '<div class="rev-ad" style="'+ (this.options.ad_border ? 'border:1px solid #eee' : '') +'">' +
                     '<a href="" target="_blank">' +
                         '<div class="rev-image" style="height:'+ this.preloaderHeight +'px">' +
@@ -7214,7 +7072,7 @@ RevSlider({
                         '<div class="rev-headline" style="height:'+ this.headlineHeight +'px; margin:'+ this.headlineMarginTop +'px ' + this.innerMargin + 'px' + ' 0;">' +
                             '<h3 style="font-size:'+ this.headlineFontSize +'px; line-height:'+ this.headlineLineHeight +'px;"></h3>' +
                         '</div>' +
-                        '<div style="margin:' + this.providerMargin +'px '  + this.innerMargin + 'px ' + this.providerMargin +'px;font-size:'+ this.providerFontSize +'px;line-height:'+ this.providerLineHeight +'px;height:'+ this.providerLineHeight +'px;" class="rev-provider"></div>' +
+                        (that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'margin:' + that.providerMargin +'px '  + that.innerMargin + 'px ' + that.providerMargin + 'px;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;height:' + that.providerLineHeight + 'px;') : '') +
                     '</a>' +
                 '</div>';
         var cell = document.createElement('div');
@@ -7242,7 +7100,9 @@ RevSlider({
                 ad.querySelectorAll('a')[0].title = data.headline;
                 ad.querySelectorAll('img')[0].setAttribute('src', data.image);
                 ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
-                ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
+                if(that.options.hide_provider === false) {
+                    ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
+                }
             }
 
             imagesLoaded( that.gridElement, function() {
@@ -7319,6 +7179,8 @@ RevShifter({
     header: 'Trending Today',
     closed_hours: 24,
     sponsored: 2,
+    disclosure_text: revDisclose.defaultDisclosureText,
+    hide_provider: false
 });
 */
 
@@ -7326,9 +7188,9 @@ RevShifter({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevShifter = factory(window, window.revUtils, window.revDetect);
+    window.RevShifter = factory(window, window.revUtils, window.revDetect, window.revDisclose);
 
-}( window, function factory(window, revUtils, revDetect) {
+}( window, function factory(window, revUtils, revDetect, revDisclose) {
 'use strict';
 
     var RevShifter;
@@ -7356,7 +7218,9 @@ RevShifter({
         devices: [
             'phone', 'tablet', 'desktop'
         ],
-        url: 'https://trends.revcontent.com/api/v1/'
+        url: 'https://trends.revcontent.com/api/v1/',
+        disclosure_text: revDisclose.defaultDisclosureText,
+        hide_provider: false
     };
 
     RevShifter = function(opts) {
@@ -7420,7 +7284,9 @@ RevShifter({
                 domain : 'bustle.com',
                 rev_position: 'top_right',
                 per_row: this.options.inner_widget_options.per_row,
-                rows: this.options.inner_widget_options.rows
+                rows: this.options.inner_widget_options.rows,
+                disclosure_text: this.options.disclosure_text,
+                hide_provider: this.options.hide_provider
             });
 
             this.attachButtonEvents();

@@ -2105,16 +2105,16 @@ return utils;
 
     var RevDialog = function() {
         var that = this;
-        this.id = 'rev-opt-out';
+        that.id = 'rev-opt-out';
         //this.url = url;
         //setTimeout(function() {that.render();}, 100);
-        this.resizeEnd;
+        that.resizeEnd;
 
-        this.addEventHandler(window, 'load', function() {
+        that.addEventHandler(window, 'load', function() {
             that.render();
         });
 
-        this.addEventHandler(window, 'resize', function() {
+        that.addEventHandler(window, 'resize', function() {
             clearTimeout(that.resizeEnd);
             that.resizeEnd = setTimeout(function() {
                 that.resize();
@@ -2130,13 +2130,14 @@ return utils;
     }
 
     RevDialog.prototype.resize = function() {
-        this.containerWidth = document.documentElement.clientWidth;
-        this.containerHeight = document.documentElement.clientHeight;
-        if (this.containerHeight < 455) {
-            this.setFullHeight();
-        } else if (this.containerHeight >= 455) {
-            this.setNormalHeight();
-            this.centerDialog();
+        var that = this;
+        that.containerWidth = document.documentElement.clientWidth;
+        that.containerHeight = document.documentElement.clientHeight;
+        if (that.containerHeight < 455) {
+            that.setFullHeight();
+        } else if (that.containerHeight >= 455) {
+            that.setNormalHeight();
+            that.centerDialog();
         }
     };
 
@@ -2204,9 +2205,10 @@ return utils;
 
 
 
-    RevDialog.prototype.showDialog = function() {
+    RevDialog.prototype.showDialog = function(injectedDialog) {
+        var that = injectedDialog || this;
         document.querySelector('.rd-box-wrap').style.display = 'block';
-        this.resize();
+        that.resize();
         return false;
     };
 
@@ -2267,6 +2269,110 @@ return utils;
     return rD;
 
 }));
+/**
+ * RevDisclose (Branding + Disclosure Options)
+ *
+ */
+
+(function (window, document, dialog, undefined) {
+    'use strict';
+    console.log("Entering RevDisclose Namespace...");
+    var RevDisclose = function () {
+        var self = this;
+        self.dialog = dialog;
+        self.plainText = false;
+        self.disclosureText = null;
+        self.disclosureHtml = '';
+        self.defaultDisclosureText = 'Sponsored by Revcontent';
+        self.disclosureTextLimit = 50;
+        self.onClickHandler = false;
+        self.onClickHandlerObject = null;
+        self.defaultOnClick = function () {
+
+        };
+        self.hooks = [];
+        self.init();
+    };
+
+    RevDisclose.prototype.init = function () {
+        console.log("RevDisclose: Initializing...");
+        var self = this;
+        document.onreadystatechange = function () {
+            if (document.readyState == "complete") {
+                console.log("RevDisclose: Document is READY!...");
+
+            }
+        }
+    };
+
+    RevDisclose.prototype.setDialog = function(dialog){
+        console.log("RevDisclose: Manually Setting Dialog Object");
+        var self = this;
+        if(typeof dialog === "object"){
+            self.dialog = dialog;
+        }
+    };
+
+    RevDisclose.prototype.truncateDisclosure = function () {
+        console.log("RevDisclose: Initializing...");
+        var self = this;
+        self.disclosureText = self.disclosureText.toString().substring(0, self.disclosureTextLimit).replace(/['"]+/g, '');
+    };
+
+    RevDisclose.prototype.setDisclosureText = function(disclosure){
+        console.log("RevDisclose: Setting Disclosure Text Label to: "  + disclosure.toString());
+        var self = this;
+        self.disclosureText = (disclosure.length > 2) ? disclosure.toString() : self.defaultDisclosureText;
+        self.truncateDisclosure();
+    };
+
+    RevDisclose.prototype.setOnClickHandler = function (handler, handlerObject) {
+        console.log("RevDisclose: Setting onClick Handler for Disclosure text...");
+        var self = this;
+        if (typeof handler === 'function') {
+            self.onClickHandler = handler;
+        }
+        if (typeof handlerObject === 'object') {
+            self.onClickHandlerObject = handlerObject;
+        }
+    };
+
+    RevDisclose.prototype.getSponsorTemplate = function () {
+        console.log("RevDisclose: Building Disclosure HTML...");
+        var self = this;
+        self.disclosureHtml = '<a href="javascript:;" onclick="revDisclose.onClickHandler(revDisclose.onClickHandlerObject ? revDisclose.onClickHandlerObject : null);">' + self.disclosureText + '</a>';
+        console.log("RevDisclose: " + self.disclosureHtml);
+        return self.plainText ? self.disclosureText : self.disclosureHtml;
+    };
+
+    RevDisclose.prototype.getDisclosure = function (disclosureText) {
+        console.log("RevDisclose: Attaching Disclosure Text and onClick Event Function...");
+        var self = this;
+        self.setDisclosureText(disclosureText);
+        if(typeof self.dialog === "object") {
+            self.setOnClickHandler(self.dialog.showDialog, self.dialog);
+        } else {
+            self.setOnClickHandler(self.defaultOnClick);
+        }
+        return self.getSponsorTemplate();
+    };
+
+    RevDisclose.prototype.getProviderTemplate = function(className, styles){
+        var self = this;
+        var providerHtml = '<div class="' + (className ? className.toString() : '') + '" style="' + (styles ? styles.toString() : '') + '"></div>';
+        return providerHtml;
+    };
+
+    RevDisclose.prototype.getProvider = function(className, styles) {
+        var self = this;
+        return self.getProviderTemplate(className, styles);
+    };
+
+    window.revDisclose = new RevDisclose();
+
+    return window.revDisclose;
+
+}(window, document, window.revDialog));
 /**
  * Revcontent detect
  */
@@ -2381,6 +2487,8 @@ RevToaster({
     header: 'Trending Today',
     closed_hours: 24,
     sponsored: 2,
+    disclosure_text: revDisclose.defaultDisclosureText,
+    hide_provider: false
 });
 */
 
@@ -2388,9 +2496,9 @@ RevToaster({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevToaster = factory(window, window.revUtils, window.revDetect, window.revApi);
+    window.RevToaster = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDisclose);
 
-}( window, function factory(window, revUtils, revDetect, revApi) {
+}( window, function factory(window, revUtils, revDetect, revApi, revDisclose) {
 'use strict';
 
     // ----- vars ----- //
@@ -2407,7 +2515,9 @@ RevToaster({
         rev_position: 'bottom_right',
         devices: [
             'phone', 'tablet', 'desktop'
-        ]
+        ],
+        disclosure_text: revDisclose.defaultDisclosureText,
+        hide_provider: false
     };
     // var options;
     var lastScrollTop = 0;
@@ -2531,7 +2641,7 @@ RevToaster({
             }
             this.sponsored = document.createElement('div');
             this.sponsored.className = 'rev-sponsored';
-            this.sponsored.innerHTML = '<a href="javascript:;" onclick="revDialog.showDialog()">Sponsored by Revcontent</a>';
+            this.sponsored.innerHTML = revDisclose.getDisclosure(this.options.disclosure_text, revDialog.showDialog, revDialog);
 
             if (this.options.rev_position == 'top_right') {
                 revUtils.addClass(this.sponsored, 'top-right')
@@ -2583,7 +2693,7 @@ RevToaster({
                             '<div class="rev-headline">' +
                                 '<h3></h3>' +
                             '</div>' +
-                            '<div class="rev-provider"></div>' +
+                            (revDisclose.getProvider('rev-provider')) +
                         '</a>' +
                     '</div>';
             var cell = document.createElement('div');
@@ -2611,7 +2721,10 @@ RevToaster({
                     ad.querySelectorAll('a')[0].setAttribute('href', data.url);
                     ad.querySelectorAll('img')[0].setAttribute('src', data.image);
                     ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
-                    ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
+                    if(that.options.hide_provider === false) {
+                        ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
+                    }
+
                 }
                 if (show) {
                     that.show();

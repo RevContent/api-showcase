@@ -20,6 +20,8 @@ RevShifter({
     header: 'Trending Today',
     closed_hours: 24,
     sponsored: 2,
+    disclosure_text: revDisclose.defaultDisclosureText,
+    hide_provider: false
 });
 */
 
@@ -27,9 +29,9 @@ RevShifter({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevShifter = factory(window, window.revUtils, window.revDetect);
+    window.RevShifter = factory(window, window.revUtils, window.revDetect, window.revDisclose);
 
-}( window, function factory(window, revUtils, revDetect) {
+}( window, function factory(window, revUtils, revDetect, revDisclose) {
 'use strict';
 
     var RevShifter;
@@ -62,7 +64,9 @@ RevShifter({
         devices: [
             'phone', 'tablet', 'desktop'
         ],
-        url: 'https://trends.revcontent.com/api/v1/'
+        url: 'https://trends.revcontent.com/api/v1/',
+        disclosure_text: revDisclose.defaultDisclosureText,
+        hide_provider: false
     };
 
     RevShifter = function(opts) {
@@ -138,7 +142,9 @@ RevShifter({
                 max_headline: true,
                 stacked: true,
                 transition_duration: this.options.retract_duration + 'ms',
-                is_layout_instant: true
+                is_layout_instant: true,
+                disclosure_text: this.options.disclosure_text,
+                hide_provider: this.options.hide_provider
             });
 
             this.size = this.element.clientHeight;

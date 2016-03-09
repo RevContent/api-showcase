@@ -45,7 +45,9 @@ RevSlider({
         'phone', 'tablet', 'desktop'
     ],
     url: 'https://trends.revcontent.com/api/v1/',
-    ad_border: true
+    ad_border: true,
+    disclosure_text: revDisclose.defaultDisclosureText,
+    hide_provider: false
 });
 */
 
@@ -53,9 +55,9 @@ RevSlider({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevSlider = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDialog);
+    window.RevSlider = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDisclose);
 
-}( window, function factory(window, revUtils, revDetect, revApi, revDialog) {
+}( window, function factory(window, revUtils, revDetect, revApi, revDisclose) {
 'use strict';
 
     var RevSlider = function(opts) {
@@ -115,7 +117,9 @@ RevSlider({
                 back: true,
                 size: 40,
                 position: 'inside',
-            }
+            },
+            disclosure_text: revDisclose.defaultDisclosureText,
+            hide_provider: false
         };
 
         // merge options
@@ -526,8 +530,9 @@ RevSlider({
         revUtils.append(this.head, this.header);
 
         this.sponsored = document.createElement('div');
-        this.sponsored.innerHTML = '<a href="javascript:;" onclick="revDialog.showDialog();">Sponsored by Revcontent</a>';
+
         revUtils.addClass(this.sponsored, 'rev-sponsored');
+        this.sponsored.innerHTML = revDisclose.getDisclosure(this.options.disclosure_text);
 
         if (this.options.rev_position == 'top_right') {
             revUtils.addClass(this.sponsored, 'top-right');
@@ -597,6 +602,7 @@ RevSlider({
         //gridContainerElement.style.height = '';
         //gridContainerElement.style.width = '100%';
 
+        var that = this;
         var oldLimit = this.limit;
         this.grid.option(this.options);
         this.setUp();
@@ -645,10 +651,12 @@ RevSlider({
             ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
             ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
             ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.margin = '0 '  + this.innerMargin + 'px 0';
-            ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
-            ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
+            if(that.options.hide_provider === false) {
+                ad.querySelectorAll('.rev-provider')[0].style.margin = this.providerMargin + 'px ' + this.innerMargin + 'px ' + this.providerMargin + 'px';
+                ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize + 'px';
+                ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
+                ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight + 'px';
+            }
         }
         this.textOverlay();
 
@@ -716,16 +724,7 @@ RevSlider({
             '</div>' +
             '</a>' +
             '</div>';
-        var cell = document.createElement('div');
-
-        cell.style.padding = this.padding + 'px';
-
-        revUtils.addClass(cell, 'rev-content');
-
-        cell.innerHTML = html;
-
-        return cell;
-    };
+    }
 
     RevSlider.prototype.getData = function() {
         var sponsoredCount = this.options.pages * this.limit;

@@ -38,7 +38,9 @@ RevFlicker({
     devices: [
         'phone', 'tablet', 'desktop'
     ],
-    url: 'https://trends.revcontent.com/api/v1/'
+    url: 'https://trends.revcontent.com/api/v1/',
+    disclosure_text: revDisclose.defaultDisclosureText,
+    hide_provider: false
 });
 */
 
@@ -46,9 +48,9 @@ RevFlicker({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevFlicker = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDialog);
+    window.RevFlicker = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDisclose);
 
-}( window, function factory(window, revUtils, revDetect, revApi, revDialog) {
+}( window, function factory(window, revUtils, revDetect, revApi, revDisclose) {
 'use strict';
 
     var RevFlicker = function(opts) {
@@ -81,7 +83,9 @@ RevFlicker({
             headline_size: 2,
             max_headline: false,
             text_overlay: false,
-            ad_border: true
+            ad_border: true,
+            disclosure_text: revDisclose.defaultDisclosureText,
+            hide_provider: false
         };
 
         // merge options
@@ -149,6 +153,7 @@ RevFlicker({
     };
 
     RevFlicker.prototype.resize = function() {
+        var that = this;
         this.getContainerWidth(true);
 
         this.setUp();
@@ -168,10 +173,12 @@ RevFlicker({
 
             ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
             ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.margin = '0 '  + this.innerMargin + 'px 0';
-            ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
-            ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
+            if(that.options.hide_provider === false) {
+                ad.querySelectorAll('.rev-provider')[0].style.margin = '0 ' + this.innerMargin + 'px 0';
+                ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize + 'px';
+                ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
+                ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight + 'px';
+            }
         }
 
         this.textOverlay();
@@ -220,7 +227,7 @@ RevFlicker({
         }
         this.sponsored = document.createElement('div');
         revUtils.addClass(this.sponsored, 'rev-sponsored');
-        this.sponsored.innerHTML = '<a href="javascript:;" onclick="revDialog.showDialog();">Sponsored by Revcontent</a>';
+        this.sponsored.innerHTML = revDisclose.getDisclosure(this.options.disclosure_text);
         if (this.options.rev_position == 'top_right') {
             revUtils.addClass(this.sponsored, 'top-right')
             revUtils.prepend(this.containerElement, this.sponsored);
@@ -372,7 +379,7 @@ RevFlicker({
         var cellHeight = this.preloaderHeight;
         if (!this.options.text_overlay) {
             cellHeight += this.headlineHeight +
-                this.headlineMarginTop + this.providerLineHeight ;
+                this.headlineMarginTop + (this.options.hide_provider ? 0 : this.providerLineHeight) ;
             cellHeight += (this.options.ad_border) ? 2 : 0;
         }
         return cellHeight;
@@ -396,7 +403,7 @@ RevFlicker({
                         '<a href="" rel="nofollow" target="_blank">' +
                             '<div class="rev-image" style="height:'+ that.preloaderHeight +'px"><img src=""/></div>' +
                             '<div class="rev-headline" style="max-height:'+ that.headlineHeight +'px; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>' +
-                            '<div style="margin: 0 '  + that.innerMargin + 'px 0;font-size:'+ that.providerFontSize +'px;line-height:'+ that.providerLineHeight +'px;height:'+ that.providerLineHeight +'px;" class="rev-provider"></div>' +
+                            ( that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'margin: 0 '  + that.innerMargin + 'px 0;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;height:' + that.providerLineHeight + 'px;') : '') +
                         '</a>' +
                     '</div>';
             var cell = document.createElement('div');
@@ -512,7 +519,9 @@ RevFlicker({
                 ad.querySelectorAll('a')[0].title = data.headline;
                 ad.querySelectorAll('img')[0].setAttribute('src', data.image);
                 ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
-                ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
+                if(that.options.hide_provider === false){
+                    ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
+                }
             }
 
             imagesLoaded( that.flickity.element, function() {

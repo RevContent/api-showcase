@@ -7,6 +7,7 @@ var minifycss    = require('gulp-minify-css');
 var concat       = require('gulp-concat');
 var uglify       = require('gulp-uglify');
 var autoprefixer = require('gulp-autoprefixer');
+var stripDebug   = require('gulp-strip-debug');
 
 gulp.task('default', ['buildjs']);
 
@@ -43,12 +44,13 @@ gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
       ' */',
       ''].join('\n');
 
-    return gulp.src(['./vendor/mobile-detect/mobile-detect.js', './vendor/imagesloaded/imagesloaded.pkgd.js', './vendor/any-grid/dist/any-grid.js', '../js/revutils.js', '../js/revdialog.js', '../js/revdetect.js', '../js/revapi.js', './build/revslider.js'])
+    return gulp.src(['./vendor/mobile-detect/mobile-detect.js', './vendor/imagesloaded/imagesloaded.pkgd.js', './vendor/any-grid/dist/any-grid.js', '../js/revutils.js', '../js/revdialog.js', '../js/revdisclose.js', '../js/revdetect.js', '../js/revapi.js', './build/revslider.js'])
         .pipe(concat('revslider.pkgd.js'))
         .pipe(gulp.dest('./build'))
         .pipe(uglify({
             mangle: false
             }))
+        .pipe(stripDebug())
         .pipe(rename('revslider.min.js'))
         .pipe(header(banner, { pkg : pkg } ))
         .pipe(gulp.dest('./build'))
