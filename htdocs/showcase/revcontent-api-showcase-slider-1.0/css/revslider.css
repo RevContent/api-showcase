@@ -255,6 +255,8 @@
     color: #fff;
     text-shadow: 1px 1px rgba(0,0,0,0.8);
     height: auto !important;
+#rev-slider.rev-slider-text-overlay .rev-ad .rev-headline-brand .rev-provider {
+    display: none;
 }
 
 #rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay,
