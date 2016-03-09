@@ -183,10 +183,10 @@ RevSlider({
 
         this.createCells(this.grid.cols);
 
+        this.textOverlay();
+
         this.grid.reloadItems();
         this.grid.layout();
-
-        this.textOverlay();
 
         if (this.options.vertical && this.options.buttons.position == 'outside') { // buttons outside for vertical only
             this.innerContainerElement.style.padding = (this.options.buttons.back ? (this.options.buttons.size + 'px') : '0') + ' 0 ' + (this.options.buttons.forward ? (this.options.buttons.size + 'px') : '0');
