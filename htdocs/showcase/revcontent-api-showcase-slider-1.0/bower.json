@@ -7,7 +7,7 @@
   "dependencies": {
     "imagesloaded": "latest",
     "mobile-detect": "latest",
-    "any-grid": "latest",
+    "any-grid": "remove-vertical-padding",
     "hammerjs": "latest"
   },
   "homepage": "https://api-v2.revcontent.com/",
