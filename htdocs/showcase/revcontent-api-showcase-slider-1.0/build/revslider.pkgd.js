@@ -4873,16 +4873,16 @@ return utils;
 
     var RevDialog = function() {
         var that = this;
-        this.id = 'rev-opt-out';
+        that.id = 'rev-opt-out';
         //this.url = url;
         //setTimeout(function() {that.render();}, 100);
-        this.resizeEnd;
+        that.resizeEnd;
 
-        this.addEventHandler(window, 'load', function() {
+        that.addEventHandler(window, 'load', function() {
             that.render();
         });
 
-        this.addEventHandler(window, 'resize', function() {
+        that.addEventHandler(window, 'resize', function() {
             clearTimeout(that.resizeEnd);
             that.resizeEnd = setTimeout(function() {
                 that.resize();
@@ -4898,13 +4898,14 @@ return utils;
     }
 
     RevDialog.prototype.resize = function() {
-        this.containerWidth = document.documentElement.clientWidth;
-        this.containerHeight = document.documentElement.clientHeight;
-        if (this.containerHeight < 455) {
-            this.setFullHeight();
-        } else if (this.containerHeight >= 455) {
-            this.setNormalHeight();
-            this.centerDialog();
+        var that = this;
+        that.containerWidth = document.documentElement.clientWidth;
+        that.containerHeight = document.documentElement.clientHeight;
+        if (that.containerHeight < 455) {
+            that.setFullHeight();
+        } else if (that.containerHeight >= 455) {
+            that.setNormalHeight();
+            that.centerDialog();
         }
     };
 
@@ -4972,9 +4973,10 @@ return utils;
 
 
 
-    RevDialog.prototype.showDialog = function() {
+    RevDialog.prototype.showDialog = function(injectedDialog) {
+        var that = injectedDialog || this;
         document.querySelector('.rd-box-wrap').style.display = 'block';
-        this.resize();
+        that.resize();
         return false;
     };
 
@@ -5035,6 +5037,110 @@ return utils;
     return rD;
 
 }));
+/**
+ * RevDisclose (Branding + Disclosure Options)
+ *
+ */
+
+(function (window, document, dialog, undefined) {
+    'use strict';
+    console.log("Entering RevDisclose Namespace...");
+    var RevDisclose = function () {
+        var self = this;
+        self.dialog = dialog;
+        self.plainText = false;
+        self.disclosureText = null;
+        self.disclosureHtml = '';
+        self.defaultDisclosureText = 'Sponsored by Revcontent';
+        self.disclosureTextLimit = 50;
+        self.onClickHandler = false;
+        self.onClickHandlerObject = null;
+        self.defaultOnClick = function () {
+
+        };
+        self.hooks = [];
+        self.init();
+    };
+
+    RevDisclose.prototype.init = function () {
+        console.log("RevDisclose: Initializing...");
+        var self = this;
+        document.onreadystatechange = function () {
+            if (document.readyState == "complete") {
+                console.log("RevDisclose: Document is READY!...");
+
+            }
+        }
+    };
+
+    RevDisclose.prototype.setDialog = function(dialog){
+        console.log("RevDisclose: Manually Setting Dialog Object");
+        var self = this;
+        if(typeof dialog === "object"){
+            self.dialog = dialog;
+        }
+    };
+
+    RevDisclose.prototype.truncateDisclosure = function () {
+        console.log("RevDisclose: Initializing...");
+        var self = this;
+        self.disclosureText = self.disclosureText.toString().substring(0, self.disclosureTextLimit).replace(/['"]+/g, '');
+    };
+
+    RevDisclose.prototype.setDisclosureText = function(disclosure){
+        console.log("RevDisclose: Setting Disclosure Text Label to: "  + disclosure.toString());
+        var self = this;
+        self.disclosureText = (disclosure.length > 2) ? disclosure.toString() : self.defaultDisclosureText;
+        self.truncateDisclosure();
+    };
+
+    RevDisclose.prototype.setOnClickHandler = function (handler, handlerObject) {
+        console.log("RevDisclose: Setting onClick Handler for Disclosure text...");
+        var self = this;
+        if (typeof handler === 'function') {
+            self.onClickHandler = handler;
+        }
+        if (typeof handlerObject === 'object') {
+            self.onClickHandlerObject = handlerObject;
+        }
+    };
+
+    RevDisclose.prototype.getSponsorTemplate = function () {
+        console.log("RevDisclose: Building Disclosure HTML...");
+        var self = this;
+        self.disclosureHtml = '<a href="javascript:;" onclick="revDisclose.onClickHandler(revDisclose.onClickHandlerObject ? revDisclose.onClickHandlerObject : null);">' + self.disclosureText + '</a>';
+        console.log("RevDisclose: " + self.disclosureHtml);
+        return self.plainText ? self.disclosureText : self.disclosureHtml;
+    };
+
+    RevDisclose.prototype.getDisclosure = function (disclosureText) {
+        console.log("RevDisclose: Attaching Disclosure Text and onClick Event Function...");
+        var self = this;
+        self.setDisclosureText(disclosureText);
+        if(typeof self.dialog === "object") {
+            self.setOnClickHandler(self.dialog.showDialog, self.dialog);
+        } else {
+            self.setOnClickHandler(self.defaultOnClick);
+        }
+        return self.getSponsorTemplate();
+    };
+
+    RevDisclose.prototype.getProviderTemplate = function(className, styles){
+        var self = this;
+        var providerHtml = '<div class="' + (className ? className.toString() : '') + '" style="' + (styles ? styles.toString() : '') + '"></div>';
+        return providerHtml;
+    };
+
+    RevDisclose.prototype.getProvider = function(className, styles) {
+        var self = this;
+        return self.getProviderTemplate(className, styles);
+    };
+
+    window.revDisclose = new RevDisclose();
+
+    return window.revDisclose;
+
+}(window, document, window.revDialog));
 /**
  * Revcontent detect
  */
@@ -5175,7 +5281,9 @@ RevSlider({
         'phone', 'tablet', 'desktop'
     ],
     url: 'https://trends.revcontent.com/api/v1/',
-    ad_border: true
+    ad_border: true,
+    disclosure_text: revDisclose.defaultDisclosureText,
+    hide_provider: false
 });
 */
 
@@ -5183,9 +5291,9 @@ RevSlider({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevSlider = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDialog);
+    window.RevSlider = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDisclose);
 
-}( window, function factory(window, revUtils, revDetect, revApi, revDialog) {
+}( window, function factory(window, revUtils, revDetect, revApi, revDisclose) {
 'use strict';
 
     var RevSlider = function(opts) {
@@ -5245,7 +5353,9 @@ RevSlider({
                 back: true,
                 size: 40,
                 position: 'inside',
-            }
+            },
+            disclosure_text: revDisclose.defaultDisclosureText,
+            hide_provider: false
         };
 
         // merge options
@@ -5656,8 +5766,9 @@ RevSlider({
         revUtils.append(this.head, this.header);
 
         this.sponsored = document.createElement('div');
-        this.sponsored.innerHTML = '<a href="javascript:;" onclick="revDialog.showDialog();">Sponsored by Revcontent</a>';
+
         revUtils.addClass(this.sponsored, 'rev-sponsored');
+        this.sponsored.innerHTML = revDisclose.getDisclosure(this.options.disclosure_text);
 
         if (this.options.rev_position == 'top_right') {
             revUtils.addClass(this.sponsored, 'top-right');
@@ -5727,6 +5838,7 @@ RevSlider({
         //gridContainerElement.style.height = '';
         //gridContainerElement.style.width = '100%';
 
+        var that = this;
         var oldLimit = this.limit;
         this.grid.option(this.options);
         this.setUp();
@@ -5775,10 +5887,12 @@ RevSlider({
             ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
             ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
             ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.margin = '0 '  + this.innerMargin + 'px 0';
-            ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
-            ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
+            if(that.options.hide_provider === false) {
+                ad.querySelectorAll('.rev-provider')[0].style.margin = this.providerMargin + 'px ' + this.innerMargin + 'px ' + this.providerMargin + 'px';
+                ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize + 'px';
+                ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
+                ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight + 'px';
+            }
         }
         this.textOverlay();
 
@@ -5846,16 +5960,7 @@ RevSlider({
             '</div>' +
             '</a>' +
             '</div>';
-        var cell = document.createElement('div');
-
-        cell.style.padding = this.padding + 'px';
-
-        revUtils.addClass(cell, 'rev-content');
-
-        cell.innerHTML = html;
-
-        return cell;
-    };
+    }
 
     RevSlider.prototype.getData = function() {
         var sponsoredCount = this.options.pages * this.limit;
