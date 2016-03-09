@@ -5441,10 +5441,8 @@ RevSlider({
     };
 
     RevSlider.prototype.createCells = function(cols) {
-        var rows = this.limit / cols;
         for (var i = 0; i < this.limit; i++) {
-            var row = Math.floor( i / cols ) + 1;
-            this.gridElement.appendChild(this.createNewCell((row == 1), (row == rows)));
+            this.gridElement.appendChild(this.createNewCell());
         }
     };
 
@@ -5960,6 +5958,16 @@ RevSlider({
             '</div>' +
             '</a>' +
             '</div>';
+
+            var cell = document.createElement('div');
+
+            cell.style.padding = this.padding + 'px';
+
+            revUtils.addClass(cell, 'rev-content');
+
+            cell.innerHTML = html;
+
+            return cell;
     }
 
     RevSlider.prototype.getData = function() {

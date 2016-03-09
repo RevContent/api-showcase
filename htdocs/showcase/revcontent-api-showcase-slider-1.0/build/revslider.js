@@ -205,10 +205,8 @@ RevSlider({
     };
 
     RevSlider.prototype.createCells = function(cols) {
-        var rows = this.limit / cols;
         for (var i = 0; i < this.limit; i++) {
-            var row = Math.floor( i / cols ) + 1;
-            this.gridElement.appendChild(this.createNewCell((row == 1), (row == rows)));
+            this.gridElement.appendChild(this.createNewCell());
         }
     };
 
@@ -710,7 +708,7 @@ RevSlider({
         return this.grid.getPerRow() * (this.options.rows[this.grid.getBreakPoint()] ? this.options.rows[this.grid.getBreakPoint()] : this.options.rows);
     };
 
-    RevSlider.prototype.createNewCell = function(first, last) {
+    RevSlider.prototype.createNewCell = function() {
         var html = '<div class="rev-ad" style="height: '+ this.getCellHeight() + 'px;' + (this.options.ad_border ? 'border:1px solid #eee' : '') +'" onmousedown="return false">' +
             '<a href="" target="_blank">' +
             '<div class="rev-image" style="height:'+ this.preloaderHeight +'px">' +
@@ -724,6 +722,16 @@ RevSlider({
             '</div>' +
             '</a>' +
             '</div>';
+
+            var cell = document.createElement('div');
+
+            cell.style.padding = this.padding + 'px';
+
+            revUtils.addClass(cell, 'rev-content');
+
+            cell.innerHTML = html;
+
+            return cell;
     }
 
     RevSlider.prototype.getData = function() {
