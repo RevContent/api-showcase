@@ -636,7 +636,7 @@ RevSlider({
             if (this.options.text_right) {
                 var paddingOffset = this.padding * 2;
                 var halfWidth = ((this.grid.columnWidth - paddingOffset) / 2);
-                ad.querySelectorAll('#rev-headline-brand')[0].style.width = halfWidth + 'px';
+                ad.querySelectorAll('.rev-headline-brand')[0].style.width = halfWidth + 'px';
                 ad.querySelectorAll('a')[0].style.display = 'inline-flex';
                 ad.querySelectorAll('.rev-image')[0].style.width = halfWidth + 'px';
             }
@@ -791,7 +791,7 @@ RevSlider({
             if (this.options.text_right) {
                 var paddingOffset = this.padding * 2;
                 var halfWidth = ((this.grid.columnWidth - paddingOffset) / 2);
-                ad.querySelectorAll('#rev-headline-brand')[0].style.width = halfWidth + 'px';
+                ad.querySelectorAll('.rev-headline-brand')[0].style.width = halfWidth + 'px';
                 ad.querySelectorAll('a')[0].style.display = 'inline-flex';
                 ad.querySelectorAll('.rev-image')[0].style.width = halfWidth + 'px';
             }
