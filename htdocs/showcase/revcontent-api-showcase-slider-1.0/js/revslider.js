@@ -104,6 +104,7 @@ RevSlider({
             show_padding: true,
             pages: 4,
             text_right: false,
+            transition_duration: 0,
             multipliers: {
                 font_size: 0,
                 margin: 0,
