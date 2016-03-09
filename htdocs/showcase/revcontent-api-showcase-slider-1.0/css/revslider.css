@@ -230,12 +230,14 @@
 }
 
 #rev-slider .rev-content {
-    transition: opacity .5s ease-in-out;
+    transition-property: opacity;
+    transition-duration: .5s;
     opacity: 1;
 }
 
 #rev-slider .rev-content.rev-next {
-    transition: opacity .5s ease-in-out;
+    transition-property: opacity;
+    transition-duration: .5s;
     opacity: .5;
 }
 
