@@ -220,7 +220,7 @@ RevSlider({
     };
 
     RevSlider.prototype.gridOptions = function() {
-        return { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound, adjustGutter:true, gutter: this.padding };
+        return { masonry: false, perRow: this.options.per_row, transitionDuration: this.options.transition_duration, isResizeBound: this.options.is_resize_bound, adjustGutter:true, removeVerticalGutters: true, gutter: this.padding };
     };
 
     // RevSlider.prototype.getAnimationDuration = function() {
