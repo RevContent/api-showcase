@@ -718,14 +718,7 @@ RevSlider({
             '</div>';
         var cell = document.createElement('div');
 
-        var padding = this.padding + 'px';
-        if (first) {
-            padding =  (this.options.buttons.position == 'outside' ? '0 ' : '0 ') + padding + ' ' + padding + ' ' + padding;
-        } else if (last) {
-            padding = padding + ' ' + padding + ' ' +(this.options.buttons.position == 'outside' ? '0 ' : '0 ') + padding;
-        }
-
-        cell.style.padding = padding;
+        cell.style.padding = this.padding + 'px';
 
         revUtils.addClass(cell, 'rev-content');
 
