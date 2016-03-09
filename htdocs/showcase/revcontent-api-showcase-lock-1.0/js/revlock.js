@@ -134,6 +134,8 @@ RevLock({
                 vertical:     true,
             });
 
+            this.innerWidget.innerElement.style.height = this.innerWidget.grid.maxHeight + 'px'; // TODO: this might be bad
+
             this.totalHeight = top + this.element.offsetHeight + 'px';
 
             this.wrapper.style.height = this.totalHeight;
