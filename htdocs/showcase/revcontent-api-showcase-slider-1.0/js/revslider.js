@@ -207,8 +207,6 @@ RevSlider({
 
         this.initButtons();
 
-        this.ellipsisTimer;
-
         this.impressionTracker = [];
     };
 
@@ -328,12 +326,12 @@ RevSlider({
 
         this.createCells();
 
-        this.updateDisplayedItems();
-        this.checkEllipsis();
         this.textOverlay();
 
         this.grid.reloadItems();
         this.grid.layout();
+
+        this.updateDisplayedItems();
 
         this.gridContainerElement.style.transitionDuration = animationDuration + 's';
         this.gridContainerElement.style.WebkitTransitionDuration = animationDuration + 's';
@@ -647,22 +645,19 @@ RevSlider({
     };
 
     RevSlider.prototype.checkEllipsis = function() {
-        var that = this;
-        clearTimeout(that.ellipsisTimer);
-        that.ellipsisTimer = setTimeout(function() {
-            that.doEllipsis();
-        }, 10);
-    };
-
-    RevSlider.prototype.doEllipsis = function() {
-        var ads = this.element.querySelectorAll('.rev-content');
-        if (ads.length > 0) {
-            for (var i = 0; i < ads.length; i++) {
-                var ad = ads[i];
-                var text = ad.querySelectorAll('a')[0].title;
-                var el = ad.querySelectorAll('.rev-headline h3')[0];
-                var newText = revUtils.ellipsisText(el, text, this.headlineHeight);
-                ad.querySelectorAll('.rev-headline h3')[0].innerHTML = newText;
+        if (this.options.max_headline && !this.options.text_right) { // text_right should be limited, but don't waste for max_headline only
+            return;
+        }
+        var headlines = this.gridElement.querySelectorAll('.rev-content .rev-headline');
+        for (var i = 0; i < headlines.length; i++) {
+            var text,
+                headline = headlines[i];
+            while(headline.clientHeight < headline.scrollHeight) {
+                text = headline.innerHTML.trim();
+                if(text.split(' ').length <= 1) {
+                    break;
+                }
+                headline.innerHTML = text.replace(/\W*\s(\S)*$/, '...');
             }
         }
     };
@@ -787,6 +782,7 @@ RevSlider({
             }
         }
         this.registerImpressions(0, this.limit);
+        this.checkEllipsis();
     };
 
     RevSlider.prototype.hasNextPage = function() {
