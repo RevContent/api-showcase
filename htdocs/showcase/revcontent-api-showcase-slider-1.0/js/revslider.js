@@ -465,46 +465,6 @@ RevSlider({
         this.attachButtonEvents();
     };
 
-    // RevSlider.prototype.setupButtons = function() {
-    //     if ((this.mobile && !this.options.show_arrows.mobile) || (!this.mobile && !this.options.show_arrows.desktop)) {
-    //         this.backBtn.setAttribute('style', 'display: none;');
-    //         this.forwardBtn.setAttribute('style', 'display: none;');
-    //     } else {
-    //         // var backBtn = this.containerElement.querySelector('#btn-back');
-    //         // var forwardBtn = this.containerElement.querySelector('#btn-forward');
-    //         var transform = 'rotate(0deg)';
-
-    //         if (this.options.vertical) {
-    //             revUtils.removeClass(this.backBtn, 'side');
-    //             revUtils.removeClass(this.forwardBtn, 'side');
-
-    //             revUtils.addClass(this.backBtn, 'top-bottom');
-    //             revUtils.addClass(this.forwardBtn, 'top-bottom');
-
-    //             this.backBtn.setAttribute('style', 'padding: 0px 0px; top: 0px;');
-    //             this.forwardBtn.setAttribute('style', 'padding: 0px 0px; bottom: 0px;');
-    //             transform = "rotate(90deg)";
-    //         } else {
-    //             revUtils.addClass(this.backBtn, 'side');
-    //             revUtils.addClass(this.forwardBtn, 'side');
-
-    //             revUtils.removeClass(this.backBtn, 'top-bottom');
-    //             revUtils.removeClass(this.forwardBtn, 'top-bottom');
-
-    //             this.backBtn.setAttribute('style', 'padding: 0px 0px; left: 0px; top: 0px;');
-    //             this.forwardBtn.setAttribute('style', 'padding: 0px 0px; right: 0px; top: 0px;');
-    //         }
-
-    //         if (!this.mobile) {
-    //             this.forwardBtn.style.opacity = 0;
-    //             this.backBtn.style.opacity = 0;
-    //         }
-    //         if (!this.options.wrap_pages) {
-    //             this.backBtn.style.display = 'none';
-    //         }
-    //     }
-    // };
-
     RevSlider.prototype.textOverlay = function() {
         var ads = this.containerElement.querySelectorAll('.rev-ad');
         if (this.options.text_overlay) {
