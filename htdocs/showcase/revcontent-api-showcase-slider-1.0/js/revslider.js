@@ -707,7 +707,6 @@ RevSlider({
 
             imagesLoaded( that.gridElement, function() {
                 revUtils.addClass(that.containerElement, 'loaded');
-                that.resize();
             });
         });
     };
