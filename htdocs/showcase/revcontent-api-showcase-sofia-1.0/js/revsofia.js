@@ -108,6 +108,9 @@ RevSofia({
             this.element.id = 'rev-sofia';
             revUtils.addClass(this.element, 'rev-sofia');
             revUtils.addClass(this.element, this.options.side);
+            if (revDetect.mobile()) {
+                revUtils.addClass(this.element, 'rev-mobile');
+            }
 
             revUtils.append(document.body, this.element);
 
