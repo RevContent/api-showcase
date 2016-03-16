@@ -607,14 +607,12 @@ RevSlider({
             }
         }
 
-        var ads = this.element.querySelectorAll('.rev-content');
+        var ads = this.element.querySelectorAll('.rev-ad');
 
         for (var i = 0; i < ads.length; i++) {
             var ad = ads[i];
 
-            ad.querySelectorAll('.rev-ad')[0].style.height = this.getCellHeight() + 'px';
-
-            //ad.style.width = this.grid.columnWidth + 'px';
+            ad.style.height = this.getCellHeight() + 'px';
 
             if (this.options.text_right) {
                 var paddingOffset = this.padding * 2;
