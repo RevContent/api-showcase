@@ -581,7 +581,7 @@ RevSlider({
 
         var that = this;
         var oldLimit = this.limit;
-        this.grid.option(this.options);
+        this.grid.option({transitionDuration: 0});
         this.setUp();
 
         var reconfig = 0;// how many to add or remove
@@ -642,6 +642,7 @@ RevSlider({
         this.grid.layout();
     };
 
+        this.grid.option({transitionDuration: this.options.transition_duration});
     };
 
     RevSlider.prototype.checkEllipsis = function() {
