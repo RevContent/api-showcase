@@ -219,6 +219,10 @@ RevSofia({
             this.visible = false;
             revUtils.removeClass(document.body, 'rev-sofia-no-transform');
             document.body.style[this.options.side == 'bottom' ? 'marginBottom' : 'marginTop'] = 0;
+            var that = this;
+            setTimeout(function() {
+                revUtils.addClass(that.element, 'rev-hidden');
+            }, this.options.transition_duration);
         };
 
         this.attachButtonEvents = function() {
