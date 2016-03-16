@@ -47,7 +47,7 @@
     vertical-align: middle;
 }*/
 
-#rev-slider .rev-chevron {
+#rev-slider #rev-slider-container .rev-btn-wrapper .rev-chevron {
     display: inline-block;
     height: 36px;
     top: 50%;
@@ -55,25 +55,19 @@
     position: absolute;
     left: 50%;
     margin-left: -18px;
-}
-
-#rev-slider .rev-chevron {
     fill: #fff;
 }
 
 #rev-slider #rev-slider-container .rev-btn-wrapper {
+    cursor: pointer;
     position: absolute;
     height: 100%;
     width: 40px;
     text-align: center;
     z-index: 10;
     user-select: none;
-    /*opacity: 0;*/
     transition: opacity .5s ease-in-out;
     z-index: 10000000000;
-}
-
-#rev-slider #rev-slider-container .rev-btn-wrapper {
     top: 0;
 }
 
@@ -81,7 +75,7 @@
     width: 100%;
 }
 
-#rev-slider.rev-slider-vertical #rev-slider-container #forward-wrapper.rev-btn-wrapper {
+#rev-slider.rev-slider-vertical #rev-slider-container .rev-btn-wrapper-forward.rev-btn-wrapper {
     bottom: 0;
     top: auto;
 }
@@ -96,12 +90,69 @@
     border-radius: 5px;
 }
 
+#rev-slider #rev-slider-container .rev-btn-container label {
+    cursor: pointer;
+}
+
 #rev-slider #rev-slider-container .rev-btn-container:hover {
     opacity: .8;
 }
 
-#rev-slider #rev-slider-container:hover #back-wrapper,
-#rev-slider #rev-slider-container:hover #forward-wrapper{
+#rev-slider #rev-slider-container .rev-btn-dual {
+    position: absolute;
+    left: 5px;
+    z-index: 1;
+    background: #fff;
+    box-shadow: 0 0 2px 0 rgba(89,89,89,1);
+    top: 50%;
+    margin-top: -36px;
+    border-radius: 2px;
+    opacity: 0;
+    transition: opacity 200ms;
+}
+
+#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper {
+    position: static;
+    width: auto;
+    height: auto;
+    top: auto;
+}
+
+#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-container {
+    background-color: inherit;
+    opacity: 1;
+    height: 36px;
+    border-radius: 0;
+}
+
+#rev-slider #rev-slider-container:hover .rev-btn-dual {
+    opacity: 1;
+}
+
+#rev-slider #rev-slider-container .rev-btn-dual.rev-btn-dual-right {
+    right: 5px;
+    left: auto;
+}
+
+#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper.rev-btn-wrapper-back {
+    border-bottom: 1px solid #ddd;
+}
+
+#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper .rev-chevron {
+    display: inline-block;
+    top: auto;
+    margin-top: 0;
+    position: static;
+    left: auto;
+    margin-left: 0;
+    fill: #ccc;
+}
+
+#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper:hover .rev-chevron {
+    fill: #aaa;
+}
+
+#rev-slider #rev-slider-container:hover .rev-btn-wrapper {
     opacity: 1 !important;
 }
 
