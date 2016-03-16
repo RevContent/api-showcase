@@ -394,18 +394,15 @@ RevSlider({
         this.headlineFontSize = Math.max(14, ((width * .03).toFixed(2) / 1));
         this.headlineLineHeight = ((this.headlineFontSize * 1.25).toFixed(2) / 1);
         this.headlineHeight = ((this.headlineLineHeight * this.options.headline_size).toFixed(2) / 1);
-        if (this.options.max_headline && this.getMaxHeadlineHeight() > 0) {
-            this.headlineHeight = this.getMaxHeadlineHeight();
-        }
-        this.headlineMarginTop = ((this.headlineLineHeight * .4).toFixed(2) / 1);
 
-        this.innerMargin = Math.max(0, ((width * this.paddingMultiplier).toFixed(2) / 1));
+        this.headlineMarginTop = ((this.headlineLineHeight * .4).toFixed(2) / 1);
 
         this.providerFontSize = ((this.headlineLineHeight / 2).toFixed(2)) / 1;
         this.providerFontSize = this.providerFontSize < 11 ? 11 : this.providerFontSize;
 
         this.providerLineHeight = Math.round(((this.providerFontSize * 1.8).toFixed(2) / 1));
 
+        this.innerMargin = Math.max(0, ((width * this.paddingMultiplier).toFixed(2) / 1));
     };
 
     RevSlider.prototype.initButtons = function() {
@@ -588,7 +585,6 @@ RevSlider({
 
         if (oldLimit != this.limit) {
             reconfig = (this.limit - oldLimit);
-
         }
 
         if (reconfig !== 0) {
@@ -627,12 +623,10 @@ RevSlider({
             }
         }
         this.textOverlay();
-
         this.checkEllipsis();
+
         this.grid.reloadItems();
         this.grid.layout();
-    };
-
         this.grid.option({transitionDuration: this.options.transition_duration});
     };
 
@@ -684,7 +678,7 @@ RevSlider({
             cell.innerHTML = html;
 
             return cell;
-    }
+    };
 
     RevSlider.prototype.getData = function() {
         var sponsoredCount = this.options.pages * this.limit;
@@ -744,12 +738,15 @@ RevSlider({
         }
 
         var ads = this.gridElement.querySelectorAll('.rev-ad');
+
         var contentIndex = 0;
         var rowCount = 0;
         var contentIncrement = (this.options.vertical) ? 1 : ((typeof this.options.rows == 'object') ? this.options.rows[this.grid.getBreakPoint()] : this.options.rows);
         for (var i = 0; i < this.limit; i++) {
             var ad = ads[i],
                 data = itemsToDisplay[contentIndex];
+
+            ad.style.height = this.getCellHeight() + 'px';
 
             ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', ''));
             ad.querySelectorAll('a')[0].title = data.headline;
@@ -771,6 +768,9 @@ RevSlider({
             }
         }
         this.registerImpressions(0, this.limit);
+
+        this.grid.reloadItems();
+        this.grid.layout();
         this.checkEllipsis();
     };
 
