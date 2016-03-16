@@ -117,6 +117,7 @@ RevSlider({
                 back: true,
                 size: 40,
                 position: 'inside',
+                dual: false
             },
             disclosure_text: revDisclose.defaultDisclosureText,
             hide_provider: false
@@ -406,42 +407,50 @@ RevSlider({
         var chevronLeft  = '<path d="M23.12 11.12L21 9l-9 9 9 9 2.12-2.12L16.24 18z"/>';
         var chevronRight = '<path d="M15 9l-2.12 2.12L19.76 18l-6.88 6.88L15 27l9-9z"/>';
 
-        var btnHeight = this.options.vertical ? this.options.buttons.size + 'px' : '100%';
+        var btnHeight = this.options.buttons.dual ? 'auto' : (this.options.vertical ? this.options.buttons.size + 'px' : '100%');
 
         this.backBtn = document.createElement('div');
         this.backBtn.id = "back-wrapper";
-        this.backBtn.setAttribute('class', 'rev-btn-wrapper');
+        this.backBtn.setAttribute('class', 'rev-btn-wrapper rev-btn-wrapper-back');
         this.backBtn.style.height = btnHeight;
-        this.backBtn.style.left = '0';
-        this.backBtn.innerHTML = '<div id="back-btn-container" class="rev-btn-container" style="right:0px;">' +
+        this.backBtn.style.left = this.options.buttons.dual ? 'auto' : '0';
+        this.backBtn.innerHTML = '<div id="back-btn-container" class="rev-btn-container" style="right: ' + (this.options.buttons.dual ? 'auto' : '0px') +';">' +
             '<label id="btn-back" class="rev-chevron">' +
                 '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">' + (this.options.vertical ? chevronUp : chevronLeft) + '</svg>' +
             '</label></div>';
 
         this.forwardBtn = document.createElement('div');
         this.forwardBtn.id = "forward-wrapper";
-        this.forwardBtn.setAttribute('class', 'rev-btn-wrapper');
+        this.forwardBtn.setAttribute('class', 'rev-btn-wrapper rev-btn-wrapper-forward');
         this.forwardBtn.style.height = btnHeight;
-        this.forwardBtn.style.right = '0';
-        this.forwardBtn.innerHTML = '<div id="forward-btn-container" class="rev-btn-container" style="right:0px;">' +
+        this.forwardBtn.style.right = this.options.buttons.dual ? 'auto' : '0';
+        this.forwardBtn.innerHTML = '<div id="forward-btn-container" class="rev-btn-container" style="right: ' + (this.options.buttons.dual ? 'auto' : '0px') + ';">' +
             '<label id="btn-forward" class="rev-chevron">' +
                 '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">' + (this.options.vertical ? chevronDown : chevronRight) + '</svg>' +
             '</label></div>';
 
-        if (this.mobile) {
-            this.forwardBtn.style.opacity = 1;
-            this.backBtn.style.opacity = 1;
+        if (this.options.buttons.dual) {
+            this.btnContainer = document.createElement('div');
+            this.btnContainer.setAttribute('class', 'rev-btn-dual');
+            revUtils.append(this.btnContainer, this.backBtn);
+            revUtils.append(this.btnContainer, this.forwardBtn);
+            revUtils.append(this.innerContainerElement, this.btnContainer);
         } else {
-            this.forwardBtn.style.opacity = 0;
-            this.backBtn.style.opacity = 0;
-        }
+            if (this.mobile) {
+                this.forwardBtn.style.opacity = 1;
+                this.backBtn.style.opacity = 1;
+            } else {
+                this.forwardBtn.style.opacity = 0;
+                this.backBtn.style.opacity = 0;
+            }
 
-        if (this.options.buttons.back) {
-            revUtils.append(this.innerContainerElement, this.backBtn);
-        }
+            if (this.options.buttons.back) {
+                revUtils.append(this.innerContainerElement, this.backBtn);
+            }
 
-        if (this.options.buttons.forward) {
-            revUtils.append(this.innerContainerElement, this.forwardBtn);
+            if (this.options.buttons.forward) {
+                revUtils.append(this.innerContainerElement, this.forwardBtn);
+            }
         }
 
         this.attachButtonEvents();
@@ -846,6 +855,17 @@ RevSlider({
 
     RevSlider.prototype.attachButtonEvents = function() {
         var that = this;
+        if (this.options.buttons.dual) {
+            this.containerElement.addEventListener('mousemove', function(e) {
+                // get left or right cursor position
+                if ((e.clientX - that.containerElement.getBoundingClientRect().left) > (that.containerElement.offsetWidth / 2)) {
+                    revUtils.addClass(that.btnContainer, 'rev-btn-dual-right');
+                } else {
+                    revUtils.removeClass(that.btnContainer, 'rev-btn-dual-right');
+                }
+            });
+        }
+
         this.forwardBtn.addEventListener('click', function() {
             that.showNextPage();
         });
