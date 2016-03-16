@@ -640,27 +640,10 @@ RevSlider({
         this.textOverlay();
 
         this.checkEllipsis();
-        if (this.options.max_headline) {
-            this.checkMaxHeadlineHeightPerRow();
-        }
         this.grid.reloadItems();
         this.grid.layout();
     };
 
-    RevSlider.prototype.checkMaxHeadlineHeightPerRow = function() {
-        var itemsPerRow = this.grid.getPerRow();
-        var currentRowNum = 0;
-        var currentHeadlineHeight = this.getMaxHeadlineHeight(currentRowNum, itemsPerRow);
-        var ads = this.element.querySelectorAll('.rev-content');
-        if (ads.length > 0) {
-            for (var i = 0; i < ads.length; i++) {
-                if (i > 0 && (i % itemsPerRow) == 0) {
-                    currentHeadlineHeight = this.getMaxHeadlineHeight(++currentRowNum, itemsPerRow);
-                }
-                var ad = ads[i];
-                ad.querySelectorAll('.rev-headline')[0].style.height = currentHeadlineHeight + 'px';
-            }
-        }
     };
 
     RevSlider.prototype.checkEllipsis = function() {
