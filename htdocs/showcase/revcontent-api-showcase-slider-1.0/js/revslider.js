@@ -173,6 +173,10 @@ RevSlider({
 
         this.grid = new AnyGrid(this.gridElement, this.gridOptions());
 
+        this.grid.on('resized', function() {
+            that.resize();
+        });
+
         this.setMultipliers();
 
         this.grid.option({gutter: this.getPadding()});
