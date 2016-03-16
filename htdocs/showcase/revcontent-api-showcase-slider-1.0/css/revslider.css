@@ -211,6 +211,9 @@
     color: #888;
     line-height: 30px;
     height: 30px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 #rev-slider .rev-ad {
