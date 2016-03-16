@@ -120,7 +120,8 @@ RevSlider({
                 dual: false
             },
             disclosure_text: revDisclose.defaultDisclosureText,
-            hide_provider: false
+            hide_provider: false,
+            hide_header: false
         };
 
         // merge options
@@ -518,12 +519,19 @@ RevSlider({
 
     RevSlider.prototype.appendElements = function() {
 
-        if (this.head) {
-            revUtils.remove(this.head);
+        if (!this.options.hide_header) {
+            if (this.head) {
+                revUtils.remove(this.head);
+            }
+            this.head = document.createElement('div');
+            revUtils.addClass(this.head, 'rev-head');
+            revUtils.prepend(this.containerElement, this.head);
+
+            this.header = document.createElement('h2');
+            this.header.innerHTML = this.options.header;
+            revUtils.addClass(this.header, 'rev-header');
+            revUtils.append(this.head, this.header);
         }
-        this.head = document.createElement('div');
-        revUtils.addClass(this.head, 'rev-head');
-        revUtils.prepend(this.containerElement, this.head);
 
         if (this.foot) {
             revUtils.remove(this.foot);
@@ -534,11 +542,6 @@ RevSlider({
             revUtils.addClass(this.foot, 'rev-foot');
             revUtils.append(this.containerElement, this.foot);
         }
-
-        this.header = document.createElement('h2');
-        this.header.innerHTML = this.options.header;
-        revUtils.addClass(this.header, 'rev-header');
-        revUtils.append(this.head, this.header);
 
         this.sponsored = document.createElement('div');
 
