@@ -105,6 +105,15 @@
     opacity: 1 !important;
 }
 
+#rev-slider.rev-slider-text-right .rev-image {
+    float: left;
+    margin-right: 5px;
+}
+
+#rev-slider.rev-slider-text-right .rev-ad a .rev-headline {
+    margin-top: 0 !important;
+}
+
 #rev-slider a {
     color: inherit;
 }
