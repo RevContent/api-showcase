@@ -747,6 +747,11 @@ RevSlider({
         for (var i = 0; i < moreItemsNeeded; i++) {
             itemsToDisplay[itemsToDisplay.length] = this.contentItems[i];
         }
+
+        if (this.options.max_headline) {
+            this.headlineHeight = this.getMaxHeadlineHeight(itemsToDisplay);
+        }
+
         var ads = this.gridElement.querySelectorAll('.rev-ad');
         var contentIndex = 0;
         var rowCount = 0;
@@ -873,34 +878,28 @@ RevSlider({
         }
     };
 
-    RevSlider.prototype.getMaxHeadlineHeight = function(rowNum, numItems) {
-        var maxHeadlineHeight = 0;
-        var that = this;
-        var ads = that.element.querySelectorAll('.rev-ad');
-        if (ads.length > 0) {
-            rowNum = (rowNum != undefined) ? rowNum : 0;
-            numItems = (numItems != undefined) ? numItems : ads.length;
-            var offset = rowNum * numItems;
-            var nextOffset = offset + numItems;
-            var el = ads[0].querySelectorAll('.rev-headline h3')[0];
-            var t = el.cloneNode(true);
-            t.style.visibility = 'hidden';
-            t.style.height = 'auto';
-            revUtils.append(el.parentNode, t);
-            for (var i = offset; i < nextOffset; i++) {
+    RevSlider.prototype.getMaxHeadlineHeight = function(itemsToDisplay) {
+        var maxHeight = 0;
+        if (this.options.text_right) { // based on preloaderHeight/ ad height
+            var verticalSpace = this.preloaderHeight - this.providerLineHeight;
+            var headlines = Math.floor(verticalSpace / this.headlineLineHeight);
+            maxHeight = headlines * this.headlineLineHeight;
+        } else {
+            var ads = this.gridElement.querySelectorAll('.rev-ad');
+            for (var i = 0; i < this.limit; i++) {
                 var ad = ads[i];
-                t.innerHTML = ad.querySelectorAll('a')[0].title;
-                if(t.clientHeight > maxHeadlineHeight) {
-                    maxHeadlineHeight = t.clientHeight;
-                }
+                var el = document.createElement('div');
+                el.style.position = 'absolute';
+                el.style.zIndex = '100';
+                el.style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
+                el.innerHTML = '<h3 style="font-size:'+ this.headlineFontSize + 'px;line-height:'+ this.headlineLineHeight +'px">'+ itemsToDisplay[i].headline + '</h3>';
+                revUtils.prepend(ad, el); // do it this way b/c changin the element height on the fly needs a repaint and requestAnimationFrame is not avail in IE9
+                maxHeight = Math.max(maxHeight, el.clientHeight);
+                revUtils.remove(el);
             }
-            revUtils.remove(t);
-            var numLines = Math.ceil(maxHeadlineHeight / that.headlineLineHeight);
-            maxHeadlineHeight = numLines * that.headlineLineHeight;
         }
-        return maxHeadlineHeight;
+        return maxHeight;
     };
-
 
     return RevSlider;
 }));
