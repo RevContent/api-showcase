@@ -792,7 +792,7 @@ RevSlider({
 
     RevSlider.prototype.attachButtonEvents = function() {
         var that = this;
-        if (this.options.buttons.dual) {
+        if (this.options.buttons.dual && !revDetect.mobile()) {
             this.containerElement.addEventListener('mousemove', function(e) {
                 // get left or right cursor position
                 if ((e.clientX - that.containerElement.getBoundingClientRect().left) > (that.containerElement.offsetWidth / 2)) {
