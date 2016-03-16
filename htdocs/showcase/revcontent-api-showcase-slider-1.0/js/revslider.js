@@ -190,7 +190,7 @@ RevSlider({
 
         this.appendElements();
 
-        this.createCells(this.grid.cols);
+        this.createCells();
 
         this.textOverlay();
 
@@ -208,7 +208,7 @@ RevSlider({
         this.impressionTracker = [];
     };
 
-    RevSlider.prototype.createCells = function(cols) {
+    RevSlider.prototype.createCells = function() {
         for (var i = 0; i < this.limit; i++) {
             this.gridElement.appendChild(this.createNewCell());
         }
@@ -322,7 +322,7 @@ RevSlider({
             this.gridContainerElement.style.width = ((containerWidth * 2) + (this.padding * 2)) + 'px';
         }
 
-        this.createCells(oldGrid.cols);
+        this.createCells();
 
         this.updateDisplayedItems();
         this.checkEllipsis();
