@@ -669,8 +669,8 @@ RevSlider({
     };
 
     RevSlider.prototype.createNewCell = function() {
-        var html = '<div class="rev-ad" style="height: '+ this.getCellHeight() + 'px;' + (this.options.ad_border ? 'border:1px solid #eee' : '') +'" onmousedown="return false">' +
         var imgWidth = typeof this.preloaderWidth === 'undefined' ? 'width:auto;' : 'width:' + this.preloaderWidth + 'px;';
+        var html = '<div class="rev-ad" style="height: '+ this.getCellHeight() + 'px;' + (this.options.ad_border ? 'border:1px solid #eee' : '') +'">' +
             '<a href="" target="_blank">' +
             '<div class="rev-image" style="'+ imgWidth +'height:'+ this.preloaderHeight +'px">' +
             '<img src=""/>' +
