@@ -106,6 +106,7 @@ RevSlider({
             show_padding: true,
             pages: 4,
             text_right: false,
+            text_right_height: 100,
             transition_duration: 0,
             multipliers: {
                 font_size: 0,
@@ -147,6 +148,7 @@ RevSlider({
         this.containerElement = document.createElement('div');
         this.containerElement.id = 'rev-slider';
         revUtils.addClass(this.containerElement, 'rev-slider-' + (this.options.vertical ? 'vertical' : 'horizontal'));
+        revUtils.addClass(this.containerElement, 'rev-slider-' + (this.options.text_right ? 'text-right' : 'text-bottom'));
 
         this.innerContainerElement = document.createElement('div');
         this.innerContainerElement.id = 'rev-slider-container';
@@ -382,6 +384,13 @@ RevSlider({
             this.imageWidth = 800;
         }
 
+        this.preloaderHeight = Math.round((this.grid.columnWidth - (this.padding * 2) - ( this.options.ad_border ? 2 : 0 )) * (this.imageHeight / this.imageWidth));
+
+        if (this.options.text_right) {
+            this.preloaderHeight = this.options.text_right_height;
+            this.preloaderWidth = Math.round(this.preloaderHeight * (this.imageWidth / this.imageHeight) * 100) / 100;
+        }
+
         var width = this.grid.containerWidth / this.grid.perRow;
 
         this.headlineFontSize = Math.max(14, ((width * .03).toFixed(2) / 1));
@@ -399,7 +408,6 @@ RevSlider({
 
         this.providerLineHeight = Math.round(((this.providerFontSize * 1.8).toFixed(2) / 1));
 
-        this.preloaderHeight = Math.round((this.grid.columnWidth - (this.padding * 2) - ( this.options.ad_border ? 2 : 0 )) * (this.imageHeight / this.imageWidth));
     };
 
     RevSlider.prototype.initButtons = function() {
@@ -600,13 +608,10 @@ RevSlider({
 
     RevSlider.prototype.getCellHeight = function() {
         var cellHeight = this.preloaderHeight;
-        if (!this.options.text_overlay) {
+        if (!this.options.text_overlay && !this.options.text_right) {
             cellHeight += this.headlineHeight +
             this.headlineMarginTop + this.providerLineHeight;
             cellHeight += (this.options.ad_border) ? 2 : 0;
-        }
-        if (this.options.text_right) {
-            cellHeight = cellHeight/2.7;
         }
         return cellHeight;
     };
@@ -726,8 +731,9 @@ RevSlider({
 
     RevSlider.prototype.createNewCell = function() {
         var html = '<div class="rev-ad" style="height: '+ this.getCellHeight() + 'px;' + (this.options.ad_border ? 'border:1px solid #eee' : '') +'" onmousedown="return false">' +
+        var imgWidth = typeof this.preloaderWidth === 'undefined' ? 'width:auto;' : 'width:' + this.preloaderWidth + 'px;';
             '<a href="" target="_blank">' +
-            '<div class="rev-image" style="height:'+ this.preloaderHeight +'px">' +
+            '<div class="rev-image" style="'+ imgWidth +'height:'+ this.preloaderHeight +'px">' +
             '<img src=""/>' +
             '</div>' +
             '<div class="rev-headline-brand">' +
