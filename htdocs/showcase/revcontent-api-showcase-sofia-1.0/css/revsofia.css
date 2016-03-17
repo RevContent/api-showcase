@@ -68,20 +68,11 @@
     box-shadow: 0 -7px 9px -7px #999;
 }
 
-#rev-sofia.rev-sofia #rev-slider-grid {
-    transition-property: height;
-}
-
-#rev-sofia.rev-sofia.top .rev-content .rev-ad {
-    transition-property: height;
-}
-
-#rev-sofia.rev-sofia.top .rev-content {
-    transition-property: width, height;
+#rev-sofia.rev-sofia .rev-content {
     border-right: 1px solid #e3e3e3;
 }
 
-#rev-sofia.rev-sofia.top .rev-content:last-child {
+#rev-sofia.rev-sofia .rev-content:last-child {
     border-right: none;
 }
 
