@@ -37,10 +37,6 @@
     transform: translateY(-100%);
 }
 
-#rev-sofia.rev-sofia:hover .rev-foot {
-    transform: translateY(0);
-}
-
 #rev-sofia.rev-sofia.bottom .rev-foot {
     top: -28px;
     transform: translateY(100%);
@@ -51,6 +47,10 @@
     bottom: -24px;
     transform: translateY(-100%);
     border-radius: 0 0 4px 4px;
+}
+
+#rev-sofia.rev-sofia:hover .rev-foot {
+    transform: translateY(0);
 }
 
 #rev-sofia.rev-sofia .rev-close {
