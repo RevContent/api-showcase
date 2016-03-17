@@ -29,6 +29,18 @@
     transition: transform 500ms;
 }
 
+#rev-sofia.rev-sofia.bottom.rev-hidden .rev-foot {
+    transform: translateY(100%);
+}
+
+#rev-sofia.rev-sofia.top.rev-hidden .rev-foot {
+    transform: translateY(-100%);
+}
+
+#rev-sofia.rev-sofia:hover .rev-foot {
+    transform: translateY(0);
+}
+
 #rev-sofia.rev-sofia.bottom .rev-foot {
     top: -28px;
     transform: translateY(100%);
@@ -39,10 +51,6 @@
     bottom: -24px;
     transform: translateY(-100%);
     border-radius: 0 0 4px 4px;
-}
-
-#rev-sofia.rev-sofia:hover .rev-foot {
-    transform: translateY(0);
 }
 
 #rev-sofia.rev-sofia .rev-close {
@@ -154,14 +162,6 @@ body.retracted #rev-sofia.rev-sofia.top #rev-slider .rev-sponsored {
 
 #rev-sofia.rev-sofia.rev-mobile .rev-foot {
     right: 5px;
-}
-
-#rev-sofia.rev-sofia.bottom.rev-mobile.rev-hidden:hover .rev-foot {
-    transform: translateY(100%);
-}
-
-#rev-sofia.rev-sofia.top.rev-mobile.rev-hidden:hover .rev-foot {
-    transform: translateY(-100%);
 }
 
 #rev-sofia.rev-sofia.rev-mobile:not(.rev-hidden) .rev-foot {
