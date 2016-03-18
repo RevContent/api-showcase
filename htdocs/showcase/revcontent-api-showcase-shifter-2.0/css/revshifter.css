@@ -26,6 +26,10 @@ body {
     z-index: 100;
 }
 
+#rev-shifter.rev-shifter.bottom #rev-slider-container {
+    padding-bottom: 20px;
+}
+
 #rev-shifter.rev-shifter .rev-foot {
     position: absolute;
     right: 10px;
