@@ -1,0 +1,17 @@
+{
+  "name": "revcontent-api-showcase-slider-1.0",
+  "version": "1",
+  "ignore": [],
+  "description": "RevSlider",
+  "main": "js/revslider.js",
+  "dependencies": {
+  },
+  "homepage": "https://api-v2.revcontent.com/",
+  "authors": [
+    "Mike Osterhout"
+  ],
+  "keywords": [
+    "revslider"
+  ],
+  "license": "MIT"
+}

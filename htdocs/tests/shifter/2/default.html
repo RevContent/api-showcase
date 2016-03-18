@@ -11,40 +11,30 @@
     <!-- endinject -->
 
     <!-- inject:html -->
-    <p class="md-body-1">The width option allows you to define the sidenav width in pixels</p>
+    <h3 class="md-subhead">Create a new RevShifter</h3>
 
-
-<h3 class="md-subhead">Available Options</h3>
-
-<table>
-    <thead>
-        <tr>
-            <th>300(default)</th>
-        </tr>
-        <tr>
-            <th>(int)</th>
-        </tr>
-    </thead>
-</table>
-
-<h3 class="md-subhead">Example</h3>
+<p>Top Position</p>
 
 <code hljs language="javascript">
-new RevFlicker({
-    ...
-    width: 600
-});
+    new RevShifter({
+        side: 'top',
+        url: 'http://trends.revcontent.com/api/v1/',
+        api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+        pub_id : 945,
+        widget_id : 6181,
+        domain : 'apiexamples.powr.com'
+    });
 </code>
     <script>
 setTimeout(function() {
-    var sidenav = new RevShifter({
-        api_key : 'bf3f270aa50d127f0f8b8c92a979d76aa1391d38',
-        pub_id : 7846,
-        widget_id : 13523,
-        domain : 'bustle.com',
-        width: 600
+    new RevShifter({
+        url: 'http://trends.revcontent.com/api/v1/',
+        api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+        pub_id : 945,
+        widget_id : 6181,
+        domain : 'apiexamples.powr.com',
+        show_on_load: true
     });
-    sidenav.show();
 });
 </script>
     <!-- endinject -->
