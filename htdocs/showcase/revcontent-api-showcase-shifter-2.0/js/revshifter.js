@@ -8,11 +8,11 @@ ooooooooo.                          .oooooo..o oooo         o8o   .o88o.     .
 o888o  o888o `Y8bod8P'     `8'     8""88888P'  o888o o888o o888o o888o     "888" `Y8bod8P' d888b
 
 
-Project: RevSofia
+Project: RevShifter
 Version: 1
 Author: michael@revcontent.com
 
-RevSofia({
+RevShifter({
     api_key: 'your api_key',
     pub_id: pub_id,
     widget_id: widget_id,
@@ -29,12 +29,12 @@ RevSofia({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevSofia = factory(window, window.revUtils, window.revDetect, window.revDisclose);
+    window.RevShifter = factory(window, window.revUtils, window.revDetect, window.revDisclose);
 
 }( window, function factory(window, revUtils, revDetect, revDisclose) {
 'use strict';
 
-    var RevSofia;
+    var RevShifter;
     var instance;
     var defaults = {
         testing: false,
@@ -52,7 +52,7 @@ RevSofia({
                 xxl: 5
             },
             rows: 1,
-            max_headline: false,
+            max_headline: true,
             ad_border: false,
             text_right: true,
             text_right_height: 100
@@ -68,15 +68,15 @@ RevSofia({
         hide_provider: false
     };
 
-    RevSofia = function(opts) {
+    RevShifter = function(opts) {
         if (instance) {
             instance.update(opts, instance.options);
             return instance;
         }
 
         // if it wasn't newed up
-        if ( !( this instanceof RevSofia ) ) {
-            instance = new RevSofia(opts);
+        if ( !( this instanceof RevShifter ) ) {
+            instance = new RevShifter(opts);
             return instance;
         } else {
             instance = this;
@@ -96,17 +96,17 @@ RevSofia({
             return;
         }
 
-        if (revUtils.getCookie('rev-sofia-closed') && !this.options.testing) {
+        if (revUtils.getCookie('rev-shifter-closed') && !this.options.testing) {
             return;
         }
 
-        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-sofia');
+        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-shifter');
 
         this.init = function() {
             this.element = document.createElement('div');
             this.element.style.zIndex = '10001';
-            this.element.id = 'rev-sofia';
-            revUtils.addClass(this.element, 'rev-sofia');
+            this.element.id = 'rev-shifter';
+            revUtils.addClass(this.element, 'rev-shifter');
             revUtils.addClass(this.element, this.options.side);
             if (revDetect.mobile()) {
                 revUtils.addClass(this.element, 'rev-mobile');
@@ -211,13 +211,13 @@ RevSofia({
 
         this.show = function() {
             this.visible = true;
-            revUtils.addClass(document.body, 'rev-sofia-no-transform');
+            revUtils.addClass(document.body, 'rev-shifter-no-transform');
             document.body.style[this.options.side == 'bottom' ? 'marginBottom' : 'marginTop'] = this.size + 'px';
         };
 
         this.hide = function() {
             this.visible = false;
-            revUtils.removeClass(document.body, 'rev-sofia-no-transform');
+            revUtils.removeClass(document.body, 'rev-shifter-no-transform');
             document.body.style[this.options.side == 'bottom' ? 'marginBottom' : 'marginTop'] = 0;
             var that = this;
             setTimeout(function() {
@@ -229,13 +229,13 @@ RevSofia({
             var that = this;
             this.closeElement.addEventListener('click', function() {
                 that.hide();
-                revUtils.setCookie('rev-sofia-closed', 1, (that.options.closed_hours / 24));
+                revUtils.setCookie('rev-shifter-closed', 1, (that.options.closed_hours / 24));
             });
         };
 
         this.init();
     };
 
-    return RevSofia;
+    return RevShifter;
 
 }));

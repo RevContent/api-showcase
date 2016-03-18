@@ -12,8 +12,8 @@ var stripDebug   = require('gulp-strip-debug');
 gulp.task('default', ['buildjs']);
 
 gulp.task('minifycss', function() {
-    return gulp.src(['./css/revsofia.css'])
-        .pipe(concat('revsofia.min.css'))
+    return gulp.src(['./css/revshifter.css'])
+        .pipe(concat('revshifter.min.css'))
         .pipe(autoprefixer({
             browsers: ['> 1%'],
             cascade: false
@@ -23,7 +23,7 @@ gulp.task('minifycss', function() {
 });
 
 gulp.task('embedcss', ['minifycss'], function () {
-    return gulp.src('./js/revsofia.js')
+    return gulp.src('./js/revshifter.js')
       .pipe(inject(gulp.src(['./build/*.css']), {
         starttag: '/* inject:css */',
         endtag: '/* endinject */',
@@ -44,19 +44,19 @@ gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
       ' */',
       ''].join('\n');
 
-    return gulp.src(['../revcontent-api-showcase-slider-1.0/build/revslider.pkgd.js', './build/revsofia.js'])
-        .pipe(concat('revsofia.pkgd.js'))
+    return gulp.src(['../revcontent-api-showcase-slider-1.0/build/revslider.pkgd.js', './build/revshifter.js'])
+        .pipe(concat('revshifter.pkgd.js'))
         .pipe(gulp.dest('./build'))
         .pipe(uglify({
             mangle: false
             }))
         .pipe(stripDebug())
-        .pipe(rename('revsofia.min.js'))
+        .pipe(rename('revshifter.min.js'))
         .pipe(header(banner, { pkg : pkg }))
         .pipe(gulp.dest('./build'))
         .pipe(gulp.dest('../../build'));
 });
 
 gulp.task('watch', ['buildjs'], function () {
-    gulp.watch(['../js/revutils.js', '../js/revdialog.js', '../js/revdetect.js', './js/*', './css/revsofia.css', '../revcontent-api-showcase-slider-1.0/build/revslider.pkgd.js', '../revcontent-api-showcase-slider-1.0/js/*'], ['buildjs']);
+    gulp.watch(['../js/revutils.js', '../js/revdialog.js', '../js/revdetect.js', './js/*', './css/revshifter.css', '../revcontent-api-showcase-slider-1.0/build/revslider.pkgd.js', '../revcontent-api-showcase-slider-1.0/js/*'], ['buildjs']);
 });
