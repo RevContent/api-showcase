@@ -26,6 +26,10 @@ body {
     z-index: 100;
 }
 
+#rev-shifter.rev-shifter.bottom {
+    padding-bottom: 15px;
+}
+
 #rev-shifter.rev-shifter .rev-foot {
     position: absolute;
     right: 10px;
