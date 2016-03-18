@@ -38,7 +38,8 @@ app.service('widgets', function() {
             title: 'RevShifter',
             img: 'shifter.jpg',
             description: 'Increase revenue and user engagement with the new RevShifter widget. Monetize on valuable site real estate with the RevShifter.',
-            link: 'revcontent-api-showcase-shifter-1.0/index.html',
+            link: 'revcontent-api-showcase-shifter-2.0/index.html',
+            bg: '#EEBF77'
             // preview: true,
             // demo: true
         },
