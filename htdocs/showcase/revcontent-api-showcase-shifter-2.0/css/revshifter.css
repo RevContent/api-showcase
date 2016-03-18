@@ -4,6 +4,7 @@ body {
 }
 
 #rev-shifter.rev-shifter {
+    font-family: sans-serif;
     -ms-overflow-style: -ms-autohiding-scrollbar;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
