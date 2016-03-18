@@ -2572,7 +2572,7 @@ utils.modulo = function( num, div ) {
 };
 
 // ----- isArray ----- //
-
+  
 var objToString = Object.prototype.toString;
 utils.isArray = function( obj ) {
   return objToString.call( obj ) == '[object Array]';
@@ -4410,7 +4410,9 @@ AnyGrid.prototype._create = function() {
 
     this.element.style.position = "relative";
 
-    this.bindResize();
+    if ( this.options.isResizeBound ) {
+        this.bindResize();
+    }
 
     this._setUp();
 };
@@ -5539,7 +5541,9 @@ RevSlider({
 
         revUtils[insert](this.gridContainerElement, this.gridElement);
 
-        this.grid = new AnyGrid(this.gridElement, this.gridOptions());
+        var options = this.gridOptions();
+        options.isResizeBound = false;
+        this.grid = new AnyGrid(this.gridElement, options);
 
         if (!this.options.vertical) {
             oldGrid.element.style.width = containerWidth + 'px';
@@ -5588,6 +5592,19 @@ RevSlider({
         oldGrid.remove();
         oldGrid.destroy();
         revUtils.remove(oldGrid.element);
+
+        if (!this.options.vertical) {
+            this.grid.element.style.width = 'auto';
+            this.grid.element.style.float = 'none';
+
+            this.gridContainerElement.style.width = 'auto';
+        }
+
+        var that = this;
+        this.grid.bindResize();
+        this.grid.on('resized', function() {
+            that.resize();
+        });
 
         this.updating = false;
     };
