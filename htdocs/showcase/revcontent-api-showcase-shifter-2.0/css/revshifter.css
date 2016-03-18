@@ -1,3 +1,8 @@
+body {
+    margin-left: 0;
+    margin-right: 0;
+}
+
 #rev-shifter.rev-shifter {
     -ms-overflow-style: -ms-autohiding-scrollbar;
     -webkit-text-size-adjust: 100%;
