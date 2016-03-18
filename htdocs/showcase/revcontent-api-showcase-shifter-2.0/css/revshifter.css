@@ -26,8 +26,8 @@ body {
     z-index: 100;
 }
 
-#rev-shifter.rev-shifter.bottom #rev-slider-container {
-    padding-bottom: 20px;
+#rev-shifter.rev-shifter.bottom {
+    padding-bottom: 15px;
 }
 
 #rev-shifter.rev-shifter .rev-foot {
