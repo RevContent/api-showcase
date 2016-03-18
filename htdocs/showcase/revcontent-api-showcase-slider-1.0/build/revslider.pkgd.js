@@ -5878,7 +5878,7 @@ RevSlider({
         if (this.options.max_headline && !this.options.text_right) { // text_right should be limited, but don't waste for max_headline only
             return;
         }
-        var headlines = this.gridElement.querySelectorAll('.rev-content .rev-headline');
+        var headlines = this.gridElement.querySelectorAll('.rev-content .rev-headline h3');
         for (var i = 0; i < headlines.length; i++) {
             var text,
                 headline = headlines[i];
