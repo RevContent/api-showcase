@@ -222,9 +222,9 @@ RevSlider({
     };
 
     RevSlider.prototype.setMultipliers = function() {
-        this.fontSizeMultiplier = Math.round( (.04 + Number((this.options.multipliers.font_size * .01).toFixed(2))) * 100 ) / 100;
-        this.marginMultiplier = Math.round( (.05 + Number((this.options.multipliers.margin * .01).toFixed(2))) * 100 ) / 100;
-        this.paddingMultiplier = Math.round( (.01 + Number((this.options.multipliers.padding * .01).toFixed(2))) * 100 ) / 100;
+        this.fontSizeMultiplier = Math.round( (.044 + Number((this.options.multipliers.font_size * .01).toFixed(2))) * 1000 ) / 1000;
+        this.marginMultiplier = Math.round( (.05 + Number((this.options.multipliers.margin * .01).toFixed(2))) * 1000 ) / 1000;
+        this.paddingMultiplier = Math.round( (.01 + Number((this.options.multipliers.padding * .01).toFixed(2))) * 1000 ) / 1000;
     };
 
     RevSlider.prototype.gridOptions = function() {
@@ -404,9 +404,8 @@ RevSlider({
             this.preloaderWidth = Math.round(this.preloaderHeight * (this.imageWidth / this.imageHeight) * 100) / 100;
         }
 
-        var width = this.grid.containerWidth / this.grid.perRow;
+        this.headlineFontSize = Math.max(14, ((this.grid.columnWidth * this.fontSizeMultiplier).toFixed(2) / 1));
 
-        this.headlineFontSize = Math.max(14, ((width * .03).toFixed(2) / 1));
         this.headlineLineHeight = ((this.headlineFontSize * 1.25).toFixed(2) / 1);
         this.headlineHeight = ((this.headlineLineHeight * this.options.headline_size).toFixed(2) / 1);
 
@@ -417,7 +416,7 @@ RevSlider({
 
         this.providerLineHeight = Math.round(((this.providerFontSize * 1.8).toFixed(2) / 1));
 
-        this.innerMargin = Math.max(0, ((width * this.paddingMultiplier).toFixed(2) / 1));
+        this.innerMargin = Math.max(0, ((this.grid.columnWidth * this.paddingMultiplier).toFixed(2) / 1));
     };
 
     RevSlider.prototype.initButtons = function() {
