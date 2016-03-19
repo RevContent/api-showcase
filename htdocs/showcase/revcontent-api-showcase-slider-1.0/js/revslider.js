@@ -222,9 +222,9 @@ RevSlider({
     };
 
     RevSlider.prototype.setMultipliers = function() {
-        this.fontSizeMultiplier = Math.round( (.04 + Number((this.options.multipliers.font_size * .01).toFixed(2))) * 100 ) / 100;
-        this.marginMultiplier = Math.round( (.05 + Number((this.options.multipliers.margin * .01).toFixed(2))) * 100 ) / 100;
-        this.paddingMultiplier = Math.round( (.01 + Number((this.options.multipliers.padding * .01).toFixed(2))) * 100 ) / 100;
+        this.fontSizeMultiplier = Math.round( (.044 + Number((this.options.multipliers.font_size * .01).toFixed(2))) * 1000 ) / 1000;
+        this.marginMultiplier = Math.round( (.05 + Number((this.options.multipliers.margin * .01).toFixed(2))) * 1000 ) / 1000;
+        this.paddingMultiplier = Math.round( (.01 + Number((this.options.multipliers.padding * .01).toFixed(2))) * 1000 ) / 1000;
     };
 
     RevSlider.prototype.gridOptions = function() {
@@ -368,7 +368,7 @@ RevSlider({
             this.grid.element.style.width = 'auto';
             this.grid.element.style.float = 'none';
 
-            this.gridContainerElement.style.width = 'auto';
+            this.gridContainerElement.style.width = '100%';
         }
 
         var that = this;
@@ -404,9 +404,8 @@ RevSlider({
             this.preloaderWidth = Math.round(this.preloaderHeight * (this.imageWidth / this.imageHeight) * 100) / 100;
         }
 
-        var width = this.grid.containerWidth / this.grid.perRow;
+        this.headlineFontSize = Math.max(14, ((this.grid.columnWidth * this.fontSizeMultiplier).toFixed(2) / 1));
 
-        this.headlineFontSize = Math.max(14, ((width * .03).toFixed(2) / 1));
         this.headlineLineHeight = ((this.headlineFontSize * 1.25).toFixed(2) / 1);
         this.headlineHeight = ((this.headlineLineHeight * this.options.headline_size).toFixed(2) / 1);
 
@@ -417,7 +416,7 @@ RevSlider({
 
         this.providerLineHeight = Math.round(((this.providerFontSize * 1.8).toFixed(2) / 1));
 
-        this.innerMargin = Math.max(0, ((width * this.paddingMultiplier).toFixed(2) / 1));
+        this.innerMargin = Math.max(0, ((this.grid.columnWidth * this.paddingMultiplier).toFixed(2) / 1));
     };
 
     RevSlider.prototype.initButtons = function() {
@@ -587,10 +586,6 @@ RevSlider({
     };
 
     RevSlider.prototype.resize = function() {
-        //var gridContainerElement = document.getElementById('rev-slider-grid-container');
-        //gridContainerElement.style.height = '';
-        //gridContainerElement.style.width = '100%';
-
         var that = this;
         var oldLimit = this.limit;
         this.grid.option({transitionDuration: 0});
@@ -616,6 +611,10 @@ RevSlider({
                 }
                 this.resetDisplay();
             }
+        }
+
+        if (this.options.max_headline) {
+            this.headlineHeight = this.getMaxHeadlineHeight(this.displayedItems);
         }
 
         var ads = this.element.querySelectorAll('.rev-ad');
@@ -740,16 +739,16 @@ RevSlider({
             endIndex = this.contentItems.length;
             moreItemsNeeded = this.limit - (endIndex - countOffset);
         }
-        var itemsToDisplay = [];
+        this.displayedItems = [];
         for (var i = 0; countOffset < endIndex; i++, countOffset++) {
-            itemsToDisplay[i] = this.contentItems[countOffset];
+            this.displayedItems[i] = this.contentItems[countOffset];
         }
         for (var i = 0; i < moreItemsNeeded; i++) {
-            itemsToDisplay[itemsToDisplay.length] = this.contentItems[i];
+            this.displayedItems[this.displayedItems.length] = this.contentItems[i];
         }
 
         if (this.options.max_headline) {
-            this.headlineHeight = this.getMaxHeadlineHeight(itemsToDisplay);
+            this.headlineHeight = this.getMaxHeadlineHeight(this.displayedItems);
         }
 
         var ads = this.gridElement.querySelectorAll('.rev-ad');
@@ -759,7 +758,7 @@ RevSlider({
         var contentIncrement = (this.options.vertical) ? 1 : ((typeof this.options.rows == 'object') ? this.options.rows[this.grid.getBreakPoint()] : this.options.rows);
         for (var i = 0; i < this.limit; i++) {
             var ad = ads[i],
-                data = itemsToDisplay[contentIndex];
+                data = this.displayedItems[contentIndex];
 
             ad.style.height = this.getCellHeight() + 'px';
 
@@ -877,7 +876,7 @@ RevSlider({
         }
     };
 
-    RevSlider.prototype.getMaxHeadlineHeight = function(itemsToDisplay) {
+    RevSlider.prototype.getMaxHeadlineHeight = function() {
         var maxHeight = 0;
         if (this.options.text_right) { // based on preloaderHeight/ ad height
             var verticalSpace = this.preloaderHeight - this.providerLineHeight;
@@ -891,7 +890,7 @@ RevSlider({
                 el.style.position = 'absolute';
                 el.style.zIndex = '100';
                 el.style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
-                el.innerHTML = '<h3 style="font-size:'+ this.headlineFontSize + 'px;line-height:'+ this.headlineLineHeight +'px">'+ itemsToDisplay[i].headline + '</h3>';
+                el.innerHTML = '<h3 style="font-size:'+ this.headlineFontSize + 'px;line-height:'+ this.headlineLineHeight +'px">'+ this.displayedItems[i].headline + '</h3>';
                 revUtils.prepend(ad, el); // do it this way b/c changin the element height on the fly needs a repaint and requestAnimationFrame is not avail in IE9
                 maxHeight = Math.max(maxHeight, el.clientHeight);
                 revUtils.remove(el);
