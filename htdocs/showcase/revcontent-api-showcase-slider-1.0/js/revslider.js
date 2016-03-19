@@ -368,7 +368,7 @@ RevSlider({
             this.grid.element.style.width = 'auto';
             this.grid.element.style.float = 'none';
 
-            this.gridContainerElement.style.width = 'auto';
+            this.gridContainerElement.style.width = '100%';
         }
 
         var that = this;
