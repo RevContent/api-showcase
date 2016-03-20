@@ -648,11 +648,12 @@ RevSlider({
         if (this.options.max_headline && !this.options.text_right) { // text_right should be limited, but don't waste for max_headline only
             return;
         }
-        var headlines = this.gridElement.querySelectorAll('.rev-content .rev-headline h3');
+        var headlines = this.gridElement.querySelectorAll('.rev-content .rev-headline');
         for (var i = 0; i < headlines.length; i++) {
             var text,
-                headline = headlines[i];
-            while(headline.clientHeight < headline.scrollHeight) {
+                container = headlines[i],
+                headline = container.children[0];
+            while(container.clientHeight < container.scrollHeight) {
                 text = headline.innerHTML.trim();
                 if(text.split(' ').length <= 1) {
                     break;
