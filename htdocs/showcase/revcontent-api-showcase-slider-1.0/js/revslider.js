@@ -629,12 +629,15 @@ RevSlider({
             ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
             ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
             ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
+
             if(that.options.hide_provider === false) {
                 ad.querySelectorAll('.rev-provider')[0].style.margin = this.providerMargin + 'px ' + this.innerMargin + 'px ' + this.providerMargin + 'px';
                 ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize + 'px';
                 ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
                 ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight + 'px';
             }
+
+            ad.querySelectorAll('.rev-headline h3')[0].innerHTML = this.displayedItems[i].headline;
         }
         this.textOverlay();
         this.checkEllipsis();
@@ -648,11 +651,12 @@ RevSlider({
         if (this.options.max_headline && !this.options.text_right) { // text_right should be limited, but don't waste for max_headline only
             return;
         }
-        var headlines = this.gridElement.querySelectorAll('.rev-content .rev-headline h3');
+        var headlines = this.gridElement.querySelectorAll('.rev-content .rev-headline');
         for (var i = 0; i < headlines.length; i++) {
             var text,
-                headline = headlines[i];
-            while(headline.clientHeight < headline.scrollHeight) {
+                container = headlines[i],
+                headline = container.children[0];
+            while(container.clientHeight < container.scrollHeight) {
                 text = headline.innerHTML.trim();
                 if(text.split(' ').length <= 1) {
                     break;

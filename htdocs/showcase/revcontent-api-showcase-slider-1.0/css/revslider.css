@@ -211,7 +211,8 @@
 }
 
 #rev-slider .rev-ad a {
-    display: inline-block;
+    display: block;
+    height: 100%;
     color: #222;
 }
 
