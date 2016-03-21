@@ -785,7 +785,7 @@ RevSlider({
                 contentIndex = ++rowCount;
             }
         }
-        this.registerImpressions(0, this.limit);
+        this.registerImpressions(countOffset, this.limit);
 
         this.grid.reloadItems();
         this.grid.layout();
