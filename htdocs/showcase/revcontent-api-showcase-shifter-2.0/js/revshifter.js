@@ -116,6 +116,7 @@ RevShifter({
 
             this.innerWidget = new RevSlider({
                 element: [this.element],
+                url: this.options.url,
                 api_key : this.options.api_key,
                 pub_id : this.options.pub_id,
                 widget_id : this.options.widget_id,
