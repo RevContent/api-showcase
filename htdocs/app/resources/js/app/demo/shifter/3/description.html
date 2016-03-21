@@ -1,24 +1,17 @@
-<p class="md-body-1">The width option allows you to define the sidenav width in pixels</p>
+<h3 class="md-subhead">Create a new RevShifter</h3>
 
-
-<h3 class="md-subhead">Available Options</h3>
-
-<table>
-    <thead>
-        <tr>
-            <th>300(default)</th>
-        </tr>
-        <tr>
-            <th>(int)</th>
-        </tr>
-    </thead>
-</table>
-
-<h3 class="md-subhead">Example</h3>
+<p>Top Position</p>
 
 <code hljs language="javascript">
-new RevFlicker({
-    ...
-    width: 600
-});
+    new RevShifter({
+        url: 'http://trends.revcontent.com/api/v1/',
+        api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+        pub_id : 945,
+        widget_id : 6181,
+        domain : 'apiexamples.powr.com',
+        show_on_load: true,
+        inner_widget_options: {
+            text_right_height: 75
+        }
+    });
 </code>

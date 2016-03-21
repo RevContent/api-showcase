@@ -57,6 +57,6 @@ gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
         .pipe(gulp.dest('../../build'));
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', ['buildjs'], function () {
     gulp.watch(['../js/revutils.js', '../js/revdialog.js', '../js/revdetect.js', './js/*', './css/revshifter.css', '../revcontent-api-showcase-slider-1.0/build/revslider.js', '../revcontent-api-showcase-slider-1.0/js/*'], ['buildjs']);
 });

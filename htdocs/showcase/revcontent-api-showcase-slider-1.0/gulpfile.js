@@ -57,6 +57,6 @@ gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
         .pipe(gulp.dest('../../build'));
 });
 
-gulp.task('watch', function () {
-    gulp.watch(['../js/revutils.js', '../js/revdialog.js', '../js/revdetect.js', './js/*', './css/*'], ['buildjs']);
+gulp.task('watch', ['buildjs'], function () {
+    gulp.watch(['../js/revutils.js', '../js/revdialog.js', '../js/revdetect.js', './vendor/any-grid/dist/any-grid.js', './js/*', './css/*'], ['buildjs']);
 });

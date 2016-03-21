@@ -161,13 +161,13 @@ app.directive('revSlider', ['$timeout', 'options', function ($timeout, options) 
         var widget;
 
         options.text_overlay = options.text_overlay ? options.text_overlay : false;
+        options.text_right = options.text_right ? options.text_right : false;
 
         options.set();
 
         $timeout(function() {
             widget = new RevSlider({
                 element: element,
-                is_resize_bound: false,
                 devices: options.getDevices(),
                 header: options.header,
                 api_key : options.api_key,
@@ -179,7 +179,10 @@ app.directive('revSlider', ['$timeout', 'options', function ($timeout, options) 
                 per_row: options.per_row,
                 headline_size: options.headline_size,
                 max_headline: options.max_headline,
-                text_overlay: options.text_overlay
+                text_overlay: options.text_overlay,
+                vertical: options.vertical,
+                page_increment: options.page_increment,
+                text_right: options.text_right
             });
         });
 

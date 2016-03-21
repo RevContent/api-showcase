@@ -40,6 +40,14 @@
             "cdn": false,
             "cdn_url": "http://labs-cdn.revcontent.com/build/revtoaster.min.js",
             "auto_inject": true
+        },
+        {
+            "name": "lock",
+            "templates": ["./tests/templates/reuters.com.html", "./tests/templates/rightwingnews.com.html"],
+            "script": "./build/revlock.min.js",
+            "cdn": false,
+            "cdn_url": "http://labs-cdn.revcontent.com/build/revlock.min.js",
+            "auto_inject": true
         }
     ]
 }
