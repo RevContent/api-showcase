@@ -38,17 +38,21 @@
                 for(b=0; b<self.enabledBeacons.length;b++){
                     var beaconId = self.beacons[b];
                     var beacon = self.beacons.get(beaconId);
-                    var beaconScript = '<script type="text/javascript">$1</script>';
-                    var beaconImage = '<img src="$1" />';
+                    var beaconScript = '<script id="$2" type="text/javascript" class="beacon-script">$1</script>';
+                    var beaconImage = '<img src="$1" id="$2" class="beacon-pxl" />';
                     var beaconEl = '';
+                    var beaconDomId = 'beacon_' + Math.floor(Math.random() * 1000);
+                    if(document.getElementById(beaconDomId) !== null){
+                        beaconDomId = 'beacon_' + Math.floor(Math.random() * 2000);
+                    }
                     if(beacon.enabled === true){
                         switch(beacon.type) {
                             case 'script':
-                                beaconEl = beaconScript.replace('$1', beacon.script_url);
+                                beaconEl = beaconScript.replace('$1', beacon.script_url).replace('$2', beaconDomId);
                                 break;
                             case 'pixel':
                             case 'default':
-                                beaconEl = beaconImage.replace('$1', beacon.pixel_url);
+                                beaconEl = beaconImage.replace('$1', beacon.pixel_url).replace('$2', beaconDomId);
                                 break;
                         }
                         document.body.insertAdjacentHTML('afterend', beaconEl);
