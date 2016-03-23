@@ -12,9 +12,9 @@
     <title>RevShifter Example</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="../css/bootstrap.css" rel="stylesheet">
 
-    <link href="css/style.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -155,7 +155,7 @@
     </div>
    <!-- /. Fake Page Content -->
 
-    <script src="build/revshifter.pkgd.js"></script>
+    <script src="../build/revshifter.pkgd.js"></script>
 
     <script>
         var shifter = new RevShifter({
@@ -163,7 +163,10 @@
             pub_id : 945,
             widget_id : 6181,
             domain : 'apiexamples.powr.com',
-            testing: true
+            testing: true,
+            inner_widget_options: {
+                text_right_height: 75
+            }
         });
     </script>
 
