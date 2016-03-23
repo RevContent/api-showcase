@@ -786,7 +786,7 @@ RevSlider({
         }
 
         if (registerImpressions) {
-            this.registerImpressions(this.offset, this.limit);
+            this.registerImpressions();
         }
 
         this.grid.reloadItems();
