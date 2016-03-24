@@ -4843,6 +4843,14 @@ utils.addEventListener = function(el, eventName, handler) {
   }
 };
 
+utils.removeEventListener = function(el, eventName, handler) {
+    if (el.removeEventListener) {
+        el.removeEventListener(eventName, handler);
+    } else {
+        el.detachEvent('on' + eventName, handler);
+    }
+}
+
 utils.ellipsisText = function(el, text, height) {
     var ellipText = '';
     var t = el.cloneNode(true);
@@ -5292,6 +5300,7 @@ RevSlider({
     var RevSlider = function(opts) {
 
         var defaults = {
+            visible: true,
             element: false,
             rows: {
                 xxs: 2,
@@ -5562,7 +5571,7 @@ RevSlider({
         this.grid.reloadItems();
         this.grid.layout();
 
-        this.updateDisplayedItems();
+        this.updateDisplayedItems(true);
 
         this.gridContainerElement.style.transitionDuration = animationDuration + 's';
         this.gridContainerElement.style.WebkitTransitionDuration = animationDuration + 's';
@@ -5838,7 +5847,9 @@ RevSlider({
                 for (var i = 0; i < (this.limit - nodes.length); i++) {
                     this.gridElement.appendChild(this.createNewCell());
                 }
-                this.resetDisplay();
+                this.previousPage = 0;
+                this.page = 1;
+                this.updateDisplayedItems(false);
             }
         }
 
@@ -5935,7 +5946,7 @@ RevSlider({
 
         revApi.request(url, function(resp) {
             that.contentItems = resp;
-            that.resetDisplay();
+            that.updateDisplayedItems(that.options.visible);
 
             imagesLoaded( that.gridElement, function() {
                 revUtils.addClass(that.containerElement, 'loaded');
@@ -5943,38 +5954,34 @@ RevSlider({
         });
     };
 
-    RevSlider.prototype.registerImpressions = function(offset, count) {
+    RevSlider.prototype.registerImpressions = function() {
+        if (this.impressionTracker[this.offset + '_' + this.count]) {
+            return; // impressions already tracked
+        }
+
         var impressionsUrl = this.options.url + '?&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&api_source=flick';
 
-        impressionsUrl += '&sponsored_count=' + (this.options.internal ? 0 : count) + '&internal_count=' + (this.options.internal ? count : 0) + '&sponsored_offset='+ (this.options.internal ? 0 : offset) +'&internal_offset=' + (this.options.internal ? offset : 0);
+        impressionsUrl += '&sponsored_count=' + (this.options.internal ? 0 : this.count) + '&internal_count=' + (this.options.internal ? this.count : 0) + '&sponsored_offset='+ (this.options.internal ? 0 : this.offset) +'&internal_offset=' + (this.options.internal ? this.offset : 0);
 
         var that = this;
         // don't do the same one twice, this could be improved I am sure
-        if ( typeof this.impressionTracker[offset + '_' + count] == 'undefined') {
-            revApi.request(impressionsUrl, function() {
-                that.impressionTracker[offset + '_' + count] = true;
-            });
-        }
+        revApi.request(impressionsUrl, function() {
+            that.impressionTracker[that.offset + '_' + that.count] = true;
+        });
     };
 
-    RevSlider.prototype.resetDisplay = function() {
-        this.previousPage = 0;
-        this.page = 1;
-        this.updateDisplayedItems();
-    };
-
-    RevSlider.prototype.updateDisplayedItems = function() {
+    RevSlider.prototype.updateDisplayedItems = function(registerImpressions) {
         var correctedPage = Math.abs(this.page);
-        var countOffset = ((correctedPage * this.increment) - this.increment);
-        var endIndex = countOffset + this.limit;
+        this.offset = ((correctedPage * this.increment) - this.increment);
+        var endIndex = this.offset + this.limit;
         var moreItemsNeeded = 0;
         if (endIndex > this.contentItems.length) {
             endIndex = this.contentItems.length;
-            moreItemsNeeded = this.limit - (endIndex - countOffset);
+            moreItemsNeeded = this.limit - (endIndex - this.offset);
         }
         this.displayedItems = [];
-        for (var i = 0; countOffset < endIndex; i++, countOffset++) {
-            this.displayedItems[i] = this.contentItems[countOffset];
+        for (var i = 0; this.offset < endIndex; i++, this.offset++) {
+            this.displayedItems[i] = this.contentItems[this.offset];
         }
         for (var i = 0; i < moreItemsNeeded; i++) {
             this.displayedItems[this.displayedItems.length] = this.contentItems[i];
@@ -6014,7 +6021,10 @@ RevSlider({
                 contentIndex = ++rowCount;
             }
         }
-        this.registerImpressions(countOffset, this.limit);
+
+        if (registerImpressions) {
+            this.registerImpressions();
+        }
 
         this.grid.reloadItems();
         this.grid.layout();
