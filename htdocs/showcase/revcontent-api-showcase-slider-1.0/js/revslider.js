@@ -745,11 +745,11 @@ RevSlider({
             moreItemsNeeded = this.limit - (endIndex - this.offset);
         }
         this.displayedItems = [];
-        for (var i = 0; this.offset < endIndex; i++, this.offset++) {
-            this.displayedItems[i] = this.contentItems[this.offset];
+        for (var i = this.offset; i < endIndex; i++) {
+            this.displayedItems.push(this.contentItems[i]);
         }
         for (var i = 0; i < moreItemsNeeded; i++) {
-            this.displayedItems[this.displayedItems.length] = this.contentItems[i];
+            this.displayedItems.push(this.contentItems[i]);
         }
 
         if (this.options.max_headline) {
@@ -758,12 +758,9 @@ RevSlider({
 
         var ads = this.gridElement.querySelectorAll('.rev-ad');
 
-        var contentIndex = 0;
-        var rowCount = 0;
-        var contentIncrement = (this.options.vertical) ? 1 : ((typeof this.options.rows == 'object') ? this.options.rows[this.grid.getBreakPoint()] : this.options.rows);
-        for (var i = 0; i < this.limit; i++) {
+        for (var i = 0; i < this.displayedItems.length; i++) {
             var ad = ads[i],
-                data = this.displayedItems[contentIndex];
+                data = this.displayedItems[i];
 
             ad.style.height = this.getCellHeight() + 'px';
 
@@ -781,10 +778,6 @@ RevSlider({
             ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize +'px';
             ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
             ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
-            contentIndex += contentIncrement;
-            if (!this.options.vertical && contentIndex > this.limit - 1) {
-                contentIndex = ++rowCount;
-            }
         }
 
         if (registerImpressions) {
