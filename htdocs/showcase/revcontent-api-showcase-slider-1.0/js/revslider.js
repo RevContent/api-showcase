@@ -187,6 +187,7 @@ RevSlider({
 
         this.grid.option({gutter: this.getPadding()});
 
+        this.offset = 0;
         this.page = 1;
         this.previousPage = 0;
 
