@@ -7480,7 +7480,6 @@ RevFlicker({
         if ( typeof this.impressionTracker[offset + '_' + count] == 'undefined') {
             revApi.request(impressionsUrl, function() {
                 that.impressionTracker[offset + '_' + count] = true;
-                console.log("Gettig Offset = ", offset);
                 if(offset === 0 && true === that.options.beacons) { revApi.beacons.attach(); }
             });
         }
