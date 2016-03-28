@@ -1,6 +1,12 @@
 body {
     margin-left: 0;
     margin-right: 0;
+    transition-property: margin-bottom, margin-top !important;
+}
+
+body.rev-shifter-no-transform #rev-shifter.rev-shifter {
+    transform: none;
+    z-index: 2147483647;
 }
 
 #rev-shifter.rev-shifter {
@@ -86,6 +92,11 @@ body {
     box-shadow: 0px 4px 6px 5px #999;
 }
 
+#rev-shifter.rev-shifter.rev-hidden {
+    transition-property: transform, height, box-shadow;
+    box-shadow: none;
+}
+
 #rev-shifter.rev-shifter .rev-content {
     border-right: 1px solid #e3e3e3;
 }
@@ -102,14 +113,6 @@ body {
 
 #rev-slider .rev-ad {
     border-radius: 0 !important;
-}
-
-body.retracted #rev-shifter.rev-shifter.top #rev-slider {
-    margin-top: -28px;
-}
-
-body.retracted #rev-shifter.rev-shifter.top #rev-slider .rev-sponsored {
-    margin-top: -24px;
 }
 
 #rev-shifter.rev-shifter * {
@@ -176,24 +179,4 @@ body.retracted #rev-shifter.rev-shifter.top #rev-slider .rev-sponsored {
 
 #rev-shifter.rev-shifter.rev-mobile:not(.rev-hidden) .rev-foot {
     transform: none;
-}
-
-body.rev-shifter-loaded {
-    margin: 0;
-}
-
-body {
-    transition-property: margin-bottom, margin-top !important;
-}
-
-body.rev-shifter-no-transform #rev-shifter.rev-shifter {
-    transform: none;
-    z-index: 2147483647;
-}
-
-body.rev-shifter-open #rev-shifter.rev-shifter{
-    top: 0;
-    right: 0;
-    transform: none !important;
-    z-index: 2147483647;
 }

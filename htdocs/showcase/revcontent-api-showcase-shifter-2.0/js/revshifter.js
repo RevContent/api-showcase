@@ -40,6 +40,9 @@ RevShifter({
         testing: false,
         size: 300,
         side: 'bottom',
+        show_on_load: false,
+        show_on_scroll: true,
+        scroll_natural: true,
         inner_widget_options: {
             header: 'Trending Now',
             per_row: {
@@ -58,7 +61,6 @@ RevShifter({
             text_right_height: 100
         },
         closed_hours: 24,
-        show_on_load: false,
         transition_duration: 2500,
         devices: [
             'phone', 'tablet', 'desktop'
@@ -107,6 +109,7 @@ RevShifter({
             this.element.style.zIndex = '10001';
             this.element.id = 'rev-shifter';
             revUtils.addClass(this.element, 'rev-shifter');
+            revUtils.addClass(this.element, 'rev-hidden');
             revUtils.addClass(this.element, this.options.side);
             if (revDetect.mobile()) {
                 revUtils.addClass(this.element, 'rev-mobile');
@@ -115,6 +118,8 @@ RevShifter({
             revUtils.append(document.body, this.element);
 
             this.innerWidget = new RevSlider({
+                api_source: 'shift',
+                visible: this.options.show_on_load,
                 element: [this.element],
                 url: this.options.url,
                 api_key : this.options.api_key,
@@ -169,6 +174,48 @@ RevShifter({
             if (this.options.show_on_load) {
                 this.show();
             }
+
+            // scrolling
+            var that = this;
+            var move = function() {
+                if (this.removed) {
+                    window.removeEventListener('scroll', move);
+                    return;
+                }
+
+                if (that.scrollTimeout) {
+                    return;
+                }
+
+                function delayed() {
+                    var scrollTop = window.pageYOffset;
+                    var scrollDirection = false;
+                    if (scrollTop < that.lastScrollTop) {
+                        scrollDirection = 'up';
+                    } else if(scrollTop > that.lastScrollTop) {
+                        scrollDirection = 'down';
+                    }
+
+                    if (scrollDirection === 'up') {
+                        that.options.scroll_natural ? that.hide() : that.show();
+                    } else if (scrollDirection === 'down') {
+                        that.options.scroll_natural ? that.show() : that.hide();
+                    }
+                    that.lastScrollTop = scrollTop;
+                    that.scrollTimeout = false;
+                }
+
+                that.scrollTimeout = setTimeout( delayed, 300);
+            };
+
+            this.scrollTimeout;
+            // wait a tick or two before doing the scroll b/c of auto scroll feature in some browsers
+            if (this.options.show_on_scroll) {
+                setTimeout(function() {
+                    that.lastScrollTop = window.pageYOffset;
+                    revUtils.addEventListener(window, 'scroll', move);
+                }, 300);
+            }
         };
 
         this.update = function(newOpts, oldOpts) {
@@ -211,18 +258,37 @@ RevShifter({
         };
 
         this.show = function() {
+            this.hideTimeout = clearTimeout(this.hideTimeout);
+            revUtils.removeClass(this.element, 'rev-hidden');
+
             this.visible = true;
+
+            this.innerWidget.registerImpressions();
+
             revUtils.addClass(document.body, 'rev-shifter-no-transform');
-            document.body.style[this.options.side == 'bottom' ? 'marginBottom' : 'marginTop'] = this.size + 'px';
+
+            if (!this.options.show_on_scroll) {
+                document.body.style[this.options.side == 'bottom' ? 'marginBottom' : 'marginTop'] = this.size + 'px';
+            }
         };
 
         this.hide = function() {
             this.visible = false;
+
             revUtils.removeClass(document.body, 'rev-shifter-no-transform');
-            document.body.style[this.options.side == 'bottom' ? 'marginBottom' : 'marginTop'] = 0;
+
+            if (!this.options.show_on_scroll) {
+                document.body.style[this.options.side == 'bottom' ? 'marginBottom' : 'marginTop'] = 0;
+            }
+
+            if (this.hideTimeout) {
+                return;
+            }
+
             var that = this;
-            setTimeout(function() {
+            this.hideTimeout = setTimeout(function() {
                 revUtils.addClass(that.element, 'rev-hidden');
+                that.hideTimeout = false;
             }, this.options.transition_duration);
         };
 
@@ -230,6 +296,7 @@ RevShifter({
             var that = this;
             this.closeElement.addEventListener('click', function() {
                 that.hide();
+                that.removed = true;
                 revUtils.setCookie('rev-shifter-closed', 1, (that.options.closed_hours / 24));
             });
         };
