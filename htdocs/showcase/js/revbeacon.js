@@ -11,6 +11,7 @@
         self.pluginSource = '';
         self.push = true;
         self.enabledBeacons = ["quantcast", "comscore"];
+        self.renderedBeacons = [];
         self.beacons = {
             get: function(beaconId){
                 var beacons = this;
@@ -80,6 +81,7 @@
                             break;
                     }
                     self.parent.insertAdjacentHTML('beforeend', beaconEl);
+                    self.renderedBeacons.push(document.getElementById(beaconDomId));
                 }
             }
         }

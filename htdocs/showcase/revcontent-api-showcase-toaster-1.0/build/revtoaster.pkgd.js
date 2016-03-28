@@ -2072,6 +2072,14 @@ utils.addEventListener = function(el, eventName, handler) {
   }
 };
 
+utils.removeEventListener = function(el, eventName, handler) {
+    if (el.removeEventListener) {
+        el.removeEventListener(eventName, handler);
+    } else {
+        el.detachEvent('on' + eventName, handler);
+    }
+}
+
 utils.ellipsisText = function(el, text, height) {
     var ellipText = '';
     var t = el.cloneNode(true);
@@ -2421,6 +2429,7 @@ return detect;
         self.pluginSource = '';
         self.push = true;
         self.enabledBeacons = ["quantcast", "comscore"];
+        self.renderedBeacons = [];
         self.beacons = {
             get: function(beaconId){
                 var beacons = this;
@@ -2490,6 +2499,7 @@ return detect;
                             break;
                     }
                     self.parent.insertAdjacentHTML('beforeend', beaconEl);
+                    self.renderedBeacons.push(document.getElementById(beaconDomId));
                 }
             }
         }

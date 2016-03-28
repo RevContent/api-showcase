@@ -21,7 +21,8 @@ RevShifter({
     closed_hours: 24,
     sponsored: 2,
     disclosure_text: revDisclose.defaultDisclosureText,
-    hide_provider: false
+    hide_provider: false,
+    beacons: true
 });
 */
 
@@ -66,7 +67,8 @@ RevShifter({
         ],
         url: 'https://trends.revcontent.com/api/v1/',
         disclosure_text: revDisclose.defaultDisclosureText,
-        hide_provider: false
+        hide_provider: false,
+        beacons: true
     };
 
     RevShifter = function(opts) {
@@ -144,7 +146,8 @@ RevShifter({
                 transition_duration: this.options.retract_duration + 'ms',
                 is_layout_instant: true,
                 disclosure_text: this.options.disclosure_text,
-                hide_provider: this.options.hide_provider
+                hide_provider: this.options.hide_provider,
+                beacons: this.options.beacons
             });
 
             this.size = this.element.clientHeight;

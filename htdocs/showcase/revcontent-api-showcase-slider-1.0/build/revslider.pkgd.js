@@ -5565,6 +5565,7 @@ return detect;
         self.pluginSource = '';
         self.push = true;
         self.enabledBeacons = ["quantcast", "comscore"];
+        self.renderedBeacons = [];
         self.beacons = {
             get: function(beaconId){
                 var beacons = this;
@@ -5634,6 +5635,7 @@ return detect;
                             break;
                     }
                     self.parent.insertAdjacentHTML('beforeend', beaconEl);
+                    self.renderedBeacons.push(document.getElementById(beaconDomId));
                 }
             }
         }
