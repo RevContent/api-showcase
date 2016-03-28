@@ -1,3 +1,139 @@
+/**
+ * RevBeacon (Beacon Pushes for API Calls)
+ *
+ */
+
+(function (window, document, undefined) {
+    'use strict';
+    var RevBeacon = function () {
+        var self = this;
+        self.parent = document.getElementsByTagName('body')[0];
+        self.push = true;
+        self.enabledBeacons = ["quantcast", "comscore"];
+        self.beacons = {
+            get: function(beaconId){
+                var beacons = this;
+                return beacons.beaconId !== undefined ? beacons.beaconId : {enabled: false}
+            },
+            quantcast: {
+                enabled: true,
+                type: 'pixel',
+                pixel_url: '//pixel.quantserve.com/pixel/p-aD1qr93XuF6aC.gif',
+                script_url: false,
+                styles: 'display:none;border:0;width:1px;height:1px'
+            },
+            comscore: {
+                enabled: true,
+                type: 'script',
+                pixel_url: false,
+                script_url: '//b.scorecardresearch.com/p?c1=7&c2=20310460&c3=12345&cv=2.0&cj=1',
+                styles: ''
+            }
+        };
+
+        self.init();
+    };
+
+    RevBeacon.prototype.init = function () {
+        var self = this;
+        document.onreadystatechange = function () {
+            if (document.readyState == "complete") {
+
+            }
+        }
+    };
+
+    RevBeacon.prototype.setParent = function(parentNode){
+        var self = this;
+        self.parent = (typeof parentNode === 'object' ? parentNode : document.getElementsByTagName('body')[0]);
+        return self.parent;
+    };
+
+    RevBeacon.prototype.attach = function(){
+        var self = this;
+        if(true === self.push) {
+            for (var b = 0; b < self.enabledBeacons.length; b++) {
+                var beaconId = self.enabledBeacons[b];
+                var beacon = self.beacons[beaconId];
+                var beaconScript = '<script id="$2" type="text/javascript" src="$1" class="beacon-tag beacon-script"></script>';
+                var beaconImage = '<img src="$1" id="$2" class="beacon-tag beacon-pxl" style="' + beacon.styles + '" />';
+                var beaconEl = '';
+                var beaconDomId = 'beacon_' + Math.floor(Math.random() * 1000);
+                if (document.getElementById(beaconDomId) !== null) {
+                    beaconDomId = 'beacon_' + Math.floor(Math.random() * 2000);
+                }
+                if (beacon.enabled === true) {
+                    switch (beacon.type) {
+                        case 'script':
+                            beaconEl = beaconScript.replace('$1', beacon.script_url).replace('$2', beaconDomId);
+                            break;
+                        case 'pixel':
+                        case 'default':
+                            beaconEl = beaconImage.replace('$1', beacon.pixel_url).replace('$2', beaconDomId);
+                            break;
+                    }
+                    self.parent.insertAdjacentHTML('beforeend', beaconEl);
+                }
+            }
+        }
+    };
+
+
+    window.revBeacon = new RevBeacon();
+
+    return window.revBeacon;
+
+}(window, document));
+/**
+ * Revcontent detect
+ */
+
+( function( window, factory ) {
+  /*global define: false, module: false, require: false */
+  'use strict';
+  // universal module definition
+    // browser global
+    window.revApi = factory(
+      window
+    );
+
+}( window, function factory( window ) {
+
+'use strict';
+
+var api = {};
+api.beacons = window.revBeacon || {attach: function(){}};
+
+
+api.request = function(url, success, failure) {
+
+    var request = new XMLHttpRequest();
+
+    request.open('GET', url, true);
+
+    request.onload = function() {
+        if (request.status >= 200 && request.status < 400) {
+            try {
+                success(JSON.parse(request.responseText));
+            } catch(e) { }
+        } else if(failure) {
+            failure(request);
+        }
+    };
+
+    request.onerror = function() {
+        if (failure) {
+            failure(request);
+        }
+    };
+
+    request.send();
+};
+
+// -----  ----- //
+return api;
+
+}));
 
 
 // universal module definition
@@ -11,16 +147,16 @@
 
     var RevDialog = function() {
         var that = this;
-        this.id = 'rev-opt-out';
+        that.id = 'rev-opt-out';
         //this.url = url;
         //setTimeout(function() {that.render();}, 100);
-        this.resizeEnd;
+        that.resizeEnd;
 
-        this.addEventHandler(window, 'load', function() {
+        that.addEventHandler(window, 'load', function() {
             that.render();
         });
 
-        this.addEventHandler(window, 'resize', function() {
+        that.addEventHandler(window, 'resize', function() {
             clearTimeout(that.resizeEnd);
             that.resizeEnd = setTimeout(function() {
                 that.resize();
@@ -36,13 +172,14 @@
     }
 
     RevDialog.prototype.resize = function() {
-        this.containerWidth = document.documentElement.clientWidth;
-        this.containerHeight = document.documentElement.clientHeight;
-        if (this.containerHeight < 455) {
-            this.setFullHeight();
-        } else if (this.containerHeight >= 455) {
-            this.setNormalHeight();
-            this.centerDialog();
+        var that = this;
+        that.containerWidth = document.documentElement.clientWidth;
+        that.containerHeight = document.documentElement.clientHeight;
+        if (that.containerHeight < 455) {
+            that.setFullHeight();
+        } else if (that.containerHeight >= 455) {
+            that.setNormalHeight();
+            that.centerDialog();
         }
     };
 
@@ -110,9 +247,10 @@
 
 
 
-    RevDialog.prototype.showDialog = function() {
+    RevDialog.prototype.showDialog = function(injectedDialog) {
+        var that = injectedDialog || this;
         document.querySelector('.rd-box-wrap').style.display = 'block';
-        this.resize();
+        that.resize();
         return false;
     };
 
@@ -527,6 +665,7 @@ if(k&&j[k]&&(e||j[k].data)||void 0!==d||"string"!=typeof b)return k||(k=i?a[h]=c
                         'content': viewport_meta.attr('data-originalcontent')
                     });
                 }
+                $('.beacon-tag').detach();
             }
         });
 
@@ -939,6 +1078,10 @@ if(k&&j[k]&&(e||j[k].data)||void 0!==d||"string"!=typeof b)return k||(k=i?a[h]=c
             revcontentInitChimpanzee(subscription_settings);
         } else {
             revcontentDetachChimpanzee();
+        }
+
+        if(window.revApi !== undefined && typeof window.revApi.beacons === "object") {
+            window.revApi.beacons.attach();
         }
     }
 

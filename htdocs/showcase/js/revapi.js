@@ -16,6 +16,8 @@
 'use strict';
 
 var api = {};
+api.beacons = window.revBeacon || {attach: function(){}};
+
 
 api.request = function(url, success, failure) {
 
