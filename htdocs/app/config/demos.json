@@ -10,7 +10,7 @@
         },
         {
             "name": "shifter",
-            "templates": [],
+            "templates": ["./tests/templates/thehealthlane.com.html"],
             "script": "./build/revshifter.min.js",
             "cdn": false,
             "cdn_url": "http://labs-cdn.revcontent.com/build/revshifter.min.js",
