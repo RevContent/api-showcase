@@ -118,7 +118,7 @@ RevShifter({
             revUtils.append(document.body, this.element);
 
             this.innerWidget = new RevSlider({
-                api_source: 'slide',
+                api_source: 'shift',
                 visible: this.options.show_on_load,
                 element: [this.element],
                 url: this.options.url,
