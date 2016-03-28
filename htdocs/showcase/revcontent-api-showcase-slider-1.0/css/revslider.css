@@ -38,6 +38,7 @@
     box-sizing: border-box;
     font-size:inherit;
     line-height:inherit;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     margin:0;
     padding:0;
 }
@@ -264,6 +265,7 @@
     font-weight: 500;
     letter-spacing: .2px;
     line-height: 20px;
+    overflow: hidden;
     margin: 0;
 }
 
