@@ -3,10 +3,11 @@
  *
  */
 
-(function (window, document, dialog, undefined) {
+(function (window, document, undefined) {
     'use strict';
     var RevBeacon = function () {
         var self = this;
+        self.parent = document.getElementsByTagName('body')[0];
         self.push = true;
         self.enabledBeacons = ["quantcast", "comscore"];
         self.beacons = {
@@ -35,28 +36,41 @@
         var self = this;
         document.onreadystatechange = function () {
             if (document.readyState == "complete") {
-                for(b=0; b<self.enabledBeacons.length;b++){
-                    var beaconId = self.beacons[b];
-                    var beacon = self.beacons.get(beaconId);
-                    var beaconScript = '<script id="$2" type="text/javascript" class="beacon-script">$1</script>';
-                    var beaconImage = '<img src="$1" id="$2" class="beacon-pxl" />';
-                    var beaconEl = '';
-                    var beaconDomId = 'beacon_' + Math.floor(Math.random() * 1000);
-                    if(document.getElementById(beaconDomId) !== null){
-                        beaconDomId = 'beacon_' + Math.floor(Math.random() * 2000);
+
+            }
+        }
+    };
+
+    RevBeacon.prototype.setParent = function(parentNode){
+        var self = this;
+        self.parent = (typeof parentNode === 'object' ? parentNode : document.getElementsByTagName('body')[0]);
+        return self.parent;
+    };
+
+    RevBeacon.prototype.attach = function(){
+        var self = this;
+        if(true === self.push) {
+            for (var b = 0; b < self.enabledBeacons.length; b++) {
+                var beaconId = self.enabledBeacons[b];
+                var beacon = self.beacons[beaconId];
+                var beaconScript = '<script id="$2" type="text/javascript" class="beacon-tag beacon-script">$1</script>';
+                var beaconImage = '<img src="$1" id="$2" class="beacon-tag beacon-pxl" />';
+                var beaconEl = '';
+                var beaconDomId = 'beacon_' + Math.floor(Math.random() * 1000);
+                if (document.getElementById(beaconDomId) !== null) {
+                    beaconDomId = 'beacon_' + Math.floor(Math.random() * 2000);
+                }
+                if (beacon.enabled === true) {
+                    switch (beacon.type) {
+                        case 'script':
+                            beaconEl = beaconScript.replace('$1', beacon.script_url).replace('$2', beaconDomId);
+                            break;
+                        case 'pixel':
+                        case 'default':
+                            beaconEl = beaconImage.replace('$1', beacon.pixel_url).replace('$2', beaconDomId);
+                            break;
                     }
-                    if(beacon.enabled === true){
-                        switch(beacon.type) {
-                            case 'script':
-                                beaconEl = beaconScript.replace('$1', beacon.script_url).replace('$2', beaconDomId);
-                                break;
-                            case 'pixel':
-                            case 'default':
-                                beaconEl = beaconImage.replace('$1', beacon.pixel_url).replace('$2', beaconDomId);
-                                break;
-                        }
-                        document.body.insertAdjacentHTML('afterend', beaconEl);
-                    }
+                    self.parent.insertAdjacentHTML('beforeend', beaconEl);
                 }
             }
         }
