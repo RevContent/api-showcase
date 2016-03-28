@@ -719,19 +719,19 @@ RevSlider({
         });
     };
 
-    RevSlider.prototype.registerImpressions = function() {
-        if (this.impressionTracker[this.offset + '_' + this.count]) {
+    RevSlider.prototype.registerImpressions = function(shit) {
+        if (this.impressionTracker[this.offset + '_' + this.limit]) {
             return; // impressions already tracked
         }
 
         var impressionsUrl = this.options.url + '?&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&api_source=' + this.options.api_source;
 
-        impressionsUrl += '&sponsored_count=' + (this.options.internal ? 0 : this.count) + '&internal_count=' + (this.options.internal ? this.count : 0) + '&sponsored_offset='+ (this.options.internal ? 0 : this.offset) +'&internal_offset=' + (this.options.internal ? this.offset : 0);
+        impressionsUrl += '&sponsored_count=' + (this.options.internal ? 0 : this.limit) + '&internal_count=' + (this.options.internal ? this.limit : 0) + '&sponsored_offset='+ (this.options.internal ? 0 : this.offset) +'&internal_offset=' + (this.options.internal ? this.offset : 0);
 
         var that = this;
         // don't do the same one twice, this could be improved I am sure
         revApi.request(impressionsUrl, function() {
-            that.impressionTracker[that.offset + '_' + that.count] = true;
+            that.impressionTracker[that.offset + '_' + that.limit] = true;
         });
     };
 
