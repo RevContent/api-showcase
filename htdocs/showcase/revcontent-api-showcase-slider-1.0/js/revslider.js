@@ -619,7 +619,7 @@ RevSlider({
         }
 
         if (this.options.max_headline) {
-            this.headlineHeight = this.getMaxHeadlineHeight(this.displayedItems);
+            this.headlineHeight = this.getMaxHeadlineHeight();
         }
 
         var ads = this.element.querySelectorAll('.rev-ad');
@@ -753,7 +753,7 @@ RevSlider({
         }
 
         if (this.options.max_headline) {
-            this.headlineHeight = this.getMaxHeadlineHeight(this.displayedItems);
+            this.headlineHeight = this.getMaxHeadlineHeight();
         }
 
         var ads = this.gridElement.querySelectorAll('.rev-ad');
