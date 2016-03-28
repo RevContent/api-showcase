@@ -6911,13 +6911,15 @@ return detect;
                 enabled: true,
                 type: 'pixel',
                 pixel_url: '//pixel.quantserve.com/pixel/p-aD1qr93XuF6aC.gif',
-                script_url: false
+                script_url: false,
+                styles: 'display:none;border:0;width:1px;height:1px'
             },
             comscore: {
                 enabled: true,
                 type: 'script',
                 pixel_url: false,
-                script_url: '//b.scorecardresearch.com/p?c1=7&c2=20310460&c3=12345&cv=2.0&cj=1'
+                script_url: '//b.scorecardresearch.com/p?c1=7&c2=20310460&c3=12345&cv=2.0&cj=1',
+                styles: ''
             }
         };
 
@@ -6946,7 +6948,7 @@ return detect;
                 var beaconId = self.enabledBeacons[b];
                 var beacon = self.beacons[beaconId];
                 var beaconScript = '<script id="$2" type="text/javascript" class="beacon-tag beacon-script">$1</script>';
-                var beaconImage = '<img src="$1" id="$2" class="beacon-tag beacon-pxl" />';
+                var beaconImage = '<img src="$1" id="$2" class="beacon-tag beacon-pxl" style="' + beacon.styles + '" />';
                 var beaconEl = '';
                 var beaconDomId = 'beacon_' + Math.floor(Math.random() * 1000);
                 if (document.getElementById(beaconDomId) !== null) {
