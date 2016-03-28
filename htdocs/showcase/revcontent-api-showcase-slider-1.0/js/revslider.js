@@ -63,6 +63,7 @@ RevSlider({
     var RevSlider = function(opts) {
 
         var defaults = {
+            api_source: 'slide',
             visible: true,
             element: false,
             rows: {
@@ -186,6 +187,7 @@ RevSlider({
 
         this.grid.option({gutter: this.getPadding()});
 
+        this.offset = 0;
         this.page = 1;
         this.previousPage = 0;
 
@@ -617,7 +619,7 @@ RevSlider({
         }
 
         if (this.options.max_headline) {
-            this.headlineHeight = this.getMaxHeadlineHeight(this.displayedItems);
+            this.headlineHeight = this.getMaxHeadlineHeight();
         }
 
         var ads = this.element.querySelectorAll('.rev-ad');
@@ -718,18 +720,18 @@ RevSlider({
     };
 
     RevSlider.prototype.registerImpressions = function() {
-        if (this.impressionTracker[this.offset + '_' + this.count]) {
+        if (this.impressionTracker[this.offset + '_' + this.limit]) {
             return; // impressions already tracked
         }
 
-        var impressionsUrl = this.options.url + '?&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&api_source=flick';
+        var impressionsUrl = this.options.url + '?&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&api_source=' + this.options.api_source;
 
-        impressionsUrl += '&sponsored_count=' + (this.options.internal ? 0 : this.count) + '&internal_count=' + (this.options.internal ? this.count : 0) + '&sponsored_offset='+ (this.options.internal ? 0 : this.offset) +'&internal_offset=' + (this.options.internal ? this.offset : 0);
+        impressionsUrl += '&sponsored_count=' + (this.options.internal ? 0 : this.limit) + '&internal_count=' + (this.options.internal ? this.limit : 0) + '&sponsored_offset='+ (this.options.internal ? 0 : this.offset) +'&internal_offset=' + (this.options.internal ? this.offset : 0);
 
         var that = this;
         // don't do the same one twice, this could be improved I am sure
         revApi.request(impressionsUrl, function() {
-            that.impressionTracker[that.offset + '_' + that.count] = true;
+            that.impressionTracker[that.offset + '_' + that.limit] = true;
         });
     };
 
@@ -743,25 +745,22 @@ RevSlider({
             moreItemsNeeded = this.limit - (endIndex - this.offset);
         }
         this.displayedItems = [];
-        for (var i = 0; this.offset < endIndex; i++, this.offset++) {
-            this.displayedItems[i] = this.contentItems[this.offset];
+        for (var i = this.offset; i < endIndex; i++) {
+            this.displayedItems.push(this.contentItems[i]);
         }
         for (var i = 0; i < moreItemsNeeded; i++) {
-            this.displayedItems[this.displayedItems.length] = this.contentItems[i];
+            this.displayedItems.push(this.contentItems[i]);
         }
 
         if (this.options.max_headline) {
-            this.headlineHeight = this.getMaxHeadlineHeight(this.displayedItems);
+            this.headlineHeight = this.getMaxHeadlineHeight();
         }
 
         var ads = this.gridElement.querySelectorAll('.rev-ad');
 
-        var contentIndex = 0;
-        var rowCount = 0;
-        var contentIncrement = (this.options.vertical) ? 1 : ((typeof this.options.rows == 'object') ? this.options.rows[this.grid.getBreakPoint()] : this.options.rows);
-        for (var i = 0; i < this.limit; i++) {
+        for (var i = 0; i < this.displayedItems.length; i++) {
             var ad = ads[i],
-                data = this.displayedItems[contentIndex];
+                data = this.displayedItems[i];
 
             ad.style.height = this.getCellHeight() + 'px';
 
@@ -779,10 +778,6 @@ RevSlider({
             ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize +'px';
             ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
             ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
-            contentIndex += contentIncrement;
-            if (!this.options.vertical && contentIndex > this.limit - 1) {
-                contentIndex = ++rowCount;
-            }
         }
 
         if (registerImpressions) {
