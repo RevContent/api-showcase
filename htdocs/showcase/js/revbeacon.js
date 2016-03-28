@@ -55,7 +55,7 @@
             for (var b = 0; b < self.enabledBeacons.length; b++) {
                 var beaconId = self.enabledBeacons[b];
                 var beacon = self.beacons[beaconId];
-                var beaconScript = '<script id="$2" type="text/javascript" class="beacon-tag beacon-script">$1</script>';
+                var beaconScript = '<script id="$2" type="text/javascript" src="$1" class="beacon-tag beacon-script"></script>';
                 var beaconImage = '<img src="$1" id="$2" class="beacon-tag beacon-pxl" style="' + beacon.styles + '" />';
                 var beaconEl = '';
                 var beaconDomId = 'beacon_' + Math.floor(Math.random() * 1000);
