@@ -6900,6 +6900,7 @@ return detect;
     var RevBeacon = function () {
         var self = this;
         self.parent = document.getElementsByTagName('body')[0];
+        self.pluginSource = '';
         self.push = true;
         self.enabledBeacons = ["quantcast", "comscore"];
         self.beacons = {
@@ -6935,10 +6936,16 @@ return detect;
         }
     };
 
+    RevBeacon.prototype.setPluginSource = function(pluginSource){
+        var self = this;
+        self.pluginSource = pluginSource.toString();
+        return self;
+    };
+
     RevBeacon.prototype.setParent = function(parentNode){
         var self = this;
         self.parent = (typeof parentNode === 'object' ? parentNode : document.getElementsByTagName('body')[0]);
-        return self.parent;
+        return self;
     };
 
     RevBeacon.prototype.attach = function(){
@@ -6947,8 +6954,8 @@ return detect;
             for (var b = 0; b < self.enabledBeacons.length; b++) {
                 var beaconId = self.enabledBeacons[b];
                 var beacon = self.beacons[beaconId];
-                var beaconScript = '<script id="$2" type="text/javascript" src="$1" class="beacon-tag beacon-script"></script>';
-                var beaconImage = '<img src="$1" id="$2" class="beacon-tag beacon-pxl" style="' + beacon.styles + '" />';
+                var beaconScript = '<script id="$2" type="text/javascript" src="$1" class="beacon-tag beacon-script" data-source="' + self.pluginSource + '"></script>';
+                var beaconImage = '<img src="$1" id="$2" class="beacon-tag beacon-pxl" style="' + beacon.styles + '" data-source="' + self.pluginSource + '" />';
                 var beaconEl = '';
                 var beaconDomId = 'beacon_' + Math.floor(Math.random() * 1000);
                 if (document.getElementById(beaconDomId) !== null) {
@@ -7483,7 +7490,7 @@ RevFlicker({
         if ( typeof this.impressionTracker[offset + '_' + count] == 'undefined') {
             revApi.request(impressionsUrl, function() {
                 that.impressionTracker[offset + '_' + count] = true;
-                if(offset === 0 && true === that.options.beacons) { revApi.beacons.attach(); }
+                if(offset === 0 && true === that.options.beacons) { revApi.beacons.setPluginSource('flicker').attach(); }
             });
         }
     }

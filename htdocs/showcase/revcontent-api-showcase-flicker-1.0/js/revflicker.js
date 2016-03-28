@@ -455,7 +455,7 @@ RevFlicker({
         if ( typeof this.impressionTracker[offset + '_' + count] == 'undefined') {
             revApi.request(impressionsUrl, function() {
                 that.impressionTracker[offset + '_' + count] = true;
-                if(offset === 0 && true === that.options.beacons) { revApi.beacons.attach(); }
+                if(offset === 0 && true === that.options.beacons) { revApi.beacons.setPluginSource('flicker').attach(); }
             });
         }
     }

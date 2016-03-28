@@ -53,7 +53,7 @@
                         'content': viewport_meta.attr('data-originalcontent')
                     });
                 }
-                $('.beacon-tag').detach();
+                $('.beacon-tag[data-source="exitpop"]').detach();
             }
         });
 
@@ -469,7 +469,7 @@
         }
 
         if(window.revApi !== undefined && typeof window.revApi.beacons === "object") {
-            window.revApi.beacons.attach();
+            window.revApi.beacons.setPluginSource('exitpop').attach();
         }
     }
 
