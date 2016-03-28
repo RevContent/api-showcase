@@ -5956,7 +5956,7 @@ RevSlider({
         });
     };
 
-    RevSlider.prototype.registerImpressions = function(shit) {
+    RevSlider.prototype.registerImpressions = function() {
         if (this.impressionTracker[this.offset + '_' + this.limit]) {
             return; // impressions already tracked
         }
@@ -5965,10 +5965,10 @@ RevSlider({
 
         impressionsUrl += '&sponsored_count=' + (this.options.internal ? 0 : this.limit) + '&internal_count=' + (this.options.internal ? this.limit : 0) + '&sponsored_offset='+ (this.options.internal ? 0 : this.offset) +'&internal_offset=' + (this.options.internal ? this.offset : 0);
 
-        var that = this;
+        this.impressionTracker[this.offset + '_' + this.limit] = true;
         // don't do the same one twice, this could be improved I am sure
         revApi.request(impressionsUrl, function() {
-            that.impressionTracker[that.offset + '_' + that.limit] = true;
+            return;
         });
     };
 
