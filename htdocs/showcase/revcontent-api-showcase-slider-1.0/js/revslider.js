@@ -63,6 +63,7 @@ RevSlider({
     var RevSlider = function(opts) {
 
         var defaults = {
+            api_source: 'slide',
             visible: true,
             element: false,
             rows: {
@@ -722,7 +723,7 @@ RevSlider({
             return; // impressions already tracked
         }
 
-        var impressionsUrl = this.options.url + '?&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&api_source=flick';
+        var impressionsUrl = this.options.url + '?&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&api_source=' + this.options.api_source;
 
         impressionsUrl += '&sponsored_count=' + (this.options.internal ? 0 : this.count) + '&internal_count=' + (this.options.internal ? this.count : 0) + '&sponsored_offset='+ (this.options.internal ? 0 : this.offset) +'&internal_offset=' + (this.options.internal ? this.offset : 0);
 
