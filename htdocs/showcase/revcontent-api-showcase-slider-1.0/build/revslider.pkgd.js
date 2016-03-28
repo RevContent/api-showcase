@@ -5956,7 +5956,7 @@ RevSlider({
         });
     };
 
-    RevSlider.prototype.registerImpressions = function(shit) {
+    RevSlider.prototype.registerImpressions = function() {
         if (this.impressionTracker[this.offset + '_' + this.limit]) {
             return; // impressions already tracked
         }
