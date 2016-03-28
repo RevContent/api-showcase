@@ -2276,7 +2276,6 @@ return utils;
 
 (function (window, document, dialog, undefined) {
     'use strict';
-    console.log("Entering RevDisclose Namespace...");
     var RevDisclose = function () {
         var self = this;
         self.dialog = dialog;
@@ -2295,18 +2294,15 @@ return utils;
     };
 
     RevDisclose.prototype.init = function () {
-        console.log("RevDisclose: Initializing...");
         var self = this;
         document.onreadystatechange = function () {
             if (document.readyState == "complete") {
-                console.log("RevDisclose: Document is READY!...");
 
             }
         }
     };
 
     RevDisclose.prototype.setDialog = function(dialog){
-        console.log("RevDisclose: Manually Setting Dialog Object");
         var self = this;
         if(typeof dialog === "object"){
             self.dialog = dialog;
@@ -2314,20 +2310,17 @@ return utils;
     };
 
     RevDisclose.prototype.truncateDisclosure = function () {
-        console.log("RevDisclose: Initializing...");
         var self = this;
         self.disclosureText = self.disclosureText.toString().substring(0, self.disclosureTextLimit).replace(/['"]+/g, '');
     };
 
     RevDisclose.prototype.setDisclosureText = function(disclosure){
-        console.log("RevDisclose: Setting Disclosure Text Label to: "  + disclosure.toString());
         var self = this;
         self.disclosureText = (disclosure.length > 2) ? disclosure.toString() : self.defaultDisclosureText;
         self.truncateDisclosure();
     };
 
     RevDisclose.prototype.setOnClickHandler = function (handler, handlerObject) {
-        console.log("RevDisclose: Setting onClick Handler for Disclosure text...");
         var self = this;
         if (typeof handler === 'function') {
             self.onClickHandler = handler;
@@ -2338,15 +2331,12 @@ return utils;
     };
 
     RevDisclose.prototype.getSponsorTemplate = function () {
-        console.log("RevDisclose: Building Disclosure HTML...");
         var self = this;
         self.disclosureHtml = '<a href="javascript:;" onclick="revDisclose.onClickHandler(revDisclose.onClickHandlerObject ? revDisclose.onClickHandlerObject : null);">' + self.disclosureText + '</a>';
-        console.log("RevDisclose: " + self.disclosureHtml);
         return self.plainText ? self.disclosureText : self.disclosureHtml;
     };
 
     RevDisclose.prototype.getDisclosure = function (disclosureText) {
-        console.log("RevDisclose: Attaching Disclosure Text and onClick Event Function...");
         var self = this;
         self.setDisclosureText(disclosureText);
         if(typeof self.dialog === "object") {
@@ -2419,6 +2409,99 @@ return detect;
 
 }));
 /**
+ * RevBeacon (Beacon Pushes for API Calls)
+ *
+ */
+
+(function (window, document, undefined) {
+    'use strict';
+    var RevBeacon = function () {
+        var self = this;
+        self.parent = document.getElementsByTagName('body')[0];
+        self.pluginSource = '';
+        self.push = true;
+        self.enabledBeacons = ["quantcast", "comscore"];
+        self.beacons = {
+            get: function(beaconId){
+                var beacons = this;
+                return beacons.beaconId !== undefined ? beacons.beaconId : {enabled: false}
+            },
+            quantcast: {
+                enabled: true,
+                type: 'pixel',
+                pixel_url: '//pixel.quantserve.com/pixel/p-aD1qr93XuF6aC.gif',
+                script_url: false,
+                styles: 'display:none;border:0;width:1px;height:1px'
+            },
+            comscore: {
+                enabled: true,
+                type: 'script',
+                pixel_url: false,
+                script_url: '//b.scorecardresearch.com/p?c1=7&c2=20310460&c3=12345&cv=2.0&cj=1',
+                styles: ''
+            }
+        };
+
+        self.init();
+    };
+
+    RevBeacon.prototype.init = function () {
+        var self = this;
+        document.onreadystatechange = function () {
+            if (document.readyState == "complete") {
+
+            }
+        }
+    };
+
+    RevBeacon.prototype.setPluginSource = function(pluginSource){
+        var self = this;
+        self.pluginSource = pluginSource.toString();
+        return self;
+    };
+
+    RevBeacon.prototype.setParent = function(parentNode){
+        var self = this;
+        self.parent = (typeof parentNode === 'object' ? parentNode : document.getElementsByTagName('body')[0]);
+        return self;
+    };
+
+    RevBeacon.prototype.attach = function(){
+        var self = this;
+        if(true === self.push) {
+            for (var b = 0; b < self.enabledBeacons.length; b++) {
+                var beaconId = self.enabledBeacons[b];
+                var beacon = self.beacons[beaconId];
+                var beaconScript = '<script id="$2" type="text/javascript" src="$1" class="beacon-tag beacon-script" data-source="' + self.pluginSource + '"></script>';
+                var beaconImage = '<img src="$1" id="$2" class="beacon-tag beacon-pxl" style="' + beacon.styles + '" data-source="' + self.pluginSource + '" />';
+                var beaconEl = '';
+                var beaconDomId = 'beacon_' + Math.floor(Math.random() * 1000);
+                if (document.getElementById(beaconDomId) !== null) {
+                    beaconDomId = 'beacon_' + Math.floor(Math.random() * 2000);
+                }
+                if (beacon.enabled === true) {
+                    switch (beacon.type) {
+                        case 'script':
+                            beaconEl = beaconScript.replace('$1', beacon.script_url).replace('$2', beaconDomId);
+                            break;
+                        case 'pixel':
+                        case 'default':
+                            beaconEl = beaconImage.replace('$1', beacon.pixel_url).replace('$2', beaconDomId);
+                            break;
+                    }
+                    self.parent.insertAdjacentHTML('beforeend', beaconEl);
+                }
+            }
+        }
+    };
+
+
+    window.revBeacon = new RevBeacon();
+
+    return window.revBeacon;
+
+}(window, document));
+/**
  * Revcontent detect
  */
 
@@ -2436,6 +2519,8 @@ return detect;
 'use strict';
 
 var api = {};
+api.beacons = window.revBeacon || {attach: function(){}};
+
 
 api.request = function(url, success, failure) {
 
@@ -2488,7 +2573,8 @@ RevToaster({
     closed_hours: 24,
     sponsored: 2,
     disclosure_text: revDisclose.defaultDisclosureText,
-    hide_provider: false
+    hide_provider: false,
+    beacons: true
 });
 */
 
@@ -2517,7 +2603,8 @@ RevToaster({
             'phone', 'tablet', 'desktop'
         ],
         disclosure_text: revDisclose.defaultDisclosureText,
-        hide_provider: false
+        hide_provider: false,
+        beacons: true
     };
     // var options;
     var lastScrollTop = 0;
@@ -2742,6 +2829,7 @@ RevToaster({
                 revUtils.removeClass(document.body, 'rev-toaster-loaded');
                 setTimeout(function() {
                     that.revToaster.parentNode.removeChild(that.revToaster);
+                    that.removeBeacons(document.querySelectorAll('.beacon-tag'));
                     removed = true;
                     revUtils.setCookie('revtoaster-closed', 1, (that.options.closed_hours / 24));
                 }, 2000);
@@ -2756,6 +2844,7 @@ RevToaster({
                 imagesLoaded( this.containerElement, function() {
                     that.visible = true;
                     revUtils.addClass(document.body, 'rev-toaster-loaded');
+                    if(true === that.options.beacons) { revApi.beacons.setPluginSource('toaster').attach(); }
                 });
             }
         };
@@ -2764,6 +2853,17 @@ RevToaster({
             this.visible = false;
             revUtils.removeClass(document.body, 'rev-toaster-loaded');
         };
+
+        this.removeBeacons = function(beaconElements) {
+            for(var b=0; b<beaconElements.length; b++) {
+                var beacon = beaconElements[b];
+                if(beacon.getAttribute('data-source') && beacon.getAttribute('data-source').toLowerCase() == 'toaster'){
+                    if(beacon.parentNode){
+                        beacon.parentNode.removeChild(beacon);
+                    }
+                }
+            }
+        }
 
         this.init();
     };
