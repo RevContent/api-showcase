@@ -56,6 +56,46 @@
         return self.pluginSource.toString();
     };
 
+    RevBeacon.prototype.enableBeacon = function(beaconName){
+        var self = this;
+        if(self.enabledBeacons[beaconName] == undefined && self.beacons[beaconName] !== undefined) {
+            self.enabledBeacons.push(beaconName);
+        }
+        return self;
+    };
+
+    RevBeacon.prototype.disableBeacon = function(beaconName){
+        var self = this;
+        self.enabledBeacons = self.enabledBeacons.filter(function(entry){
+            if(beaconName != entry) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        return self;
+    };
+
+    RevBeacon.prototype.offline = function(){
+        var self = this;
+        self.push = false;
+        return self;
+    };
+
+    RevBeacon.prototype.createBeacon = function(beaconName, enabled, type, pixelUrl, scriptUrl, styles) {
+        var self = this;
+        if(self.beacons[beaconName] == undefined) {
+            self.beacons[beaconName] = {
+                enabled: enabled,
+                type: type,
+                pixel_url: pixelUrl,
+                script_url: scriptUrl,
+                styles: styles
+            };
+        }
+        return self;
+    };
+
     RevBeacon.prototype.setParent = function(parentNode){
         var self = this;
         self.parent = (typeof parentNode === 'object' ? parentNode : document.getElementsByTagName('body')[0]);
