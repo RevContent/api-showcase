@@ -5605,6 +5605,11 @@ return detect;
         return self;
     };
 
+    RevBeacon.prototype.getPluginSource = function(){
+        var self = this;
+        return self.pluginSource.toString();
+    };
+
     RevBeacon.prototype.setParent = function(parentNode){
         var self = this;
         self.parent = (typeof parentNode === 'object' ? parentNode : document.getElementsByTagName('body')[0]);
@@ -6434,7 +6439,7 @@ RevSlider({
         var that = this;
         // don't do the same one twice, this could be improved I am sure
         revApi.request(impressionsUrl, function() {
-            if(that.offset == 0 && true === that.options.beacons) { revApi.beacons.setPluginSource('slider').attach(); }
+            if(that.offset == 0 && true === that.options.beacons) { revApi.beacons.setPluginSource((revApi.beacons.getPluginSource() != '' ? revApi.beacons.getPluginSource() : 'slider')).attach(); }
             return;
         });
     };

@@ -735,7 +735,7 @@ RevSlider({
         var that = this;
         // don't do the same one twice, this could be improved I am sure
         revApi.request(impressionsUrl, function() {
-            if(that.offset == 0 && true === that.options.beacons) { revApi.beacons.setPluginSource('slider').attach(); }
+            if(that.offset == 0 && true === that.options.beacons) { revApi.beacons.setPluginSource((revApi.beacons.getPluginSource() != '' ? revApi.beacons.getPluginSource() : 'slider')).attach(); }
             return;
         });
     };

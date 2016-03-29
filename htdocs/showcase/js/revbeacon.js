@@ -51,6 +51,11 @@
         return self;
     };
 
+    RevBeacon.prototype.getPluginSource = function(){
+        var self = this;
+        return self.pluginSource.toString();
+    };
+
     RevBeacon.prototype.setParent = function(parentNode){
         var self = this;
         self.parent = (typeof parentNode === 'object' ? parentNode : document.getElementsByTagName('body')[0]);

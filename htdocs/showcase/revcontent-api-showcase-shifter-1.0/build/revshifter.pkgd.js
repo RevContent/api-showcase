@@ -1129,6 +1129,14 @@ utils.addEventListener = function(el, eventName, handler) {
   }
 };
 
+utils.removeEventListener = function(el, eventName, handler) {
+    if (el.removeEventListener) {
+        el.removeEventListener(eventName, handler);
+    } else {
+        el.detachEvent('on' + eventName, handler);
+    }
+}
+
 utils.ellipsisText = function(el, text, height) {
     var ellipText = '';
     var t = el.cloneNode(true);
@@ -1333,7 +1341,6 @@ return utils;
 
 (function (window, document, dialog, undefined) {
     'use strict';
-    console.log("Entering RevDisclose Namespace...");
     var RevDisclose = function () {
         var self = this;
         self.dialog = dialog;
@@ -1352,18 +1359,15 @@ return utils;
     };
 
     RevDisclose.prototype.init = function () {
-        console.log("RevDisclose: Initializing...");
         var self = this;
         document.onreadystatechange = function () {
             if (document.readyState == "complete") {
-                console.log("RevDisclose: Document is READY!...");
 
             }
         }
     };
 
     RevDisclose.prototype.setDialog = function(dialog){
-        console.log("RevDisclose: Manually Setting Dialog Object");
         var self = this;
         if(typeof dialog === "object"){
             self.dialog = dialog;
@@ -1371,20 +1375,17 @@ return utils;
     };
 
     RevDisclose.prototype.truncateDisclosure = function () {
-        console.log("RevDisclose: Initializing...");
         var self = this;
         self.disclosureText = self.disclosureText.toString().substring(0, self.disclosureTextLimit).replace(/['"]+/g, '');
     };
 
     RevDisclose.prototype.setDisclosureText = function(disclosure){
-        console.log("RevDisclose: Setting Disclosure Text Label to: "  + disclosure.toString());
         var self = this;
         self.disclosureText = (disclosure.length > 2) ? disclosure.toString() : self.defaultDisclosureText;
         self.truncateDisclosure();
     };
 
     RevDisclose.prototype.setOnClickHandler = function (handler, handlerObject) {
-        console.log("RevDisclose: Setting onClick Handler for Disclosure text...");
         var self = this;
         if (typeof handler === 'function') {
             self.onClickHandler = handler;
@@ -1395,15 +1396,12 @@ return utils;
     };
 
     RevDisclose.prototype.getSponsorTemplate = function () {
-        console.log("RevDisclose: Building Disclosure HTML...");
         var self = this;
         self.disclosureHtml = '<a href="javascript:;" onclick="revDisclose.onClickHandler(revDisclose.onClickHandlerObject ? revDisclose.onClickHandlerObject : null);">' + self.disclosureText + '</a>';
-        console.log("RevDisclose: " + self.disclosureHtml);
         return self.plainText ? self.disclosureText : self.disclosureHtml;
     };
 
     RevDisclose.prototype.getDisclosure = function (disclosureText) {
-        console.log("RevDisclose: Attaching Disclosure Text and onClick Event Function...");
         var self = this;
         self.setDisclosureText(disclosureText);
         if(typeof self.dialog === "object") {
@@ -1476,6 +1474,106 @@ return detect;
 
 }));
 /**
+ * RevBeacon (Beacon Pushes for API Calls)
+ *
+ */
+
+(function (window, document, undefined) {
+    'use strict';
+    var RevBeacon = function () {
+        var self = this;
+        self.parent = document.getElementsByTagName('body')[0];
+        self.pluginSource = '';
+        self.push = true;
+        self.enabledBeacons = ["quantcast", "comscore"];
+        self.renderedBeacons = [];
+        self.beacons = {
+            get: function(beaconId){
+                var beacons = this;
+                return beacons.beaconId !== undefined ? beacons.beaconId : {enabled: false}
+            },
+            quantcast: {
+                enabled: true,
+                type: 'pixel',
+                pixel_url: '//pixel.quantserve.com/pixel/p-aD1qr93XuF6aC.gif',
+                script_url: false,
+                styles: 'display:none;border:0;width:1px;height:1px'
+            },
+            comscore: {
+                enabled: true,
+                type: 'script',
+                pixel_url: false,
+                script_url: '//b.scorecardresearch.com/p?c1=7&c2=20310460&c3=12345&cv=2.0&cj=1',
+                styles: ''
+            }
+        };
+
+        self.init();
+    };
+
+    RevBeacon.prototype.init = function () {
+        var self = this;
+        document.onreadystatechange = function () {
+            if (document.readyState == "complete") {
+
+            }
+        }
+    };
+
+    RevBeacon.prototype.setPluginSource = function(pluginSource){
+        var self = this;
+        self.pluginSource = pluginSource.toString();
+        return self;
+    };
+
+    RevBeacon.prototype.getPluginSource = function(){
+        var self = this;
+        return self.pluginSource.toString();
+    };
+
+    RevBeacon.prototype.setParent = function(parentNode){
+        var self = this;
+        self.parent = (typeof parentNode === 'object' ? parentNode : document.getElementsByTagName('body')[0]);
+        return self;
+    };
+
+    RevBeacon.prototype.attach = function(){
+        var self = this;
+        if(true === self.push) {
+            for (var b = 0; b < self.enabledBeacons.length; b++) {
+                var beaconId = self.enabledBeacons[b];
+                var beacon = self.beacons[beaconId];
+                var beaconScript = '<script id="$2" type="text/javascript" src="$1" class="beacon-tag beacon-script" data-source="' + self.pluginSource + '"></script>';
+                var beaconImage = '<img src="$1" id="$2" class="beacon-tag beacon-pxl" style="' + beacon.styles + '" data-source="' + self.pluginSource + '" />';
+                var beaconEl = '';
+                var beaconDomId = 'beacon_' + Math.floor(Math.random() * 1000);
+                if (document.getElementById(beaconDomId) !== null) {
+                    beaconDomId = 'beacon_' + Math.floor(Math.random() * 2000);
+                }
+                if (beacon.enabled === true) {
+                    switch (beacon.type) {
+                        case 'script':
+                            beaconEl = beaconScript.replace('$1', beacon.script_url).replace('$2', beaconDomId);
+                            break;
+                        case 'pixel':
+                        case 'default':
+                            beaconEl = beaconImage.replace('$1', beacon.pixel_url).replace('$2', beaconDomId);
+                            break;
+                    }
+                    self.parent.insertAdjacentHTML('beforeend', beaconEl);
+                    self.renderedBeacons.push(document.getElementById(beaconDomId));
+                }
+            }
+        }
+    };
+
+
+    window.revBeacon = new RevBeacon();
+
+    return window.revBeacon;
+
+}(window, document));
+/**
  * Revcontent detect
  */
 
@@ -1493,6 +1591,8 @@ return detect;
 'use strict';
 
 var api = {};
+api.beacons = window.revBeacon || {attach: function(){}};
+
 
 api.request = function(url, success, failure) {
 
@@ -2497,123 +2597,488 @@ define(function () {
     }
 })());
 /*!
- * imagesLoaded PACKAGED v4.1.0
+ * imagesLoaded PACKAGED v4.0.0
  * JavaScript is all like "You images are done yet or what?"
  * MIT License
  */
 
-/**
- * EvEmitter v1.0.1
- * Lil' event emitter
- * MIT License
+/*!
+ * EventEmitter v4.2.11 - git.io/ee
+ * Unlicense - http://unlicense.org/
+ * Oliver Caldwell - http://oli.me.uk/
+ * @preserve
  */
 
-/* jshint unused: true, undef: true, strict: true */
+;(function () {
+    'use strict';
 
-( function( global, factory ) {
-  // universal module definition
-  /* jshint strict: false */ /* globals define, module */
-  if ( typeof define == 'function' && define.amd ) {
-    // AMD - RequireJS
-    define( 'ev-emitter/ev-emitter',factory );
-  } else if ( typeof module == 'object' && module.exports ) {
-    // CommonJS - Browserify, Webpack
-    module.exports = factory();
-  } else {
-    // Browser globals
-    global.EvEmitter = factory();
-  }
+    /**
+     * Class for managing events.
+     * Can be extended to provide event functionality in other classes.
+     *
+     * @class EventEmitter Manages event registering and emitting.
+     */
+    function EventEmitter() {}
 
-}( this, function() {
+    // Shortcuts to improve speed and size
+    var proto = EventEmitter.prototype;
+    var exports = this;
+    var originalGlobalValue = exports.EventEmitter;
 
+    /**
+     * Finds the index of the listener for the event in its storage array.
+     *
+     * @param {Function[]} listeners Array of listeners to search through.
+     * @param {Function} listener Method to look for.
+     * @return {Number} Index of the specified listener, -1 if not found
+     * @api private
+     */
+    function indexOfListener(listeners, listener) {
+        var i = listeners.length;
+        while (i--) {
+            if (listeners[i].listener === listener) {
+                return i;
+            }
+        }
 
-
-function EvEmitter() {}
-
-var proto = EvEmitter.prototype;
-
-proto.on = function( eventName, listener ) {
-  if ( !eventName || !listener ) {
-    return;
-  }
-  // set events hash
-  var events = this._events = this._events || {};
-  // set listeners array
-  var listeners = events[ eventName ] = events[ eventName ] || [];
-  // only add once
-  if ( listeners.indexOf( listener ) == -1 ) {
-    listeners.push( listener );
-  }
-
-  return this;
-};
-
-proto.once = function( eventName, listener ) {
-  if ( !eventName || !listener ) {
-    return;
-  }
-  // add event
-  this.on( eventName, listener );
-  // set once flag
-  // set onceEvents hash
-  var onceEvents = this._onceEvents = this._onceEvents || {};
-  // set onceListeners array
-  var onceListeners = onceEvents[ eventName ] = onceEvents[ eventName ] || [];
-  // set flag
-  onceListeners[ listener ] = true;
-
-  return this;
-};
-
-proto.off = function( eventName, listener ) {
-  var listeners = this._events && this._events[ eventName ];
-  if ( !listeners || !listeners.length ) {
-    return;
-  }
-  var index = listeners.indexOf( listener );
-  if ( index != -1 ) {
-    listeners.splice( index, 1 );
-  }
-
-  return this;
-};
-
-proto.emitEvent = function( eventName, args ) {
-  var listeners = this._events && this._events[ eventName ];
-  if ( !listeners || !listeners.length ) {
-    return;
-  }
-  var i = 0;
-  var listener = listeners[i];
-  args = args || [];
-  // once stuff
-  var onceListeners = this._onceEvents && this._onceEvents[ eventName ];
-
-  while ( listener ) {
-    var isOnce = onceListeners && onceListeners[ listener ];
-    if ( isOnce ) {
-      // remove listener
-      // remove before trigger to prevent recursion
-      this.off( eventName, listener );
-      // unset once flag
-      delete onceListeners[ listener ];
+        return -1;
     }
-    // trigger listener
-    listener.apply( this, args );
-    // get next listener
-    i += isOnce ? 0 : 1;
-    listener = listeners[i];
-  }
 
-  return this;
-};
+    /**
+     * Alias a method while keeping the context correct, to allow for overwriting of target method.
+     *
+     * @param {String} name The name of the target method.
+     * @return {Function} The aliased method
+     * @api private
+     */
+    function alias(name) {
+        return function aliasClosure() {
+            return this[name].apply(this, arguments);
+        };
+    }
 
-return EvEmitter;
+    /**
+     * Returns the listener array for the specified event.
+     * Will initialise the event object and listener arrays if required.
+     * Will return an object if you use a regex search. The object contains keys for each matched event. So /ba[rz]/ might return an object containing bar and baz. But only if you have either defined them with defineEvent or added some listeners to them.
+     * Each property in the object response is an array of listener functions.
+     *
+     * @param {String|RegExp} evt Name of the event to return the listeners from.
+     * @return {Function[]|Object} All listener functions for the event.
+     */
+    proto.getListeners = function getListeners(evt) {
+        var events = this._getEvents();
+        var response;
+        var key;
 
-}));
+        // Return a concatenated array of all matching events if
+        // the selector is a regular expression.
+        if (evt instanceof RegExp) {
+            response = {};
+            for (key in events) {
+                if (events.hasOwnProperty(key) && evt.test(key)) {
+                    response[key] = events[key];
+                }
+            }
+        }
+        else {
+            response = events[evt] || (events[evt] = []);
+        }
+
+        return response;
+    };
+
+    /**
+     * Takes a list of listener objects and flattens it into a list of listener functions.
+     *
+     * @param {Object[]} listeners Raw listener objects.
+     * @return {Function[]} Just the listener functions.
+     */
+    proto.flattenListeners = function flattenListeners(listeners) {
+        var flatListeners = [];
+        var i;
+
+        for (i = 0; i < listeners.length; i += 1) {
+            flatListeners.push(listeners[i].listener);
+        }
+
+        return flatListeners;
+    };
+
+    /**
+     * Fetches the requested listeners via getListeners but will always return the results inside an object. This is mainly for internal use but others may find it useful.
+     *
+     * @param {String|RegExp} evt Name of the event to return the listeners from.
+     * @return {Object} All listener functions for an event in an object.
+     */
+    proto.getListenersAsObject = function getListenersAsObject(evt) {
+        var listeners = this.getListeners(evt);
+        var response;
+
+        if (listeners instanceof Array) {
+            response = {};
+            response[evt] = listeners;
+        }
+
+        return response || listeners;
+    };
+
+    /**
+     * Adds a listener function to the specified event.
+     * The listener will not be added if it is a duplicate.
+     * If the listener returns true then it will be removed after it is called.
+     * If you pass a regular expression as the event name then the listener will be added to all events that match it.
+     *
+     * @param {String|RegExp} evt Name of the event to attach the listener to.
+     * @param {Function} listener Method to be called when the event is emitted. If the function returns true then it will be removed after calling.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.addListener = function addListener(evt, listener) {
+        var listeners = this.getListenersAsObject(evt);
+        var listenerIsWrapped = typeof listener === 'object';
+        var key;
+
+        for (key in listeners) {
+            if (listeners.hasOwnProperty(key) && indexOfListener(listeners[key], listener) === -1) {
+                listeners[key].push(listenerIsWrapped ? listener : {
+                    listener: listener,
+                    once: false
+                });
+            }
+        }
+
+        return this;
+    };
+
+    /**
+     * Alias of addListener
+     */
+    proto.on = alias('addListener');
+
+    /**
+     * Semi-alias of addListener. It will add a listener that will be
+     * automatically removed after its first execution.
+     *
+     * @param {String|RegExp} evt Name of the event to attach the listener to.
+     * @param {Function} listener Method to be called when the event is emitted. If the function returns true then it will be removed after calling.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.addOnceListener = function addOnceListener(evt, listener) {
+        return this.addListener(evt, {
+            listener: listener,
+            once: true
+        });
+    };
+
+    /**
+     * Alias of addOnceListener.
+     */
+    proto.once = alias('addOnceListener');
+
+    /**
+     * Defines an event name. This is required if you want to use a regex to add a listener to multiple events at once. If you don't do this then how do you expect it to know what event to add to? Should it just add to every possible match for a regex? No. That is scary and bad.
+     * You need to tell it what event names should be matched by a regex.
+     *
+     * @param {String} evt Name of the event to create.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.defineEvent = function defineEvent(evt) {
+        this.getListeners(evt);
+        return this;
+    };
+
+    /**
+     * Uses defineEvent to define multiple events.
+     *
+     * @param {String[]} evts An array of event names to define.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.defineEvents = function defineEvents(evts) {
+        for (var i = 0; i < evts.length; i += 1) {
+            this.defineEvent(evts[i]);
+        }
+        return this;
+    };
+
+    /**
+     * Removes a listener function from the specified event.
+     * When passed a regular expression as the event name, it will remove the listener from all events that match it.
+     *
+     * @param {String|RegExp} evt Name of the event to remove the listener from.
+     * @param {Function} listener Method to remove from the event.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.removeListener = function removeListener(evt, listener) {
+        var listeners = this.getListenersAsObject(evt);
+        var index;
+        var key;
+
+        for (key in listeners) {
+            if (listeners.hasOwnProperty(key)) {
+                index = indexOfListener(listeners[key], listener);
+
+                if (index !== -1) {
+                    listeners[key].splice(index, 1);
+                }
+            }
+        }
+
+        return this;
+    };
+
+    /**
+     * Alias of removeListener
+     */
+    proto.off = alias('removeListener');
+
+    /**
+     * Adds listeners in bulk using the manipulateListeners method.
+     * If you pass an object as the second argument you can add to multiple events at once. The object should contain key value pairs of events and listeners or listener arrays. You can also pass it an event name and an array of listeners to be added.
+     * You can also pass it a regular expression to add the array of listeners to all events that match it.
+     * Yeah, this function does quite a bit. That's probably a bad thing.
+     *
+     * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to add to multiple events at once.
+     * @param {Function[]} [listeners] An optional array of listener functions to add.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.addListeners = function addListeners(evt, listeners) {
+        // Pass through to manipulateListeners
+        return this.manipulateListeners(false, evt, listeners);
+    };
+
+    /**
+     * Removes listeners in bulk using the manipulateListeners method.
+     * If you pass an object as the second argument you can remove from multiple events at once. The object should contain key value pairs of events and listeners or listener arrays.
+     * You can also pass it an event name and an array of listeners to be removed.
+     * You can also pass it a regular expression to remove the listeners from all events that match it.
+     *
+     * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to remove from multiple events at once.
+     * @param {Function[]} [listeners] An optional array of listener functions to remove.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.removeListeners = function removeListeners(evt, listeners) {
+        // Pass through to manipulateListeners
+        return this.manipulateListeners(true, evt, listeners);
+    };
+
+    /**
+     * Edits listeners in bulk. The addListeners and removeListeners methods both use this to do their job. You should really use those instead, this is a little lower level.
+     * The first argument will determine if the listeners are removed (true) or added (false).
+     * If you pass an object as the second argument you can add/remove from multiple events at once. The object should contain key value pairs of events and listeners or listener arrays.
+     * You can also pass it an event name and an array of listeners to be added/removed.
+     * You can also pass it a regular expression to manipulate the listeners of all events that match it.
+     *
+     * @param {Boolean} remove True if you want to remove listeners, false if you want to add.
+     * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to add/remove from multiple events at once.
+     * @param {Function[]} [listeners] An optional array of listener functions to add/remove.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.manipulateListeners = function manipulateListeners(remove, evt, listeners) {
+        var i;
+        var value;
+        var single = remove ? this.removeListener : this.addListener;
+        var multiple = remove ? this.removeListeners : this.addListeners;
+
+        // If evt is an object then pass each of its properties to this method
+        if (typeof evt === 'object' && !(evt instanceof RegExp)) {
+            for (i in evt) {
+                if (evt.hasOwnProperty(i) && (value = evt[i])) {
+                    // Pass the single listener straight through to the singular method
+                    if (typeof value === 'function') {
+                        single.call(this, i, value);
+                    }
+                    else {
+                        // Otherwise pass back to the multiple function
+                        multiple.call(this, i, value);
+                    }
+                }
+            }
+        }
+        else {
+            // So evt must be a string
+            // And listeners must be an array of listeners
+            // Loop over it and pass each one to the multiple method
+            i = listeners.length;
+            while (i--) {
+                single.call(this, evt, listeners[i]);
+            }
+        }
+
+        return this;
+    };
+
+    /**
+     * Removes all listeners from a specified event.
+     * If you do not specify an event then all listeners will be removed.
+     * That means every event will be emptied.
+     * You can also pass a regex to remove all events that match it.
+     *
+     * @param {String|RegExp} [evt] Optional name of the event to remove all listeners for. Will remove from every event if not passed.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.removeEvent = function removeEvent(evt) {
+        var type = typeof evt;
+        var events = this._getEvents();
+        var key;
+
+        // Remove different things depending on the state of evt
+        if (type === 'string') {
+            // Remove all listeners for the specified event
+            delete events[evt];
+        }
+        else if (evt instanceof RegExp) {
+            // Remove all events matching the regex.
+            for (key in events) {
+                if (events.hasOwnProperty(key) && evt.test(key)) {
+                    delete events[key];
+                }
+            }
+        }
+        else {
+            // Remove all listeners in all events
+            delete this._events;
+        }
+
+        return this;
+    };
+
+    /**
+     * Alias of removeEvent.
+     *
+     * Added to mirror the node API.
+     */
+    proto.removeAllListeners = alias('removeEvent');
+
+    /**
+     * Emits an event of your choice.
+     * When emitted, every listener attached to that event will be executed.
+     * If you pass the optional argument array then those arguments will be passed to every listener upon execution.
+     * Because it uses `apply`, your array of arguments will be passed as if you wrote them out separately.
+     * So they will not arrive within the array on the other side, they will be separate.
+     * You can also pass a regular expression to emit to all events that match it.
+     *
+     * @param {String|RegExp} evt Name of the event to emit and execute listeners for.
+     * @param {Array} [args] Optional array of arguments to be passed to each listener.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.emitEvent = function emitEvent(evt, args) {
+        var listenersMap = this.getListenersAsObject(evt);
+        var listeners;
+        var listener;
+        var i;
+        var key;
+        var response;
+
+        for (key in listenersMap) {
+            if (listenersMap.hasOwnProperty(key)) {
+                listeners = listenersMap[key].slice(0);
+                i = listeners.length;
+
+                while (i--) {
+                    // If the listener returns true then it shall be removed from the event
+                    // The function is executed either with a basic call or an apply if there is an args array
+                    listener = listeners[i];
+
+                    if (listener.once === true) {
+                        this.removeListener(evt, listener.listener);
+                    }
+
+                    response = listener.listener.apply(this, args || []);
+
+                    if (response === this._getOnceReturnValue()) {
+                        this.removeListener(evt, listener.listener);
+                    }
+                }
+            }
+        }
+
+        return this;
+    };
+
+    /**
+     * Alias of emitEvent
+     */
+    proto.trigger = alias('emitEvent');
+
+    /**
+     * Subtly different from emitEvent in that it will pass its arguments on to the listeners, as opposed to taking a single array of arguments to pass on.
+     * As with emitEvent, you can pass a regex in place of the event name to emit to all events that match it.
+     *
+     * @param {String|RegExp} evt Name of the event to emit and execute listeners for.
+     * @param {...*} Optional additional arguments to be passed to each listener.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.emit = function emit(evt) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        return this.emitEvent(evt, args);
+    };
+
+    /**
+     * Sets the current value to check against when executing listeners. If a
+     * listeners return value matches the one set here then it will be removed
+     * after execution. This value defaults to true.
+     *
+     * @param {*} value The new value to check for when executing listeners.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.setOnceReturnValue = function setOnceReturnValue(value) {
+        this._onceReturnValue = value;
+        return this;
+    };
+
+    /**
+     * Fetches the current value to check against when executing listeners. If
+     * the listeners return value matches this one then it should be removed
+     * automatically. It will return true by default.
+     *
+     * @return {*|Boolean} The current value to check for or the default, true.
+     * @api private
+     */
+    proto._getOnceReturnValue = function _getOnceReturnValue() {
+        if (this.hasOwnProperty('_onceReturnValue')) {
+            return this._onceReturnValue;
+        }
+        else {
+            return true;
+        }
+    };
+
+    /**
+     * Fetches the events object and creates one if required.
+     *
+     * @return {Object} The events storage object.
+     * @api private
+     */
+    proto._getEvents = function _getEvents() {
+        return this._events || (this._events = {});
+    };
+
+    /**
+     * Reverts the global {@link EventEmitter} to its previous value and returns a reference to this version.
+     *
+     * @return {Function} Non conflicting EventEmitter class.
+     */
+    EventEmitter.noConflict = function noConflict() {
+        exports.EventEmitter = originalGlobalValue;
+        return EventEmitter;
+    };
+
+    // Expose the class either via AMD, CommonJS or the global object
+    if (typeof define === 'function' && define.amd) {
+        define('eventEmitter/EventEmitter',[],function () {
+            return EventEmitter;
+        });
+    }
+    else if (typeof module === 'object' && module.exports){
+        module.exports = EventEmitter;
+    }
+    else {
+        exports.EventEmitter = EventEmitter;
+    }
+}.call(this));
 
 /*!
- * imagesLoaded v4.1.0
+ * imagesLoaded v4.0.0
  * JavaScript is all like "You images are done yet or what?"
  * MIT License
  */
@@ -2626,21 +3091,21 @@ return EvEmitter;
   if ( typeof define == 'function' && define.amd ) {
     // AMD
     define( [
-      'ev-emitter/ev-emitter'
-    ], function( EvEmitter ) {
-      return factory( window, EvEmitter );
+      'eventEmitter/EventEmitter'
+    ], function( EventEmitter ) {
+      return factory( window, EventEmitter );
     });
   } else if ( typeof module == 'object' && module.exports ) {
     // CommonJS
     module.exports = factory(
       window,
-      require('ev-emitter')
+      require('wolfy87-eventemitter')
     );
   } else {
     // browser global
     window.imagesLoaded = factory(
       window,
-      window.EvEmitter
+      window.EventEmitter
     );
   }
 
@@ -2648,7 +3113,7 @@ return EvEmitter;
 
 // --------------------------  factory -------------------------- //
 
-function factory( window, EvEmitter ) {
+function factory( window, EventEmitter ) {
 
 
 
@@ -2726,7 +3191,7 @@ function ImagesLoaded( elem, options, onAlways ) {
   }.bind( this ));
 }
 
-ImagesLoaded.prototype = Object.create( EvEmitter.prototype );
+ImagesLoaded.prototype = Object.create( EventEmitter.prototype );
 
 ImagesLoaded.prototype.options = {};
 
@@ -2837,7 +3302,7 @@ ImagesLoaded.prototype.progress = function( image, elem, message ) {
   this.progressedCount++;
   this.hasAnyBroken = this.hasAnyBroken || !image.isLoaded;
   // progress event
-  this.emitEvent( 'progress', [ this, image, elem ] );
+  this.emit( 'progress', this, image, elem );
   if ( this.jqDeferred && this.jqDeferred.notify ) {
     this.jqDeferred.notify( this, image );
   }
@@ -2854,8 +3319,8 @@ ImagesLoaded.prototype.progress = function( image, elem, message ) {
 ImagesLoaded.prototype.complete = function() {
   var eventName = this.hasAnyBroken ? 'fail' : 'done';
   this.isComplete = true;
-  this.emitEvent( eventName, [ this ] );
-  this.emitEvent( 'always', [ this ] );
+  this.emit( eventName, this );
+  this.emit( 'always', this );
   if ( this.jqDeferred ) {
     var jqMethod = this.hasAnyBroken ? 'reject' : 'resolve';
     this.jqDeferred[ jqMethod ]( this );
@@ -2868,7 +3333,7 @@ function LoadingImage( img ) {
   this.img = img;
 }
 
-LoadingImage.prototype = Object.create( EvEmitter.prototype );
+LoadingImage.prototype = Object.create( EventEmitter.prototype );
 
 LoadingImage.prototype.check = function() {
   // If complete is true and browser supports natural sizes,
@@ -2896,7 +3361,7 @@ LoadingImage.prototype.getIsImageComplete = function() {
 
 LoadingImage.prototype.confirm = function( isLoaded, message ) {
   this.isLoaded = isLoaded;
-  this.emitEvent( 'progress', [ this, this.img, message ] );
+  this.emit( 'progress', this, this.img, message );
 };
 
 // ----- events ----- //
@@ -2950,13 +3415,13 @@ Background.prototype.check = function() {
 };
 
 Background.prototype.unbindEvents = function() {
-  this.img.removeEventListener( 'load', this );
-  this.img.removeEventListener( 'error', this );
+  this.img.addEventListener( 'load', this );
+  this.img.addEventListener( 'error', this );
 };
 
 Background.prototype.confirm = function( isLoaded, message ) {
   this.isLoaded = isLoaded;
-  this.emitEvent( 'progress', [ this, this.element, message ] );
+  this.emit( 'progress', this, this.element, message );
 };
 
 // -------------------------- jQuery -------------------------- //
@@ -5851,8 +6316,8 @@ var AnyGrid = Outlayer.create( 'anyGrid', {
         opacity: 1
     },
     adjustGutter: false,
-    gutter: false
-
+    gutter: false,
+    removeVerticalGutters: false
 });
 
 AnyGrid.prototype.getBreakPoint = function() {
@@ -5904,12 +6369,14 @@ AnyGrid.prototype._setUp = function() {
         this.perRow = parseInt(this.options.perRow);
     }
 
+    this.verticalPadding = this.options.gutter ? this.options.gutter : (this.items.length ? getSize(this.items[0].element).paddingTop : 0);
+
     var measureContainerWidth = this.containerWidth;
 
     if (this.options.adjustGutter && (this.items.length || this.options.gutter)) {
-        this.itemPadding = this.options.gutter ? this.options.gutter : getSize(this.items[0].element).paddingLeft;
-        this.element.parentNode.style.marginLeft = (this.itemPadding * -1) + 'px';
-        measureContainerWidth = this.containerWidth + (this.itemPadding * 2);
+        var padding = this.options.gutter ? this.options.gutter : getSize(this.items[0].element).paddingLeft;
+        this.element.parentNode.style.marginLeft = (padding * -1) + 'px';
+        measureContainerWidth = this.containerWidth + (padding * 2);
     }
 
     this.columnWidth = (measureContainerWidth / this.perRow);
@@ -5933,7 +6400,9 @@ AnyGrid.prototype._create = function() {
 
     this.element.style.position = "relative";
 
-    this.bindResize();
+    if ( this.options.isResizeBound ) {
+        this.bindResize();
+    }
 
     this._setUp();
 };
@@ -5952,14 +6421,27 @@ AnyGrid.prototype._getItemLayoutPosition = function( item ) {
 
     var itemHeight = (this.options.itemHeight ? this.options.itemHeight : item.size.height);
 
+    this.rowsCount = (this.items.length / this.cols);
+    var row = Math.floor( this.itemIndex / this.cols ) + 1;
+
+    if (this.options.stacked) { // need the row for removeVerticalGutters
+        column = Math.floor(this.itemIndex / this.rowsCount);
+        row = Math.abs((column * this.rowsCount) - this.itemIndex) + 1;
+    }
+
+    if (this.options.removeVerticalGutters) {
+        if (row === 1 && item.size.paddingTop) {
+            itemHeight = itemHeight - this.verticalPadding
+        }
+        if (row === this.rowsCount && item.size.paddingBottom) {
+            itemHeight = itemHeight - this.verticalPadding
+        }
+    }
+
     if (this.options.masonry) {
         this.columns[column] = this.columns[column] + itemHeight;
         this.maxHeight = Math.max(this.maxHeight, this.columns[column]);
     } else if (this.options.stacked) {
-        var rows = (this.items.length / this.cols);
-        column = Math.floor(this.itemIndex / rows);
-        var row = (Math.floor((this.itemIndex + 1) / (column + 1)) - 1);
-
         x = column * this.columnWidth;
         y = this.columns[column];
 
@@ -5967,8 +6449,7 @@ AnyGrid.prototype._getItemLayoutPosition = function( item ) {
 
         this.maxHeight = Math.max(this.maxHeight, this.columns[column]);
     } else {
-        var row = Math.floor( this.itemIndex / this.cols );
-        var firstColumn = (row > 0);
+        var firstColumn = (row > 1);
 
         if (firstColumn) {
             this.columns[column] = this.rows[(row - 1)].maxHeight + itemHeight;
@@ -5995,9 +6476,41 @@ AnyGrid.prototype._getItemLayoutPosition = function( item ) {
     this.itemIndex++;
 
     return {
+        row: row,
         x: x,
         y: y
     };
+};
+
+/**
+ * iterate over array and position each item
+ * Reason being - separating this logic prevents 'layout invalidation'
+ * thx @paul_irish
+ * @param {Array} queue
+ */
+AnyGrid.prototype._processLayoutQueue = function( queue ) {
+  for ( var i=0, len = queue.length; i < len; i++ ) {
+    var obj = queue[i];
+    this._positionItem( obj.item, obj.x, obj.y, obj.isInstant, obj.row );
+  }
+};
+
+AnyGrid.prototype._positionItem = function( item, x, y, isInstant, row ) {
+    if ( isInstant ) {
+        // if not transition, just set CSS
+        item.goTo( x, y );
+    } else {
+        item.moveTo( x, y, (this.options.stacked ? true : false));
+    }
+    if (this.options.removeVerticalGutters) {
+        item.element.style.padding = this.verticalPadding + 'px';
+        if (row === 1) {
+            item.element.style.paddingTop = '0';
+        }
+        if (row === this.rowsCount) {
+            item.element.style.paddingBottom = '0';
+        }
+    }
 };
 
 AnyGrid.prototype._postLayout = function() {
@@ -6084,8 +6597,47 @@ function toDashedAll( str ) {
   });
 }
 
-var transitionProps = 'opacity, height, width,' +
+var transitionProps = 'opacity, height, width, padding,' +
   toDashedAll( vendorProperties.transform || 'transform' );
+
+Item.prototype.moveTo = function( x, y, force) {
+
+  if (!supportsCSS3) {
+    this.goTo(x, y);
+    return;
+  }
+
+  this.getPosition();
+  // get current x & y from top/left
+  var curX = this.position.x;
+  var curY = this.position.y;
+
+  var compareX = parseInt( x, 10 );
+  var compareY = parseInt( y, 10 );
+  var didNotMove = compareX === this.position.x && compareY === this.position.y;
+
+  // save end position
+  this.setPosition( x, y );
+
+  // if did not move and not transitioning, just go to layout
+  if ( !force && didNotMove && !this.isTransitioning ) {
+    this.layoutPosition();
+    return;
+  }
+
+  var transX = x - curX;
+  var transY = y - curY;
+  var transitionStyle = {};
+  transitionStyle.transform = this.getTranslate( transX, transY );
+
+  this.transition({
+    to: transitionStyle,
+    onTransitionEnd: {
+      transform: this.layoutPosition
+    },
+    isCleaning: true
+  });
+};
 
 Item.prototype.enableTransition = function(/* style */) {
   // HACK changing transitionProperty during a transition
@@ -6280,6 +6832,14 @@ utils.addEventListener = function(el, eventName, handler) {
     });
   }
 };
+
+utils.removeEventListener = function(el, eventName, handler) {
+    if (el.removeEventListener) {
+        el.removeEventListener(eventName, handler);
+    } else {
+        el.detachEvent('on' + eventName, handler);
+    }
+}
 
 utils.ellipsisText = function(el, text, height) {
     var ellipText = '';
@@ -6485,7 +7045,6 @@ return utils;
 
 (function (window, document, dialog, undefined) {
     'use strict';
-    console.log("Entering RevDisclose Namespace...");
     var RevDisclose = function () {
         var self = this;
         self.dialog = dialog;
@@ -6504,18 +7063,15 @@ return utils;
     };
 
     RevDisclose.prototype.init = function () {
-        console.log("RevDisclose: Initializing...");
         var self = this;
         document.onreadystatechange = function () {
             if (document.readyState == "complete") {
-                console.log("RevDisclose: Document is READY!...");
 
             }
         }
     };
 
     RevDisclose.prototype.setDialog = function(dialog){
-        console.log("RevDisclose: Manually Setting Dialog Object");
         var self = this;
         if(typeof dialog === "object"){
             self.dialog = dialog;
@@ -6523,20 +7079,17 @@ return utils;
     };
 
     RevDisclose.prototype.truncateDisclosure = function () {
-        console.log("RevDisclose: Initializing...");
         var self = this;
         self.disclosureText = self.disclosureText.toString().substring(0, self.disclosureTextLimit).replace(/['"]+/g, '');
     };
 
     RevDisclose.prototype.setDisclosureText = function(disclosure){
-        console.log("RevDisclose: Setting Disclosure Text Label to: "  + disclosure.toString());
         var self = this;
         self.disclosureText = (disclosure.length > 2) ? disclosure.toString() : self.defaultDisclosureText;
         self.truncateDisclosure();
     };
 
     RevDisclose.prototype.setOnClickHandler = function (handler, handlerObject) {
-        console.log("RevDisclose: Setting onClick Handler for Disclosure text...");
         var self = this;
         if (typeof handler === 'function') {
             self.onClickHandler = handler;
@@ -6547,15 +7100,12 @@ return utils;
     };
 
     RevDisclose.prototype.getSponsorTemplate = function () {
-        console.log("RevDisclose: Building Disclosure HTML...");
         var self = this;
         self.disclosureHtml = '<a href="javascript:;" onclick="revDisclose.onClickHandler(revDisclose.onClickHandlerObject ? revDisclose.onClickHandlerObject : null);">' + self.disclosureText + '</a>';
-        console.log("RevDisclose: " + self.disclosureHtml);
         return self.plainText ? self.disclosureText : self.disclosureHtml;
     };
 
     RevDisclose.prototype.getDisclosure = function (disclosureText) {
-        console.log("RevDisclose: Attaching Disclosure Text and onClick Event Function...");
         var self = this;
         self.setDisclosureText(disclosureText);
         if(typeof self.dialog === "object") {
@@ -6628,6 +7178,106 @@ return detect;
 
 }));
 /**
+ * RevBeacon (Beacon Pushes for API Calls)
+ *
+ */
+
+(function (window, document, undefined) {
+    'use strict';
+    var RevBeacon = function () {
+        var self = this;
+        self.parent = document.getElementsByTagName('body')[0];
+        self.pluginSource = '';
+        self.push = true;
+        self.enabledBeacons = ["quantcast", "comscore"];
+        self.renderedBeacons = [];
+        self.beacons = {
+            get: function(beaconId){
+                var beacons = this;
+                return beacons.beaconId !== undefined ? beacons.beaconId : {enabled: false}
+            },
+            quantcast: {
+                enabled: true,
+                type: 'pixel',
+                pixel_url: '//pixel.quantserve.com/pixel/p-aD1qr93XuF6aC.gif',
+                script_url: false,
+                styles: 'display:none;border:0;width:1px;height:1px'
+            },
+            comscore: {
+                enabled: true,
+                type: 'script',
+                pixel_url: false,
+                script_url: '//b.scorecardresearch.com/p?c1=7&c2=20310460&c3=12345&cv=2.0&cj=1',
+                styles: ''
+            }
+        };
+
+        self.init();
+    };
+
+    RevBeacon.prototype.init = function () {
+        var self = this;
+        document.onreadystatechange = function () {
+            if (document.readyState == "complete") {
+
+            }
+        }
+    };
+
+    RevBeacon.prototype.setPluginSource = function(pluginSource){
+        var self = this;
+        self.pluginSource = pluginSource.toString();
+        return self;
+    };
+
+    RevBeacon.prototype.getPluginSource = function(){
+        var self = this;
+        return self.pluginSource.toString();
+    };
+
+    RevBeacon.prototype.setParent = function(parentNode){
+        var self = this;
+        self.parent = (typeof parentNode === 'object' ? parentNode : document.getElementsByTagName('body')[0]);
+        return self;
+    };
+
+    RevBeacon.prototype.attach = function(){
+        var self = this;
+        if(true === self.push) {
+            for (var b = 0; b < self.enabledBeacons.length; b++) {
+                var beaconId = self.enabledBeacons[b];
+                var beacon = self.beacons[beaconId];
+                var beaconScript = '<script id="$2" type="text/javascript" src="$1" class="beacon-tag beacon-script" data-source="' + self.pluginSource + '"></script>';
+                var beaconImage = '<img src="$1" id="$2" class="beacon-tag beacon-pxl" style="' + beacon.styles + '" data-source="' + self.pluginSource + '" />';
+                var beaconEl = '';
+                var beaconDomId = 'beacon_' + Math.floor(Math.random() * 1000);
+                if (document.getElementById(beaconDomId) !== null) {
+                    beaconDomId = 'beacon_' + Math.floor(Math.random() * 2000);
+                }
+                if (beacon.enabled === true) {
+                    switch (beacon.type) {
+                        case 'script':
+                            beaconEl = beaconScript.replace('$1', beacon.script_url).replace('$2', beaconDomId);
+                            break;
+                        case 'pixel':
+                        case 'default':
+                            beaconEl = beaconImage.replace('$1', beacon.pixel_url).replace('$2', beaconDomId);
+                            break;
+                    }
+                    self.parent.insertAdjacentHTML('beforeend', beaconEl);
+                    self.renderedBeacons.push(document.getElementById(beaconDomId));
+                }
+            }
+        }
+    };
+
+
+    window.revBeacon = new RevBeacon();
+
+    return window.revBeacon;
+
+}(window, document));
+/**
  * Revcontent detect
  */
 
@@ -6645,6 +7295,8 @@ return detect;
 'use strict';
 
 var api = {};
+api.beacons = window.revBeacon || {attach: function(){}};
+
 
 api.request = function(url, success, failure) {
 
@@ -6724,7 +7376,9 @@ RevSlider({
     url: 'https://trends.revcontent.com/api/v1/',
     ad_border: true,
     disclosure_text: revDisclose.defaultDisclosureText,
-    hide_provider: false
+    hide_provider: false,
+    hide_header: false,
+    beacons: true
 });
 */
 
@@ -6740,6 +7394,8 @@ RevSlider({
     var RevSlider = function(opts) {
 
         var defaults = {
+            api_source: 'slide',
+            visible: true,
             element: false,
             rows: {
                 xxs: 2,
@@ -6752,7 +7408,7 @@ RevSlider({
             },
             per_row: {
                 xxs: 1,
-                xs: 1,
+                xs: 2,
                 sm: 3,
                 md: 4,
                 lg: 5,
@@ -6764,7 +7420,7 @@ RevSlider({
             header: 'Trending Now',
             rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right'),
             show_arrows: {
-                mobile: false,
+                mobile: true,
                 desktop: true
             },
             internal: false,
@@ -6776,8 +7432,31 @@ RevSlider({
             headline_size: 2,
             max_headline: false,
             text_overlay: false,
+            vertical: false,
+            page_increment: true,
+            wrap_pages: true,
+            wrap_reverse: true, // if page_increment is false, this must be false
+            show_padding: true,
+            pages: 4,
+            text_right: false,
+            text_right_height: 100,
+            transition_duration: 0,
+            multipliers: {
+                font_size: 0,
+                margin: 0,
+                padding: 0
+            },
+            buttons: {
+                forward: true,
+                back: true,
+                size: 40,
+                position: 'inside',
+                dual: false
+            },
             disclosure_text: revDisclose.defaultDisclosureText,
-            hide_provider: false
+            hide_provider: false,
+            hide_header: false,
+            beacons: true
         };
 
         // merge options
@@ -6794,24 +7473,25 @@ RevSlider({
 
         var that = this;
 
-        revUtils.appendStyle('/* inject:css */#rev-slider a,#rev-slider a:focus,#rev-slider a:hover{text-decoration:none}#rev-slider,#rev-slider #rev-slider-grid,#rev-slider #rev-slider-grid-container{padding:0;width:100%}#rev-slider #rev-slider-grid-container{display:table;width:100%}#rev-slider{clear:both}#rev-slider *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-slider #rev-slider-grid-container .rev-btn-container{padding:0 30px}#rev-slider a{color:inherit}#rev-slider:focus{outline:0}#rev-slider .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-slider .rev-sponsored{line-height:24px;font-size:12px}#rev-slider .rev-sponsored.bottom-right,#rev-slider .rev-sponsored.top-right{float:right}#rev-slider .rev-sponsored.top-right a{vertical-align:-5px}#rev-slider .rev-sponsored a{color:#999}#rev-slider .rev-ad a{display:block;color:#222}#rev-slider .rev-image{position:relative;-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee}#rev-slider .rev-image img{position:absolute;top:0;left:0;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-slider.loaded .rev-image{background:0 0}#rev-slider.loaded .rev-image img{opacity:1}#rev-slider .rev-headline,#rev-slider .rev-provider{margin:0 10px;text-align:left}#rev-slider .rev-headline{margin-top:12px;height:40px;overflow:hidden}#rev-slider .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-slider .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px}#rev-slider .rev-ad{border-radius:5px;overflow:hidden;background:#fff}#rev-slider .rev-content{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-slider .rev-content.rev-next{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:.5}#rev-slider.rev-slider-text-overlay .rev-ad{position:relative}#rev-slider.rev-slider-text-overlay .rev-ad a{height:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-headline{position:absolute;bottom:4px;color:#fff;text-shadow:1px 1px rgba(0,0,0,.8);height:auto!important}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{border-radius:5px;position:absolute;top:0;height:100%;width:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;content:"";display:block}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after{background:-webkit-linear-gradient(top,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%);background:linear-gradient(to bottom,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{opacity:0;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%);background:linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:after{opacity:0}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:before{opacity:1}#rev-opt-out .rd-close-button{position:absolute;cursor:pointer;right:10px;z-index:10}#rev-opt-out a{cursor:pointer!important}#rev-opt-out .rd-box-wrap{display:none;z-index:2147483641}#rev-opt-out .rd-box-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}#rev-opt-out .rd-vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}#rev-opt-out .rd-box{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}#rev-opt-out .rd-normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}#rev-opt-out .rd-full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}#rev-opt-out .rd-header{height:20px;position:absolute;right:0}#rev-opt-out .rd-about{font-family:Arial,sans-serif;font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}#rev-opt-out .rd-about .rd-logo{background:url(https://serve.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}#rev-opt-out .rd-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}#rev-opt-out .rd-about p#main{text-align:left}#rev-opt-out .rd-about h2{color:#777;font-family:Arial,sans-serif;font-size:16px;line-height:18px}#rev-opt-out .rd-about a{color:#00cb43}#rev-opt-out .rd-well{border:1px solid #E0E0E0;padding:20px;text-align:center;border-radius:2px;margin:20px 0 0}#rev-opt-out .rd-well h2{margin-top:0}#rev-opt-out .rd-well p{margin-bottom:0}#rev-opt-out .rd-opt-out{text-align:center}#rev-opt-out .rd-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-slider');
+        this.mobile = (revDetect.mobile()) ? true : false;
 
-        var backBtn = document.createElement('div');
-        backBtn.id = "back";
-        backBtn.setAttribute('class', 'rev-btn-container');
-        backBtn.innerHTML = '<button id="btn-back" class="rev-btn"><</button>';
+        revUtils.appendStyle('/* inject:css */#rev-slider a,#rev-slider a:focus,#rev-slider a:hover{text-decoration:none}#rev-slider,#rev-slider #rev-slider-grid-container{padding:0;width:100%}#rev-slider #rev-slider-grid{padding:0}#rev-slider #rev-slider-grid-container{clear:both;position:relative;width:100%;-webkit-transition:-webkit-transform;transition:transform;-webkit-transition-timing-function:ease-in-out;transition-timing-function:ease-in-out}#rev-slider #rev-slider-container,#rev-slider #rev-slider-inner{width:100%;clear:both;overflow:hidden;position:relative}#rev-slider{clear:both}#rev-slider *{box-sizing:border-box;font-size:inherit;line-height:inherit;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;margin:0;padding:0}#rev-slider #rev-slider-container .rev-btn-wrapper .rev-chevron{display:inline-block;height:36px;top:50%;margin-top:-18px;position:absolute;left:50%;margin-left:-18px;fill:#fff}#rev-slider #rev-slider-container .rev-btn-wrapper{cursor:pointer;position:absolute;height:100%;width:40px;text-align:center;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;z-index:10000000000;top:0}#rev-slider.rev-slider-vertical #rev-slider-container .rev-btn-wrapper{width:100%}#rev-slider.rev-slider-vertical #rev-slider-container .rev-btn-wrapper-forward.rev-btn-wrapper{bottom:0;top:auto}#rev-slider #rev-slider-container .rev-btn-container{position:relative;background-color:#333;opacity:.3;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;height:100%;text-align:center;border-radius:5px}#rev-slider #rev-slider-container .rev-btn-container label{cursor:pointer}#rev-slider #rev-slider-container .rev-btn-container:hover{opacity:.8}#rev-slider #rev-slider-container .rev-btn-dual{position:absolute;left:5px;z-index:1;background:#fff;box-shadow:0 0 2px 0 rgba(89,89,89,1);top:50%;margin-top:-36px;border-radius:2px;opacity:0;-webkit-transition:opacity .2s;transition:opacity .2s}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper{position:static;width:auto;height:auto;top:auto}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-container{background-color:inherit;opacity:1;height:36px;border-radius:0}#rev-slider #rev-slider-container:hover .rev-btn-dual{opacity:1}#rev-slider #rev-slider-container .rev-btn-dual.rev-btn-dual-right{right:5px;left:auto}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper.rev-btn-wrapper-back{border-bottom:1px solid #ddd}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper .rev-chevron{display:inline-block;top:auto;margin-top:0;position:static;left:auto;margin-left:0;fill:#ccc}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper:hover .rev-chevron{fill:#aaa}#rev-slider #rev-slider-container:hover .rev-btn-wrapper{opacity:1!important}#rev-slider.rev-slider-text-right .rev-image{float:left;margin-right:5px}#rev-slider.rev-slider-text-right .rev-ad a .rev-headline{margin-top:0!important}#rev-slider a{color:inherit}#rev-slider:focus{outline:0}#rev-slider .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-slider .rev-sponsored{line-height:24px;font-size:12px}#rev-slider .rev-sponsored.bottom-right,#rev-slider .rev-sponsored.top-right{float:right}#rev-slider .rev-sponsored.top-right a{vertical-align:-5px}#rev-slider .rev-sponsored a{color:#999}#rev-slider .rev-ad a{display:block;height:100%;color:#222}#rev-slider .rev-image{position:relative;-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee;overflow:hidden}#rev-slider .rev-image img{position:absolute;top:0;left:0;width:100%;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-slider.loaded .rev-image{background:0 0}#rev-slider.loaded .rev-image img{opacity:1}#rev-slider .rev-headline,#rev-slider .rev-provider{margin:0 10px;text-align:left}#rev-slider .rev-headline{margin-top:12px;overflow:hidden}#rev-slider .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;overflow:hidden;margin:0}#rev-slider .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}#rev-slider .rev-ad{border-radius:5px;overflow:hidden;background:#fff;z-index:1}#rev-slider .rev-ad img{border-top-left-radius:5px;border-top-right-radius:5px}#rev-slider .rev-content.blur{-webkit-filter:blur(3px);filter:blur(3px)}#rev-slider .rev-content{-webkit-transition-property:opacity;transition-property:opacity;-webkit-transition-duration:.5s;transition-duration:.5s;opacity:1}#rev-slider .rev-content.rev-next{-webkit-transition-property:opacity;transition-property:opacity;-webkit-transition-duration:.5s;transition-duration:.5s;opacity:.5}#rev-slider.rev-slider-text-overlay .rev-ad{position:relative}#rev-slider.rev-slider-text-overlay .rev-ad a{height:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-headline-brand{position:absolute;bottom:4px;color:#fff;text-shadow:1px 1px rgba(0,0,0,.8)}#rev-slider.rev-slider-text-overlay .rev-ad .rev-headline-brand .rev-provider{display:none}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{border-radius:5px;position:absolute;top:0;height:100%;width:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;content:"";display:block}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after{background:-webkit-linear-gradient(top,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%);background:linear-gradient(to bottom,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{opacity:0;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%);background:linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:after{opacity:0}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:before{opacity:1}#rev-opt-out .rd-close-button{position:absolute;cursor:pointer;right:10px;z-index:10}#rev-opt-out a{cursor:pointer!important}#rev-opt-out .rd-box-wrap{display:none;z-index:2147483641}#rev-opt-out .rd-box-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}#rev-opt-out .rd-vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}#rev-opt-out .rd-box{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}#rev-opt-out .rd-normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}#rev-opt-out .rd-full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}#rev-opt-out .rd-header{height:20px;position:absolute;right:0}#rev-opt-out .rd-about{font-family:Arial,sans-serif;font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}#rev-opt-out .rd-about .rd-logo{background:url(https://serve.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}#rev-opt-out .rd-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}#rev-opt-out .rd-about p#main{text-align:left}#rev-opt-out .rd-about h2{color:#777;font-family:Arial,sans-serif;font-size:16px;line-height:18px}#rev-opt-out .rd-about a{color:#00cb43}#rev-opt-out .rd-well{border:1px solid #E0E0E0;padding:20px;text-align:center;border-radius:2px;margin:20px 0 0}#rev-opt-out .rd-well h2{margin-top:0}#rev-opt-out .rd-well p{margin-bottom:0}#rev-opt-out .rd-opt-out{text-align:center}#rev-opt-out .rd-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-slider');
 
-        var forwardBtn = document.createElement('div');
-        forwardBtn.id = "forward";
-        forwardBtn.setAttribute('class', 'rev-btn-container');
-        forwardBtn.innerHTML = '<button id="btn-forward" class="rev-btn">></button>';
+        this.contentItems = [];
 
         this.containerElement = document.createElement('div');
         this.containerElement.id = 'rev-slider';
-        this.containerElement.class = 'rev-slider';
+        revUtils.addClass(this.containerElement, 'rev-slider-' + (this.options.vertical ? 'vertical' : 'horizontal'));
+        revUtils.addClass(this.containerElement, 'rev-slider-' + (this.options.text_right ? 'text-right' : 'text-bottom'));
 
-        var gridContainerElement = document.createElement('div');
-        gridContainerElement.id = 'rev-slider-grid-container';
+        this.innerContainerElement = document.createElement('div');
+        this.innerContainerElement.id = 'rev-slider-container';
+
+        this.innerElement = document.createElement('div');
+        this.innerElement.id = 'rev-slider-inner';
+
+        this.gridContainerElement = document.createElement('div');
+        this.gridContainerElement.id = 'rev-slider-grid-container';
 
         this.gridElement = document.createElement('div');
         this.gridElement.id = 'rev-slider-grid';
@@ -6819,19 +7499,29 @@ RevSlider({
         this.element = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
         this.element.style.width = '100%';
 
-        revUtils.append(this.containerElement, gridContainerElement);
-        // revUtils.append(gridContainerElement, backBtn);
-        revUtils.append(gridContainerElement, this.gridElement);
-        // revUtils.append(gridContainerElement, forwardBtn);
+        revUtils.append(this.containerElement, this.innerContainerElement);
+
+        revUtils.append(this.innerContainerElement, this.innerElement);
+
+        revUtils.append(this.innerElement, this.gridContainerElement);
+
+        revUtils.append(this.gridContainerElement, this.gridElement);
+
         revUtils.append(this.element, this.containerElement);
 
-        this.grid = new AnyGrid(this.gridElement, { masonry: false, perRow: this.options.per_row, transitionDuration: 0, isResizeBound: this.options.is_resize_bound});
+        this.grid = new AnyGrid(this.gridElement, this.gridOptions());
 
         this.grid.on('resized', function() {
             that.resize();
         });
 
+        this.setMultipliers();
+
+        this.grid.option({gutter: this.getPadding()});
+
+        this.offset = 0;
         this.page = 1;
+        this.previousPage = 0;
 
         this.setUp();
 
@@ -6839,54 +7529,284 @@ RevSlider({
 
         this.appendElements();
 
-        for (var i = 0; i < this.limit; i++) {
-            this.appendCell();
-        };
+        this.createCells();
 
         this.textOverlay();
 
         this.grid.reloadItems();
         this.grid.layout();
 
-        // this.attachButtonEvents();
+        if (this.options.vertical && this.options.buttons.position == 'outside') { // buttons outside for vertical only
+            this.innerContainerElement.style.padding = (this.options.buttons.back ? (this.options.buttons.size + 'px') : '0') + ' 0 ' + (this.options.buttons.forward ? (this.options.buttons.size + 'px') : '0');
+        }
 
-        this.ellipsisTimer;
+        this.initButtons();
+
+        this.impressionTracker = [];
+    };
+
+    RevSlider.prototype.createCells = function() {
+        for (var i = 0; i < this.limit; i++) {
+            this.gridElement.appendChild(this.createNewCell());
+        }
+    };
+
+    RevSlider.prototype.getPadding = function() {
+        this.padding = ((this.grid.columnWidth * this.marginMultiplier).toFixed(2) / 1);
+        return this.padding;
+    };
+
+    RevSlider.prototype.setMultipliers = function() {
+        this.fontSizeMultiplier = Math.round( (.044 + Number((this.options.multipliers.font_size * .01).toFixed(2))) * 1000 ) / 1000;
+        this.marginMultiplier = Math.round( (.05 + Number((this.options.multipliers.margin * .01).toFixed(2))) * 1000 ) / 1000;
+        this.paddingMultiplier = Math.round( (.01 + Number((this.options.multipliers.padding * .01).toFixed(2))) * 1000 ) / 1000;
+    };
+
+    RevSlider.prototype.gridOptions = function() {
+        return { masonry: false, perRow: this.options.per_row, transitionDuration: this.options.transition_duration, isResizeBound: this.options.is_resize_bound, adjustGutter:true, removeVerticalGutters: true, gutter: this.padding };
+    };
+
+    // RevSlider.prototype.getAnimationDuration = function() {
+    //     var duration = 0.5;
+    //     if (this.options.vertical) {
+    //         var gridRows = this.options.rows[this.grid.getBreakPoint()];
+    //         if (gridRows >= 7) {
+    //             duration = 2;
+    //         } else if (gridRows >= 6) {
+    //             duration = 1.75;
+    //         } else if (gridRows >= 5) {
+    //             duration = 1.5;
+    //         } else if (gridRows >= 4) {
+    //             duration = 1.25;
+    //         } else if (gridRows >= 3) {
+    //             duration = 1;
+    //         } else if (gridRows >= 2) {
+    //             duration = 0.75;
+    //         }
+    //     } else {
+    //         var gridWidth = this.grid.containerWidth;
+
+    //         if (gridWidth >= 1500) {
+    //             duration = 2;
+    //         } else if (gridWidth >= 1250) {
+    //             duration = 1.75;
+    //         } else if (gridWidth >= 1000) {
+    //             duration = 1.5;
+    //         } else if (gridWidth >= 750) {
+    //             duration = 1.25;
+    //         } else if (gridWidth >= 500) {
+    //             duration = 1;
+    //         } else if (gridWidth >= 250) {
+    //             duration = 0.75;
+    //         }
+    //     }
+    //     if (!this.options.page_increment) {
+    //         duration = duration * .5;
+    //     }
+    //     return duration;
+    // };
+
+    RevSlider.prototype.createNextPageGrid = function() {
+        var containerWidth = this.innerElement.offsetWidth;
+        var containerHeight = this.innerElement.offsetHeight;
+
+        var animationDuration = 1.75; //this.getAnimationDuration(); TODO: make dynamic
+
+        if (this.page > this.previousPage) { // slide left or up
+            var insert = 'append';
+            if (this.options.vertical) { // up
+                var margin = 'marginBottom';
+                var gridContainerTransform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
+            } else { // left
+                var margin = 'marginRight';
+                var gridContainerTransform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
+            }
+        } else { // Slide right or down
+            var insert = 'prepend';
+            if (this.options.vertical) { // down
+                var margin = 'marginTop';
+                this.gridContainerElement.style.transform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
+                this.gridContainerElement.style.MsTransform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
+                this.gridContainerElement.style.WebkitTransform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
+                var gridContainerTransform = 'translateY(0px)';
+            } else { // right
+                var margin = 'marginLeft';
+                this.gridContainerElement.style.transform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
+                this.gridContainerElement.style.MsTransform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
+                this.gridContainerElement.style.WebkitTransform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
+                var gridContainerTransform = 'translateX(0px)';
+            }
+        }
+
+        var oldGrid = this.grid;
+
+        this.gridElement.style[margin] = (this.padding * 2) + 'px';
+
+        this.gridElement = document.createElement('div');
+        this.gridElement.id = 'rev-slider-grid';
+
+        revUtils[insert](this.gridContainerElement, this.gridElement);
+
+        var options = this.gridOptions();
+        options.isResizeBound = false;
+        this.grid = new AnyGrid(this.gridElement, options);
+
+        if (!this.options.vertical) {
+            oldGrid.element.style.width = containerWidth + 'px';
+            oldGrid.element.style.float = 'left';
+
+            this.grid.element.style.width = containerWidth + 'px';
+            this.grid.element.style.float = 'left';
+
+            this.gridContainerElement.style.width = ((containerWidth * 2) + (this.padding * 2)) + 'px';
+        }
+
+        this.createCells();
+
+        this.textOverlay();
+
+        this.grid.reloadItems();
+        this.grid.layout();
+
+        this.updateDisplayedItems(true);
+
+        this.gridContainerElement.style.transitionDuration = animationDuration + 's';
+        this.gridContainerElement.style.WebkitTransitionDuration = animationDuration + 's';
+        this.gridContainerElement.style.transform = gridContainerTransform;
+        this.gridContainerElement.style.MsTransform = gridContainerTransform;
+        this.gridContainerElement.style.WebkitTransform = gridContainerTransform;
+
+        var that = this;
+        setTimeout(function() {
+            that.updateGrids(oldGrid);
+        }, animationDuration * 1000);
+    };
+
+    RevSlider.prototype.updateGrids = function(oldGrid) {
+        this.gridElement.style.transform = 'none';
+        this.gridElement.style.MsTransform = 'none';
+        this.gridElement.style.WebkitTransform = 'none';
+        this.gridElement.className = '';
+
+        this.gridContainerElement.style.transitionDuration = '0s';
+        this.gridContainerElement.style.WebkitTransitionDuration = '0s';
+
+        this.gridContainerElement.style.transform = 'none';
+        this.gridContainerElement.style.MsTransform = 'none';
+        this.gridContainerElement.style.WebkitTransform = 'none';
+
+        oldGrid.remove();
+        oldGrid.destroy();
+        revUtils.remove(oldGrid.element);
+
+        if (!this.options.vertical) {
+            this.grid.element.style.width = 'auto';
+            this.grid.element.style.float = 'none';
+
+            this.gridContainerElement.style.width = '100%';
+        }
+
+        var that = this;
+        this.grid.bindResize();
+        this.grid.on('resized', function() {
+            that.resize();
+        });
+
+        this.updating = false;
     };
 
     RevSlider.prototype.setUp = function() {
         this.grid.layout();
         this.limit = this.getLimit();
-        var width = this.grid.containerWidth / this.grid.perRow;
+        var rowsCols = (this.options.vertical) ? this.grid.perRow : this.options.rows[this.grid.getBreakPoint()];
+        this.increment = (this.options.page_increment) ? this.limit : rowsCols;
 
         if (this.options.image_ratio == 'square') {
-            var imageHeight = 400;
-            var imageWidth = 400;
+            this.imageHeight = 400;
+            this.imageWidth = 400;
         } else if (this.options.image_ratio == 'rectangle') {
-            var imageHeight = 300;
-            var imageWidth = 400;
+            this.imageHeight = 300;
+            this.imageWidth = 400;
         } else if (this.options.image_ratio == 'wide_rectangle') {
-            var imageHeight = 450;
-            var imageWidth = 800;
+            this.imageHeight = 450;
+            this.imageWidth = 800;
         }
 
-        this.padding = ((width * .025).toFixed(2) / 1);
+        this.preloaderHeight = Math.round((this.grid.columnWidth - (this.padding * 2) - ( this.options.ad_border ? 2 : 0 )) * (this.imageHeight / this.imageWidth));
 
-        // // font size is relative to width, other measurements are relative to this font size
-        this.headlineFontSize = Math.max(14, ((width * .03).toFixed(2) / 1));
+        if (this.options.text_right) {
+            this.preloaderHeight = this.options.text_right_height;
+            this.preloaderWidth = Math.round(this.preloaderHeight * (this.imageWidth / this.imageHeight) * 100) / 100;
+        }
+
+        this.headlineFontSize = Math.max(14, ((this.grid.columnWidth * this.fontSizeMultiplier).toFixed(2) / 1));
+
         this.headlineLineHeight = ((this.headlineFontSize * 1.25).toFixed(2) / 1);
         this.headlineHeight = ((this.headlineLineHeight * this.options.headline_size).toFixed(2) / 1);
-        if (this.options.max_headline && this.getMaxHeadlineHeight() > 0) {
-            this.headlineHeight = this.getMaxHeadlineHeight();
-        }
+
         this.headlineMarginTop = ((this.headlineLineHeight * .4).toFixed(2) / 1);
 
-        this.innerMargin = ((this.headlineMarginTop * .3).toFixed(2) / 1);
+        this.providerFontSize = ((this.headlineLineHeight / 2).toFixed(2)) / 1;
+        this.providerFontSize = this.providerFontSize < 11 ? 11 : this.providerFontSize;
 
-        this.providerFontSize = Math.max(11, ((this.headlineLineHeight / 2).toFixed(2) / 1));
-        this.providerLineHeight = ((this.providerFontSize * 1.25).toFixed(2) / 1);
-        this.providerMargin = ((this.providerLineHeight * .2).toFixed(2) / 1);
+        this.providerLineHeight = Math.round(((this.providerFontSize * 1.8).toFixed(2) / 1));
 
-        this.preloaderHeight = (this.grid.columnWidth - (this.padding * 2) - (this.options.ad_border ? 2 : 0)) * (imageHeight / imageWidth);
+        this.innerMargin = Math.max(0, ((this.grid.columnWidth * this.paddingMultiplier).toFixed(2) / 1));
+    };
+
+    RevSlider.prototype.initButtons = function() {
+        var chevronUp    = '<path d="M18 12l-9 9 2.12 2.12L18 16.24l6.88 6.88L27 21z"/>';
+        var chevronDown  = '<path d="M24.88 12.88L18 19.76l-6.88-6.88L9 15l9 9 9-9z"/><path d="M0 0h36v36H0z" fill="none"/>';
+        var chevronLeft  = '<path d="M23.12 11.12L21 9l-9 9 9 9 2.12-2.12L16.24 18z"/>';
+        var chevronRight = '<path d="M15 9l-2.12 2.12L19.76 18l-6.88 6.88L15 27l9-9z"/>';
+
+        var btnHeight = this.options.buttons.dual ? 'auto' : (this.options.vertical ? this.options.buttons.size + 'px' : '100%');
+
+        this.backBtn = document.createElement('div');
+        this.backBtn.id = "back-wrapper";
+        this.backBtn.setAttribute('class', 'rev-btn-wrapper rev-btn-wrapper-back');
+        this.backBtn.style.height = btnHeight;
+        this.backBtn.style.left = this.options.buttons.dual ? 'auto' : '0';
+        this.backBtn.innerHTML = '<div id="back-btn-container" class="rev-btn-container" style="right: ' + (this.options.buttons.dual ? 'auto' : '0px') +';">' +
+            '<label id="btn-back" class="rev-chevron">' +
+                '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">' + (this.options.vertical ? chevronUp : chevronLeft) + '</svg>' +
+            '</label></div>';
+
+        this.forwardBtn = document.createElement('div');
+        this.forwardBtn.id = "forward-wrapper";
+        this.forwardBtn.setAttribute('class', 'rev-btn-wrapper rev-btn-wrapper-forward');
+        this.forwardBtn.style.height = btnHeight;
+        this.forwardBtn.style.right = this.options.buttons.dual ? 'auto' : '0';
+        this.forwardBtn.innerHTML = '<div id="forward-btn-container" class="rev-btn-container" style="right: ' + (this.options.buttons.dual ? 'auto' : '0px') + ';">' +
+            '<label id="btn-forward" class="rev-chevron">' +
+                '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">' + (this.options.vertical ? chevronDown : chevronRight) + '</svg>' +
+            '</label></div>';
+
+        if (this.options.buttons.dual) {
+            this.btnContainer = document.createElement('div');
+            this.btnContainer.setAttribute('class', 'rev-btn-dual');
+            revUtils.append(this.btnContainer, this.backBtn);
+            revUtils.append(this.btnContainer, this.forwardBtn);
+            revUtils.append(this.innerContainerElement, this.btnContainer);
+        } else {
+            if (this.mobile) {
+                this.forwardBtn.style.opacity = 1;
+                this.backBtn.style.opacity = 1;
+            } else {
+                this.forwardBtn.style.opacity = 0;
+                this.backBtn.style.opacity = 0;
+            }
+
+            if (this.options.buttons.back) {
+                revUtils.append(this.innerContainerElement, this.backBtn);
+            }
+
+            if (this.options.buttons.forward) {
+                revUtils.append(this.innerContainerElement, this.forwardBtn);
+            }
+        }
+
+        this.attachButtonEvents();
     };
 
     RevSlider.prototype.textOverlay = function() {
@@ -6904,47 +7824,71 @@ RevSlider({
             revUtils.removeClass(this.containerElement, 'rev-slider-text-overlay');
             for (var i = 0; i < ads.length; i++) {
                 var ad = ads[i];
-                ad.style.height = 'auto';
+                //ad.style.height = 'auto';
             }
         }
     };
 
     RevSlider.prototype.appendElements = function() {
-        if (this.header) {
-            revUtils.remove(this.header);
-        }
-        this.header = document.createElement('h2');
-        this.header.innerHTML = this.options.header;
-        revUtils.addClass(this.header, 'rev-header');
-        revUtils.prepend(this.containerElement, this.header);
 
-        if (this.sponsored) {
-            revUtils.remove(this.sponsored);
+        if (!this.options.hide_header) {
+            if (this.head) {
+                revUtils.remove(this.head);
+            }
+            this.head = document.createElement('div');
+            revUtils.addClass(this.head, 'rev-head');
+            revUtils.prepend(this.containerElement, this.head);
+
+            this.header = document.createElement('h2');
+            this.header.innerHTML = this.options.header;
+            revUtils.addClass(this.header, 'rev-header');
+            revUtils.append(this.head, this.header);
         }
+
+        if (this.foot) {
+            revUtils.remove(this.foot);
+        }
+        var sponsoredFoot = (this.options.rev_position == 'bottom_left' || this.options.rev_position == 'bottom_right');
+        if (sponsoredFoot) {
+            this.foot = document.createElement('div');
+            revUtils.addClass(this.foot, 'rev-foot');
+            revUtils.append(this.containerElement, this.foot);
+        }
+
         this.sponsored = document.createElement('div');
+
         revUtils.addClass(this.sponsored, 'rev-sponsored');
         this.sponsored.innerHTML = revDisclose.getDisclosure(this.options.disclosure_text);
+
         if (this.options.rev_position == 'top_right') {
-            revUtils.addClass(this.sponsored, 'top-right')
-            revUtils.prepend(this.containerElement, this.sponsored);
-        } else if (this.options.rev_position == 'bottom_left' || this.options.rev_position == 'bottom_right') {
+            revUtils.addClass(this.sponsored, 'top-right');
+            revUtils.prepend(this.head, this.sponsored);
+        } else if (sponsoredFoot) {
             revUtils.addClass(this.sponsored, this.options.rev_position.replace('_', '-'));
-            revUtils.append(this.containerElement, this.sponsored);
+            revUtils.append(this.foot, this.sponsored);
         }
-    }
+    };
 
 
     RevSlider.prototype.update = function(newOpts, oldOpts) {
+        oldOpts = oldOpts ? oldOpts : this.options;
 
         this.options = revUtils.extend(this.options, newOpts);
 
-        if ( (this.options.size !== oldOpts.size) ||
-             (this.options.realSize !== oldOpts.realSize) ||
-             (this.options.per_row !== oldOpts.per_row) ||
-             (this.options.rows !== oldOpts.rows) ||
-             (this.options.headline_size !== oldOpts.headline_size)) {
+        if ((this.options.size !== oldOpts.size) ||
+            (this.options.realSize !== oldOpts.realSize) ||
+            (this.options.per_row !== oldOpts.per_row) ||
+            (this.options.rows !== oldOpts.rows) ||
+            (this.options.headline_size !== oldOpts.headline_size) ||
+            (this.options.vertical !== oldOpts.vertical) ||
+            (this.options.page_increment !== oldOpts.page_increment) ||
+            (this.options.show_padding !== oldOpts.show_padding)) {
             this.options.perRow = this.options.per_row; // AnyGrid needs camels
             this.resize();
+        }
+
+        if (!this.options.page_increment) {
+            this.options.wrap_reverse = false;
         }
 
         if ((this.options.header !== oldOpts.header) || this.options.rev_position !== oldOpts.rev_position) {
@@ -6956,19 +7900,36 @@ RevSlider({
             this.grid.reloadItems();
             this.grid.layout();
         }
+        if (this.options.text_right !== oldOpts.text_right) {
+            this.grid.reloadItems();
+            this.grid.layout();
+        }
+
+        if (this.options.pages !== oldOpts.pages) {
+            this.getData();
+        }
+    };
+
+    RevSlider.prototype.getCellHeight = function() {
+        var cellHeight = this.preloaderHeight;
+        if (!this.options.text_overlay && !this.options.text_right) {
+            cellHeight += this.headlineHeight +
+            this.headlineMarginTop + this.providerLineHeight;
+            cellHeight += (this.options.ad_border) ? 2 : 0;
+        }
+        return cellHeight;
     };
 
     RevSlider.prototype.resize = function() {
         var that = this;
         var oldLimit = this.limit;
-        this.grid.option(this.options);
+        this.grid.option({transitionDuration: 0});
         this.setUp();
 
         var reconfig = 0;// how many to add or remove
 
         if (oldLimit != this.limit) {
             reconfig = (this.limit - oldLimit);
-            this.getData();
         }
 
         if (reconfig !== 0) {
@@ -6978,81 +7939,66 @@ RevSlider({
                     if (i >= this.limit) {
                         this.grid.remove(nodes[i]);
                     }
-                };
+                }
             } else {
                 for (var i = 0; i < (this.limit - nodes.length); i++) {
-                    this.appendCell();
+                    this.gridElement.appendChild(this.createNewCell());
                 }
+                this.previousPage = 0;
+                this.page = 1;
+                this.updateDisplayedItems(false);
             }
         }
 
-        var ads = this.element.querySelectorAll('.rev-content');
+        if (this.options.max_headline) {
+            this.headlineHeight = this.getMaxHeadlineHeight();
+        }
+
+        var ads = this.element.querySelectorAll('.rev-ad');
 
         for (var i = 0; i < ads.length; i++) {
             var ad = ads[i];
 
-            ad.style.width = this.columnWidth + 'px';
-            ad.style.marginRight = this.margin + 'px';
+            ad.style.height = this.getCellHeight() + 'px';
 
             ad.querySelectorAll('.rev-image')[0].style.height = this.preloaderHeight + 'px';
-            ad.querySelectorAll('.rev-headline')[0].style.height = this.headlineHeight + 'px';
+            ad.querySelectorAll('.rev-headline')[0].style.maxHeight = this.headlineHeight + 'px';
             ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
-
             ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
             ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
+
             if(that.options.hide_provider === false) {
                 ad.querySelectorAll('.rev-provider')[0].style.margin = this.providerMargin + 'px ' + this.innerMargin + 'px ' + this.providerMargin + 'px';
                 ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize + 'px';
                 ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
                 ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight + 'px';
             }
-        }
 
+            ad.querySelectorAll('.rev-headline h3')[0].innerHTML = this.displayedItems[i].headline;
+        }
         this.textOverlay();
-
         this.checkEllipsis();
-        if (this.options.max_headline) {
-            this.checkMaxHeadlineHeightPerRow();
-        }
+
         this.grid.reloadItems();
         this.grid.layout();
+        this.grid.option({transitionDuration: this.options.transition_duration});
     };
-
-    RevSlider.prototype.checkMaxHeadlineHeightPerRow = function() {
-        var itemsPerRow = this.grid.getPerRow();
-        var currentRowNum = 0;
-        var currentHeadlineHeight = this.getMaxHeadlineHeight(currentRowNum, itemsPerRow);
-        var ads = this.element.querySelectorAll('.rev-content');
-        if (ads.length > 0) {
-            for (var i = 0; i < ads.length; i++) {
-                if (i > 0 && i % itemsPerRow == 0) {
-                    var currentHeadlineHeight = this.getMaxHeadlineHeight(++currentRowNum, itemsPerRow);
-                }
-                var ad = ads[i];
-                ad.querySelectorAll('.rev-headline')[0].style.height = currentHeadlineHeight + 'px';
-            }
-        }
-
-    }
-
 
     RevSlider.prototype.checkEllipsis = function() {
-        var that = this;
-        clearTimeout(that.ellipsisTimer);
-        that.ellipsisTimer = setTimeout(function() {
-            that.doEllipsis();
-        }, 300);
-    };
-
-    RevSlider.prototype.doEllipsis = function() {
-        var ads = this.element.querySelectorAll('.rev-content');
-        if (ads.length > 0) {
-            for (var i = 0; i < ads.length; i++) {
-                var ad = ads[i];
-                var text = ad.querySelectorAll('a')[0].title;
-                var el = ad.querySelectorAll('.rev-headline h3')[0];
-                var newText = revUtils.ellipsisText(el, text, this.headlineHeight);
-                ad.querySelectorAll('.rev-headline h3')[0].innerHTML = newText;
+        if (this.options.max_headline && !this.options.text_right) { // text_right should be limited, but don't waste for max_headline only
+            return;
+        }
+        var headlines = this.gridElement.querySelectorAll('.rev-content .rev-headline');
+        for (var i = 0; i < headlines.length; i++) {
+            var text,
+                container = headlines[i],
+                headline = container.children[0];
+            while(container.clientHeight < container.scrollHeight) {
+                text = headline.innerHTML.trim();
+                if(text.split(' ').length <= 1) {
+                    break;
+                }
+                headline.innerHTML = text.replace(/\W*\s(\S)*$/, '...');
             }
         }
     };
@@ -7060,103 +8006,236 @@ RevSlider({
     RevSlider.prototype.getLimit = function() {
         // can pass object for rows or just single value for all breakpoints
         return this.grid.getPerRow() * (this.options.rows[this.grid.getBreakPoint()] ? this.options.rows[this.grid.getBreakPoint()] : this.options.rows);
-    }
+    };
 
-    RevSlider.prototype.appendCell = function() {
-        var that = this;
-        var html = '<div class="rev-ad" style="'+ (this.options.ad_border ? 'border:1px solid #eee' : '') +'">' +
-                    '<a href="" target="_blank">' +
-                        '<div class="rev-image" style="height:'+ this.preloaderHeight +'px">' +
-                            '<img src=""/>' +
-                        '</div>' +
-                        '<div class="rev-headline" style="height:'+ this.headlineHeight +'px; margin:'+ this.headlineMarginTop +'px ' + this.innerMargin + 'px' + ' 0;">' +
-                            '<h3 style="font-size:'+ this.headlineFontSize +'px; line-height:'+ this.headlineLineHeight +'px;"></h3>' +
-                        '</div>' +
-                        (that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'margin:' + that.providerMargin +'px '  + that.innerMargin + 'px ' + that.providerMargin + 'px;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;height:' + that.providerLineHeight + 'px;') : '') +
-                    '</a>' +
-                '</div>';
-        var cell = document.createElement('div');
+    RevSlider.prototype.createNewCell = function() {
+        var imgWidth = typeof this.preloaderWidth === 'undefined' ? 'width:auto;' : 'width:' + this.preloaderWidth + 'px;';
+        var html = '<div class="rev-ad" style="height: '+ this.getCellHeight() + 'px;' + (this.options.ad_border ? 'border:1px solid #eee' : '') +'">' +
+            '<a href="" target="_blank">' +
+            '<div class="rev-image" style="'+ imgWidth +'height:'+ this.preloaderHeight +'px">' +
+            '<img src=""/>' +
+            '</div>' +
+            '<div class="rev-headline-brand">' +
+            '<div class="rev-headline" style="max-height:'+ this.headlineHeight +'px; margin:'+ this.headlineMarginTop +'px ' + this.innerMargin + 'px' + ' 0;">' +
+            '<h3 style="font-size:'+ this.headlineFontSize +'px; line-height:'+ this.headlineLineHeight +'px;"></h3>' +
+            '</div>' +
+            '<div style="margin:0 '  + this.innerMargin + 'px 0;font-size:'+ this.providerFontSize +'px;line-height:'+ this.providerLineHeight +'px;height:'+ this.providerLineHeight +'px;" class="rev-provider"></div>' +
+            '</div>' +
+            '</a>' +
+            '</div>';
 
-        cell.style.padding = this.padding + 'px';
+            var cell = document.createElement('div');
 
-        revUtils.addClass(cell, 'rev-content');
+            cell.style.padding = this.padding + 'px';
 
-        cell.innerHTML = html;
+            revUtils.addClass(cell, 'rev-content');
 
-        this.gridElement.appendChild(cell);
+            cell.innerHTML = html;
+
+            return cell;
     };
 
     RevSlider.prototype.getData = function() {
-        var url = this.options.url + '?api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + this.limit + '&sponsored_offset=' + ((this.page * this.limit) - this.limit) + '&internal_count=0';
+        var sponsoredCount = this.options.pages * this.limit;
+        var url = this.options.url + '?api_key='+ this.options.api_key +'&uitm=true&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&internal_count=0'+'&sponsored_count=' + sponsoredCount;
 
         var that = this;
 
         revApi.request(url, function(resp) {
-            var ads = that.element.querySelectorAll('.rev-ad');
-            for (var i = 0; i < resp.length; i++) {
-                var ad = ads[i],
-                    data = resp[i];
-                ad.querySelectorAll('a')[0].setAttribute('href', data.url);
-                ad.querySelectorAll('a')[0].title = data.headline;
-                ad.querySelectorAll('img')[0].setAttribute('src', data.image);
-                ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
-                if(that.options.hide_provider === false) {
-                    ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
-                }
-            }
+            that.contentItems = resp;
+            that.updateDisplayedItems(that.options.visible);
 
             imagesLoaded( that.gridElement, function() {
                 revUtils.addClass(that.containerElement, 'loaded');
-                that.resize();
             });
         });
     };
 
+    RevSlider.prototype.registerImpressions = function() {
+        if (this.impressionTracker[this.offset + '_' + this.limit]) {
+            return; // impressions already tracked
+        }
+
+        var impressionsUrl = this.options.url + '?&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&api_source=' + this.options.api_source;
+
+        impressionsUrl += '&sponsored_count=' + (this.options.internal ? 0 : this.limit) + '&internal_count=' + (this.options.internal ? this.limit : 0) + '&sponsored_offset='+ (this.options.internal ? 0 : this.offset) +'&internal_offset=' + (this.options.internal ? this.offset : 0);
+
+        this.impressionTracker[this.offset + '_' + this.limit] = true;
+        var that = this;
+        // don't do the same one twice, this could be improved I am sure
+        revApi.request(impressionsUrl, function() {
+            if(that.offset == 0 && true === that.options.beacons) { revApi.beacons.setPluginSource((revApi.beacons.getPluginSource() != '' ? revApi.beacons.getPluginSource() : 'slider')).attach(); }
+            return;
+        });
+    };
+
+    RevSlider.prototype.updateDisplayedItems = function(registerImpressions) {
+        var correctedPage = Math.abs(this.page);
+        this.offset = ((correctedPage * this.increment) - this.increment);
+        var endIndex = this.offset + this.limit;
+        var moreItemsNeeded = 0;
+        if (endIndex > this.contentItems.length) {
+            endIndex = this.contentItems.length;
+            moreItemsNeeded = this.limit - (endIndex - this.offset);
+        }
+        this.displayedItems = [];
+        for (var i = this.offset; i < endIndex; i++) {
+            this.displayedItems.push(this.contentItems[i]);
+        }
+        for (var i = 0; i < moreItemsNeeded; i++) {
+            this.displayedItems.push(this.contentItems[i]);
+        }
+
+        if (this.options.max_headline) {
+            this.headlineHeight = this.getMaxHeadlineHeight();
+        }
+
+        var ads = this.gridElement.querySelectorAll('.rev-ad');
+
+        for (var i = 0; i < this.displayedItems.length; i++) {
+            var ad = ads[i],
+                data = this.displayedItems[i];
+
+            ad.style.height = this.getCellHeight() + 'px';
+
+            ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', ''));
+            ad.querySelectorAll('a')[0].title = data.headline;
+            ad.querySelectorAll('img')[0].setAttribute('src', data.image);
+            ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
+            ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
+            ad.querySelectorAll('.rev-image')[0].style.height = this.preloaderHeight + 'px';
+            ad.querySelectorAll('.rev-headline')[0].style.maxHeight = this.headlineHeight + 'px';
+            ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
+            ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
+            ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
+            ad.querySelectorAll('.rev-provider')[0].style.margin = '0 '  + this.innerMargin + 'px 0';
+            ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize +'px';
+            ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
+            ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
+        }
+
+        if (registerImpressions) {
+            this.registerImpressions();
+        }
+
+        this.grid.reloadItems();
+        this.grid.layout();
+        this.checkEllipsis();
+    };
+
+    RevSlider.prototype.hasNextPage = function() {
+        //var pageOffset = (this.options.page_increment) ? 0 : this.limit;
+        var correctedPage = Math.abs(this.page);
+        return this.contentItems.length  >= (correctedPage * this.increment) + this.increment;
+    };
+
+    RevSlider.prototype.hasPreviousPage = function() {
+        var correctedPage = Math.abs(this.page);
+        return (correctedPage - 1) > 0;
+    };
+
+    RevSlider.prototype.hasMorePages = function() {
+        var correctedPage = Math.abs(this.page);
+        return this.contentItems.length  >= (correctedPage * this.increment) + this.increment;
+    };
+
     RevSlider.prototype.attachButtonEvents = function() {
         var that = this;
-        document.getElementById('btn-forward').addEventListener('click', function() {
-            that.page = that.page + 1;
-            that.getData();
+        if (this.options.buttons.dual && !revDetect.mobile()) {
+            this.containerElement.addEventListener('mousemove', function(e) {
+                // get left or right cursor position
+                if ((e.clientX - that.containerElement.getBoundingClientRect().left) > (that.containerElement.offsetWidth / 2)) {
+                    revUtils.addClass(that.btnContainer, 'rev-btn-dual-right');
+                } else {
+                    revUtils.removeClass(that.btnContainer, 'rev-btn-dual-right');
+                }
+            });
+        }
+
+        this.forwardBtn.addEventListener('click', function() {
+            that.showNextPage();
         });
 
-        document.getElementById('btn-back').addEventListener('click', function() {
-            that.page = Math.max(1, that.page - 1);
-            that.getData();
+        this.backBtn.addEventListener('click', function() {
+            that.showPreviousPage();
         });
     };
 
-    RevSlider.prototype.getMaxHeadlineHeight = function(rowNum, numItems) {
-        var maxHeadlineHeight = 0;
-        var that = this;
-        var ads = that.element.querySelectorAll('.rev-ad');
-        if (ads.length > 0) {
-            rowNum = (rowNum != undefined) ? rowNum : 0;
-            numItems = (numItems != undefined) ? numItems : ads.length;
-            var offset = rowNum * numItems;
-            var nextOffset = offset + numItems;
-            var el = ads[0].querySelectorAll('.rev-headline h3')[0];
-            var t = el.cloneNode(true);
-            t.style.visibility = 'hidden';
-            t.style.height = 'auto';
-            revUtils.append(el.parentNode, t);
-            for (var i = offset; i < nextOffset; i++) {
-                var ad = ads[i];
-                t.innerHTML = ad.querySelectorAll('a')[0].title;
-                if(t.clientHeight > maxHeadlineHeight) {
-                    maxHeadlineHeight = t.clientHeight;
+    RevSlider.prototype.showNextPage = function() {
+        if (!this.updating) {
+            this.updating = true;
+            if (this.options.wrap_pages) {
+                if (!this.hasMorePages() || this.page === -1) {
+                    // wrap or reverse
+                    this.page = (this.options.wrap_reverse) ? this.page * -1 : 0;
                 }
             }
-            revUtils.remove(t);
-            var numLines = Math.ceil(maxHeadlineHeight / that.headlineLineHeight);
-            maxHeadlineHeight = numLines * that.headlineLineHeight;
+            this.previousPage = this.page;
+            this.page = this.page + 1;
+            this.createNextPageGrid();
+            if (!this.hasNextPage() && !this.options.wrap_pages) {
+                // Disable forward button
+                this.forwardBtn.style.display = 'none';
+            }
+            if (this.hasPreviousPage()) {
+                this.backBtn.style.display = 'block';
+            }
         }
-        return maxHeadlineHeight;
     };
 
+    RevSlider.prototype.showPreviousPage = function() {
+        if (!this.updating) {
+            this.updating = true;
+            if (this.options.wrap_pages) {
+                if (this.options.wrap_reverse) {
+                    if (!this.hasMorePages() || this.page === 1) {
+                        // Reverse direction
+                        this.page = this.page * -1;
+                    }
+                } else if (!this.hasPreviousPage()) {
+                    // Wrap to end
+                    this.page = Math.floor(this.contentItems.length / this.increment);
+                    // Add 1 here as it will be subtracted below.
+                    this.page += 1;
+                }
+            }
+            this.previousPage = this.page;
+            this.page = this.page - 1;
+            this.createNextPageGrid();
+            if (!this.hasPreviousPage() && !this.options.wrap_pages) {
+                // Disable back button
+                this.backBtn.style.display = 'none';
+            } else {
+                this.forwardBtn.style.display = 'block';
+            }
+        }
+    };
+
+    RevSlider.prototype.getMaxHeadlineHeight = function() {
+        var maxHeight = 0;
+        if (this.options.text_right) { // based on preloaderHeight/ ad height
+            var verticalSpace = this.preloaderHeight - this.providerLineHeight;
+            var headlines = Math.floor(verticalSpace / this.headlineLineHeight);
+            maxHeight = headlines * this.headlineLineHeight;
+        } else {
+            var ads = this.gridElement.querySelectorAll('.rev-ad');
+            for (var i = 0; i < this.limit; i++) {
+                var ad = ads[i];
+                var el = document.createElement('div');
+                el.style.position = 'absolute';
+                el.style.zIndex = '100';
+                el.style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
+                el.innerHTML = '<h3 style="font-size:'+ this.headlineFontSize + 'px;line-height:'+ this.headlineLineHeight +'px">'+ this.displayedItems[i].headline + '</h3>';
+                revUtils.prepend(ad, el); // do it this way b/c changin the element height on the fly needs a repaint and requestAnimationFrame is not avail in IE9
+                maxHeight = Math.max(maxHeight, el.clientHeight);
+                revUtils.remove(el);
+            }
+        }
+        return maxHeight;
+    };
 
     return RevSlider;
 }));
-
 /*
 ooooooooo.                          .oooooo..o oooo         o8o   .o88o.     .
 `888   `Y88.                       d8P'    `Y8 `888         `"'   888 `"   .o8
@@ -7180,7 +8259,8 @@ RevShifter({
     closed_hours: 24,
     sponsored: 2,
     disclosure_text: revDisclose.defaultDisclosureText,
-    hide_provider: false
+    hide_provider: false,
+    beacons: true
 });
 */
 
@@ -7188,17 +8268,18 @@ RevShifter({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevShifter = factory(window, window.revUtils, window.revDetect, window.revDisclose);
+    window.RevShifter = factory(window, window.revUtils, window.revDetect, window.revDisclose, window.revApi);
 
-}( window, function factory(window, revUtils, revDetect, revDisclose) {
+}( window, function factory(window, revUtils, revDetect, revDisclose, revApi) {
 'use strict';
 
     var RevShifter;
     var instance;
     var defaults = {
         testing: false,
-        width: 300,
+        size: 300,
         inner_widget: 'slider',
+        side: 'top',
         inner_widget_options: {
             header: 'Trending Now',
             per_row: {
@@ -7212,6 +8293,10 @@ RevShifter({
             },
             rows: 10
         },
+        show_on_load: false,
+        retract_on_load: true,
+        retract_time: 4000,
+        retract_duration: 2500,
         rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right'),
         sponsored: 10,
         internal: false,
@@ -7220,7 +8305,8 @@ RevShifter({
         ],
         url: 'https://trends.revcontent.com/api/v1/',
         disclosure_text: revDisclose.defaultDisclosureText,
-        hide_provider: false
+        hide_provider: false,
+        beacons: true
     };
 
     RevShifter = function(opts) {
@@ -7255,45 +8341,91 @@ RevShifter({
             return;
         }
 
-        revUtils.appendStyle('/* inject:css */.rev-shifter{-ms-overflow-style:-ms-autohiding-scrollbar;-webkit-text-size-adjust:100%;text-size-adjust:100%;box-sizing:border-box;cursor:default;text-rendering:optimizeLegibility;background:#fff;position:fixed;-webkit-transition:.5s;transition:.5s;width:100%;padding:30px 10px 10px;bottom:0;right:0;-webkit-transition-property:-webkit-transform;transition-property:transform;transform:translateX(100%);-ms-transform:translateX(100%);-moz-transform:translateX(100%);-o-transform:translateX(100%);-webkit-transform:translateX(100%);overflow-y:scroll;border-left:1px solid #dcdcdc}.rev-shifter .rev-close{position:absolute;top:0;right:0;cursor:pointer;padding:10px;fill:#555}.rev-shifter *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}.rev-shifter a,.rev-shifter a:focus,.rev-shifter a:hover{text-decoration:none}body.rev-shifter-loaded{margin:0}body.rev-shifter-open .rev-shifter{top:0;right:0;transform:none;-ms-transform:none;-moz-transform:none;-o-transform:none;-webkit-transform:none;z-index:2147483647}/* endinject */', 'rev-shifter');
+        revUtils.appendStyle('/* inject:css */.rev-shifter{-ms-overflow-style:-ms-autohiding-scrollbar;-webkit-text-size-adjust:100%;text-size-adjust:100%;box-sizing:border-box;cursor:default;text-rendering:optimizeLegibility;background:#fff;position:fixed;width:100%;padding:30px 10px 10px;-webkit-transition-property:-webkit-transform,height;transition-property:transform,height;box-shadow:none}body .rev-shifter.top{box-shadow:inset 0 -7px 9px -7px #000}.rev-shifter #rev-slider-grid,.rev-shifter.top .rev-content .rev-ad{-webkit-transition-property:height;transition-property:height}.rev-shifter.top .rev-content{-webkit-transition-property:width,height;transition-property:width,height}.rev-shifter.right{right:0;bottom:0;height:100%;border-left:1px solid #dcdcdc;-webkit-transform:translateX(100%);transform:translateX(100%)}.rev-shifter.left{left:0;bottom:0;height:100%;border-right:1px solid #dcdcdc;-webkit-transform:translateX(-100%);transform:translateX(-100%)}.rev-shifter.top{top:0;width:100%;-webkit-transform:translateY(-100%);transform:translateY(-100%)}.rev-shifter.top #rev-slider{display:inline-block}body.retracted .rev-shifter.top #rev-slider{margin-top:-28px}body.retracted .rev-shifter.top #rev-slider .rev-sponsored{margin-top:-24px}.rev-shifter .rev-close{position:absolute;top:0;right:0;cursor:pointer;padding:10px;fill:#555;z-index:1}.rev-shifter *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}.rev-shifter a,.rev-shifter a:focus,.rev-shifter a:hover{text-decoration:none}.rev-shifter .rev-toggle{position:absolute;z-index:10001;background-color:#000;text-align:center;line-height:0;cursor:pointer;opacity:.8}.rev-shifter.right .rev-toggle{top:50%;height:100px;vertical-align:middle;left:-30px;margin-top:-50px}.rev-shifter.top .rev-toggle{bottom:-30px;left:50%;width:100px;margin-left:-50px;border-radius:0 0 3px 3px}.rev-shifter .rev-toggle svg{fill:#fff}.rev-shifter.left .rev-toggle svg,.rev-shifter.right .rev-toggle svg{top:50%;margin-top:-18px}body.rev-shifter-loaded{margin:0}body{-webkit-transition-property:margin-top!important;transition-property:margin-top!important}body.rev-shifter-open{margin-top:0}body.rev-shifter-no-transform .rev-shifter{-webkit-transform:none;transform:none;z-index:2147483647}body.rev-shifter-open .rev-shifter{top:0;right:0;-webkit-transform:none!important;transform:none!important;z-index:2147483647}/* endinject */', 'rev-shifter');
 
         this.init = function() {
             this.element = document.createElement('div');
             this.innerWidgetElement = document.createElement('div');
-            this.element.style.width = this.options.width + 'px';
             this.element.style.zIndex = '10001';
-            this.element.style.height = '100%';
             this.element.id = 'rev-shifter';
-            this.element.setAttribute('class', 'rev-shifter');
+            revUtils.addClass(this.element, 'rev-shifter');
+            revUtils.addClass(this.element, this.options.side);
 
             this.closeElement = document.createElement('div');
-            this.closeElement.setAttribute('class', 'rev-close');
             this.closeElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>';
+            revUtils.addClass(this.closeElement, 'rev-close');
             revUtils.append(this.element, this.closeElement);
 
             revUtils.append(this.element, this.innerWidgetElement);
 
+            this.toggleElement = document.createElement('div');
+            revUtils.addClass(this.toggleElement, 'rev-toggle');
+            revUtils.append(this.element, this.toggleElement);
+
             revUtils.append(document.body, this.element);
+
+            if (this.options.side == 'top') {
+                this.options.inner_widget_options.rows = 2;
+            }
+
+            if(typeof revApi === 'object'
+                && typeof revApi.beacons === 'object'
+                && typeof revApi.beacons.setPluginSource === 'function') {
+                revApi.beacons.setPluginSource('shifter');
+            }
 
             this.innerWidget = new RevSlider({
                 element: [this.innerWidgetElement],
-                url: 'https://trends.revcontent.com/api/v1/',
-                api_key : 'bf3f270aa50d127f0f8b8c92a979d76aa1391d38',
-                pub_id : 7846,
-                widget_id : 13523,
-                domain : 'bustle.com',
-                rev_position: 'top_right',
+                api_key : this.options.api_key,
+                pub_id : this.options.pub_id,
+                widget_id : this.options.widget_id,
+                domain : this.options.domain,
+                rev_position: 'bottom_right',
+                header : this.options.inner_widget_options.header,
                 per_row: this.options.inner_widget_options.per_row,
                 rows: this.options.inner_widget_options.rows,
+                text_overlay: true,
+                max_headline: true,
+                stacked: true,
+                transition_duration: this.options.retract_duration + 'ms',
+                is_layout_instant: true,
                 disclosure_text: this.options.disclosure_text,
-                hide_provider: this.options.hide_provider
+                hide_provider: this.options.hide_provider,
+                beacons: this.options.beacons
             });
 
+            this.size = this.element.clientHeight;
+            this.difference = (this.size - this.innerWidget.grid.maxHeight);
+            this.showSize = this.innerWidget.grid.rows[this.innerWidget.grid.getBreakPoint()];
+
+            if (typeof this.options.inner_widget_options.per_row === 'object') {
+                this.options.single_per_row = {};
+                for (var prop in this.options.inner_widget_options.per_row) {
+                    this.options.single_per_row[prop] = (this.options.inner_widget_options.per_row[prop] * this.options.inner_widget_options.rows);
+                }
+            } else {
+                this.options.single_per_row = (this.options.inner_widget_options.per_row * this.options.inner_widget_options.rows);
+            }
+
+            if (this.options.side == 'left' || this.options.side == 'right') {
+                this.element.style.width = this.options.size + 'px';
+            }
+
+            this.handleTransform();
+
+            this.toggleElementInnerHtml();
+
             this.attachButtonEvents();
+
+            if (this.options.show_on_load) {
+                this.show(this.options.retract_on_load);
+            }
         };
 
         this.update = function(newOpts, oldOpts) {
             this.options = revUtils.extend(defaults, newOpts);
+            //a hack to make up for revUtils shortcomings
+            this.options.inner_widget_options = revUtils.extend(defaults.inner_widget_options, newOpts.inner_widget_options);
 
             if (this.visible != newOpts.visible) {
                 if (newOpts.visible) {
@@ -7305,37 +8437,170 @@ RevShifter({
 
             if (this.options.width !== oldOpts.width) {
                 this.element.style.width = this.options.width + 'px';
-            }
-
-            if (this.options.width !== oldOpts.width) {
                 this.innerWidget.resize();
             }
 
             if ( (this.options.size !== oldOpts.size) ||
                 (this.options.realSize !== oldOpts.realSize) ||
+                (this.options.inner_widget_options.header !== oldOpts.inner_widget_options.header) ||
                 (this.options.inner_widget_options.per_row !== oldOpts.inner_widget_options.per_row) ||
                 (this.options.inner_widget_options.rows !== oldOpts.inner_widget_options.rows)) {
                 this.innerWidget.update(this.options.inner_widget_options,  oldOpts.inner_widget_options);
             }
         };
 
+        this.applyTransitionCss = function(element) {
+            element.style.transitionDuration = this.options.retract_duration + 'ms';
+            element.style.WebkitTransitionDuration = this.options.retract_duration + 'ms';
+            element.style.MozTransitionDuration = this.options.retract_duration + 'ms';
+            element.style.OTransitionDuration = this.options.retract_duration + 'ms';
+        };
 
-        this.show = function() {
+        this.handleTransform = function() {
+            this.applyTransitionCss(this.element);
+            this.applyTransitionCss(document.body);
+            this.applyTransitionCss(this.innerWidget.gridElement);
+            this.applyTransitionCss(this.element.querySelector('#rev-slider'));
+            this.applyTransitionCss(this.element.querySelector('#rev-slider .rev-sponsored'));
+
+            var content = this.element.querySelectorAll('.rev-content');
+            for (var i = 0; i < content.length; i++) {
+                this.applyTransitionCss(content[i]);
+            }
+
+            var ads = this.element.querySelectorAll('.rev-ad');
+            for (var i = 0; i < ads.length; i++) {
+                this.applyTransitionCss(ads[i]);
+            }
+
+            var imgs = this.element.querySelectorAll('.rev-image');
+            for (var i = 0; i < imgs.length; i++) { // special case that also needs background transitioned
+                imgs[i].style.transition = 'background .5s ease-in-out, height ' + this.options.retract_duration + 'ms';
+                imgs[i].style.WebkitTransition = 'background .5s ease-in-out, height ' + this.options.retract_duration + 'ms';
+                imgs[i].style.MozTransition = 'background .5s ease-in-out, height ' + this.options.retract_duration + 'ms';
+                imgs[i].style.OTransition = 'background .5s ease-in-out, height ' + this.options.retract_duration + 'ms';
+            }
+        };
+
+        this.transformBody = function(retract) {
+            if (this.options.side !== 'top') {
+                return;
+            }
+            if (retract) {
+                document.body.style.marginTop = (this.innerWidget.grid.maxHeight + this.difference - 28 - 18) + 'px';
+            } else {
+                document.body.style.marginTop = this.size + 'px';
+            }
+        };
+
+        this.retract = function() {
+            if (this.options.side !== 'top') {
+                return;
+            }
+            this.retracted = true;
+            revUtils.addClass(document.body, 'retracted');
+            this.toggleElementInnerHtml();
+
+            this.innerWidget.grid.option({ // not instant
+                isLayoutInstant: false,
+                itemHeight: (this.showSize / 2)
+            });
+
+            this.innerWidget.update({ // one row
+                per_row: this.options.single_per_row,
+                rows: 1
+            });
+
+            this.innerWidget.grid.option({ // back to instant
+                isLayoutInstant: true
+            });
+
+            this.transformBody(true);
+        };
+
+        this.show = function(retract) {
             this.visible = true;
-            revUtils.addClass(document.body, 'rev-shifter-open');
-        }
+            this.retracted = false;
+
+            revUtils.addClass(document.body, 'rev-shifter-no-transform');
+
+            this.transformBody();
+
+            revUtils.removeClass(document.body, 'retracted');
+
+            this.toggleElementInnerHtml();
+
+            this.innerWidget.grid.option({ // not instant
+                isLayoutInstant: false,
+                itemHeight: this.showSize
+            });
+
+            this.innerWidget.update({ // back to default rows
+                per_row: this.options.inner_widget_options.per_row,
+                rows: this.options.inner_widget_options.rows
+            });
+
+            this.innerWidget.grid.option({ // back to instant
+                isLayoutInstant: true
+            });
+
+            if (retract) {
+                var that = this;
+                setTimeout(function() {
+                    that.retract();
+                }, this.options.retract_time);
+            }
+        };
 
         this.hide = function() {
             this.visible = false;
-            revUtils.removeClass(document.body, 'rev-shifter-open');
-        }
+            revUtils.removeClass(document.body, 'rev-shifter-no-transform');
+            document.body.style.marginTop = 0;
+            this.toggleElementInnerHtml();
+        };
+
+        this.toggle = function() {
+            if (this.retracted || !this.visible) {
+                this.show();
+            } else {
+                if (this.options.side == 'top') {
+                    this.retract();
+                } else {
+                    this.hide();
+                }
+
+            }
+        };
+
+        this.toggleElementInnerHtml = function() {
+            switch(this.options.side){
+                case 'top':
+                    if (this.retracted || !this.visible) { // down arrow
+                        this.toggleElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36"><path d="M24.88 12.88L18 19.76l-6.88-6.88L9 15l9 9 9-9z"/></svg>';
+                    } else { // up arrow
+                        this.toggleElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36"><path d="M18 12l-9 9 2.12 2.12L18 16.24l6.88 6.88L27 21z"/></svg>';
+                    }
+                    break;
+                case 'right':
+                    if (this.retracted || !this.visible) { // left arrow
+                        this.toggleElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36"><path d="M23.12 11.12L21 9l-9 9 9 9 2.12-2.12L16.24 18z"/></svg>';
+                    } else { // right arrow
+                        this.toggleElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36"><path d="M15 9l-2.12 2.12L19.76 18l-6.88 6.88L15 27l9-9z"/></svg>';
+                    }
+                    break;
+            }
+        };
 
         this.attachButtonEvents = function() {
             var that = this;
             this.closeElement.addEventListener('click', function() {
                 that.hide();
             });
-        }
+
+            this.toggleElement.addEventListener('click', function() {
+                that.toggle();
+            });
+        };
 
         this.init();
     };

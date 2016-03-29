@@ -30,9 +30,9 @@ RevShifter({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevShifter = factory(window, window.revUtils, window.revDetect, window.revDisclose);
+    window.RevShifter = factory(window, window.revUtils, window.revDetect, window.revDisclose, window.revApi);
 
-}( window, function factory(window, revUtils, revDetect, revDisclose) {
+}( window, function factory(window, revUtils, revDetect, revDisclose, revApi) {
 'use strict';
 
     var RevShifter;
@@ -130,6 +130,12 @@ RevShifter({
                 this.options.inner_widget_options.rows = 2;
             }
 
+            if(typeof revApi === 'object'
+                && typeof revApi.beacons === 'object'
+                && typeof revApi.beacons.setPluginSource === 'function') {
+                revApi.beacons.setPluginSource('shifter');
+            }
+
             this.innerWidget = new RevSlider({
                 element: [this.innerWidgetElement],
                 api_key : this.options.api_key,
@@ -152,7 +158,7 @@ RevShifter({
 
             this.size = this.element.clientHeight;
             this.difference = (this.size - this.innerWidget.grid.maxHeight);
-            this.showSize = this.innerWidget.grid.rows[0].height;
+            this.showSize = this.innerWidget.grid.rows[this.innerWidget.grid.getBreakPoint()];
 
             if (typeof this.options.inner_widget_options.per_row === 'object') {
                 this.options.single_per_row = {};
