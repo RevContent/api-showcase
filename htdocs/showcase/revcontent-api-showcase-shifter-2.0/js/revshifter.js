@@ -21,7 +21,8 @@ RevShifter({
     closed_hours: 24,
     sponsored: 2,
     disclosure_text: revDisclose.defaultDisclosureText,
-    hide_provider: false
+    hide_provider: false,
+    beacons: true
 });
 */
 
@@ -29,9 +30,9 @@ RevShifter({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevShifter = factory(window, window.revUtils, window.revDetect, window.revDisclose);
+    window.RevShifter = factory(window, window.revUtils, window.revDetect, window.revDisclose, window.revApi);
 
-}( window, function factory(window, revUtils, revDetect, revDisclose) {
+}( window, function factory(window, revUtils, revDetect, revDisclose, revApi) {
 'use strict';
 
     var RevShifter;
@@ -67,7 +68,8 @@ RevShifter({
         ],
         url: 'https://trends.revcontent.com/api/v1/',
         disclosure_text: revDisclose.defaultDisclosureText,
-        hide_provider: false
+        hide_provider: false,
+        beacons: true
     };
 
     RevShifter = function(opts) {
@@ -117,6 +119,12 @@ RevShifter({
 
             revUtils.append(document.body, this.element);
 
+            if(typeof revApi === 'object'
+                && typeof revApi.beacons === 'object'
+                && typeof revApi.beacons.setPluginSource === 'function') {
+                revApi.beacons.setPluginSource('shifter');
+            }
+
             this.innerWidget = new RevSlider({
                 api_source: 'shift',
                 visible: this.options.show_on_load,
@@ -145,7 +153,8 @@ RevShifter({
                     size: 40,
                     position: 'inside',
                     dual: true
-                }
+                },
+                beacons: this.options.beacons
             });
 
             this.closeElement = document.createElement('div');
