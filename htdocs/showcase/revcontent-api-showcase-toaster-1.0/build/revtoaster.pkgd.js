@@ -2469,6 +2469,51 @@ return detect;
         return self;
     };
 
+    RevBeacon.prototype.getPluginSource = function(){
+        var self = this;
+        return self.pluginSource.toString();
+    };
+
+    RevBeacon.prototype.enableBeacon = function(beaconName){
+        var self = this;
+        if(self.enabledBeacons[beaconName] == undefined && self.beacons[beaconName] !== undefined) {
+            self.enabledBeacons.push(beaconName);
+        }
+        return self;
+    };
+
+    RevBeacon.prototype.disableBeacon = function(beaconName){
+        var self = this;
+        self.enabledBeacons = self.enabledBeacons.filter(function(entry){
+            if(beaconName != entry) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        return self;
+    };
+
+    RevBeacon.prototype.offline = function(){
+        var self = this;
+        self.push = false;
+        return self;
+    };
+
+    RevBeacon.prototype.createBeacon = function(beaconName, enabled, type, pixelUrl, scriptUrl, styles) {
+        var self = this;
+        if(self.beacons[beaconName] == undefined) {
+            self.beacons[beaconName] = {
+                enabled: enabled,
+                type: type,
+                pixel_url: pixelUrl,
+                script_url: scriptUrl,
+                styles: styles
+            };
+        }
+        return self;
+    };
+
     RevBeacon.prototype.setParent = function(parentNode){
         var self = this;
         self.parent = (typeof parentNode === 'object' ? parentNode : document.getElementsByTagName('body')[0]);
@@ -2515,21 +2560,22 @@ return detect;
  * Revcontent detect
  */
 
-( function( window, factory ) {
+( function( window, factory) {
   /*global define: false, module: false, require: false */
   'use strict';
   // universal module definition
     // browser global
     window.revApi = factory(
-      window
+      window,
+      window.revBeacon
     );
 
-}( window, function factory( window ) {
+}( window, function factory( window, revBeacon ) {
 
 'use strict';
 
 var api = {};
-api.beacons = window.revBeacon || {attach: function(){}};
+api.beacons = revBeacon || {attach: function(){}};
 
 
 api.request = function(url, success, failure) {
