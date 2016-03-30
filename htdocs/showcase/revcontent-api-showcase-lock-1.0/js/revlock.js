@@ -15,7 +15,7 @@ RevLock({
     api_key: 'your api_key',
     pub_id: pub_id,
     widget_id: widget_id,
-    domain: 'widget domain',
+    domain: 'widget domain'
 });
 */
 
@@ -58,7 +58,8 @@ RevLock({
             },
             devices: [
                 'phone', 'tablet', 'desktop'
-            ]
+            ],
+            beacons: true
         };
 
         // merge options
@@ -118,6 +119,12 @@ RevLock({
 
             revUtils.append(document.body, this.element);
 
+            if(typeof revApi === 'object'
+                && typeof revApi.beacons === 'object'
+                && typeof revApi.beacons.setPluginSource === 'function') {
+                revApi.beacons.setPluginSource('lock');
+            }
+
             this.innerWidget = new RevSlider({
                 element:      [this.innerWidgetElement],
                 url:          'https://trends.revcontent.com/api/v1/',
@@ -132,6 +139,7 @@ RevLock({
                 image_ratio:  this.options.inner_widget_options.image_ratio,
                 buttons:      this.options.inner_widget_options.buttons,
                 vertical:     true,
+                beacons:      this.options.beacons
             });
 
             this.innerWidget.innerElement.style.height = this.innerWidget.grid.maxHeight + 'px'; // TODO: this might be bad
@@ -151,6 +159,10 @@ RevLock({
                 revUtils.addClass(that.element, 'unlocked');
                 setTimeout(function() {
                     revUtils.remove(that.element);
+                    if(typeof revApi === 'object'
+                        && typeof revApi.beacons === 'object') {
+                        revApi.beacons.detach('lock');
+                    }
                 }, 1000);
             });
         };

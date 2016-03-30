@@ -130,8 +130,25 @@
                 }
             }
         }
+        return self;
     };
 
+    RevBeacon.prototype.detach = function(pluginSource){
+        var self = this;
+        for (var b = 0; b < self.renderedBeacons.length; b++) {
+            if(self.renderedBeacons[b].parentNode){
+                if(pluginSource !== undefined) {
+                    if(self.renderedBeacons[b].getAttribute('data-source') == pluginSource.toString()){
+                        self.renderedBeacons[b].parentNode.removeChild(self.renderedBeacons[b]);
+                    }
+                } else {
+                    self.renderedBeacons[b].parentNode.removeChild(self.renderedBeacons[b]);
+                }
+
+            }
+        }
+        return self;
+    };
 
     window.revBeacon = new RevBeacon();
 

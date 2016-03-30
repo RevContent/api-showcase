@@ -276,7 +276,10 @@ RevToaster({
                 revUtils.removeClass(document.body, 'rev-toaster-loaded');
                 setTimeout(function() {
                     that.revToaster.parentNode.removeChild(that.revToaster);
-                    that.removeBeacons(document.querySelectorAll('.beacon-tag'));
+                    if(typeof revApi === 'object'
+                        && typeof revApi.beacons === 'object') {
+                        revApi.beacons.detach('toaster');
+                    }
                     removed = true;
                     revUtils.setCookie('revtoaster-closed', 1, (that.options.closed_hours / 24));
                 }, 2000);
@@ -300,17 +303,6 @@ RevToaster({
             this.visible = false;
             revUtils.removeClass(document.body, 'rev-toaster-loaded');
         };
-
-        this.removeBeacons = function(beaconElements) {
-            for(var b=0; b<beaconElements.length; b++) {
-                var beacon = beaconElements[b];
-                if(beacon.getAttribute('data-source') && beacon.getAttribute('data-source').toLowerCase() == 'toaster'){
-                    if(beacon.parentNode){
-                        beacon.parentNode.removeChild(beacon);
-                    }
-                }
-            }
-        }
 
         this.init();
     };

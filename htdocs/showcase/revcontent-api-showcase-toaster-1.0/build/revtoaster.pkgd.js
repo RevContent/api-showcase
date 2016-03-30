@@ -2548,8 +2548,25 @@ return detect;
                 }
             }
         }
+        return self;
     };
 
+    RevBeacon.prototype.detach = function(pluginSource){
+        var self = this;
+        for (var b = 0; b < self.renderedBeacons.length; b++) {
+            if(self.renderedBeacons[b].parentNode){
+                if(pluginSource !== undefined) {
+                    if(self.renderedBeacons[b].getAttribute('data-source') == pluginSource.toString()){
+                        self.renderedBeacons[b].parentNode.removeChild(self.renderedBeacons[b]);
+                    }
+                } else {
+                    self.renderedBeacons[b].parentNode.removeChild(self.renderedBeacons[b]);
+                }
+
+            }
+        }
+        return self;
+    };
 
     window.revBeacon = new RevBeacon();
 
@@ -2885,7 +2902,10 @@ RevToaster({
                 revUtils.removeClass(document.body, 'rev-toaster-loaded');
                 setTimeout(function() {
                     that.revToaster.parentNode.removeChild(that.revToaster);
-                    that.removeBeacons(document.querySelectorAll('.beacon-tag'));
+                    if(typeof revApi === 'object'
+                        && typeof revApi.beacons === 'object') {
+                        revApi.beacons.detach('toaster');
+                    }
                     removed = true;
                     revUtils.setCookie('revtoaster-closed', 1, (that.options.closed_hours / 24));
                 }, 2000);
@@ -2909,17 +2929,6 @@ RevToaster({
             this.visible = false;
             revUtils.removeClass(document.body, 'rev-toaster-loaded');
         };
-
-        this.removeBeacons = function(beaconElements) {
-            for(var b=0; b<beaconElements.length; b++) {
-                var beacon = beaconElements[b];
-                if(beacon.getAttribute('data-source') && beacon.getAttribute('data-source').toLowerCase() == 'toaster'){
-                    if(beacon.parentNode){
-                        beacon.parentNode.removeChild(beacon);
-                    }
-                }
-            }
-        }
 
         this.init();
     };
