@@ -274,16 +274,14 @@ RevSlider({
         var containerWidth = this.innerElement.offsetWidth;
         var containerHeight = this.innerElement.offsetHeight;
 
-        var animationDuration = 1.75; //this.getAnimationDuration(); TODO: make dynamic
-
-        if (this.page > this.previousPage) { // slide left or up
+        if (this.direction == 'next') { // slide left or up
             var insert = 'append';
             if (this.options.vertical) { // up
                 var margin = 'marginBottom';
-                var gridContainerTransform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
+                this.gridContainerTransform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
             } else { // left
                 var margin = 'marginRight';
-                var gridContainerTransform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
+                this.gridContainerTransform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
             }
         } else { // Slide right or down
             var insert = 'prepend';
@@ -292,17 +290,17 @@ RevSlider({
                 this.gridContainerElement.style.transform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
                 this.gridContainerElement.style.MsTransform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
                 this.gridContainerElement.style.WebkitTransform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
-                var gridContainerTransform = 'translateY(0px)';
+                this.gridContainerTransform = 'translateY(0px)';
             } else { // right
                 var margin = 'marginLeft';
                 this.gridContainerElement.style.transform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
                 this.gridContainerElement.style.MsTransform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
                 this.gridContainerElement.style.WebkitTransform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
-                var gridContainerTransform = 'translateX(0px)';
+                this.gridContainerTransform = 'translateX(0px)';
             }
         }
 
-        var oldGrid = this.grid;
+        this.oldGrid = this.grid;
 
         this.grid.element.style[margin] = (this.padding * 2) + 'px';
 
@@ -316,8 +314,8 @@ RevSlider({
         this.grid = new AnyGrid(gridElement, options);
 
         if (!this.options.vertical) {
-            oldGrid.element.style.width = containerWidth + 'px';
-            oldGrid.element.style.float = 'left';
+            this.oldGrid.element.style.width = containerWidth + 'px';
+            this.oldGrid.element.style.float = 'left';
 
             this.grid.element.style.width = containerWidth + 'px';
             this.grid.element.style.float = 'left';
@@ -333,24 +331,38 @@ RevSlider({
         this.grid.layout();
 
         this.updateDisplayedItems(true);
+    };
+
+    RevSlider.prototype.animateGrid = function(){
+        var animationDuration = 1.75; //this.getAnimationDuration(); TODO: make dynamic
 
         this.gridContainerElement.style.transitionDuration = animationDuration + 's';
         this.gridContainerElement.style.WebkitTransitionDuration = animationDuration + 's';
-        this.gridContainerElement.style.transform = gridContainerTransform;
-        this.gridContainerElement.style.MsTransform = gridContainerTransform;
-        this.gridContainerElement.style.WebkitTransform = gridContainerTransform;
+        this.gridContainerElement.style.transform = this.gridContainerTransform;
+        this.gridContainerElement.style.MsTransform = this.gridContainerTransform;
+        this.gridContainerElement.style.WebkitTransform = this.gridContainerTransform;
 
         var that = this;
         setTimeout(function() {
-            that.updateGrids(oldGrid);
+            that.updateGrids();
         }, animationDuration * 1000);
     };
 
-    RevSlider.prototype.updateGrids = function(oldGrid) {
-        this.gridElement.style.transform = 'none';
-        this.gridElement.style.MsTransform = 'none';
-        this.gridElement.style.WebkitTransform = 'none';
-        this.gridElement.className = '';
+    RevSlider.prototype.updateGrids = function(revert) {
+        if (revert) {
+            var removeGrid = this.grid;
+            var transitionGrid = this.oldGrid;
+        } else {
+            var removeGrid = this.oldGrid;
+            var transitionGrid = this.grid;
+        }
+
+        transitionGrid.element.style.transform = 'none';
+        transitionGrid.element.style.MsTransform = 'none';
+        transitionGrid.element.style.WebkitTransform = 'none';
+        transitionGrid.element.style.marginLeft = '0';
+        transitionGrid.element.style.marginRight = '0';
+        transitionGrid.element.className = '';
 
         this.gridContainerElement.style.transitionDuration = '0s';
         this.gridContainerElement.style.WebkitTransitionDuration = '0s';
@@ -359,9 +371,14 @@ RevSlider({
         this.gridContainerElement.style.MsTransform = 'none';
         this.gridContainerElement.style.WebkitTransform = 'none';
 
-        oldGrid.remove();
-        oldGrid.destroy();
-        revUtils.remove(oldGrid.element);
+        removeGrid.remove();
+        removeGrid.destroy();
+        revUtils.remove(removeGrid.element);
+
+        if (revert) {
+            this.grid = transitionGrid;
+            this.offset = this.oldOffset;
+        }
 
         if (!this.options.vertical) {
             this.grid.element.style.width = 'auto';
@@ -370,10 +387,9 @@ RevSlider({
             this.gridContainerElement.style.width = '100%';
         }
 
-        var that = this;
         this.grid.bindResize();
         this.grid.on('resized', function() {
-            that.resize();
+            this.resize();
         });
 
         this.updating = false;
@@ -796,11 +812,11 @@ RevSlider({
         }
 
         this.forwardBtn.addEventListener('click', function() {
-            that.showNextPage();
+            that.showNextPage(true);
         });
 
         this.backBtn.addEventListener('click', function() {
-            that.showPreviousPage();
+            that.showPreviousPage(true);
         });
     };
 
@@ -820,6 +836,8 @@ RevSlider({
                 // Disable forward button
                 this.forwardBtn.style.display = 'none';
             }
+            if (click) { // animate right away on click
+                this.animateGrid();
             }
         }
     };
@@ -843,6 +861,8 @@ RevSlider({
             this.previousPage = this.page;
             this.page = this.page - 1;
             this.createNextPageGrid();
+            if (click) {
+                this.animateGrid();
             }
         }
     };
