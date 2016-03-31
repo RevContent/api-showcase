@@ -804,6 +804,124 @@ RevSlider({
 
     RevSlider.prototype.attachButtonEvents = function() {
         var that = this;
+
+        var mc = new Hammer(this.element);
+        mc.add(new Hammer.Swipe());
+        mc.add(new Hammer.Pan({ threshold: 1 })).recognizeWith(mc.get('swipe'));
+
+        var movement = 0;
+        var made = false;
+        var direction = false;
+        var updown = false;
+
+        this.element.addEventListener('click', function(e) {
+            if (made || movement) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
+        });
+
+        mc.on('swipeleft', function(ev) {
+            console.log('swipeleft');
+            if (made || direction == 'right') {
+                return;
+            }
+            made = true;
+            that.gridContainerElement.style.transitionDuration =  '.75s';
+            that.gridContainerElement.style.WebkitTransitionDuration =  '.75s';
+            that.gridContainerElement.style.transform = 'translateX(-'+ (that.innerElement.offsetWidth + (that.padding * 2)) +'px)';
+            that.gridContainerElement.style.MsTransform = 'translateX(-'+ (that.innerElement.offsetWidth + (that.padding * 2)) +'px)';
+            that.gridContainerElement.style.WebkitTransform = 'translateX(-'+ (that.innerElement.offsetWidth + (that.padding * 2)) +'px)';
+            setTimeout(function() {
+                that.updateGrids();
+                made = false;
+                direction = false;
+            }, 750);
+            movement = 0;
+        });
+
+        mc.on('swiperight', function(e) {
+            if (made || direction == 'left') {
+                return;
+            }
+            made = true;
+            that.gridContainerElement.style.transitionDuration =  '.75s';
+            that.gridContainerElement.style.WebkitTransitionDuration =  '.75s';
+            that.gridContainerElement.style.transform = 'translateX(0px)';
+            that.gridContainerElement.style.MsTransform = 'translateX(0px)';
+            that.gridContainerElement.style.WebkitTransform = 'translateX(0px)';
+            setTimeout(function() {
+                that.updateGrids();
+                made = false;
+                direction = false;
+            }, 750);
+            movement = 0;
+        });
+
+        mc.on('panleft', function(e) {
+            if (made || direction == 'right') {
+                return;
+            }
+            updown = false;
+
+            direction = 'left';
+            that.showNextPage();
+
+            movement = movement + 2;
+            that.gridContainerElement.style.transform = 'translateX(-'+ movement +'px)';
+            that.gridContainerElement.style.MsTransform = 'translateX(-'+ movement +'px)';
+            that.gridContainerElement.style.WebkitTransform = 'translateX(-'+ movement +'px)';
+        });
+
+        mc.on('panright', function(e) {
+            if (made || direction == 'left') {
+                return;
+            }
+            updown = false;
+
+            direction = 'right';
+            that.showPreviousPage();
+
+            movement = movement + 2;
+            that.gridContainerElement.style.transform = 'translateX(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2)) - movement ) +'px)';
+            that.gridContainerElement.style.MsTransform = 'translateX(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2)) - movement ) +'px)'
+            that.gridContainerElement.style.WebkitTransform = 'translateX(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2)) - movement ) +'px)'
+        });
+
+        mc.on('panup pandown', function(e) {
+            updown = true;
+        });
+
+        mc.on('panend', function(e) {
+            console.log('panend');
+            if (made || (updown && !movement)) {
+                return;
+            }
+
+            that.gridContainerElement.style.transitionDuration = '.3s';
+            that.gridContainerElement.style.WebkitTransitionDuration =  '.3s';
+            if (direction == 'left') {
+                that.gridContainerElement.style.transform = 'none';
+                that.gridContainerElement.style.MsTransform = 'none';
+                that.gridContainerElement.style.WebkitTransform = 'none';
+            } else {
+                that.gridContainerElement.style.transform = 'translateX(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2))) +'px)';
+                that.gridContainerElement.style.MsTransform = 'translateX(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2))) +'px)'
+                that.gridContainerElement.style.WebkitTransform = 'translateX(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2))) +'px)'
+            }
+
+            that.page = that.previousPage;
+            that.direction = that.previousDirection;
+            that.previousPage = that.lastPage;
+
+            setTimeout(function() {
+                that.updateGrids(true);
+                movement = 0;
+                made = false;
+                direction = false;
+            }, 300);
+        });
+
         if (this.options.buttons.dual && !revDetect.mobile()) {
             this.containerElement.addEventListener('mousemove', function(e) {
                 // get left or right cursor position
