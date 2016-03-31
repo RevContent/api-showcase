@@ -161,8 +161,8 @@ RevSlider({
         this.gridContainerElement = document.createElement('div');
         this.gridContainerElement.id = 'rev-slider-grid-container';
 
-        this.gridElement = document.createElement('div');
-        this.gridElement.id = 'rev-slider-grid';
+        var gridElement = document.createElement('div');
+        gridElement.id = 'rev-slider-grid';
 
         this.element = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
         this.element.style.width = '100%';
@@ -173,11 +173,11 @@ RevSlider({
 
         revUtils.append(this.innerElement, this.gridContainerElement);
 
-        revUtils.append(this.gridContainerElement, this.gridElement);
+        revUtils.append(this.gridContainerElement, gridElement);
 
         revUtils.append(this.element, this.containerElement);
 
-        this.grid = new AnyGrid(this.gridElement, this.gridOptions());
+        this.grid = new AnyGrid(gridElement, this.gridOptions());
 
         this.grid.on('resized', function() {
             that.resize();
@@ -215,7 +215,7 @@ RevSlider({
 
     RevSlider.prototype.createCells = function() {
         for (var i = 0; i < this.limit; i++) {
-            this.gridElement.appendChild(this.createNewCell());
+            this.grid.element.appendChild(this.createNewCell());
         }
     };
 
@@ -308,16 +308,16 @@ RevSlider({
 
         var oldGrid = this.grid;
 
-        this.gridElement.style[margin] = (this.padding * 2) + 'px';
+        this.grid.element.style[margin] = (this.padding * 2) + 'px';
 
-        this.gridElement = document.createElement('div');
-        this.gridElement.id = 'rev-slider-grid';
+        var gridElement = document.createElement('div');//something up here
+        gridElement.id = 'rev-slider-grid';
 
-        revUtils[insert](this.gridContainerElement, this.gridElement);
+        revUtils[insert](this.gridContainerElement, gridElement);
 
         var options = this.gridOptions();
         options.isResizeBound = false;
-        this.grid = new AnyGrid(this.gridElement, options);
+        this.grid = new AnyGrid(gridElement, options);
 
         if (!this.options.vertical) {
             oldGrid.element.style.width = containerWidth + 'px';
@@ -610,7 +610,7 @@ RevSlider({
                 }
             } else {
                 for (var i = 0; i < (this.limit - nodes.length); i++) {
-                    this.gridElement.appendChild(this.createNewCell());
+                    this.grid.element.appendChild(this.createNewCell());
                 }
                 this.previousPage = 0;
                 this.page = 1;
@@ -656,7 +656,7 @@ RevSlider({
         if (this.options.max_headline && !this.options.text_right) { // text_right should be limited, but don't waste for max_headline only
             return;
         }
-        var headlines = this.gridElement.querySelectorAll('.rev-content .rev-headline');
+        var headlines = this.grid.element.querySelectorAll('.rev-content .rev-headline');
         for (var i = 0; i < headlines.length; i++) {
             var text,
                 container = headlines[i],
@@ -713,7 +713,7 @@ RevSlider({
             that.contentItems = resp;
             that.updateDisplayedItems(that.options.visible);
 
-            imagesLoaded( that.gridElement, function() {
+            imagesLoaded( that.grid.element, function() {
                 revUtils.addClass(that.containerElement, 'loaded');
             });
         });
@@ -756,7 +756,7 @@ RevSlider({
             this.headlineHeight = this.getMaxHeadlineHeight();
         }
 
-        var ads = this.gridElement.querySelectorAll('.rev-ad');
+        var ads = this.grid.element.querySelectorAll('.rev-ad');
 
         for (var i = 0; i < this.displayedItems.length; i++) {
             var ad = ads[i],
@@ -884,7 +884,7 @@ RevSlider({
             var headlines = Math.floor(verticalSpace / this.headlineLineHeight);
             maxHeight = headlines * this.headlineLineHeight;
         } else {
-            var ads = this.gridElement.querySelectorAll('.rev-ad');
+            var ads = this.grid.element.querySelectorAll('.rev-ad');
             for (var i = 0; i < this.limit; i++) {
                 var ad = ads[i];
                 var el = document.createElement('div');
