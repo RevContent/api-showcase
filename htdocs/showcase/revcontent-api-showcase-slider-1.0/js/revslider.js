@@ -102,9 +102,8 @@ RevSlider({
             max_headline: false,
             text_overlay: false,
             vertical: false,
-            page_increment: true,
-            wrap_pages: true,
-            wrap_reverse: true, // if page_increment is false, this must be false
+            wrap_pages: true, //currently the only supported option
+            wrap_reverse: true, //currently the only supported option
             show_padding: true,
             pages: 4,
             text_right: false,
@@ -267,9 +266,6 @@ RevSlider({
     //         } else if (gridWidth >= 250) {
     //             duration = 0.75;
     //         }
-    //     }
-    //     if (!this.options.page_increment) {
-    //         duration = duration * .5;
     //     }
     //     return duration;
     // };
@@ -549,14 +545,9 @@ RevSlider({
             (this.options.rows !== oldOpts.rows) ||
             (this.options.headline_size !== oldOpts.headline_size) ||
             (this.options.vertical !== oldOpts.vertical) ||
-            (this.options.page_increment !== oldOpts.page_increment) ||
             (this.options.show_padding !== oldOpts.show_padding)) {
             this.options.perRow = this.options.per_row; // AnyGrid needs camels
             this.resize();
-        }
-
-        if (!this.options.page_increment) {
-            this.options.wrap_reverse = false;
         }
 
         if ((this.options.header !== oldOpts.header) || this.options.rev_position !== oldOpts.rev_position) {
@@ -789,20 +780,6 @@ RevSlider({
         this.checkEllipsis();
     };
 
-    RevSlider.prototype.hasNextPage = function() {
-        //var pageOffset = (this.options.page_increment) ? 0 : this.limit;
-        var correctedPage = Math.abs(this.page);
-        return this.contentItems.length  >= (correctedPage * this.increment) + this.increment;
-    };
-
-    RevSlider.prototype.hasPreviousPage = function() {
-        var correctedPage = Math.abs(this.page);
-        return (correctedPage - 1) > 0;
-    };
-
-    RevSlider.prototype.hasMorePages = function() {
-        var correctedPage = Math.abs(this.page);
-        return this.contentItems.length  >= (correctedPage * this.increment) + this.increment;
     };
 
     RevSlider.prototype.attachButtonEvents = function() {
@@ -843,8 +820,6 @@ RevSlider({
                 // Disable forward button
                 this.forwardBtn.style.display = 'none';
             }
-            if (this.hasPreviousPage()) {
-                this.backBtn.style.display = 'block';
             }
         }
     };
@@ -868,11 +843,6 @@ RevSlider({
             this.previousPage = this.page;
             this.page = this.page - 1;
             this.createNextPageGrid();
-            if (!this.hasPreviousPage() && !this.options.wrap_pages) {
-                // Disable back button
-                this.backBtn.style.display = 'none';
-            } else {
-                this.forwardBtn.style.display = 'block';
             }
         }
     };
