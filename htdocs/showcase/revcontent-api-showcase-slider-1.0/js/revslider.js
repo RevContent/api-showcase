@@ -398,8 +398,6 @@ RevSlider({
     RevSlider.prototype.setUp = function() {
         this.grid.layout();
         this.limit = this.getLimit();
-        var rowsCols = (this.options.vertical) ? this.grid.perRow : this.options.rows[this.grid.getBreakPoint()];
-        this.increment = (this.options.page_increment) ? this.limit : rowsCols;
 
         if (this.options.image_ratio == 'square') {
             this.imageHeight = 400;
