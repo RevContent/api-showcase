@@ -2902,10 +2902,7 @@ RevToaster({
                 revUtils.removeClass(document.body, 'rev-toaster-loaded');
                 setTimeout(function() {
                     that.revToaster.parentNode.removeChild(that.revToaster);
-                    if(typeof revApi === 'object'
-                        && typeof revApi.beacons === 'object') {
-                        revApi.beacons.detach('toaster');
-                    }
+                    revApi.beacons.detach('toaster');
                     removed = true;
                     revUtils.setCookie('revtoaster-closed', 1, (that.options.closed_hours / 24));
                 }, 2000);

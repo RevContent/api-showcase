@@ -6790,11 +6790,7 @@ RevShifter({
 
             revUtils.append(document.body, this.element);
 
-            if(typeof revApi === 'object'
-                && typeof revApi.beacons === 'object'
-                && typeof revApi.beacons.setPluginSource === 'function') {
-                revApi.beacons.setPluginSource('shifter');
-            }
+            revApi.beacons.setPluginSource('shifter');
 
             this.innerWidget = new RevSlider({
                 api_source: 'shift',

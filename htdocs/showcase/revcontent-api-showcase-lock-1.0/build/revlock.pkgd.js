@@ -6830,10 +6830,7 @@ RevLock({
                 revUtils.addClass(that.element, 'unlocked');
                 setTimeout(function() {
                     revUtils.remove(that.element);
-                    if(typeof revApi === 'object'
-                        && typeof revApi.beacons === 'object') {
-                        revApi.beacons.detach('lock');
-                    }
+                    revApi.beacons.detach('lock');
                 }, 1000);
             });
         };
