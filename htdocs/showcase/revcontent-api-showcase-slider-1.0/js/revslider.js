@@ -188,7 +188,7 @@ RevSlider({
 
         this.offset = 0;
         this.page = 1;
-        this.previousPage = 0;
+        this.previousPage = 1;
 
         this.setUp();
 
@@ -619,8 +619,8 @@ RevSlider({
                 for (var i = 0; i < (this.limit - nodes.length); i++) {
                     this.grid.element.appendChild(this.createNewCell());
                 }
-                this.previousPage = 0;
                 this.page = 1;
+                this.previousPage = 1;
                 this.updateDisplayedItems(false);
             }
         }
@@ -743,8 +743,10 @@ RevSlider({
     };
 
     RevSlider.prototype.updateDisplayedItems = function(registerImpressions) {
-        var correctedPage = Math.abs(this.page);
-        this.offset = ((correctedPage * this.increment) - this.increment);
+        this.oldOffset = this.offset;
+
+        this.offset = ((this.page - 1) * this.limit);
+
         var endIndex = this.offset + this.limit;
         var moreItemsNeeded = 0;
         if (endIndex > this.contentItems.length) {
@@ -796,6 +798,8 @@ RevSlider({
         this.checkEllipsis();
     };
 
+    RevSlider.prototype.maxPages = function() {
+        return Math.floor(this.contentItems.length / this.limit);
     };
 
     RevSlider.prototype.attachButtonEvents = function() {
@@ -820,47 +824,64 @@ RevSlider({
         });
     };
 
-    RevSlider.prototype.showNextPage = function() {
+    RevSlider.prototype.showNextPage = function(click) {
         if (!this.updating) {
             this.updating = true;
-            if (this.options.wrap_pages) {
-                if (!this.hasMorePages() || this.page === -1) {
-                    // wrap or reverse
-                    this.page = (this.options.wrap_reverse) ? this.page * -1 : 0;
-                }
+
+            var previousPage = this.page;
+
+            if (this.direction == 'previous') {
+                this.page = this.previousPage;
+            } else {
+                this.page = (this.page + 1);
             }
-            this.previousPage = this.page;
-            this.page = this.page + 1;
+
+            if (this.page > this.maxPages()) {
+                this.page = 1;
+            }else if (this.page === 0) {
+                this.page = this.maxPages();
+            }
+
+            this.lastPage = this.previousPage;
+            this.previousPage = previousPage;
+            this.previousDirection = this.direction;
+
+            this.direction = 'next';
+
             this.createNextPageGrid();
-            if (!this.hasNextPage() && !this.options.wrap_pages) {
-                // Disable forward button
-                this.forwardBtn.style.display = 'none';
-            }
+
             if (click) { // animate right away on click
                 this.animateGrid();
             }
         }
     };
 
-    RevSlider.prototype.showPreviousPage = function() {
+    RevSlider.prototype.showPreviousPage = function(click) {
         if (!this.updating) {
             this.updating = true;
-            if (this.options.wrap_pages) {
-                if (this.options.wrap_reverse) {
-                    if (!this.hasMorePages() || this.page === 1) {
-                        // Reverse direction
-                        this.page = this.page * -1;
-                    }
-                } else if (!this.hasPreviousPage()) {
-                    // Wrap to end
-                    this.page = Math.floor(this.contentItems.length / this.increment);
-                    // Add 1 here as it will be subtracted below.
-                    this.page += 1;
-                }
+
+            var previousPage = this.page;
+
+            if (this.direction == 'next') {
+                this.page = this.previousPage;
+            } else {
+                this.page = (this.page + 1);
             }
-            this.previousPage = this.page;
-            this.page = this.page - 1;
+
+            if (this.page > this.maxPages()) {
+                this.page = 1;
+            }else if (this.page === 0) {
+                this.page = this.maxPages();
+            }
+
+            this.lastPage = this.previousPage;
+            this.previousPage = previousPage;
+            this.previousDirection = this.direction;
+
+            this.direction = 'previous';
+
             this.createNextPageGrid();
+
             if (click) {
                 this.animateGrid();
             }
