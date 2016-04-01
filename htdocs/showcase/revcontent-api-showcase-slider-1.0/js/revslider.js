@@ -278,25 +278,25 @@ RevSlider({
             var insert = 'append';
             if (this.options.vertical) { // up
                 var margin = 'marginBottom';
-                this.gridContainerTransform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
+                this.gridContainerTransform = 'translate3d(0, -'+ (containerHeight + (this.padding * 2)) +'px, 0)';
             } else { // left
                 var margin = 'marginRight';
-                this.gridContainerTransform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
+                this.gridContainerTransform = 'translate3d(-'+ (containerWidth + (this.padding * 2)) +'px, 0, 0)';
             }
         } else { // Slide right or down
             var insert = 'prepend';
             if (this.options.vertical) { // down
                 var margin = 'marginTop';
-                this.gridContainerElement.style.transform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
-                this.gridContainerElement.style.MsTransform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
-                this.gridContainerElement.style.WebkitTransform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
-                this.gridContainerTransform = 'translateY(0px)';
+                this.gridContainerElement.style.transform = 'translate3d(0, -'+ (containerHeight + (this.padding * 2)) +'px, 0)';
+                this.gridContainerElement.style.MsTransform = 'translate3d(0, -'+ (containerHeight + (this.padding * 2)) +'px, 0)';
+                this.gridContainerElement.style.WebkitTransform = 'translate3d(0, -'+ (containerHeight + (this.padding * 2)) +'px, 0)';
+                this.gridContainerTransform = 'translate3d(0, 0, 0)';
             } else { // right
                 var margin = 'marginLeft';
-                this.gridContainerElement.style.transform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
-                this.gridContainerElement.style.MsTransform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
-                this.gridContainerElement.style.WebkitTransform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
-                this.gridContainerTransform = 'translateX(0px)';
+                this.gridContainerElement.style.transform = 'translate3d(-'+ (containerWidth + (this.padding * 2)) +'px, 0, 0)';
+                this.gridContainerElement.style.MsTransform = 'translate3d(-'+ (containerWidth + (this.padding * 2)) +'px, 0, 0)';
+                this.gridContainerElement.style.WebkitTransform = 'translate3d(-'+ (containerWidth + (this.padding * 2)) +'px, 0, 0)';
+                this.gridContainerTransform = 'translate3d(0, 0, 0)';
             }
         }
 
@@ -827,9 +827,9 @@ RevSlider({
             made = true;
             that.gridContainerElement.style.transitionDuration =  '.75s';
             that.gridContainerElement.style.WebkitTransitionDuration =  '.75s';
-            that.gridContainerElement.style.transform = 'translateX(-'+ (that.innerElement.offsetWidth + (that.padding * 2)) +'px)';
-            that.gridContainerElement.style.MsTransform = 'translateX(-'+ (that.innerElement.offsetWidth + (that.padding * 2)) +'px)';
-            that.gridContainerElement.style.WebkitTransform = 'translateX(-'+ (that.innerElement.offsetWidth + (that.padding * 2)) +'px)';
+            that.gridContainerElement.style.transform = 'translate3d(-'+ (that.innerElement.offsetWidth + (that.padding * 2)) +'px, 0, 0)';
+            that.gridContainerElement.style.MsTransform = 'translate3d(-'+ (that.innerElement.offsetWidth + (that.padding * 2)) +'px, 0, 0)';
+            that.gridContainerElement.style.WebkitTransform = 'translate3d(-'+ (that.innerElement.offsetWidth + (that.padding * 2)) +'px, 0, 0)';
             setTimeout(function() {
                 that.updateGrids();
                 made = false;
@@ -845,9 +845,9 @@ RevSlider({
             made = true;
             that.gridContainerElement.style.transitionDuration =  '.75s';
             that.gridContainerElement.style.WebkitTransitionDuration =  '.75s';
-            that.gridContainerElement.style.transform = 'translateX(0px)';
-            that.gridContainerElement.style.MsTransform = 'translateX(0px)';
-            that.gridContainerElement.style.WebkitTransform = 'translateX(0px)';
+            that.gridContainerElement.style.transform = 'translate3d(0, 0, 0)';
+            that.gridContainerElement.style.MsTransform = 'translate3d(0, 0, 0)';
+            that.gridContainerElement.style.WebkitTransform = 'translate3d(0, 0, 0)';
             setTimeout(function() {
                 that.updateGrids();
                 made = false;
@@ -866,9 +866,9 @@ RevSlider({
             that.showNextPage();
 
             movement = movement + 2;
-            that.gridContainerElement.style.transform = 'translateX(-'+ movement +'px)';
-            that.gridContainerElement.style.MsTransform = 'translateX(-'+ movement +'px)';
-            that.gridContainerElement.style.WebkitTransform = 'translateX(-'+ movement +'px)';
+            that.gridContainerElement.style.transform = 'translate3d(-'+ movement +'px, 0, 0)';
+            that.gridContainerElement.style.MsTransform = 'translate3d(-'+ movement +'px, 0, 0)';
+            that.gridContainerElement.style.WebkitTransform = 'translate3d(-'+ movement +'px, 0, 0)';
         });
 
         mc.on('panright', function(e) {
@@ -881,9 +881,9 @@ RevSlider({
             that.showPreviousPage();
 
             movement = movement + 2;
-            that.gridContainerElement.style.transform = 'translateX(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2)) - movement ) +'px)';
-            that.gridContainerElement.style.MsTransform = 'translateX(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2)) - movement ) +'px)'
-            that.gridContainerElement.style.WebkitTransform = 'translateX(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2)) - movement ) +'px)'
+            that.gridContainerElement.style.transform = 'translate3d(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2)) - movement ) +'px), 0, 0';
+            that.gridContainerElement.style.MsTransform = 'translate3d(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2)) - movement ) +'px, 0, 0)'
+            that.gridContainerElement.style.WebkitTransform = 'translate3d(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2)) - movement ) +'px, 0, 0)'
         });
 
         mc.on('panup pandown', function(e) {
@@ -903,9 +903,9 @@ RevSlider({
                 that.gridContainerElement.style.MsTransform = 'none';
                 that.gridContainerElement.style.WebkitTransform = 'none';
             } else {
-                that.gridContainerElement.style.transform = 'translateX(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2))) +'px)';
-                that.gridContainerElement.style.MsTransform = 'translateX(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2))) +'px)'
-                that.gridContainerElement.style.WebkitTransform = 'translateX(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2))) +'px)'
+                that.gridContainerElement.style.transform = 'translate3d(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2))) +'px, 0, 0)';
+                that.gridContainerElement.style.MsTransform = 'translate3d(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2))) +'px, 0, 0)';
+                that.gridContainerElement.style.WebkitTransform = 'translate3d(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2))) +'px, 0, 0)';
             }
 
             that.page = that.previousPage;
