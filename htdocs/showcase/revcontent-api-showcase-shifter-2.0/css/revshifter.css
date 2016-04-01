@@ -165,14 +165,6 @@ body.rev-shifter-no-transform #rev-shifter.rev-shifter {
     margin-top: -18px;
 }
 
-#rev-shifter.rev-shifter.rev-mobile #rev-slider-container {
-    padding-left: 46px;
-}
-
-#rev-shifter.rev-shifter.rev-mobile #rev-slider-container .rev-btn-dual {
-    opacity: 1;
-}
-
 #rev-shifter.rev-shifter.rev-mobile .rev-foot {
     right: 5px;
 }
