@@ -820,7 +820,6 @@ RevSlider({
         });
 
         mc.on('swipeleft', function(ev) {
-            console.log('swipeleft');
             if (made || direction == 'right') {
                 return;
             }
@@ -891,7 +890,6 @@ RevSlider({
         });
 
         mc.on('panend', function(e) {
-            console.log('panend');
             if (made || (updown && !movement)) {
                 return;
             }
