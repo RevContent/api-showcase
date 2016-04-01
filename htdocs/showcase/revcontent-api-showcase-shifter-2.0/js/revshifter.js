@@ -30,9 +30,9 @@ RevShifter({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevShifter = factory(window, window.revUtils, window.revDetect, window.revDisclose, window.revApi);
+    window.RevShifter = factory(window, window.revUtils, window.revDetect, window.revDisclose);
 
-}( window, function factory(window, revUtils, revDetect, revDisclose, revApi) {
+}( window, function factory(window, revUtils, revDetect, revDisclose) {
 'use strict';
 
     var RevShifter;
@@ -118,8 +118,6 @@ RevShifter({
             }
 
             revUtils.append(document.body, this.element);
-
-            revApi.beacons.setPluginSource('shifter');
 
             this.innerWidget = new RevSlider({
                 api_source: 'shift',
