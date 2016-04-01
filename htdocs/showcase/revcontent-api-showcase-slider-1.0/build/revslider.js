@@ -102,9 +102,8 @@ RevSlider({
             max_headline: false,
             text_overlay: false,
             vertical: false,
-            page_increment: true,
-            wrap_pages: true,
-            wrap_reverse: true, // if page_increment is false, this must be false
+            wrap_pages: true, //currently the only supported option
+            wrap_reverse: true, //currently the only supported option
             show_padding: true,
             pages: 4,
             text_right: false,
@@ -143,7 +142,7 @@ RevSlider({
 
         this.mobile = (revDetect.mobile()) ? true : false;
 
-        revUtils.appendStyle('/* inject:css */#rev-slider a,#rev-slider a:focus,#rev-slider a:hover{text-decoration:none}#rev-slider,#rev-slider #rev-slider-grid-container{padding:0;width:100%}#rev-slider #rev-slider-grid{padding:0}#rev-slider #rev-slider-grid-container{clear:both;position:relative;width:100%;-webkit-transition:-webkit-transform;transition:transform;-webkit-transition-timing-function:ease-in-out;transition-timing-function:ease-in-out}#rev-slider #rev-slider-container,#rev-slider #rev-slider-inner{width:100%;clear:both;overflow:hidden;position:relative}#rev-slider{clear:both}#rev-slider *{box-sizing:border-box;font-size:inherit;line-height:inherit;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;margin:0;padding:0}#rev-slider #rev-slider-container .rev-btn-wrapper .rev-chevron{display:inline-block;height:36px;top:50%;margin-top:-18px;position:absolute;left:50%;margin-left:-18px;fill:#fff}#rev-slider #rev-slider-container .rev-btn-wrapper{cursor:pointer;position:absolute;height:100%;width:40px;text-align:center;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;z-index:10000000000;top:0}#rev-slider.rev-slider-vertical #rev-slider-container .rev-btn-wrapper{width:100%}#rev-slider.rev-slider-vertical #rev-slider-container .rev-btn-wrapper-forward.rev-btn-wrapper{bottom:0;top:auto}#rev-slider #rev-slider-container .rev-btn-container{position:relative;background-color:#333;opacity:.3;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;height:100%;text-align:center;border-radius:5px}#rev-slider #rev-slider-container .rev-btn-container label{cursor:pointer}#rev-slider #rev-slider-container .rev-btn-container:hover{opacity:.8}#rev-slider #rev-slider-container .rev-btn-dual{position:absolute;left:5px;z-index:1;background:#fff;box-shadow:0 0 2px 0 rgba(89,89,89,1);top:50%;margin-top:-36px;border-radius:2px;opacity:0;-webkit-transition:opacity .2s;transition:opacity .2s}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper{position:static;width:auto;height:auto;top:auto}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-container{background-color:inherit;opacity:1;height:36px;border-radius:0}#rev-slider #rev-slider-container:hover .rev-btn-dual{opacity:1}#rev-slider #rev-slider-container .rev-btn-dual.rev-btn-dual-right{right:5px;left:auto}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper.rev-btn-wrapper-back{border-bottom:1px solid #ddd}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper .rev-chevron{display:inline-block;top:auto;margin-top:0;position:static;left:auto;margin-left:0;fill:#ccc}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper:hover .rev-chevron{fill:#aaa}#rev-slider #rev-slider-container:hover .rev-btn-wrapper{opacity:1!important}#rev-slider.rev-slider-text-right .rev-image{float:left;margin-right:5px}#rev-slider.rev-slider-text-right .rev-ad a .rev-headline{margin-top:0!important}#rev-slider a{color:inherit}#rev-slider:focus{outline:0}#rev-slider .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-slider .rev-sponsored{line-height:24px;font-size:12px}#rev-slider .rev-sponsored.bottom-right,#rev-slider .rev-sponsored.top-right{float:right}#rev-slider .rev-sponsored.top-right a{vertical-align:-5px}#rev-slider .rev-sponsored a{color:#999}#rev-slider .rev-ad a{display:block;height:100%;color:#222}#rev-slider .rev-image{position:relative;-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee;overflow:hidden}#rev-slider .rev-image img{position:absolute;top:0;left:0;width:100%;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-slider.loaded .rev-image{background:0 0}#rev-slider.loaded .rev-image img{opacity:1}#rev-slider .rev-headline,#rev-slider .rev-provider{margin:0 10px;text-align:left}#rev-slider .rev-headline{margin-top:12px;overflow:hidden}#rev-slider .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;overflow:hidden;margin:0}#rev-slider .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}#rev-slider .rev-ad{border-radius:5px;overflow:hidden;background:#fff;z-index:1}#rev-slider .rev-ad img{border-top-left-radius:5px;border-top-right-radius:5px}#rev-slider .rev-content.blur{-webkit-filter:blur(3px);filter:blur(3px)}#rev-slider .rev-content{-webkit-transition-property:opacity;transition-property:opacity;-webkit-transition-duration:.5s;transition-duration:.5s;opacity:1}#rev-slider .rev-content.rev-next{-webkit-transition-property:opacity;transition-property:opacity;-webkit-transition-duration:.5s;transition-duration:.5s;opacity:.5}#rev-slider.rev-slider-text-overlay .rev-ad{position:relative}#rev-slider.rev-slider-text-overlay .rev-ad a{height:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-headline-brand{position:absolute;bottom:4px;color:#fff;text-shadow:1px 1px rgba(0,0,0,.8)}#rev-slider.rev-slider-text-overlay .rev-ad .rev-headline-brand .rev-provider{display:none}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{border-radius:5px;position:absolute;top:0;height:100%;width:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;content:"";display:block}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after{background:-webkit-linear-gradient(top,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%);background:linear-gradient(to bottom,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{opacity:0;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%);background:linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:after{opacity:0}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:before{opacity:1}#rev-opt-out .rd-close-button{position:absolute;cursor:pointer;right:10px;z-index:10}#rev-opt-out a{cursor:pointer!important}#rev-opt-out .rd-box-wrap{display:none;z-index:2147483641}#rev-opt-out .rd-box-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}#rev-opt-out .rd-vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}#rev-opt-out .rd-box{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}#rev-opt-out .rd-normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}#rev-opt-out .rd-full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}#rev-opt-out .rd-header{height:20px;position:absolute;right:0}#rev-opt-out .rd-about{font-family:Arial,sans-serif;font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}#rev-opt-out .rd-about .rd-logo{background:url(https://serve.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}#rev-opt-out .rd-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}#rev-opt-out .rd-about p#main{text-align:left}#rev-opt-out .rd-about h2{color:#777;font-family:Arial,sans-serif;font-size:16px;line-height:18px}#rev-opt-out .rd-about a{color:#00cb43}#rev-opt-out .rd-well{border:1px solid #E0E0E0;padding:20px;text-align:center;border-radius:2px;margin:20px 0 0}#rev-opt-out .rd-well h2{margin-top:0}#rev-opt-out .rd-well p{margin-bottom:0}#rev-opt-out .rd-opt-out{text-align:center}#rev-opt-out .rd-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-slider');
+        revUtils.appendStyle('/* inject:css */#rev-slider a,#rev-slider a:focus,#rev-slider a:hover{text-decoration:none}#rev-slider,#rev-slider #rev-slider-grid-container{padding:0;width:100%}#rev-slider #rev-slider-grid{padding:0}#rev-slider #rev-slider-grid-container{clear:both;position:relative;width:100%;-webkit-transition:-webkit-transform;transition:transform;-webkit-transition-timing-function:ease-in-out;transition-timing-function:ease-in-out}#rev-slider #rev-slider-container,#rev-slider #rev-slider-inner{width:100%;clear:both;overflow:hidden;position:relative}#rev-slider{clear:both}#rev-slider *{user-drag:none;-webkit-user-drag:none;box-sizing:border-box;font-size:inherit;line-height:inherit;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;margin:0;padding:0}#rev-slider #rev-slider-container .rev-btn-wrapper .rev-chevron{display:inline-block;height:36px;top:50%;margin-top:-18px;position:absolute;left:50%;margin-left:-18px;fill:#fff}#rev-slider #rev-slider-container .rev-btn-wrapper{cursor:pointer;position:absolute;height:100%;width:40px;text-align:center;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;z-index:10000000000;top:0}#rev-slider.rev-slider-vertical #rev-slider-container .rev-btn-wrapper{width:100%}#rev-slider.rev-slider-vertical #rev-slider-container .rev-btn-wrapper-forward.rev-btn-wrapper{bottom:0;top:auto}#rev-slider #rev-slider-container .rev-btn-container{position:relative;background-color:#333;opacity:.3;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;height:100%;text-align:center;border-radius:5px}#rev-slider #rev-slider-container .rev-btn-container label{cursor:pointer}#rev-slider #rev-slider-container .rev-btn-container:hover{opacity:.8}#rev-slider #rev-slider-container .rev-btn-dual{position:absolute;left:5px;z-index:1;background:#fff;box-shadow:0 0 2px 0 rgba(89,89,89,1);top:50%;margin-top:-36px;border-radius:2px;opacity:0;-webkit-transition:opacity .2s;transition:opacity .2s}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper{position:static;width:auto;height:auto;top:auto}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-container{background-color:inherit;opacity:1;height:36px;border-radius:0}#rev-slider #rev-slider-container:hover .rev-btn-dual{opacity:1}#rev-slider #rev-slider-container .rev-btn-dual.rev-btn-dual-right{right:5px;left:auto}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper.rev-btn-wrapper-back{border-bottom:1px solid #ddd}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper .rev-chevron{display:inline-block;top:auto;margin-top:0;position:static;left:auto;margin-left:0;fill:#ccc}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper:hover .rev-chevron{fill:#aaa}#rev-slider #rev-slider-container:hover .rev-btn-wrapper{opacity:1!important}#rev-slider.rev-slider-text-right .rev-image{float:left;margin-right:5px}#rev-slider.rev-slider-text-right .rev-ad a .rev-headline{margin-top:0!important}#rev-slider a{color:inherit}#rev-slider:focus{outline:0}#rev-slider .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-slider .rev-sponsored{line-height:24px;font-size:12px}#rev-slider .rev-sponsored.bottom-right,#rev-slider .rev-sponsored.top-right{float:right}#rev-slider .rev-sponsored.top-right a{vertical-align:-5px}#rev-slider .rev-sponsored a{color:#999}#rev-slider .rev-ad a{display:block;height:100%;color:#222}#rev-slider .rev-image{position:relative;-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee;overflow:hidden}#rev-slider .rev-image img{position:absolute;top:0;left:0;width:100%;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-slider.loaded .rev-image{background:0 0}#rev-slider.loaded .rev-image img{opacity:1}#rev-slider .rev-headline,#rev-slider .rev-provider{margin:0 10px;text-align:left}#rev-slider .rev-headline{margin-top:12px;overflow:hidden}#rev-slider .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;overflow:hidden;margin:0}#rev-slider .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}#rev-slider .rev-ad{border-radius:5px;overflow:hidden;background:#fff;z-index:1}#rev-slider .rev-ad img{border-top-left-radius:5px;border-top-right-radius:5px}#rev-slider .rev-content.blur{-webkit-filter:blur(3px);filter:blur(3px)}#rev-slider .rev-content{-webkit-transition-property:opacity;transition-property:opacity;-webkit-transition-duration:.5s;transition-duration:.5s;opacity:1}#rev-slider .rev-content.rev-next{-webkit-transition-property:opacity;transition-property:opacity;-webkit-transition-duration:.5s;transition-duration:.5s;opacity:.5}#rev-slider.rev-slider-text-overlay .rev-ad{position:relative}#rev-slider.rev-slider-text-overlay .rev-ad a{height:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-headline-brand{position:absolute;bottom:4px;color:#fff;text-shadow:1px 1px rgba(0,0,0,.8)}#rev-slider.rev-slider-text-overlay .rev-ad .rev-headline-brand .rev-provider{display:none}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{border-radius:5px;position:absolute;top:0;height:100%;width:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;content:"";display:block}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after{background:-webkit-linear-gradient(top,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%);background:linear-gradient(to bottom,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{opacity:0;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%);background:linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:after{opacity:0}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:before{opacity:1}#rev-opt-out .rd-close-button{position:absolute;cursor:pointer;right:10px;z-index:10}#rev-opt-out a{cursor:pointer!important}#rev-opt-out .rd-box-wrap{display:none;z-index:2147483641}#rev-opt-out .rd-box-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}#rev-opt-out .rd-vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}#rev-opt-out .rd-box{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}#rev-opt-out .rd-normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}#rev-opt-out .rd-full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}#rev-opt-out .rd-header{height:20px;position:absolute;right:0}#rev-opt-out .rd-about{font-family:Arial,sans-serif;font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}#rev-opt-out .rd-about .rd-logo{background:url(https://serve.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}#rev-opt-out .rd-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}#rev-opt-out .rd-about p#main{text-align:left}#rev-opt-out .rd-about h2{color:#777;font-family:Arial,sans-serif;font-size:16px;line-height:18px}#rev-opt-out .rd-about a{color:#00cb43}#rev-opt-out .rd-well{border:1px solid #E0E0E0;padding:20px;text-align:center;border-radius:2px;margin:20px 0 0}#rev-opt-out .rd-well h2{margin-top:0}#rev-opt-out .rd-well p{margin-bottom:0}#rev-opt-out .rd-opt-out{text-align:center}#rev-opt-out .rd-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-slider');
 
         this.contentItems = [];
 
@@ -161,8 +160,8 @@ RevSlider({
         this.gridContainerElement = document.createElement('div');
         this.gridContainerElement.id = 'rev-slider-grid-container';
 
-        this.gridElement = document.createElement('div');
-        this.gridElement.id = 'rev-slider-grid';
+        var gridElement = document.createElement('div');
+        gridElement.id = 'rev-slider-grid';
 
         this.element = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
         this.element.style.width = '100%';
@@ -173,11 +172,11 @@ RevSlider({
 
         revUtils.append(this.innerElement, this.gridContainerElement);
 
-        revUtils.append(this.gridContainerElement, this.gridElement);
+        revUtils.append(this.gridContainerElement, gridElement);
 
         revUtils.append(this.element, this.containerElement);
 
-        this.grid = new AnyGrid(this.gridElement, this.gridOptions());
+        this.grid = new AnyGrid(gridElement, this.gridOptions());
 
         this.grid.on('resized', function() {
             that.resize();
@@ -189,7 +188,7 @@ RevSlider({
 
         this.offset = 0;
         this.page = 1;
-        this.previousPage = 0;
+        this.previousPage = 1;
 
         this.setUp();
 
@@ -215,7 +214,7 @@ RevSlider({
 
     RevSlider.prototype.createCells = function() {
         for (var i = 0; i < this.limit; i++) {
-            this.gridElement.appendChild(this.createNewCell());
+            this.grid.element.appendChild(this.createNewCell());
         }
     };
 
@@ -268,9 +267,6 @@ RevSlider({
     //             duration = 0.75;
     //         }
     //     }
-    //     if (!this.options.page_increment) {
-    //         duration = duration * .5;
-    //     }
     //     return duration;
     // };
 
@@ -278,50 +274,48 @@ RevSlider({
         var containerWidth = this.innerElement.offsetWidth;
         var containerHeight = this.innerElement.offsetHeight;
 
-        var animationDuration = 1.75; //this.getAnimationDuration(); TODO: make dynamic
-
-        if (this.page > this.previousPage) { // slide left or up
+        if (this.direction == 'next') { // slide left or up
             var insert = 'append';
             if (this.options.vertical) { // up
                 var margin = 'marginBottom';
-                var gridContainerTransform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
+                this.gridContainerTransform = 'translate3d(0, -'+ (containerHeight + (this.padding * 2)) +'px, 0)';
             } else { // left
                 var margin = 'marginRight';
-                var gridContainerTransform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
+                this.gridContainerTransform = 'translate3d(-'+ (containerWidth + (this.padding * 2)) +'px, 0, 0)';
             }
         } else { // Slide right or down
             var insert = 'prepend';
             if (this.options.vertical) { // down
                 var margin = 'marginTop';
-                this.gridContainerElement.style.transform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
-                this.gridContainerElement.style.MsTransform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
-                this.gridContainerElement.style.WebkitTransform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
-                var gridContainerTransform = 'translateY(0px)';
+                this.gridContainerElement.style.transform = 'translate3d(0, -'+ (containerHeight + (this.padding * 2)) +'px, 0)';
+                this.gridContainerElement.style.MsTransform = 'translate3d(0, -'+ (containerHeight + (this.padding * 2)) +'px, 0)';
+                this.gridContainerElement.style.WebkitTransform = 'translate3d(0, -'+ (containerHeight + (this.padding * 2)) +'px, 0)';
+                this.gridContainerTransform = 'translate3d(0, 0, 0)';
             } else { // right
                 var margin = 'marginLeft';
-                this.gridContainerElement.style.transform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
-                this.gridContainerElement.style.MsTransform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
-                this.gridContainerElement.style.WebkitTransform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
-                var gridContainerTransform = 'translateX(0px)';
+                this.gridContainerElement.style.transform = 'translate3d(-'+ (containerWidth + (this.padding * 2)) +'px, 0, 0)';
+                this.gridContainerElement.style.MsTransform = 'translate3d(-'+ (containerWidth + (this.padding * 2)) +'px, 0, 0)';
+                this.gridContainerElement.style.WebkitTransform = 'translate3d(-'+ (containerWidth + (this.padding * 2)) +'px, 0, 0)';
+                this.gridContainerTransform = 'translate3d(0, 0, 0)';
             }
         }
 
-        var oldGrid = this.grid;
+        this.oldGrid = this.grid;
 
-        this.gridElement.style[margin] = (this.padding * 2) + 'px';
+        this.grid.element.style[margin] = (this.padding * 2) + 'px';
 
-        this.gridElement = document.createElement('div');
-        this.gridElement.id = 'rev-slider-grid';
+        var gridElement = document.createElement('div');//something up here
+        gridElement.id = 'rev-slider-grid';
 
-        revUtils[insert](this.gridContainerElement, this.gridElement);
+        revUtils[insert](this.gridContainerElement, gridElement);
 
         var options = this.gridOptions();
         options.isResizeBound = false;
-        this.grid = new AnyGrid(this.gridElement, options);
+        this.grid = new AnyGrid(gridElement, options);
 
         if (!this.options.vertical) {
-            oldGrid.element.style.width = containerWidth + 'px';
-            oldGrid.element.style.float = 'left';
+            this.oldGrid.element.style.width = containerWidth + 'px';
+            this.oldGrid.element.style.float = 'left';
 
             this.grid.element.style.width = containerWidth + 'px';
             this.grid.element.style.float = 'left';
@@ -337,24 +331,38 @@ RevSlider({
         this.grid.layout();
 
         this.updateDisplayedItems(true);
+    };
+
+    RevSlider.prototype.animateGrid = function(){
+        var animationDuration = 1.75; //this.getAnimationDuration(); TODO: make dynamic
 
         this.gridContainerElement.style.transitionDuration = animationDuration + 's';
         this.gridContainerElement.style.WebkitTransitionDuration = animationDuration + 's';
-        this.gridContainerElement.style.transform = gridContainerTransform;
-        this.gridContainerElement.style.MsTransform = gridContainerTransform;
-        this.gridContainerElement.style.WebkitTransform = gridContainerTransform;
+        this.gridContainerElement.style.transform = this.gridContainerTransform;
+        this.gridContainerElement.style.MsTransform = this.gridContainerTransform;
+        this.gridContainerElement.style.WebkitTransform = this.gridContainerTransform;
 
         var that = this;
         setTimeout(function() {
-            that.updateGrids(oldGrid);
+            that.updateGrids();
         }, animationDuration * 1000);
     };
 
-    RevSlider.prototype.updateGrids = function(oldGrid) {
-        this.gridElement.style.transform = 'none';
-        this.gridElement.style.MsTransform = 'none';
-        this.gridElement.style.WebkitTransform = 'none';
-        this.gridElement.className = '';
+    RevSlider.prototype.updateGrids = function(revert) {
+        if (revert) {
+            var removeGrid = this.grid;
+            var transitionGrid = this.oldGrid;
+        } else {
+            var removeGrid = this.oldGrid;
+            var transitionGrid = this.grid;
+        }
+
+        transitionGrid.element.style.transform = 'none';
+        transitionGrid.element.style.MsTransform = 'none';
+        transitionGrid.element.style.WebkitTransform = 'none';
+        transitionGrid.element.style.marginLeft = '0';
+        transitionGrid.element.style.marginRight = '0';
+        transitionGrid.element.className = '';
 
         this.gridContainerElement.style.transitionDuration = '0s';
         this.gridContainerElement.style.WebkitTransitionDuration = '0s';
@@ -363,9 +371,14 @@ RevSlider({
         this.gridContainerElement.style.MsTransform = 'none';
         this.gridContainerElement.style.WebkitTransform = 'none';
 
-        oldGrid.remove();
-        oldGrid.destroy();
-        revUtils.remove(oldGrid.element);
+        removeGrid.remove();
+        removeGrid.destroy();
+        revUtils.remove(removeGrid.element);
+
+        if (revert) {
+            this.grid = transitionGrid;
+            this.offset = this.oldOffset;
+        }
 
         if (!this.options.vertical) {
             this.grid.element.style.width = 'auto';
@@ -374,10 +387,9 @@ RevSlider({
             this.gridContainerElement.style.width = '100%';
         }
 
-        var that = this;
         this.grid.bindResize();
         this.grid.on('resized', function() {
-            that.resize();
+            this.resize();
         });
 
         this.updating = false;
@@ -386,8 +398,6 @@ RevSlider({
     RevSlider.prototype.setUp = function() {
         this.grid.layout();
         this.limit = this.getLimit();
-        var rowsCols = (this.options.vertical) ? this.grid.perRow : this.options.rows[this.grid.getBreakPoint()];
-        this.increment = (this.options.page_increment) ? this.limit : rowsCols;
 
         if (this.options.image_ratio == 'square') {
             this.imageHeight = 400;
@@ -549,14 +559,9 @@ RevSlider({
             (this.options.rows !== oldOpts.rows) ||
             (this.options.headline_size !== oldOpts.headline_size) ||
             (this.options.vertical !== oldOpts.vertical) ||
-            (this.options.page_increment !== oldOpts.page_increment) ||
             (this.options.show_padding !== oldOpts.show_padding)) {
             this.options.perRow = this.options.per_row; // AnyGrid needs camels
             this.resize();
-        }
-
-        if (!this.options.page_increment) {
-            this.options.wrap_reverse = false;
         }
 
         if ((this.options.header !== oldOpts.header) || this.options.rev_position !== oldOpts.rev_position) {
@@ -610,10 +615,10 @@ RevSlider({
                 }
             } else {
                 for (var i = 0; i < (this.limit - nodes.length); i++) {
-                    this.gridElement.appendChild(this.createNewCell());
+                    this.grid.element.appendChild(this.createNewCell());
                 }
-                this.previousPage = 0;
                 this.page = 1;
+                this.previousPage = 1;
                 this.updateDisplayedItems(false);
             }
         }
@@ -656,7 +661,7 @@ RevSlider({
         if (this.options.max_headline && !this.options.text_right) { // text_right should be limited, but don't waste for max_headline only
             return;
         }
-        var headlines = this.gridElement.querySelectorAll('.rev-content .rev-headline');
+        var headlines = this.grid.element.querySelectorAll('.rev-content .rev-headline');
         for (var i = 0; i < headlines.length; i++) {
             var text,
                 container = headlines[i],
@@ -713,7 +718,7 @@ RevSlider({
             that.contentItems = resp;
             that.updateDisplayedItems(that.options.visible);
 
-            imagesLoaded( that.gridElement, function() {
+            imagesLoaded( that.grid.element, function() {
                 revUtils.addClass(that.containerElement, 'loaded');
             });
         });
@@ -736,8 +741,10 @@ RevSlider({
     };
 
     RevSlider.prototype.updateDisplayedItems = function(registerImpressions) {
-        var correctedPage = Math.abs(this.page);
-        this.offset = ((correctedPage * this.increment) - this.increment);
+        this.oldOffset = this.offset;
+
+        this.offset = ((this.page - 1) * this.limit);
+
         var endIndex = this.offset + this.limit;
         var moreItemsNeeded = 0;
         if (endIndex > this.contentItems.length) {
@@ -756,7 +763,7 @@ RevSlider({
             this.headlineHeight = this.getMaxHeadlineHeight();
         }
 
-        var ads = this.gridElement.querySelectorAll('.rev-ad');
+        var ads = this.grid.element.querySelectorAll('.rev-ad');
 
         for (var i = 0; i < this.displayedItems.length; i++) {
             var ad = ads[i],
@@ -789,24 +796,128 @@ RevSlider({
         this.checkEllipsis();
     };
 
-    RevSlider.prototype.hasNextPage = function() {
-        //var pageOffset = (this.options.page_increment) ? 0 : this.limit;
-        var correctedPage = Math.abs(this.page);
-        return this.contentItems.length  >= (correctedPage * this.increment) + this.increment;
-    };
-
-    RevSlider.prototype.hasPreviousPage = function() {
-        var correctedPage = Math.abs(this.page);
-        return (correctedPage - 1) > 0;
-    };
-
-    RevSlider.prototype.hasMorePages = function() {
-        var correctedPage = Math.abs(this.page);
-        return this.contentItems.length  >= (correctedPage * this.increment) + this.increment;
+    RevSlider.prototype.maxPages = function() {
+        return Math.floor(this.contentItems.length / this.limit);
     };
 
     RevSlider.prototype.attachButtonEvents = function() {
         var that = this;
+
+        var mc = new Hammer(this.element);
+        mc.add(new Hammer.Swipe());
+        mc.add(new Hammer.Pan({ threshold: 1 })).recognizeWith(mc.get('swipe'));
+
+        var movement = 0;
+        var made = false;
+        var direction = false;
+        var updown = false;
+
+        this.element.addEventListener('click', function(e) {
+            if (made || movement) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
+        });
+
+        mc.on('swipeleft', function(ev) {
+            if (made || direction == 'right') {
+                return;
+            }
+            made = true;
+            that.gridContainerElement.style.transitionDuration =  '.75s';
+            that.gridContainerElement.style.WebkitTransitionDuration =  '.75s';
+            that.gridContainerElement.style.transform = 'translate3d(-'+ (that.innerElement.offsetWidth + (that.padding * 2)) +'px, 0, 0)';
+            that.gridContainerElement.style.MsTransform = 'translate3d(-'+ (that.innerElement.offsetWidth + (that.padding * 2)) +'px, 0, 0)';
+            that.gridContainerElement.style.WebkitTransform = 'translate3d(-'+ (that.innerElement.offsetWidth + (that.padding * 2)) +'px, 0, 0)';
+            setTimeout(function() {
+                that.updateGrids();
+                made = false;
+                direction = false;
+            }, 750);
+            movement = 0;
+        });
+
+        mc.on('swiperight', function(e) {
+            if (made || direction == 'left') {
+                return;
+            }
+            made = true;
+            that.gridContainerElement.style.transitionDuration =  '.75s';
+            that.gridContainerElement.style.WebkitTransitionDuration =  '.75s';
+            that.gridContainerElement.style.transform = 'translate3d(0, 0, 0)';
+            that.gridContainerElement.style.MsTransform = 'translate3d(0, 0, 0)';
+            that.gridContainerElement.style.WebkitTransform = 'translate3d(0, 0, 0)';
+            setTimeout(function() {
+                that.updateGrids();
+                made = false;
+                direction = false;
+            }, 750);
+            movement = 0;
+        });
+
+        mc.on('panleft', function(e) {
+            if (made || direction == 'right') {
+                return;
+            }
+            updown = false;
+
+            direction = 'left';
+            that.showNextPage();
+
+            movement = movement + 2;
+            that.gridContainerElement.style.transform = 'translate3d(-'+ movement +'px, 0, 0)';
+            that.gridContainerElement.style.MsTransform = 'translate3d(-'+ movement +'px, 0, 0)';
+            that.gridContainerElement.style.WebkitTransform = 'translate3d(-'+ movement +'px, 0, 0)';
+        });
+
+        mc.on('panright', function(e) {
+            if (made || direction == 'left') {
+                return;
+            }
+            updown = false;
+
+            direction = 'right';
+            that.showPreviousPage();
+
+            movement = movement + 2;
+            that.gridContainerElement.style.transform = 'translate3d(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2)) - movement ) +'px), 0, 0';
+            that.gridContainerElement.style.MsTransform = 'translate3d(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2)) - movement ) +'px, 0, 0)'
+            that.gridContainerElement.style.WebkitTransform = 'translate3d(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2)) - movement ) +'px, 0, 0)'
+        });
+
+        mc.on('panup pandown', function(e) {
+            updown = true;
+        });
+
+        mc.on('panend', function(e) {
+            if (made || (updown && !movement)) {
+                return;
+            }
+
+            that.gridContainerElement.style.transitionDuration = '.3s';
+            that.gridContainerElement.style.WebkitTransitionDuration =  '.3s';
+            if (direction == 'left') {
+                that.gridContainerElement.style.transform = 'none';
+                that.gridContainerElement.style.MsTransform = 'none';
+                that.gridContainerElement.style.WebkitTransform = 'none';
+            } else {
+                that.gridContainerElement.style.transform = 'translate3d(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2))) +'px, 0, 0)';
+                that.gridContainerElement.style.MsTransform = 'translate3d(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2))) +'px, 0, 0)';
+                that.gridContainerElement.style.WebkitTransform = 'translate3d(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2))) +'px, 0, 0)';
+            }
+
+            that.page = that.previousPage;
+            that.direction = that.previousDirection;
+            that.previousPage = that.lastPage;
+
+            setTimeout(function() {
+                that.updateGrids(true);
+                movement = 0;
+                made = false;
+                direction = false;
+            }, 300);
+        });
+
         if (this.options.buttons.dual && !revDetect.mobile()) {
             this.containerElement.addEventListener('mousemove', function(e) {
                 // get left or right cursor position
@@ -819,60 +930,74 @@ RevSlider({
         }
 
         this.forwardBtn.addEventListener('click', function() {
-            that.showNextPage();
+            that.showNextPage(true);
         });
 
         this.backBtn.addEventListener('click', function() {
-            that.showPreviousPage();
+            that.showPreviousPage(true);
         });
     };
 
-    RevSlider.prototype.showNextPage = function() {
+    RevSlider.prototype.showNextPage = function(click) {
         if (!this.updating) {
             this.updating = true;
-            if (this.options.wrap_pages) {
-                if (!this.hasMorePages() || this.page === -1) {
-                    // wrap or reverse
-                    this.page = (this.options.wrap_reverse) ? this.page * -1 : 0;
-                }
+
+            var previousPage = this.page;
+
+            if (this.direction == 'previous') {
+                this.page = this.previousPage;
+            } else {
+                this.page = (this.page + 1);
             }
-            this.previousPage = this.page;
-            this.page = this.page + 1;
+
+            if (this.page > this.maxPages()) {
+                this.page = 1;
+            }else if (this.page === 0) {
+                this.page = this.maxPages();
+            }
+
+            this.lastPage = this.previousPage;
+            this.previousPage = previousPage;
+            this.previousDirection = this.direction;
+
+            this.direction = 'next';
+
             this.createNextPageGrid();
-            if (!this.hasNextPage() && !this.options.wrap_pages) {
-                // Disable forward button
-                this.forwardBtn.style.display = 'none';
-            }
-            if (this.hasPreviousPage()) {
-                this.backBtn.style.display = 'block';
+
+            if (click) { // animate right away on click
+                this.animateGrid();
             }
         }
     };
 
-    RevSlider.prototype.showPreviousPage = function() {
+    RevSlider.prototype.showPreviousPage = function(click) {
         if (!this.updating) {
             this.updating = true;
-            if (this.options.wrap_pages) {
-                if (this.options.wrap_reverse) {
-                    if (!this.hasMorePages() || this.page === 1) {
-                        // Reverse direction
-                        this.page = this.page * -1;
-                    }
-                } else if (!this.hasPreviousPage()) {
-                    // Wrap to end
-                    this.page = Math.floor(this.contentItems.length / this.increment);
-                    // Add 1 here as it will be subtracted below.
-                    this.page += 1;
-                }
-            }
-            this.previousPage = this.page;
-            this.page = this.page - 1;
-            this.createNextPageGrid();
-            if (!this.hasPreviousPage() && !this.options.wrap_pages) {
-                // Disable back button
-                this.backBtn.style.display = 'none';
+
+            var previousPage = this.page;
+
+            if (this.direction == 'next') {
+                this.page = this.previousPage;
             } else {
-                this.forwardBtn.style.display = 'block';
+                this.page = (this.page + 1);
+            }
+
+            if (this.page > this.maxPages()) {
+                this.page = 1;
+            }else if (this.page === 0) {
+                this.page = this.maxPages();
+            }
+
+            this.lastPage = this.previousPage;
+            this.previousPage = previousPage;
+            this.previousDirection = this.direction;
+
+            this.direction = 'previous';
+
+            this.createNextPageGrid();
+
+            if (click) {
+                this.animateGrid();
             }
         }
     };
@@ -884,7 +1009,7 @@ RevSlider({
             var headlines = Math.floor(verticalSpace / this.headlineLineHeight);
             maxHeight = headlines * this.headlineLineHeight;
         } else {
-            var ads = this.gridElement.querySelectorAll('.rev-ad');
+            var ads = this.grid.element.querySelectorAll('.rev-ad');
             for (var i = 0; i < this.limit; i++) {
                 var ad = ads[i];
                 var el = document.createElement('div');
