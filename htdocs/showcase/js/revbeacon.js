@@ -10,6 +10,7 @@
         self.parent = document.getElementsByTagName('body')[0];
         self.pluginSource = '';
         self.push = true;
+        self.pushed = 0;
         self.enabledBeacons = ["quantcast", "comscore"];
         self.renderedBeacons = [];
         self.beacons = {
@@ -104,7 +105,7 @@
 
     RevBeacon.prototype.attach = function(){
         var self = this;
-        if(true === self.push) {
+        if(true === self.push && !self.pushed) {
             for (var b = 0; b < self.enabledBeacons.length; b++) {
                 var beaconId = self.enabledBeacons[b];
                 var beacon = self.beacons[beaconId];
@@ -129,6 +130,7 @@
                     self.renderedBeacons.push(document.getElementById(beaconDomId));
                 }
             }
+            self.pushed = self.renderedBeacons.length;
         }
         return self;
     };
@@ -147,6 +149,7 @@
 
             }
         }
+        self.pushed = 0;
         return self;
     };
 
