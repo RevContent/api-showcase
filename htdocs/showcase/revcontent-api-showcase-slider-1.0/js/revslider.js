@@ -334,8 +334,7 @@ RevSlider({
     RevSlider.prototype.animateGrid = function(){
         var animationDuration = 1.75; //this.getAnimationDuration(); TODO: make dynamic
 
-        this.gridContainerElement.style.transitionDuration = animationDuration + 's';
-        this.gridContainerElement.style.WebkitTransitionDuration = animationDuration + 's';
+        revUtils.transitionDurationCss(this.gridContainerElement, animationDuration + 's');
         revUtils.transformCss(this.gridContainerElement, this.gridContainerTransform);
 
         var that = this;
@@ -358,8 +357,7 @@ RevSlider({
         transitionGrid.element.style.marginRight = '0';
         transitionGrid.element.className = '';
 
-        this.gridContainerElement.style.transitionDuration = '0s';
-        this.gridContainerElement.style.WebkitTransitionDuration = '0s';
+        revUtils.transitionDurationCss(this.gridContainerElement,  '0s');
 
         revUtils.transformCss(this.gridContainerElement, 'none');
 
@@ -831,8 +829,7 @@ RevSlider({
                 return;
             }
             made = true;
-            that.gridContainerElement.style.transitionDuration =  '.75s';
-            that.gridContainerElement.style.WebkitTransitionDuration =  '.75s';
+            revUtils.transitionDurationCss(that.gridContainerElement, '.75s');
             revUtils.transformCss(that.gridContainerElement, 'translate3d(-'+ (that.innerElement.offsetWidth + (that.padding * 2)) +'px, 0, 0)');
             setTimeout(function() {
                 that.updateGrids();
@@ -847,8 +844,7 @@ RevSlider({
                 return;
             }
             made = true;
-            that.gridContainerElement.style.transitionDuration =  '.75s';
-            that.gridContainerElement.style.WebkitTransitionDuration =  '.75s';
+            revUtils.transitionDurationCss(that.gridContainerElement, '.75s');
             revUtils.transformCss(that.gridContainerElement, 'translate3d(0, 0, 0)');
             setTimeout(function() {
                 that.updateGrids();
@@ -893,8 +889,7 @@ RevSlider({
                 return;
             }
 
-            that.gridContainerElement.style.transitionDuration = '.3s';
-            that.gridContainerElement.style.WebkitTransitionDuration =  '.3s';
+            revUtils.transitionDurationCss(that.gridContainerElement, '.3s');
             if (direction == 'left') {
                 revUtils.transformCss(that.gridContainerElement, 'none');
             } else {
