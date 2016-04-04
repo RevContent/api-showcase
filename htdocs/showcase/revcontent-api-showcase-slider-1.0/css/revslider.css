@@ -29,6 +29,7 @@
 
 #rev-slider {
     clear: both;
+    cursor: move;
     /*margin: 4px;*/
 }
 
