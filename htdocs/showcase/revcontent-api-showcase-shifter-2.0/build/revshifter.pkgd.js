@@ -8706,8 +8706,6 @@ RevSlider({
                 return;
             }
 
-            that.gridContainerElement.style.transitionDuration = '.3s';
-            that.gridContainerElement.style.WebkitTransitionDuration =  '.3s';
             revUtils.transitionDurationCss(that.gridContainerElement, '.3s');
             if (direction == 'left') {
                 revUtils.transformCss(that.gridContainerElement, 'none');
@@ -8868,9 +8866,9 @@ RevShifter({
                 xxs: 1,
                 xs: 1,
                 sm: 2,
-                md: 3,
-                lg: 4,
-                xl: 5,
+                md: 2,
+                lg: 3,
+                xl: 4,
                 xxl: 5
             },
             rows: 1,
