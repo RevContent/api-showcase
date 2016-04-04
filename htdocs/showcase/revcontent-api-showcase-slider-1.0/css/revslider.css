@@ -71,6 +71,7 @@
     user-select: none;
     transition: opacity .5s ease-in-out;
     z-index: 10000000000;
+    opacity: 0;
     top: 0;
 }
 

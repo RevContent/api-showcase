@@ -140,8 +140,6 @@ RevSlider({
 
         var that = this;
 
-        this.mobile = (revDetect.mobile()) ? true : false;
-
         revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-slider');
 
         this.contentItems = [];
@@ -207,7 +205,11 @@ RevSlider({
             this.innerContainerElement.style.padding = (this.options.buttons.back ? (this.options.buttons.size + 'px') : '0') + ' 0 ' + (this.options.buttons.forward ? (this.options.buttons.size + 'px') : '0');
         }
 
-        this.initButtons();
+        if (!revDetect.mobile()) {
+            this.initButtons();
+        }
+
+        this.attachTouchEvents();
 
         this.impressionTracker = [];
     };
@@ -467,14 +469,6 @@ RevSlider({
             revUtils.append(this.btnContainer, this.forwardBtn);
             revUtils.append(this.innerContainerElement, this.btnContainer);
         } else {
-            if (this.mobile) {
-                this.forwardBtn.style.opacity = 1;
-                this.backBtn.style.opacity = 1;
-            } else {
-                this.forwardBtn.style.opacity = 0;
-                this.backBtn.style.opacity = 0;
-            }
-
             if (this.options.buttons.back) {
                 revUtils.append(this.innerContainerElement, this.backBtn);
             }
@@ -803,6 +797,29 @@ RevSlider({
     RevSlider.prototype.attachButtonEvents = function() {
         var that = this;
 
+        if (this.options.buttons.dual) {
+            this.containerElement.addEventListener('mousemove', function(e) {
+                // get left or right cursor position
+                if ((e.clientX - that.containerElement.getBoundingClientRect().left) > (that.containerElement.offsetWidth / 2)) {
+                    revUtils.addClass(that.btnContainer, 'rev-btn-dual-right');
+                } else {
+                    revUtils.removeClass(that.btnContainer, 'rev-btn-dual-right');
+                }
+            });
+        }
+
+        this.forwardBtn.addEventListener('click', function() {
+            that.showNextPage(true);
+        });
+
+        this.backBtn.addEventListener('click', function() {
+            that.showPreviousPage(true);
+        });
+    };
+
+    RevSlider.prototype.attachTouchEvents = function() {
+        var that = this;
+
         var mc = new Hammer(this.element);
         mc.add(new Hammer.Swipe());
         mc.add(new Hammer.Pan({ threshold: 1 })).recognizeWith(mc.get('swipe'));
@@ -916,25 +933,6 @@ RevSlider({
                 made = false;
                 direction = false;
             }, 300);
-        });
-
-        if (this.options.buttons.dual && !revDetect.mobile()) {
-            this.containerElement.addEventListener('mousemove', function(e) {
-                // get left or right cursor position
-                if ((e.clientX - that.containerElement.getBoundingClientRect().left) > (that.containerElement.offsetWidth / 2)) {
-                    revUtils.addClass(that.btnContainer, 'rev-btn-dual-right');
-                } else {
-                    revUtils.removeClass(that.btnContainer, 'rev-btn-dual-right');
-                }
-            });
-        }
-
-        this.forwardBtn.addEventListener('click', function() {
-            that.showNextPage(true);
-        });
-
-        this.backBtn.addEventListener('click', function() {
-            that.showPreviousPage(true);
         });
     };
 
