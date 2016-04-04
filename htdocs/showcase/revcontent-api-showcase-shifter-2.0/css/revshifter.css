@@ -36,6 +36,10 @@ body.rev-shifter-no-transform #rev-shifter.rev-shifter {
     padding-bottom: 15px;
 }
 
+#rev-shifter.rev-shifter.rev-mobile.bottom {
+    padding-bottom: 0;
+}
+
 #rev-shifter.rev-shifter .rev-foot {
     position: absolute;
     right: 10px;
