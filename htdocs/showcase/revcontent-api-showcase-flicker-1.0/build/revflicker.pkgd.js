@@ -243,7 +243,7 @@ if ( typeof define === 'function' && define.amd ) {
  */
 
 ;(function () {
-    
+    'use strict';
 
     /**
      * Class for managing events.
@@ -1190,7 +1190,7 @@ if ( typeof define === 'function' && define.amd ) {
 
 ( function( ElemProto ) {
 
-  
+  'use strict';
 
   var matchesMethod = ( function() {
     // check for the standard method name first
@@ -1296,7 +1296,7 @@ if ( typeof define === 'function' && define.amd ) {
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-  
+  'use strict';
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -1559,7 +1559,7 @@ return utils;
 }));
 
 ( function( window, factory ) {
-  
+  'use strict';
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -1653,7 +1653,7 @@ return Cell;
 }));
 
 ( function( window, factory ) {
-  
+  'use strict';
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -1909,19 +1909,12 @@ return proto;
 
 }));
 
-/*!
- * Flickity v1.1.1
- * Touch, responsive, flickable galleries
- *
- * Licensed GPLv3 for open source use
- * or Flickity Commercial License for commercial use
- *
- * http://flickity.metafizzy.co
- * Copyright 2015 Metafizzy
+/**
+ * Flickity main
  */
 
 ( function( window, factory ) {
-  
+  'use strict';
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -2038,7 +2031,7 @@ Flickity.prototype._create = function() {
   this.element.flickityGUID = id; // expando
   instances[ id ] = this; // associate via id
   // initial properties
-  this.selectedIndex = this.options.initialIndex || 0;
+  this.selectedIndex = 0;
   // how many frames slider has been in same position
   this.restingFrames = 0;
   // initial physics properties
@@ -2106,8 +2099,19 @@ Flickity.prototype.activate = function() {
 
   this.emit('activate');
 
-  this.positionSliderAtSelected();
-  this.select( this.selectedIndex );
+  var index;
+  var initialIndex = this.options.initialIndex;
+  if ( this.isInitActivated ) {
+    index = this.selectedIndex;
+  } else if ( initialIndex !== undefined ) {
+    index = this.cells[ initialIndex ] ? initialIndex : 0;
+  } else {
+    index = 0;
+  }
+  // select instantly
+  this.select( index, false, true );
+  // flag for initial activation, for using initialIndex
+  this.isInitActivated = true;
 };
 
 // slider positions the cells
@@ -2338,11 +2342,13 @@ Flickity.prototype.dispatchEvent = function( type, event, args ) {
 /**
  * @param {Integer} index - index of the cell
  * @param {Boolean} isWrap - will wrap-around to last/first if at the end
+ * @param {Boolean} isInstant - will immediately set position at selected cell
  */
-Flickity.prototype.select = function( index, isWrap ) {
+Flickity.prototype.select = function( index, isWrap, isInstant ) {
   if ( !this.isActive ) {
     return;
   }
+  index = parseInt( index, 10 );
   // wrap position so slider is within normal area
   var len = this.cells.length;
   if ( this.options.wrapAround && len > 1 ) {
@@ -2356,13 +2362,18 @@ Flickity.prototype.select = function( index, isWrap ) {
   if ( this.options.wrapAround || isWrap ) {
     index = utils.modulo( index, len );
   }
-
-  if ( this.cells[ index ] ) {
-    this.selectedIndex = index;
-    this.setSelectedCell();
-    this.startAnimation();
-    this.dispatchEvent('cellSelect');
+  // bail if invalid index
+  if ( !this.cells[ index ] ) {
+    return;
   }
+  this.selectedIndex = index;
+  this.setSelectedCell();
+  if ( isInstant ) {
+    this.positionSliderAtSelected();
+  } else {
+    this.startAnimation();
+  }
+  this.dispatchEvent('cellSelect');
 };
 
 Flickity.prototype.previous = function( isWrap ) {
@@ -2670,7 +2681,7 @@ return Flickity;
 /*global define: false, module: false, require: false */
 
 ( function( window, factory ) {
-  
+  'use strict';
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -2978,7 +2989,7 @@ return Unipointer;
 }));
 
 /*!
- * Unidragger v1.1.5
+ * Unidragger v1.1.6
  * Draggable base class
  * MIT license
  */
@@ -2987,7 +2998,7 @@ return Unipointer;
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-  
+  'use strict';
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -3208,7 +3219,7 @@ Unidragger.prototype._dragPointerUp = function( event, pointer ) {
   }
 };
 
-Unipointer.prototype.pointerDone = function() {
+Unidragger.prototype.pointerDone = function() {
   eventie.unbind( window, 'scroll', this );
 };
 
@@ -3345,7 +3356,7 @@ return Unidragger;
 }));
 
 ( function( window, factory ) {
-  
+  'use strict';
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -3491,9 +3502,15 @@ var focusNodes = {
 
 Flickity.prototype.pointerDownFocus = function( event ) {
   // focus element, if not touch, and its not an input or select
-  if ( this.options.accessibility && !touchStartEvents[ event.type ] &&
-      !focusNodes[ event.target.nodeName ] ) {
-    this.element.focus();
+  if ( !this.options.accessibility || touchStartEvents[ event.type ] ||
+      focusNodes[ event.target.nodeName ] ) {
+    return;
+  }
+  var prevScrollY = window.pageYOffset;
+  this.element.focus();
+  // hack to fix scroll jump after focus, #76
+  if ( window.pageYOffset != prevScrollY ) {
+    window.scrollTo( window.pageXOffset, prevScrollY );
   }
 };
 
@@ -3718,7 +3735,7 @@ return Flickity;
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-  
+  'use strict';
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -3832,7 +3849,7 @@ return TapListener;
 // -------------------------- prev/next button -------------------------- //
 
 ( function( window, factory ) {
-  
+  'use strict';
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -3910,6 +3927,9 @@ PrevNextButton.prototype._create = function() {
   element.className += this.isPrevious ? ' previous' : ' next';
   // prevent button from submitting form http://stackoverflow.com/a/10836076/182183
   element.setAttribute( 'type', 'button' );
+  // init as disabled
+  this.disable();
+
   Flickity.setUnselectable( element );
   // create arrow
   if ( supportsInlineSVG() ) {
@@ -3935,7 +3955,6 @@ PrevNextButton.prototype._create = function() {
 };
 
 PrevNextButton.prototype.activate = function() {
-  this.update();
   this.bindTap( this.element );
   // click events from keyboard
   eventie.bind( this.element, 'click', this );
@@ -4092,7 +4111,7 @@ return Flickity;
 }));
 
 ( function( window, factory ) {
-  
+  'use strict';
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4161,7 +4180,6 @@ PageDots.prototype._create = function() {
 
 PageDots.prototype.activate = function() {
   this.setDots();
-  this.updateSelected();
   this.bindTap( this.holder );
   // add to DOM
   this.parent.element.appendChild( this.holder );
@@ -4277,7 +4295,7 @@ return Flickity;
 }));
 
 ( function( window, factory ) {
-  
+  'use strict';
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4285,15 +4303,17 @@ return Flickity;
     define( 'flickity/js/player',[
       'eventEmitter/EventEmitter',
       'eventie/eventie',
+      'fizzy-ui-utils/utils',
       './flickity'
-    ], function( EventEmitter, eventie, Flickity ) {
-      return factory( EventEmitter, eventie, Flickity );
+    ], function( EventEmitter, eventie, utils, Flickity ) {
+      return factory( EventEmitter, eventie, utils, Flickity );
     });
   } else if ( typeof exports == 'object' ) {
     // CommonJS
     module.exports = factory(
       require('wolfy87-eventemitter'),
       require('eventie'),
+      require('fizzy-ui-utils'),
       require('./flickity')
     );
   } else {
@@ -4301,11 +4321,12 @@ return Flickity;
     factory(
       window.EventEmitter,
       window.eventie,
+      window.fizzyUIUtils,
       window.Flickity
     );
   }
 
-}( window, function factory( EventEmitter, eventie, Flickity ) {
+}( window, function factory( EventEmitter, eventie, utils, Flickity ) {
 
 
 
@@ -4404,9 +4425,9 @@ Player.prototype.visibilityChange = function() {
 
 // -------------------------- Flickity -------------------------- //
 
-// utils.extend( Flickity.defaults, {
-//   autoPlay: false
-// });
+utils.extend( Flickity.defaults, {
+  pauseAutoPlayOnHover: true
+});
 
 Flickity.createMethods.push('_createPlayer');
 
@@ -4444,6 +4465,9 @@ Flickity.prototype.deactivatePlayer = function() {
 
 // pause auto-play on hover
 Flickity.prototype.onmouseenter = function() {
+  if ( !this.options.pauseAutoPlayOnHover ) {
+    return;
+  }
   this.player.pause();
   eventie.bind( this.element, 'mouseleave', this );
 };
@@ -4463,7 +4487,7 @@ return Flickity;
 }));
 
 ( function( window, factory ) {
-  
+  'use strict';
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4640,7 +4664,7 @@ return Flickity;
 }));
 
 ( function( window, factory ) {
-  
+  'use strict';
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4674,7 +4698,7 @@ return Flickity;
   }
 
 }( window, function factory( window, classie, eventie, Flickity, utils ) {
-
+'use strict';
 
 Flickity.createMethods.push('_createLazyload');
 
@@ -4741,7 +4765,7 @@ LazyLoader.prototype.onload = function( event ) {
   this.complete( event, 'flickity-lazyloaded' );
 };
 
-LazyLoader.prototype.onerror = function() {
+LazyLoader.prototype.onerror = function( event ) {
   this.complete( event, 'flickity-lazyerror' );
 };
 
@@ -4766,13 +4790,19 @@ return Flickity;
 
 }));
 
-/**
- * Flickity index
- * used for AMD and CommonJS exports
+/*!
+ * Flickity v1.1.1
+ * Touch, responsive, flickable galleries
+ *
+ * Licensed GPLv3 for open source use
+ * or Flickity Commercial License for commercial use
+ *
+ * http://flickity.metafizzy.co
+ * Copyright 2015 Metafizzy
  */
 
 ( function( window, factory ) {
-  
+  'use strict';
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4813,7 +4843,7 @@ return Flickity;
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-  
+  'use strict';
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -4944,17 +4974,17 @@ return Flickity;
 }));
 
 /*!
- * imagesLoaded v3.1.8
+ * imagesLoaded v3.2.0
  * JavaScript is all like "You images are done yet or what?"
  * MIT License
  */
 
-( function( window, factory ) { 
+( function( window, factory ) { 'use strict';
   // universal module definition
 
   /*global define: false, module: false, require: false */
 
-  if ( typeof define === 'function' && define.amd ) {
+  if ( typeof define == 'function' && define.amd ) {
     // AMD
     define( 'imagesloaded/imagesloaded',[
       'eventEmitter/EventEmitter',
@@ -4962,7 +4992,7 @@ return Flickity;
     ], function( EventEmitter, eventie ) {
       return factory( window, EventEmitter, eventie );
     });
-  } else if ( typeof exports === 'object' ) {
+  } else if ( typeof module == 'object' && module.exports ) {
     // CommonJS
     module.exports = factory(
       window,
@@ -4988,7 +5018,6 @@ function factory( window, EventEmitter, eventie ) {
 
 var $ = window.jQuery;
 var console = window.console;
-var hasConsole = typeof console !== 'undefined';
 
 // -------------------------- helpers -------------------------- //
 
@@ -5002,7 +5031,7 @@ function extend( a, b ) {
 
 var objToString = Object.prototype.toString;
 function isArray( obj ) {
-  return objToString.call( obj ) === '[object Array]';
+  return objToString.call( obj ) == '[object Array]';
 }
 
 // turn element or nodeList into an array
@@ -5011,9 +5040,9 @@ function makeArray( obj ) {
   if ( isArray( obj ) ) {
     // use object if already an array
     ary = obj;
-  } else if ( typeof obj.length === 'number' ) {
+  } else if ( typeof obj.length == 'number' ) {
     // convert nodeList to array
-    for ( var i=0, len = obj.length; i < len; i++ ) {
+    for ( var i=0; i < obj.length; i++ ) {
       ary.push( obj[i] );
     }
   } else {
@@ -5033,17 +5062,17 @@ function makeArray( obj ) {
   function ImagesLoaded( elem, options, onAlways ) {
     // coerce ImagesLoaded() without new, to be new ImagesLoaded()
     if ( !( this instanceof ImagesLoaded ) ) {
-      return new ImagesLoaded( elem, options );
+      return new ImagesLoaded( elem, options, onAlways );
     }
     // use elem as selector string
-    if ( typeof elem === 'string' ) {
+    if ( typeof elem == 'string' ) {
       elem = document.querySelectorAll( elem );
     }
 
     this.elements = makeArray( elem );
     this.options = extend( {}, this.options );
 
-    if ( typeof options === 'function' ) {
+    if ( typeof options == 'function' ) {
       onAlways = options;
     } else {
       extend( this.options, options );
@@ -5075,25 +5104,71 @@ function makeArray( obj ) {
     this.images = [];
 
     // filter & find items if we have an item selector
-    for ( var i=0, len = this.elements.length; i < len; i++ ) {
+    for ( var i=0; i < this.elements.length; i++ ) {
       var elem = this.elements[i];
-      // filter siblings
-      if ( elem.nodeName === 'IMG' ) {
-        this.addImage( elem );
-      }
-      // find children
-      // no non-element nodes, #143
-      var nodeType = elem.nodeType;
-      if ( !nodeType || !( nodeType === 1 || nodeType === 9 || nodeType === 11 ) ) {
-        continue;
-      }
-      var childElems = elem.querySelectorAll('img');
-      // concat childElems to filterFound array
-      for ( var j=0, jLen = childElems.length; j < jLen; j++ ) {
-        var img = childElems[j];
-        this.addImage( img );
+      this.addElementImages( elem );
+    }
+  };
+
+  /**
+   * @param {Node} element
+   */
+  ImagesLoaded.prototype.addElementImages = function( elem ) {
+    // filter siblings
+    if ( elem.nodeName == 'IMG' ) {
+      this.addImage( elem );
+    }
+    // get background image on element
+    if ( this.options.background === true ) {
+      this.addElementBackgroundImages( elem );
+    }
+
+    // find children
+    // no non-element nodes, #143
+    var nodeType = elem.nodeType;
+    if ( !nodeType || !elementNodeTypes[ nodeType ] ) {
+      return;
+    }
+    var childImgs = elem.querySelectorAll('img');
+    // concat childElems to filterFound array
+    for ( var i=0; i < childImgs.length; i++ ) {
+      var img = childImgs[i];
+      this.addImage( img );
+    }
+
+    // get child background images
+    if ( typeof this.options.background == 'string' ) {
+      var children = elem.querySelectorAll( this.options.background );
+      for ( i=0; i < children.length; i++ ) {
+        var child = children[i];
+        this.addElementBackgroundImages( child );
       }
     }
+  };
+
+  var elementNodeTypes = {
+    1: true,
+    9: true,
+    11: true
+  };
+
+  ImagesLoaded.prototype.addElementBackgroundImages = function( elem ) {
+    var style = getStyle( elem );
+    // get url inside url("...")
+    var reURL = /url\(['"]*([^'"\)]+)['"]*\)/gi;
+    var matches = reURL.exec( style.backgroundImage );
+    while ( matches !== null ) {
+      var url = matches && matches[1];
+      if ( url ) {
+        this.addBackground( url, elem );
+      }
+      matches = reURL.exec( style.backgroundImage );
+    }
+  };
+
+  // IE8
+  var getStyle = window.getComputedStyle || function( elem ) {
+    return elem.currentStyle;
   };
 
   /**
@@ -5104,73 +5179,63 @@ function makeArray( obj ) {
     this.images.push( loadingImage );
   };
 
+  ImagesLoaded.prototype.addBackground = function( url, elem ) {
+    var background = new Background( url, elem );
+    this.images.push( background );
+  };
+
   ImagesLoaded.prototype.check = function() {
     var _this = this;
-    var checkedCount = 0;
-    var length = this.images.length;
+    this.progressedCount = 0;
     this.hasAnyBroken = false;
     // complete if no images
-    if ( !length ) {
+    if ( !this.images.length ) {
       this.complete();
       return;
     }
 
-    function onConfirm( image, message ) {
-      if ( _this.options.debug && hasConsole ) {
-        console.log( 'confirm', image, message );
-      }
-
-      _this.progress( image );
-      checkedCount++;
-      if ( checkedCount === length ) {
-        _this.complete();
-      }
-      return true; // bind once
+    function onProgress( image, elem, message ) {
+      // HACK - Chrome triggers event before object properties have changed. #83
+      setTimeout( function() {
+        _this.progress( image, elem, message );
+      });
     }
 
-    for ( var i=0; i < length; i++ ) {
+    for ( var i=0; i < this.images.length; i++ ) {
       var loadingImage = this.images[i];
-      loadingImage.on( 'confirm', onConfirm );
+      loadingImage.once( 'progress', onProgress );
       loadingImage.check();
     }
   };
 
-  ImagesLoaded.prototype.progress = function( image ) {
+  ImagesLoaded.prototype.progress = function( image, elem, message ) {
+    this.progressedCount++;
     this.hasAnyBroken = this.hasAnyBroken || !image.isLoaded;
-    // HACK - Chrome triggers event before object properties have changed. #83
-    var _this = this;
-    setTimeout( function() {
-      _this.emit( 'progress', _this, image );
-      if ( _this.jqDeferred && _this.jqDeferred.notify ) {
-        _this.jqDeferred.notify( _this, image );
-      }
-    });
+    // progress event
+    this.emit( 'progress', this, image, elem );
+    if ( this.jqDeferred && this.jqDeferred.notify ) {
+      this.jqDeferred.notify( this, image );
+    }
+    // check if completed
+    if ( this.progressedCount == this.images.length ) {
+      this.complete();
+    }
+
+    if ( this.options.debug && console ) {
+      console.log( 'progress: ' + message, image, elem );
+    }
   };
 
   ImagesLoaded.prototype.complete = function() {
     var eventName = this.hasAnyBroken ? 'fail' : 'done';
     this.isComplete = true;
-    var _this = this;
-    // HACK - another setTimeout so that confirm happens after progress
-    setTimeout( function() {
-      _this.emit( eventName, _this );
-      _this.emit( 'always', _this );
-      if ( _this.jqDeferred ) {
-        var jqMethod = _this.hasAnyBroken ? 'reject' : 'resolve';
-        _this.jqDeferred[ jqMethod ]( _this );
-      }
-    });
+    this.emit( eventName, this );
+    this.emit( 'always', this );
+    if ( this.jqDeferred ) {
+      var jqMethod = this.hasAnyBroken ? 'reject' : 'resolve';
+      this.jqDeferred[ jqMethod ]( this );
+    }
   };
-
-  // -------------------------- jquery -------------------------- //
-
-  if ( $ ) {
-    $.fn.imagesLoaded = function( options, callback ) {
-      var instance = new ImagesLoaded( this, options, callback );
-      return instance.jqDeferred.promise( $(this) );
-    };
-  }
-
 
   // --------------------------  -------------------------- //
 
@@ -5181,106 +5246,120 @@ function makeArray( obj ) {
   LoadingImage.prototype = new EventEmitter();
 
   LoadingImage.prototype.check = function() {
-    // first check cached any previous images that have same src
-    var resource = cache[ this.img.src ] || new Resource( this.img.src );
-    if ( resource.isConfirmed ) {
-      this.confirm( resource.isLoaded, 'cached was confirmed' );
-      return;
-    }
-
     // If complete is true and browser supports natural sizes,
     // try to check for image status manually.
-    if ( this.img.complete && this.img.naturalWidth !== undefined ) {
+    var isComplete = this.getIsImageComplete();
+    if ( isComplete ) {
       // report based on naturalWidth
       this.confirm( this.img.naturalWidth !== 0, 'naturalWidth' );
       return;
     }
 
     // If none of the checks above matched, simulate loading on detached element.
-    var _this = this;
-    resource.on( 'confirm', function( resrc, message ) {
-      _this.confirm( resrc.isLoaded, message );
-      return true;
-    });
+    this.proxyImage = new Image();
+    eventie.bind( this.proxyImage, 'load', this );
+    eventie.bind( this.proxyImage, 'error', this );
+    // bind to image as well for Firefox. #191
+    eventie.bind( this.img, 'load', this );
+    eventie.bind( this.img, 'error', this );
+    this.proxyImage.src = this.img.src;
+  };
 
-    resource.check();
+  LoadingImage.prototype.getIsImageComplete = function() {
+    return this.img.complete && this.img.naturalWidth !== undefined;
   };
 
   LoadingImage.prototype.confirm = function( isLoaded, message ) {
     this.isLoaded = isLoaded;
-    this.emit( 'confirm', this, message );
-  };
-
-  // -------------------------- Resource -------------------------- //
-
-  // Resource checks each src, only once
-  // separate class from LoadingImage to prevent memory leaks. See #115
-
-  var cache = {};
-
-  function Resource( src ) {
-    this.src = src;
-    // add to cache
-    cache[ src ] = this;
-  }
-
-  Resource.prototype = new EventEmitter();
-
-  Resource.prototype.check = function() {
-    // only trigger checking once
-    if ( this.isChecked ) {
-      return;
-    }
-    // simulate loading on detached element
-    var proxyImage = new Image();
-    eventie.bind( proxyImage, 'load', this );
-    eventie.bind( proxyImage, 'error', this );
-    proxyImage.src = this.src;
-    // set flag
-    this.isChecked = true;
+    this.emit( 'progress', this, this.img, message );
   };
 
   // ----- events ----- //
 
   // trigger specified handler for event type
-  Resource.prototype.handleEvent = function( event ) {
+  LoadingImage.prototype.handleEvent = function( event ) {
     var method = 'on' + event.type;
     if ( this[ method ] ) {
       this[ method ]( event );
     }
   };
 
-  Resource.prototype.onload = function( event ) {
+  LoadingImage.prototype.onload = function() {
     this.confirm( true, 'onload' );
-    this.unbindProxyEvents( event );
+    this.unbindEvents();
   };
 
-  Resource.prototype.onerror = function( event ) {
+  LoadingImage.prototype.onerror = function() {
     this.confirm( false, 'onerror' );
-    this.unbindProxyEvents( event );
+    this.unbindEvents();
   };
 
-  // ----- confirm ----- //
+  LoadingImage.prototype.unbindEvents = function() {
+    eventie.unbind( this.proxyImage, 'load', this );
+    eventie.unbind( this.proxyImage, 'error', this );
+    eventie.unbind( this.img, 'load', this );
+    eventie.unbind( this.img, 'error', this );
+  };
 
-  Resource.prototype.confirm = function( isLoaded, message ) {
-    this.isConfirmed = true;
+  // -------------------------- Background -------------------------- //
+
+  function Background( url, element ) {
+    this.url = url;
+    this.element = element;
+    this.img = new Image();
+  }
+
+  // inherit LoadingImage prototype
+  Background.prototype = new LoadingImage();
+
+  Background.prototype.check = function() {
+    eventie.bind( this.img, 'load', this );
+    eventie.bind( this.img, 'error', this );
+    this.img.src = this.url;
+    // check if image is already complete
+    var isComplete = this.getIsImageComplete();
+    if ( isComplete ) {
+      this.confirm( this.img.naturalWidth !== 0, 'naturalWidth' );
+      this.unbindEvents();
+    }
+  };
+
+  Background.prototype.unbindEvents = function() {
+    eventie.unbind( this.img, 'load', this );
+    eventie.unbind( this.img, 'error', this );
+  };
+
+  Background.prototype.confirm = function( isLoaded, message ) {
     this.isLoaded = isLoaded;
-    this.emit( 'confirm', this, message );
+    this.emit( 'progress', this, this.element, message );
   };
 
-  Resource.prototype.unbindProxyEvents = function( event ) {
-    eventie.unbind( event.target, 'load', this );
-    eventie.unbind( event.target, 'error', this );
-  };
+  // -------------------------- jQuery -------------------------- //
 
-  // -----  ----- //
+  ImagesLoaded.makeJQueryPlugin = function( jQuery ) {
+    jQuery = jQuery || window.jQuery;
+    if ( !jQuery ) {
+      return;
+    }
+    // set local variable
+    $ = jQuery;
+    // $().imagesLoaded()
+    $.fn.imagesLoaded = function( options, callback ) {
+      var instance = new ImagesLoaded( this, options, callback );
+      return instance.jqDeferred.promise( $(this) );
+    };
+  };
+  // try making plugin
+  ImagesLoaded.makeJQueryPlugin();
+
+  // --------------------------  -------------------------- //
 
   return ImagesLoaded;
 
 });
 
 /*!
- * Flickity imagesLoaded v1.0.1
+ * Flickity imagesLoaded v1.0.2
  * enables imagesLoaded option for Flickity
  */
 
@@ -5288,7 +5367,7 @@ function makeArray( obj ) {
 
 ( function( window, factory ) {
   /*global define: false, module: false, require: false */
-  
+  'use strict';
   // universal module definition
 
   if ( typeof define == 'function' && define.amd ) {
@@ -5316,7 +5395,7 @@ function makeArray( obj ) {
   }
 
 }( window, function factory( window, Flickity, imagesLoaded ) {
-
+'use strict';
 
 Flickity.createMethods.push('_createImagesLoaded');
 
@@ -5362,7 +5441,7 @@ define(function () {
         "Dell": "Dell.*Streak|Dell.*Aero|Dell.*Venue|DELL.*Venue Pro|Dell Flash|Dell Smoke|Dell Mini 3iX|XCD28|XCD35|\\b001DL\\b|\\b101DL\\b|\\bGS01\\b",
         "Motorola": "Motorola|DROIDX|DROID BIONIC|\\bDroid\\b.*Build|Android.*Xoom|HRI39|MOT-|A1260|A1680|A555|A853|A855|A953|A955|A956|Motorola.*ELECTRIFY|Motorola.*i1|i867|i940|MB200|MB300|MB501|MB502|MB508|MB511|MB520|MB525|MB526|MB611|MB612|MB632|MB810|MB855|MB860|MB861|MB865|MB870|ME501|ME502|ME511|ME525|ME600|ME632|ME722|ME811|ME860|ME863|ME865|MT620|MT710|MT716|MT720|MT810|MT870|MT917|Motorola.*TITANIUM|WX435|WX445|XT300|XT301|XT311|XT316|XT317|XT319|XT320|XT390|XT502|XT530|XT531|XT532|XT535|XT603|XT610|XT611|XT615|XT681|XT701|XT702|XT711|XT720|XT800|XT806|XT860|XT862|XT875|XT882|XT883|XT894|XT901|XT907|XT909|XT910|XT912|XT928|XT926|XT915|XT919|XT925|XT1021|\\bMoto E\\b",
         "Samsung": "Samsung|SM-G9250|GT-19300|SGH-I337|BGT-S5230|GT-B2100|GT-B2700|GT-B2710|GT-B3210|GT-B3310|GT-B3410|GT-B3730|GT-B3740|GT-B5510|GT-B5512|GT-B5722|GT-B6520|GT-B7300|GT-B7320|GT-B7330|GT-B7350|GT-B7510|GT-B7722|GT-B7800|GT-C3010|GT-C3011|GT-C3060|GT-C3200|GT-C3212|GT-C3212I|GT-C3262|GT-C3222|GT-C3300|GT-C3300K|GT-C3303|GT-C3303K|GT-C3310|GT-C3322|GT-C3330|GT-C3350|GT-C3500|GT-C3510|GT-C3530|GT-C3630|GT-C3780|GT-C5010|GT-C5212|GT-C6620|GT-C6625|GT-C6712|GT-E1050|GT-E1070|GT-E1075|GT-E1080|GT-E1081|GT-E1085|GT-E1087|GT-E1100|GT-E1107|GT-E1110|GT-E1120|GT-E1125|GT-E1130|GT-E1160|GT-E1170|GT-E1175|GT-E1180|GT-E1182|GT-E1200|GT-E1210|GT-E1225|GT-E1230|GT-E1390|GT-E2100|GT-E2120|GT-E2121|GT-E2152|GT-E2220|GT-E2222|GT-E2230|GT-E2232|GT-E2250|GT-E2370|GT-E2550|GT-E2652|GT-E3210|GT-E3213|GT-I5500|GT-I5503|GT-I5700|GT-I5800|GT-I5801|GT-I6410|GT-I6420|GT-I7110|GT-I7410|GT-I7500|GT-I8000|GT-I8150|GT-I8160|GT-I8190|GT-I8320|GT-I8330|GT-I8350|GT-I8530|GT-I8700|GT-I8703|GT-I8910|GT-I9000|GT-I9001|GT-I9003|GT-I9010|GT-I9020|GT-I9023|GT-I9070|GT-I9082|GT-I9100|GT-I9103|GT-I9220|GT-I9250|GT-I9300|GT-I9305|GT-I9500|GT-I9505|GT-M3510|GT-M5650|GT-M7500|GT-M7600|GT-M7603|GT-M8800|GT-M8910|GT-N7000|GT-S3110|GT-S3310|GT-S3350|GT-S3353|GT-S3370|GT-S3650|GT-S3653|GT-S3770|GT-S3850|GT-S5210|GT-S5220|GT-S5229|GT-S5230|GT-S5233|GT-S5250|GT-S5253|GT-S5260|GT-S5263|GT-S5270|GT-S5300|GT-S5330|GT-S5350|GT-S5360|GT-S5363|GT-S5369|GT-S5380|GT-S5380D|GT-S5560|GT-S5570|GT-S5600|GT-S5603|GT-S5610|GT-S5620|GT-S5660|GT-S5670|GT-S5690|GT-S5750|GT-S5780|GT-S5830|GT-S5839|GT-S6102|GT-S6500|GT-S7070|GT-S7200|GT-S7220|GT-S7230|GT-S7233|GT-S7250|GT-S7500|GT-S7530|GT-S7550|GT-S7562|GT-S7710|GT-S8000|GT-S8003|GT-S8500|GT-S8530|GT-S8600|SCH-A310|SCH-A530|SCH-A570|SCH-A610|SCH-A630|SCH-A650|SCH-A790|SCH-A795|SCH-A850|SCH-A870|SCH-A890|SCH-A930|SCH-A950|SCH-A970|SCH-A990|SCH-I100|SCH-I110|SCH-I400|SCH-I405|SCH-I500|SCH-I510|SCH-I515|SCH-I600|SCH-I730|SCH-I760|SCH-I770|SCH-I830|SCH-I910|SCH-I920|SCH-I959|SCH-LC11|SCH-N150|SCH-N300|SCH-R100|SCH-R300|SCH-R351|SCH-R400|SCH-R410|SCH-T300|SCH-U310|SCH-U320|SCH-U350|SCH-U360|SCH-U365|SCH-U370|SCH-U380|SCH-U410|SCH-U430|SCH-U450|SCH-U460|SCH-U470|SCH-U490|SCH-U540|SCH-U550|SCH-U620|SCH-U640|SCH-U650|SCH-U660|SCH-U700|SCH-U740|SCH-U750|SCH-U810|SCH-U820|SCH-U900|SCH-U940|SCH-U960|SCS-26UC|SGH-A107|SGH-A117|SGH-A127|SGH-A137|SGH-A157|SGH-A167|SGH-A177|SGH-A187|SGH-A197|SGH-A227|SGH-A237|SGH-A257|SGH-A437|SGH-A517|SGH-A597|SGH-A637|SGH-A657|SGH-A667|SGH-A687|SGH-A697|SGH-A707|SGH-A717|SGH-A727|SGH-A737|SGH-A747|SGH-A767|SGH-A777|SGH-A797|SGH-A817|SGH-A827|SGH-A837|SGH-A847|SGH-A867|SGH-A877|SGH-A887|SGH-A897|SGH-A927|SGH-B100|SGH-B130|SGH-B200|SGH-B220|SGH-C100|SGH-C110|SGH-C120|SGH-C130|SGH-C140|SGH-C160|SGH-C170|SGH-C180|SGH-C200|SGH-C207|SGH-C210|SGH-C225|SGH-C230|SGH-C417|SGH-C450|SGH-D307|SGH-D347|SGH-D357|SGH-D407|SGH-D415|SGH-D780|SGH-D807|SGH-D980|SGH-E105|SGH-E200|SGH-E315|SGH-E316|SGH-E317|SGH-E335|SGH-E590|SGH-E635|SGH-E715|SGH-E890|SGH-F300|SGH-F480|SGH-I200|SGH-I300|SGH-I320|SGH-I550|SGH-I577|SGH-I600|SGH-I607|SGH-I617|SGH-I627|SGH-I637|SGH-I677|SGH-I700|SGH-I717|SGH-I727|SGH-i747M|SGH-I777|SGH-I780|SGH-I827|SGH-I847|SGH-I857|SGH-I896|SGH-I897|SGH-I900|SGH-I907|SGH-I917|SGH-I927|SGH-I937|SGH-I997|SGH-J150|SGH-J200|SGH-L170|SGH-L700|SGH-M110|SGH-M150|SGH-M200|SGH-N105|SGH-N500|SGH-N600|SGH-N620|SGH-N625|SGH-N700|SGH-N710|SGH-P107|SGH-P207|SGH-P300|SGH-P310|SGH-P520|SGH-P735|SGH-P777|SGH-Q105|SGH-R210|SGH-R220|SGH-R225|SGH-S105|SGH-S307|SGH-T109|SGH-T119|SGH-T139|SGH-T209|SGH-T219|SGH-T229|SGH-T239|SGH-T249|SGH-T259|SGH-T309|SGH-T319|SGH-T329|SGH-T339|SGH-T349|SGH-T359|SGH-T369|SGH-T379|SGH-T409|SGH-T429|SGH-T439|SGH-T459|SGH-T469|SGH-T479|SGH-T499|SGH-T509|SGH-T519|SGH-T539|SGH-T559|SGH-T589|SGH-T609|SGH-T619|SGH-T629|SGH-T639|SGH-T659|SGH-T669|SGH-T679|SGH-T709|SGH-T719|SGH-T729|SGH-T739|SGH-T746|SGH-T749|SGH-T759|SGH-T769|SGH-T809|SGH-T819|SGH-T839|SGH-T919|SGH-T929|SGH-T939|SGH-T959|SGH-T989|SGH-U100|SGH-U200|SGH-U800|SGH-V205|SGH-V206|SGH-X100|SGH-X105|SGH-X120|SGH-X140|SGH-X426|SGH-X427|SGH-X475|SGH-X495|SGH-X497|SGH-X507|SGH-X600|SGH-X610|SGH-X620|SGH-X630|SGH-X700|SGH-X820|SGH-X890|SGH-Z130|SGH-Z150|SGH-Z170|SGH-ZX10|SGH-ZX20|SHW-M110|SPH-A120|SPH-A400|SPH-A420|SPH-A460|SPH-A500|SPH-A560|SPH-A600|SPH-A620|SPH-A660|SPH-A700|SPH-A740|SPH-A760|SPH-A790|SPH-A800|SPH-A820|SPH-A840|SPH-A880|SPH-A900|SPH-A940|SPH-A960|SPH-D600|SPH-D700|SPH-D710|SPH-D720|SPH-I300|SPH-I325|SPH-I330|SPH-I350|SPH-I500|SPH-I600|SPH-I700|SPH-L700|SPH-M100|SPH-M220|SPH-M240|SPH-M300|SPH-M305|SPH-M320|SPH-M330|SPH-M350|SPH-M360|SPH-M370|SPH-M380|SPH-M510|SPH-M540|SPH-M550|SPH-M560|SPH-M570|SPH-M580|SPH-M610|SPH-M620|SPH-M630|SPH-M800|SPH-M810|SPH-M850|SPH-M900|SPH-M910|SPH-M920|SPH-M930|SPH-N100|SPH-N200|SPH-N240|SPH-N300|SPH-N400|SPH-Z400|SWC-E100|SCH-i909|GT-N7100|GT-N7105|SCH-I535|SM-N900A|SGH-I317|SGH-T999L|GT-S5360B|GT-I8262|GT-S6802|GT-S6312|GT-S6310|GT-S5312|GT-S5310|GT-I9105|GT-I8510|GT-S6790N|SM-G7105|SM-N9005|GT-S5301|GT-I9295|GT-I9195|SM-C101|GT-S7392|GT-S7560|GT-B7610|GT-I5510|GT-S7582|GT-S7530E|GT-I8750|SM-G9006V|SM-G9008V|SM-G9009D|SM-G900A|SM-G900D|SM-G900F|SM-G900H|SM-G900I|SM-G900J|SM-G900K|SM-G900L|SM-G900M|SM-G900P|SM-G900R4|SM-G900S|SM-G900T|SM-G900V|SM-G900W8|SHV-E160K|SCH-P709|SCH-P729|SM-T2558|GT-I9205",
-        "LG": "\\bLG\\b;|LG[- ]?(C800|C900|E400|E610|E900|E-900|F160|F180K|F180L|F180S|730|855|L160|LS740|LS840|LS970|LU6200|MS690|MS695|MS770|MS840|MS870|MS910|P500|P700|P705|VM696|AS680|AS695|AX840|C729|E970|GS505|272|C395|E739BK|E960|L55C|L75C|LS696|LS860|P769BK|P350|P500|P509|P870|UN272|US730|VS840|VS950|LN272|LN510|LS670|LS855|LW690|MN270|MN510|P509|P769|P930|UN200|UN270|UN510|UN610|US670|US740|US760|UX265|UX840|VN271|VN530|VS660|VS700|VS740|VS750|VS910|VS920|VS930|VX9200|VX11000|AX840A|LW770|P506|P925|P999|E612|D955|D802)",
+        "LG": "\\bLG\\b;|LG[- ]?(C800|C900|E400|E610|E900|E-900|F160|F180K|F180L|F180S|730|855|L160|LS740|LS840|LS970|LU6200|MS690|MS695|MS770|MS840|MS870|MS910|P500|P700|P705|VM696|AS680|AS695|AX840|C729|E970|GS505|272|C395|E739BK|E960|L55C|L75C|LS696|LS860|P769BK|P350|P500|P509|P870|UN272|US730|VS840|VS950|LN272|LN510|LS670|LS855|LW690|MN270|MN510|P509|P769|P930|UN200|UN270|UN510|UN610|US670|US740|US760|UX265|UX840|VN271|VN530|VS660|VS700|VS740|VS750|VS910|VS920|VS930|VX9200|VX11000|AX840A|LW770|P506|P925|P999|E612|D955|D802|MS323)",
         "Sony": "SonyST|SonyLT|SonyEricsson|SonyEricssonLT15iv|LT18i|E10i|LT28h|LT26w|SonyEricssonMT27i|C5303|C6902|C6903|C6906|C6943|D2533",
         "Asus": "Asus.*Galaxy|PadFone.*Mobile",
         "Micromax": "Micromax.*\\b(A210|A92|A88|A72|A111|A110Q|A115|A116|A110|A90S|A26|A51|A35|A54|A25|A27|A89|A68|A65|A57|A90)\\b",
@@ -5383,7 +5462,7 @@ define(function () {
     "tablets": {
         "iPad": "iPad|iPad.*Mobile",
         "NexusTablet": "Android.*Nexus[\\s]+(7|9|10)",
-        "SamsungTablet": "SAMSUNG.*Tablet|Galaxy.*Tab|SC-01C|GT-P1000|GT-P1003|GT-P1010|GT-P3105|GT-P6210|GT-P6800|GT-P6810|GT-P7100|GT-P7300|GT-P7310|GT-P7500|GT-P7510|SCH-I800|SCH-I815|SCH-I905|SGH-I957|SGH-I987|SGH-T849|SGH-T859|SGH-T869|SPH-P100|GT-P3100|GT-P3108|GT-P3110|GT-P5100|GT-P5110|GT-P6200|GT-P7320|GT-P7511|GT-N8000|GT-P8510|SGH-I497|SPH-P500|SGH-T779|SCH-I705|SCH-I915|GT-N8013|GT-P3113|GT-P5113|GT-P8110|GT-N8010|GT-N8005|GT-N8020|GT-P1013|GT-P6201|GT-P7501|GT-N5100|GT-N5105|GT-N5110|SHV-E140K|SHV-E140L|SHV-E140S|SHV-E150S|SHV-E230K|SHV-E230L|SHV-E230S|SHW-M180K|SHW-M180L|SHW-M180S|SHW-M180W|SHW-M300W|SHW-M305W|SHW-M380K|SHW-M380S|SHW-M380W|SHW-M430W|SHW-M480K|SHW-M480S|SHW-M480W|SHW-M485W|SHW-M486W|SHW-M500W|GT-I9228|SCH-P739|SCH-I925|GT-I9200|GT-P5200|GT-P5210|GT-P5210X|SM-T311|SM-T310|SM-T310X|SM-T210|SM-T210R|SM-T211|SM-P600|SM-P601|SM-P605|SM-P900|SM-P901|SM-T217|SM-T217A|SM-T217S|SM-P6000|SM-T3100|SGH-I467|XE500|SM-T110|GT-P5220|GT-I9200X|GT-N5110X|GT-N5120|SM-P905|SM-T111|SM-T2105|SM-T315|SM-T320|SM-T320X|SM-T321|SM-T520|SM-T525|SM-T530NU|SM-T230NU|SM-T330NU|SM-T900|XE500T1C|SM-P605V|SM-P905V|SM-T337V|SM-T537V|SM-T707V|SM-T807V|SM-P600X|SM-P900X|SM-T210X|SM-T230|SM-T230X|SM-T325|GT-P7503|SM-T531|SM-T330|SM-T530|SM-T705|SM-T705C|SM-T535|SM-T331|SM-T800|SM-T700|SM-T537|SM-T807|SM-P907A|SM-T337A|SM-T537A|SM-T707A|SM-T807A|SM-T237|SM-T807P|SM-P607T|SM-T217T|SM-T337T|SM-T807T|SM-T116NQ|SM-P550|SM-T350|SM-T550|SM-T9000|SM-P9000|SM-T705Y|SM-T805|GT-P3113|SM-T710|SM-T810|SM-T360",
+        "SamsungTablet": "SAMSUNG.*Tablet|Galaxy.*Tab|SC-01C|GT-P1000|GT-P1003|GT-P1010|GT-P3105|GT-P6210|GT-P6800|GT-P6810|GT-P7100|GT-P7300|GT-P7310|GT-P7500|GT-P7510|SCH-I800|SCH-I815|SCH-I905|SGH-I957|SGH-I987|SGH-T849|SGH-T859|SGH-T869|SPH-P100|GT-P3100|GT-P3108|GT-P3110|GT-P5100|GT-P5110|GT-P6200|GT-P7320|GT-P7511|GT-N8000|GT-P8510|SGH-I497|SPH-P500|SGH-T779|SCH-I705|SCH-I915|GT-N8013|GT-P3113|GT-P5113|GT-P8110|GT-N8010|GT-N8005|GT-N8020|GT-P1013|GT-P6201|GT-P7501|GT-N5100|GT-N5105|GT-N5110|SHV-E140K|SHV-E140L|SHV-E140S|SHV-E150S|SHV-E230K|SHV-E230L|SHV-E230S|SHW-M180K|SHW-M180L|SHW-M180S|SHW-M180W|SHW-M300W|SHW-M305W|SHW-M380K|SHW-M380S|SHW-M380W|SHW-M430W|SHW-M480K|SHW-M480S|SHW-M480W|SHW-M485W|SHW-M486W|SHW-M500W|GT-I9228|SCH-P739|SCH-I925|GT-I9200|GT-P5200|GT-P5210|GT-P5210X|SM-T311|SM-T310|SM-T310X|SM-T210|SM-T210R|SM-T211|SM-P600|SM-P601|SM-P605|SM-P900|SM-P901|SM-T217|SM-T217A|SM-T217S|SM-P6000|SM-T3100|SGH-I467|XE500|SM-T110|GT-P5220|GT-I9200X|GT-N5110X|GT-N5120|SM-P905|SM-T111|SM-T2105|SM-T315|SM-T320|SM-T320X|SM-T321|SM-T520|SM-T525|SM-T530NU|SM-T230NU|SM-T330NU|SM-T900|XE500T1C|SM-P605V|SM-P905V|SM-T337V|SM-T537V|SM-T707V|SM-T807V|SM-P600X|SM-P900X|SM-T210X|SM-T230|SM-T230X|SM-T325|GT-P7503|SM-T531|SM-T330|SM-T530|SM-T705|SM-T705C|SM-T535|SM-T331|SM-T800|SM-T700|SM-T537|SM-T807|SM-P907A|SM-T337A|SM-T537A|SM-T707A|SM-T807A|SM-T237|SM-T807P|SM-P607T|SM-T217T|SM-T337T|SM-T807T|SM-T116NQ|SM-P550|SM-T350|SM-T550|SM-T9000|SM-P9000|SM-T705Y|SM-T805|GT-P3113|SM-T710|SM-T810|SM-T360|SM-T533|SM-T113|SM-T335|SM-T715",
         "Kindle": "Kindle|Silk.*Accelerated|Android.*\\b(KFOT|KFTT|KFJWI|KFJWA|KFOTE|KFSOWI|KFTHWI|KFTHWA|KFAPWI|KFAPWA|WFJWAE|KFSAWA|KFSAWI|KFASWI)\\b",
         "SurfaceTablet": "Windows NT [0-9.]+; ARM;.*(Tablet|ARMBJS)",
         "HPTablet": "HP Slate (7|8|10)|HP ElitePad 900|hp-tablet|EliteBook.*Touch|HP 8|Slate 21|HP SlateBook 10",
@@ -5480,6 +5559,7 @@ define(function () {
         "DigmaTablet": "\\b(iDx10|iDx9|iDx8|iDx7|iDxD7|iDxD8|iDsQ8|iDsQ7|iDsQ8|iDsD10|iDnD7|3TS804H|iDsQ11|iDj7|iDs10)\\b",
         "EvolioTablet": "ARIA_Mini_wifi|Aria[ _]Mini|Evolio X10|Evolio X7|Evolio X8|\\bEvotab\\b|\\bNeura\\b",
         "LavaTablet": "QPAD E704|\\bIvoryS\\b|E-TAB IVORY|\\bE-TAB\\b",
+        "AocTablet": "MW0811|MW0812|MW0922|MTK8382",
         "CelkonTablet": "CT695|CT888|CT[\\s]?910|CT7 Tab|CT9 Tab|CT3 Tab|CT2 Tab|CT1 Tab|C820|C720|\\bCT-1\\b",
         "WolderTablet": "miTab \\b(DIAMOND|SPACE|BROOKLYN|NEO|FLY|MANHATTAN|FUNK|EVOLUTION|SKY|GOCAR|IRON|GENIUS|POP|MINT|EPSILON|BROADWAY|JUMP|HOP|LEGEND|NEW AGE|LINE|ADVANCE|FEEL|FOLLOW|LIKE|LINK|LIVE|THINK|FREEDOM|CHICAGO|CLEVELAND|BALTIMORE-GH|IOWA|BOSTON|SEATTLE|PHOENIX|DALLAS|IN 101|MasterChef)\\b",
         "MiTablet": "\\bMI PAD\\b|\\bHM NOTE 1W\\b",
@@ -5488,7 +5568,7 @@ define(function () {
         "LeaderTablet": "TBLT10Q|TBLT10I|TBL-10WDKB|TBL-10WDKBO2013|TBL-W230V2|TBL-W450|TBL-W500|SV572|TBLT7I|TBA-AC7-8G|TBLT79|TBL-8W16|TBL-10W32|TBL-10WKB|TBL-W100",
         "UbislateTablet": "UbiSlate[\\s]?7C",
         "PocketBookTablet": "Pocketbook",
-        "Hudl": "Hudl HT7S3",
+        "Hudl": "Hudl HT7S3|Hudl 2",
         "TelstraTablet": "T-Hub2",
         "GenericTablet": "Android.*\\b97D\\b|Tablet(?!.*PC)|BNTV250A|MID-WCDMA|LogicPD Zoom2|\\bA7EB\\b|CatNova8|A1_07|CT704|CT1002|\\bM721\\b|rk30sdk|\\bEVOTAB\\b|M758A|ET904|ALUMIUM10|Smartfren Tab|Endeavour 1010|Tablet-PC-4|Tagi Tab|\\bM6pro\\b|CT1020W|arc 10HD|\\bJolla\\b|\\bTP750\\b"
     },
@@ -5498,7 +5578,7 @@ define(function () {
         "PalmOS": "PalmOS|avantgo|blazer|elaine|hiptop|palm|plucker|xiino",
         "SymbianOS": "Symbian|SymbOS|Series60|Series40|SYB-[0-9]+|\\bS60\\b",
         "WindowsMobileOS": "Windows CE.*(PPC|Smartphone|Mobile|[0-9]{3}x[0-9]{3})|Window Mobile|Windows Phone [0-9.]+|WCE;",
-        "WindowsPhoneOS": "Windows Phone 8.1|Windows Phone 8.0|Windows Phone OS|XBLWP7|ZuneWP7|Windows NT 6.[23]; ARM;",
+        "WindowsPhoneOS": "Windows Phone 10.0|Windows Phone 8.1|Windows Phone 8.0|Windows Phone OS|XBLWP7|ZuneWP7|Windows NT 6.[23]; ARM;",
         "iOS": "\\biPhone.*Mobile|\\biPod|\\biPad",
         "MeeGoOS": "MeeGo",
         "MaemoOS": "Maemo",
@@ -6093,9 +6173,9 @@ define(function () {
          * AudioSonicTablet, AMPETablet, SkkTablet, TecnoTablet, JXDTablet, iJoyTablet,
          * FX2Tablet, XoroTablet, ViewsonicTablet, OdysTablet, CaptivaTablet,
          * IconbitTablet, TeclastTablet, OndaTablet, JaytechTablet, BlaupunktTablet,
-         * DigmaTablet, EvolioTablet, LavaTablet, CelkonTablet, WolderTablet, MiTablet,
-         * NibiruTablet, NexoTablet, LeaderTablet, UbislateTablet, PocketBookTablet, Hudl,
-         * TelstraTablet, GenericTablet</tt><br>
+         * DigmaTablet, EvolioTablet, LavaTablet, AocTablet, CelkonTablet, WolderTablet,
+         * MiTablet, NibiruTablet, NexoTablet, LeaderTablet, UbislateTablet,
+         * PocketBookTablet, Hudl, TelstraTablet, GenericTablet</tt><br>
          * <br>
          * If the device is not detected by the regular expressions from Mobile-Detect, a test is made against
          * the patterns of <a href="http://detectmobilebrowsers.com/">detectmobilebrowsers.com</a>. If this test
@@ -6474,6 +6554,14 @@ utils.addEventListener = function(el, eventName, handler) {
   }
 };
 
+utils.removeEventListener = function(el, eventName, handler) {
+    if (el.removeEventListener) {
+        el.removeEventListener(eventName, handler);
+    } else {
+        el.detachEvent('on' + eventName, handler);
+    }
+}
+
 utils.ellipsisText = function(el, text, height) {
     var ellipText = '';
     var t = el.cloneNode(true);
@@ -6678,7 +6766,6 @@ return utils;
 
 (function (window, document, dialog, undefined) {
     'use strict';
-    console.log("Entering RevDisclose Namespace...");
     var RevDisclose = function () {
         var self = this;
         self.dialog = dialog;
@@ -6697,18 +6784,15 @@ return utils;
     };
 
     RevDisclose.prototype.init = function () {
-        console.log("RevDisclose: Initializing...");
         var self = this;
         document.onreadystatechange = function () {
             if (document.readyState == "complete") {
-                console.log("RevDisclose: Document is READY!...");
 
             }
         }
     };
 
     RevDisclose.prototype.setDialog = function(dialog){
-        console.log("RevDisclose: Manually Setting Dialog Object");
         var self = this;
         if(typeof dialog === "object"){
             self.dialog = dialog;
@@ -6716,20 +6800,17 @@ return utils;
     };
 
     RevDisclose.prototype.truncateDisclosure = function () {
-        console.log("RevDisclose: Initializing...");
         var self = this;
         self.disclosureText = self.disclosureText.toString().substring(0, self.disclosureTextLimit).replace(/['"]+/g, '');
     };
 
     RevDisclose.prototype.setDisclosureText = function(disclosure){
-        console.log("RevDisclose: Setting Disclosure Text Label to: "  + disclosure.toString());
         var self = this;
         self.disclosureText = (disclosure.length > 2) ? disclosure.toString() : self.defaultDisclosureText;
         self.truncateDisclosure();
     };
 
     RevDisclose.prototype.setOnClickHandler = function (handler, handlerObject) {
-        console.log("RevDisclose: Setting onClick Handler for Disclosure text...");
         var self = this;
         if (typeof handler === 'function') {
             self.onClickHandler = handler;
@@ -6740,15 +6821,12 @@ return utils;
     };
 
     RevDisclose.prototype.getSponsorTemplate = function () {
-        console.log("RevDisclose: Building Disclosure HTML...");
         var self = this;
         self.disclosureHtml = '<a href="javascript:;" onclick="revDisclose.onClickHandler(revDisclose.onClickHandlerObject ? revDisclose.onClickHandlerObject : null);">' + self.disclosureText + '</a>';
-        console.log("RevDisclose: " + self.disclosureHtml);
         return self.plainText ? self.disclosureText : self.disclosureHtml;
     };
 
     RevDisclose.prototype.getDisclosure = function (disclosureText) {
-        console.log("RevDisclose: Attaching Disclosure Text and onClick Event Function...");
         var self = this;
         self.setDisclosureText(disclosureText);
         if(typeof self.dialog === "object") {
@@ -6821,23 +6899,186 @@ return detect;
 
 }));
 /**
+ * RevBeacon (Beacon Pushes for API Calls)
+ *
+ */
+
+(function (window, document, undefined) {
+    'use strict';
+    var RevBeacon = function () {
+        var self = this;
+        self.parent = document.getElementsByTagName('body')[0];
+        self.pluginSource = '';
+        self.push = true;
+        self.pushed = 0;
+        self.enabledBeacons = ["quantcast", "comscore"];
+        self.renderedBeacons = [];
+        self.beacons = {
+            get: function(beaconId){
+                var beacons = this;
+                return beacons.beaconId !== undefined ? beacons.beaconId : {enabled: false}
+            },
+            quantcast: {
+                enabled: true,
+                type: 'pixel',
+                pixel_url: '//pixel.quantserve.com/pixel/p-aD1qr93XuF6aC.gif',
+                script_url: false,
+                styles: 'display:none;border:0;width:1px;height:1px'
+            },
+            comscore: {
+                enabled: true,
+                type: 'script',
+                pixel_url: false,
+                script_url: '//b.scorecardresearch.com/p?c1=7&c2=20310460&c3=12345&cv=2.0&cj=1',
+                styles: ''
+            }
+        };
+
+        self.init();
+    };
+
+    RevBeacon.prototype.init = function () {
+        var self = this;
+        document.onreadystatechange = function () {
+            if (document.readyState == "complete") {
+
+            }
+        }
+    };
+
+    RevBeacon.prototype.setPluginSource = function(pluginSource){
+        var self = this;
+        self.pluginSource = pluginSource.toString();
+        return self;
+    };
+
+    RevBeacon.prototype.getPluginSource = function(){
+        var self = this;
+        return self.pluginSource.toString();
+    };
+
+    RevBeacon.prototype.enableBeacon = function(beaconName){
+        var self = this;
+        if(self.enabledBeacons[beaconName] == undefined && self.beacons[beaconName] !== undefined) {
+            self.enabledBeacons.push(beaconName);
+        }
+        return self;
+    };
+
+    RevBeacon.prototype.disableBeacon = function(beaconName){
+        var self = this;
+        self.enabledBeacons = self.enabledBeacons.filter(function(entry){
+            if(beaconName != entry) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        return self;
+    };
+
+    RevBeacon.prototype.offline = function(){
+        var self = this;
+        self.push = false;
+        return self;
+    };
+
+    RevBeacon.prototype.createBeacon = function(beaconName, enabled, type, pixelUrl, scriptUrl, styles) {
+        var self = this;
+        if(self.beacons[beaconName] == undefined) {
+            self.beacons[beaconName] = {
+                enabled: enabled,
+                type: type,
+                pixel_url: pixelUrl,
+                script_url: scriptUrl,
+                styles: styles
+            };
+        }
+        return self;
+    };
+
+    RevBeacon.prototype.setParent = function(parentNode){
+        var self = this;
+        self.parent = (typeof parentNode === 'object' ? parentNode : document.getElementsByTagName('body')[0]);
+        return self;
+    };
+
+    RevBeacon.prototype.attach = function(){
+        var self = this;
+        if(true === self.push && !self.pushed) {
+            for (var b = 0; b < self.enabledBeacons.length; b++) {
+                var beaconId = self.enabledBeacons[b];
+                var beacon = self.beacons[beaconId];
+                var beaconScript = '<script id="$2" type="text/javascript" src="$1" class="beacon-tag beacon-script" data-source="' + self.pluginSource + '"></script>';
+                var beaconImage = '<img src="$1" id="$2" class="beacon-tag beacon-pxl" style="' + beacon.styles + '" data-source="' + self.pluginSource + '" />';
+                var beaconEl = '';
+                var beaconDomId = 'beacon_' + Math.floor(Math.random() * 1000);
+                if (document.getElementById(beaconDomId) !== null) {
+                    beaconDomId = 'beacon_' + Math.floor(Math.random() * 2000);
+                }
+                if (beacon.enabled === true) {
+                    switch (beacon.type) {
+                        case 'script':
+                            beaconEl = beaconScript.replace('$1', beacon.script_url).replace('$2', beaconDomId);
+                            break;
+                        case 'pixel':
+                        case 'default':
+                            beaconEl = beaconImage.replace('$1', beacon.pixel_url).replace('$2', beaconDomId);
+                            break;
+                    }
+                    self.parent.insertAdjacentHTML('beforeend', beaconEl);
+                    self.renderedBeacons.push(document.getElementById(beaconDomId));
+                }
+            }
+            self.pushed = self.renderedBeacons.length;
+        }
+        return self;
+    };
+
+    RevBeacon.prototype.detach = function(pluginSource){
+        var self = this;
+        for (var b = 0; b < self.renderedBeacons.length; b++) {
+            if(self.renderedBeacons[b].parentNode){
+                if(pluginSource !== undefined) {
+                    if(self.renderedBeacons[b].getAttribute('data-source') == pluginSource.toString()){
+                        self.renderedBeacons[b].parentNode.removeChild(self.renderedBeacons[b]);
+                    }
+                } else {
+                    self.renderedBeacons[b].parentNode.removeChild(self.renderedBeacons[b]);
+                }
+
+            }
+        }
+        self.pushed = 0;
+        return self;
+    };
+
+    window.revBeacon = new RevBeacon();
+
+    return window.revBeacon;
+
+}(window, document));
+/**
  * Revcontent detect
  */
 
-( function( window, factory ) {
+( function( window, factory) {
   /*global define: false, module: false, require: false */
   'use strict';
   // universal module definition
     // browser global
     window.revApi = factory(
-      window
+      window,
+      window.revBeacon
     );
 
-}( window, function factory( window ) {
+}( window, function factory( window, revBeacon ) {
 
 'use strict';
 
 var api = {};
+api.beacons = revBeacon || {attach: function(){}};
+
 
 api.request = function(url, success, failure) {
 
@@ -6910,7 +7151,8 @@ RevFlicker({
     ],
     url: 'https://trends.revcontent.com/api/v1/',
     disclosure_text: revDisclose.defaultDisclosureText,
-    hide_provider: false
+    hide_provider: false,
+    beacons: true
 });
 */
 
@@ -6955,7 +7197,8 @@ RevFlicker({
             text_overlay: false,
             ad_border: true,
             disclosure_text: revDisclose.defaultDisclosureText,
-            hide_provider: false
+            hide_provider: false,
+            beacons: true
         };
 
         // merge options
@@ -6975,7 +7218,7 @@ RevFlicker({
 
         var that = this;
         //append injrected style
-        revUtils.appendStyle('/* inject:css */#rev-flicker:focus,.flickity-enabled:focus{outline:0}#rev-flicker,#rev-flicker .flickity-viewport,#rev-flicker .rev-flicker{clear:both}.flickity-enabled{position:relative}.flickity-viewport{overflow:hidden;position:relative;height:100%}.flickity-slider{position:absolute;width:100%;height:100%}.flickity-enabled.is-draggable{-webkit-tap-highlight-color:transparent;tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.flickity-enabled.is-draggable .flickity-viewport{cursor:move;cursor:grab}.flickity-enabled.is-draggable .flickity-viewport.is-pointer-down{cursor:grabbing}.flickity-prev-next-button{position:absolute;top:50%;width:44px;height:44px;border:none;border-radius:50%;background:#fff;background:hsla(0,0%,100%,.75);cursor:pointer;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}.flickity-prev-next-button:hover{background:#fff}.flickity-prev-next-button:focus{outline:0;box-shadow:0 0 0 5px #09F}.flickity-prev-next-button:active{filter:alpha(opacity=60);opacity:.6}.flickity-prev-next-button.previous{left:10px}.flickity-prev-next-button.next{right:10px}.flickity-rtl .flickity-prev-next-button.previous{left:auto;right:10px}.flickity-rtl .flickity-prev-next-button.next{right:auto;left:10px}.flickity-prev-next-button:disabled{filter:alpha(opacity=30);opacity:.3;cursor:auto}.flickity-prev-next-button svg{position:absolute;left:20%;top:20%;width:60%;height:60%}.flickity-prev-next-button .arrow{fill:#333}.flickity-prev-next-button.no-svg{color:#333;font-size:26px}.flickity-page-dots{position:absolute;width:100%;bottom:-25px;padding:0;margin:0;list-style:none;text-align:center;line-height:1}.flickity-rtl .flickity-page-dots{direction:rtl}.flickity-page-dots .dot{display:inline-block;width:10px;height:10px;margin:0 8px;background:#333;border-radius:50%;filter:alpha(opacity=25);opacity:.25;cursor:pointer}.flickity-page-dots .dot.is-selected{filter:alpha(opacity=100);opacity:1}#rev-flicker *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-flicker .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-flicker .rev-sponsored{line-height:24px;font-size:12px}#rev-flicker .rev-sponsored.bottom-right,#rev-flicker .rev-sponsored.top-right{float:right}#rev-flicker .rev-sponsored.top-right a{vertical-align:-5px}#rev-flicker .flickity-prev-next-button{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-flicker .flickity-prev-next-button:disabled{opacity:0}#rev-flicker .rev-sponsored a{color:#999}#rev-flicker a,#rev-flicker a:focus,#rev-flicker a:hover{text-decoration:none}#rev-flicker .rev-ad a{display:block;color:#222}#rev-flicker .rev-image{-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee}#rev-flicker .rev-image img{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-flicker.loaded .rev-image{background:0 0}#rev-flicker.loaded .rev-image img{opacity:1}#rev-flicker .rev-headline,#rev-flicker .rev-provider{margin:0;text-align:left}#rev-flicker .rev-headline{margin:0;overflow:hidden}#rev-flicker .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-flicker .rev-provider{color:#999;font-weight:600}#rev-flicker .rev-ad{border-style:solid;border-color:#eee;border-radius:5px;overflow:hidden;background:#fff}#rev-flicker .rev-content{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-flicker .rev-content.rev-next{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:.5}#rev-flicker.rev-flicker-text-overlay .rev-ad{position:relative}#rev-flicker.rev-flicker-text-overlay .rev-ad a{height:100%}#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-headline{position:absolute;bottom:4px;color:#fff;text-shadow:1px 1px rgba(0,0,0,.8);height:auto!important}#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay,#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:after,#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:before{border-radius:5px;position:absolute;top:0;height:100%;width:100%}#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:after,#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:before{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;content:"";display:block}#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:after{background:-webkit-linear-gradient(top,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%);background:linear-gradient(to bottom,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%)}#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:before{opacity:0;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%);background:linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%)}#rev-flicker.rev-flicker-text-overlay .rev-ad a:hover .rev-overlay:after{opacity:0}#rev-flicker.rev-flicker-text-overlay .rev-ad a:hover .rev-overlay:before{opacity:1}#rev-opt-out .rd-close-button{position:absolute;cursor:pointer;right:10px;z-index:10}#rev-opt-out a{cursor:pointer!important}#rev-opt-out .rd-box-wrap{display:none;z-index:2147483641}#rev-opt-out .rd-box-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}#rev-opt-out .rd-vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}#rev-opt-out .rd-box{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}#rev-opt-out .rd-normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}#rev-opt-out .rd-full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}#rev-opt-out .rd-header{height:20px;position:absolute;right:0}#rev-opt-out .rd-about{font-family:Arial,sans-serif;font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}#rev-opt-out .rd-about .rd-logo{background:url(https://serve.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}#rev-opt-out .rd-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}#rev-opt-out .rd-about p#main{text-align:left}#rev-opt-out .rd-about h2{color:#777;font-family:Arial,sans-serif;font-size:16px;line-height:18px}#rev-opt-out .rd-about a{color:#00cb43}#rev-opt-out .rd-well{border:1px solid #E0E0E0;padding:20px;text-align:center;border-radius:2px;margin:20px 0 0}#rev-opt-out .rd-well h2{margin-top:0}#rev-opt-out .rd-well p{margin-bottom:0}#rev-opt-out .rd-opt-out{text-align:center}#rev-opt-out .rd-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-flicker');
+        revUtils.appendStyle('/* inject:css */#rev-flicker:focus,.flickity-enabled:focus{outline:0}#rev-flicker,#rev-flicker .flickity-viewport,#rev-flicker .rev-flicker{clear:both}.flickity-enabled{position:relative}.flickity-viewport{overflow:hidden;position:relative;height:100%}.flickity-slider{position:absolute;width:100%;height:100%}.flickity-enabled.is-draggable{-webkit-tap-highlight-color:transparent;tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.flickity-enabled.is-draggable .flickity-viewport{cursor:move;cursor:grab}.flickity-enabled.is-draggable .flickity-viewport.is-pointer-down{cursor:grabbing}.flickity-prev-next-button{position:absolute;top:50%;width:44px;height:44px;border:none;border-radius:50%;background:#fff;background:hsla(0,0%,100%,.75);cursor:pointer;-webkit-transform:translateY(-50%);transform:translateY(-50%)}.flickity-prev-next-button:hover{background:#fff}.flickity-prev-next-button:focus{outline:0;box-shadow:0 0 0 5px #09F}.flickity-prev-next-button:active{filter:alpha(opacity=60);opacity:.6}.flickity-prev-next-button.previous{left:10px}.flickity-prev-next-button.next{right:10px}.flickity-rtl .flickity-prev-next-button.previous{left:auto;right:10px}.flickity-rtl .flickity-prev-next-button.next{right:auto;left:10px}.flickity-prev-next-button:disabled{filter:alpha(opacity=30);opacity:.3;cursor:auto}.flickity-prev-next-button svg{position:absolute;left:20%;top:20%;width:60%;height:60%}.flickity-prev-next-button .arrow{fill:#333}.flickity-prev-next-button.no-svg{color:#333;font-size:26px}.flickity-page-dots{position:absolute;width:100%;bottom:-25px;padding:0;margin:0;list-style:none;text-align:center;line-height:1}.flickity-rtl .flickity-page-dots{direction:rtl}.flickity-page-dots .dot{display:inline-block;width:10px;height:10px;margin:0 8px;background:#333;border-radius:50%;filter:alpha(opacity=25);opacity:.25;cursor:pointer}.flickity-page-dots .dot.is-selected{filter:alpha(opacity=100);opacity:1}#rev-flicker *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-flicker .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-flicker .rev-sponsored{line-height:24px;font-size:12px}#rev-flicker .rev-sponsored.bottom-right,#rev-flicker .rev-sponsored.top-right{float:right}#rev-flicker .rev-sponsored.top-right a{vertical-align:-5px}#rev-flicker .flickity-prev-next-button{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-flicker .flickity-prev-next-button:disabled{opacity:0}#rev-flicker .rev-sponsored a{color:#999}#rev-flicker a,#rev-flicker a:focus,#rev-flicker a:hover{text-decoration:none}#rev-flicker .rev-ad a{display:block;color:#222}#rev-flicker .rev-image{-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee}#rev-flicker .rev-image img{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-flicker.loaded .rev-image{background:0 0}#rev-flicker.loaded .rev-image img{opacity:1}#rev-flicker .rev-headline,#rev-flicker .rev-provider{margin:0;text-align:left}#rev-flicker .rev-headline{margin:0;overflow:hidden}#rev-flicker .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-flicker .rev-provider{color:#999;font-weight:600}#rev-flicker .rev-ad{border-style:solid;border-color:#eee;border-radius:5px;overflow:hidden;background:#fff}#rev-flicker .rev-content{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:1}#rev-flicker .rev-content.rev-next{-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:.5}#rev-flicker.rev-flicker-text-overlay .rev-ad{position:relative}#rev-flicker.rev-flicker-text-overlay .rev-ad a{height:100%}#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-headline{position:absolute;bottom:4px;color:#fff;text-shadow:1px 1px rgba(0,0,0,.8);height:auto!important}#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay,#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:after,#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:before{border-radius:5px;position:absolute;top:0;height:100%;width:100%}#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:after,#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:before{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;content:"";display:block}#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:after{background:-webkit-linear-gradient(top,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%);background:linear-gradient(to bottom,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%)}#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-overlay:before{opacity:0;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%);background:linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%)}#rev-flicker.rev-flicker-text-overlay .rev-ad a:hover .rev-overlay:after{opacity:0}#rev-flicker.rev-flicker-text-overlay .rev-ad a:hover .rev-overlay:before{opacity:1}#rev-opt-out .rd-close-button{position:absolute;cursor:pointer;right:10px;z-index:10}#rev-opt-out a{cursor:pointer!important}#rev-opt-out .rd-box-wrap{display:none;z-index:2147483641}#rev-opt-out .rd-box-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}#rev-opt-out .rd-vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}#rev-opt-out .rd-box{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}#rev-opt-out .rd-normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}#rev-opt-out .rd-full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}#rev-opt-out .rd-header{height:20px;position:absolute;right:0}#rev-opt-out .rd-about{font-family:Arial,sans-serif;font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}#rev-opt-out .rd-about .rd-logo{background:url(https://serve.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}#rev-opt-out .rd-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}#rev-opt-out .rd-about p#main{text-align:left}#rev-opt-out .rd-about h2{color:#777;font-family:Arial,sans-serif;font-size:16px;line-height:18px}#rev-opt-out .rd-about a{color:#00cb43}#rev-opt-out .rd-well{border:1px solid #E0E0E0;padding:20px;text-align:center;border-radius:2px;margin:20px 0 0}#rev-opt-out .rd-well h2{margin-top:0}#rev-opt-out .rd-well p{margin-bottom:0}#rev-opt-out .rd-opt-out{text-align:center}#rev-opt-out .rd-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-flicker');
 
         // append a new element to the flicker
         this.containerElement = document.createElement('div');
@@ -7323,6 +7566,7 @@ RevFlicker({
         if ( typeof this.impressionTracker[offset + '_' + count] == 'undefined') {
             revApi.request(impressionsUrl, function() {
                 that.impressionTracker[offset + '_' + count] = true;
+                if(offset === 0 && true === that.options.beacons) { revApi.beacons.setPluginSource('flicker').attach(); }
             });
         }
     }

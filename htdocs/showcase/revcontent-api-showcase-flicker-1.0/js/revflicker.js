@@ -40,7 +40,8 @@ RevFlicker({
     ],
     url: 'https://trends.revcontent.com/api/v1/',
     disclosure_text: revDisclose.defaultDisclosureText,
-    hide_provider: false
+    hide_provider: false,
+    beacons: true
 });
 */
 
@@ -85,7 +86,8 @@ RevFlicker({
             text_overlay: false,
             ad_border: true,
             disclosure_text: revDisclose.defaultDisclosureText,
-            hide_provider: false
+            hide_provider: false,
+            beacons: true
         };
 
         // merge options
@@ -453,6 +455,7 @@ RevFlicker({
         if ( typeof this.impressionTracker[offset + '_' + count] == 'undefined') {
             revApi.request(impressionsUrl, function() {
                 that.impressionTracker[offset + '_' + count] = true;
+                if(offset === 0 && true === that.options.beacons) { revApi.beacons.setPluginSource('flicker').attach(); }
             });
         }
     }

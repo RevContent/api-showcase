@@ -972,123 +972,488 @@ define(function () {
     }
 })());
 /*!
- * imagesLoaded PACKAGED v4.1.0
+ * imagesLoaded PACKAGED v4.0.0
  * JavaScript is all like "You images are done yet or what?"
  * MIT License
  */
 
-/**
- * EvEmitter v1.0.1
- * Lil' event emitter
- * MIT License
+/*!
+ * EventEmitter v4.2.11 - git.io/ee
+ * Unlicense - http://unlicense.org/
+ * Oliver Caldwell - http://oli.me.uk/
+ * @preserve
  */
 
-/* jshint unused: true, undef: true, strict: true */
+;(function () {
+    'use strict';
 
-( function( global, factory ) {
-  // universal module definition
-  /* jshint strict: false */ /* globals define, module */
-  if ( typeof define == 'function' && define.amd ) {
-    // AMD - RequireJS
-    define( 'ev-emitter/ev-emitter',factory );
-  } else if ( typeof module == 'object' && module.exports ) {
-    // CommonJS - Browserify, Webpack
-    module.exports = factory();
-  } else {
-    // Browser globals
-    global.EvEmitter = factory();
-  }
+    /**
+     * Class for managing events.
+     * Can be extended to provide event functionality in other classes.
+     *
+     * @class EventEmitter Manages event registering and emitting.
+     */
+    function EventEmitter() {}
 
-}( this, function() {
+    // Shortcuts to improve speed and size
+    var proto = EventEmitter.prototype;
+    var exports = this;
+    var originalGlobalValue = exports.EventEmitter;
 
+    /**
+     * Finds the index of the listener for the event in its storage array.
+     *
+     * @param {Function[]} listeners Array of listeners to search through.
+     * @param {Function} listener Method to look for.
+     * @return {Number} Index of the specified listener, -1 if not found
+     * @api private
+     */
+    function indexOfListener(listeners, listener) {
+        var i = listeners.length;
+        while (i--) {
+            if (listeners[i].listener === listener) {
+                return i;
+            }
+        }
 
-
-function EvEmitter() {}
-
-var proto = EvEmitter.prototype;
-
-proto.on = function( eventName, listener ) {
-  if ( !eventName || !listener ) {
-    return;
-  }
-  // set events hash
-  var events = this._events = this._events || {};
-  // set listeners array
-  var listeners = events[ eventName ] = events[ eventName ] || [];
-  // only add once
-  if ( listeners.indexOf( listener ) == -1 ) {
-    listeners.push( listener );
-  }
-
-  return this;
-};
-
-proto.once = function( eventName, listener ) {
-  if ( !eventName || !listener ) {
-    return;
-  }
-  // add event
-  this.on( eventName, listener );
-  // set once flag
-  // set onceEvents hash
-  var onceEvents = this._onceEvents = this._onceEvents || {};
-  // set onceListeners array
-  var onceListeners = onceEvents[ eventName ] = onceEvents[ eventName ] || [];
-  // set flag
-  onceListeners[ listener ] = true;
-
-  return this;
-};
-
-proto.off = function( eventName, listener ) {
-  var listeners = this._events && this._events[ eventName ];
-  if ( !listeners || !listeners.length ) {
-    return;
-  }
-  var index = listeners.indexOf( listener );
-  if ( index != -1 ) {
-    listeners.splice( index, 1 );
-  }
-
-  return this;
-};
-
-proto.emitEvent = function( eventName, args ) {
-  var listeners = this._events && this._events[ eventName ];
-  if ( !listeners || !listeners.length ) {
-    return;
-  }
-  var i = 0;
-  var listener = listeners[i];
-  args = args || [];
-  // once stuff
-  var onceListeners = this._onceEvents && this._onceEvents[ eventName ];
-
-  while ( listener ) {
-    var isOnce = onceListeners && onceListeners[ listener ];
-    if ( isOnce ) {
-      // remove listener
-      // remove before trigger to prevent recursion
-      this.off( eventName, listener );
-      // unset once flag
-      delete onceListeners[ listener ];
+        return -1;
     }
-    // trigger listener
-    listener.apply( this, args );
-    // get next listener
-    i += isOnce ? 0 : 1;
-    listener = listeners[i];
-  }
 
-  return this;
-};
+    /**
+     * Alias a method while keeping the context correct, to allow for overwriting of target method.
+     *
+     * @param {String} name The name of the target method.
+     * @return {Function} The aliased method
+     * @api private
+     */
+    function alias(name) {
+        return function aliasClosure() {
+            return this[name].apply(this, arguments);
+        };
+    }
 
-return EvEmitter;
+    /**
+     * Returns the listener array for the specified event.
+     * Will initialise the event object and listener arrays if required.
+     * Will return an object if you use a regex search. The object contains keys for each matched event. So /ba[rz]/ might return an object containing bar and baz. But only if you have either defined them with defineEvent or added some listeners to them.
+     * Each property in the object response is an array of listener functions.
+     *
+     * @param {String|RegExp} evt Name of the event to return the listeners from.
+     * @return {Function[]|Object} All listener functions for the event.
+     */
+    proto.getListeners = function getListeners(evt) {
+        var events = this._getEvents();
+        var response;
+        var key;
 
-}));
+        // Return a concatenated array of all matching events if
+        // the selector is a regular expression.
+        if (evt instanceof RegExp) {
+            response = {};
+            for (key in events) {
+                if (events.hasOwnProperty(key) && evt.test(key)) {
+                    response[key] = events[key];
+                }
+            }
+        }
+        else {
+            response = events[evt] || (events[evt] = []);
+        }
+
+        return response;
+    };
+
+    /**
+     * Takes a list of listener objects and flattens it into a list of listener functions.
+     *
+     * @param {Object[]} listeners Raw listener objects.
+     * @return {Function[]} Just the listener functions.
+     */
+    proto.flattenListeners = function flattenListeners(listeners) {
+        var flatListeners = [];
+        var i;
+
+        for (i = 0; i < listeners.length; i += 1) {
+            flatListeners.push(listeners[i].listener);
+        }
+
+        return flatListeners;
+    };
+
+    /**
+     * Fetches the requested listeners via getListeners but will always return the results inside an object. This is mainly for internal use but others may find it useful.
+     *
+     * @param {String|RegExp} evt Name of the event to return the listeners from.
+     * @return {Object} All listener functions for an event in an object.
+     */
+    proto.getListenersAsObject = function getListenersAsObject(evt) {
+        var listeners = this.getListeners(evt);
+        var response;
+
+        if (listeners instanceof Array) {
+            response = {};
+            response[evt] = listeners;
+        }
+
+        return response || listeners;
+    };
+
+    /**
+     * Adds a listener function to the specified event.
+     * The listener will not be added if it is a duplicate.
+     * If the listener returns true then it will be removed after it is called.
+     * If you pass a regular expression as the event name then the listener will be added to all events that match it.
+     *
+     * @param {String|RegExp} evt Name of the event to attach the listener to.
+     * @param {Function} listener Method to be called when the event is emitted. If the function returns true then it will be removed after calling.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.addListener = function addListener(evt, listener) {
+        var listeners = this.getListenersAsObject(evt);
+        var listenerIsWrapped = typeof listener === 'object';
+        var key;
+
+        for (key in listeners) {
+            if (listeners.hasOwnProperty(key) && indexOfListener(listeners[key], listener) === -1) {
+                listeners[key].push(listenerIsWrapped ? listener : {
+                    listener: listener,
+                    once: false
+                });
+            }
+        }
+
+        return this;
+    };
+
+    /**
+     * Alias of addListener
+     */
+    proto.on = alias('addListener');
+
+    /**
+     * Semi-alias of addListener. It will add a listener that will be
+     * automatically removed after its first execution.
+     *
+     * @param {String|RegExp} evt Name of the event to attach the listener to.
+     * @param {Function} listener Method to be called when the event is emitted. If the function returns true then it will be removed after calling.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.addOnceListener = function addOnceListener(evt, listener) {
+        return this.addListener(evt, {
+            listener: listener,
+            once: true
+        });
+    };
+
+    /**
+     * Alias of addOnceListener.
+     */
+    proto.once = alias('addOnceListener');
+
+    /**
+     * Defines an event name. This is required if you want to use a regex to add a listener to multiple events at once. If you don't do this then how do you expect it to know what event to add to? Should it just add to every possible match for a regex? No. That is scary and bad.
+     * You need to tell it what event names should be matched by a regex.
+     *
+     * @param {String} evt Name of the event to create.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.defineEvent = function defineEvent(evt) {
+        this.getListeners(evt);
+        return this;
+    };
+
+    /**
+     * Uses defineEvent to define multiple events.
+     *
+     * @param {String[]} evts An array of event names to define.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.defineEvents = function defineEvents(evts) {
+        for (var i = 0; i < evts.length; i += 1) {
+            this.defineEvent(evts[i]);
+        }
+        return this;
+    };
+
+    /**
+     * Removes a listener function from the specified event.
+     * When passed a regular expression as the event name, it will remove the listener from all events that match it.
+     *
+     * @param {String|RegExp} evt Name of the event to remove the listener from.
+     * @param {Function} listener Method to remove from the event.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.removeListener = function removeListener(evt, listener) {
+        var listeners = this.getListenersAsObject(evt);
+        var index;
+        var key;
+
+        for (key in listeners) {
+            if (listeners.hasOwnProperty(key)) {
+                index = indexOfListener(listeners[key], listener);
+
+                if (index !== -1) {
+                    listeners[key].splice(index, 1);
+                }
+            }
+        }
+
+        return this;
+    };
+
+    /**
+     * Alias of removeListener
+     */
+    proto.off = alias('removeListener');
+
+    /**
+     * Adds listeners in bulk using the manipulateListeners method.
+     * If you pass an object as the second argument you can add to multiple events at once. The object should contain key value pairs of events and listeners or listener arrays. You can also pass it an event name and an array of listeners to be added.
+     * You can also pass it a regular expression to add the array of listeners to all events that match it.
+     * Yeah, this function does quite a bit. That's probably a bad thing.
+     *
+     * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to add to multiple events at once.
+     * @param {Function[]} [listeners] An optional array of listener functions to add.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.addListeners = function addListeners(evt, listeners) {
+        // Pass through to manipulateListeners
+        return this.manipulateListeners(false, evt, listeners);
+    };
+
+    /**
+     * Removes listeners in bulk using the manipulateListeners method.
+     * If you pass an object as the second argument you can remove from multiple events at once. The object should contain key value pairs of events and listeners or listener arrays.
+     * You can also pass it an event name and an array of listeners to be removed.
+     * You can also pass it a regular expression to remove the listeners from all events that match it.
+     *
+     * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to remove from multiple events at once.
+     * @param {Function[]} [listeners] An optional array of listener functions to remove.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.removeListeners = function removeListeners(evt, listeners) {
+        // Pass through to manipulateListeners
+        return this.manipulateListeners(true, evt, listeners);
+    };
+
+    /**
+     * Edits listeners in bulk. The addListeners and removeListeners methods both use this to do their job. You should really use those instead, this is a little lower level.
+     * The first argument will determine if the listeners are removed (true) or added (false).
+     * If you pass an object as the second argument you can add/remove from multiple events at once. The object should contain key value pairs of events and listeners or listener arrays.
+     * You can also pass it an event name and an array of listeners to be added/removed.
+     * You can also pass it a regular expression to manipulate the listeners of all events that match it.
+     *
+     * @param {Boolean} remove True if you want to remove listeners, false if you want to add.
+     * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to add/remove from multiple events at once.
+     * @param {Function[]} [listeners] An optional array of listener functions to add/remove.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.manipulateListeners = function manipulateListeners(remove, evt, listeners) {
+        var i;
+        var value;
+        var single = remove ? this.removeListener : this.addListener;
+        var multiple = remove ? this.removeListeners : this.addListeners;
+
+        // If evt is an object then pass each of its properties to this method
+        if (typeof evt === 'object' && !(evt instanceof RegExp)) {
+            for (i in evt) {
+                if (evt.hasOwnProperty(i) && (value = evt[i])) {
+                    // Pass the single listener straight through to the singular method
+                    if (typeof value === 'function') {
+                        single.call(this, i, value);
+                    }
+                    else {
+                        // Otherwise pass back to the multiple function
+                        multiple.call(this, i, value);
+                    }
+                }
+            }
+        }
+        else {
+            // So evt must be a string
+            // And listeners must be an array of listeners
+            // Loop over it and pass each one to the multiple method
+            i = listeners.length;
+            while (i--) {
+                single.call(this, evt, listeners[i]);
+            }
+        }
+
+        return this;
+    };
+
+    /**
+     * Removes all listeners from a specified event.
+     * If you do not specify an event then all listeners will be removed.
+     * That means every event will be emptied.
+     * You can also pass a regex to remove all events that match it.
+     *
+     * @param {String|RegExp} [evt] Optional name of the event to remove all listeners for. Will remove from every event if not passed.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.removeEvent = function removeEvent(evt) {
+        var type = typeof evt;
+        var events = this._getEvents();
+        var key;
+
+        // Remove different things depending on the state of evt
+        if (type === 'string') {
+            // Remove all listeners for the specified event
+            delete events[evt];
+        }
+        else if (evt instanceof RegExp) {
+            // Remove all events matching the regex.
+            for (key in events) {
+                if (events.hasOwnProperty(key) && evt.test(key)) {
+                    delete events[key];
+                }
+            }
+        }
+        else {
+            // Remove all listeners in all events
+            delete this._events;
+        }
+
+        return this;
+    };
+
+    /**
+     * Alias of removeEvent.
+     *
+     * Added to mirror the node API.
+     */
+    proto.removeAllListeners = alias('removeEvent');
+
+    /**
+     * Emits an event of your choice.
+     * When emitted, every listener attached to that event will be executed.
+     * If you pass the optional argument array then those arguments will be passed to every listener upon execution.
+     * Because it uses `apply`, your array of arguments will be passed as if you wrote them out separately.
+     * So they will not arrive within the array on the other side, they will be separate.
+     * You can also pass a regular expression to emit to all events that match it.
+     *
+     * @param {String|RegExp} evt Name of the event to emit and execute listeners for.
+     * @param {Array} [args] Optional array of arguments to be passed to each listener.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.emitEvent = function emitEvent(evt, args) {
+        var listenersMap = this.getListenersAsObject(evt);
+        var listeners;
+        var listener;
+        var i;
+        var key;
+        var response;
+
+        for (key in listenersMap) {
+            if (listenersMap.hasOwnProperty(key)) {
+                listeners = listenersMap[key].slice(0);
+                i = listeners.length;
+
+                while (i--) {
+                    // If the listener returns true then it shall be removed from the event
+                    // The function is executed either with a basic call or an apply if there is an args array
+                    listener = listeners[i];
+
+                    if (listener.once === true) {
+                        this.removeListener(evt, listener.listener);
+                    }
+
+                    response = listener.listener.apply(this, args || []);
+
+                    if (response === this._getOnceReturnValue()) {
+                        this.removeListener(evt, listener.listener);
+                    }
+                }
+            }
+        }
+
+        return this;
+    };
+
+    /**
+     * Alias of emitEvent
+     */
+    proto.trigger = alias('emitEvent');
+
+    /**
+     * Subtly different from emitEvent in that it will pass its arguments on to the listeners, as opposed to taking a single array of arguments to pass on.
+     * As with emitEvent, you can pass a regex in place of the event name to emit to all events that match it.
+     *
+     * @param {String|RegExp} evt Name of the event to emit and execute listeners for.
+     * @param {...*} Optional additional arguments to be passed to each listener.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.emit = function emit(evt) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        return this.emitEvent(evt, args);
+    };
+
+    /**
+     * Sets the current value to check against when executing listeners. If a
+     * listeners return value matches the one set here then it will be removed
+     * after execution. This value defaults to true.
+     *
+     * @param {*} value The new value to check for when executing listeners.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.setOnceReturnValue = function setOnceReturnValue(value) {
+        this._onceReturnValue = value;
+        return this;
+    };
+
+    /**
+     * Fetches the current value to check against when executing listeners. If
+     * the listeners return value matches this one then it should be removed
+     * automatically. It will return true by default.
+     *
+     * @return {*|Boolean} The current value to check for or the default, true.
+     * @api private
+     */
+    proto._getOnceReturnValue = function _getOnceReturnValue() {
+        if (this.hasOwnProperty('_onceReturnValue')) {
+            return this._onceReturnValue;
+        }
+        else {
+            return true;
+        }
+    };
+
+    /**
+     * Fetches the events object and creates one if required.
+     *
+     * @return {Object} The events storage object.
+     * @api private
+     */
+    proto._getEvents = function _getEvents() {
+        return this._events || (this._events = {});
+    };
+
+    /**
+     * Reverts the global {@link EventEmitter} to its previous value and returns a reference to this version.
+     *
+     * @return {Function} Non conflicting EventEmitter class.
+     */
+    EventEmitter.noConflict = function noConflict() {
+        exports.EventEmitter = originalGlobalValue;
+        return EventEmitter;
+    };
+
+    // Expose the class either via AMD, CommonJS or the global object
+    if (typeof define === 'function' && define.amd) {
+        define('eventEmitter/EventEmitter',[],function () {
+            return EventEmitter;
+        });
+    }
+    else if (typeof module === 'object' && module.exports){
+        module.exports = EventEmitter;
+    }
+    else {
+        exports.EventEmitter = EventEmitter;
+    }
+}.call(this));
 
 /*!
- * imagesLoaded v4.1.0
+ * imagesLoaded v4.0.0
  * JavaScript is all like "You images are done yet or what?"
  * MIT License
  */
@@ -1101,21 +1466,21 @@ return EvEmitter;
   if ( typeof define == 'function' && define.amd ) {
     // AMD
     define( [
-      'ev-emitter/ev-emitter'
-    ], function( EvEmitter ) {
-      return factory( window, EvEmitter );
+      'eventEmitter/EventEmitter'
+    ], function( EventEmitter ) {
+      return factory( window, EventEmitter );
     });
   } else if ( typeof module == 'object' && module.exports ) {
     // CommonJS
     module.exports = factory(
       window,
-      require('ev-emitter')
+      require('wolfy87-eventemitter')
     );
   } else {
     // browser global
     window.imagesLoaded = factory(
       window,
-      window.EvEmitter
+      window.EventEmitter
     );
   }
 
@@ -1123,7 +1488,7 @@ return EvEmitter;
 
 // --------------------------  factory -------------------------- //
 
-function factory( window, EvEmitter ) {
+function factory( window, EventEmitter ) {
 
 
 
@@ -1201,7 +1566,7 @@ function ImagesLoaded( elem, options, onAlways ) {
   }.bind( this ));
 }
 
-ImagesLoaded.prototype = Object.create( EvEmitter.prototype );
+ImagesLoaded.prototype = Object.create( EventEmitter.prototype );
 
 ImagesLoaded.prototype.options = {};
 
@@ -1312,7 +1677,7 @@ ImagesLoaded.prototype.progress = function( image, elem, message ) {
   this.progressedCount++;
   this.hasAnyBroken = this.hasAnyBroken || !image.isLoaded;
   // progress event
-  this.emitEvent( 'progress', [ this, image, elem ] );
+  this.emit( 'progress', this, image, elem );
   if ( this.jqDeferred && this.jqDeferred.notify ) {
     this.jqDeferred.notify( this, image );
   }
@@ -1329,8 +1694,8 @@ ImagesLoaded.prototype.progress = function( image, elem, message ) {
 ImagesLoaded.prototype.complete = function() {
   var eventName = this.hasAnyBroken ? 'fail' : 'done';
   this.isComplete = true;
-  this.emitEvent( eventName, [ this ] );
-  this.emitEvent( 'always', [ this ] );
+  this.emit( eventName, this );
+  this.emit( 'always', this );
   if ( this.jqDeferred ) {
     var jqMethod = this.hasAnyBroken ? 'reject' : 'resolve';
     this.jqDeferred[ jqMethod ]( this );
@@ -1343,7 +1708,7 @@ function LoadingImage( img ) {
   this.img = img;
 }
 
-LoadingImage.prototype = Object.create( EvEmitter.prototype );
+LoadingImage.prototype = Object.create( EventEmitter.prototype );
 
 LoadingImage.prototype.check = function() {
   // If complete is true and browser supports natural sizes,
@@ -1371,7 +1736,7 @@ LoadingImage.prototype.getIsImageComplete = function() {
 
 LoadingImage.prototype.confirm = function( isLoaded, message ) {
   this.isLoaded = isLoaded;
-  this.emitEvent( 'progress', [ this, this.img, message ] );
+  this.emit( 'progress', this, this.img, message );
 };
 
 // ----- events ----- //
@@ -1425,13 +1790,13 @@ Background.prototype.check = function() {
 };
 
 Background.prototype.unbindEvents = function() {
-  this.img.removeEventListener( 'load', this );
-  this.img.removeEventListener( 'error', this );
+  this.img.addEventListener( 'load', this );
+  this.img.addEventListener( 'error', this );
 };
 
 Background.prototype.confirm = function( isLoaded, message ) {
   this.isLoaded = isLoaded;
-  this.emitEvent( 'progress', [ this, this.element, message ] );
+  this.emit( 'progress', this, this.element, message );
 };
 
 // -------------------------- jQuery -------------------------- //
@@ -4410,7 +4775,9 @@ AnyGrid.prototype._create = function() {
 
     this.element.style.position = "relative";
 
-    this.bindResize();
+    if ( this.options.isResizeBound ) {
+        this.bindResize();
+    }
 
     this._setUp();
 };
@@ -4440,7 +4807,8 @@ AnyGrid.prototype._getItemLayoutPosition = function( item ) {
     if (this.options.removeVerticalGutters) {
         if (row === 1 && item.size.paddingTop) {
             itemHeight = itemHeight - this.verticalPadding
-        } else if (row === this.rowsCount && item.size.paddingBottom) {
+        }
+        if (row === this.rowsCount && item.size.paddingBottom) {
             itemHeight = itemHeight - this.verticalPadding
         }
     }
@@ -4840,6 +5208,14 @@ utils.addEventListener = function(el, eventName, handler) {
   }
 };
 
+utils.removeEventListener = function(el, eventName, handler) {
+    if (el.removeEventListener) {
+        el.removeEventListener(eventName, handler);
+    } else {
+        el.detachEvent('on' + eventName, handler);
+    }
+}
+
 utils.ellipsisText = function(el, text, height) {
     var ellipText = '';
     var t = el.cloneNode(true);
@@ -5044,7 +5420,6 @@ return utils;
 
 (function (window, document, dialog, undefined) {
     'use strict';
-    console.log("Entering RevDisclose Namespace...");
     var RevDisclose = function () {
         var self = this;
         self.dialog = dialog;
@@ -5063,18 +5438,15 @@ return utils;
     };
 
     RevDisclose.prototype.init = function () {
-        console.log("RevDisclose: Initializing...");
         var self = this;
         document.onreadystatechange = function () {
             if (document.readyState == "complete") {
-                console.log("RevDisclose: Document is READY!...");
 
             }
         }
     };
 
     RevDisclose.prototype.setDialog = function(dialog){
-        console.log("RevDisclose: Manually Setting Dialog Object");
         var self = this;
         if(typeof dialog === "object"){
             self.dialog = dialog;
@@ -5082,20 +5454,17 @@ return utils;
     };
 
     RevDisclose.prototype.truncateDisclosure = function () {
-        console.log("RevDisclose: Initializing...");
         var self = this;
         self.disclosureText = self.disclosureText.toString().substring(0, self.disclosureTextLimit).replace(/['"]+/g, '');
     };
 
     RevDisclose.prototype.setDisclosureText = function(disclosure){
-        console.log("RevDisclose: Setting Disclosure Text Label to: "  + disclosure.toString());
         var self = this;
         self.disclosureText = (disclosure.length > 2) ? disclosure.toString() : self.defaultDisclosureText;
         self.truncateDisclosure();
     };
 
     RevDisclose.prototype.setOnClickHandler = function (handler, handlerObject) {
-        console.log("RevDisclose: Setting onClick Handler for Disclosure text...");
         var self = this;
         if (typeof handler === 'function') {
             self.onClickHandler = handler;
@@ -5106,15 +5475,12 @@ return utils;
     };
 
     RevDisclose.prototype.getSponsorTemplate = function () {
-        console.log("RevDisclose: Building Disclosure HTML...");
         var self = this;
         self.disclosureHtml = '<a href="javascript:;" onclick="revDisclose.onClickHandler(revDisclose.onClickHandlerObject ? revDisclose.onClickHandlerObject : null);">' + self.disclosureText + '</a>';
-        console.log("RevDisclose: " + self.disclosureHtml);
         return self.plainText ? self.disclosureText : self.disclosureHtml;
     };
 
     RevDisclose.prototype.getDisclosure = function (disclosureText) {
-        console.log("RevDisclose: Attaching Disclosure Text and onClick Event Function...");
         var self = this;
         self.setDisclosureText(disclosureText);
         if(typeof self.dialog === "object") {
@@ -5187,23 +5553,186 @@ return detect;
 
 }));
 /**
+ * RevBeacon (Beacon Pushes for API Calls)
+ *
+ */
+
+(function (window, document, undefined) {
+    'use strict';
+    var RevBeacon = function () {
+        var self = this;
+        self.parent = document.getElementsByTagName('body')[0];
+        self.pluginSource = '';
+        self.push = true;
+        self.pushed = 0;
+        self.enabledBeacons = ["quantcast", "comscore"];
+        self.renderedBeacons = [];
+        self.beacons = {
+            get: function(beaconId){
+                var beacons = this;
+                return beacons.beaconId !== undefined ? beacons.beaconId : {enabled: false}
+            },
+            quantcast: {
+                enabled: true,
+                type: 'pixel',
+                pixel_url: '//pixel.quantserve.com/pixel/p-aD1qr93XuF6aC.gif',
+                script_url: false,
+                styles: 'display:none;border:0;width:1px;height:1px'
+            },
+            comscore: {
+                enabled: true,
+                type: 'script',
+                pixel_url: false,
+                script_url: '//b.scorecardresearch.com/p?c1=7&c2=20310460&c3=12345&cv=2.0&cj=1',
+                styles: ''
+            }
+        };
+
+        self.init();
+    };
+
+    RevBeacon.prototype.init = function () {
+        var self = this;
+        document.onreadystatechange = function () {
+            if (document.readyState == "complete") {
+
+            }
+        }
+    };
+
+    RevBeacon.prototype.setPluginSource = function(pluginSource){
+        var self = this;
+        self.pluginSource = pluginSource.toString();
+        return self;
+    };
+
+    RevBeacon.prototype.getPluginSource = function(){
+        var self = this;
+        return self.pluginSource.toString();
+    };
+
+    RevBeacon.prototype.enableBeacon = function(beaconName){
+        var self = this;
+        if(self.enabledBeacons[beaconName] == undefined && self.beacons[beaconName] !== undefined) {
+            self.enabledBeacons.push(beaconName);
+        }
+        return self;
+    };
+
+    RevBeacon.prototype.disableBeacon = function(beaconName){
+        var self = this;
+        self.enabledBeacons = self.enabledBeacons.filter(function(entry){
+            if(beaconName != entry) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        return self;
+    };
+
+    RevBeacon.prototype.offline = function(){
+        var self = this;
+        self.push = false;
+        return self;
+    };
+
+    RevBeacon.prototype.createBeacon = function(beaconName, enabled, type, pixelUrl, scriptUrl, styles) {
+        var self = this;
+        if(self.beacons[beaconName] == undefined) {
+            self.beacons[beaconName] = {
+                enabled: enabled,
+                type: type,
+                pixel_url: pixelUrl,
+                script_url: scriptUrl,
+                styles: styles
+            };
+        }
+        return self;
+    };
+
+    RevBeacon.prototype.setParent = function(parentNode){
+        var self = this;
+        self.parent = (typeof parentNode === 'object' ? parentNode : document.getElementsByTagName('body')[0]);
+        return self;
+    };
+
+    RevBeacon.prototype.attach = function(){
+        var self = this;
+        if(true === self.push && !self.pushed) {
+            for (var b = 0; b < self.enabledBeacons.length; b++) {
+                var beaconId = self.enabledBeacons[b];
+                var beacon = self.beacons[beaconId];
+                var beaconScript = '<script id="$2" type="text/javascript" src="$1" class="beacon-tag beacon-script" data-source="' + self.pluginSource + '"></script>';
+                var beaconImage = '<img src="$1" id="$2" class="beacon-tag beacon-pxl" style="' + beacon.styles + '" data-source="' + self.pluginSource + '" />';
+                var beaconEl = '';
+                var beaconDomId = 'beacon_' + Math.floor(Math.random() * 1000);
+                if (document.getElementById(beaconDomId) !== null) {
+                    beaconDomId = 'beacon_' + Math.floor(Math.random() * 2000);
+                }
+                if (beacon.enabled === true) {
+                    switch (beacon.type) {
+                        case 'script':
+                            beaconEl = beaconScript.replace('$1', beacon.script_url).replace('$2', beaconDomId);
+                            break;
+                        case 'pixel':
+                        case 'default':
+                            beaconEl = beaconImage.replace('$1', beacon.pixel_url).replace('$2', beaconDomId);
+                            break;
+                    }
+                    self.parent.insertAdjacentHTML('beforeend', beaconEl);
+                    self.renderedBeacons.push(document.getElementById(beaconDomId));
+                }
+            }
+            self.pushed = self.renderedBeacons.length;
+        }
+        return self;
+    };
+
+    RevBeacon.prototype.detach = function(pluginSource){
+        var self = this;
+        for (var b = 0; b < self.renderedBeacons.length; b++) {
+            if(self.renderedBeacons[b].parentNode){
+                if(pluginSource !== undefined) {
+                    if(self.renderedBeacons[b].getAttribute('data-source') == pluginSource.toString()){
+                        self.renderedBeacons[b].parentNode.removeChild(self.renderedBeacons[b]);
+                    }
+                } else {
+                    self.renderedBeacons[b].parentNode.removeChild(self.renderedBeacons[b]);
+                }
+
+            }
+        }
+        self.pushed = 0;
+        return self;
+    };
+
+    window.revBeacon = new RevBeacon();
+
+    return window.revBeacon;
+
+}(window, document));
+/**
  * Revcontent detect
  */
 
-( function( window, factory ) {
+( function( window, factory) {
   /*global define: false, module: false, require: false */
   'use strict';
   // universal module definition
     // browser global
     window.revApi = factory(
-      window
+      window,
+      window.revBeacon
     );
 
-}( window, function factory( window ) {
+}( window, function factory( window, revBeacon ) {
 
 'use strict';
 
 var api = {};
+api.beacons = revBeacon || {attach: function(){}};
+
 
 api.request = function(url, success, failure) {
 
@@ -5283,7 +5812,9 @@ RevSlider({
     url: 'https://trends.revcontent.com/api/v1/',
     ad_border: true,
     disclosure_text: revDisclose.defaultDisclosureText,
-    hide_provider: false
+    hide_provider: false,
+    hide_header: false,
+    beacons: true
 });
 */
 
@@ -5299,6 +5830,8 @@ RevSlider({
     var RevSlider = function(opts) {
 
         var defaults = {
+            api_source: 'slide',
+            visible: true,
             element: false,
             rows: {
                 xxs: 2,
@@ -5342,6 +5875,7 @@ RevSlider({
             show_padding: true,
             pages: 4,
             text_right: false,
+            text_right_height: 100,
             transition_duration: 0,
             multipliers: {
                 font_size: 0,
@@ -5353,9 +5887,12 @@ RevSlider({
                 back: true,
                 size: 40,
                 position: 'inside',
+                dual: false
             },
             disclosure_text: revDisclose.defaultDisclosureText,
-            hide_provider: false
+            hide_provider: false,
+            hide_header: false,
+            beacons: true
         };
 
         // merge options
@@ -5374,13 +5911,14 @@ RevSlider({
 
         this.mobile = (revDetect.mobile()) ? true : false;
 
-        revUtils.appendStyle('/* inject:css */#rev-slider a,#rev-slider a:focus,#rev-slider a:hover{text-decoration:none}#rev-slider,#rev-slider #rev-slider-grid-container{padding:0;width:100%}#rev-slider #rev-slider-grid{padding:0}#rev-slider #rev-slider-grid-container{clear:both;position:relative;width:100%;-webkit-transition:-webkit-transform;transition:transform;-webkit-transition-timing-function:ease-in-out;transition-timing-function:ease-in-out}#rev-slider #rev-slider-container,#rev-slider #rev-slider-inner{width:100%;clear:both;overflow:hidden;position:relative}#rev-slider{clear:both}#rev-slider *{box-sizing:border-box;font-size:inherit;line-height:inherit;margin:0;padding:0}#rev-slider .rev-chevron{display:inline-block;height:36px;top:50%;margin-top:-18px;position:absolute;left:50%;margin-left:-18px;fill:#fff}#rev-slider #rev-slider-container .rev-btn-wrapper{position:absolute;height:100%;width:40px;text-align:center;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;z-index:10000000000;top:0}#rev-slider.rev-slider-vertical #rev-slider-container .rev-btn-wrapper{width:100%}#rev-slider.rev-slider-vertical #rev-slider-container #forward-wrapper.rev-btn-wrapper{bottom:0;top:auto}#rev-slider #rev-slider-container .rev-btn-container{position:relative;background-color:#333;opacity:.3;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;height:100%;text-align:center;border-radius:5px}#rev-slider #rev-slider-container .rev-btn-container:hover{opacity:.8}#rev-slider #rev-slider-container:hover #back-wrapper,#rev-slider #rev-slider-container:hover #forward-wrapper{opacity:1!important}#rev-slider a{color:inherit}#rev-slider:focus{outline:0}#rev-slider .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-slider .rev-sponsored{line-height:24px;font-size:12px}#rev-slider .rev-sponsored.bottom-right,#rev-slider .rev-sponsored.top-right{float:right}#rev-slider .rev-sponsored.top-right a{vertical-align:-5px}#rev-slider .rev-sponsored a{color:#999}#rev-slider .rev-ad a{display:block;color:#222}#rev-slider .rev-image{position:relative;-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee;overflow:hidden}#rev-slider .rev-image img{position:absolute;top:0;left:0;width:100%;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-slider.loaded .rev-image{background:0 0}#rev-slider.loaded .rev-image img{opacity:1}#rev-slider .rev-headline,#rev-slider .rev-provider{margin:0 10px;text-align:left}#rev-slider .rev-headline{margin-top:12px;overflow:hidden}#rev-slider .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;margin:0}#rev-slider .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px}#rev-slider .rev-ad{border-radius:5px;overflow:hidden;background:#fff;z-index:1}#rev-slider .rev-ad img{border-top-left-radius:5px;border-top-right-radius:5px}#rev-slider .rev-content.blur{-webkit-filter:blur(3px);filter:blur(3px)}#rev-slider .rev-content{-webkit-transition-property:opacity;transition-property:opacity;-webkit-transition-duration:.5s;transition-duration:.5s;opacity:1}#rev-slider .rev-content.rev-next{-webkit-transition-property:opacity;transition-property:opacity;-webkit-transition-duration:.5s;transition-duration:.5s;opacity:.5}#rev-slider.rev-slider-text-overlay .rev-ad{position:relative}#rev-slider.rev-slider-text-overlay .rev-ad a{height:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-headline-brand{position:absolute;bottom:4px;color:#fff;text-shadow:1px 1px rgba(0,0,0,.8)}#rev-slider.rev-slider-text-overlay .rev-ad .rev-headline-brand .rev-provider{display:none}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{border-radius:5px;position:absolute;top:0;height:100%;width:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;content:"";display:block}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after{background:-webkit-linear-gradient(top,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%);background:linear-gradient(to bottom,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{opacity:0;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%);background:linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:after{opacity:0}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:before{opacity:1}#rev-opt-out .rd-close-button{position:absolute;cursor:pointer;right:10px;z-index:10}#rev-opt-out a{cursor:pointer!important}#rev-opt-out .rd-box-wrap{display:none;z-index:2147483641}#rev-opt-out .rd-box-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}#rev-opt-out .rd-vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}#rev-opt-out .rd-box{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}#rev-opt-out .rd-normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}#rev-opt-out .rd-full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}#rev-opt-out .rd-header{height:20px;position:absolute;right:0}#rev-opt-out .rd-about{font-family:Arial,sans-serif;font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}#rev-opt-out .rd-about .rd-logo{background:url(https://serve.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}#rev-opt-out .rd-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}#rev-opt-out .rd-about p#main{text-align:left}#rev-opt-out .rd-about h2{color:#777;font-family:Arial,sans-serif;font-size:16px;line-height:18px}#rev-opt-out .rd-about a{color:#00cb43}#rev-opt-out .rd-well{border:1px solid #E0E0E0;padding:20px;text-align:center;border-radius:2px;margin:20px 0 0}#rev-opt-out .rd-well h2{margin-top:0}#rev-opt-out .rd-well p{margin-bottom:0}#rev-opt-out .rd-opt-out{text-align:center}#rev-opt-out .rd-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-slider');
+        revUtils.appendStyle('/* inject:css */#rev-slider a,#rev-slider a:focus,#rev-slider a:hover{text-decoration:none}#rev-slider,#rev-slider #rev-slider-grid-container{padding:0;width:100%}#rev-slider #rev-slider-grid{padding:0}#rev-slider #rev-slider-grid-container{clear:both;position:relative;width:100%;-webkit-transition:-webkit-transform;transition:transform;-webkit-transition-timing-function:ease-in-out;transition-timing-function:ease-in-out}#rev-slider #rev-slider-container,#rev-slider #rev-slider-inner{width:100%;clear:both;overflow:hidden;position:relative}#rev-slider{clear:both}#rev-slider *{box-sizing:border-box;font-size:inherit;line-height:inherit;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;margin:0;padding:0}#rev-slider #rev-slider-container .rev-btn-wrapper .rev-chevron{display:inline-block;height:36px;top:50%;margin-top:-18px;position:absolute;left:50%;margin-left:-18px;fill:#fff}#rev-slider #rev-slider-container .rev-btn-wrapper{cursor:pointer;position:absolute;height:100%;width:40px;text-align:center;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;z-index:10000000000;top:0}#rev-slider.rev-slider-vertical #rev-slider-container .rev-btn-wrapper{width:100%}#rev-slider.rev-slider-vertical #rev-slider-container .rev-btn-wrapper-forward.rev-btn-wrapper{bottom:0;top:auto}#rev-slider #rev-slider-container .rev-btn-container{position:relative;background-color:#333;opacity:.3;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;height:100%;text-align:center;border-radius:5px}#rev-slider #rev-slider-container .rev-btn-container label{cursor:pointer}#rev-slider #rev-slider-container .rev-btn-container:hover{opacity:.8}#rev-slider #rev-slider-container .rev-btn-dual{position:absolute;left:5px;z-index:1;background:#fff;box-shadow:0 0 2px 0 rgba(89,89,89,1);top:50%;margin-top:-36px;border-radius:2px;opacity:0;-webkit-transition:opacity .2s;transition:opacity .2s}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper{position:static;width:auto;height:auto;top:auto}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-container{background-color:inherit;opacity:1;height:36px;border-radius:0}#rev-slider #rev-slider-container:hover .rev-btn-dual{opacity:1}#rev-slider #rev-slider-container .rev-btn-dual.rev-btn-dual-right{right:5px;left:auto}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper.rev-btn-wrapper-back{border-bottom:1px solid #ddd}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper .rev-chevron{display:inline-block;top:auto;margin-top:0;position:static;left:auto;margin-left:0;fill:#ccc}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper:hover .rev-chevron{fill:#aaa}#rev-slider #rev-slider-container:hover .rev-btn-wrapper{opacity:1!important}#rev-slider.rev-slider-text-right .rev-image{float:left;margin-right:5px}#rev-slider.rev-slider-text-right .rev-ad a .rev-headline{margin-top:0!important}#rev-slider a{color:inherit}#rev-slider:focus{outline:0}#rev-slider .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-slider .rev-sponsored{line-height:24px;font-size:12px}#rev-slider .rev-sponsored.bottom-right,#rev-slider .rev-sponsored.top-right{float:right}#rev-slider .rev-sponsored.top-right a{vertical-align:-5px}#rev-slider .rev-sponsored a{color:#999}#rev-slider .rev-ad a{display:block;height:100%;color:#222}#rev-slider .rev-image{position:relative;-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee;overflow:hidden}#rev-slider .rev-image img{position:absolute;top:0;left:0;width:100%;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-slider.loaded .rev-image{background:0 0}#rev-slider.loaded .rev-image img{opacity:1}#rev-slider .rev-headline,#rev-slider .rev-provider{margin:0 10px;text-align:left}#rev-slider .rev-headline{margin-top:12px;overflow:hidden}#rev-slider .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;overflow:hidden;margin:0}#rev-slider .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}#rev-slider .rev-ad{border-radius:5px;overflow:hidden;background:#fff;z-index:1}#rev-slider .rev-ad img{border-top-left-radius:5px;border-top-right-radius:5px}#rev-slider .rev-content.blur{-webkit-filter:blur(3px);filter:blur(3px)}#rev-slider .rev-content{-webkit-transition-property:opacity;transition-property:opacity;-webkit-transition-duration:.5s;transition-duration:.5s;opacity:1}#rev-slider .rev-content.rev-next{-webkit-transition-property:opacity;transition-property:opacity;-webkit-transition-duration:.5s;transition-duration:.5s;opacity:.5}#rev-slider.rev-slider-text-overlay .rev-ad{position:relative}#rev-slider.rev-slider-text-overlay .rev-ad a{height:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-headline-brand{position:absolute;bottom:4px;color:#fff;text-shadow:1px 1px rgba(0,0,0,.8)}#rev-slider.rev-slider-text-overlay .rev-ad .rev-headline-brand .rev-provider{display:none}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{border-radius:5px;position:absolute;top:0;height:100%;width:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;content:"";display:block}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after{background:-webkit-linear-gradient(top,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%);background:linear-gradient(to bottom,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{opacity:0;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%);background:linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:after{opacity:0}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:before{opacity:1}#rev-opt-out .rd-close-button{position:absolute;cursor:pointer;right:10px;z-index:10}#rev-opt-out a{cursor:pointer!important}#rev-opt-out .rd-box-wrap{display:none;z-index:2147483641}#rev-opt-out .rd-box-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}#rev-opt-out .rd-vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}#rev-opt-out .rd-box{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}#rev-opt-out .rd-normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}#rev-opt-out .rd-full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}#rev-opt-out .rd-header{height:20px;position:absolute;right:0}#rev-opt-out .rd-about{font-family:Arial,sans-serif;font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}#rev-opt-out .rd-about .rd-logo{background:url(https://serve.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}#rev-opt-out .rd-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}#rev-opt-out .rd-about p#main{text-align:left}#rev-opt-out .rd-about h2{color:#777;font-family:Arial,sans-serif;font-size:16px;line-height:18px}#rev-opt-out .rd-about a{color:#00cb43}#rev-opt-out .rd-well{border:1px solid #E0E0E0;padding:20px;text-align:center;border-radius:2px;margin:20px 0 0}#rev-opt-out .rd-well h2{margin-top:0}#rev-opt-out .rd-well p{margin-bottom:0}#rev-opt-out .rd-opt-out{text-align:center}#rev-opt-out .rd-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-slider');
 
         this.contentItems = [];
 
         this.containerElement = document.createElement('div');
         this.containerElement.id = 'rev-slider';
         revUtils.addClass(this.containerElement, 'rev-slider-' + (this.options.vertical ? 'vertical' : 'horizontal'));
+        revUtils.addClass(this.containerElement, 'rev-slider-' + (this.options.text_right ? 'text-right' : 'text-bottom'));
 
         this.innerContainerElement = document.createElement('div');
         this.innerContainerElement.id = 'rev-slider-container';
@@ -5409,10 +5947,15 @@ RevSlider({
 
         this.grid = new AnyGrid(this.gridElement, this.gridOptions());
 
+        this.grid.on('resized', function() {
+            that.resize();
+        });
+
         this.setMultipliers();
 
         this.grid.option({gutter: this.getPadding()});
 
+        this.offset = 0;
         this.page = 1;
         this.previousPage = 0;
 
@@ -5422,7 +5965,7 @@ RevSlider({
 
         this.appendElements();
 
-        this.createCells(this.grid.cols);
+        this.createCells();
 
         this.textOverlay();
 
@@ -5435,12 +5978,10 @@ RevSlider({
 
         this.initButtons();
 
-        this.ellipsisTimer;
-
         this.impressionTracker = [];
     };
 
-    RevSlider.prototype.createCells = function(cols) {
+    RevSlider.prototype.createCells = function() {
         for (var i = 0; i < this.limit; i++) {
             this.gridElement.appendChild(this.createNewCell());
         }
@@ -5452,9 +5993,9 @@ RevSlider({
     };
 
     RevSlider.prototype.setMultipliers = function() {
-        this.fontSizeMultiplier = Math.round( (.04 + Number((this.options.multipliers.font_size * .01).toFixed(2))) * 100 ) / 100;
-        this.marginMultiplier = Math.round( (.05 + Number((this.options.multipliers.margin * .01).toFixed(2))) * 100 ) / 100;
-        this.paddingMultiplier = Math.round( (.01 + Number((this.options.multipliers.padding * .01).toFixed(2))) * 100 ) / 100;
+        this.fontSizeMultiplier = Math.round( (.044 + Number((this.options.multipliers.font_size * .01).toFixed(2))) * 1000 ) / 1000;
+        this.marginMultiplier = Math.round( (.05 + Number((this.options.multipliers.margin * .01).toFixed(2))) * 1000 ) / 1000;
+        this.paddingMultiplier = Math.round( (.01 + Number((this.options.multipliers.padding * .01).toFixed(2))) * 1000 ) / 1000;
     };
 
     RevSlider.prototype.gridOptions = function() {
@@ -5542,7 +6083,9 @@ RevSlider({
 
         revUtils[insert](this.gridContainerElement, this.gridElement);
 
-        this.grid = new AnyGrid(this.gridElement, this.gridOptions());
+        var options = this.gridOptions();
+        options.isResizeBound = false;
+        this.grid = new AnyGrid(this.gridElement, options);
 
         if (!this.options.vertical) {
             oldGrid.element.style.width = containerWidth + 'px';
@@ -5554,14 +6097,14 @@ RevSlider({
             this.gridContainerElement.style.width = ((containerWidth * 2) + (this.padding * 2)) + 'px';
         }
 
-        this.createCells(oldGrid.cols);
+        this.createCells();
 
-        this.updateDisplayedItems();
-        this.checkEllipsis();
         this.textOverlay();
 
         this.grid.reloadItems();
         this.grid.layout();
+
+        this.updateDisplayedItems(true);
 
         this.gridContainerElement.style.transitionDuration = animationDuration + 's';
         this.gridContainerElement.style.WebkitTransitionDuration = animationDuration + 's';
@@ -5592,6 +6135,19 @@ RevSlider({
         oldGrid.destroy();
         revUtils.remove(oldGrid.element);
 
+        if (!this.options.vertical) {
+            this.grid.element.style.width = 'auto';
+            this.grid.element.style.float = 'none';
+
+            this.gridContainerElement.style.width = '100%';
+        }
+
+        var that = this;
+        this.grid.bindResize();
+        this.grid.on('resized', function() {
+            that.resize();
+        });
+
         this.updating = false;
     };
 
@@ -5612,24 +6168,26 @@ RevSlider({
             this.imageWidth = 800;
         }
 
-        var width = this.grid.containerWidth / this.grid.perRow;
+        this.preloaderHeight = Math.round((this.grid.columnWidth - (this.padding * 2) - ( this.options.ad_border ? 2 : 0 )) * (this.imageHeight / this.imageWidth));
 
-        this.headlineFontSize = Math.max(14, ((width * .03).toFixed(2) / 1));
+        if (this.options.text_right) {
+            this.preloaderHeight = this.options.text_right_height;
+            this.preloaderWidth = Math.round(this.preloaderHeight * (this.imageWidth / this.imageHeight) * 100) / 100;
+        }
+
+        this.headlineFontSize = Math.max(14, ((this.grid.columnWidth * this.fontSizeMultiplier).toFixed(2) / 1));
+
         this.headlineLineHeight = ((this.headlineFontSize * 1.25).toFixed(2) / 1);
         this.headlineHeight = ((this.headlineLineHeight * this.options.headline_size).toFixed(2) / 1);
-        if (this.options.max_headline && this.getMaxHeadlineHeight() > 0) {
-            this.headlineHeight = this.getMaxHeadlineHeight();
-        }
-        this.headlineMarginTop = ((this.headlineLineHeight * .4).toFixed(2) / 1);
 
-        this.innerMargin = Math.max(0, ((width * this.paddingMultiplier).toFixed(2) / 1));
+        this.headlineMarginTop = ((this.headlineLineHeight * .4).toFixed(2) / 1);
 
         this.providerFontSize = ((this.headlineLineHeight / 2).toFixed(2)) / 1;
         this.providerFontSize = this.providerFontSize < 11 ? 11 : this.providerFontSize;
 
         this.providerLineHeight = Math.round(((this.providerFontSize * 1.8).toFixed(2) / 1));
 
-        this.preloaderHeight = Math.round((this.grid.columnWidth - (this.padding * 2) - ( this.options.ad_border ? 2 : 0 )) * (this.imageHeight / this.imageWidth));
+        this.innerMargin = Math.max(0, ((this.grid.columnWidth * this.paddingMultiplier).toFixed(2) / 1));
     };
 
     RevSlider.prototype.initButtons = function() {
@@ -5638,86 +6196,54 @@ RevSlider({
         var chevronLeft  = '<path d="M23.12 11.12L21 9l-9 9 9 9 2.12-2.12L16.24 18z"/>';
         var chevronRight = '<path d="M15 9l-2.12 2.12L19.76 18l-6.88 6.88L15 27l9-9z"/>';
 
-        var btnHeight = this.options.vertical ? this.options.buttons.size + 'px' : '100%';
+        var btnHeight = this.options.buttons.dual ? 'auto' : (this.options.vertical ? this.options.buttons.size + 'px' : '100%');
 
         this.backBtn = document.createElement('div');
         this.backBtn.id = "back-wrapper";
-        this.backBtn.setAttribute('class', 'rev-btn-wrapper');
+        this.backBtn.setAttribute('class', 'rev-btn-wrapper rev-btn-wrapper-back');
         this.backBtn.style.height = btnHeight;
-        this.backBtn.style.left = '0';
-        this.backBtn.innerHTML = '<div id="back-btn-container" class="rev-btn-container" style="right:0px;">' +
+        this.backBtn.style.left = this.options.buttons.dual ? 'auto' : '0';
+        this.backBtn.innerHTML = '<div id="back-btn-container" class="rev-btn-container" style="right: ' + (this.options.buttons.dual ? 'auto' : '0px') +';">' +
             '<label id="btn-back" class="rev-chevron">' +
                 '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">' + (this.options.vertical ? chevronUp : chevronLeft) + '</svg>' +
             '</label></div>';
 
         this.forwardBtn = document.createElement('div');
         this.forwardBtn.id = "forward-wrapper";
-        this.forwardBtn.setAttribute('class', 'rev-btn-wrapper');
+        this.forwardBtn.setAttribute('class', 'rev-btn-wrapper rev-btn-wrapper-forward');
         this.forwardBtn.style.height = btnHeight;
-        this.forwardBtn.style.right = '0';
-        this.forwardBtn.innerHTML = '<div id="forward-btn-container" class="rev-btn-container" style="right:0px;">' +
+        this.forwardBtn.style.right = this.options.buttons.dual ? 'auto' : '0';
+        this.forwardBtn.innerHTML = '<div id="forward-btn-container" class="rev-btn-container" style="right: ' + (this.options.buttons.dual ? 'auto' : '0px') + ';">' +
             '<label id="btn-forward" class="rev-chevron">' +
                 '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">' + (this.options.vertical ? chevronDown : chevronRight) + '</svg>' +
             '</label></div>';
 
-        if (this.mobile) {
-            this.forwardBtn.style.opacity = 1;
-            this.backBtn.style.opacity = 1;
+        if (this.options.buttons.dual) {
+            this.btnContainer = document.createElement('div');
+            this.btnContainer.setAttribute('class', 'rev-btn-dual');
+            revUtils.append(this.btnContainer, this.backBtn);
+            revUtils.append(this.btnContainer, this.forwardBtn);
+            revUtils.append(this.innerContainerElement, this.btnContainer);
         } else {
-            this.forwardBtn.style.opacity = 0;
-            this.backBtn.style.opacity = 0;
-        }
+            if (this.mobile) {
+                this.forwardBtn.style.opacity = 1;
+                this.backBtn.style.opacity = 1;
+            } else {
+                this.forwardBtn.style.opacity = 0;
+                this.backBtn.style.opacity = 0;
+            }
 
-        if (this.options.buttons.back) {
-            revUtils.append(this.innerContainerElement, this.backBtn);
-        }
+            if (this.options.buttons.back) {
+                revUtils.append(this.innerContainerElement, this.backBtn);
+            }
 
-        if (this.options.buttons.forward) {
-            revUtils.append(this.innerContainerElement, this.forwardBtn);
+            if (this.options.buttons.forward) {
+                revUtils.append(this.innerContainerElement, this.forwardBtn);
+            }
         }
 
         this.attachButtonEvents();
     };
-
-    // RevSlider.prototype.setupButtons = function() {
-    //     if ((this.mobile && !this.options.show_arrows.mobile) || (!this.mobile && !this.options.show_arrows.desktop)) {
-    //         this.backBtn.setAttribute('style', 'display: none;');
-    //         this.forwardBtn.setAttribute('style', 'display: none;');
-    //     } else {
-    //         // var backBtn = this.containerElement.querySelector('#btn-back');
-    //         // var forwardBtn = this.containerElement.querySelector('#btn-forward');
-    //         var transform = 'rotate(0deg)';
-
-    //         if (this.options.vertical) {
-    //             revUtils.removeClass(this.backBtn, 'side');
-    //             revUtils.removeClass(this.forwardBtn, 'side');
-
-    //             revUtils.addClass(this.backBtn, 'top-bottom');
-    //             revUtils.addClass(this.forwardBtn, 'top-bottom');
-
-    //             this.backBtn.setAttribute('style', 'padding: 0px 0px; top: 0px;');
-    //             this.forwardBtn.setAttribute('style', 'padding: 0px 0px; bottom: 0px;');
-    //             transform = "rotate(90deg)";
-    //         } else {
-    //             revUtils.addClass(this.backBtn, 'side');
-    //             revUtils.addClass(this.forwardBtn, 'side');
-
-    //             revUtils.removeClass(this.backBtn, 'top-bottom');
-    //             revUtils.removeClass(this.forwardBtn, 'top-bottom');
-
-    //             this.backBtn.setAttribute('style', 'padding: 0px 0px; left: 0px; top: 0px;');
-    //             this.forwardBtn.setAttribute('style', 'padding: 0px 0px; right: 0px; top: 0px;');
-    //         }
-
-    //         if (!this.mobile) {
-    //             this.forwardBtn.style.opacity = 0;
-    //             this.backBtn.style.opacity = 0;
-    //         }
-    //         if (!this.options.wrap_pages) {
-    //             this.backBtn.style.display = 'none';
-    //         }
-    //     }
-    // };
 
     RevSlider.prototype.textOverlay = function() {
         var ads = this.containerElement.querySelectorAll('.rev-ad');
@@ -5741,12 +6267,19 @@ RevSlider({
 
     RevSlider.prototype.appendElements = function() {
 
-        if (this.head) {
-            revUtils.remove(this.head);
+        if (!this.options.hide_header) {
+            if (this.head) {
+                revUtils.remove(this.head);
+            }
+            this.head = document.createElement('div');
+            revUtils.addClass(this.head, 'rev-head');
+            revUtils.prepend(this.containerElement, this.head);
+
+            this.header = document.createElement('h2');
+            this.header.innerHTML = this.options.header;
+            revUtils.addClass(this.header, 'rev-header');
+            revUtils.append(this.head, this.header);
         }
-        this.head = document.createElement('div');
-        revUtils.addClass(this.head, 'rev-head');
-        revUtils.prepend(this.containerElement, this.head);
 
         if (this.foot) {
             revUtils.remove(this.foot);
@@ -5757,11 +6290,6 @@ RevSlider({
             revUtils.addClass(this.foot, 'rev-foot');
             revUtils.append(this.containerElement, this.foot);
         }
-
-        this.header = document.createElement('h2');
-        this.header.innerHTML = this.options.header;
-        revUtils.addClass(this.header, 'rev-header');
-        revUtils.append(this.head, this.header);
 
         this.sponsored = document.createElement('div');
 
@@ -5820,32 +6348,24 @@ RevSlider({
 
     RevSlider.prototype.getCellHeight = function() {
         var cellHeight = this.preloaderHeight;
-        if (!this.options.text_overlay) {
+        if (!this.options.text_overlay && !this.options.text_right) {
             cellHeight += this.headlineHeight +
             this.headlineMarginTop + this.providerLineHeight;
             cellHeight += (this.options.ad_border) ? 2 : 0;
-        }
-        if (this.options.text_right) {
-            cellHeight = cellHeight/2.7;
         }
         return cellHeight;
     };
 
     RevSlider.prototype.resize = function() {
-        //var gridContainerElement = document.getElementById('rev-slider-grid-container');
-        //gridContainerElement.style.height = '';
-        //gridContainerElement.style.width = '100%';
-
         var that = this;
         var oldLimit = this.limit;
-        this.grid.option(this.options);
+        this.grid.option({transitionDuration: 0});
         this.setUp();
 
         var reconfig = 0;// how many to add or remove
 
         if (oldLimit != this.limit) {
             reconfig = (this.limit - oldLimit);
-
         }
 
         if (reconfig !== 0) {
@@ -5860,81 +6380,61 @@ RevSlider({
                 for (var i = 0; i < (this.limit - nodes.length); i++) {
                     this.gridElement.appendChild(this.createNewCell());
                 }
-                this.resetDisplay();
+                this.previousPage = 0;
+                this.page = 1;
+                this.updateDisplayedItems(false);
             }
         }
 
-        var ads = this.element.querySelectorAll('.rev-content');
+        if (this.options.max_headline) {
+            this.headlineHeight = this.getMaxHeadlineHeight();
+        }
+
+        var ads = this.element.querySelectorAll('.rev-ad');
 
         for (var i = 0; i < ads.length; i++) {
             var ad = ads[i];
 
-            ad.querySelectorAll('.rev-ad')[0].style.height = this.getCellHeight() + 'px';
+            ad.style.height = this.getCellHeight() + 'px';
 
-            //ad.style.width = this.grid.columnWidth + 'px';
-
-            if (this.options.text_right) {
-                var paddingOffset = this.padding * 2;
-                var halfWidth = ((this.grid.columnWidth - paddingOffset) / 2);
-                ad.querySelectorAll('.rev-headline-brand')[0].style.width = halfWidth + 'px';
-                ad.querySelectorAll('a')[0].style.display = 'inline-flex';
-                ad.querySelectorAll('.rev-image')[0].style.width = halfWidth + 'px';
-            }
             ad.querySelectorAll('.rev-image')[0].style.height = this.preloaderHeight + 'px';
-            ad.querySelectorAll('.rev-headline')[0].style.height = this.headlineHeight + 'px';
+            ad.querySelectorAll('.rev-headline')[0].style.maxHeight = this.headlineHeight + 'px';
             ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
             ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
             ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
+
             if(that.options.hide_provider === false) {
                 ad.querySelectorAll('.rev-provider')[0].style.margin = this.providerMargin + 'px ' + this.innerMargin + 'px ' + this.providerMargin + 'px';
                 ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize + 'px';
                 ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
                 ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight + 'px';
             }
+
+            ad.querySelectorAll('.rev-headline h3')[0].innerHTML = this.displayedItems[i].headline;
         }
         this.textOverlay();
-
         this.checkEllipsis();
-        if (this.options.max_headline) {
-            this.checkMaxHeadlineHeightPerRow();
-        }
+
         this.grid.reloadItems();
         this.grid.layout();
-    };
-
-    RevSlider.prototype.checkMaxHeadlineHeightPerRow = function() {
-        var itemsPerRow = this.grid.getPerRow();
-        var currentRowNum = 0;
-        var currentHeadlineHeight = this.getMaxHeadlineHeight(currentRowNum, itemsPerRow);
-        var ads = this.element.querySelectorAll('.rev-content');
-        if (ads.length > 0) {
-            for (var i = 0; i < ads.length; i++) {
-                if (i > 0 && (i % itemsPerRow) == 0) {
-                    currentHeadlineHeight = this.getMaxHeadlineHeight(++currentRowNum, itemsPerRow);
-                }
-                var ad = ads[i];
-                ad.querySelectorAll('.rev-headline')[0].style.height = currentHeadlineHeight + 'px';
-            }
-        }
+        this.grid.option({transitionDuration: this.options.transition_duration});
     };
 
     RevSlider.prototype.checkEllipsis = function() {
-        var that = this;
-        clearTimeout(that.ellipsisTimer);
-        that.ellipsisTimer = setTimeout(function() {
-            that.doEllipsis();
-        }, 10);
-    };
-
-    RevSlider.prototype.doEllipsis = function() {
-        var ads = this.element.querySelectorAll('.rev-content');
-        if (ads.length > 0) {
-            for (var i = 0; i < ads.length; i++) {
-                var ad = ads[i];
-                var text = ad.querySelectorAll('a')[0].title;
-                var el = ad.querySelectorAll('.rev-headline h3')[0];
-                var newText = revUtils.ellipsisText(el, text, this.headlineHeight);
-                ad.querySelectorAll('.rev-headline h3')[0].innerHTML = newText;
+        if (this.options.max_headline && !this.options.text_right) { // text_right should be limited, but don't waste for max_headline only
+            return;
+        }
+        var headlines = this.gridElement.querySelectorAll('.rev-content .rev-headline');
+        for (var i = 0; i < headlines.length; i++) {
+            var text,
+                container = headlines[i],
+                headline = container.children[0];
+            while(container.clientHeight < container.scrollHeight) {
+                text = headline.innerHTML.trim();
+                if(text.split(' ').length <= 1) {
+                    break;
+                }
+                headline.innerHTML = text.replace(/\W*\s(\S)*$/, '...');
             }
         }
     };
@@ -5944,14 +6444,15 @@ RevSlider({
         return this.grid.getPerRow() * (this.options.rows[this.grid.getBreakPoint()] ? this.options.rows[this.grid.getBreakPoint()] : this.options.rows);
     };
 
-    RevSlider.prototype.createNewCell = function(first, last) {
-        var html = '<div class="rev-ad" style="height: '+ this.getCellHeight() + 'px;' + (this.options.ad_border ? 'border:1px solid #eee' : '') +'" onmousedown="return false">' +
+    RevSlider.prototype.createNewCell = function() {
+        var imgWidth = typeof this.preloaderWidth === 'undefined' ? 'width:auto;' : 'width:' + this.preloaderWidth + 'px;';
+        var html = '<div class="rev-ad" style="height: '+ this.getCellHeight() + 'px;' + (this.options.ad_border ? 'border:1px solid #eee' : '') +'">' +
             '<a href="" target="_blank">' +
-            '<div class="rev-image" style="height:'+ this.preloaderHeight +'px">' +
+            '<div class="rev-image" style="'+ imgWidth +'height:'+ this.preloaderHeight +'px">' +
             '<img src=""/>' +
             '</div>' +
             '<div class="rev-headline-brand">' +
-            '<div class="rev-headline" style="height:'+ this.headlineHeight +'px; margin:'+ this.headlineMarginTop +'px ' + this.innerMargin + 'px' + ' 0;">' +
+            '<div class="rev-headline" style="max-height:'+ this.headlineHeight +'px; margin:'+ this.headlineMarginTop +'px ' + this.innerMargin + 'px' + ' 0;">' +
             '<h3 style="font-size:'+ this.headlineFontSize +'px; line-height:'+ this.headlineLineHeight +'px;"></h3>' +
             '</div>' +
             '<div style="margin:0 '  + this.innerMargin + 'px 0;font-size:'+ this.providerFontSize +'px;line-height:'+ this.providerLineHeight +'px;height:'+ this.providerLineHeight +'px;" class="rev-provider"></div>' +
@@ -5968,7 +6469,7 @@ RevSlider({
             cell.innerHTML = html;
 
             return cell;
-    }
+    };
 
     RevSlider.prototype.getData = function() {
         var sponsoredCount = this.options.pages * this.limit;
@@ -5978,73 +6479,68 @@ RevSlider({
 
         revApi.request(url, function(resp) {
             that.contentItems = resp;
-            that.resetDisplay();
+            that.updateDisplayedItems(that.options.visible);
 
             imagesLoaded( that.gridElement, function() {
                 revUtils.addClass(that.containerElement, 'loaded');
-                that.resize();
             });
         });
     };
 
-    RevSlider.prototype.registerImpressions = function(offset, count) {
-        var impressionsUrl = this.options.url + '?&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&api_source=flick';
+    RevSlider.prototype.registerImpressions = function() {
+        if (this.impressionTracker[this.offset + '_' + this.limit]) {
+            return; // impressions already tracked
+        }
 
-        impressionsUrl += '&sponsored_count=' + (this.options.internal ? 0 : count) + '&internal_count=' + (this.options.internal ? count : 0) + '&sponsored_offset='+ (this.options.internal ? 0 : offset) +'&internal_offset=' + (this.options.internal ? offset : 0);
+        var impressionsUrl = this.options.url + '?&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&api_source=' + this.options.api_source;
 
+        impressionsUrl += '&sponsored_count=' + (this.options.internal ? 0 : this.limit) + '&internal_count=' + (this.options.internal ? this.limit : 0) + '&sponsored_offset='+ (this.options.internal ? 0 : this.offset) +'&internal_offset=' + (this.options.internal ? this.offset : 0);
+
+        this.impressionTracker[this.offset + '_' + this.limit] = true;
         var that = this;
         // don't do the same one twice, this could be improved I am sure
-        if ( typeof this.impressionTracker[offset + '_' + count] == 'undefined') {
-            revApi.request(impressionsUrl, function() {
-                that.impressionTracker[offset + '_' + count] = true;
-            });
-        }
+        revApi.request(impressionsUrl, function() {
+            if(that.offset == 0 && true === that.options.beacons) { revApi.beacons.setPluginSource(that.options.api_source).attach(); }
+            return;
+        });
     };
 
-    RevSlider.prototype.resetDisplay = function() {
-        this.previousPage = 0;
-        this.page = 1;
-        this.updateDisplayedItems();
-    };
-
-    RevSlider.prototype.updateDisplayedItems = function() {
+    RevSlider.prototype.updateDisplayedItems = function(registerImpressions) {
         var correctedPage = Math.abs(this.page);
-        var countOffset = ((correctedPage * this.increment) - this.increment);
-        var endIndex = countOffset + this.limit;
+        this.offset = ((correctedPage * this.increment) - this.increment);
+        var endIndex = this.offset + this.limit;
         var moreItemsNeeded = 0;
         if (endIndex > this.contentItems.length) {
             endIndex = this.contentItems.length;
-            moreItemsNeeded = this.limit - (endIndex - countOffset);
+            moreItemsNeeded = this.limit - (endIndex - this.offset);
         }
-        var itemsToDisplay = [];
-        for (var i = 0; countOffset < endIndex; i++, countOffset++) {
-            itemsToDisplay[i] = this.contentItems[countOffset];
+        this.displayedItems = [];
+        for (var i = this.offset; i < endIndex; i++) {
+            this.displayedItems.push(this.contentItems[i]);
         }
         for (var i = 0; i < moreItemsNeeded; i++) {
-            itemsToDisplay[itemsToDisplay.length] = this.contentItems[i];
+            this.displayedItems.push(this.contentItems[i]);
         }
-        var ads = this.gridElement.querySelectorAll('.rev-ad');
-        var contentIndex = 0;
-        var rowCount = 0;
-        var contentIncrement = (this.options.vertical) ? 1 : ((typeof this.options.rows == 'object') ? this.options.rows[this.grid.getBreakPoint()] : this.options.rows);
-        for (var i = 0; i < this.limit; i++) {
-            var ad = ads[i],
-                data = itemsToDisplay[contentIndex];
 
-            if (this.options.text_right) {
-                var paddingOffset = this.padding * 2;
-                var halfWidth = ((this.grid.columnWidth - paddingOffset) / 2);
-                ad.querySelectorAll('.rev-headline-brand')[0].style.width = halfWidth + 'px';
-                ad.querySelectorAll('a')[0].style.display = 'inline-flex';
-                ad.querySelectorAll('.rev-image')[0].style.width = halfWidth + 'px';
-            }
+        if (this.options.max_headline) {
+            this.headlineHeight = this.getMaxHeadlineHeight();
+        }
+
+        var ads = this.gridElement.querySelectorAll('.rev-ad');
+
+        for (var i = 0; i < this.displayedItems.length; i++) {
+            var ad = ads[i],
+                data = this.displayedItems[i];
+
+            ad.style.height = this.getCellHeight() + 'px';
+
             ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', ''));
             ad.querySelectorAll('a')[0].title = data.headline;
             ad.querySelectorAll('img')[0].setAttribute('src', data.image);
             ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
             ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
             ad.querySelectorAll('.rev-image')[0].style.height = this.preloaderHeight + 'px';
-            ad.querySelectorAll('.rev-headline')[0].style.height = this.headlineHeight + 'px';
+            ad.querySelectorAll('.rev-headline')[0].style.maxHeight = this.headlineHeight + 'px';
             ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
             ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
             ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
@@ -6052,12 +6548,15 @@ RevSlider({
             ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize +'px';
             ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
             ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
-            contentIndex += contentIncrement;
-            if (!this.options.vertical && contentIndex > this.limit - 1) {
-                contentIndex = ++rowCount;
-            }
         }
-        this.registerImpressions(0, this.limit);
+
+        if (registerImpressions) {
+            this.registerImpressions();
+        }
+
+        this.grid.reloadItems();
+        this.grid.layout();
+        this.checkEllipsis();
     };
 
     RevSlider.prototype.hasNextPage = function() {
@@ -6078,6 +6577,17 @@ RevSlider({
 
     RevSlider.prototype.attachButtonEvents = function() {
         var that = this;
+        if (this.options.buttons.dual && !revDetect.mobile()) {
+            this.containerElement.addEventListener('mousemove', function(e) {
+                // get left or right cursor position
+                if ((e.clientX - that.containerElement.getBoundingClientRect().left) > (that.containerElement.offsetWidth / 2)) {
+                    revUtils.addClass(that.btnContainer, 'rev-btn-dual-right');
+                } else {
+                    revUtils.removeClass(that.btnContainer, 'rev-btn-dual-right');
+                }
+            });
+        }
+
         this.forwardBtn.addEventListener('click', function() {
             that.showNextPage();
         });
@@ -6137,34 +6647,28 @@ RevSlider({
         }
     };
 
-    RevSlider.prototype.getMaxHeadlineHeight = function(rowNum, numItems) {
-        var maxHeadlineHeight = 0;
-        var that = this;
-        var ads = that.element.querySelectorAll('.rev-ad');
-        if (ads.length > 0) {
-            rowNum = (rowNum != undefined) ? rowNum : 0;
-            numItems = (numItems != undefined) ? numItems : ads.length;
-            var offset = rowNum * numItems;
-            var nextOffset = offset + numItems;
-            var el = ads[0].querySelectorAll('.rev-headline h3')[0];
-            var t = el.cloneNode(true);
-            t.style.visibility = 'hidden';
-            t.style.height = 'auto';
-            revUtils.append(el.parentNode, t);
-            for (var i = offset; i < nextOffset; i++) {
+    RevSlider.prototype.getMaxHeadlineHeight = function() {
+        var maxHeight = 0;
+        if (this.options.text_right) { // based on preloaderHeight/ ad height
+            var verticalSpace = this.preloaderHeight - this.providerLineHeight;
+            var headlines = Math.floor(verticalSpace / this.headlineLineHeight);
+            maxHeight = headlines * this.headlineLineHeight;
+        } else {
+            var ads = this.gridElement.querySelectorAll('.rev-ad');
+            for (var i = 0; i < this.limit; i++) {
                 var ad = ads[i];
-                t.innerHTML = ad.querySelectorAll('a')[0].title;
-                if(t.clientHeight > maxHeadlineHeight) {
-                    maxHeadlineHeight = t.clientHeight;
-                }
+                var el = document.createElement('div');
+                el.style.position = 'absolute';
+                el.style.zIndex = '100';
+                el.style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
+                el.innerHTML = '<h3 style="font-size:'+ this.headlineFontSize + 'px;line-height:'+ this.headlineLineHeight +'px">'+ this.displayedItems[i].headline + '</h3>';
+                revUtils.prepend(ad, el); // do it this way b/c changin the element height on the fly needs a repaint and requestAnimationFrame is not avail in IE9
+                maxHeight = Math.max(maxHeight, el.clientHeight);
+                revUtils.remove(el);
             }
-            revUtils.remove(t);
-            var numLines = Math.ceil(maxHeadlineHeight / that.headlineLineHeight);
-            maxHeadlineHeight = numLines * that.headlineLineHeight;
         }
-        return maxHeadlineHeight;
+        return maxHeight;
     };
-
 
     return RevSlider;
 }));
@@ -6185,7 +6689,7 @@ RevLock({
     api_key: 'your api_key',
     pub_id: pub_id,
     widget_id: widget_id,
-    domain: 'widget domain',
+    domain: 'widget domain'
 });
 */
 
@@ -6228,7 +6732,8 @@ RevLock({
             },
             devices: [
                 'phone', 'tablet', 'desktop'
-            ]
+            ],
+            beacons: true
         };
 
         // merge options
@@ -6247,7 +6752,7 @@ RevLock({
 
         var that = this;
 
-        revUtils.appendStyle('/* inject:css */body{margin:0}#rev-lock{z-index:100000000;position:absolute;width:100%;background-color:#fff;left:0;-webkit-transition:all;transition:all;-webkit-transition-duration:1s;transition-duration:1s;opacity:1;-webkit-transform:none;-ms-transform:none;transform:none}#rev-lock-wrapper{overflow:hidden}#rev-lock #rev-slider-inner,#rev-lock .rev-foot,#rev-lock .rev-head{padding:0 3px}#rev-lock.unlocked{opacity:.8;-webkit-transform:translateY(100%);-ms-transform:translateY(100%);transform:translateY(100%)}#rev-lock-unlock{border-radius:6px;font-family:Arial;color:#1f628d;font-size:18;padding:6px 0;border:2px solid #1f628d;text-decoration:none;margin:0 40px 10px;text-align:center;cursor:pointer}#rev-lock-gradient{width:100%;height:60px;position:absolute;top:-60px;background:-webkit-linear-gradient(top,rgba(255,255,255,.35) 0,rgba(255,255,255,1) 100%);background:linear-gradient(to bottom,rgba(255,255,255,.35) 0,rgba(255,255,255,1) 100%)}#rev-lock #rev-slider #rev-slider-container .rev-btn-container{border-radius:0}#rev-opt-out .rd-close-button{position:absolute;cursor:pointer;right:10px;z-index:10}#rev-opt-out a{cursor:pointer!important}#rev-opt-out .rd-box-wrap{display:none;z-index:2147483641}#rev-opt-out .rd-box-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}#rev-opt-out .rd-vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}#rev-opt-out .rd-box{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}#rev-opt-out .rd-normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}#rev-opt-out .rd-full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}#rev-opt-out .rd-header{height:20px;position:absolute;right:0}#rev-opt-out .rd-about{font-family:Arial,sans-serif;font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}#rev-opt-out .rd-about .rd-logo{background:url(https://serve.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}#rev-opt-out .rd-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}#rev-opt-out .rd-about p#main{text-align:left}#rev-opt-out .rd-about h2{color:#777;font-family:Arial,sans-serif;font-size:16px;line-height:18px}#rev-opt-out .rd-about a{color:#00cb43}#rev-opt-out .rd-well{border:1px solid #E0E0E0;padding:20px;text-align:center;border-radius:2px;margin:20px 0 0}#rev-opt-out .rd-well h2{margin-top:0}#rev-opt-out .rd-well p{margin-bottom:0}#rev-opt-out .rd-opt-out{text-align:center}#rev-opt-out .rd-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-lock');
+        revUtils.appendStyle('/* inject:css */body{margin:0}#rev-lock{z-index:100000000;position:absolute;width:100%;background-color:#fff;left:0;-webkit-transition:all;transition:all;-webkit-transition-duration:1s;transition-duration:1s;opacity:1;-webkit-transform:none;transform:none}#rev-lock-wrapper{overflow:hidden}#rev-lock #rev-slider-inner,#rev-lock .rev-foot,#rev-lock .rev-head{padding:0 3px}#rev-lock.unlocked{opacity:.8;-webkit-transform:translateY(100%);transform:translateY(100%)}#rev-lock-unlock{border-radius:6px;font-family:Arial;color:#1f628d;font-size:18;padding:6px 0;border:2px solid #1f628d;text-decoration:none;margin:0 40px 10px;text-align:center;cursor:pointer}#rev-lock-gradient{width:100%;height:60px;position:absolute;top:-60px;background:-webkit-linear-gradient(top,rgba(255,255,255,.35) 0,rgba(255,255,255,1) 100%);background:linear-gradient(to bottom,rgba(255,255,255,.35) 0,rgba(255,255,255,1) 100%)}#rev-lock #rev-slider #rev-slider-container .rev-btn-container{border-radius:0}#rev-opt-out .rd-close-button{position:absolute;cursor:pointer;right:10px;z-index:10}#rev-opt-out a{cursor:pointer!important}#rev-opt-out .rd-box-wrap{display:none;z-index:2147483641}#rev-opt-out .rd-box-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}#rev-opt-out .rd-vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}#rev-opt-out .rd-box{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}#rev-opt-out .rd-normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}#rev-opt-out .rd-full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}#rev-opt-out .rd-header{height:20px;position:absolute;right:0}#rev-opt-out .rd-about{font-family:Arial,sans-serif;font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}#rev-opt-out .rd-about .rd-logo{background:url(https://serve.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}#rev-opt-out .rd-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}#rev-opt-out .rd-about p#main{text-align:left}#rev-opt-out .rd-about h2{color:#777;font-family:Arial,sans-serif;font-size:16px;line-height:18px}#rev-opt-out .rd-about a{color:#00cb43}#rev-opt-out .rd-well{border:1px solid #E0E0E0;padding:20px;text-align:center;border-radius:2px;margin:20px 0 0}#rev-opt-out .rd-well h2{margin-top:0}#rev-opt-out .rd-well p{margin-bottom:0}#rev-opt-out .rd-opt-out{text-align:center}#rev-opt-out .rd-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-lock');
 
         this.init = function() {
 
@@ -6289,6 +6794,7 @@ RevLock({
             revUtils.append(document.body, this.element);
 
             this.innerWidget = new RevSlider({
+                api_source:   'lock',
                 element:      [this.innerWidgetElement],
                 url:          'https://trends.revcontent.com/api/v1/',
                 api_key:      'bf3f270aa50d127f0f8b8c92a979d76aa1391d38',
@@ -6302,6 +6808,7 @@ RevLock({
                 image_ratio:  this.options.inner_widget_options.image_ratio,
                 buttons:      this.options.inner_widget_options.buttons,
                 vertical:     true,
+                beacons:      this.options.beacons
             });
 
             this.innerWidget.innerElement.style.height = this.innerWidget.grid.maxHeight + 'px'; // TODO: this might be bad
@@ -6321,6 +6828,7 @@ RevLock({
                 revUtils.addClass(that.element, 'unlocked');
                 setTimeout(function() {
                     revUtils.remove(that.element);
+                    revApi.beacons.detach('lock');
                 }, 1000);
             });
         };
