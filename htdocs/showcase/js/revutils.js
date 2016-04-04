@@ -162,6 +162,12 @@ utils.removeEventListener = function(el, eventName, handler) {
     } else {
         el.detachEvent('on' + eventName, handler);
     }
+};
+
+utils.transformCss = function(el, css) {
+    el.style.transform = css;
+    el.style.MsTransform = css;
+    el.style.WebkitTransform = css;
 }
 
 utils.ellipsisText = function(el, text, height) {

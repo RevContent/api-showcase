@@ -289,15 +289,11 @@ RevSlider({
             var insert = 'prepend';
             if (this.options.vertical) { // down
                 var margin = 'marginTop';
-                this.gridContainerElement.style.transform = 'translate3d(0, -'+ (containerHeight + (this.padding * 2)) +'px, 0)';
-                this.gridContainerElement.style.MsTransform = 'translate3d(0, -'+ (containerHeight + (this.padding * 2)) +'px, 0)';
-                this.gridContainerElement.style.WebkitTransform = 'translate3d(0, -'+ (containerHeight + (this.padding * 2)) +'px, 0)';
+                revUtils.transformCss(this.gridContainerElement, 'translate3d(0, -'+ (containerHeight + (this.padding * 2)) +'px, 0)');
                 this.gridContainerTransform = 'translate3d(0, 0, 0)';
             } else { // right
                 var margin = 'marginLeft';
-                this.gridContainerElement.style.transform = 'translate3d(-'+ (containerWidth + (this.padding * 2)) +'px, 0, 0)';
-                this.gridContainerElement.style.MsTransform = 'translate3d(-'+ (containerWidth + (this.padding * 2)) +'px, 0, 0)';
-                this.gridContainerElement.style.WebkitTransform = 'translate3d(-'+ (containerWidth + (this.padding * 2)) +'px, 0, 0)';
+                revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ (containerWidth + (this.padding * 2)) +'px, 0, 0)');
                 this.gridContainerTransform = 'translate3d(0, 0, 0)';
             }
         }
@@ -340,9 +336,7 @@ RevSlider({
 
         this.gridContainerElement.style.transitionDuration = animationDuration + 's';
         this.gridContainerElement.style.WebkitTransitionDuration = animationDuration + 's';
-        this.gridContainerElement.style.transform = this.gridContainerTransform;
-        this.gridContainerElement.style.MsTransform = this.gridContainerTransform;
-        this.gridContainerElement.style.WebkitTransform = this.gridContainerTransform;
+        revUtils.transformCss(this.gridContainerElement, this.gridContainerTransform);
 
         var that = this;
         setTimeout(function() {
@@ -359,9 +353,7 @@ RevSlider({
             var transitionGrid = this.grid;
         }
 
-        transitionGrid.element.style.transform = 'none';
-        transitionGrid.element.style.MsTransform = 'none';
-        transitionGrid.element.style.WebkitTransform = 'none';
+        revUtils.transformCss(transitionGrid.element, 'none');
         transitionGrid.element.style.marginLeft = '0';
         transitionGrid.element.style.marginRight = '0';
         transitionGrid.element.className = '';
@@ -369,9 +361,7 @@ RevSlider({
         this.gridContainerElement.style.transitionDuration = '0s';
         this.gridContainerElement.style.WebkitTransitionDuration = '0s';
 
-        this.gridContainerElement.style.transform = 'none';
-        this.gridContainerElement.style.MsTransform = 'none';
-        this.gridContainerElement.style.WebkitTransform = 'none';
+        revUtils.transformCss(this.gridContainerElement, 'none');
 
         removeGrid.remove();
         removeGrid.destroy();
@@ -843,9 +833,7 @@ RevSlider({
             made = true;
             that.gridContainerElement.style.transitionDuration =  '.75s';
             that.gridContainerElement.style.WebkitTransitionDuration =  '.75s';
-            that.gridContainerElement.style.transform = 'translate3d(-'+ (that.innerElement.offsetWidth + (that.padding * 2)) +'px, 0, 0)';
-            that.gridContainerElement.style.MsTransform = 'translate3d(-'+ (that.innerElement.offsetWidth + (that.padding * 2)) +'px, 0, 0)';
-            that.gridContainerElement.style.WebkitTransform = 'translate3d(-'+ (that.innerElement.offsetWidth + (that.padding * 2)) +'px, 0, 0)';
+            revUtils.transformCss(that.gridContainerElement, 'translate3d(-'+ (that.innerElement.offsetWidth + (that.padding * 2)) +'px, 0, 0)');
             setTimeout(function() {
                 that.updateGrids();
                 made = false;
@@ -861,9 +849,7 @@ RevSlider({
             made = true;
             that.gridContainerElement.style.transitionDuration =  '.75s';
             that.gridContainerElement.style.WebkitTransitionDuration =  '.75s';
-            that.gridContainerElement.style.transform = 'translate3d(0, 0, 0)';
-            that.gridContainerElement.style.MsTransform = 'translate3d(0, 0, 0)';
-            that.gridContainerElement.style.WebkitTransform = 'translate3d(0, 0, 0)';
+            revUtils.transformCss(that.gridContainerElement, 'translate3d(0, 0, 0)');
             setTimeout(function() {
                 that.updateGrids();
                 made = false;
@@ -882,9 +868,7 @@ RevSlider({
             that.showNextPage();
 
             movement = movement + 2;
-            that.gridContainerElement.style.transform = 'translate3d(-'+ movement +'px, 0, 0)';
-            that.gridContainerElement.style.MsTransform = 'translate3d(-'+ movement +'px, 0, 0)';
-            that.gridContainerElement.style.WebkitTransform = 'translate3d(-'+ movement +'px, 0, 0)';
+            revUtils.transformCss(that.gridContainerElement, 'translate3d(-'+ movement +'px, 0, 0)');
         });
 
         mc.on('panright', function(e) {
@@ -897,9 +881,7 @@ RevSlider({
             that.showPreviousPage();
 
             movement = movement + 2;
-            that.gridContainerElement.style.transform = 'translate3d(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2)) - movement ) +'px), 0, 0';
-            that.gridContainerElement.style.MsTransform = 'translate3d(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2)) - movement ) +'px, 0, 0)'
-            that.gridContainerElement.style.WebkitTransform = 'translate3d(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2)) - movement ) +'px, 0, 0)'
+            revUtils.transformCss(that.gridContainerElement, 'translate3d(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2)) - movement ) +'px, 0, 0)');
         });
 
         mc.on('panup pandown', function(e) {
@@ -914,13 +896,9 @@ RevSlider({
             that.gridContainerElement.style.transitionDuration = '.3s';
             that.gridContainerElement.style.WebkitTransitionDuration =  '.3s';
             if (direction == 'left') {
-                that.gridContainerElement.style.transform = 'none';
-                that.gridContainerElement.style.MsTransform = 'none';
-                that.gridContainerElement.style.WebkitTransform = 'none';
+                revUtils.transformCss(that.gridContainerElement, 'none');
             } else {
-                that.gridContainerElement.style.transform = 'translate3d(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2))) +'px, 0, 0)';
-                that.gridContainerElement.style.MsTransform = 'translate3d(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2))) +'px, 0, 0)';
-                that.gridContainerElement.style.WebkitTransform = 'translate3d(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2))) +'px, 0, 0)';
+                revUtils.transformCss(that.gridContainerElement, 'translate3d(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2))) +'px, 0, 0)');
             }
 
             that.page = that.previousPage;
