@@ -143,8 +143,6 @@ RevFlicker({
             that.getData();
         });
 
-        this.ellipsisTimer;
-
         revUtils.addEventListener(window, 'resize', function() {
             that.resize();
         });
@@ -191,28 +189,7 @@ RevFlicker({
             this.selectedIndex = -1;
             this.nextEffect();
         }
-        this.checkEllipsis();
-    };
-
-    RevFlicker.prototype.checkEllipsis = function() {
-        var that = this;
-        clearTimeout(that.ellipsisTimer);
-        that.ellipsisTimer = setTimeout(function() {
-            that.doEllipsis();
-        }, 300);
-    };
-
-    RevFlicker.prototype.doEllipsis = function() {
-        var ads = this.flickity.element.querySelectorAll('.rev-content');
-        if (ads.length > 0) {
-            for (var i = 0; i < ads.length; i++) {
-                var ad = ads[i];
-                var text = ad.querySelectorAll('a')[0].title;
-                var el = ad.querySelectorAll('.rev-headline h3')[0];
-                var newText = revUtils.ellipsisText(el, text, this.headlineHeight);
-                ad.querySelectorAll('.rev-headline h3')[0].innerHTML = newText;
-            }
-        }
+        revUtils.ellipsisText(this.flickity.element.querySelectorAll('.rev-content .rev-headline'));
     };
 
     RevFlicker.prototype.appendElements = function() {
