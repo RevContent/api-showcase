@@ -453,6 +453,13 @@ RevFlicker({
         var that = this;
         // don't do the same one twice, this could be improved I am sure
         if ( typeof this.impressionTracker[offset + '_' + count] == 'undefined') {
+
+            if (offset == 0 && count > 1) {
+                for (var i = 1; i < count; i++) {
+                    that.impressionTracker[i + '_1'] = true;
+                }
+            }
+
             that.impressionTracker[offset + '_' + count] = true;
 
             revApi.request(impressionsUrl, function() {
