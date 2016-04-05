@@ -47,7 +47,9 @@ RevSlider({
     url: 'https://trends.revcontent.com/api/v1/',
     ad_border: true,
     disclosure_text: revDisclose.defaultDisclosureText,
-    hide_provider: false
+    hide_provider: false,
+    hide_header: false,
+    beacons: true
 });
 */
 
@@ -123,7 +125,8 @@ RevSlider({
             },
             disclosure_text: revDisclose.defaultDisclosureText,
             hide_provider: false,
-            hide_header: false
+            hide_header: false,
+            beacons: true
         };
 
         // merge options
@@ -716,8 +719,10 @@ RevSlider({
         impressionsUrl += '&sponsored_count=' + (this.options.internal ? 0 : this.limit) + '&internal_count=' + (this.options.internal ? this.limit : 0) + '&sponsored_offset='+ (this.options.internal ? 0 : this.offset) +'&internal_offset=' + (this.options.internal ? this.offset : 0);
 
         this.impressionTracker[this.offset + '_' + this.limit] = true;
+        var that = this;
         // don't do the same one twice, this could be improved I am sure
         revApi.request(impressionsUrl, function() {
+            if(that.offset == 0 && true === that.options.beacons) { revApi.beacons.setPluginSource(that.options.api_source).attach(); }
             return;
         });
     };

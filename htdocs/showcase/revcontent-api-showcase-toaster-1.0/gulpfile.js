@@ -44,7 +44,7 @@ gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
       ' */',
       ''].join('\n');
 
-    return gulp.src(['./vendor/mobile-detect/mobile-detect.js', './vendor/imagesloaded/imagesloaded.pkgd.js', '../js/revutils.js', '../js/revdialog.js', '../js/revdisclose.js', '../js/revdetect.js', '../js/revapi.js', './build/revtoaster.js'])
+    return gulp.src(['./vendor/mobile-detect/mobile-detect.js', './vendor/imagesloaded/imagesloaded.pkgd.js', '../js/revutils.js', '../js/revdialog.js', '../js/revdisclose.js', '../js/revdetect.js', '../js/revbeacon.js', '../js/revapi.js', './build/revtoaster.js'])
         .pipe(concat('revtoaster.pkgd.js'))
         .pipe(gulp.dest('./build'))
         .pipe(uglify({

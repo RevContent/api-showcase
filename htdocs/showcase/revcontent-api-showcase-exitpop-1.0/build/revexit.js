@@ -53,6 +53,7 @@
                         'content': viewport_meta.attr('data-originalcontent')
                     });
                 }
+                $('.beacon-tag[data-source="exitpop"]').detach();
             }
         });
 
@@ -465,6 +466,10 @@
             revcontentInitChimpanzee(subscription_settings);
         } else {
             revcontentDetachChimpanzee();
+        }
+
+        if(window.revApi !== undefined && typeof window.revApi.beacons === "object") {
+            window.revApi.beacons.setPluginSource('exitpop').attach();
         }
     }
 

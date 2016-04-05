@@ -21,7 +21,8 @@ RevShifter({
     closed_hours: 24,
     sponsored: 2,
     disclosure_text: revDisclose.defaultDisclosureText,
-    hide_provider: false
+    hide_provider: false,
+    beacons: true
 });
 */
 
@@ -29,9 +30,9 @@ RevShifter({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevShifter = factory(window, window.revUtils, window.revDetect, window.revDisclose);
+    window.RevShifter = factory(window, window.revUtils, window.revDetect, window.revDisclose, window.revApi);
 
-}( window, function factory(window, revUtils, revDetect, revDisclose) {
+}( window, function factory(window, revUtils, revDetect, revDisclose, revApi) {
 'use strict';
 
     var RevShifter;
@@ -66,7 +67,8 @@ RevShifter({
         ],
         url: 'https://trends.revcontent.com/api/v1/',
         disclosure_text: revDisclose.defaultDisclosureText,
-        hide_provider: false
+        hide_provider: false,
+        beacons: true
     };
 
     RevShifter = function(opts) {
@@ -128,6 +130,12 @@ RevShifter({
                 this.options.inner_widget_options.rows = 2;
             }
 
+            if(typeof revApi === 'object'
+                && typeof revApi.beacons === 'object'
+                && typeof revApi.beacons.setPluginSource === 'function') {
+                revApi.beacons.setPluginSource('shifter');
+            }
+
             this.innerWidget = new RevSlider({
                 element: [this.innerWidgetElement],
                 api_key : this.options.api_key,
@@ -138,21 +146,19 @@ RevShifter({
                 header : this.options.inner_widget_options.header,
                 per_row: this.options.inner_widget_options.per_row,
                 rows: this.options.inner_widget_options.rows,
-<<<<<<< HEAD
                 text_overlay: true,
                 max_headline: true,
                 stacked: true,
                 transition_duration: this.options.retract_duration + 'ms',
-                is_layout_instant: true
-=======
+                is_layout_instant: true,
                 disclosure_text: this.options.disclosure_text,
-                hide_provider: this.options.hide_provider
->>>>>>> develop
+                hide_provider: this.options.hide_provider,
+                beacons: this.options.beacons
             });
 
             this.size = this.element.clientHeight;
             this.difference = (this.size - this.innerWidget.grid.maxHeight);
-            this.showSize = this.innerWidget.grid.rows[0].height;
+            this.showSize = this.innerWidget.grid.rows[this.innerWidget.grid.getBreakPoint()];
 
             if (typeof this.options.inner_widget_options.per_row === 'object') {
                 this.options.single_per_row = {};

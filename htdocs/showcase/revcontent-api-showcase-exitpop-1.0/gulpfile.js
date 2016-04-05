@@ -84,7 +84,7 @@ gulp.task('build-rx', ['revexit-css', 'revchimp-css', 'revchimp-inject', 'revexi
       ' */',
       ''].join('\n');
 
-    return gulp.src(['./js/revutils.js', '../js/revdialog.js', './build/jquery.js', './build/revchimp.js', './build/revexit.js'])
+    return gulp.src(['../js/revbeacon.js', '../js/revapi.js', '../js/revdialog.js', './build/jquery.js', './build/revchimp.js', './build/revexit.js'])
         .pipe(concat('revexit.pkgd.js'))
         .pipe(gulp.dest('./build'))
         .pipe(uglify({
