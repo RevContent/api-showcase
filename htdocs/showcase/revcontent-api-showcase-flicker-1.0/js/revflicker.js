@@ -453,8 +453,9 @@ RevFlicker({
         var that = this;
         // don't do the same one twice, this could be improved I am sure
         if ( typeof this.impressionTracker[offset + '_' + count] == 'undefined') {
+            that.impressionTracker[offset + '_' + count] = true;
+
             revApi.request(impressionsUrl, function() {
-                that.impressionTracker[offset + '_' + count] = true;
                 if(offset === 0 && true === that.options.beacons) { revApi.beacons.setPluginSource('flicker').attach(); }
             });
         }
