@@ -20,7 +20,8 @@ RevToaster({
     closed_hours: 24,
     sponsored: 2,
     disclosure_text: revDisclose.defaultDisclosureText,
-    hide_provider: false
+    hide_provider: false,
+    beacons: true
 });
 */
 
@@ -49,7 +50,8 @@ RevToaster({
             'phone', 'tablet', 'desktop'
         ],
         disclosure_text: revDisclose.defaultDisclosureText,
-        hide_provider: false
+        hide_provider: false,
+        beacons: true
     };
     // var options;
     var lastScrollTop = 0;
@@ -274,6 +276,7 @@ RevToaster({
                 revUtils.removeClass(document.body, 'rev-toaster-loaded');
                 setTimeout(function() {
                     that.revToaster.parentNode.removeChild(that.revToaster);
+                    revApi.beacons.detach('toaster');
                     removed = true;
                     revUtils.setCookie('revtoaster-closed', 1, (that.options.closed_hours / 24));
                 }, 2000);
@@ -288,6 +291,7 @@ RevToaster({
                 imagesLoaded( this.containerElement, function() {
                     that.visible = true;
                     revUtils.addClass(document.body, 'rev-toaster-loaded');
+                    if(true === that.options.beacons) { revApi.beacons.setPluginSource('toaster').attach(); }
                 });
             }
         };

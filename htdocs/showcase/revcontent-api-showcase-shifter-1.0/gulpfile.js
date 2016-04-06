@@ -44,7 +44,7 @@ gulp.task('buildjs', ['minifycss', 'embedcss'], function() {
       ' */',
       ''].join('\n');
 
-    return gulp.src(['./vendor/mobile-detect/mobile-detect.js', '../js/revutils.js', '../js/revdialog.js', '../js/revdisclose.js', '../js/revdetect.js', '../js/revapi.js', '../revcontent-api-showcase-slider-1.0/build/revslider.pkgd.js', './build/revshifter.js'])
+    return gulp.src(['./vendor/mobile-detect/mobile-detect.js', '../js/revutils.js', '../js/revdialog.js', '../js/revdisclose.js', '../js/revdetect.js', '../js/revbeacon.js', '../js/revapi.js', '../revcontent-api-showcase-slider-1.0/build/revslider.pkgd.js', './build/revshifter.js'])
         .pipe(concat('revshifter.pkgd.js'))
         .pipe(gulp.dest('./build'))
         .pipe(uglify({

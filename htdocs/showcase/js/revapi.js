@@ -2,20 +2,23 @@
  * Revcontent detect
  */
 
-( function( window, factory ) {
+( function( window, factory) {
   /*global define: false, module: false, require: false */
   'use strict';
   // universal module definition
     // browser global
     window.revApi = factory(
-      window
+      window,
+      window.revBeacon
     );
 
-}( window, function factory( window ) {
+}( window, function factory( window, revBeacon ) {
 
 'use strict';
 
 var api = {};
+api.beacons = revBeacon || {attach: function(){}};
+
 
 api.request = function(url, success, failure) {
 
