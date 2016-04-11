@@ -143,8 +143,6 @@ RevFlicker({
             that.getData();
         });
 
-        this.ellipsisTimer;
-
         revUtils.addEventListener(window, 'resize', function() {
             that.resize();
         });
@@ -191,28 +189,7 @@ RevFlicker({
             this.selectedIndex = -1;
             this.nextEffect();
         }
-        this.checkEllipsis();
-    };
-
-    RevFlicker.prototype.checkEllipsis = function() {
-        var that = this;
-        clearTimeout(that.ellipsisTimer);
-        that.ellipsisTimer = setTimeout(function() {
-            that.doEllipsis();
-        }, 300);
-    };
-
-    RevFlicker.prototype.doEllipsis = function() {
-        var ads = this.flickity.element.querySelectorAll('.rev-content');
-        if (ads.length > 0) {
-            for (var i = 0; i < ads.length; i++) {
-                var ad = ads[i];
-                var text = ad.querySelectorAll('a')[0].title;
-                var el = ad.querySelectorAll('.rev-headline h3')[0];
-                var newText = revUtils.ellipsisText(el, text, this.headlineHeight);
-                ad.querySelectorAll('.rev-headline h3')[0].innerHTML = newText;
-            }
-        }
+        revUtils.ellipsisText(this.flickity.element.querySelectorAll('.rev-content .rev-headline'));
     };
 
     RevFlicker.prototype.appendElements = function() {
@@ -453,9 +430,20 @@ RevFlicker({
         var that = this;
         // don't do the same one twice, this could be improved I am sure
         if ( typeof this.impressionTracker[offset + '_' + count] == 'undefined') {
+
+            if (offset == 0 && count > 1) {
+                for (var i = 1; i < count; i++) {
+                    that.impressionTracker[i + '_1'] = true;
+                }
+            }
+
+            that.impressionTracker[offset + '_' + count] = true;
+
             revApi.request(impressionsUrl, function() {
-                that.impressionTracker[offset + '_' + count] = true;
                 if(offset === 0 && true === that.options.beacons) { revApi.beacons.setPluginSource('flicker').attach(); }
+            }, function() {
+                delete that.impressionTracker[offset + '_' + count]; //unset on failure in case we somehow try it again
+                //TODO: retry the call or log to db for later attempt
             });
         }
     }
