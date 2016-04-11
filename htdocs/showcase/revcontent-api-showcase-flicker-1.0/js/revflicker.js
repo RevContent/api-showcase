@@ -442,7 +442,7 @@ RevFlicker({
             revApi.request(impressionsUrl, function() {
                 if(offset === 0 && true === that.options.beacons) { revApi.beacons.setPluginSource('flicker').attach(); }
             }, function() {
-                that.impressionTracker[offset + '_' + count] = false; //unset on failure in case we somehow try it again
+                delete that.impressionTracker[offset + '_' + count]; //unset on failure in case we somehow try it again
                 //TODO: retry the call or log to db for later attempt
             });
         }
