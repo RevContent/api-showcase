@@ -213,9 +213,7 @@ RevSlider({
             this.innerContainerElement.style.padding = (this.options.buttons.back ? (this.options.buttons.size + 'px') : '0') + ' 0 ' + (this.options.buttons.forward ? (this.options.buttons.size + 'px') : '0');
         }
 
-        if (!revDetect.mobile()) {
-            this.initButtons();
-        }
+        this.initButtons();
 
         this.attachTouchEvents();
 
