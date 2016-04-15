@@ -144,6 +144,8 @@ RevSlider({
 
         var that = this;
 
+        this.emitter = new EventEmitter();
+
         revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-slider');
 
         this.contentItems = [];
@@ -705,6 +707,9 @@ RevSlider({
         revApi.request(url, function(resp) {
             that.contentItems = resp;
             that.updateDisplayedItems(that.options.visible);
+
+            that.emitter.emitEvent('ready');
+            that.ready = true;
 
             imagesLoaded( that.grid.element, function() {
                 revUtils.addClass(that.containerElement, 'loaded');
