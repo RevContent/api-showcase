@@ -358,7 +358,7 @@ RevSlider({
     };
 
     RevSlider.prototype.updateGrids = function(revert) {
-        if (revert) {
+        if (revert === true) {
             var removeGrid = this.grid;
             var transitionGrid = this.oldGrid;
         } else {
