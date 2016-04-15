@@ -69,6 +69,7 @@ RevShifter({
         ],
         url: 'https://trends.revcontent.com/api/v1/',
         disclosure_text: revDisclose.defaultDisclosureText,
+        hide_footer: false,
         hide_provider: false,
         beacons: true
     };
@@ -147,6 +148,7 @@ RevShifter({
                 disclosure_text: this.options.disclosure_text,
                 hide_provider: this.options.hide_provider,
                 hide_header: true,
+                hide_footer: this.options.hide_footer,
                 buttons: {
                     forward: true,
                     back: true,
@@ -157,11 +159,15 @@ RevShifter({
                 beacons: this.options.beacons
             });
 
-            this.closeElement = document.createElement('div');
-            this.closeElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>';
-            revUtils.addClass(this.closeElement, 'rev-close');
+            if (!this.options.hide_footer && !revDetect.mobile()) {
+                this.closeElement = document.createElement('div');
+                this.closeElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>';
+                revUtils.addClass(this.closeElement, 'rev-close');
 
-            revUtils.append(this.innerWidget.foot, this.closeElement);
+                revUtils.append(this.innerWidget.foot, this.closeElement);
+
+                this.attachCloseButtonEvent();
+            }
 
             this.size = this.element.clientHeight;
             this.difference = (this.size - this.innerWidget.grid.maxHeight);
@@ -361,7 +367,7 @@ RevShifter({
             }, this.options.transition_duration);
         };
 
-        this.attachButtonEvents = function() {
+        this.attachCloseButtonEvent = function() {
             var that = this;
             this.closeElement.addEventListener('click', function() {
                 that.hide();
