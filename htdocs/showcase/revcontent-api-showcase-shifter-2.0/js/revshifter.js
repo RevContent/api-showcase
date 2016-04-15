@@ -181,13 +181,18 @@ RevShifter({
                 this.options.single_per_row = (this.options.inner_widget_options.per_row * this.options.inner_widget_options.rows);
             }
 
-            this.handleTransform();
+            this.setTransitionDuration();
 
 
             if (this.options.show_on_load) {
                 this.show();
             }
 
+        this.setTransitionDuration = function(transitionDuration) {
+            var transitionDuration = transitionDuration ? transitionDuration : this.options.transition_duration;
+            revUtils.transitionDurationCss(this.element, transitionDuration + 'ms');
+            revUtils.transitionDurationCss(document.body, transitionDuration + 'ms');
+        };
         this.doTouchSimulation = function() {
             if (this.options.touch_simulation && !this.first) {
                 this.first = true;
