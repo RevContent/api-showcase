@@ -67,6 +67,7 @@ RevShifter({
         devices: [
             'phone', 'tablet', 'desktop'
         ],
+        hide_on_show_transition: true,
         url: 'https://trends.revcontent.com/api/v1/',
         disclosure_text: 'Ads by Revcontent',
         hide_footer: false,
@@ -188,11 +189,19 @@ RevShifter({
                 this.show();
             }
 
+            if (revDetect.mobile()) {
+                this.attachTouchEvents();
+            } else {
+                this.attachScrollEvents();
+            }
+        };
+
         this.setTransitionDuration = function(transitionDuration) {
             var transitionDuration = transitionDuration ? transitionDuration : this.options.transition_duration;
             revUtils.transitionDurationCss(this.element, transitionDuration + 'ms');
             revUtils.transitionDurationCss(document.body, transitionDuration + 'ms');
         };
+
         this.doTouchSimulation = function() {
             if (this.options.touch_simulation && !this.first) {
                 this.first = true;
@@ -212,11 +221,14 @@ RevShifter({
                 that.touchEnabledElement.style.width = that.touchEnabledElement.offsetHeight + 'px';
             });
         }
+
+        this.attachScrollEvents = function() {
             // scrolling
             var that = this;
             var move = function() {
                 if (this.removed) {
-                    window.removeEventListener('scroll', move);
+                    revUtils.removeEventListener(window, 'scroll', move);
+                    revUtils.removeEventListener(window, 'touchmove', move);
                     return;
                 }
 
@@ -233,13 +245,16 @@ RevShifter({
                         scrollDirection = 'down';
                     }
 
-                    if (scrollDirection === 'up') {
+                    that.lastScrollTop = scrollTop;
+                    that.scrollTimeout = false;
+
+                    if (that.transitioning && !that.options.hide_on_show_transition) { // don't do anything if already transitioning and option is false
+                        return;
+                    } else if (scrollDirection === 'up') {
                         that.options.scroll_natural ? that.hide() : that.show();
                     } else if (scrollDirection === 'down') {
                         that.options.scroll_natural ? that.show() : that.hide();
                     }
-                    that.lastScrollTop = scrollTop;
-                    that.scrollTimeout = false;
                 }
 
                 that.scrollTimeout = setTimeout( delayed, 300);
@@ -250,10 +265,14 @@ RevShifter({
             if (this.options.show_on_scroll) {
                 setTimeout(function() {
                     that.lastScrollTop = window.pageYOffset;
-                    revUtils.addEventListener(window, 'scroll', move);
+                    if (revDetect.mobile()) {
+                        revUtils.addEventListener(window, 'touchmove', move);
+                    } else {
+                        revUtils.addEventListener(window, 'scroll', move);
+                    }
                 }, 300);
             }
-        };
+        }
 
         this.update = function(newOpts, oldOpts) {
             this.options = revUtils.extend(defaults, newOpts);
@@ -282,17 +301,26 @@ RevShifter({
             }
         };
 
-        this.applyTransitionCss = function(element) {
-            element.style.transitionDuration = this.options.transition_duration + 'ms';
-            element.style.WebkitTransitionDuration = this.options.transition_duration + 'ms';
-            element.style.MozTransitionDuration = this.options.transition_duration + 'ms';
-            element.style.OTransitionDuration = this.options.transition_duration + 'ms';
-        };
+        this.attachTouchEvents = function() {
 
-        this.handleTransform = function() {
-            this.applyTransitionCss(this.element);
-            this.applyTransitionCss(document.body);
-        };
+            var mc = new Hammer(window, {
+                touchAction: 'auto'
+            });
+            mc.add(new Hammer.Pan({ threshold: 0, direction: Hammer.DIRECTION_ALL }));
+
+            var that = this;
+            mc.on("panup pandown", function(ev){
+                if (that.transitioning && !that.options.hide_on_show_transition) { // don't do anything if already transitioning and option is false
+                    return;
+                }
+
+                if (ev.type === 'panup') {
+                    that.options.scroll_natural ? that.show() : that.hide();
+                } else if (ev.type === 'pandown') {
+                    that.options.scroll_natural ? that.hide() : that.show();
+                }
+            });
+        }
 
         this.show = function() {
             this.hideTimeout = clearTimeout(this.hideTimeout);
