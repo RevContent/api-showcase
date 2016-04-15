@@ -168,11 +168,14 @@ utils.transformCss = function(el, css) {
     el.style.transform = css;
     el.style.MsTransform = css;
     el.style.WebkitTransform = css;
+    el.style.OTransform = css;
 };
 
 utils.transitionDurationCss = function(el, css) {
     el.style.transitionDuration = css;
     el.style.WebkitTransitionDuration = css;
+    el.style.MozTransitionDuration = css;
+    el.style.OTransitionDuration = css;
 };
 
 utils.ellipsisText = function(el, text, height) {
