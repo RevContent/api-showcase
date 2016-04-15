@@ -68,7 +68,7 @@ RevShifter({
             'phone', 'tablet', 'desktop'
         ],
         url: 'https://trends.revcontent.com/api/v1/',
-        disclosure_text: revDisclose.defaultDisclosureText,
+        disclosure_text: 'Ads by Revcontent',
         hide_footer: false,
         hide_provider: false,
         beacons: true
