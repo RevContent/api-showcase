@@ -837,101 +837,127 @@ RevSlider({
         mc.add(new Hammer.Swipe({ threshold: 5, velocity: .2 }));
         mc.add(new Hammer.Pan({ threshold: 0 })).recognizeWith(mc.get('swipe'));
 
-        var movement = 0;
-        var made = false;
-        var direction = false;
-        var updown = false;
+        this.movement = 0;
+        this.made = false;
+        this.panDirection = false;
+        this.updown = false;
 
         this.element.addEventListener('click', function(e) {
-            if (made || movement) {
+            if (that.made || that.movement) {
                 e.stopPropagation();
                 e.preventDefault();
             }
         });
 
+        mc.on('pan swipe', function(e) {
+            e.preventDefault(); // don't go scrolling the page or any other funny business
+        });
+
         mc.on('swipeleft', function(ev) {
-            if (made || direction == 'right') {
+            if (that.made || that.transitioning || !that.movement || that.panDirection == 'right') {
                 return;
             }
-            made = true;
-            revUtils.transitionDurationCss(that.gridContainerElement, '.75s');
+            that.made = true;
+            revUtils.transitionDurationCss(that.gridContainerElement, (that.animationDuration / 1.5) + 's');
             revUtils.transformCss(that.gridContainerElement, 'translate3d(-'+ (that.innerElement.offsetWidth + (that.padding * 2)) +'px, 0, 0)');
             setTimeout(function() {
                 that.updateGrids();
-                made = false;
-                direction = false;
-            }, 750);
-            movement = 0;
+                that.made = false;
+                that.panDirection = false;
+            }, (that.animationDuration / 1.5) * 1000);
+            that.movement = 0;
         });
 
         mc.on('swiperight', function(e) {
-            if (made || direction == 'left') {
+            if (that.made || that.transitioning || !that.movement || that.panDirection == 'left') {
                 return;
             }
-            made = true;
-            revUtils.transitionDurationCss(that.gridContainerElement, '.75s');
+            that.made = true;
+            revUtils.transitionDurationCss(that.gridContainerElement, (that.animationDuration / 1.5) + 's');
             revUtils.transformCss(that.gridContainerElement, 'translate3d(0, 0, 0)');
             setTimeout(function() {
                 that.updateGrids();
-                made = false;
-                direction = false;
-            }, 750);
-            movement = 0;
+                that.made = false;
+                that.panDirection = false;
+            }, (that.animationDuration / 1.5) * 1000);
+            that.movement = 0;
         });
 
         mc.on('panleft', function(e) {
-            if (made || direction == 'right') {
+            if (that.made || that.transitioning || that.panDirection == 'right') {
                 return;
             }
-            updown = false;
-
-            direction = 'left';
-            that.showNextPage();
-
-            movement = movement + 2;
-            revUtils.transformCss(that.gridContainerElement, 'translate3d(-'+ movement +'px, 0, 0)');
+            that.pan('left');
         });
 
         mc.on('panright', function(e) {
-            if (made || direction == 'left') {
+            if (that.made || that.transitioning || that.panDirection == 'left') {
                 return;
             }
-            updown = false;
-
-            direction = 'right';
-            that.showPreviousPage();
-
-            movement = movement + 2;
-            revUtils.transformCss(that.gridContainerElement, 'translate3d(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2)) - movement ) +'px, 0, 0)');
+            that.pan('right');
         });
 
         mc.on('panup pandown', function(e) {
-            updown = true;
+            that.updown = true;
         });
 
         mc.on('panend', function(e) {
-            if (made || (updown && !movement)) {
+            if (that.made || that.transitioning || (that.updown && !that.movement)) {
                 return;
             }
-
-            revUtils.transitionDurationCss(that.gridContainerElement, '.3s');
-            if (direction == 'left') {
-                revUtils.transformCss(that.gridContainerElement, 'none');
-            } else {
-                revUtils.transformCss(that.gridContainerElement, 'translate3d(-'+ ( (that.innerElement.offsetWidth + (that.padding * 2))) +'px, 0, 0)');
-            }
-
-            that.page = that.previousPage;
-            that.direction = that.previousDirection;
-            that.previousPage = that.lastPage;
-
-            setTimeout(function() {
-                that.updateGrids(true);
-                movement = 0;
-                made = false;
-                direction = false;
-            }, 300);
+            that.resetShowPage();
         });
+    };
+
+    RevSlider.prototype.pan = function(direction, movement, reset) {
+        this.updown = false;
+
+        this.panDirection = direction;
+        if (direction == 'left') {
+            this.showNextPage();
+        } else if (direction == 'right') {
+            this.showPreviousPage();
+        }
+
+        if (movement) {
+            revUtils.transitionDurationCss(this.gridContainerElement, this.animationDuration + 's');
+            if (reset) {
+                var that = this;
+                setTimeout(function() {
+                    that.resetShowPage(reset);
+                }, this.animationDuration * 1000);
+            }
+        }
+
+        this.movement = movement ? movement : (this.movement + 3);
+
+        if (direction == 'left') {
+            revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ this.movement +'px, 0, 0)');
+        } else if (direction == 'right') {
+            revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.innerElement.offsetWidth + (this.padding * 2)) - this.movement ) +'px, 0, 0)');
+        }
+    };
+
+    RevSlider.prototype.resetShowPage = function(ms) {
+        var ms = ms ? ms : 300;
+        revUtils.transitionDurationCss(this.gridContainerElement, ms + 'ms');
+        if (this.panDirection == 'left') {
+            revUtils.transformCss(this.gridContainerElement, 'none');
+        } else {
+            revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.innerElement.offsetWidth + (this.padding * 2))) +'px, 0, 0)');
+        }
+
+        this.page = this.previousPage;
+        this.direction = this.previousDirection;
+        this.previousPage = this.lastPage;
+
+        var that = this;
+        setTimeout(function() {
+            that.updateGrids(true);
+            that.movement = 0;
+            that.made = false;
+            that.panDirection = false;
+        }, ms);
     };
 
     RevSlider.prototype.showNextPage = function(click) {
@@ -957,7 +983,6 @@ RevSlider({
             this.previousDirection = this.direction;
 
             this.direction = 'next';
-
             this.createNextPageGrid();
 
             if (click) { // animate right away on click
