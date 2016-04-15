@@ -63,7 +63,7 @@ RevShifter({
         },
         touch_simulation: false,
         closed_hours: 24,
-        transition_duration: 2500,
+        transition_duration: 1200,
         devices: [
             'phone', 'tablet', 'desktop'
         ],
@@ -143,7 +143,6 @@ RevShifter({
                 ad_border: this.options.inner_widget_options.ad_border,
                 text_right: this.options.inner_widget_options.text_right,
                 text_right_height: this.options.inner_widget_options.text_right_height,
-                transition_duration: this.options.transition_duration + 'ms',
                 is_layout_instant: true,
                 disclosure_text: this.options.disclosure_text,
                 hide_provider: this.options.hide_provider,
