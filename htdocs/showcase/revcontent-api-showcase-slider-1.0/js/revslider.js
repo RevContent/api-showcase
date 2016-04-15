@@ -834,8 +834,8 @@ RevSlider({
         var that = this;
 
         var mc = new Hammer(this.element);
-        mc.add(new Hammer.Swipe());
-        mc.add(new Hammer.Pan({ threshold: 1 })).recognizeWith(mc.get('swipe'));
+        mc.add(new Hammer.Swipe({ threshold: 5, velocity: .2 }));
+        mc.add(new Hammer.Pan({ threshold: 0 })).recognizeWith(mc.get('swipe'));
 
         var movement = 0;
         var made = false;
