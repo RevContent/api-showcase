@@ -392,8 +392,10 @@ RevSlider({
         }
 
         this.grid.bindResize();
+
+        var that = this;
         this.grid.on('resized', function() {
-            this.resize();
+            that.resize();
         });
 
         this.updating = false;
