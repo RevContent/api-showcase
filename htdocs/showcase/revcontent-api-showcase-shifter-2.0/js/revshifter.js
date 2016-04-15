@@ -153,7 +153,7 @@ RevShifter({
                     back: true,
                     size: 40,
                     position: 'inside',
-                    dual: true
+                    dual: (revDetect.mobile() ? false : true)
                 },
                 beacons: this.options.beacons
             });
@@ -183,7 +183,6 @@ RevShifter({
 
             this.handleTransform();
 
-            this.attachButtonEvents();
 
             if (this.options.show_on_load) {
                 this.show();
