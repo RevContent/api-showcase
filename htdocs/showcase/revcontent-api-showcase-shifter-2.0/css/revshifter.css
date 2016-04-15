@@ -36,8 +36,8 @@ body.rev-shifter-no-transform #rev-shifter.rev-shifter {
     padding-bottom: 15px;
 }
 
-#rev-shifter.rev-shifter.rev-mobile.bottom {
-    padding-bottom: 0;
+#rev-shifter.rev-shifter.rev-mobile {
+    padding-bottom: 7px;
 }
 
 #rev-shifter.rev-shifter .rev-foot {
@@ -169,8 +169,60 @@ body.rev-shifter-no-transform #rev-shifter.rev-shifter {
     margin-top: -18px;
 }
 
+#rev-shifter.rev-shifter.rev-mobile #rev-slider-container .rev-btn-wrapper {
+    opacity: 1;
+    width: 40px;
+}
+
+#rev-shifter.rev-shifter.rev-mobile #rev-slider-container .rev-btn-wrapper .rev-btn-container {
+    background-color: transparent;
+    opacity: 1;
+}
+
+#rev-shifter.rev-shifter.rev-mobile #rev-slider-container .rev-btn-wrapper .rev-btn-container .rev-chevron {
+    height: 36px;
+    width: 36px;
+    border-radius: 50%;
+    opacity: .7;
+    border: 1px solid;
+    margin-left: -18px;
+    margin-top: -18px;
+    background: #fff;
+}
+
+#rev-shifter.rev-shifter.rev-mobile #rev-slider-container .rev-btn-wrapper .rev-btn-container .rev-chevron svg {
+    width: 36px;
+    height: 36px;
+    fill: #000;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -18px;
+    margin-top: -18px;
+}
+
+#rev-shifter.rev-shifter.rev-mobile .rev-sponsored {
+    font-size: 10px;
+    line-height: 10px;
+}
+
+#rev-shifter.rev-shifter.rev-mobile .rev-close {
+    top: 0;
+    right: 0;
+}
+
 #rev-shifter.rev-shifter.rev-mobile .rev-foot {
+    transition: none;
     right: 5px;
+    padding: 0;
+    border: none;
+    bottom: 2px;
+    top: auto;
+    z-index: 1000;
+}
+
+#rev-shifter.rev-shifter.rev-mobile .rev-ad a .rev-headline {
+    text-decoration: none !important;
 }
 
 #rev-shifter.rev-shifter.rev-mobile:not(.rev-hidden) .rev-foot {
