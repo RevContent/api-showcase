@@ -126,6 +126,7 @@ RevSlider({
             disclosure_text: revDisclose.defaultDisclosureText,
             hide_provider: false,
             hide_header: false,
+            hide_footer: false,
             beacons: true
         };
 
@@ -508,27 +509,29 @@ RevSlider({
             revUtils.append(this.head, this.header);
         }
 
-        if (this.foot) {
-            revUtils.remove(this.foot);
-        }
-        var sponsoredFoot = (this.options.rev_position == 'bottom_left' || this.options.rev_position == 'bottom_right');
-        if (sponsoredFoot) {
-            this.foot = document.createElement('div');
-            revUtils.addClass(this.foot, 'rev-foot');
-            revUtils.append(this.containerElement, this.foot);
-        }
+        if (!this.options.hide_footer) {
+            if (this.foot) {
+                revUtils.remove(this.foot);
+            }
+            var sponsoredFoot = (this.options.rev_position == 'bottom_left' || this.options.rev_position == 'bottom_right');
+            if (sponsoredFoot) {
+                this.foot = document.createElement('div');
+                revUtils.addClass(this.foot, 'rev-foot');
+                revUtils.append(this.containerElement, this.foot);
+            }
 
-        this.sponsored = document.createElement('div');
+            this.sponsored = document.createElement('div');
 
-        revUtils.addClass(this.sponsored, 'rev-sponsored');
-        this.sponsored.innerHTML = revDisclose.getDisclosure(this.options.disclosure_text);
+            revUtils.addClass(this.sponsored, 'rev-sponsored');
+            this.sponsored.innerHTML = revDisclose.getDisclosure(this.options.disclosure_text);
 
-        if (this.options.rev_position == 'top_right') {
-            revUtils.addClass(this.sponsored, 'top-right');
-            revUtils.prepend(this.head, this.sponsored);
-        } else if (sponsoredFoot) {
-            revUtils.addClass(this.sponsored, this.options.rev_position.replace('_', '-'));
-            revUtils.append(this.foot, this.sponsored);
+            if (this.options.rev_position == 'top_right') {
+                revUtils.addClass(this.sponsored, 'top-right');
+                revUtils.prepend(this.head, this.sponsored);
+            } else if (sponsoredFoot) {
+                revUtils.addClass(this.sponsored, this.options.rev_position.replace('_', '-'));
+                revUtils.append(this.foot, this.sponsored);
+            }
         }
     };
 
