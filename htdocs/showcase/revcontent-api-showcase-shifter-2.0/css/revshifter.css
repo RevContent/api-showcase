@@ -176,3 +176,40 @@ body.rev-shifter-no-transform #rev-shifter.rev-shifter {
 #rev-shifter.rev-shifter.rev-mobile:not(.rev-hidden) .rev-foot {
     transform: none;
 }
+
+#rev-shifter.rev-shifter .rev-touch-enabled {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 1000;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.93);
+    height: 80%;
+    border-radius: 50%;
+    border: 1px solid #33a225;
+}
+
+#rev-shifter.rev-shifter .rev-touch-enabled svg {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    fill: #33a225;
+}
+
+#rev-shifter.rev-shifter .rev-touch-enabled.rev-touch-enabled-scale {
+    transform: translate(-50%, -50%) scale(.7);
+}
+
+#rev-shifter.rev-shifter .rev-touch-enabled.rev-touch-enabled-scale-down {
+    transition: transform 1.75s;
+}
+
+#rev-shifter.rev-shifter .rev-touch-enabled.rev-touch-enabled-scale-up {
+    transition: transform 300ms;
+}
+
+#rev-shifter.rev-shifter .rev-touch-enabled.rev-touch-enabled-scale-remove {
+    opacity: 0;
+    transition: transform 300ms, opacity 600ms;
+}
