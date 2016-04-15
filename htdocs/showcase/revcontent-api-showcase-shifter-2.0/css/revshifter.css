@@ -133,6 +133,10 @@ body.rev-shifter-no-transform #rev-shifter.rev-shifter {
     text-decoration: none;
 }
 
+#rev-shifter .rev-ad > a:hover .rev-headline {
+    text-decoration: underline;
+}
+
 #rev-shifter.rev-shifter .rev-toggle {
     position: absolute;
     z-index: 10001;
