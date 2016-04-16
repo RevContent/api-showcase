@@ -348,12 +348,15 @@ RevSlider({
     };
 
     RevSlider.prototype.animateGrid = function() {
+        this.transitioning = true;
+
         revUtils.transitionDurationCss(this.gridContainerElement, this.animationDuration + 's');
         revUtils.transformCss(this.gridContainerElement, this.gridContainerTransform);
 
         var that = this;
         setTimeout(function() {
             that.updateGrids();
+            that.transitioning = false;
         }, this.animationDuration * 1000);
     };
 
