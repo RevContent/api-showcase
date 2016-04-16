@@ -9346,7 +9346,7 @@ RevShifter({
 
             var that = this;
             mc.on("panup pandown", function(ev){
-                if (that.transitioning && !that.options.hide_on_show_transition) { // don't do anything if already transitioning and option is false
+                if ( that.innerWidget.updown || (that.transitioning && !that.options.hide_on_show_transition)) { // don't do anything if already transitioning and option is false
                     return;
                 }
 
