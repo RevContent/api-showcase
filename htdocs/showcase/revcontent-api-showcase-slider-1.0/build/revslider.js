@@ -347,8 +347,14 @@ RevSlider({
         this.updateDisplayedItems(true);
     };
 
+    RevSlider.prototype.transitionClass = function(transitioning)
+    {
+        revUtils[transitioning ? 'addClass' : 'removeClass'](this.element, 'rev-transitioning');
+    }
+
     RevSlider.prototype.animateGrid = function() {
         this.transitioning = true;
+        this.transitionClass(true);
 
         revUtils.transitionDurationCss(this.gridContainerElement, this.animationDuration + 's');
         revUtils.transformCss(this.gridContainerElement, this.gridContainerTransform);
@@ -401,6 +407,7 @@ RevSlider({
             that.resize();
         });
 
+        that.transitionClass(false);
         this.updating = false;
     };
 
@@ -914,6 +921,8 @@ RevSlider({
 
     RevSlider.prototype.pan = function(direction, movement, reset) {
         this.updown = false;
+
+        this.transitionClass(true);
 
         this.panDirection = direction;
         if (direction == 'left') {
