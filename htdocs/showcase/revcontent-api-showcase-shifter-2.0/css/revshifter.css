@@ -188,7 +188,7 @@ body.rev-shifter-no-transform #rev-shifter.rev-shifter {
     width: 36px;
     border-radius: 50%;
     opacity: .7;
-    border: 1px solid;
+    border: 1px solid #bbb;
     margin-left: -18px;
     margin-top: -18px;
     background: #fff;
@@ -203,6 +203,7 @@ body.rev-shifter-no-transform #rev-shifter.rev-shifter {
     top: 50%;
     margin-left: -18px;
     margin-top: -18px;
+    opacity: .8;
 }
 
 #rev-shifter.rev-shifter.rev-mobile .rev-sponsored {
