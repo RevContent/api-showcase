@@ -29,10 +29,13 @@
 
 #rev-slider {
     clear: both;
+    cursor: move;
     /*margin: 4px;*/
 }
 
 #rev-slider * {
+    user-drag: none;
+    -webkit-user-drag: none;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -69,6 +72,7 @@
     user-select: none;
     transition: opacity .5s ease-in-out;
     z-index: 10000000000;
+    opacity: 0;
     top: 0;
 }
 
