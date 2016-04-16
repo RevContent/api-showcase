@@ -183,6 +183,10 @@ body.rev-shifter-no-transform #rev-shifter.rev-shifter {
     opacity: 1;
 }
 
+#rev-shifter.rev-shifter #rev-slider-container .rev-btn-wrapper .rev-btn-container .rev-chevron {
+    transition: opacity 200ms;
+}
+
 #rev-shifter.rev-shifter.rev-mobile #rev-slider-container .rev-btn-wrapper .rev-btn-container .rev-chevron {
     height: 36px;
     width: 36px;
@@ -192,6 +196,10 @@ body.rev-shifter-no-transform #rev-shifter.rev-shifter {
     margin-left: -18px;
     margin-top: -18px;
     background: #fff;
+}
+
+#rev-shifter.rev-shifter.rev-transitioning #rev-slider-container .rev-btn-wrapper .rev-btn-container .rev-chevron {
+    opacity: .4;
 }
 
 #rev-shifter.rev-shifter.rev-mobile #rev-slider-container .rev-btn-wrapper .rev-btn-container .rev-chevron svg {
