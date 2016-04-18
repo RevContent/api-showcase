@@ -32,12 +32,12 @@ body.rev-shifter-no-transform #rev-shifter.rev-shifter {
     z-index: 100;
 }
 
-#rev-shifter.rev-shifter.bottom {
-    padding-bottom: 15px;
+#rev-shifter.rev-shifter.bottom #rev-slider-container{
+    padding-bottom: 20px;
 }
 
-#rev-shifter.rev-shifter.rev-mobile {
-    padding-bottom: 7px;
+#rev-shifter.rev-shifter.rev-mobile #rev-slider-container{
+    padding-bottom: 12px;
 }
 
 #rev-shifter.rev-shifter .rev-foot {
@@ -58,13 +58,13 @@ body.rev-shifter-no-transform #rev-shifter.rev-shifter {
 }
 
 #rev-shifter.rev-shifter.bottom .rev-foot {
-    top: -28px;
+    top: -24px;
     transform: translateY(100%);
     border-radius: 4px 4px 0 0;
 }
 
 #rev-shifter.rev-shifter.top .rev-foot {
-    bottom: -24px;
+    bottom: -20px;
     transform: translateY(-100%);
     border-radius: 0 0 4px 4px;
 }

@@ -70,7 +70,6 @@
     text-align: center;
     z-index: 10;
     user-select: none;
-    transition: opacity .5s ease-in-out;
     z-index: 10000000000;
     opacity: 0;
     top: 0;
@@ -192,7 +191,7 @@
 }
 
 #rev-slider .rev-sponsored {
-    line-height: 24px;
+    line-height: 20px;
     font-size: 12px;
 }
 

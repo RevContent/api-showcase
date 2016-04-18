@@ -127,7 +127,8 @@ RevSlider({
             hide_provider: false,
             hide_header: false,
             hide_footer: false,
-            beacons: true
+            beacons: true,
+            touch_direction: Hammer.DIRECTION_HORIZONTAL // don't prevent vertical scrolling
         };
 
         // merge options
@@ -262,28 +263,31 @@ RevSlider({
         } else {
             switch (this.grid.breakPoint) {
                 case 'xxs':
-                    this.animationDuration = 1.2;
+                    this.animationDuration = .6;
                     break;
                 case 'xs':
-                    this.animationDuration = 1.3;
+                    this.animationDuration = .7;
                     break;
                 case 'sm':
-                    this.animationDuration = 1.4;
+                    this.animationDuration = .8;
                     break;
                 case 'md':
-                    this.animationDuration = 1.5;
+                    this.animationDuration = .9;
                     break;
                 case 'lg':
-                    this.animationDuration = 1.6;
+                    this.animationDuration = 1;
                     break;
                 case 'xl':
-                    this.animationDuration = 1.7;
+                    this.animationDuration = 1.1;
                     break;
                 case 'xxl':
-                    this.animationDuration = 1.8;
+                    this.animationDuration = 1.2;
                     break;
             }
         }
+
+        // set it
+        revUtils.transitionDurationCss(this.gridContainerElement, this.animationDuration + 's');
 
         return this.animationDuration;
     };
@@ -673,19 +677,7 @@ RevSlider({
         if (this.options.max_headline && !this.options.text_right) { // text_right should be limited, but don't waste for max_headline only
             return;
         }
-        var headlines = this.grid.element.querySelectorAll('.rev-content .rev-headline');
-        for (var i = 0; i < headlines.length; i++) {
-            var text,
-                container = headlines[i],
-                headline = container.children[0];
-            while(container.clientHeight < container.scrollHeight) {
-                text = headline.innerHTML.trim();
-                if(text.split(' ').length <= 1) {
-                    break;
-                }
-                headline.innerHTML = text.replace(/\W*\s(\S)*$/, '...');
-            }
-        }
+        revUtils.ellipsisText(this.grid.element.querySelectorAll('.rev-content .rev-headline'));
     };
 
     RevSlider.prototype.getLimit = function() {
@@ -820,32 +812,50 @@ RevSlider({
     RevSlider.prototype.attachButtonEvents = function() {
         var that = this;
 
-        if (this.options.buttons.dual) {
-            this.containerElement.addEventListener('mousemove', function(e) {
-                // get left or right cursor position
-                if ((e.clientX - that.containerElement.getBoundingClientRect().left) > (that.containerElement.offsetWidth / 2)) {
-                    revUtils.addClass(that.btnContainer, 'rev-btn-dual-right');
-                } else {
-                    revUtils.removeClass(that.btnContainer, 'rev-btn-dual-right');
-                }
+        if (revDetect.mobile()) { // if mobile detect tap TODO: see if hammer can accept multiple elements somehow(array does not work :( )
+            var mcForwardBtn = new Hammer(this.forwardBtn);
+            mcForwardBtn.add(new Hammer.Tap());
+
+            mcForwardBtn.on('tap', function(e) {
+                that.showNextPage(true);
             });
+
+            var mcBackBtn = new Hammer(this.backBtn);
+            mcBackBtn.add(new Hammer.Tap());
+
+            mcBackBtn.on('tap', function(e) {
+                that.showPreviousPage(true);
+            });
+        } else {
+            // dual button mouse move position
+            if (this.options.buttons.dual) {
+                this.containerElement.addEventListener('mousemove', function(e) {
+                    // get left or right cursor position
+                    if ((e.clientX - that.containerElement.getBoundingClientRect().left) > (that.containerElement.offsetWidth / 2)) {
+                        revUtils.addClass(that.btnContainer, 'rev-btn-dual-right');
+                    } else {
+                        revUtils.removeClass(that.btnContainer, 'rev-btn-dual-right');
+                    }
+                });
+            }
+
+            // button events
+            revUtils.addEventListener(this.forwardBtn, 'click', function() {
+                that.showNextPage(true);
+            });
+
+            revUtils.addEventListener(this.backBtn, 'click', function() {
+                that.showPreviousPage(true);
+            })
         }
-
-        this.forwardBtn.addEventListener('click', function() {
-            that.showNextPage(true);
-        });
-
-        this.backBtn.addEventListener('click', function() {
-            that.showPreviousPage(true);
-        });
     };
 
     RevSlider.prototype.attachTouchEvents = function() {
         var that = this;
 
         var mc = new Hammer(this.element);
-        mc.add(new Hammer.Swipe({ threshold: 5, velocity: .2 }));
-        mc.add(new Hammer.Pan({ threshold: 0 })).recognizeWith(mc.get('swipe'));
+        mc.add(new Hammer.Swipe({ threshold: 5, velocity: 0, direction: this.options.touch_direction }));
+        mc.add(new Hammer.Pan({ threshold: 0, direction: this.options.touch_direction })).recognizeWith(mc.get('swipe'));
 
         this.movement = 0;
         this.made = false;
@@ -897,14 +907,14 @@ RevSlider({
             if (that.made || that.transitioning || that.panDirection == 'right') {
                 return;
             }
-            that.pan('left');
+            that.pan('left', e.distance / 10);
         });
 
         mc.on('panright', function(e) {
             if (that.made || that.transitioning || that.panDirection == 'left') {
                 return;
             }
-            that.pan('right');
+            that.pan('right', e.distance / 10);
         });
 
         mc.on('panup pandown', function(e) {
@@ -931,22 +941,26 @@ RevSlider({
             this.showPreviousPage();
         }
 
-        if (movement) {
-            revUtils.transitionDurationCss(this.gridContainerElement, this.animationDuration + 's');
-            if (reset) {
-                var that = this;
-                setTimeout(function() {
-                    that.resetShowPage(reset);
-                }, this.animationDuration * 1000);
+        this.movement = this.movement + movement;
+
+        if (this.movement > this.grid.containerWidth) {
+            this.updateGrids();
+            this.panDirection = false;
+            this.movement = 0;
+        } else {
+            revUtils.transitionDurationCss(this.gridContainerElement,  '0s');
+            if (direction == 'left') {
+                revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ this.movement +'px, 0, 0)');
+            } else if (direction == 'right') {
+                revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.grid.containerWidth + (this.padding * 2)) - this.movement ) +'px, 0, 0)');
             }
         }
 
-        this.movement = movement ? movement : (this.movement + 3);
-
-        if (direction == 'left') {
-            revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ this.movement +'px, 0, 0)');
-        } else if (direction == 'right') {
-            revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.innerElement.offsetWidth + (this.padding * 2)) - this.movement ) +'px, 0, 0)');
+        if (reset) { // used for touch simulation
+            var that = this;
+            setTimeout(function() {
+                that.resetShowPage(reset);
+            }, this.animationDuration * 1000);
         }
     };
 
@@ -956,7 +970,7 @@ RevSlider({
         if (this.panDirection == 'left') {
             revUtils.transformCss(this.gridContainerElement, 'none');
         } else {
-            revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.innerElement.offsetWidth + (this.padding * 2))) +'px, 0, 0)');
+            revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.grid.containerWidth + (this.padding * 2))) +'px, 0, 0)');
         }
 
         this.page = this.previousPage;

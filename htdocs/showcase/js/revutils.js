@@ -183,7 +183,7 @@ utils.ellipsisText = function(headlines) {
         var text,
             container = headlines[i],
             headline = container.children[0];
-        while(container.clientHeight < container.scrollHeight) {
+        while(container.clientHeight < (container.scrollHeight > container.clientHeight ? (container.scrollHeight - 1) : container.scrollHeight)) {
             text = headline.innerHTML.trim();
             if(text.split(' ').length <= 1) {
                 break;
