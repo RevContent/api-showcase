@@ -330,7 +330,6 @@ RevShifter({
 
             this.visible = true;
             this.transitioning = true;
-            this.innerWidget.transitioning = true;
 
             revUtils.addClass(document.body, 'rev-shifter-no-transform');
 
@@ -363,13 +362,11 @@ RevShifter({
 
                         setTimeout(function() { // everything is done
                             that.transitioning = false;
-                            that.innerWidget.transitioning = false;
                         }, resetMs);
 
                     }, that.innerWidget.animationDuration * 1000);
                 } else {
                     that.transitioning = false;
-                    that.innerWidget.transitioning = false;
                 }
             }, this.options.transition_duration);
 
