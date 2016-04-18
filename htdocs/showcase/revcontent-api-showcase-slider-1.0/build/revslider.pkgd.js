@@ -8929,7 +8929,6 @@ RevSlider({
         } else {
             if (reset) { // used for touch simulation
                 revUtils.transitionDurationCss(this.gridContainerElement,  this.animationDuration + 's');
-
                 var that = this;
                 setTimeout(function() {
                     that.resetShowPage(reset);
