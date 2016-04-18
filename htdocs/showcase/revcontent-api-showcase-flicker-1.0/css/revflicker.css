@@ -7,6 +7,7 @@
 }
 
 #rev-flicker * {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -112,6 +113,7 @@
     letter-spacing: .2px;
     line-height: 20px;
     margin: 0;
+    overflow: hidden !important;
 }
 
 #rev-flicker .rev-provider {
