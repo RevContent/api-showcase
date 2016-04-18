@@ -286,9 +286,6 @@ RevSlider({
             }
         }
 
-        // set it
-        revUtils.transitionDurationCss(this.gridContainerElement, this.animationDuration + 's');
-
         return this.animationDuration;
     };
 
@@ -948,19 +945,21 @@ RevSlider({
             this.panDirection = false;
             this.movement = 0;
         } else {
-            revUtils.transitionDurationCss(this.gridContainerElement,  '0s');
+            if (reset) { // used for touch simulation
+                revUtils.transitionDurationCss(this.gridContainerElement,  this.animationDuration + 's');
+                var that = this;
+                setTimeout(function() {
+                    that.resetShowPage(reset);
+                }, this.animationDuration * 1000);
+            } else {
+                revUtils.transitionDurationCss(this.gridContainerElement,  '0s');
+            }
+
             if (direction == 'left') {
                 revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ this.movement +'px, 0, 0)');
             } else if (direction == 'right') {
                 revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.grid.containerWidth + (this.padding * 2)) - this.movement ) +'px, 0, 0)');
             }
-        }
-
-        if (reset) { // used for touch simulation
-            var that = this;
-            setTimeout(function() {
-                that.resetShowPage(reset);
-            }, this.animationDuration * 1000);
         }
     };
 
