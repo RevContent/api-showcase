@@ -127,7 +127,8 @@ RevSlider({
             hide_provider: false,
             hide_header: false,
             hide_footer: false,
-            beacons: true
+            beacons: true,
+            touch_direction: Hammer.DIRECTION_HORIZONTAL // don't prevent vertical scrolling
         };
 
         // merge options
@@ -262,28 +263,31 @@ RevSlider({
         } else {
             switch (this.grid.breakPoint) {
                 case 'xxs':
-                    this.animationDuration = 1.2;
+                    this.animationDuration = .6;
                     break;
                 case 'xs':
-                    this.animationDuration = 1.3;
+                    this.animationDuration = .7;
                     break;
                 case 'sm':
-                    this.animationDuration = 1.4;
+                    this.animationDuration = .8;
                     break;
                 case 'md':
-                    this.animationDuration = 1.5;
+                    this.animationDuration = .9;
                     break;
                 case 'lg':
-                    this.animationDuration = 1.6;
+                    this.animationDuration = 1;
                     break;
                 case 'xl':
-                    this.animationDuration = 1.7;
+                    this.animationDuration = 1.1;
                     break;
                 case 'xxl':
-                    this.animationDuration = 1.8;
+                    this.animationDuration = 1.2;
                     break;
             }
         }
+
+        // set it
+        revUtils.transitionDurationCss(this.gridContainerElement, this.animationDuration + 's');
 
         return this.animationDuration;
     };
@@ -844,8 +848,8 @@ RevSlider({
         var that = this;
 
         var mc = new Hammer(this.element);
-        mc.add(new Hammer.Swipe({ threshold: 5, velocity: .2 }));
-        mc.add(new Hammer.Pan({ threshold: 0 })).recognizeWith(mc.get('swipe'));
+        mc.add(new Hammer.Swipe({ threshold: 5, velocity: 0, direction: this.options.touch_direction }));
+        mc.add(new Hammer.Pan({ threshold: 0, direction: this.options.touch_direction })).recognizeWith(mc.get('swipe'));
 
         this.movement = 0;
         this.made = false;
@@ -897,14 +901,14 @@ RevSlider({
             if (that.made || that.transitioning || that.panDirection == 'right') {
                 return;
             }
-            that.pan('left');
+            that.pan('left', e.distance / 10);
         });
 
         mc.on('panright', function(e) {
             if (that.made || that.transitioning || that.panDirection == 'left') {
                 return;
             }
-            that.pan('right');
+            that.pan('right', e.distance / 10);
         });
 
         mc.on('panup pandown', function(e) {
@@ -931,22 +935,26 @@ RevSlider({
             this.showPreviousPage();
         }
 
-        if (movement) {
-            revUtils.transitionDurationCss(this.gridContainerElement, this.animationDuration + 's');
-            if (reset) {
-                var that = this;
-                setTimeout(function() {
-                    that.resetShowPage(reset);
-                }, this.animationDuration * 1000);
+        this.movement = this.movement + movement;
+
+        if (this.movement > this.grid.containerWidth) {
+            this.updateGrids();
+            this.panDirection = false;
+            this.movement = 0;
+        } else {
+            revUtils.transitionDurationCss(this.gridContainerElement,  '0s');
+            if (direction == 'left') {
+                revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ this.movement +'px, 0, 0)');
+            } else if (direction == 'right') {
+                revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.grid.containerWidth + (this.padding * 2)) - this.movement ) +'px, 0, 0)');
             }
         }
 
-        this.movement = movement ? movement : (this.movement + 3);
-
-        if (direction == 'left') {
-            revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ this.movement +'px, 0, 0)');
-        } else if (direction == 'right') {
-            revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.innerElement.offsetWidth + (this.padding * 2)) - this.movement ) +'px, 0, 0)');
+        if (reset) { // used for touch simulation
+            var that = this;
+            setTimeout(function() {
+                that.resetShowPage(reset);
+            }, this.animationDuration * 1000);
         }
     };
 
