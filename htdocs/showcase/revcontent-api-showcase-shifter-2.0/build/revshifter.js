@@ -156,7 +156,8 @@ RevShifter({
                     position: 'inside',
                     dual: (revDetect.mobile() ? false : true)
                 },
-                beacons: this.options.beacons
+                beacons: this.options.beacons,
+                touch_direction: Hammer.DIRECTION_ALL // prevent vertical scrolling
             });
 
             if (!this.options.hide_footer && !revDetect.mobile()) {
@@ -170,8 +171,6 @@ RevShifter({
             }
 
             this.size = this.element.clientHeight;
-            this.difference = (this.size - this.innerWidget.grid.maxHeight);
-            this.showSize = this.innerWidget.grid.rows[1].height;
 
             if (typeof this.options.inner_widget_options.per_row === 'object') {
                 this.options.single_per_row = {};
@@ -310,16 +309,28 @@ RevShifter({
 
             var that = this;
             mc.on("panup pandown", function(ev){
-                if ( that.innerWidget.updown || (that.transitioning && !that.options.hide_on_show_transition)) { // don't do anything if already transitioning and option is false
+                if ( that.cancelPan || (that.transitioning && !that.options.hide_on_show_transition)) { // don't do anything if already transitioning and option is false
+                    that.cancelPan = false;
                     return;
                 }
-
                 if (ev.type === 'panup') {
                     that.options.scroll_natural ? that.show() : that.hide();
                 } else if (ev.type === 'pandown') {
                     that.options.scroll_natural ? that.hide() : that.show();
                 }
             });
+
+            // this is a bit of a hack but is the best/ only working way to
+            // prevent show/hide when paning vertically on element
+            var cancelPan = function() {
+                that.cancelPan = true;
+            }
+
+            revUtils.addEventListener(this.element, 'touchstart', cancelPan);
+
+            revUtils.addEventListener(this.element, 'touchend', cancelPan);
+
+            revUtils.addEventListener(this.element, 'touchmove', cancelPan);
         }
 
         this.show = function() {
@@ -330,7 +341,6 @@ RevShifter({
 
             this.visible = true;
             this.transitioning = true;
-            this.innerWidget.transitioning = true;
 
             revUtils.addClass(document.body, 'rev-shifter-no-transform');
 
@@ -363,13 +373,11 @@ RevShifter({
 
                         setTimeout(function() { // everything is done
                             that.transitioning = false;
-                            that.innerWidget.transitioning = false;
                         }, resetMs);
 
                     }, that.innerWidget.animationDuration * 1000);
                 } else {
                     that.transitioning = false;
-                    that.innerWidget.transitioning = false;
                 }
             }, this.options.transition_duration);
 
