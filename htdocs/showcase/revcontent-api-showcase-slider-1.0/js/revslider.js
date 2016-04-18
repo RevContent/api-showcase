@@ -677,19 +677,7 @@ RevSlider({
         if (this.options.max_headline && !this.options.text_right) { // text_right should be limited, but don't waste for max_headline only
             return;
         }
-        var headlines = this.grid.element.querySelectorAll('.rev-content .rev-headline');
-        for (var i = 0; i < headlines.length; i++) {
-            var text,
-                container = headlines[i],
-                headline = container.children[0];
-            while(container.clientHeight < container.scrollHeight) {
-                text = headline.innerHTML.trim();
-                if(text.split(' ').length <= 1) {
-                    break;
-                }
-                headline.innerHTML = text.replace(/\W*\s(\S)*$/, '...');
-            }
-        }
+        revUtils.ellipsisText(this.grid.element.querySelectorAll('.rev-content .rev-headline'));
     };
 
     RevSlider.prototype.getLimit = function() {
