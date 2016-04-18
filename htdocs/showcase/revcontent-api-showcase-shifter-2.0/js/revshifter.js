@@ -171,8 +171,6 @@ RevShifter({
             }
 
             this.size = this.element.clientHeight;
-            this.difference = (this.size - this.innerWidget.grid.maxHeight);
-            this.showSize = this.innerWidget.grid.rows[1].height;
 
             if (typeof this.options.inner_widget_options.per_row === 'object') {
                 this.options.single_per_row = {};
