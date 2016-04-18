@@ -824,24 +824,42 @@ RevSlider({
     RevSlider.prototype.attachButtonEvents = function() {
         var that = this;
 
-        if (this.options.buttons.dual) {
-            this.containerElement.addEventListener('mousemove', function(e) {
-                // get left or right cursor position
-                if ((e.clientX - that.containerElement.getBoundingClientRect().left) > (that.containerElement.offsetWidth / 2)) {
-                    revUtils.addClass(that.btnContainer, 'rev-btn-dual-right');
-                } else {
-                    revUtils.removeClass(that.btnContainer, 'rev-btn-dual-right');
-                }
+        if (revDetect.mobile()) { // if mobile detect tap TODO: see if hammer can accept multiple elements somehow(array does not work :( )
+            var mcForwardBtn = new Hammer(this.forwardBtn);
+            mcForwardBtn.add(new Hammer.Tap());
+
+            mcForwardBtn.on('tap', function(e) {
+                that.showNextPage(true);
             });
+
+            var mcBackBtn = new Hammer(this.backBtn);
+            mcBackBtn.add(new Hammer.Tap());
+
+            mcBackBtn.on('tap', function(e) {
+                that.showPreviousPage(true);
+            });
+        } else {
+            // dual button mouse move position
+            if (this.options.buttons.dual) {
+                this.containerElement.addEventListener('mousemove', function(e) {
+                    // get left or right cursor position
+                    if ((e.clientX - that.containerElement.getBoundingClientRect().left) > (that.containerElement.offsetWidth / 2)) {
+                        revUtils.addClass(that.btnContainer, 'rev-btn-dual-right');
+                    } else {
+                        revUtils.removeClass(that.btnContainer, 'rev-btn-dual-right');
+                    }
+                });
+            }
+
+            // button events
+            revUtils.addEventListener(this.forwardBtn, 'click', function() {
+                that.showNextPage(true);
+            });
+
+            revUtils.addEventListener(this.backBtn, 'click', function() {
+                that.showPreviousPage(true);
+            })
         }
-
-        this.forwardBtn.addEventListener('click', function() {
-            that.showNextPage(true);
-        });
-
-        this.backBtn.addEventListener('click', function() {
-            that.showPreviousPage(true);
-        });
     };
 
     RevSlider.prototype.attachTouchEvents = function() {
@@ -964,7 +982,7 @@ RevSlider({
         if (this.panDirection == 'left') {
             revUtils.transformCss(this.gridContainerElement, 'none');
         } else {
-            revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.innerElement.offsetWidth + (this.padding * 2))) +'px, 0, 0)');
+            revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.grid.containerWidth + (this.padding * 2))) +'px, 0, 0)');
         }
 
         this.page = this.previousPage;
