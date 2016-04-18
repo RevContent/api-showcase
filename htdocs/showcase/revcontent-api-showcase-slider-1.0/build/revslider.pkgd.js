@@ -7434,20 +7434,19 @@ utils.transitionDurationCss = function(el, css) {
     el.style.OTransitionDuration = css;
 };
 
-utils.ellipsisText = function(el, text, height) {
-    var ellipText = '';
-    var t = el.cloneNode(true);
-    t.style.visibility = 'hidden';
-    t.style.height = 'auto';
-    this.append(el.parentNode, t);
-    t.innerHTML = text;
-    while (text.length > 0 && (t.clientHeight > height)) {
-        text = text.substr(0, text.length - 1);
-        t.innerHTML = text + "...";
+utils.ellipsisText = function(headlines) {
+    for (var i = 0; i < headlines.length; i++) {
+        var text,
+            container = headlines[i],
+            headline = container.children[0];
+        while(container.clientHeight < container.scrollHeight) {
+            text = headline.innerHTML.trim();
+            if(text.split(' ').length <= 1) {
+                break;
+            }
+            headline.innerHTML = text.replace(/\W*\s(\S)*$/, '...');
+        }
     }
-    ellipText = t.innerHTML;
-    this.remove(t);
-    return ellipText;
 };
 
 // -----  ----- //
