@@ -846,12 +846,12 @@ RevSlider({
             });
 
             revUtils.addEventListener(that.containerElement, 'mouseenter', function(){
-                revUtils.removeClass(that.btnContainer, 'off'); 
-                revUtils.addClass(that.btnContainer, 'on');  
+                revUtils.removeClass(that.containerElement, 'off');
+                revUtils.addClass(that.containerElement, 'on');
             });
             revUtils.addEventListener(that.containerElement, 'mouseleave', function(){
-                revUtils.removeClass(that.btnContainer, 'on');
-                revUtils.addClass(that.btnContainer, 'off');
+                revUtils.removeClass(that.containerElement, 'on');
+                revUtils.addClass(that.containerElement, 'off');
             });
         }
     };

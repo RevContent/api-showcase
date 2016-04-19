@@ -133,11 +133,11 @@
     /*opacity: 1;
     visibility: visible;*/
 }
-#rev-slider #rev-slider-container .rev-btn-dual.off {
+#rev-slider.off #rev-slider-container .rev-btn-dual {
     opacity: 0;
     visibility: hidden;
 }
-#rev-slider #rev-slider-container .rev-btn-dual.on {
+#rev-slider.on #rev-slider-container .rev-btn-dual {
     opacity: 1;
     visibility: visible;
 }
