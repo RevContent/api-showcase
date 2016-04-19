@@ -68,10 +68,9 @@
     height: 100%;
     width: 40px;
     text-align: center;
-    z-index: 10;
     user-select: none;
-    z-index: 10000000000;
-    opacity: 0;
+    z-index: 2147483600;
+    opacity: 1;
     top: 0;
 }
 
@@ -87,7 +86,7 @@
 #rev-slider #rev-slider-container .rev-btn-container {
     position: relative;
     background-color: #333333;
-    opacity: .3;
+    opacity: 1;
     transition: opacity .5s ease-in-out;
     height: 100%;
     text-align: center;
@@ -99,19 +98,20 @@
 }
 
 #rev-slider #rev-slider-container .rev-btn-container:hover {
-    opacity: .8;
+    opacity: 1;
 }
 
 #rev-slider #rev-slider-container .rev-btn-dual {
     position: absolute;
     left: 5px;
-    z-index: 1;
+    z-index: inherit;
     background: #fff;
     box-shadow: 0 0 2px 0 rgba(89,89,89,1);
     top: 50%;
     margin-top: -36px;
     border-radius: 2px;
-    opacity: 0;
+    opacity: 1;
+    visibility: hidden;
     transition: opacity 200ms;
 }
 
@@ -130,9 +130,17 @@
 }
 
 #rev-slider #rev-slider-container:hover .rev-btn-dual {
-    opacity: 1;
+    /*opacity: 1;
+    visibility: visible;*/
 }
-
+#rev-slider #rev-slider-container .rev-btn-dual.off {
+    opacity: 0;
+    visibility: hidden;
+}
+#rev-slider #rev-slider-container .rev-btn-dual.on {
+    opacity: 1;
+    visibility: visible;
+}
 #rev-slider #rev-slider-container .rev-btn-dual.rev-btn-dual-right {
     right: 5px;
     left: auto;

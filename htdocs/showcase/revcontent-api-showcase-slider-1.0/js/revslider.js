@@ -843,7 +843,16 @@ RevSlider({
 
             revUtils.addEventListener(this.backBtn, 'click', function() {
                 that.showPreviousPage(true);
-            })
+            });
+
+            revUtils.addEventListener(that.containerElement, 'mouseenter', function(){
+                revUtils.removeClass(that.btnContainer, 'off'); 
+                revUtils.addClass(that.btnContainer, 'on');  
+            });
+            revUtils.addEventListener(that.containerElement, 'mouseleave', function(){
+                revUtils.removeClass(that.btnContainer, 'on');
+                revUtils.addClass(that.btnContainer, 'off');
+            });
         }
     };
 
