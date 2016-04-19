@@ -73,7 +73,7 @@ body.rev-shifter-no-transform #rev-shifter.rev-shifter {
     border-radius: 0 0 4px 4px;
 }
 
-#rev-shifter.rev-shifter:hover .rev-foot {
+#rev-shifter.rev-shifter #rev-slider.on .rev-foot {
     transform: translateY(0);
 }
 
