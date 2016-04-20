@@ -6560,14 +6560,28 @@ utils.removeEventListener = function(el, eventName, handler) {
     } else {
         el.detachEvent('on' + eventName, handler);
     }
-}
+};
+
+utils.transformCss = function(el, css) {
+    el.style.transform = css;
+    el.style.MsTransform = css;
+    el.style.WebkitTransform = css;
+    el.style.OTransform = css;
+};
+
+utils.transitionDurationCss = function(el, css) {
+    el.style.transitionDuration = css;
+    el.style.WebkitTransitionDuration = css;
+    el.style.MozTransitionDuration = css;
+    el.style.OTransitionDuration = css;
+};
 
 utils.ellipsisText = function(headlines) {
     for (var i = 0; i < headlines.length; i++) {
         var text,
             container = headlines[i],
             headline = container.children[0];
-        while(container.clientHeight < container.scrollHeight) {
+        while(container.clientHeight < (container.scrollHeight > container.clientHeight ? (container.scrollHeight - 1) : container.scrollHeight)) {
             text = headline.innerHTML.trim();
             if(text.split(' ').length <= 1) {
                 break;

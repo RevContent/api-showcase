@@ -104,9 +104,8 @@ RevSlider({
             max_headline: false,
             text_overlay: false,
             vertical: false,
-            page_increment: true,
-            wrap_pages: true,
-            wrap_reverse: true, // if page_increment is false, this must be false
+            wrap_pages: true, //currently the only supported option
+            wrap_reverse: true, //currently the only supported option
             show_padding: true,
             pages: 4,
             text_right: false,
@@ -127,7 +126,9 @@ RevSlider({
             disclosure_text: revDisclose.defaultDisclosureText,
             hide_provider: false,
             hide_header: false,
-            beacons: true
+            hide_footer: false,
+            beacons: true,
+            touch_direction: Hammer.DIRECTION_HORIZONTAL // don't prevent vertical scrolling
         };
 
         // merge options
@@ -144,9 +145,9 @@ RevSlider({
 
         var that = this;
 
-        this.mobile = (revDetect.mobile()) ? true : false;
+        this.emitter = new EventEmitter();
 
-        revUtils.appendStyle('/* inject:css */#rev-slider a,#rev-slider a:focus,#rev-slider a:hover{text-decoration:none}#rev-slider,#rev-slider #rev-slider-grid-container{padding:0;width:100%}#rev-slider #rev-slider-grid{padding:0}#rev-slider #rev-slider-grid-container{clear:both;position:relative;width:100%;-webkit-transition:-webkit-transform;transition:transform;-webkit-transition-timing-function:ease-in-out;transition-timing-function:ease-in-out}#rev-slider #rev-slider-container,#rev-slider #rev-slider-inner{width:100%;clear:both;overflow:hidden;position:relative}#rev-slider{clear:both}#rev-slider *{box-sizing:border-box;font-size:inherit;line-height:inherit;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;margin:0;padding:0}#rev-slider #rev-slider-container .rev-btn-wrapper .rev-chevron{display:inline-block;height:36px;top:50%;margin-top:-18px;position:absolute;left:50%;margin-left:-18px;fill:#fff}#rev-slider #rev-slider-container .rev-btn-wrapper{cursor:pointer;position:absolute;height:100%;width:40px;text-align:center;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;z-index:10000000000;top:0}#rev-slider.rev-slider-vertical #rev-slider-container .rev-btn-wrapper{width:100%}#rev-slider.rev-slider-vertical #rev-slider-container .rev-btn-wrapper-forward.rev-btn-wrapper{bottom:0;top:auto}#rev-slider #rev-slider-container .rev-btn-container{position:relative;background-color:#333;opacity:.3;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;height:100%;text-align:center;border-radius:5px}#rev-slider #rev-slider-container .rev-btn-container label{cursor:pointer}#rev-slider #rev-slider-container .rev-btn-container:hover{opacity:.8}#rev-slider #rev-slider-container .rev-btn-dual{position:absolute;left:5px;z-index:1;background:#fff;box-shadow:0 0 2px 0 rgba(89,89,89,1);top:50%;margin-top:-36px;border-radius:2px;opacity:0;-webkit-transition:opacity .2s;transition:opacity .2s}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper{position:static;width:auto;height:auto;top:auto}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-container{background-color:inherit;opacity:1;height:36px;border-radius:0}#rev-slider #rev-slider-container:hover .rev-btn-dual{opacity:1}#rev-slider #rev-slider-container .rev-btn-dual.rev-btn-dual-right{right:5px;left:auto}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper.rev-btn-wrapper-back{border-bottom:1px solid #ddd}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper .rev-chevron{display:inline-block;top:auto;margin-top:0;position:static;left:auto;margin-left:0;fill:#ccc}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper:hover .rev-chevron{fill:#aaa}#rev-slider #rev-slider-container:hover .rev-btn-wrapper{opacity:1!important}#rev-slider.rev-slider-text-right .rev-image{float:left;margin-right:5px}#rev-slider.rev-slider-text-right .rev-ad a .rev-headline{margin-top:0!important}#rev-slider a{color:inherit}#rev-slider:focus{outline:0}#rev-slider .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-slider .rev-sponsored{line-height:24px;font-size:12px}#rev-slider .rev-sponsored.bottom-right,#rev-slider .rev-sponsored.top-right{float:right}#rev-slider .rev-sponsored.top-right a{vertical-align:-5px}#rev-slider .rev-sponsored a{color:#999}#rev-slider .rev-ad a{display:block;height:100%;color:#222}#rev-slider .rev-image{position:relative;-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee;overflow:hidden}#rev-slider .rev-image img{position:absolute;top:0;left:0;width:100%;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-slider.loaded .rev-image{background:0 0}#rev-slider.loaded .rev-image img{opacity:1}#rev-slider .rev-headline,#rev-slider .rev-provider{margin:0 10px;text-align:left}#rev-slider .rev-headline{margin-top:12px;overflow:hidden}#rev-slider .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;overflow:hidden;margin:0}#rev-slider .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}#rev-slider .rev-ad{border-radius:5px;overflow:hidden;background:#fff;z-index:1}#rev-slider .rev-ad img{border-top-left-radius:5px;border-top-right-radius:5px}#rev-slider .rev-content.blur{-webkit-filter:blur(3px);filter:blur(3px)}#rev-slider .rev-content{-webkit-transition-property:opacity;transition-property:opacity;-webkit-transition-duration:.5s;transition-duration:.5s;opacity:1}#rev-slider .rev-content.rev-next{-webkit-transition-property:opacity;transition-property:opacity;-webkit-transition-duration:.5s;transition-duration:.5s;opacity:.5}#rev-slider.rev-slider-text-overlay .rev-ad{position:relative}#rev-slider.rev-slider-text-overlay .rev-ad a{height:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-headline-brand{position:absolute;bottom:4px;color:#fff;text-shadow:1px 1px rgba(0,0,0,.8)}#rev-slider.rev-slider-text-overlay .rev-ad .rev-headline-brand .rev-provider{display:none}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{border-radius:5px;position:absolute;top:0;height:100%;width:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;content:"";display:block}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after{background:-webkit-linear-gradient(top,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%);background:linear-gradient(to bottom,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{opacity:0;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%);background:linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:after{opacity:0}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:before{opacity:1}#rev-opt-out .rd-close-button{position:absolute;cursor:pointer;right:10px;z-index:10}#rev-opt-out a{cursor:pointer!important}#rev-opt-out .rd-box-wrap{display:none;z-index:2147483641}#rev-opt-out .rd-box-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}#rev-opt-out .rd-vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}#rev-opt-out .rd-box{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}#rev-opt-out .rd-normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}#rev-opt-out .rd-full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}#rev-opt-out .rd-header{height:20px;position:absolute;right:0}#rev-opt-out .rd-about{font-family:Arial,sans-serif;font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}#rev-opt-out .rd-about .rd-logo{background:url(https://serve.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}#rev-opt-out .rd-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}#rev-opt-out .rd-about p#main{text-align:left}#rev-opt-out .rd-about h2{color:#777;font-family:Arial,sans-serif;font-size:16px;line-height:18px}#rev-opt-out .rd-about a{color:#00cb43}#rev-opt-out .rd-well{border:1px solid #E0E0E0;padding:20px;text-align:center;border-radius:2px;margin:20px 0 0}#rev-opt-out .rd-well h2{margin-top:0}#rev-opt-out .rd-well p{margin-bottom:0}#rev-opt-out .rd-opt-out{text-align:center}#rev-opt-out .rd-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-slider');
+        revUtils.appendStyle('/* inject:css */#rev-slider a,#rev-slider a:focus,#rev-slider a:hover{text-decoration:none}#rev-slider,#rev-slider #rev-slider-grid-container{padding:0;width:100%}#rev-slider #rev-slider-grid{padding:0}#rev-slider #rev-slider-grid-container{clear:both;position:relative;width:100%;-webkit-transition:-webkit-transform;transition:transform;-webkit-transition-timing-function:ease-in-out;transition-timing-function:ease-in-out}#rev-slider #rev-slider-container,#rev-slider #rev-slider-inner{width:100%;clear:both;overflow:hidden;position:relative}#rev-slider{clear:both;cursor:move}#rev-slider *{user-drag:none;-webkit-user-drag:none;box-sizing:border-box;font-size:inherit;line-height:inherit;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;margin:0;padding:0}#rev-slider #rev-slider-container .rev-btn-wrapper .rev-chevron{display:inline-block;height:36px;top:50%;margin-top:-18px;position:absolute;left:50%;margin-left:-18px;fill:#fff}#rev-slider #rev-slider-container .rev-btn-wrapper{cursor:pointer;position:absolute;height:100%;width:40px;text-align:center;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;z-index:2147483600;opacity:1;top:0}#rev-slider.rev-slider-vertical #rev-slider-container .rev-btn-wrapper{width:100%}#rev-slider.rev-slider-vertical #rev-slider-container .rev-btn-wrapper-forward.rev-btn-wrapper{bottom:0;top:auto}#rev-slider #rev-slider-container .rev-btn-container{position:relative;background-color:#333;opacity:1;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;height:100%;text-align:center;border-radius:5px}#rev-slider #rev-slider-container .rev-btn-container label{cursor:pointer}#rev-slider #rev-slider-container .rev-btn-container:hover{opacity:1}#rev-slider #rev-slider-container .rev-btn-dual{position:absolute;left:5px;z-index:inherit;background:#fff;box-shadow:0 0 2px 0 rgba(89,89,89,1);top:50%;margin-top:-36px;border-radius:2px;opacity:1;visibility:hidden;-webkit-transition:opacity .2s;transition:opacity .2s}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper{position:static;width:auto;height:auto;top:auto}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-container{background-color:inherit;opacity:1;height:36px;border-radius:0}#rev-slider.off #rev-slider-container .rev-btn-dual{opacity:0;visibility:hidden}#rev-slider.on #rev-slider-container .rev-btn-dual{opacity:1;visibility:visible}#rev-slider #rev-slider-container .rev-btn-dual.rev-btn-dual-right{right:5px;left:auto}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper.rev-btn-wrapper-back{border-bottom:1px solid #ddd}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper .rev-chevron{display:inline-block;top:auto;margin-top:0;position:static;left:auto;margin-left:0;fill:#ccc}#rev-slider #rev-slider-container .rev-btn-dual .rev-btn-wrapper:hover .rev-chevron{fill:#aaa}#rev-slider #rev-slider-container:hover .rev-btn-wrapper{opacity:1!important}#rev-slider.rev-slider-text-right .rev-image{float:left;margin-right:5px}#rev-slider.rev-slider-text-right .rev-ad a .rev-headline{margin-top:0!important}#rev-slider a{color:inherit}#rev-slider:focus{outline:0}#rev-slider .rev-header{float:left;font-size:22px;line-height:32px;margin-bottom:0;text-align:left;width:auto}#rev-slider .rev-sponsored{line-height:20px;font-size:12px}#rev-slider .rev-sponsored.bottom-right,#rev-slider .rev-sponsored.top-right{float:right}#rev-slider .rev-sponsored.top-right a{vertical-align:-5px}#rev-slider .rev-sponsored a{color:#999}#rev-slider .rev-ad a{display:block;height:100%;color:#222}#rev-slider .rev-image{position:relative;-webkit-transition:background .5s ease-in-out;transition:background .5s ease-in-out;background:#eee;overflow:hidden}#rev-slider .rev-image img{position:absolute;top:0;left:0;width:100%;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out;opacity:0;display:block;max-width:100%;height:auto}#rev-slider.loaded .rev-image{background:0 0}#rev-slider.loaded .rev-image img{opacity:1}#rev-slider .rev-headline,#rev-slider .rev-provider{margin:0 10px;text-align:left}#rev-slider .rev-headline{margin-top:12px;overflow:hidden}#rev-slider .rev-headline h3{font-size:16px;font-weight:500;letter-spacing:.2px;line-height:20px;overflow:hidden;margin:0}#rev-slider .rev-provider{font-size:12px;color:#888;line-height:30px;height:30px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}#rev-slider .rev-ad{border-radius:5px;overflow:hidden;background:#fff;z-index:1}#rev-slider .rev-ad img{border-top-left-radius:5px;border-top-right-radius:5px}#rev-slider .rev-content.blur{-webkit-filter:blur(3px);filter:blur(3px)}#rev-slider .rev-content{-webkit-transition-property:opacity;transition-property:opacity;-webkit-transition-duration:.5s;transition-duration:.5s;opacity:1}#rev-slider .rev-content.rev-next{-webkit-transition-property:opacity;transition-property:opacity;-webkit-transition-duration:.5s;transition-duration:.5s;opacity:.5}#rev-slider.rev-slider-text-overlay .rev-ad{position:relative}#rev-slider.rev-slider-text-overlay .rev-ad a{height:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-headline-brand{position:absolute;bottom:4px;color:#fff;text-shadow:1px 1px rgba(0,0,0,.8)}#rev-slider.rev-slider-text-overlay .rev-ad .rev-headline-brand .rev-provider{display:none}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{border-radius:5px;position:absolute;top:0;height:100%;width:100%}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{-webkit-transition:all .5s ease-in-out;transition:all .5s ease-in-out;content:"";display:block}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after{background:-webkit-linear-gradient(top,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%);background:linear-gradient(to bottom,rgba(0,0,0,.1) 0,rgba(0,0,0,.65) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before{opacity:0;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%);background:linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.4) 100%)}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:after{opacity:0}#rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:before{opacity:1}#rev-opt-out .rd-close-button{position:absolute;cursor:pointer;right:10px;z-index:10}#rev-opt-out a{cursor:pointer!important}#rev-opt-out .rd-box-wrap{display:none;z-index:2147483641}#rev-opt-out .rd-box-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;filter:alpha(opacity=50);z-index:2147483641}#rev-opt-out .rd-vertical-offset{position:fixed;display:table-cell;top:0;width:100%;z-index:2147483642}#rev-opt-out .rd-box{position:absolute;vertical-align:middle;background-color:#fff;padding:10px;border:1px solid #555;border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;overflow:auto;box-shadow:3px 3px 10px 4px #555}#rev-opt-out .rd-normal{min-width:270px;max-width:435px;width:90%;margin:10px auto}#rev-opt-out .rd-full-screen{position:fixed;right:15px;left:15px;top:15px;bottom:15px}#rev-opt-out .rd-header{height:20px;position:absolute;right:0}#rev-opt-out .rd-about{font-family:Arial,sans-serif;font-size:14px;text-align:left;box-sizing:content-box;color:#333;padding:15px}#rev-opt-out .rd-about .rd-logo{background:url(https://serve.revcontent.com/assets/img/rc-logo.png) bottom center no-repeat;width:220px;height:48px;display:block;margin:0 auto}#rev-opt-out .rd-about p{margin:16px 0;color:#555;font-size:14px;line-height:16px}#rev-opt-out .rd-about p#main{text-align:left}#rev-opt-out .rd-about h2{color:#777;font-family:Arial,sans-serif;font-size:16px;line-height:18px}#rev-opt-out .rd-about a{color:#00cb43}#rev-opt-out .rd-well{border:1px solid #E0E0E0;padding:20px;text-align:center;border-radius:2px;margin:20px 0 0}#rev-opt-out .rd-well h2{margin-top:0}#rev-opt-out .rd-well p{margin-bottom:0}#rev-opt-out .rd-opt-out{text-align:center}#rev-opt-out .rd-opt-out a{margin-top:6px;display:inline-block}/* endinject */', 'rev-slider');
 
         this.contentItems = [];
 
@@ -164,8 +165,8 @@ RevSlider({
         this.gridContainerElement = document.createElement('div');
         this.gridContainerElement.id = 'rev-slider-grid-container';
 
-        this.gridElement = document.createElement('div');
-        this.gridElement.id = 'rev-slider-grid';
+        var gridElement = document.createElement('div');
+        gridElement.id = 'rev-slider-grid';
 
         this.element = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
         this.element.style.width = '100%';
@@ -176,11 +177,11 @@ RevSlider({
 
         revUtils.append(this.innerElement, this.gridContainerElement);
 
-        revUtils.append(this.gridContainerElement, this.gridElement);
+        revUtils.append(this.gridContainerElement, gridElement);
 
         revUtils.append(this.element, this.containerElement);
 
-        this.grid = new AnyGrid(this.gridElement, this.gridOptions());
+        this.grid = new AnyGrid(gridElement, this.gridOptions());
 
         this.grid.on('resized', function() {
             that.resize();
@@ -192,7 +193,7 @@ RevSlider({
 
         this.offset = 0;
         this.page = 1;
-        this.previousPage = 0;
+        this.previousPage = 1;
 
         this.setUp();
 
@@ -207,18 +208,22 @@ RevSlider({
         this.grid.reloadItems();
         this.grid.layout();
 
+        this.getAnimationDuration();
+
         if (this.options.vertical && this.options.buttons.position == 'outside') { // buttons outside for vertical only
             this.innerContainerElement.style.padding = (this.options.buttons.back ? (this.options.buttons.size + 'px') : '0') + ' 0 ' + (this.options.buttons.forward ? (this.options.buttons.size + 'px') : '0');
         }
 
         this.initButtons();
 
+        this.attachTouchEvents();
+
         this.impressionTracker = [];
     };
 
     RevSlider.prototype.createCells = function() {
         for (var i = 0; i < this.limit; i++) {
-            this.gridElement.appendChild(this.createNewCell());
+            this.grid.element.appendChild(this.createNewCell());
         }
     };
 
@@ -237,94 +242,95 @@ RevSlider({
         return { masonry: false, perRow: this.options.per_row, transitionDuration: this.options.transition_duration, isResizeBound: this.options.is_resize_bound, adjustGutter:true, removeVerticalGutters: true, gutter: this.padding };
     };
 
-    // RevSlider.prototype.getAnimationDuration = function() {
-    //     var duration = 0.5;
-    //     if (this.options.vertical) {
-    //         var gridRows = this.options.rows[this.grid.getBreakPoint()];
-    //         if (gridRows >= 7) {
-    //             duration = 2;
-    //         } else if (gridRows >= 6) {
-    //             duration = 1.75;
-    //         } else if (gridRows >= 5) {
-    //             duration = 1.5;
-    //         } else if (gridRows >= 4) {
-    //             duration = 1.25;
-    //         } else if (gridRows >= 3) {
-    //             duration = 1;
-    //         } else if (gridRows >= 2) {
-    //             duration = 0.75;
-    //         }
-    //     } else {
-    //         var gridWidth = this.grid.containerWidth;
+    RevSlider.prototype.getAnimationDuration = function() {
+        this.animationDuration = 0.5;
 
-    //         if (gridWidth >= 1500) {
-    //             duration = 2;
-    //         } else if (gridWidth >= 1250) {
-    //             duration = 1.75;
-    //         } else if (gridWidth >= 1000) {
-    //             duration = 1.5;
-    //         } else if (gridWidth >= 750) {
-    //             duration = 1.25;
-    //         } else if (gridWidth >= 500) {
-    //             duration = 1;
-    //         } else if (gridWidth >= 250) {
-    //             duration = 0.75;
-    //         }
-    //     }
-    //     if (!this.options.page_increment) {
-    //         duration = duration * .5;
-    //     }
-    //     return duration;
-    // };
+        if (this.options.vertical) {
+            var gridRows = this.grid.rowsCount;
+            if (gridRows >= 7) {
+                this.animationDuration = 2;
+            } else if (gridRows >= 6) {
+                this.animationDuration = 1.75;
+            } else if (gridRows >= 5) {
+                this.animationDuration = 1.5;
+            } else if (gridRows >= 4) {
+                this.animationDuration = 1.25;
+            } else if (gridRows >= 3) {
+                this.animationDuration = 1;
+            } else if (gridRows >= 2) {
+                this.animationDuration = 0.75;
+            }
+        } else {
+            switch (this.grid.breakPoint) {
+                case 'xxs':
+                    this.animationDuration = .6;
+                    break;
+                case 'xs':
+                    this.animationDuration = .7;
+                    break;
+                case 'sm':
+                    this.animationDuration = .8;
+                    break;
+                case 'md':
+                    this.animationDuration = .9;
+                    break;
+                case 'lg':
+                    this.animationDuration = 1;
+                    break;
+                case 'xl':
+                    this.animationDuration = 1.1;
+                    break;
+                case 'xxl':
+                    this.animationDuration = 1.2;
+                    break;
+            }
+        }
+
+        return this.animationDuration;
+    };
 
     RevSlider.prototype.createNextPageGrid = function() {
         var containerWidth = this.innerElement.offsetWidth;
         var containerHeight = this.innerElement.offsetHeight;
 
-        var animationDuration = 1.75; //this.getAnimationDuration(); TODO: make dynamic
-
-        if (this.page > this.previousPage) { // slide left or up
+        if (this.direction == 'next') { // slide left or up
             var insert = 'append';
             if (this.options.vertical) { // up
                 var margin = 'marginBottom';
-                var gridContainerTransform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
+                this.gridContainerTransform = 'translate3d(0, -'+ (containerHeight + (this.padding * 2)) +'px, 0)';
             } else { // left
                 var margin = 'marginRight';
-                var gridContainerTransform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
+                this.gridContainerTransform = 'translate3d(-'+ (containerWidth + (this.padding * 2)) +'px, 0, 0)';
             }
         } else { // Slide right or down
             var insert = 'prepend';
             if (this.options.vertical) { // down
                 var margin = 'marginTop';
-                this.gridContainerElement.style.transform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
-                this.gridContainerElement.style.MsTransform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
-                this.gridContainerElement.style.WebkitTransform = 'translateY(-'+ (containerHeight + (this.padding * 2)) +'px)';
-                var gridContainerTransform = 'translateY(0px)';
+                revUtils.transformCss(this.gridContainerElement, 'translate3d(0, -'+ (containerHeight + (this.padding * 2)) +'px, 0)');
+                this.gridContainerTransform = 'translate3d(0, 0, 0)';
             } else { // right
                 var margin = 'marginLeft';
-                this.gridContainerElement.style.transform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
-                this.gridContainerElement.style.MsTransform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
-                this.gridContainerElement.style.WebkitTransform = 'translateX(-'+ (containerWidth + (this.padding * 2)) +'px)';
-                var gridContainerTransform = 'translateX(0px)';
+                revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ (containerWidth + (this.padding * 2)) +'px, 0, 0)');
+                this.gridContainerTransform = 'translate3d(0, 0, 0)';
             }
         }
 
-        var oldGrid = this.grid;
+        this.oldGrid = this.grid;
 
-        this.gridElement.style[margin] = (this.padding * 2) + 'px';
+        this.grid.element.style[margin] = (this.padding * 2) + 'px';
 
-        this.gridElement = document.createElement('div');
-        this.gridElement.id = 'rev-slider-grid';
+        var gridElement = document.createElement('div');//something up here
+        gridElement.id = 'rev-slider-grid';
 
-        revUtils[insert](this.gridContainerElement, this.gridElement);
+        revUtils[insert](this.gridContainerElement, gridElement);
 
         var options = this.gridOptions();
         options.isResizeBound = false;
-        this.grid = new AnyGrid(this.gridElement, options);
+        this.grid = new AnyGrid(gridElement, options);
 
         if (!this.options.vertical) {
-            oldGrid.element.style.width = containerWidth + 'px';
-            oldGrid.element.style.float = 'left';
+            this.oldGrid.element.style.width = containerWidth + 'px';
+            this.oldGrid.element.style.float = 'left';
 
             this.grid.element.style.width = containerWidth + 'px';
             this.grid.element.style.float = 'left';
@@ -340,35 +346,53 @@ RevSlider({
         this.grid.layout();
 
         this.updateDisplayedItems(true);
+    };
 
-        this.gridContainerElement.style.transitionDuration = animationDuration + 's';
-        this.gridContainerElement.style.WebkitTransitionDuration = animationDuration + 's';
-        this.gridContainerElement.style.transform = gridContainerTransform;
-        this.gridContainerElement.style.MsTransform = gridContainerTransform;
-        this.gridContainerElement.style.WebkitTransform = gridContainerTransform;
+    RevSlider.prototype.transitionClass = function(transitioning)
+    {
+        revUtils[transitioning ? 'addClass' : 'removeClass'](this.element, 'rev-transitioning');
+    }
+
+    RevSlider.prototype.animateGrid = function() {
+        this.transitioning = true;
+        this.transitionClass(true);
+
+        revUtils.transitionDurationCss(this.gridContainerElement, this.animationDuration + 's');
+        revUtils.transformCss(this.gridContainerElement, this.gridContainerTransform);
 
         var that = this;
         setTimeout(function() {
-            that.updateGrids(oldGrid);
-        }, animationDuration * 1000);
+            that.updateGrids();
+            that.transitioning = false;
+        }, this.animationDuration * 1000);
     };
 
-    RevSlider.prototype.updateGrids = function(oldGrid) {
-        this.gridElement.style.transform = 'none';
-        this.gridElement.style.MsTransform = 'none';
-        this.gridElement.style.WebkitTransform = 'none';
-        this.gridElement.className = '';
+    RevSlider.prototype.updateGrids = function(revert) {
+        if (revert === true) {
+            var removeGrid = this.grid;
+            var transitionGrid = this.oldGrid;
+        } else {
+            var removeGrid = this.oldGrid;
+            var transitionGrid = this.grid;
+        }
 
-        this.gridContainerElement.style.transitionDuration = '0s';
-        this.gridContainerElement.style.WebkitTransitionDuration = '0s';
+        revUtils.transformCss(transitionGrid.element, 'none');
+        transitionGrid.element.style.marginLeft = '0';
+        transitionGrid.element.style.marginRight = '0';
+        transitionGrid.element.className = '';
 
-        this.gridContainerElement.style.transform = 'none';
-        this.gridContainerElement.style.MsTransform = 'none';
-        this.gridContainerElement.style.WebkitTransform = 'none';
+        revUtils.transitionDurationCss(this.gridContainerElement,  '0s');
 
-        oldGrid.remove();
-        oldGrid.destroy();
-        revUtils.remove(oldGrid.element);
+        revUtils.transformCss(this.gridContainerElement, 'none');
+
+        removeGrid.remove();
+        removeGrid.destroy();
+        revUtils.remove(removeGrid.element);
+
+        if (revert) {
+            this.grid = transitionGrid;
+            this.offset = this.oldOffset;
+        }
 
         if (!this.options.vertical) {
             this.grid.element.style.width = 'auto';
@@ -377,20 +401,20 @@ RevSlider({
             this.gridContainerElement.style.width = '100%';
         }
 
-        var that = this;
         this.grid.bindResize();
+
+        var that = this;
         this.grid.on('resized', function() {
             that.resize();
         });
 
+        that.transitionClass(false);
         this.updating = false;
     };
 
     RevSlider.prototype.setUp = function() {
         this.grid.layout();
         this.limit = this.getLimit();
-        var rowsCols = (this.options.vertical) ? this.grid.perRow : this.options.rows[this.grid.getBreakPoint()];
-        this.increment = (this.options.page_increment) ? this.limit : rowsCols;
 
         if (this.options.image_ratio == 'square') {
             this.imageHeight = 400;
@@ -460,14 +484,6 @@ RevSlider({
             revUtils.append(this.btnContainer, this.forwardBtn);
             revUtils.append(this.innerContainerElement, this.btnContainer);
         } else {
-            if (this.mobile) {
-                this.forwardBtn.style.opacity = 1;
-                this.backBtn.style.opacity = 1;
-            } else {
-                this.forwardBtn.style.opacity = 0;
-                this.backBtn.style.opacity = 0;
-            }
-
             if (this.options.buttons.back) {
                 revUtils.append(this.innerContainerElement, this.backBtn);
             }
@@ -516,27 +532,29 @@ RevSlider({
             revUtils.append(this.head, this.header);
         }
 
-        if (this.foot) {
-            revUtils.remove(this.foot);
-        }
-        var sponsoredFoot = (this.options.rev_position == 'bottom_left' || this.options.rev_position == 'bottom_right');
-        if (sponsoredFoot) {
-            this.foot = document.createElement('div');
-            revUtils.addClass(this.foot, 'rev-foot');
-            revUtils.append(this.containerElement, this.foot);
-        }
+        if (!this.options.hide_footer) {
+            if (this.foot) {
+                revUtils.remove(this.foot);
+            }
+            var sponsoredFoot = (this.options.rev_position == 'bottom_left' || this.options.rev_position == 'bottom_right');
+            if (sponsoredFoot) {
+                this.foot = document.createElement('div');
+                revUtils.addClass(this.foot, 'rev-foot');
+                revUtils.append(this.containerElement, this.foot);
+            }
 
-        this.sponsored = document.createElement('div');
+            this.sponsored = document.createElement('div');
 
-        revUtils.addClass(this.sponsored, 'rev-sponsored');
-        this.sponsored.innerHTML = revDisclose.getDisclosure(this.options.disclosure_text);
+            revUtils.addClass(this.sponsored, 'rev-sponsored');
+            this.sponsored.innerHTML = revDisclose.getDisclosure(this.options.disclosure_text);
 
-        if (this.options.rev_position == 'top_right') {
-            revUtils.addClass(this.sponsored, 'top-right');
-            revUtils.prepend(this.head, this.sponsored);
-        } else if (sponsoredFoot) {
-            revUtils.addClass(this.sponsored, this.options.rev_position.replace('_', '-'));
-            revUtils.append(this.foot, this.sponsored);
+            if (this.options.rev_position == 'top_right') {
+                revUtils.addClass(this.sponsored, 'top-right');
+                revUtils.prepend(this.head, this.sponsored);
+            } else if (sponsoredFoot) {
+                revUtils.addClass(this.sponsored, this.options.rev_position.replace('_', '-'));
+                revUtils.append(this.foot, this.sponsored);
+            }
         }
     };
 
@@ -552,14 +570,9 @@ RevSlider({
             (this.options.rows !== oldOpts.rows) ||
             (this.options.headline_size !== oldOpts.headline_size) ||
             (this.options.vertical !== oldOpts.vertical) ||
-            (this.options.page_increment !== oldOpts.page_increment) ||
             (this.options.show_padding !== oldOpts.show_padding)) {
             this.options.perRow = this.options.per_row; // AnyGrid needs camels
             this.resize();
-        }
-
-        if (!this.options.page_increment) {
-            this.options.wrap_reverse = false;
         }
 
         if ((this.options.header !== oldOpts.header) || this.options.rev_position !== oldOpts.rev_position) {
@@ -613,10 +626,10 @@ RevSlider({
                 }
             } else {
                 for (var i = 0; i < (this.limit - nodes.length); i++) {
-                    this.gridElement.appendChild(this.createNewCell());
+                    this.grid.element.appendChild(this.createNewCell());
                 }
-                this.previousPage = 0;
                 this.page = 1;
+                this.previousPage = 1;
                 this.updateDisplayedItems(false);
             }
         }
@@ -653,25 +666,15 @@ RevSlider({
         this.grid.reloadItems();
         this.grid.layout();
         this.grid.option({transitionDuration: this.options.transition_duration});
+
+        this.getAnimationDuration();
     };
 
     RevSlider.prototype.checkEllipsis = function() {
         if (this.options.max_headline && !this.options.text_right) { // text_right should be limited, but don't waste for max_headline only
             return;
         }
-        var headlines = this.gridElement.querySelectorAll('.rev-content .rev-headline');
-        for (var i = 0; i < headlines.length; i++) {
-            var text,
-                container = headlines[i],
-                headline = container.children[0];
-            while(container.clientHeight < container.scrollHeight) {
-                text = headline.innerHTML.trim();
-                if(text.split(' ').length <= 1) {
-                    break;
-                }
-                headline.innerHTML = text.replace(/\W*\s(\S)*$/, '...');
-            }
-        }
+        revUtils.ellipsisText(this.grid.element.querySelectorAll('.rev-content .rev-headline'));
     };
 
     RevSlider.prototype.getLimit = function() {
@@ -716,7 +719,10 @@ RevSlider({
             that.contentItems = resp;
             that.updateDisplayedItems(that.options.visible);
 
-            imagesLoaded( that.gridElement, function() {
+            that.emitter.emitEvent('ready');
+            that.ready = true;
+
+            imagesLoaded( that.grid.element, function() {
                 revUtils.addClass(that.containerElement, 'loaded');
             });
         });
@@ -741,8 +747,10 @@ RevSlider({
     };
 
     RevSlider.prototype.updateDisplayedItems = function(registerImpressions) {
-        var correctedPage = Math.abs(this.page);
-        this.offset = ((correctedPage * this.increment) - this.increment);
+        this.oldOffset = this.offset;
+
+        this.offset = ((this.page - 1) * this.limit);
+
         var endIndex = this.offset + this.limit;
         var moreItemsNeeded = 0;
         if (endIndex > this.contentItems.length) {
@@ -761,7 +769,7 @@ RevSlider({
             this.headlineHeight = this.getMaxHeadlineHeight();
         }
 
-        var ads = this.gridElement.querySelectorAll('.rev-ad');
+        var ads = this.grid.element.querySelectorAll('.rev-ad');
 
         for (var i = 0; i < this.displayedItems.length; i++) {
             var ad = ads[i],
@@ -794,90 +802,257 @@ RevSlider({
         this.checkEllipsis();
     };
 
-    RevSlider.prototype.hasNextPage = function() {
-        //var pageOffset = (this.options.page_increment) ? 0 : this.limit;
-        var correctedPage = Math.abs(this.page);
-        return this.contentItems.length  >= (correctedPage * this.increment) + this.increment;
-    };
-
-    RevSlider.prototype.hasPreviousPage = function() {
-        var correctedPage = Math.abs(this.page);
-        return (correctedPage - 1) > 0;
-    };
-
-    RevSlider.prototype.hasMorePages = function() {
-        var correctedPage = Math.abs(this.page);
-        return this.contentItems.length  >= (correctedPage * this.increment) + this.increment;
+    RevSlider.prototype.maxPages = function() {
+        return Math.floor(this.contentItems.length / this.limit);
     };
 
     RevSlider.prototype.attachButtonEvents = function() {
         var that = this;
-        if (this.options.buttons.dual && !revDetect.mobile()) {
-            this.containerElement.addEventListener('mousemove', function(e) {
-                // get left or right cursor position
-                if ((e.clientX - that.containerElement.getBoundingClientRect().left) > (that.containerElement.offsetWidth / 2)) {
-                    revUtils.addClass(that.btnContainer, 'rev-btn-dual-right');
-                } else {
-                    revUtils.removeClass(that.btnContainer, 'rev-btn-dual-right');
-                }
+
+        if (revDetect.mobile()) { // if mobile detect tap TODO: see if hammer can accept multiple elements somehow(array does not work :( )
+            var mcForwardBtn = new Hammer(this.forwardBtn);
+            mcForwardBtn.add(new Hammer.Tap());
+
+            mcForwardBtn.on('tap', function(e) {
+                that.showNextPage(true);
+            });
+
+            var mcBackBtn = new Hammer(this.backBtn);
+            mcBackBtn.add(new Hammer.Tap());
+
+            mcBackBtn.on('tap', function(e) {
+                that.showPreviousPage(true);
+            });
+        } else {
+            // dual button mouse move position
+            if (this.options.buttons.dual) {
+                this.containerElement.addEventListener('mousemove', function(e) {
+                    // get left or right cursor position
+                    if ((e.clientX - that.containerElement.getBoundingClientRect().left) > (that.containerElement.offsetWidth / 2)) {
+                        revUtils.addClass(that.btnContainer, 'rev-btn-dual-right');
+                    } else {
+                        revUtils.removeClass(that.btnContainer, 'rev-btn-dual-right');
+                    }
+                });
+            }
+
+            // button events
+            revUtils.addEventListener(this.forwardBtn, 'click', function() {
+                that.showNextPage(true);
+            });
+
+            revUtils.addEventListener(this.backBtn, 'click', function() {
+                that.showPreviousPage(true);
+            });
+
+            revUtils.addEventListener(that.containerElement, 'mouseenter', function(){
+                revUtils.removeClass(that.containerElement, 'off');
+                revUtils.addClass(that.containerElement, 'on');
+            });
+            revUtils.addEventListener(that.containerElement, 'mouseleave', function(){
+                revUtils.removeClass(that.containerElement, 'on');
+                revUtils.addClass(that.containerElement, 'off');
             });
         }
+    };
 
-        this.forwardBtn.addEventListener('click', function() {
-            that.showNextPage();
+    RevSlider.prototype.attachTouchEvents = function() {
+        var that = this;
+
+        var mc = new Hammer(this.element);
+        mc.add(new Hammer.Swipe({ threshold: 5, velocity: 0, direction: this.options.touch_direction }));
+        mc.add(new Hammer.Pan({ threshold: 0, direction: this.options.touch_direction })).recognizeWith(mc.get('swipe'));
+
+        this.movement = 0;
+        this.made = false;
+        this.panDirection = false;
+        this.updown = false;
+
+        this.element.addEventListener('click', function(e) {
+            if (that.made || that.movement) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
         });
 
-        this.backBtn.addEventListener('click', function() {
-            that.showPreviousPage();
+        mc.on('pan swipe', function(e) {
+            e.preventDefault(); // don't go scrolling the page or any other funny business
+        });
+
+        mc.on('swipeleft', function(ev) {
+            if (that.made || that.transitioning || !that.movement || that.panDirection == 'right') {
+                return;
+            }
+            that.made = true;
+            revUtils.transitionDurationCss(that.gridContainerElement, (that.animationDuration / 1.5) + 's');
+            revUtils.transformCss(that.gridContainerElement, 'translate3d(-'+ (that.innerElement.offsetWidth + (that.padding * 2)) +'px, 0, 0)');
+            setTimeout(function() {
+                that.updateGrids();
+                that.made = false;
+                that.panDirection = false;
+            }, (that.animationDuration / 1.5) * 1000);
+            that.movement = 0;
+        });
+
+        mc.on('swiperight', function(e) {
+            if (that.made || that.transitioning || !that.movement || that.panDirection == 'left') {
+                return;
+            }
+            that.made = true;
+            revUtils.transitionDurationCss(that.gridContainerElement, (that.animationDuration / 1.5) + 's');
+            revUtils.transformCss(that.gridContainerElement, 'translate3d(0, 0, 0)');
+            setTimeout(function() {
+                that.updateGrids();
+                that.made = false;
+                that.panDirection = false;
+            }, (that.animationDuration / 1.5) * 1000);
+            that.movement = 0;
+        });
+
+        mc.on('panleft', function(e) {
+            if (that.made || that.transitioning || that.panDirection == 'right') {
+                return;
+            }
+            that.pan('left', e.distance / 10);
+        });
+
+        mc.on('panright', function(e) {
+            if (that.made || that.transitioning || that.panDirection == 'left') {
+                return;
+            }
+            that.pan('right', e.distance / 10);
+        });
+
+        mc.on('panup pandown', function(e) {
+            that.updown = true;
+        });
+
+        mc.on('panend', function(e) {
+            if (that.made || that.transitioning || (that.updown && !that.movement)) {
+                return;
+            }
+            that.resetShowPage();
         });
     };
 
-    RevSlider.prototype.showNextPage = function() {
-        if (!this.updating) {
-            this.updating = true;
-            if (this.options.wrap_pages) {
-                if (!this.hasMorePages() || this.page === -1) {
-                    // wrap or reverse
-                    this.page = (this.options.wrap_reverse) ? this.page * -1 : 0;
-                }
+    RevSlider.prototype.pan = function(direction, movement, reset) {
+        this.updown = false;
+
+        this.transitionClass(true);
+
+        this.panDirection = direction;
+        if (direction == 'left') {
+            this.showNextPage();
+        } else if (direction == 'right') {
+            this.showPreviousPage();
+        }
+
+        this.movement = this.movement + movement;
+
+        if (this.movement > this.grid.containerWidth) {
+            this.updateGrids();
+            this.panDirection = false;
+            this.movement = 0;
+        } else {
+            if (reset) { // used for touch simulation
+                revUtils.transitionDurationCss(this.gridContainerElement,  this.animationDuration + 's');
+                var that = this;
+                setTimeout(function() {
+                    that.resetShowPage(reset);
+                }, this.animationDuration * 1000);
+            } else {
+                revUtils.transitionDurationCss(this.gridContainerElement,  '0s');
             }
-            this.previousPage = this.page;
-            this.page = this.page + 1;
-            this.createNextPageGrid();
-            if (!this.hasNextPage() && !this.options.wrap_pages) {
-                // Disable forward button
-                this.forwardBtn.style.display = 'none';
-            }
-            if (this.hasPreviousPage()) {
-                this.backBtn.style.display = 'block';
+
+            if (direction == 'left') {
+                revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ this.movement +'px, 0, 0)');
+            } else if (direction == 'right') {
+                revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.grid.containerWidth + (this.padding * 2)) - this.movement ) +'px, 0, 0)');
             }
         }
     };
 
-    RevSlider.prototype.showPreviousPage = function() {
+    RevSlider.prototype.resetShowPage = function(ms) {
+        var ms = ms ? ms : 300;
+        revUtils.transitionDurationCss(this.gridContainerElement, ms + 'ms');
+        if (this.panDirection == 'left') {
+            revUtils.transformCss(this.gridContainerElement, 'none');
+        } else {
+            revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.grid.containerWidth + (this.padding * 2))) +'px, 0, 0)');
+        }
+
+        this.page = this.previousPage;
+        this.direction = this.previousDirection;
+        this.previousPage = this.lastPage;
+
+        var that = this;
+        setTimeout(function() {
+            that.updateGrids(true);
+            that.movement = 0;
+            that.made = false;
+            that.panDirection = false;
+        }, ms);
+    };
+
+    RevSlider.prototype.showNextPage = function(click) {
         if (!this.updating) {
             this.updating = true;
-            if (this.options.wrap_pages) {
-                if (this.options.wrap_reverse) {
-                    if (!this.hasMorePages() || this.page === 1) {
-                        // Reverse direction
-                        this.page = this.page * -1;
-                    }
-                } else if (!this.hasPreviousPage()) {
-                    // Wrap to end
-                    this.page = Math.floor(this.contentItems.length / this.increment);
-                    // Add 1 here as it will be subtracted below.
-                    this.page += 1;
-                }
-            }
-            this.previousPage = this.page;
-            this.page = this.page - 1;
-            this.createNextPageGrid();
-            if (!this.hasPreviousPage() && !this.options.wrap_pages) {
-                // Disable back button
-                this.backBtn.style.display = 'none';
+
+            var previousPage = this.page;
+
+            if (this.direction == 'previous') {
+                this.page = this.previousPage;
             } else {
-                this.forwardBtn.style.display = 'block';
+                this.page = (this.page + 1);
+            }
+
+            if (this.page > this.maxPages()) {
+                this.page = 1;
+            }else if (this.page === 0) {
+                this.page = this.maxPages();
+            }
+
+            this.lastPage = this.previousPage;
+            this.previousPage = previousPage;
+            this.previousDirection = this.direction;
+
+            this.direction = 'next';
+            this.createNextPageGrid();
+
+            if (click) { // animate right away on click
+                this.animateGrid();
+            }
+        }
+    };
+
+    RevSlider.prototype.showPreviousPage = function(click) {
+        if (!this.updating) {
+            this.updating = true;
+
+            var previousPage = this.page;
+
+            if (this.direction == 'next') {
+                this.page = this.previousPage;
+            } else {
+                this.page = (this.page + 1);
+            }
+
+            if (this.page > this.maxPages()) {
+                this.page = 1;
+            }else if (this.page === 0) {
+                this.page = this.maxPages();
+            }
+
+            this.lastPage = this.previousPage;
+            this.previousPage = previousPage;
+            this.previousDirection = this.direction;
+
+            this.direction = 'previous';
+
+            this.createNextPageGrid();
+
+            if (click) {
+                this.animateGrid();
             }
         }
     };
@@ -889,7 +1064,7 @@ RevSlider({
             var headlines = Math.floor(verticalSpace / this.headlineLineHeight);
             maxHeight = headlines * this.headlineLineHeight;
         } else {
-            var ads = this.gridElement.querySelectorAll('.rev-ad');
+            var ads = this.grid.element.querySelectorAll('.rev-ad');
             for (var i = 0; i < this.limit; i++) {
                 var ad = ads[i];
                 var el = document.createElement('div');

@@ -32,8 +32,16 @@ body.rev-shifter-no-transform #rev-shifter.rev-shifter {
     z-index: 100;
 }
 
-#rev-shifter.rev-shifter.bottom {
-    padding-bottom: 15px;
+#rev-shifter.rev-shifter.bottom #rev-slider-container{
+    padding-bottom: 20px;
+}
+
+#rev-shifter.rev-shifter.bottom.rev-mobile #rev-slider-container{
+    padding-bottom: 5px;
+}
+
+#rev-shifter.rev-shifter.rev-mobile {
+    padding-bottom: 7px;
 }
 
 #rev-shifter.rev-shifter .rev-foot {
@@ -54,18 +62,18 @@ body.rev-shifter-no-transform #rev-shifter.rev-shifter {
 }
 
 #rev-shifter.rev-shifter.bottom .rev-foot {
-    top: -28px;
+    top: -24px;
     transform: translateY(100%);
     border-radius: 4px 4px 0 0;
 }
 
 #rev-shifter.rev-shifter.top .rev-foot {
-    bottom: -24px;
+    bottom: -20px;
     transform: translateY(-100%);
     border-radius: 0 0 4px 4px;
 }
 
-#rev-shifter.rev-shifter:hover .rev-foot {
+#rev-shifter.rev-shifter #rev-slider.on .rev-foot {
     transform: translateY(0);
 }
 
@@ -129,6 +137,10 @@ body.rev-shifter-no-transform #rev-shifter.rev-shifter {
     text-decoration: none;
 }
 
+#rev-shifter .rev-ad > a:hover .rev-headline {
+    text-decoration: underline;
+}
+
 #rev-shifter.rev-shifter .rev-toggle {
     position: absolute;
     z-index: 10001;
@@ -165,18 +177,108 @@ body.rev-shifter-no-transform #rev-shifter.rev-shifter {
     margin-top: -18px;
 }
 
-#rev-shifter.rev-shifter.rev-mobile #rev-slider-container {
-    padding-left: 46px;
+#rev-shifter.rev-shifter.rev-mobile #rev-slider-container .rev-btn-wrapper {
+    opacity: 1;
+    width: 40px;
 }
 
-#rev-shifter.rev-shifter.rev-mobile #rev-slider-container .rev-btn-dual {
+#rev-shifter.rev-shifter.rev-mobile #rev-slider-container .rev-btn-wrapper .rev-btn-container {
+    background-color: transparent;
     opacity: 1;
 }
 
+#rev-shifter.rev-shifter #rev-slider-container .rev-btn-wrapper .rev-btn-container .rev-chevron {
+    transition: opacity 200ms;
+}
+
+#rev-shifter.rev-shifter.rev-mobile #rev-slider-container .rev-btn-wrapper .rev-btn-container .rev-chevron {
+    height: 36px;
+    width: 36px;
+    border-radius: 50%;
+    opacity: .7;
+    border: 1px solid #bbb;
+    margin-left: -18px;
+    margin-top: -18px;
+    background: #fff;
+}
+
+#rev-shifter.rev-shifter.rev-transitioning #rev-slider-container .rev-btn-wrapper .rev-btn-container .rev-chevron {
+    opacity: .4;
+}
+
+#rev-shifter.rev-shifter.rev-mobile #rev-slider-container .rev-btn-wrapper .rev-btn-container .rev-chevron svg {
+    width: 36px;
+    height: 36px;
+    fill: #000;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -18px;
+    margin-top: -18px;
+    opacity: .8;
+}
+
+#rev-shifter.rev-shifter.rev-mobile .rev-sponsored {
+    font-size: 10px;
+    line-height: 10px;
+}
+
+#rev-shifter.rev-shifter.rev-mobile .rev-close {
+    top: 0;
+    right: 0;
+}
+
 #rev-shifter.rev-shifter.rev-mobile .rev-foot {
+    transition: none;
     right: 5px;
+    padding: 0;
+    border: none;
+    bottom: 2px;
+    top: auto;
+    z-index: 1000;
+}
+
+#rev-shifter.rev-shifter.rev-mobile .rev-ad a .rev-headline {
+    text-decoration: none !important;
 }
 
 #rev-shifter.rev-shifter.rev-mobile:not(.rev-hidden) .rev-foot {
     transform: none;
+}
+
+#rev-shifter.rev-shifter .rev-touch-enabled {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 1000;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.93);
+    height: 80%;
+    border-radius: 50%;
+    border: 1px solid #33a225;
+}
+
+#rev-shifter.rev-shifter .rev-touch-enabled svg {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    fill: #33a225;
+}
+
+#rev-shifter.rev-shifter .rev-touch-enabled.rev-touch-enabled-scale {
+    transform: translate(-50%, -50%) scale(.7);
+}
+
+#rev-shifter.rev-shifter .rev-touch-enabled.rev-touch-enabled-scale-down {
+    transition: transform 1.75s;
+}
+
+#rev-shifter.rev-shifter .rev-touch-enabled.rev-touch-enabled-scale-up {
+    transition: transform 300ms;
+}
+
+#rev-shifter.rev-shifter .rev-touch-enabled.rev-touch-enabled-scale-remove {
+    opacity: 0;
+    transition: transform 300ms, opacity 600ms;
 }

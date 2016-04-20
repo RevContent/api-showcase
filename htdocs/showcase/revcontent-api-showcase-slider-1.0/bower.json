@@ -8,7 +8,7 @@
     "imagesloaded": "latest",
     "mobile-detect": "latest",
     "any-grid": "remove-vertical-padding",
-    "hammerjs": "latest"
+    "hammerjs": "~2"
   },
   "homepage": "https://api-v2.revcontent.com/",
   "authors": [
