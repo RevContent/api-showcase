@@ -135,6 +135,11 @@ RevLock({
                 buttons:      this.options.inner_widget_options.buttons,
                 vertical:     true,
                 beacons:      this.options.beacons
+                multipliers: {
+                    font_size: 3,
+                    margin: -2.2,
+                    padding: 2
+                }
             });
 
             this.innerWidget.innerElement.style.height = this.innerWidget.grid.maxHeight + 'px'; // TODO: this might be bad
