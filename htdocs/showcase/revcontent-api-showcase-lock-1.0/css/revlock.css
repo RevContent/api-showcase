@@ -9,9 +9,7 @@ body {
     overflow: hidden;
 }
 
-#rev-lock .rev-head,
-#rev-lock .rev-foot,
-#rev-lock #rev-slider-inner {
+#rev-lock .rev-lock-inner {
     padding: 0 3px;
 }
 
