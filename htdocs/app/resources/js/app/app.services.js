@@ -37,7 +37,7 @@ app.service('widgets', function() {
         shifter: {
             title: 'RevShifter',
             img: 'shifter.jpg',
-            description: 'Monetize valuable site real estate on the top or bottom of the page, show RevShifter on demand or as the user scrolls. With pagination and touch support RevShifter is sure to increase revenue and user engagement. Customize RevShifter to fit your site today!',
+            description: 'Monetize valuable site real estate on the top or bottom of the page, show RevShifter on demand or as the user scrolls. Great for engaging users on high bounce rate experiences with pagination and touch support. RevShifter is sure to increase revenue, customize one to fit your site today!',
             link: 'revcontent-api-showcase-shifter-2.0/index.html',
             bg: '#EEBF77'
             // preview: true,
