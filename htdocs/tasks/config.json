@@ -1,0 +1,136 @@
+{
+  "slider": {
+    "name": "rev-slider",
+    "description": "Content Gallery",
+    "homepage": "http://labs.revcontent.com",
+    "version": "0.1.0",
+    "pkg": "./showcase/revcontent-api-showcase-slider-1.0/package.json",
+    "js": "./showcase/revcontent-api-showcase-slider-1.0/js/revslider.js",
+    "css": [
+        "./showcase/revcontent-api-showcase-slider-1.0/css/revslider.css",
+        "./showcase/css/revdialog.css"
+    ],
+    "build": [
+      "./vendor/hammerjs/hammer.js",
+      "./vendor/mobile-detect/mobile-detect.js",
+      "./vendor/imagesloaded/imagesloaded.pkgd.js",
+      "./vendor/any-grid/dist/any-grid.js",
+      "./showcase/js/revutils.js",
+      "./showcase/js/revdialog.js",
+      "./showcase/js/revdisclose.js",
+      "./showcase/js/revdetect.js",
+      "./showcase/js/revbeacon.js",
+      "./showcase/js/revapi.js",
+      "./build/files/slider/revslider.embed.js"
+    ],
+    "watch": [
+      "./showcase/js/revutils.js",
+      "./showcase/js/revdialog.js",
+      "./showcase/js/revdisclose.js",
+      "./showcase/js/revdetect.js",
+      "./showcase/js/revbeacon.js",
+      "./showcase/js/revapi.js",
+      "./vendor/any-grid/dist/any-grid.js",
+      "./showcase/revcontent-api-showcase-slider-1.0/js/*",
+      "./showcase/revcontent-api-showcase-slider-1.0/css/*"
+    ]
+  },
+  "shifter": {
+    "name": "rev-shifter",
+    "description": "Content Shifter",
+    "homepage": "http://labs.revcontent.com",
+    "version": "0.0.1",
+    "js": "./showcase/revcontent-api-showcase-shifter-2.0/js/revshifter.js",
+    "css": [
+      "./showcase/revcontent-api-showcase-shifter-2.0/css/revshifter.css"
+    ],
+    "build": [
+      "./build/files/slider/revslider.pkgd.js",
+      "./build/files/shifter/revshifter.embed.js"
+    ],
+    "watch": [
+      "./build/files/slider/revslider.pkgd.js",
+      "./showcase/revcontent-api-showcase-shifter-2.0/js/*",
+      "./showcase/revcontent-api-showcase-shifter-2.0/css/*"
+    ]
+  },
+  "lock": {
+    "name": "rev-lock",
+    "description": "Content Lock",
+    "homepage": "http://labs.revcontent.com",
+    "version": "0.1.0",
+    "js": "./showcase/revcontent-api-showcase-lock-1.0/js/revlock.js",
+    "css": [
+      "./showcase/revcontent-api-showcase-lock-1.0/css/revlock.css"
+    ],
+    "build": [
+      "./build/files/slider/revslider.pkgd.js",
+      "./build/files/lock/revlock.embed.js"
+    ],
+    "watch": [
+      "./build/files/slider/revslider.pkgd.js",
+      "./showcase/revcontent-api-showcase-lock-1.0/js/*",
+      "./showcase/revcontent-api-showcase-lock-1.0/css/*"
+    ]
+  },
+  "flicker": {
+    "name": "rev-flicker",
+    "description": "Scrolling Gallery",
+    "homepage": "http://labs.revcontent.com",
+    "version": "0.1.3",
+    "js": "./showcase/revcontent-api-showcase-flicker-1.0/js/revflicker.js",
+    "css": [
+      "./vendor/flickity/css/flickity.css",
+      "./showcase/revcontent-api-showcase-flicker-1.0/css/revflicker.css",
+      "./showcase/css/revdialog.css"
+    ],
+    "build": [
+      "./vendor/flickity/dist/flickity.pkgd.js",
+      "./vendor/mobile-detect/mobile-detect.js",
+      "./showcase/js/revutils.js",
+      "./showcase/js/revdialog.js",
+      "./showcase/js/revdisclose.js",
+      "./showcase/js/revdetect.js",
+      "./showcase/js/revbeacon.js",
+      "./showcase/js/revapi.js",
+      "./build/files/flicker/revflicker.embed.js"
+    ],
+    "watch": [
+      "./showcase/js/revutils.js",
+      "./showcase/js/revdialog.js",
+      "./showcase/js/revdisclose.js",
+      "./showcase/js/revdetect.js",
+      "./showcase/js/revbeacon.js",
+      "./showcase/js/revapi.js",
+      "./showcase/revcontent-api-showcase-flicker-1.0/js/*",
+      "./showcase/revcontent-api-showcase-flicker-1.0/css/*",
+      "./vendor/flickity/dist/flickity.pkgd.js"
+    ]
+  },
+  "toaster": {
+    "name": "rev-toaster",
+    "description": "Content Toaster",
+    "homepage": "http://labs.revcontent.com",
+    "version": "0.1.1",
+    "js": "./showcase/revcontent-api-showcase-toaster-1.0/js/revtoaster.js",
+    "css": [
+      "./showcase/revcontent-api-showcase-toaster-1.0/css/revtoaster.css",
+      "./showcase/css/revdialog.css"
+    ],
+    "build": [
+      "./vendor/mobile-detect/mobile-detect.js",
+      "./vendor/imagesloaded/imagesloaded.pkgd.js",
+      "./showcase/js/revutils.js",
+      "./showcase/js/revdialog.js",
+      "./showcase/js/revdisclose.js",
+      "./showcase/js/revdetect.js",
+      "./showcase/js/revbeacon.js",
+      "./showcase/js/revapi.js",
+      "./build/files/toaster/revtoaster.embed.js"
+    ],
+    "watch": [
+      "./showcase/revcontent-api-showcase-toaster-1.0/js/*",
+      "./showcase/revcontent-api-showcase-toaster-1.0/css/*"
+    ]
+  }
+}

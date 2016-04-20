@@ -29,9 +29,9 @@ RevLock({
 'use strict';
 
     var RevLock = function(opts) {
-
         var defaults = {
             id: false,
+            url: 'https://trends.revcontent.com/api/v1/',
             distance: 500,
             element: false,
             unlock_text: 'Read More...',
@@ -49,12 +49,11 @@ RevLock({
                     xxl: 7
                 },
                 buttons: {
-                    forward: true,
-                    back: false,
-                    size: 40,
-                    position: 'outside',
+                    forward: false,
+                    back: false
                 },
-                rows: 2
+                rows: 2,
+                headline_size: 3
             },
             devices: [
                 'phone', 'tablet', 'desktop'
@@ -122,19 +121,24 @@ RevLock({
             this.innerWidget = new RevSlider({
                 api_source:   'lock',
                 element:      [this.innerWidgetElement],
-                url:          'https://trends.revcontent.com/api/v1/',
-                api_key:      'bf3f270aa50d127f0f8b8c92a979d76aa1391d38',
-                pub_id:       7846,
-                widget_id:    13523,
-                domain:       'bustle.com',
+                url:          this.options.url,
+                api_key:      this.options.api_key,
+                pub_id:       this.options.pub_id,
+                widget_id:    this.options.widget_id,
+                domain:       this.options.domain,
                 rev_position: this.options.inner_widget_options.rev_position,
                 header:       this.options.inner_widget_options.header,
                 per_row:      this.options.inner_widget_options.per_row,
                 rows:         this.options.inner_widget_options.rows,
                 image_ratio:  this.options.inner_widget_options.image_ratio,
+                headline_size: this.options.inner_widget_options.headline_size,
                 buttons:      this.options.inner_widget_options.buttons,
-                vertical:     true,
-                beacons:      this.options.beacons
+                beacons:      this.options.beacons,
+                multipliers: {
+                    font_size: 3,
+                    margin: -2.2,
+                    padding: 2
+                }
             });
 
             this.innerWidget.innerElement.style.height = this.innerWidget.grid.maxHeight + 'px'; // TODO: this might be bad

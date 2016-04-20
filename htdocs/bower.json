@@ -1,12 +1,15 @@
 {
-  "name": "revcontent-api-showcase-shifter-1.0",
+  "name": "revcontent-api-showcase",
   "version": "1",
   "ignore": [],
   "description": "RevShifter",
   "main": "js/revshifter.js",
   "dependencies": {
     "imagesloaded": "~3",
-    "mobile-detect": "~1"
+    "mobile-detect": "~1",
+    "flickity": "~1",
+    "any-grid": "remove-vertical-padding",
+    "hammerjs": "~2"
   },
   "homepage": "https://api-v2.revcontent.com/",
   "authors": [

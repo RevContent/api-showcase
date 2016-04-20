@@ -32,12 +32,8 @@ body.rev-shifter-no-transform #rev-shifter.rev-shifter {
     z-index: 100;
 }
 
-#rev-shifter.rev-shifter.bottom #rev-slider-container{
-    padding-bottom: 20px;
-}
-
-#rev-shifter.rev-shifter.bottom.rev-mobile #rev-slider-container{
-    padding-bottom: 5px;
+#rev-shifter.rev-shifter.bottom {
+    padding-bottom: 15px;
 }
 
 #rev-shifter.rev-shifter.rev-mobile {

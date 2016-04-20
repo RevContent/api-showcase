@@ -37,7 +37,7 @@ app.service('widgets', function() {
         shifter: {
             title: 'RevShifter',
             img: 'shifter.jpg',
-            description: 'Increase revenue and user engagement with the new RevShifter widget. Monetize on valuable site real estate with the RevShifter.',
+            description: 'Monetize valuable site real estate on the top or bottom of the page, show RevShifter on demand or as the user scrolls. Great for engaging users on high bounce rate experiences with pagination and touch support. RevShifter is sure to increase revenue, customize one to fit your site today!',
             link: 'revcontent-api-showcase-shifter-2.0/index.html',
             bg: '#EEBF77'
             // preview: true,
@@ -58,11 +58,11 @@ app.service('widgets', function() {
             bg: '#847F6C'
         },
         'revmore': {
-            title: 'Mobile RevMore',
-            img: 'revmore.jpg',
+            title: 'Mobile RevLock',
+            img: 'revlock.jpg',
             description: 'Studies show that Facebook-referred mobile users never reach the bottom of the article. By truncating the page, RevMore increase the visibility of content recommendations from standard Revcontent widgets.',
-            link: 'revcontent-api-showcase-revmore-1.0/index.html',
-            bg: '#DA825E'
+            link: 'revcontent-api-showcase-lock-1.0/index.html',
+            bg: '#5B7D89'
         }
         //'scrolling-exp': {
           //  title: 'Scrolling Experience',

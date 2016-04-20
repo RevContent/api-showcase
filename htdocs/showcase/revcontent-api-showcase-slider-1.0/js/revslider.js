@@ -826,9 +826,9 @@ RevSlider({
         } else {
             // dual button mouse move position
             if (this.options.buttons.dual) {
-                this.containerElement.addEventListener('mousemove', function(e) {
+                this.element.addEventListener('mousemove', function(e) {
                     // get left or right cursor position
-                    if ((e.clientX - that.containerElement.getBoundingClientRect().left) > (that.containerElement.offsetWidth / 2)) {
+                    if ((e.clientX - that.element.getBoundingClientRect().left) > (that.element.offsetWidth / 2)) {
                         revUtils.addClass(that.btnContainer, 'rev-btn-dual-right');
                     } else {
                         revUtils.removeClass(that.btnContainer, 'rev-btn-dual-right');
@@ -845,11 +845,11 @@ RevSlider({
                 that.showPreviousPage(true);
             });
 
-            revUtils.addEventListener(that.containerElement, 'mouseenter', function(){
+            revUtils.addEventListener(that.element, 'mouseenter', function(){
                 revUtils.removeClass(that.containerElement, 'off');
                 revUtils.addClass(that.containerElement, 'on');
             });
-            revUtils.addEventListener(that.containerElement, 'mouseleave', function(){
+            revUtils.addEventListener(that.element, 'mouseleave', function(){
                 revUtils.removeClass(that.containerElement, 'on');
                 revUtils.addClass(that.containerElement, 'off');
             });

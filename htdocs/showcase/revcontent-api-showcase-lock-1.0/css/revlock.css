@@ -9,9 +9,7 @@ body {
     overflow: hidden;
 }
 
-#rev-lock .rev-head,
-#rev-lock .rev-foot,
-#rev-lock #rev-slider-inner {
+#rev-lock .rev-lock-inner {
     padding: 0 3px;
 }
 
@@ -35,7 +33,7 @@ body {
     border-radius: 6px;
     font-family: 'Arial';
     color: #1f628d;
-    font-size: 18;
+    font-size: 18px;
     padding: 6px 0;
     border: solid #1f628d 2px;
     text-decoration: none;
