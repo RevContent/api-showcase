@@ -55,7 +55,8 @@ RevLock({
                     size: 40,
                     position: 'outside',
                 },
-                rows: 2
+                rows: 2,
+                headline_size: 3
             },
             devices: [
                 'phone', 'tablet', 'desktop'
@@ -133,6 +134,7 @@ RevLock({
                 per_row:      this.options.inner_widget_options.per_row,
                 rows:         this.options.inner_widget_options.rows,
                 image_ratio:  this.options.inner_widget_options.image_ratio,
+                headline_size: this.options.inner_widget_options.headline_size,
                 buttons:      this.options.inner_widget_options.buttons,
                 vertical:     true,
                 beacons:      this.options.beacons
