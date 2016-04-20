@@ -136,8 +136,7 @@ RevLock({
                 image_ratio:  this.options.inner_widget_options.image_ratio,
                 headline_size: this.options.inner_widget_options.headline_size,
                 buttons:      this.options.inner_widget_options.buttons,
-                vertical:     true,
-                beacons:      this.options.beacons
+                beacons:      this.options.beacons,
                 multipliers: {
                     font_size: 3,
                     margin: -2.2,
