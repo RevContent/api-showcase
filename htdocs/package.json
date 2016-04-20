@@ -21,6 +21,7 @@
     "gulp-util": "~2.2.20",
     "gulp-notify": "~2.2.0",
     "gulp-preprocess": "^1.2.0",
-    "gulp-strip-debug": "^1.0.2"
-}
+    "gulp-strip-debug": "^1.0.2",
+    "yargs": "latest",
+  }
 }
