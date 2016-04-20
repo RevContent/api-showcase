@@ -32,6 +32,7 @@ RevLock({
 
         var defaults = {
             id: false,
+            url: 'https://trends.revcontent.com/api/v1/',
             distance: 500,
             element: false,
             unlock_text: 'Read More...',
@@ -122,7 +123,7 @@ RevLock({
             this.innerWidget = new RevSlider({
                 api_source:   'lock',
                 element:      [this.innerWidgetElement],
-                url:          'https://trends.revcontent.com/api/v1/',
+                url:          this.options.url,
                 api_key:      'bf3f270aa50d127f0f8b8c92a979d76aa1391d38',
                 pub_id:       7846,
                 widget_id:    13523,
