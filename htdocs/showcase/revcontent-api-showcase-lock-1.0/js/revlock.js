@@ -29,7 +29,6 @@ RevLock({
 'use strict';
 
     var RevLock = function(opts) {
-
         var defaults = {
             id: false,
             url: 'https://trends.revcontent.com/api/v1/',
@@ -50,10 +49,8 @@ RevLock({
                     xxl: 7
                 },
                 buttons: {
-                    forward: true,
-                    back: false,
-                    size: 40,
-                    position: 'outside',
+                    forward: false,
+                    back: false
                 },
                 rows: 2,
                 headline_size: 3
