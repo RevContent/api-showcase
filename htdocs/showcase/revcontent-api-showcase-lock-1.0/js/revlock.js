@@ -55,6 +55,7 @@ RevLock({
                 rows: 2,
                 headline_size: 3
             },
+            disclosure_text: 'Ads by Revcontent',
             devices: [
                 'phone', 'tablet', 'desktop'
             ],
@@ -135,6 +136,7 @@ RevLock({
                 buttons:      this.options.inner_widget_options.buttons,
                 beacons:      this.options.beacons,
                 prevent_default_pan: false,
+                disclosure_text: this.options.disclosure_text,
                 multipliers: {
                     font_size: 3,
                     margin: -2.2,
