@@ -35,26 +35,25 @@ RevLock({
             distance: 500,
             element: false,
             unlock_text: 'Read More...',
-            inner_widget_options: {
-                header: 'Trending Now',
-                rev_position: 'top_right',
-                image_ratio: 'rectangle',
-                per_row: {
-                    xxs: 2,
-                    xs: 2,
-                    sm: 3,
-                    md: 4,
-                    lg: 5,
-                    xl: 6,
-                    xxl: 7
-                },
-                buttons: {
-                    forward: false,
-                    back: false
-                },
-                rows: 2,
-                headline_size: 3
+            header: 'Trending Now',
+            rev_position: 'top_right',
+            image_ratio: 'rectangle',
+            per_row: {
+                xxs: 2,
+                xs: 2,
+                sm: 3,
+                md: 4,
+                lg: 5,
+                xl: 6,
+                xxl: 7
             },
+            buttons: {
+                forward: false,
+                back: false
+            },
+            rows: 2,
+            headline_size: 3,
+            disclosure_text: 'Ads by Revcontent',
             devices: [
                 'phone', 'tablet', 'desktop'
             ],
@@ -63,8 +62,6 @@ RevLock({
 
         // merge options
         this.options = revUtils.extend(defaults, opts);
-
-        this.options.inner_widget_options = revUtils.extend(defaults.inner_widget_options, opts.inner_widget_options);
 
         if (revUtils.validateApiParams(this.options).length) {
             return;
@@ -126,14 +123,16 @@ RevLock({
                 pub_id:       this.options.pub_id,
                 widget_id:    this.options.widget_id,
                 domain:       this.options.domain,
-                rev_position: this.options.inner_widget_options.rev_position,
-                header:       this.options.inner_widget_options.header,
-                per_row:      this.options.inner_widget_options.per_row,
-                rows:         this.options.inner_widget_options.rows,
-                image_ratio:  this.options.inner_widget_options.image_ratio,
-                headline_size: this.options.inner_widget_options.headline_size,
-                buttons:      this.options.inner_widget_options.buttons,
+                rev_position: this.options.rev_position,
+                header:       this.options.header,
+                per_row:      this.options.per_row,
+                rows:         this.options.rows,
+                image_ratio:  this.options.image_ratio,
+                headline_size: this.options.headline_size,
+                buttons:      this.options.buttons,
                 beacons:      this.options.beacons,
+                prevent_default_pan: false,
+                disclosure_text: this.options.disclosure_text,
                 multipliers: {
                     font_size: 3,
                     margin: -2.2,
