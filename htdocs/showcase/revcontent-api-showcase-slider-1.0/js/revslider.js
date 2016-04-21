@@ -116,6 +116,7 @@ RevSlider({
                 margin: 0,
                 padding: 0
             },
+            prevent_default_pan: true,
             buttons: {
                 forward: true,
                 back: true,
@@ -876,7 +877,11 @@ RevSlider({
         });
 
         mc.on('pan swipe', function(e) {
-            e.preventDefault(); // don't go scrolling the page or any other funny business
+            // prevent default on pan by default, or atleast if the thing is moving
+            // Lock needs to pass false for example so the user can scroll the page
+            if (that.options.prevent_default_pan || that.made || that.transitioning || that.movement) {
+                e.preventDefault(); // don't go scrolling the page or any other funny business
+            }
         });
 
         mc.on('swipeleft', function(ev) {
