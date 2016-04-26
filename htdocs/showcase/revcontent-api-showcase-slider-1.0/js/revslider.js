@@ -669,6 +669,8 @@ RevSlider({
         this.grid.option({transitionDuration: this.options.transition_duration});
 
         this.getAnimationDuration();
+
+        this.emitter.emitEvent('resized');
     };
 
     RevSlider.prototype.checkEllipsis = function() {
