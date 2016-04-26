@@ -78,6 +78,11 @@ RevLock({
 
         this.init = function() {
 
+            this.setTop();
+
+            this.wrapperHeight();
+
+            this.attachResizedEvents();
             this.bodyPadding = getComputedStyle(document.body)['padding'];//IE9+
             document.body.style.padding = '0';//make sure we don't have any strange paddings
 
@@ -102,12 +107,13 @@ RevLock({
 
             this.innerWidgetElement = document.createElement('div');
 
+        // get the top position using marker if it exists or distance option
+        this.setTop = function() {
             var marker = document.getElementById(this.options.id);
-            var top = marker ? marker.getBoundingClientRect().top : this.options.distance;
+            this.top = marker ? marker.getBoundingClientRect().top : this.options.distance;
 
-            top = top + document.body.scrollTop;
-
-            this.element.style.top = top + 'px';
+            this.element.style.top = this.top + 'px';
+        }
 
             revUtils.append(this.containerElement, this.innerWidgetElement);
             revUtils.append(this.element, this.unlockBtn);
@@ -140,14 +146,10 @@ RevLock({
                 }
             });
 
-            this.innerWidget.innerElement.style.height = this.innerWidget.grid.maxHeight + 'px'; // TODO: this might be bad
-
-            this.totalHeight = top + this.element.offsetHeight + 'px';
-
-            this.wrapper.style.height = this.totalHeight;
-
-            this.attachButtonEvents();
-        };
+        // set the wrapper equal to top + the element height
+        this.wrapperHeight = function() {
+            this.wrapper.style.height = this.top + this.element.offsetHeight + 'px';
+        }
 
         this.attachButtonEvents = function() {
             var that = this;
@@ -159,6 +161,14 @@ RevLock({
                     revUtils.remove(that.element);
                     revApi.beacons.detach('lock');
                 }, 1000);
+            });
+        };
+
+        // reset the wrapper height on resize
+        this.attachResizedEvents = function() {
+            var that = this;
+            this.innerWidget.emitter.on( 'resized', function() {
+                that.wrapperHeight();
             });
         };
 
