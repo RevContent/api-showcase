@@ -1,6 +1,8 @@
 html
 .vagrant
 .hhvm.hhbc
+htdocs/build/files
+htdocs/vendor
 htdocs/node_modules
 htdocs/showcase/**/node_modules
 htdocs/showcase/**/vendor
