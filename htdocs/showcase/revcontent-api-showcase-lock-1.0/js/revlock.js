@@ -38,6 +38,7 @@ RevLock({
             header: 'Trending Now',
             rev_position: 'top_right',
             image_ratio: 'rectangle',
+            pagination_dots: true,
             per_row: {
                 xxs: 2,
                 xs: 2,
@@ -145,6 +146,7 @@ RevLock({
             this.innerWidget = new RevSlider({
                 api_source:   'lock',
                 element:      [this.innerWidgetElement],
+                pagination_dots: this.options.pagination_dots,
                 url:          this.options.url,
                 api_key:      this.options.api_key,
                 pub_id:       this.options.pub_id,
