@@ -129,6 +129,7 @@ RevSlider({
             hide_header: false,
             hide_footer: false,
             beacons: true,
+            pagination_dots: false,
             touch_direction: Hammer.DIRECTION_HORIZONTAL // don't prevent vertical scrolling
         };
 
@@ -218,6 +219,8 @@ RevSlider({
         this.initButtons();
 
         this.attachTouchEvents();
+
+        this.paginationDots();
 
         this.impressionTracker = [];
     };
@@ -450,6 +453,80 @@ RevSlider({
         this.innerMargin = Math.max(0, ((this.grid.columnWidth * this.paddingMultiplier).toFixed(2) / 1));
     };
 
+    RevSlider.prototype.updatePagination = function() {
+
+        if (this.maxPages() <= 1) {
+            this.mc.set({enable: false}); // disable touch events
+            if (this.options.pagination_dots) {
+                revUtils.remove(this.paginationDotsContainer); // remove the pagination dots all together
+            }
+        } else {
+            this.mc.set({enable: true});// make sure touch events are enabled
+            if (this.options.pagination_dots && !this.paginationDotsContainer.parentNode) { // add pagination dots if not there
+                revUtils.prepend(this.innerContainerElement, this.paginationDotsContainer);
+            }
+        }
+
+        this.emitter.emitEvent('resized'); // emit resize in case dots changed size
+
+        if (!this.options.pagination_dots) { // if no pagination dots we can return now
+            return;
+        }
+
+        var children = this.paginationDots.childNodes
+
+        // update the active dot
+        for (var i = 0; i < children.length; i++) {
+            revUtils.removeClass(children[i], 'rev-active');
+            if ((i+1) == this.page) {
+                revUtils.addClass(children[i], 'rev-active');
+            }
+        }
+
+        // make sure we don't have too many or too few dots
+        var difference = (this.maxPages() - children.length);
+
+        if (difference < 0) {
+            var remove = [];
+            for (var i = 0; i < this.options.pages; i++) {
+                if (i >= this.maxPages()) {
+                    remove.push(children[i])
+                }
+            }
+            for (var i = 0; i <= remove.length; i++) {
+                revUtils.remove(remove[i]);
+            }
+        } else if (difference > 0) {
+            for (var i = 0; i < difference; i++) {
+                revUtils.append(this.paginationDots, document.createElement('div'));
+            }
+        }
+    };
+
+    RevSlider.prototype.paginationDots = function() {
+        if (!this.options.pagination_dots) {
+            return;
+        }
+
+        this.paginationDots = document.createElement('div');
+        revUtils.addClass(this.paginationDots, 'rev-pagination-dots');
+
+        for (var i = 0; i < this.options.pages; i++) {
+            var dot = document.createElement('div');
+            if (i === 0) {
+                revUtils.addClass(dot, 'rev-active');
+            }
+            revUtils.append(this.paginationDots, dot);
+        }
+
+        this.paginationDotsContainer = document.createElement('div');
+        revUtils.addClass(this.paginationDotsContainer, 'rev-pagination-dots-container');
+
+        revUtils.append(this.paginationDotsContainer, this.paginationDots);
+
+        revUtils.prepend(this.innerContainerElement, this.paginationDotsContainer);
+    };
+
     RevSlider.prototype.initButtons = function() {
         var chevronUp    = '<path d="M18 12l-9 9 2.12 2.12L18 16.24l6.88 6.88L27 21z"/>';
         var chevronDown  = '<path d="M24.88 12.88L18 19.76l-6.88-6.88L9 15l9 9 9-9z"/><path d="M0 0h36v36H0z" fill="none"/>';
@@ -669,6 +746,7 @@ RevSlider({
         this.grid.option({transitionDuration: this.options.transition_duration});
 
         this.getAnimationDuration();
+        this.updatePagination();
 
         this.emitter.emitEvent('resized');
     };
@@ -803,6 +881,7 @@ RevSlider({
         this.grid.reloadItems();
         this.grid.layout();
         this.checkEllipsis();
+        this.updatePagination();
     };
 
     RevSlider.prototype.maxPages = function() {
@@ -862,9 +941,9 @@ RevSlider({
     RevSlider.prototype.attachTouchEvents = function() {
         var that = this;
 
-        var mc = new Hammer(this.element);
-        mc.add(new Hammer.Swipe({ threshold: 5, velocity: 0, direction: this.options.touch_direction }));
-        mc.add(new Hammer.Pan({ threshold: 0, direction: this.options.touch_direction })).recognizeWith(mc.get('swipe'));
+        this.mc = new Hammer(this.element);
+        this.mc.add(new Hammer.Swipe({ threshold: 5, velocity: 0, direction: this.options.touch_direction }));
+        this.mc.add(new Hammer.Pan({ threshold: 0, direction: this.options.touch_direction })).recognizeWith(this.mc.get('swipe'));
 
         this.movement = 0;
         this.made = false;
@@ -878,7 +957,7 @@ RevSlider({
             }
         });
 
-        mc.on('pan swipe', function(e) {
+        this.mc.on('pan swipe', function(e) {
             // prevent default on pan by default, or atleast if the thing is moving
             // Lock needs to pass false for example so the user can scroll the page
             if (that.options.prevent_default_pan || that.made || that.transitioning || that.movement) {
@@ -886,7 +965,7 @@ RevSlider({
             }
         });
 
-        mc.on('swipeleft', function(ev) {
+        this.mc.on('swipeleft', function(ev) {
             if (that.made || that.transitioning || !that.movement || that.panDirection == 'right') {
                 return;
             }
@@ -901,7 +980,7 @@ RevSlider({
             that.movement = 0;
         });
 
-        mc.on('swiperight', function(e) {
+        this.mc.on('swiperight', function(e) {
             if (that.made || that.transitioning || !that.movement || that.panDirection == 'left') {
                 return;
             }
@@ -916,25 +995,25 @@ RevSlider({
             that.movement = 0;
         });
 
-        mc.on('panleft', function(e) {
+        this.mc.on('panleft', function(e) {
             if (that.made || that.transitioning || that.panDirection == 'right') {
                 return;
             }
             that.pan('left', e.distance / 10);
         });
 
-        mc.on('panright', function(e) {
+        this.mc.on('panright', function(e) {
             if (that.made || that.transitioning || that.panDirection == 'left') {
                 return;
             }
             that.pan('right', e.distance / 10);
         });
 
-        mc.on('panup pandown', function(e) {
+        this.mc.on('panup pandown', function(e) {
             that.updown = true;
         });
 
-        mc.on('panend', function(e) {
+        this.mc.on('panend', function(e) {
             if (that.made || that.transitioning || (that.updown && !that.movement)) {
                 return;
             }
@@ -991,6 +1070,8 @@ RevSlider({
         this.page = this.previousPage;
         this.direction = this.previousDirection;
         this.previousPage = this.lastPage;
+
+        this.updatePagination();
 
         var that = this;
         setTimeout(function() {
