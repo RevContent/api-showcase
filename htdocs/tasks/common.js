@@ -7,6 +7,8 @@ var rename    = require('gulp-rename');
 var uglify    = require('gulp-uglify');
 var header       = require('gulp-header');
 var gulp      = require('gulp');
+var pump      = require('pump');
+var notify    = require("gulp-notify");
 
 var widget = yargs.widget;
 
@@ -48,16 +50,25 @@ gulp.task('embedcss', ['minifycss'], function () {
         .pipe(gulp.dest('./build/files/' + widget));
 });
 
-gulp.task('build', ['minifycss', 'embedcss'], function() {
-    return gulp.src(config[widget].build)
-        .pipe(concat('rev'+ widget +'.pkgd.js'))
-        .pipe(gulp.dest('./build/files/' + widget))
-        .pipe(uglify({
-            mangle: false
-            }))
-        .pipe(rename('rev'+ widget +'.min.js'))
-        .pipe(header(banner, { pkg : config[widget] } ))
-        .pipe(gulp.dest('./build'));
+gulp.task('build', ['minifycss', 'embedcss'], function(cb) {
+      pump([
+            gulp.src(config[widget].build),
+            concat('rev'+ widget +'.pkgd.js'),
+            gulp.dest('./build/files/' + widget),
+            uglify({
+                mangle: false
+            }).on('error', function (err) {
+                var fileArr = err.fileName.split('/');
+                var messageArr = err.message.split(': ');
+                notify().write(fileArr[fileArr.length - 1] + ' Line: ' + err.lineNumber + ' ' + messageArr[messageArr.length - 1]);
+                this.emit('end');
+            }),
+            rename('rev'+ widget +'.min.js'),
+            header(banner, { pkg : config[widget] } ),
+            gulp.dest('./build')
+        ],
+        cb
+      );
 });
 
 gulp.task('watch', function () {
