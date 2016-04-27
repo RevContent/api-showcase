@@ -38,6 +38,7 @@ RevLock({
             header: 'Trending Now',
             rev_position: 'top_right',
             image_ratio: 'rectangle',
+            pagination_dots: true,
             per_row: {
                 xxs: 2,
                 xs: 2,
@@ -78,9 +79,31 @@ RevLock({
 
         this.init = function() {
 
+            this.checkPadding();
+
+            this.createElements();
+
+            this.setTop();
+
+            this.appendElements();
+
+            this.innerWidget();
+
+            this.wrapperHeight();
+
+            this.attachButtonEvents();
+
+            this.attachResizedEvents();
+        };
+
+        // we don't want any padding on the body
+        this.checkPadding = function() {
             this.bodyPadding = getComputedStyle(document.body)['padding'];//IE9+
             document.body.style.padding = '0';//make sure we don't have any strange paddings
+        }
 
+        // create the elements
+        this.createElements = function() {
             this.wrapper = document.createElement("div");
             this.wrapper.id = "rev-lock-wrapper";
             while (document.body.firstChild) {
@@ -101,23 +124,29 @@ RevLock({
             this.containerElement.className = 'rev-lock-inner';
 
             this.innerWidgetElement = document.createElement('div');
+        }
 
+        // get the top position using marker if it exists or distance option
+        this.setTop = function() {
             var marker = document.getElementById(this.options.id);
-            var top = marker ? marker.getBoundingClientRect().top : this.options.distance;
+            this.top = marker ? marker.getBoundingClientRect().top : this.options.distance;
 
-            top = top + document.body.scrollTop;
+            this.element.style.top = this.top + 'px';
+        }
 
-            this.element.style.top = top + 'px';
-
+        this.appendElements = function() {
             revUtils.append(this.containerElement, this.innerWidgetElement);
             revUtils.append(this.element, this.unlockBtn);
             revUtils.append(this.element, this.containerElement);
 
             revUtils.append(document.body, this.element);
+        }
 
+        this.innerWidget = function() {
             this.innerWidget = new RevSlider({
                 api_source:   'lock',
                 element:      [this.innerWidgetElement],
+                pagination_dots: this.options.pagination_dots,
                 url:          this.options.url,
                 api_key:      this.options.api_key,
                 pub_id:       this.options.pub_id,
@@ -139,16 +168,14 @@ RevLock({
                     padding: 2
                 }
             });
+        }
 
-            this.innerWidget.innerElement.style.height = this.innerWidget.grid.maxHeight + 'px'; // TODO: this might be bad
+        // set the wrapper equal to top + the element height
+        this.wrapperHeight = function() {
+            this.wrapper.style.height = this.top + this.element.offsetHeight + 'px';
+        }
 
-            this.totalHeight = top + this.element.offsetHeight + 'px';
-
-            this.wrapper.style.height = this.totalHeight;
-
-            this.attachButtonEvents();
-        };
-
+        // unlock button
         this.attachButtonEvents = function() {
             var that = this;
             this.unlockBtn.addEventListener('click', function() {
@@ -159,6 +186,14 @@ RevLock({
                     revUtils.remove(that.element);
                     revApi.beacons.detach('lock');
                 }, 1000);
+            });
+        };
+
+        // reset the wrapper height on resize
+        this.attachResizedEvents = function() {
+            var that = this;
+            this.innerWidget.emitter.on( 'resized', function() {
+                that.wrapperHeight();
             });
         };
 

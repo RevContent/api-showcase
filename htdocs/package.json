@@ -23,5 +23,7 @@
     "gulp-preprocess": "^1.2.0",
     "gulp-strip-debug": "^1.0.2",
     "yargs": "latest",
+    "pump": "latest",
+    "gulp-notify": "~2"
   }
 }
