@@ -951,6 +951,7 @@ RevSlider({
 
     RevSlider.prototype.attachTouchEvents = function() {
         var that = this;
+        this.moving = 'forward'; // always start off moving forward no matter the direction
 
         this.preventDefault(); // prevent default touch/click events
 
@@ -1101,11 +1102,8 @@ RevSlider({
 
             var previousPage = this.page;
 
-            if (this.direction == 'previous') {
-                this.page = this.previousPage;
-            } else {
-                this.page = (this.page + 1);
-            }
+            this.page = this.page + 1;
+            this.moving = 'forward';
 
             if (this.page > this.maxPages()) {
                 this.page = 1;
@@ -1134,8 +1132,14 @@ RevSlider({
 
             if (this.direction == 'next') {
                 this.page = this.previousPage;
+                this.moving = 'back';
             } else {
-                this.page = (this.page + 1);
+                if (this.moving == 'back') {
+                    this.page = this.page - 1;
+                } else {
+                    this.page = this.page + 1;
+                    this.moving = 'forward';
+                }
             }
 
             if (this.page > this.maxPages()) {
