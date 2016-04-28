@@ -527,6 +527,17 @@ RevSlider({
         revUtils.prepend(this.innerContainerElement, this.paginationDotsContainer);
     };
 
+    //added to prevent default drag functionality in FF
+    RevSlider.prototype.preventDefault = function(){
+        revUtils.addEventListener(this.element, 'mousedown', function(e) {
+            e.preventDefault();
+        });
+
+        revUtils.addEventListener(this.element, 'dragstart', function(e) {
+            e.preventDefault();
+        });
+    };
+
     RevSlider.prototype.initButtons = function() {
         var chevronUp    = '<path d="M18 12l-9 9 2.12 2.12L18 16.24l6.88 6.88L27 21z"/>';
         var chevronDown  = '<path d="M24.88 12.88L18 19.76l-6.88-6.88L9 15l9 9 9-9z"/><path d="M0 0h36v36H0z" fill="none"/>';
@@ -940,6 +951,8 @@ RevSlider({
 
     RevSlider.prototype.attachTouchEvents = function() {
         var that = this;
+
+        this.preventDefault(); // prevent default touch/click events
 
         this.mc = new Hammer(this.element);
         this.mc.add(new Hammer.Swipe({ threshold: 5, velocity: 0, direction: this.options.touch_direction }));
