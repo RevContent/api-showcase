@@ -172,7 +172,8 @@ RevLock({
 
         // set the wrapper equal to top + the element height
         this.wrapperHeight = function() {
-            this.wrapper.style.height = this.top + this.element.offsetHeight + 'px';
+            // subtract 20 to make up for bottom zone
+            this.wrapper.style.height = (this.top - 20) + this.element.offsetHeight + 'px';
         }
 
         // unlock button
@@ -180,6 +181,7 @@ RevLock({
             var that = this;
             this.unlockBtn.addEventListener('click', function() {
                 that.wrapper.style.height = 'auto';
+                that.wrapper.style.marginBottom = '0'; // remove buffer margin
                 document.body.style.padding = that.bodyPadding;// reset any body padding
                 revUtils.addClass(that.element, 'unlocked');
                 setTimeout(function() {

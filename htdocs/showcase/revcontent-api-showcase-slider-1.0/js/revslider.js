@@ -218,9 +218,15 @@ RevSlider({
 
         this.initButtons();
 
-        this.attachTouchEvents();
+        this.initTouch();
 
         this.paginationDots();
+
+        this.emitter.on( 'ready', function() {
+            that.attachTouchEvents();
+
+            that.attachButtonEvents();
+        });
 
         this.impressionTracker = [];
     };
@@ -581,8 +587,6 @@ RevSlider({
                 revUtils.append(this.innerContainerElement, this.forwardBtn);
             }
         }
-
-        this.attachButtonEvents();
     };
 
     RevSlider.prototype.textOverlay = function() {
@@ -949,8 +953,8 @@ RevSlider({
         }
     };
 
-    RevSlider.prototype.attachTouchEvents = function() {
-        var that = this;
+    RevSlider.prototype.initTouch = function() {
+        this.moving = 'forward'; // always start off moving forward no matter the direction
 
         this.preventDefault(); // prevent default touch/click events
 
@@ -962,6 +966,10 @@ RevSlider({
         this.made = false;
         this.panDirection = false;
         this.updown = false;
+    };
+
+    RevSlider.prototype.attachTouchEvents = function() {
+        var that = this;
 
         this.element.addEventListener('click', function(e) {
             if (that.made || that.movement) {
@@ -1101,11 +1109,8 @@ RevSlider({
 
             var previousPage = this.page;
 
-            if (this.direction == 'previous') {
-                this.page = this.previousPage;
-            } else {
-                this.page = (this.page + 1);
-            }
+            this.page = this.page + 1;
+            this.moving = 'forward';
 
             if (this.page > this.maxPages()) {
                 this.page = 1;
@@ -1134,8 +1139,14 @@ RevSlider({
 
             if (this.direction == 'next') {
                 this.page = this.previousPage;
+                this.moving = 'back';
             } else {
-                this.page = (this.page + 1);
+                if (this.moving == 'back') {
+                    this.page = this.page - 1;
+                } else {
+                    this.page = this.page + 1;
+                    this.moving = 'forward';
+                }
             }
 
             if (this.page > this.maxPages()) {
