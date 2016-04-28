@@ -6,6 +6,7 @@ body {
 }
 
 #rev-lock-wrapper {
+    margin-bottom: 20px;
     overflow: hidden;
 }
 
