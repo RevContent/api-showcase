@@ -58,10 +58,10 @@ app.service('widgets', function() {
             bg: '#847F6C'
         },
         'revmore': {
-            title: 'Mobile RevLock',
-            img: 'revlock.jpg',
+            title: 'Mobile RevMore',
+            img: 'revmore.jpg',
             description: 'Studies show that Facebook-referred mobile users never reach the bottom of the article. By truncating the page, RevMore increase the visibility of content recommendations from standard Revcontent widgets.',
-            link: 'revcontent-api-showcase-lock-1.0/index.html',
+            link: 'revcontent-api-showcase-more-1.0/index.html',
             bg: '#5B7D89'
         }
         //'scrolling-exp': {
