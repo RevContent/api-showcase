@@ -190,6 +190,7 @@ RevMore({
                     that.innerWidget.grid.destroy();
                     that.innerWidget.mc.set({enable: false});
                     revUtils.remove(that.element);
+                    that.wrapper.style.height = 'auto';
                     revApi.beacons.detach('more');
                 }, 1000);
             });
