@@ -1,17 +1,17 @@
 /*
-ooooooooo.                         ooooo                            oooo
-`888   `Y88.                       `888'                            `888
- 888   .d88'  .ooooo.  oooo    ooo  888          .ooooo.   .ooooo.   888  oooo
- 888ooo88P'  d88' `88b  `88.  .8'   888         d88' `88b d88' `"Y8  888 .8P'
- 888`88b.    888ooo888   `88..8'    888         888   888 888        888888.
- 888  `88b.  888    .o    `888'     888       o 888   888 888   .o8  888 `88b.
-o888o  o888o `Y8bod8P'     `8'     o888ooooood8 `Y8bod8P' `Y8bod8P' o888o o888o
+ooooooooo.                         ooo        ooooo
+`888   `Y88.                       `88.       .888'
+ 888   .d88'  .ooooo.  oooo    ooo  888b     d'888   .ooooo.  oooo d8b  .ooooo.
+ 888ooo88P'  d88' `88b  `88.  .8'   8 Y88. .P  888  d88' `88b `888""8P d88' `88b
+ 888`88b.    888ooo888   `88..8'    8  `888'   888  888   888  888     888ooo888
+ 888  `88b.  888    .o    `888'     8    Y     888  888   888  888     888    .o
+o888o  o888o `Y8bod8P'     `8'     o8o        o888o `Y8bod8P' d888b    `Y8bod8P'
 
-Project: RevLock
+Project: RevMore
 Version: 1
 Author: michael@revcontent.com
 
-RevLock({
+RevMore({
     api_key: 'your api_key',
     pub_id: pub_id,
     widget_id: widget_id,
@@ -23,12 +23,12 @@ RevLock({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevLock = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDialog);
+    window.RevMore = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDialog);
 
 }( window, function factory(window, revUtils, revDetect, revApi, revDialog) {
 'use strict';
 
-    var RevLock = function(opts) {
+    var RevMore = function(opts) {
         var defaults = {
             id: false,
             url: 'https://trends.revcontent.com/api/v1/',
@@ -75,7 +75,7 @@ RevLock({
 
         var that = this;
 
-        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-lock');
+        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-more');
 
         this.init = function() {
 
@@ -105,23 +105,23 @@ RevLock({
         // create the elements
         this.createElements = function() {
             this.wrapper = document.createElement("div");
-            this.wrapper.id = "rev-lock-wrapper";
+            this.wrapper.id = "rev-more-wrapper";
             while (document.body.firstChild) {
                 this.wrapper.appendChild(document.body.firstChild);
             }
             document.body.appendChild(this.wrapper);
 
             this.element = document.createElement('div');
-            this.element.id = 'rev-lock';
-            this.element.innerHTML = '<div id="rev-lock-gradient"></div>';
-            this.element.setAttribute('class', 'rev-lock');
+            this.element.id = 'rev-more';
+            this.element.innerHTML = '<div id="rev-more-gradient"></div>';
+            this.element.setAttribute('class', 'rev-more');
 
             this.unlockBtn = document.createElement('div');
-            this.unlockBtn.id = 'rev-lock-unlock';
+            this.unlockBtn.id = 'rev-more-unlock';
             this.unlockBtn.innerHTML = this.options.unlock_text;
 
             this.containerElement = document.createElement('div');
-            this.containerElement.className = 'rev-lock-inner';
+            this.containerElement.className = 'rev-more-inner';
 
             this.innerWidgetElement = document.createElement('div');
         }
@@ -144,7 +144,7 @@ RevLock({
 
         this.innerWidget = function() {
             this.innerWidget = new RevSlider({
-                api_source:   'lock',
+                api_source:   'more',
                 element:      [this.innerWidgetElement],
                 pagination_dots: this.options.pagination_dots,
                 url:          this.options.url,
@@ -191,7 +191,7 @@ RevLock({
 
                 setTimeout(function() {
                     revUtils.remove(that.element);
-                    revApi.beacons.detach('lock');
+                    revApi.beacons.detach('more');
                 }, 1000);
             });
         };
@@ -207,5 +207,5 @@ RevLock({
         this.init();
     };
 
-    return RevLock;
+    return RevMore;
 }));
