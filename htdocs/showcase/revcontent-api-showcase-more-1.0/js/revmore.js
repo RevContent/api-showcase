@@ -185,11 +185,10 @@ RevMore({
                 document.body.style.padding = that.bodyPadding;// reset any body padding
                 revUtils.addClass(that.element, 'unlocked');
 
-                that.innerWidget.grid.remove();
-                that.innerWidget.grid.destroy();
-                that.innerWidget.mc.set({enable: false});
-
                 setTimeout(function() {
+                    that.innerWidget.grid.remove();
+                    that.innerWidget.grid.destroy();
+                    that.innerWidget.mc.set({enable: false});
                     revUtils.remove(that.element);
                     revApi.beacons.detach('more');
                 }, 1000);
