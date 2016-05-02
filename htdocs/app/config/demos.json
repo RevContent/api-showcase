@@ -42,8 +42,8 @@
             "auto_inject": true
         },
         {
-            "templates": ["./tests/templates/reuters.com.html", "./tests/templates/rightwingnews.com.html", "./tests/templates/forums.androidcentral.com.html"],
             "name": "more",
+            "templates": ["./tests/templates/reuters.com.html", "./tests/templates/rightwingnews.com.html", "./tests/templates/forums.androidcentral.com.html"],
             "script": "./build/revmore.min.js",
             "cdn": false,
             "cdn_url": "http://labs-cdn.revcontent.com/build/revmore.min.js",
