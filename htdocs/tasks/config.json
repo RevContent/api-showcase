@@ -54,23 +54,23 @@
       "./showcase/revcontent-api-showcase-shifter-2.0/css/*"
     ]
   },
-  "lock": {
-    "name": "rev-lock",
+  "more": {
+    "name": "rev-more",
     "description": "Content Lock",
     "homepage": "http://labs.revcontent.com",
     "version": "0.1.0",
-    "js": "./showcase/revcontent-api-showcase-lock-1.0/js/revlock.js",
+    "js": "./showcase/revcontent-api-showcase-more-1.0/js/revmore.js",
     "css": [
-      "./showcase/revcontent-api-showcase-lock-1.0/css/revlock.css"
+      "./showcase/revcontent-api-showcase-more-1.0/css/revmore.css"
     ],
     "build": [
       "./build/files/slider/revslider.pkgd.js",
-      "./build/files/lock/revlock.embed.js"
+      "./build/files/more/revmore.embed.js"
     ],
     "watch": [
       "./build/files/slider/revslider.pkgd.js",
-      "./showcase/revcontent-api-showcase-lock-1.0/js/*",
-      "./showcase/revcontent-api-showcase-lock-1.0/css/*"
+      "./showcase/revcontent-api-showcase-more-1.0/js/*",
+      "./showcase/revcontent-api-showcase-more-1.0/css/*"
     ]
   },
   "flicker": {
