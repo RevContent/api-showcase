@@ -358,10 +358,9 @@ RevSlider({
         this.updateDisplayedItems(true);
     };
 
-    RevSlider.prototype.transitionClass = function(transitioning)
-    {
+    RevSlider.prototype.transitionClass = function(transitioning) {
         revUtils[transitioning ? 'addClass' : 'removeClass'](this.element, 'rev-transitioning');
-    }
+    };
 
     RevSlider.prototype.animateGrid = function() {
         this.transitioning = true;
