@@ -184,6 +184,11 @@ RevLock({
                 that.wrapper.style.marginBottom = '0'; // remove buffer margin
                 document.body.style.padding = that.bodyPadding;// reset any body padding
                 revUtils.addClass(that.element, 'unlocked');
+
+                that.innerWidget.grid.remove();
+                that.innerWidget.grid.destroy();
+                that.innerWidget.mc.set({enable: false});
+
                 setTimeout(function() {
                     revUtils.remove(that.element);
                     revApi.beacons.detach('lock');
