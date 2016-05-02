@@ -807,7 +807,7 @@ RevSlider({
 
     RevSlider.prototype.getData = function() {
         var sponsoredCount = this.options.pages * this.limit;
-        var url = this.options.url + '?api_key='+ this.options.api_key +'&uitm=true&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&internal_count=0'+'&sponsored_count=' + sponsoredCount;
+        var url = this.options.url + '?api_key='+ this.options.api_key +'&uitm=true&img_h='+ this.imageHeight +'&img_w='+ this.imageWidth + '&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&internal_count=0'+'&sponsored_count=' + sponsoredCount;
 
         var that = this;
 
