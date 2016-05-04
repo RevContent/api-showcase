@@ -83,6 +83,8 @@ RevMore({
 
             this.createElements();
 
+            this.setPadding();
+
             this.setTop();
 
             this.appendElements();
@@ -98,9 +100,26 @@ RevMore({
 
         // we don't want any padding on the body
         this.checkPadding = function() {
-            this.bodyPadding = getComputedStyle(document.body)['padding'];//IE9+
-            document.body.style.padding = '0';//make sure we don't have any strange paddings
-        }
+            //IE9+
+            this.padding = {
+                top: getComputedStyle(document.body)['padding-top'],
+                right: getComputedStyle(document.body)['padding-right'],
+                bottom: getComputedStyle(document.body)['padding-bottom'],
+                left: getComputedStyle(document.body)['padding-left']
+            }
+            //make sure we don't have any strange paddings
+            document.body.style.paddingBottom = '0';
+            document.body.style.paddingLeft = '0';
+            document.body.style.paddingRight = '0';
+        };
+
+        this.setPadding = function() {
+            if (this.padding.top == '0px') { // if there is not padding move along
+                return;
+            }
+            this.wrapper.style.paddingTop = this.padding.top;
+            this.wrapper.style.marginTop = '-' + this.padding.top;
+        };
 
         // create the elements
         this.createElements = function() {
@@ -124,15 +143,16 @@ RevMore({
             this.containerElement.className = 'rev-more-inner';
 
             this.innerWidgetElement = document.createElement('div');
-        }
+        };
 
         // get the top position using marker if it exists or distance option
         this.setTop = function() {
             var marker = document.getElementById(this.options.id);
+
             this.top = marker ? marker.getBoundingClientRect().top : this.options.distance;
 
             this.element.style.top = this.top + 'px';
-        }
+        };
 
         this.appendElements = function() {
             revUtils.append(this.containerElement, this.innerWidgetElement);
@@ -140,7 +160,7 @@ RevMore({
             revUtils.append(this.element, this.containerElement);
 
             revUtils.append(document.body, this.element);
-        }
+        };
 
         this.innerWidget = function() {
             this.innerWidget = new RevSlider({
@@ -168,13 +188,13 @@ RevMore({
                     padding: 2
                 }
             });
-        }
+        };
 
         // set the wrapper equal to top + the element height
         this.wrapperHeight = function() {
             // subtract 20 to make up for bottom zone
             this.wrapper.style.height = (this.top - 20) + this.element.offsetHeight + 'px';
-        }
+        };
 
         // unlock button
         this.attachButtonEvents = function() {
@@ -182,7 +202,13 @@ RevMore({
             this.unlockBtn.addEventListener('click', function() {
                 that.wrapper.style.height = 'auto';
                 that.wrapper.style.marginBottom = '0'; // remove buffer margin
-                document.body.style.padding = that.bodyPadding;// reset any body padding
+                // reset any padding or margin set
+                document.body.style.paddingBottom = that.padding.bottom;
+                document.body.style.paddingLeft = that.padding.left;
+                document.body.style.paddingRight = that.padding.right;
+                that.wrapper.style.paddingTop = 0;
+                that.wrapper.style.marginTop = 0;
+
                 revUtils.addClass(that.element, 'unlocked');
 
                 setTimeout(function() {
