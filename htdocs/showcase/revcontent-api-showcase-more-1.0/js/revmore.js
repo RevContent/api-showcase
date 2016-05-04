@@ -215,6 +215,7 @@ RevMore({
                     that.innerWidget.grid.remove();
                     that.innerWidget.grid.destroy();
                     that.innerWidget.mc.set({enable: false});
+                    that.innerWidget.mc.destroy();
                     revUtils.remove(that.element);
                     that.wrapper.style.height = 'auto';
                     revApi.beacons.detach('more');
