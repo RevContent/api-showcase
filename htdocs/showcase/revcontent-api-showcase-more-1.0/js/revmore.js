@@ -114,7 +114,7 @@ RevMore({
         };
 
         this.setPadding = function() {
-            if (this.padding.top == '0px') { // if there is not padding move along
+            if (!parseInt(this.padding.top, 10)) { // if there is not padding move along
                 return;
             }
             this.wrapper.style.paddingTop = this.padding.top;
