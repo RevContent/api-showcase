@@ -1,8 +1,8 @@
 {
-  "name": "rev-flicker",
-  "description": "Scrolling Gallery",
+  "name": "rev-labs",
+  "description": "Showcase for Revcontent API",
   "homepage": "http://labs.revcontent.com",
-  "version": "0.1.3",
+  "version": "1.0.0",
   "repository": {
     "url": "git:///Revcontent/api-showcase.git"
   },
@@ -21,6 +21,9 @@
     "gulp-util": "~2.2.20",
     "gulp-notify": "~2.2.0",
     "gulp-preprocess": "^1.2.0",
-    "gulp-strip-debug": "^1.0.2"
-}
+    "gulp-strip-debug": "^1.0.2",
+    "yargs": "latest",
+    "pump": "latest",
+    "gulp-notify": "~2"
+  }
 }

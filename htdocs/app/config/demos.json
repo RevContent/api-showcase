@@ -2,7 +2,7 @@
     "tests": [
         {
             "name": "flicker",
-            "templates": [],
+            "templates": ["./tests/templates/forums.androidcentral.com.html"],
             "script": "./build/revflicker.min.js",
             "cdn": false,
             "cdn_url": "http://labs-cdn.revcontent.com/build/revflicker.min.js",
@@ -10,7 +10,7 @@
         },
         {
             "name": "shifter",
-            "templates": ["./tests/templates/thehealthlane.com.html"],
+            "templates": ["./tests/templates/thehealthlane.com.html", "./tests/templates/forums.androidcentral.com.html"],
             "script": "./build/revshifter.min.js",
             "cdn": false,
             "cdn_url": "http://labs-cdn.revcontent.com/build/revshifter.min.js",
@@ -42,11 +42,11 @@
             "auto_inject": true
         },
         {
-            "name": "lock",
-            "templates": ["./tests/templates/reuters.com.html", "./tests/templates/rightwingnews.com.html"],
-            "script": "./build/revlock.min.js",
+            "name": "more",
+            "templates": ["./tests/templates/reuters.com.html", "./tests/templates/rightwingnews.com.html", "./tests/templates/forums.androidcentral.com.html"],
+            "script": "./build/revmore.min.js",
             "cdn": false,
-            "cdn_url": "http://labs-cdn.revcontent.com/build/revlock.min.js",
+            "cdn_url": "http://labs-cdn.revcontent.com/build/revmore.min.js",
             "auto_inject": true
         }
     ]

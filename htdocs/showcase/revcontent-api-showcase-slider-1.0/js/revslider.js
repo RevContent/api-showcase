@@ -116,6 +116,7 @@ RevSlider({
                 margin: 0,
                 padding: 0
             },
+            prevent_default_pan: true,
             buttons: {
                 forward: true,
                 back: true,
@@ -128,6 +129,7 @@ RevSlider({
             hide_header: false,
             hide_footer: false,
             beacons: true,
+            pagination_dots: false,
             touch_direction: Hammer.DIRECTION_HORIZONTAL // don't prevent vertical scrolling
         };
 
@@ -216,7 +218,15 @@ RevSlider({
 
         this.initButtons();
 
-        this.attachTouchEvents();
+        this.initTouch();
+
+        this.paginationDots();
+
+        this.emitter.on( 'ready', function() {
+            that.attachTouchEvents();
+
+            that.attachButtonEvents();
+        });
 
         this.impressionTracker = [];
     };
@@ -348,10 +358,9 @@ RevSlider({
         this.updateDisplayedItems(true);
     };
 
-    RevSlider.prototype.transitionClass = function(transitioning)
-    {
+    RevSlider.prototype.transitionClass = function(transitioning) {
         revUtils[transitioning ? 'addClass' : 'removeClass'](this.element, 'rev-transitioning');
-    }
+    };
 
     RevSlider.prototype.animateGrid = function() {
         this.transitioning = true;
@@ -449,6 +458,91 @@ RevSlider({
         this.innerMargin = Math.max(0, ((this.grid.columnWidth * this.paddingMultiplier).toFixed(2) / 1));
     };
 
+    RevSlider.prototype.updatePagination = function() {
+
+        if (this.maxPages() <= 1) {
+            this.mc.set({enable: false}); // disable touch events
+            if (this.options.pagination_dots) {
+                revUtils.remove(this.paginationDotsContainer); // remove the pagination dots all together
+            }
+        } else {
+            this.mc.set({enable: true});// make sure touch events are enabled
+            if (this.options.pagination_dots && !this.paginationDotsContainer.parentNode) { // add pagination dots if not there
+                revUtils.prepend(this.innerContainerElement, this.paginationDotsContainer);
+            }
+        }
+
+        this.emitter.emitEvent('resized'); // emit resize in case dots changed size
+
+        if (!this.options.pagination_dots) { // if no pagination dots we can return now
+            return;
+        }
+
+        var children = this.paginationDots.childNodes
+
+        // update the active dot
+        for (var i = 0; i < children.length; i++) {
+            revUtils.removeClass(children[i], 'rev-active');
+            if ((i+1) == this.page) {
+                revUtils.addClass(children[i], 'rev-active');
+            }
+        }
+
+        // make sure we don't have too many or too few dots
+        var difference = (this.maxPages() - children.length);
+
+        if (difference < 0) {
+            var remove = [];
+            for (var i = 0; i < this.options.pages; i++) {
+                if (i >= this.maxPages()) {
+                    remove.push(children[i])
+                }
+            }
+            for (var i = 0; i <= remove.length; i++) {
+                revUtils.remove(remove[i]);
+            }
+        } else if (difference > 0) {
+            for (var i = 0; i < difference; i++) {
+                revUtils.append(this.paginationDots, document.createElement('div'));
+            }
+        }
+    };
+
+    RevSlider.prototype.paginationDots = function() {
+        if (!this.options.pagination_dots) {
+            return;
+        }
+
+        this.paginationDots = document.createElement('div');
+        revUtils.addClass(this.paginationDots, 'rev-pagination-dots');
+
+        for (var i = 0; i < this.options.pages; i++) {
+            var dot = document.createElement('div');
+            if (i === 0) {
+                revUtils.addClass(dot, 'rev-active');
+            }
+            revUtils.append(this.paginationDots, dot);
+        }
+
+        this.paginationDotsContainer = document.createElement('div');
+        revUtils.addClass(this.paginationDotsContainer, 'rev-pagination-dots-container');
+
+        revUtils.append(this.paginationDotsContainer, this.paginationDots);
+
+        revUtils.prepend(this.innerContainerElement, this.paginationDotsContainer);
+    };
+
+    //added to prevent default drag functionality in FF
+    RevSlider.prototype.preventDefault = function(){
+        revUtils.addEventListener(this.element, 'mousedown', function(e) {
+            e.preventDefault();
+        });
+
+        revUtils.addEventListener(this.element, 'dragstart', function(e) {
+            e.preventDefault();
+        });
+    };
+
     RevSlider.prototype.initButtons = function() {
         var chevronUp    = '<path d="M18 12l-9 9 2.12 2.12L18 16.24l6.88 6.88L27 21z"/>';
         var chevronDown  = '<path d="M24.88 12.88L18 19.76l-6.88-6.88L9 15l9 9 9-9z"/><path d="M0 0h36v36H0z" fill="none"/>';
@@ -492,8 +586,6 @@ RevSlider({
                 revUtils.append(this.innerContainerElement, this.forwardBtn);
             }
         }
-
-        this.attachButtonEvents();
     };
 
     RevSlider.prototype.textOverlay = function() {
@@ -668,6 +760,9 @@ RevSlider({
         this.grid.option({transitionDuration: this.options.transition_duration});
 
         this.getAnimationDuration();
+        this.updatePagination();
+
+        this.emitter.emitEvent('resized');
     };
 
     RevSlider.prototype.checkEllipsis = function() {
@@ -711,7 +806,7 @@ RevSlider({
 
     RevSlider.prototype.getData = function() {
         var sponsoredCount = this.options.pages * this.limit;
-        var url = this.options.url + '?api_key='+ this.options.api_key +'&uitm=true&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&internal_count=0'+'&sponsored_count=' + sponsoredCount;
+        var url = this.options.url + '?api_key='+ this.options.api_key +'&uitm=true&img_h='+ this.imageHeight +'&img_w='+ this.imageWidth + '&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&internal_count=0'+'&sponsored_count=' + sponsoredCount;
 
         var that = this;
 
@@ -800,6 +895,7 @@ RevSlider({
         this.grid.reloadItems();
         this.grid.layout();
         this.checkEllipsis();
+        this.updatePagination();
     };
 
     RevSlider.prototype.maxPages = function() {
@@ -826,9 +922,9 @@ RevSlider({
         } else {
             // dual button mouse move position
             if (this.options.buttons.dual) {
-                this.containerElement.addEventListener('mousemove', function(e) {
+                this.element.addEventListener('mousemove', function(e) {
                     // get left or right cursor position
-                    if ((e.clientX - that.containerElement.getBoundingClientRect().left) > (that.containerElement.offsetWidth / 2)) {
+                    if ((e.clientX - that.element.getBoundingClientRect().left) > (that.element.offsetWidth / 2)) {
                         revUtils.addClass(that.btnContainer, 'rev-btn-dual-right');
                     } else {
                         revUtils.removeClass(that.btnContainer, 'rev-btn-dual-right');
@@ -845,28 +941,34 @@ RevSlider({
                 that.showPreviousPage(true);
             });
 
-            revUtils.addEventListener(that.containerElement, 'mouseenter', function(){
+            revUtils.addEventListener(that.element, 'mouseenter', function(){
                 revUtils.removeClass(that.containerElement, 'off');
                 revUtils.addClass(that.containerElement, 'on');
             });
-            revUtils.addEventListener(that.containerElement, 'mouseleave', function(){
+            revUtils.addEventListener(that.element, 'mouseleave', function(){
                 revUtils.removeClass(that.containerElement, 'on');
                 revUtils.addClass(that.containerElement, 'off');
             });
         }
     };
 
-    RevSlider.prototype.attachTouchEvents = function() {
-        var that = this;
+    RevSlider.prototype.initTouch = function() {
+        this.moving = 'forward'; // always start off moving forward no matter the direction
 
-        var mc = new Hammer(this.element);
-        mc.add(new Hammer.Swipe({ threshold: 5, velocity: 0, direction: this.options.touch_direction }));
-        mc.add(new Hammer.Pan({ threshold: 0, direction: this.options.touch_direction })).recognizeWith(mc.get('swipe'));
+        this.preventDefault(); // prevent default touch/click events
+
+        this.mc = new Hammer(this.element);
+        this.mc.add(new Hammer.Swipe({ threshold: 5, velocity: 0, direction: this.options.touch_direction }));
+        this.mc.add(new Hammer.Pan({ threshold: 0, direction: this.options.touch_direction })).recognizeWith(this.mc.get('swipe'));
 
         this.movement = 0;
         this.made = false;
         this.panDirection = false;
         this.updown = false;
+    };
+
+    RevSlider.prototype.attachTouchEvents = function() {
+        var that = this;
 
         this.element.addEventListener('click', function(e) {
             if (that.made || that.movement) {
@@ -875,11 +977,15 @@ RevSlider({
             }
         });
 
-        mc.on('pan swipe', function(e) {
-            e.preventDefault(); // don't go scrolling the page or any other funny business
+        this.mc.on('pan swipe', function(e) {
+            // prevent default on pan by default, or atleast if the thing is moving
+            // Lock needs to pass false for example so the user can scroll the page
+            if (that.options.prevent_default_pan || that.made || that.transitioning || that.movement) {
+                e.preventDefault(); // don't go scrolling the page or any other funny business
+            }
         });
 
-        mc.on('swipeleft', function(ev) {
+        this.mc.on('swipeleft', function(ev) {
             if (that.made || that.transitioning || !that.movement || that.panDirection == 'right') {
                 return;
             }
@@ -894,7 +1000,7 @@ RevSlider({
             that.movement = 0;
         });
 
-        mc.on('swiperight', function(e) {
+        this.mc.on('swiperight', function(e) {
             if (that.made || that.transitioning || !that.movement || that.panDirection == 'left') {
                 return;
             }
@@ -909,25 +1015,25 @@ RevSlider({
             that.movement = 0;
         });
 
-        mc.on('panleft', function(e) {
+        this.mc.on('panleft', function(e) {
             if (that.made || that.transitioning || that.panDirection == 'right') {
                 return;
             }
             that.pan('left', e.distance / 10);
         });
 
-        mc.on('panright', function(e) {
+        this.mc.on('panright', function(e) {
             if (that.made || that.transitioning || that.panDirection == 'left') {
                 return;
             }
             that.pan('right', e.distance / 10);
         });
 
-        mc.on('panup pandown', function(e) {
+        this.mc.on('panup pandown', function(e) {
             that.updown = true;
         });
 
-        mc.on('panend', function(e) {
+        this.mc.on('panend', function(e) {
             if (that.made || that.transitioning || (that.updown && !that.movement)) {
                 return;
             }
@@ -985,6 +1091,8 @@ RevSlider({
         this.direction = this.previousDirection;
         this.previousPage = this.lastPage;
 
+        this.updatePagination();
+
         var that = this;
         setTimeout(function() {
             that.updateGrids(true);
@@ -1000,11 +1108,8 @@ RevSlider({
 
             var previousPage = this.page;
 
-            if (this.direction == 'previous') {
-                this.page = this.previousPage;
-            } else {
-                this.page = (this.page + 1);
-            }
+            this.page = this.page + 1;
+            this.moving = 'forward';
 
             if (this.page > this.maxPages()) {
                 this.page = 1;
@@ -1033,8 +1138,14 @@ RevSlider({
 
             if (this.direction == 'next') {
                 this.page = this.previousPage;
+                this.moving = 'back';
             } else {
-                this.page = (this.page + 1);
+                if (this.moving == 'back') {
+                    this.page = this.page - 1;
+                } else {
+                    this.page = this.page + 1;
+                    this.moving = 'forward';
+                }
             }
 
             if (this.page > this.maxPages()) {

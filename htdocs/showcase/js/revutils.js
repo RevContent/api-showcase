@@ -108,7 +108,7 @@ utils.append = function(el, html) {
 }
 
 utils.remove = function(el) {
-    if (el) {
+    if (el && el.parentNode) {
         el.parentNode.removeChild(el);
     }
 }
