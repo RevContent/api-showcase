@@ -91,6 +91,8 @@ RevFlicker({
             text_right: false,
             text_right_height: 100,
             css: '',
+            user_ip: false,
+            user_agent: false,
         };
 
         // merge options
@@ -505,6 +507,9 @@ RevFlicker({
         var internal = this.options.internal ? this.options.internal : 0;
 
         var url = this.options.url + '?uitm=true&img_h='+ this.imageHeight +'&img_w='+ this.imageWidth +'&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + sponsored + '&internal_count=' + internal + '&sponsored_offset=0&internal_offset=0&api_source=flick';
+        // user ip or user_agent passed?
+        url += this.options.user_ip ? '&user_ip=' + this.options.user_ip : '';
+        url += this.options.user_agent ? '&user_agent=' + this.options.user_agent : '';
 
         var that = this;
         revApi.request(url, function(resp) {
