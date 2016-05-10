@@ -87,9 +87,26 @@ RevFlicker({
             ad_border: true,
             disclosure_text: revDisclose.defaultDisclosureText,
             hide_provider: false,
-            beacons: true
+            beacons: true,
+            multipliers: {
+                line_height: 0,
+                font_size: 0,
+                margin: 0,
+                padding: 0
+            },
+            size: {
+                margin: false,
+                image_height: false,
+                headline_line_height: false,
+                headline_margin_top: false,
+                provider_line_height: false,
+                provider_margin_top: false,
+                provider_margin_bottom: false,
+                inner_margin: false
+            },
             text_right: false,
             text_right_height: 100,
+            next_width: false,
             css: '',
             user_ip: false,
             user_agent: false,
@@ -99,6 +116,7 @@ RevFlicker({
 
         // merge options
         this.options = revUtils.extend(defaults, opts);
+
         // param errors
         if (revUtils.validateApiParams(this.options).length) {
             return;
@@ -138,6 +156,9 @@ RevFlicker({
             percentPosition: false,
             wrapAround: true
         });
+
+        this.setMultipliers();
+
         // wrapper class
         revUtils.addClass(this.flickity.element, 'rev-flicker');
         // HACK for Chrome using emitter to wait for element container to be ready
@@ -166,6 +187,10 @@ RevFlicker({
 
         this.setUp();
 
+        if (this.options.max_headline) {
+            this.headlineHeight = this.getMaxHeadlineHeight();
+        }
+
         var ads = this.flickity.element.querySelectorAll('.rev-content');
 
         for (var i = 0; i < ads.length; i++) {
@@ -182,7 +207,7 @@ RevFlicker({
             ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
             ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
             if(that.options.hide_provider === false) {
-                ad.querySelectorAll('.rev-provider')[0].style.margin = '0 ' + this.innerMargin + 'px 0';
+                ad.querySelectorAll('.rev-provider')[0].style.margin = this.providerMarginTop + 'px '  + this.innerMargin + 'px '+ this.providerMarginBottom +'px';
                 ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize + 'px';
                 ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
                 ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight + 'px';
@@ -250,6 +275,13 @@ RevFlicker({
         setTimeout(check, 0);
     };
 
+    RevFlicker.prototype.setMultipliers = function() {
+        this.lineHeightMultiplier = Math.round( (0.057 + Number((this.options.multipliers.line_height * .01).toFixed(2))) * 1000 ) / 1000;
+        this.fontSizeMultiplier = Math.round( (.83 + Number((this.options.multipliers.font_size * .01).toFixed(2))) * 1000 ) / 1000;
+        this.marginMultiplier = Math.round( (.05 + Number((this.options.multipliers.margin * .01).toFixed(2))) * 1000 ) / 1000;
+        this.paddingMultiplier = Math.round( (.01 + Number((this.options.multipliers.padding * .01).toFixed(2))) * 1000 ) / 1000;
+    };
+
     RevFlicker.prototype.setUp = function() {
         // determine elements per row based on container width
         if (typeof this.options.per_row == 'number') { // if a number is passed just use that
@@ -270,7 +302,21 @@ RevFlicker({
             this.perRow = this.options.per_row.xxs;
         }
 
-        if (this.options.image_ratio == 'square') {
+        var width = this.containerWidth / this.perRow;
+
+        this.margin = this.options.size.margin ? this.options.size.margin : ((width * this.marginMultiplier).toFixed(2) / 1);
+
+        if (this.options.next_width) {
+            this.columnWidth = (((this.containerWidth - (this.margin * this.perRow)) / (this.perRow)).toFixed(2) / 1);
+            this.columnWidth = this.columnWidth - (this.options.next_width / this.perRow);
+        } else {
+            this.columnWidth = (((this.containerWidth - (this.margin * this.perRow)) / (this.perRow + (1/2))).toFixed(2) / 1);
+        }
+
+        if (!this.options.text_right && this.options.size.image_height) {
+            this.imageHeight = this.options.size.image_height * 2;
+            this.imageWidth = this.columnWidth * 2;
+        } else if (this.options.image_ratio == 'square') {
             this.imageHeight = 400;
             this.imageWidth = 400;
         } else if (this.options.image_ratio == 'rectangle') {
@@ -281,27 +327,28 @@ RevFlicker({
             this.imageWidth = 800;
         }
 
-        var width = this.containerWidth / this.perRow;
-
-        this.margin = ((width * .05).toFixed(2) / 1);
-
-        // font size is relative to width, other measurements are relative to this font size
-        this.headlineFontSize = Math.max(14, ((width * .03).toFixed(2) / 1));
-        this.headlineLineHeight = ((this.headlineFontSize * 1.2).toFixed(2) / 1);
-        this.headlineHeight = ((this.headlineLineHeight * this.options.headline_size).toFixed(2) / 1);
-        if (this.options.max_headline && this.getMaxHeadlineHeight() > 0) {
-            this.headlineHeight = this.getMaxHeadlineHeight();
+        this.headlineLineHeight = this.options.size.headline_line_height ? this.options.size.headline_line_height : (this.columnWidth * this.lineHeightMultiplier).toFixed(2) / 1;
+        if (!this.options.size.headline_line_height && this.headlineLineHeight < 16) {
+            this.headlineLineHeight = 16;
         }
-        this.headlineMarginTop = ((this.headlineLineHeight * .4).toFixed(2) / 1);
+        this.headlineFontSize = Math.min(this.headlineLineHeight, (this.headlineLineHeight * this.fontSizeMultiplier).toFixed(2) / 1);
 
-        this.innerMargin = ((this.headlineMarginTop * .3).toFixed(2) / 1);
+        this.headlineHeight = ((this.headlineLineHeight * this.options.headline_size).toFixed(2) / 1);
 
-        this.providerFontSize = Math.max(11, ((this.headlineLineHeight / 2).toFixed(2) / 1));
-        this.providerLineHeight = ((this.providerFontSize * 1.5).toFixed(2) / 1);
+        this.headlineMarginTop = this.options.size.headline_margin_top ? this.options.size.headline_margin_top : ((this.headlineLineHeight * .4).toFixed(2) / 1);
+        this.innerMargin = this.options.size.inner_margin ? this.options.size.inner_margin : Math.max(0, ((this.columnWidth * this.paddingMultiplier).toFixed(2) / 1));
 
-        this.columnWidth = (((this.containerWidth - (this.margin * this.perRow)) / (this.perRow + (1/2))).toFixed(2) / 1);
+        this.providerLineHeight = this.options.size.provider_line_height ? this.options.size.provider_line_height : (this.headlineLineHeight * .75).toFixed(2) / 1;
+        if (!this.options.size.provider_line_height && this.providerLineHeight < 16.5) {
+            this.providerLineHeight = 16.5;
+        }
+        this.providerFontSize = Math.min(this.providerLineHeight, (this.providerLineHeight * (this.fontSizeMultiplier - .165)).toFixed(2) / 1);
 
-        this.preloaderHeight = Math.round((this.columnWidth - ( this.options.ad_border ? 2 : 0 )) * (this.imageHeight / this.imageWidth));
+        this.providerMarginTop = this.options.size.provider_margin_top ? this.options.size.provider_margin_top : 0;
+        this.providerMarginBottom = this.options.size.provider_margin_bottom ? this.options.size.provider_margin_bottom : 0;
+
+        this.preloaderHeight = this.options.size.image_height ? this.options.size.image_height : Math.round(this.columnWidth * (this.imageHeight / this.imageWidth));
+
         if (this.options.text_right) {
             this.preloaderHeight = this.options.text_right_height;
             this.preloaderWidth = Math.round(this.preloaderHeight * (this.imageWidth / this.imageHeight) * 100) / 100;
@@ -377,8 +424,10 @@ RevFlicker({
         var cellHeight = this.preloaderHeight;
         if (!this.options.text_overlay && !this.options.text_right) {
             cellHeight += this.headlineHeight +
-                this.headlineMarginTop + (this.options.hide_provider ? 0 : this.providerLineHeight) ;
+                this.headlineMarginTop + (this.options.hide_provider ? 0 : this.providerLineHeight);
             cellHeight += (this.options.ad_border) ? 2 : 0;
+            cellHeight += this.providerMarginTop;
+            cellHeight += this.providerMarginBottom;
         }
         return cellHeight;
     }
@@ -396,12 +445,14 @@ RevFlicker({
 
         var that = this;
 
+        var imgWidth = typeof this.preloaderWidth === 'undefined' ? 'width:auto;' : 'width:' + this.preloaderWidth + 'px;';
+
         for (var j = index; j < this.options.sponsored; j++) {
             var html = '<div class="rev-ad" style="height: '+ that.getCellHeight() +'px; border-width:' + (that.options.ad_border ? '1px' : '0') + '">' +
                         '<a href="" rel="nofollow" target="_blank">' +
-                            '<div class="rev-image" style="height:'+ that.preloaderHeight +'px"><img src=""/></div>' +
+                            '<div class="rev-image" style="'+ imgWidth +'height:'+ that.preloaderHeight +'px"><img src=""/></div>' +
                             '<div class="rev-headline" style="max-height:'+ that.headlineHeight +'px; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>' +
-                            ( that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'margin: 0 '  + that.innerMargin + 'px 0;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;height:' + that.providerLineHeight + 'px;') : '') +
+                            ( that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'margin: ' + that.providerMarginTop + 'px '  + that.innerMargin + 'px '+ that.providerMarginBottom +'px;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;height:' + that.providerLineHeight + 'px;') : '') +
                         '</a>' +
                     '</div>';
             var cell = document.createElement('div');
@@ -523,6 +574,8 @@ RevFlicker({
         var that = this;
         revApi.request(url, function(resp) {
 
+            that.data = resp;
+
             var ads = that.flickity.element.querySelectorAll('.rev-ad');
 
             for (var i = 0; i < resp.length; i++) {
@@ -537,9 +590,10 @@ RevFlicker({
                 }
             }
 
+            that.resize();
+
             imagesLoaded( that.flickity.element, function() {
                 revUtils.addClass(that.containerElement, 'loaded');
-                that.resize();
                 that.registerImpressions(true);
                 that.attachRegisterImpressions();
             });
