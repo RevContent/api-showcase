@@ -1,21 +1,40 @@
-<p class="md-body-1">With responsive styling and touch enabled gestures Flicker puts the fun into your content slider. You can configure the Flicker widget to show on phone, tablet and desktop and you can even decide how many units to display at various breakpoints. Include Flicker on your page and let the engagement begin!</p>
+<!-- size -->
+<!-- set the various size options -->
 
-<h3 class="md-subhead">Add html element to the page</h3>
+<p class="md-body-1">hide_provider is used to turn on/off the Creative Provider</p>
 
-<code hljs language="html">
-<div id="flicker"></div>
-</code>
 
-<h3 class="md-subhead">Create a new RevFlicker + <span style="color:seagreen">Beacon Tracking</span></h3>
+<h3 class="md-subhead">Available Options</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>
+                false (default)
+            </th>
+        </tr>
+        <tr>
+            <th>
+                true (Do NOT show Ad provider)
+            </th>
+        </tr>
+    </thead>
+</table>
+
+<h3 class="md-subhead">Example</h3>
 
 <code hljs language="javascript">
 new RevFlicker({
-    id: 'flicker',
-    url: 'http://trends.revcontent.com/api/v1/',
-    api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
-    pub_id : 945,
-    widget_id : 6181,
-    domain : 'apiexamples.powr.com',
-    beacons: true
+    ...
+    size: {
+        margin: 2,
+        image_height: false,
+        headline_line_height: 18,
+        headline_margin_top: 8,
+        provider_line_height: 22,
+        provider_margin_top: 8,
+        provider_margin_bottom: 10,
+        inner_margin: 10
+    }
 });
 </code>
