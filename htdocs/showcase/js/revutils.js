@@ -71,7 +71,11 @@ utils.extend = function( a, b ) {
     }
 
     for ( var prop in b ) {
-        c[ prop ] = b[ prop ];
+        if (typeof b[prop] == 'object') { // if the prop is an obj recurse
+            c[prop] = this.extend(c[prop], b[prop]);
+        } else {
+            c[prop] = b[prop];
+        }
     }
     return c;
 };
