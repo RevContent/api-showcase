@@ -88,6 +88,7 @@ RevFlicker({
             disclosure_text: revDisclose.defaultDisclosureText,
             hide_provider: false,
             beacons: true
+            css: '',
         };
 
         // merge options
@@ -107,7 +108,7 @@ RevFlicker({
 
         var that = this;
         //append injrected style
-        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-flicker');
+        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-flicker', this.options.css);
 
         // append a new element to the flicker
         this.containerElement = document.createElement('div');

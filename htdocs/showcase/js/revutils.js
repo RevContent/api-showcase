@@ -47,10 +47,14 @@ utils.validateApiParams = function(params) {
     return errors;
 };
 
-utils.appendStyle = function(style, namespace) {
+utils.appendStyle = function(style, namespace, extra) {
     var namespace = namespace + '-append-style';
 
     if (!document.getElementById(namespace)) {
+        if (typeof extra === 'string') {
+            style += extra;
+        }
+
         var el = document.createElement('style');
         el.type = 'text/css';
         el.id = namespace;
