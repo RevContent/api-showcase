@@ -252,7 +252,9 @@ RevFlicker({
 
     RevFlicker.prototype.setUp = function() {
         // determine elements per row based on container width
-        if (this.containerWidth >= 1500) {
+        if (typeof this.options.per_row == 'number') { // if a number is passed just use that
+            this.perRow = this.options.per_row;
+        }else if (this.containerWidth >= 1500) {
             this.perRow = this.options.per_row.xxl;
         }else if (this.containerWidth >= 1250) {
             this.perRow = this.options.per_row.xl;
