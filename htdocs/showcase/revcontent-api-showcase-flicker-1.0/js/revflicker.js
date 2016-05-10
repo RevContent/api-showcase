@@ -227,7 +227,6 @@ RevFlicker({
 
     RevFlicker.prototype.appendElements = function() {
         if (!this.options.hide_header) {
-            console.log('hiii');
             if (this.header) {
                 revUtils.remove(this.header);
             }
