@@ -93,6 +93,8 @@ RevFlicker({
             css: '',
             user_ip: false,
             user_agent: false,
+            hide_header: false,
+            hide_disclosure: false
         };
 
         // merge options
@@ -199,26 +201,31 @@ RevFlicker({
     };
 
     RevFlicker.prototype.appendElements = function() {
-        if (this.header) {
-            revUtils.remove(this.header);
+        if (!this.options.hide_header) {
+            console.log('hiii');
+            if (this.header) {
+                revUtils.remove(this.header);
+            }
+            this.header = document.createElement('h2');
+            this.header.innerHTML = this.options.header;
+            revUtils.addClass(this.header, 'rev-header');
+            revUtils.prepend(this.containerElement, this.header);
         }
-        this.header = document.createElement('h2');
-        this.header.innerHTML = this.options.header;
-        revUtils.addClass(this.header, 'rev-header');
-        revUtils.prepend(this.containerElement, this.header);
 
-        if (this.sponsored) {
-            revUtils.remove(this.sponsored);
-        }
-        this.sponsored = document.createElement('div');
-        revUtils.addClass(this.sponsored, 'rev-sponsored');
-        this.sponsored.innerHTML = revDisclose.getDisclosure(this.options.disclosure_text);
-        if (this.options.rev_position == 'top_right') {
-            revUtils.addClass(this.sponsored, 'top-right')
-            revUtils.prepend(this.containerElement, this.sponsored);
-        } else if (this.options.rev_position == 'bottom_left' || this.options.rev_position == 'bottom_right') {
-            revUtils.addClass(this.sponsored, this.options.rev_position.replace('_', '-'));
-            revUtils.append(this.containerElement, this.sponsored);
+        if (!this.options.hide_disclosure) {
+            if (this.sponsored) {
+                revUtils.remove(this.sponsored);
+            }
+            this.sponsored = document.createElement('div');
+            revUtils.addClass(this.sponsored, 'rev-sponsored');
+            this.sponsored.innerHTML = revDisclose.getDisclosure(this.options.disclosure_text);
+            if (this.options.rev_position == 'top_right') {
+                revUtils.addClass(this.sponsored, 'top-right')
+                revUtils.prepend(this.containerElement, this.sponsored);
+            } else if (this.options.rev_position == 'bottom_left' || this.options.rev_position == 'bottom_right') {
+                revUtils.addClass(this.sponsored, this.options.rev_position.replace('_', '-'));
+                revUtils.append(this.containerElement, this.sponsored);
+            }
         }
     };
 
