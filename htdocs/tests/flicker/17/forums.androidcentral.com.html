@@ -353,10 +353,10 @@ But how important is the stuff your trying to recover? is it worth sending it to
     <!-- endinject -->
 
     <!-- inject:html -->
-    <!-- devices -->
-<!-- set devices to  ['phone', 'tablet'] -->
+    <!-- text_right -->
+<!-- show the text on the right -->
 
-<p class="md-body-1">The devices option allows you to show the widget on certain devices</p>
+<p class="md-body-1">hide_provider is used to turn on/off the Creative Provider</p>
 
 
 <h3 class="md-subhead">Available Options</h3>
@@ -365,7 +365,12 @@ But how important is the stuff your trying to recover? is it worth sending it to
     <thead>
         <tr>
             <th>
-            ['phone', 'tablet', 'desktop'](default)
+                false (default)
+            </th>
+        </tr>
+        <tr>
+            <th>
+                true (Do NOT show Ad provider)
             </th>
         </tr>
     </thead>
@@ -376,7 +381,7 @@ But how important is the stuff your trying to recover? is it worth sending it to
 <code hljs language="javascript">
 new RevFlicker({
     ...
-    devices: ['phone', 'tablet']
+    text_right: true
 });
 </code>
     <div id="rev-flicker" ></div>
@@ -389,7 +394,7 @@ setTimeout(function() {
         pub_id : 945,
         widget_id : 6181,
         domain : 'apiexamples.powr.com',
-        devices: ['phone', 'tablet']
+        text_right: true
     });
 });
 </script>
