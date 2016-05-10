@@ -88,6 +88,8 @@ RevFlicker({
             disclosure_text: revDisclose.defaultDisclosureText,
             hide_provider: false,
             beacons: true
+            text_right: false,
+            text_right_height: 100,
             css: '',
         };
 
@@ -114,6 +116,7 @@ RevFlicker({
         this.containerElement = document.createElement('div');
         this.containerElement.id = 'rev-flicker';
         this.containerElement.setAttribute('class', 'rev-flicker');
+        revUtils.addClass(this.containerElement, 'rev-flicker-' + (this.options.text_right ? 'text-right' : 'text-bottom'));
 
         this.flickerElement = document.createElement('div');
 
@@ -288,6 +291,10 @@ RevFlicker({
         this.columnWidth = (((this.containerWidth - (this.margin * this.perRow)) / (this.perRow + (1/2))).toFixed(2) / 1);
 
         this.preloaderHeight = Math.round((this.columnWidth - ( this.options.ad_border ? 2 : 0 )) * (this.imageHeight / this.imageWidth));
+        if (this.options.text_right) {
+            this.preloaderHeight = this.options.text_right_height;
+            this.preloaderWidth = Math.round(this.preloaderHeight * (this.imageWidth / this.imageHeight) * 100) / 100;
+        }
     };
 
     RevFlicker.prototype.update = function(newOpts, oldOpts) {
@@ -357,7 +364,7 @@ RevFlicker({
 
     RevFlicker.prototype.getCellHeight = function() {
         var cellHeight = this.preloaderHeight;
-        if (!this.options.text_overlay) {
+        if (!this.options.text_overlay && !this.options.text_right) {
             cellHeight += this.headlineHeight +
                 this.headlineMarginTop + (this.options.hide_provider ? 0 : this.providerLineHeight) ;
             cellHeight += (this.options.ad_border) ? 2 : 0;
@@ -527,31 +534,27 @@ RevFlicker({
     };
 
     RevFlicker.prototype.getMaxHeadlineHeight = function() {
-        var maxHeadlineHeight = 0;
-        var that = this;
-        var ads = that.flickity.element.querySelectorAll('.rev-ad');
-        if (ads.length > 0) {
-            var el = ads[0].querySelectorAll('.rev-headline h3')[0];
-            var t = el.cloneNode(true);
-            t.style.visibility = 'hidden';
-            t.style.height = 'auto';
-            revUtils.append(el.parentNode, t);
+        var maxHeight = 0;
+        if (this.options.text_right) { // based on preloaderHeight/ ad height
+            var verticalSpace = this.preloaderHeight - this.providerLineHeight - this.providerMarginBottom - this.providerMarginTop;
+            var headlines = Math.floor(verticalSpace / this.headlineLineHeight);
+            maxHeight = headlines * this.headlineLineHeight;
+        } else {
+            var ads = this.flickity.element.querySelectorAll('.rev-ad');
             for (var i = 0; i < ads.length; i++) {
                 var ad = ads[i];
-                t.innerHTML = ad.querySelectorAll('a')[0].title;
-                if(t.clientHeight > maxHeadlineHeight) {
-                    maxHeadlineHeight = t.clientHeight;
-                }
+                var el = document.createElement('div');
+                el.style.position = 'absolute';
+                el.style.zIndex = '100';
+                el.style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
+                el.innerHTML = '<h3 style="font-size:'+ this.headlineFontSize + 'px;line-height:'+ this.headlineLineHeight +'px">'+ this.data[i].headline + '</h3>';
+                revUtils.prepend(ad, el); // do it this way b/c changin the element height on the fly needs a repaint and requestAnimationFrame is not avail in IE9
+                maxHeight = Math.max(maxHeight, el.clientHeight);
+                revUtils.remove(el);
             }
-            revUtils.remove(t);
-            var numLines = Math.ceil(maxHeadlineHeight / that.headlineLineHeight);
-            maxHeadlineHeight = numLines * that.headlineLineHeight;
         }
-        return maxHeadlineHeight;
+        return maxHeight;
     };
 
-
-
     return RevFlicker;
-
 }));
