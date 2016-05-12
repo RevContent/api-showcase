@@ -47,10 +47,14 @@ utils.validateApiParams = function(params) {
     return errors;
 };
 
-utils.appendStyle = function(style, namespace) {
+utils.appendStyle = function(style, namespace, extra) {
     var namespace = namespace + '-append-style';
 
     if (!document.getElementById(namespace)) {
+        if (typeof extra === 'string') {
+            style += extra;
+        }
+
         var el = document.createElement('style');
         el.type = 'text/css';
         el.id = namespace;
@@ -67,7 +71,11 @@ utils.extend = function( a, b ) {
     }
 
     for ( var prop in b ) {
-        c[ prop ] = b[ prop ];
+        if (typeof b[prop] == 'object') { // if the prop is an obj recurse
+            c[prop] = this.extend(c[prop], b[prop]);
+        } else {
+            c[prop] = b[prop];
+        }
     }
     return c;
 };

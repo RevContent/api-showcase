@@ -7,10 +7,14 @@ var gulp = require('gulp');
 var demos = require('../app/config/demos.json');
 
 function getFolders(dir) {
+  try {
     return fs.readdirSync(dir)
       .filter(function(file) {
-        return fs.statSync(path.join(dir, file)).isDirectory();
+        return fs.statSync(path.join(dir, file)).isDirectory() && file !== "mockup";
       });
+  } catch(e) {
+    return [];
+  }
 }
 
 gulp.task('tests', function() {
@@ -87,11 +91,37 @@ gulp.task('tests-files', ['tests'], function() {
                 html += '<li><h5>'+ templateName +'</h5></li>';
                 html += '<li style="list-style:none;"><ol>';
                 for (var k = 0; k < folders.length; k++) {
+
                   var index = k + 1;
-                  html += '<li><a target="_blank" href="/tests/' + widget + '/' + index + '/' + templateName + '.html">Demo</a></li>';
+
+                  var fileContent = fs.readFileSync("./app/resources/js/app/demo/" + widget + '/' + index + '/description.html', "utf8");
+                  var fileContentArr = fileContent.split("-->\n");
+
+                  var demoName = 'Demo';
+                  var demoDescription = '';
+
+                  if (fileContentArr[0] && fileContentArr[0].substr(0, 4) == '<!--') {
+                    demoName = fileContentArr[0].substr(5).trim();
+                  }
+
+                  if (fileContentArr[1] && fileContentArr[1].substr(0, 4) == '<!--') {
+                    demoDescription = ': ' + fileContentArr[1].substr(5).trim();
+                  }
+
+                  html += '<li><a target="_blank" href="/tests/' + widget + '/' + index + '/' + templateName + '.html">'+ demoName +'</a>'+ demoDescription +'</li>';
                 };
                 html += '</ol></li>';
               };
+
+              var mockups = getFolders('./app/resources/js/app/demo/' + widget + '/mockup');
+
+              for (var k = 0; k < mockups.length; k++) {
+                var name = mockups[k];
+                html += '<li><h5>'+ name +'</h5></li>';
+                html += '<li style="list-style:none;"><ol>';
+                html += '<li><a target="_blank" href="/app/resources/js/app/demo/'+ widget +'/mockup/'+ name +'/'+ name +'.html">Demo</a></li>';
+                html += '</ol></li>';
+              }
 
               return html;
             }
