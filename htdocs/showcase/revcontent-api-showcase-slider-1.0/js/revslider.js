@@ -817,7 +817,7 @@ RevSlider({
             that.emitter.emitEvent('ready');
             that.ready = true;
 
-            imagesLoaded( that.grid.element, function() {
+            revUtils.imagesLoaded(that.grid.element.querySelectorAll('img')).once('done', function() {
                 revUtils.addClass(that.containerElement, 'loaded');
             });
         });

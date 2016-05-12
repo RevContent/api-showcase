@@ -515,13 +515,12 @@ RevFlicker({
                 }
             }
 
-            imagesLoaded( that.flickity.element, function() {
+            revUtils.imagesLoaded(that.flickity.element.querySelectorAll('img')).once('done', function() {
                 revUtils.addClass(that.containerElement, 'loaded');
                 that.resize();
                 that.registerImpressions(true);
                 that.attachRegisterImpressions();
             });
-
         });
     };
 

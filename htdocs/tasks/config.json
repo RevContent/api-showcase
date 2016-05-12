@@ -13,7 +13,6 @@
     "build": [
       "./vendor/hammerjs/hammer.js",
       "./vendor/mobile-detect/mobile-detect.js",
-      "./vendor/imagesloaded/imagesloaded.pkgd.js",
       "./vendor/any-grid/dist/any-grid.js",
       "./showcase/js/revutils.js",
       "./showcase/js/revdialog.js",
@@ -119,7 +118,7 @@
     ],
     "build": [
       "./vendor/mobile-detect/mobile-detect.js",
-      "./vendor/imagesloaded/imagesloaded.pkgd.js",
+      "./vendor/eventEmitter/EventEmitter.min.js",
       "./showcase/js/revutils.js",
       "./showcase/js/revdialog.js",
       "./showcase/js/revdisclose.js",

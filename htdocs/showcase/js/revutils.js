@@ -193,6 +193,94 @@ utils.ellipsisText = function(headlines) {
     }
 };
 
+utils.imagesLoaded = function(images) {
+
+    // LoadingImage code from https://github.com/desandro/imagesloaded
+    function LoadingImage( img ) {
+        this.img = img;
+    }
+
+    LoadingImage.prototype = new EventEmitter();
+
+    LoadingImage.prototype.check = function() {
+        // If complete is true and browser supports natural sizes,
+        // try to check for image status manually.
+        var isComplete = this.getIsImageComplete();
+        if ( isComplete ) {
+            // HACK check async to allow time to bind listeners
+            var that = this;
+            setTimeout(function() {
+                // report based on naturalWidth
+                that.confirm( that.img.naturalWidth !== 0, 'naturalWidth' );
+            });
+            return;
+        }
+
+        // If none of the checks above matched, simulate loading on detached element.
+        this.proxyImage = new Image();
+        eventie.bind( this.proxyImage, 'load', this );
+        eventie.bind( this.proxyImage, 'error', this );
+        // bind to image as well for Firefox. #191
+        eventie.bind( this.img, 'load', this );
+        eventie.bind( this.img, 'error', this );
+        this.proxyImage.src = this.img.src;
+    };
+
+    LoadingImage.prototype.getIsImageComplete = function() {
+        return this.img.complete && this.img.naturalWidth !== undefined;
+    };
+
+    LoadingImage.prototype.confirm = function( isLoaded, message ) {
+        this.isLoaded = isLoaded;
+        this.emit( 'progress', this, this.img, message );
+    };
+
+    // ----- events ----- //
+
+    // trigger specified handler for event type
+    LoadingImage.prototype.handleEvent = function( event ) {
+        var method = 'on' + event.type;
+        if ( this[ method ] ) {
+          this[ method ]( event );
+        }
+    };
+
+    LoadingImage.prototype.onload = function() {
+        this.confirm( true, 'onload' );
+        this.unbindEvents();
+    };
+
+    LoadingImage.prototype.onerror = function() {
+        this.confirm( false, 'onerror' );
+        this.unbindEvents();
+    };
+
+    LoadingImage.prototype.unbindEvents = function() {
+        eventie.unbind( this.proxyImage, 'load', this );
+        eventie.unbind( this.proxyImage, 'error', this );
+        eventie.unbind( this.img, 'load', this );
+        eventie.unbind( this.img, 'error', this );
+    };
+
+    // emit done event when all images have finished loading
+    var emitter = new EventEmitter();
+
+    var progressedCount = 0;
+
+    for (var i=0; i < images.length; i++ ) {
+        var loadingImage = new LoadingImage(images[i]);
+        loadingImage.once( 'progress', function() {
+            progressedCount++;
+            if (progressedCount == images.length) {
+                emitter.emitEvent('done');
+            }
+        });
+        loadingImage.check();
+    }
+
+    return emitter;
+}
+
 // -----  ----- //
 return utils;
 
