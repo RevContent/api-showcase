@@ -18,7 +18,7 @@
         },
         {
             "name": "slider",
-            "templates": [],
+            "templates": ["./tests/templates/dailygreatest.com.html"],
             "script": "./build/revslider.min.js",
             "cdn": false,
             "cdn_url": "http://labs-cdn.revcontent.com/build/revslider.min.js",
@@ -26,7 +26,7 @@
         },
         {
             "name": "exit",
-            "templates": [],
+            "templates": ["./tests/templates/egotastic.com.html"],
             "script": "./build/revexit.min.js?w=6181&p=945&k=3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b&d=apiexamples.powr.com&x=both&t=true",
             "cdn": false,
             "cdn_url": "http://labs-cdn.revcontent.com/build/revexit.min.js?w=6181&p=945&k=3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b&d=apiexamples.powr.com&x=both&t=true",
