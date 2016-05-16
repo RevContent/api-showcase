@@ -419,6 +419,10 @@ RevFlicker({
         }
     }
 
+    RevFlicker.prototype.getOptionLimit = function(initial) {
+        return this.options.internal ? this.options.internal : this.options.sponsored;
+    };
+
     RevFlicker.prototype.getCellHeight = function() {
         var cellHeight = this.preloaderHeight;
         if (!this.options.text_overlay && !this.options.text_right) {
@@ -434,10 +438,12 @@ RevFlicker({
     RevFlicker.prototype.preData = function() {
 
         var content = this.flickity.element.querySelectorAll('.rev-content');
+        var count = this.getOptionLimit();
         var index = content.length;
-        if (content.length > this.options.sponsored) {
-            var index = this.options.sponsored;
-            for (var i = this.options.sponsored; i < content.length; i++) {
+
+        if (content.length > count) {
+            var index = count;
+            for (var i = count; i < content.length; i++) {
                 revUtils.remove(content[i]);
             }
         }
@@ -446,7 +452,7 @@ RevFlicker({
 
         var imgWidth = typeof this.preloaderWidth === 'undefined' ? 'width:auto;' : 'width:' + this.preloaderWidth + 'px;';
 
-        for (var j = index; j < this.options.sponsored; j++) {
+        for (var j = index; j < count; j++) {
             var html = '<div class="rev-ad" style="height: '+ that.getCellHeight() +'px; border-width:' + (that.options.ad_border ? '1px' : '0') + '">' +
                         '<a href="" rel="nofollow" target="_blank">' +
                             '<div class="rev-image" style="'+ imgWidth +'height:'+ that.preloaderHeight +'px"><img src=""/></div>' +
@@ -477,8 +483,6 @@ RevFlicker({
     };
 
     RevFlicker.prototype.registerImpressions = function(initial) {
-        var optionLimit = this.options.internal ? this.options.internal : this.options.sponsored;
-
         // if its the first time register the intial viewed impressions
         var count = this.perRow;
         var offset = 0;
@@ -487,7 +491,7 @@ RevFlicker({
             count = 1;
             offset = this.flickity.selectedIndex;
 
-            if ( (offset + (this.perRow - 1)) < optionLimit ) {
+            if ( (offset + (this.perRow - 1)) < this.getOptionLimit() ) {
                 offset += (this.perRow - 1);
             }
         }
