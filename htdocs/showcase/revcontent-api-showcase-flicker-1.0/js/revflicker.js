@@ -581,16 +581,21 @@ RevFlicker({
 
             var ads = that.flickity.element.querySelectorAll('.rev-ad');
 
-            for (var i = 0; i < resp.length; i++) {
+            var dataIndex = 0;
+            for (var i = 0; i < ads.length; i++) {
+                if (!resp[dataIndex]) { // go back to the beginning if there are more ads than data
+                    dataIndex = 0;
+                }
                 var ad = ads[i],
-                    data = resp[i];
+                    data = resp[dataIndex];
                 ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', ''));
                 ad.querySelectorAll('a')[0].title = data.headline;
                 ad.querySelectorAll('img')[0].setAttribute('src', data.image);
                 ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
-                if(that.options.hide_provider === false){
+                if (that.options.hide_provider === false) {
                     ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
                 }
+                dataIndex++;
             }
 
             that.resize();
