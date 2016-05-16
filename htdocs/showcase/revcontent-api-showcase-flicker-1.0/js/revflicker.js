@@ -579,6 +579,11 @@ RevFlicker({
 
             that.data = resp;
 
+            if (!that.data.length) { // if no data remove the container and call it a day
+                revUtils.remove(that.containerElement);
+                return;
+            }
+
             var ads = that.flickity.element.querySelectorAll('.rev-ad');
 
             var dataIndex = 0;
