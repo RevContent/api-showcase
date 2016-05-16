@@ -346,7 +346,7 @@ RevFlicker({
         this.providerMarginTop = this.options.size.provider_margin_top ? this.options.size.provider_margin_top : 0;
         this.providerMarginBottom = this.options.size.provider_margin_bottom ? this.options.size.provider_margin_bottom : 0;
 
-        this.preloaderHeight = this.options.size.image_height ? this.options.size.image_height : Math.round(this.columnWidth * (this.imageHeight / this.imageWidth));
+        this.preloaderHeight = this.options.size.image_height ? this.options.size.image_height : Math.round((this.columnWidth - (this.options.ad_border ? 2 : 0)) * (this.imageHeight / this.imageWidth));
 
         if (this.options.text_right) {
             this.preloaderHeight = this.options.text_right_height;
