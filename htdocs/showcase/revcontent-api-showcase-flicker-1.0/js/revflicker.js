@@ -397,7 +397,7 @@ RevFlicker({
             var ad = ads[i];
             ad.style.borderWidth = (this.options.ad_border ? '1px' : '0')
         }
-    }
+    };
 
     RevFlicker.prototype.textOverlay = function() {
         var ads = this.containerElement.querySelectorAll('.rev-ad');
@@ -417,7 +417,7 @@ RevFlicker({
                 ad.style.height = this.getCellHeight() + 'px';
             }
         }
-    }
+    };
 
     RevFlicker.prototype.getOptionLimit = function(initial) {
         return this.options.internal ? this.options.internal : this.options.sponsored;
@@ -433,7 +433,7 @@ RevFlicker({
             cellHeight += this.providerMarginBottom;
         }
         return cellHeight;
-    }
+    };
 
     RevFlicker.prototype.preData = function() {
 
@@ -519,7 +519,7 @@ RevFlicker({
                 //TODO: retry the call or log to db for later attempt
             });
         }
-    }
+    };
 
     RevFlicker.prototype.attachRegisterImpressions = function() {
         var that = this;
@@ -571,8 +571,8 @@ RevFlicker({
 
         var url = this.options.url + '?uitm=true&img_h='+ this.imageHeight +'&img_w='+ this.imageWidth +'&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + sponsored + '&internal_count=' + internal + '&sponsored_offset=0&internal_offset=0&api_source=flick';
         // user ip or user_agent passed?
-        url += this.options.user_ip ? '&user_ip=' + this.options.user_ip : '';
-        url += this.options.user_agent ? '&user_agent=' + this.options.user_agent : '';
+        url += this.options.user_ip ? ('&user_ip=' + this.options.user_ip) : '';
+        url += this.options.user_agent ? ('&user_agent=' + this.options.user_agent) : '';
 
         var that = this;
         revApi.request(url, function(resp) {
