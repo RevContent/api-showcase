@@ -346,7 +346,7 @@ RevFlicker({
         this.providerMarginTop = this.options.size.provider_margin_top ? this.options.size.provider_margin_top : 0;
         this.providerMarginBottom = this.options.size.provider_margin_bottom ? this.options.size.provider_margin_bottom : 0;
 
-        this.preloaderHeight = this.options.size.image_height ? this.options.size.image_height : Math.round(this.columnWidth * (this.imageHeight / this.imageWidth));
+        this.preloaderHeight = this.options.size.image_height ? this.options.size.image_height : Math.round((this.columnWidth - (this.options.ad_border ? 2 : 0)) * (this.imageHeight / this.imageWidth));
 
         if (this.options.text_right) {
             this.preloaderHeight = this.options.text_right_height;
@@ -397,7 +397,7 @@ RevFlicker({
             var ad = ads[i];
             ad.style.borderWidth = (this.options.ad_border ? '1px' : '0')
         }
-    }
+    };
 
     RevFlicker.prototype.textOverlay = function() {
         var ads = this.containerElement.querySelectorAll('.rev-ad');
@@ -417,7 +417,11 @@ RevFlicker({
                 ad.style.height = this.getCellHeight() + 'px';
             }
         }
-    }
+    };
+
+    RevFlicker.prototype.getOptionLimit = function(initial) {
+        return this.options.internal ? this.options.internal : this.options.sponsored;
+    };
 
     RevFlicker.prototype.getCellHeight = function() {
         var cellHeight = this.preloaderHeight;
@@ -429,15 +433,17 @@ RevFlicker({
             cellHeight += this.providerMarginBottom;
         }
         return cellHeight;
-    }
+    };
 
     RevFlicker.prototype.preData = function() {
 
         var content = this.flickity.element.querySelectorAll('.rev-content');
+        var count = this.getOptionLimit();
         var index = content.length;
-        if (content.length > this.options.sponsored) {
-            var index = this.options.sponsored;
-            for (var i = this.options.sponsored; i < content.length; i++) {
+
+        if (content.length > count) {
+            var index = count;
+            for (var i = count; i < content.length; i++) {
                 revUtils.remove(content[i]);
             }
         }
@@ -446,7 +452,7 @@ RevFlicker({
 
         var imgWidth = typeof this.preloaderWidth === 'undefined' ? 'width:auto;' : 'width:' + this.preloaderWidth + 'px;';
 
-        for (var j = index; j < this.options.sponsored; j++) {
+        for (var j = index; j < count; j++) {
             var html = '<div class="rev-ad" style="height: '+ that.getCellHeight() +'px; border-width:' + (that.options.ad_border ? '1px' : '0') + '">' +
                         '<a href="" rel="nofollow" target="_blank">' +
                             '<div class="rev-image" style="'+ imgWidth +'height:'+ that.preloaderHeight +'px"><img src=""/></div>' +
@@ -477,8 +483,6 @@ RevFlicker({
     };
 
     RevFlicker.prototype.registerImpressions = function(initial) {
-        var optionLimit = this.options.internal ? this.options.internal : this.options.sponsored;
-
         // if its the first time register the intial viewed impressions
         var count = this.perRow;
         var offset = 0;
@@ -487,7 +491,7 @@ RevFlicker({
             count = 1;
             offset = this.flickity.selectedIndex;
 
-            if ( (offset + (this.perRow - 1)) < optionLimit ) {
+            if ( (offset + (this.perRow - 1)) < this.getOptionLimit() ) {
                 offset += (this.perRow - 1);
             }
         }
@@ -515,7 +519,7 @@ RevFlicker({
                 //TODO: retry the call or log to db for later attempt
             });
         }
-    }
+    };
 
     RevFlicker.prototype.attachRegisterImpressions = function() {
         var that = this;
@@ -567,26 +571,36 @@ RevFlicker({
 
         var url = this.options.url + '?uitm=true&img_h='+ this.imageHeight +'&img_w='+ this.imageWidth +'&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + sponsored + '&internal_count=' + internal + '&sponsored_offset=0&internal_offset=0&api_source=flick';
         // user ip or user_agent passed?
-        url += this.options.user_ip ? '&user_ip=' + this.options.user_ip : '';
-        url += this.options.user_agent ? '&user_agent=' + this.options.user_agent : '';
+        url += this.options.user_ip ? ('&user_ip=' + this.options.user_ip) : '';
+        url += this.options.user_agent ? ('&user_agent=' + this.options.user_agent) : '';
 
         var that = this;
         revApi.request(url, function(resp) {
 
             that.data = resp;
 
+            if (!that.data.length) { // if no data remove the container and call it a day
+                revUtils.remove(that.containerElement);
+                return;
+            }
+
             var ads = that.flickity.element.querySelectorAll('.rev-ad');
 
-            for (var i = 0; i < resp.length; i++) {
+            var dataIndex = 0;
+            for (var i = 0; i < ads.length; i++) {
+                if (!resp[dataIndex]) { // go back to the beginning if there are more ads than data
+                    dataIndex = 0;
+                }
                 var ad = ads[i],
-                    data = resp[i];
+                    data = resp[dataIndex];
                 ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', ''));
                 ad.querySelectorAll('a')[0].title = data.headline;
                 ad.querySelectorAll('img')[0].setAttribute('src', data.image);
                 ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
-                if(that.options.hide_provider === false){
+                if (that.options.hide_provider === false) {
                     ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
                 }
+                dataIndex++;
             }
 
             that.resize();
