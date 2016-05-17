@@ -11066,7 +11066,15 @@ return jQuery;
  po = "Provider Options", control display of provider label on ad units. Choices are "disabled", "all", "sponsored" or "internal" (Default)
 
  **/
-(function(j,q,u,e,r,y,R,o,x){try{o=jQuery;if(o&&(!R||(R&&o.fn.jquery==R))){x=true}}catch(er){}if(!x||(R&&o.fn.jquery!=R)){(q=j.createElement(q)).type='text/javascript';if(r){q.async=true}q.src='//ajax.googleapis.com/ajax/libs/jquery/'+(R||1)+'/jquery.min.js';u=j.getElementsByTagName(u)[0];q.onload=q.onreadystatechange=(function(){if(!e&&(!this.readyState||this.readyState=='loaded'||this.readyState=='complete')){e=true;x=jQuery;jQuery.noConflict(true)(function(){y(x)});q.onload=q.onreadystatechange=null;u.removeChild(q)}});u.appendChild(q)}else{y(o)}})(document,'script','head',false,false,(function($){$(function(){
+ ( function( window, factory ) {
+   'use strict';
+     window.revExit = factory(
+       window,
+       jQuery.noConflict(true)
+     );
+ }( window, function factory( window, $ ) {
+
+ 'use strict';
 
     $(document).ready(function() {
 
@@ -11438,7 +11446,7 @@ return jQuery;
             $exit_mask.css({'overflow-y': 'hidden', 'height': '100%'/*,'padding': '0 36px 0 0'*/}).addClass("modal-lg");
             $exit_wrap.css({'position': 'static', /*'padding': '18px',*/ 'height': $(window).height() - (0.12 * $(window).height()), 'width': '80%' /*$('#revexitadpanel').innerWidth()*/});
             //console.log("Large Desktop case >= 768 & <= 992");
-            var spnsr_mrgns = (100 * ((($(window).width() - $('#revexitunit').width()) / 2) / $(window).width())) || 5;    
+            var spnsr_mrgns = (100 * ((($(window).width() - $('#revexitunit').width()) / 2) / $(window).width())) || 5;
             $('#revexitsponsor').css({'padding': '0 0 0 18px', 'color':'rgba(0,0,0,0.5)', 'margin':'0 0 !important', 'position':'absolute', 'top': '11px', 'right': '40px', 'display':'inline-block', 'width': 'auto','text-align': 'right', 'max-width': $('#revexitunit').width() + 'px'});
         }
         else if(false === revExitMobile && (viewport_width > 480) && (viewport_width <= 768)) {
@@ -11447,7 +11455,7 @@ return jQuery;
             $exit_mask.css({'overflow-y': 'hidden', 'height': '100%'/*,'padding': '0 36px 0 0'*/}).addClass("modal-md");
             $exit_wrap.css({'overflow-y': 'scroll', 'position': 'static', /*'padding': '18px',*/ 'height': $(window).height() - (0.12 * $(window).height()), 'width': '80%' /*$('#revexitadpanel').innerWidth()*/});
             //console.log("Desktop case >= 480 & <= 768");
-            $('#revexitsponsor').css({'padding': '0 0 0 18px', 'color':'rgba(0,0,0,0.5)', 'margin':'0 0 !important', 'position':'absolute', 'top': '1.85em', 'right': '0px', 'left': '0px', 'left': '0px', 'display':'inline-block', 'width': 'auto','text-align': 'left', 'max-width': $('#revexitunit').width() + 'px'});
+            $('#revexitsponsor').css({'padding': '0 0 0 18px', 'color':'rgba(0,0,0,0.5)', 'margin':'0 0 !important', 'position':'absolute', 'top': '1.85em', 'right': '0', 'left': '0', 'display':'inline-block', 'width': 'auto','text-align': 'left', 'max-width': $('#revexitunit').width() + 'px'});
         }
         else if(false === revExitMobile && viewport_width <= 480) {
             $('body.revexit-open').css({'overflow-y': 'hidden', 'height': $wrap_height});
@@ -11455,16 +11463,16 @@ return jQuery;
             $exit_mask.css({'overflow-y': 'hidden', 'height': '100%'/*,'padding': '0 36px 0 0'*/}).addClass("modal-sm");
             $exit_wrap.css({'overflow-y': 'scroll', 'position': 'static'/*, 'padding': '18px'*/, 'height': '80%', 'width': '80%'});
             //console.log("Small Desktop case <= 480");
-            $('#revexitsponsor').css({'padding': '0 0 0 18px', 'color':'rgba(0,0,0,0.5)', 'margin':'0 0 !important', 'position':'absolute', 'top': '1.55em', 'right': '0px', 'left': '0px', 'left': '0px', 'display':'inline-block', 'width': 'auto','text-align': 'left', 'max-width': $('#revexitunit').width() + 'px'});
+            $('#revexitsponsor').css({'padding': '0 0 0 18px', 'color':'rgba(0,0,0,0.5)', 'margin':'0 0 !important', 'position':'absolute', 'top': '1.55em', 'right': '0', 'left': '0', 'display':'inline-block', 'width': 'auto','text-align': 'left', 'max-width': $('#revexitunit').width() + 'px'});
         }
         else if(false === revExitMobile && viewport_width >= 1024) {
             $('body.revexit-open').css({'overflow': 'hidden', 'height': '100%'});
             $exit_mask.css({'height': '100%', 'position': 'fixed', 'overflow': 'hidden'}).addClass("modal-hd");
             $exit_wrap.css({'position': 'static', 'overflow': 'hidden', 'height': 'auto', 'width': $('#revexitadpanel').innerWidth() || 992 });
             //console.log("HD Desktop case");
-            var spnsr_mrgns = (100 * ((($(window).width() - $('#revexitunit').width()) / 2) / $(window).width())) || 5;    
-            //$('#revexitsponsor').css({'text-shadow':'0 0 2px rgba(30,30,30, 0.8)', 'border': '0', 'margin':'0 ' + spnsr_mrgns + '%' ,'position':'fixed','top':'4%','left':0,'display':'block','width': $('#revexitunit').width(),'text-align': 'right','max-width': $('#revexitunit').width() + 'px'});    
-            $('#revexitsponsor').css({'padding': '0 18px 0 0', 'color':'rgba(0,0,0,0.5)', 'margin': '0', 'margin':'0 0 !important', 'position':'absolute', 'top': '11px', 'right': '50px', 'display':'inline-block', 'width': 'auto','text-align': 'right', 'max-width': $('#revexitunit').width() + 'px'});
+            var spnsr_mrgns = (100 * ((($(window).width() - $('#revexitunit').width()) / 2) / $(window).width())) || 5;
+            //$('#revexitsponsor').css({'text-shadow':'0 0 2px rgba(30,30,30, 0.8)', 'border': '0', 'margin':'0 ' + spnsr_mrgns + '%' ,'position':'fixed','top':'4%','left':0,'display':'block','width': $('#revexitunit').width(),'text-align': 'right','max-width': $('#revexitunit').width() + 'px'});
+            $('#revexitsponsor').css({'padding': '0 18px 0 0', 'color':'rgba(0,0,0,0.5)', 'margin':'0 0 !important', 'position':'absolute', 'top': '11px', 'right': '50px', 'display':'inline-block', 'width': 'auto','text-align': 'right', 'max-width': $('#revexitunit').width() + 'px'});
             if(false === enableSubscriptions && (($exit_wrap.outerHeight() + ($(window).height() * 0.10)) > $(window).height())) {
                 $exit_mask.addClass('fullscreen');
             }
@@ -11737,4 +11745,7 @@ return jQuery;
         return url;
     }
 
-})}),'2.1.4');
+
+    return $('#revexitunit');
+
+}));
