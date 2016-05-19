@@ -10,7 +10,7 @@
         },
         {
             "name": "shifter",
-            "templates": ["./tests/templates/thehealthlane.com.html", "./tests/templates/forums.androidcentral.com.html"],
+            "templates": ["./tests/templates/thehealthlane.com.html", "./tests/templates/forums.androidcentral.com.html", "./tests/templates/opposingviews.com.html"],
             "script": "./build/revshifter.min.js",
             "cdn": false,
             "cdn_url": "http://labs-cdn.revcontent.com/build/revshifter.min.js",
