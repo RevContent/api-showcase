@@ -151,7 +151,7 @@ RevSlider({
 
         revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-slider');
 
-        this.contentItems = [];
+        this.data = [];
 
         this.containerElement = document.createElement('div');
         this.containerElement.id = 'rev-slider';
@@ -811,7 +811,8 @@ RevSlider({
         var that = this;
 
         revApi.request(url, function(resp) {
-            that.contentItems = resp;
+            that.data = resp;
+
             that.updateDisplayedItems(that.options.visible);
 
             that.emitter.emitEvent('ready');
@@ -846,18 +847,14 @@ RevSlider({
 
         this.offset = ((this.page - 1) * this.limit);
 
-        var endIndex = this.offset + this.limit;
-        var moreItemsNeeded = 0;
-        if (endIndex > this.contentItems.length) {
-            endIndex = this.contentItems.length;
-            moreItemsNeeded = this.limit - (endIndex - this.offset);
-        }
         this.displayedItems = [];
-        for (var i = this.offset; i < endIndex; i++) {
-            this.displayedItems.push(this.contentItems[i]);
-        }
-        for (var i = 0; i < moreItemsNeeded; i++) {
-            this.displayedItems.push(this.contentItems[i]);
+        var dataIndex = this.offset;
+        for (var i = 0; i < this.limit; i++) {
+            if (!this.data[dataIndex]) { // go back to the beginning if there are more ads than data
+                dataIndex = 0;
+            }
+            this.displayedItems.push(this.data[dataIndex]);
+            dataIndex++;
         }
 
         if (this.options.max_headline) {
@@ -899,7 +896,11 @@ RevSlider({
     };
 
     RevSlider.prototype.maxPages = function() {
-        return Math.floor(this.contentItems.length / this.limit);
+        var maxPages = Math.ceil(this.data.length / this.limit);
+        if (maxPages > this.options.pages) {
+            maxPages = this.options.pages;
+        }
+        return maxPages;
     };
 
     RevSlider.prototype.attachButtonEvents = function() {
