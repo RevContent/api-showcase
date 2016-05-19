@@ -552,9 +552,55 @@
                                 <div class="articals-contant"> -->
                             <div class="adds-banners" >
 
-                                            <div id="revslider8653032"></div>
-                                            <script src="/build/revslider.min.js"></script>
-                                            <script> new RevSlider({id: 'revslider8653032', api_key: '2557166a1b52a3afba2b8920899d7ca47991b6fc', pub_id: 770, widget_id: 32427, domain: 'dailygreatest.com', rev_position: 'top_right'});</script>
+    <!-- inject:js -->
+    <script src="/build/revslider.min.js"></script>
+    <!-- endinject -->
+
+    <!-- inject:html -->
+    <p class="md-body-1">disclosure_text is used to set a custom label for the "Sponsored By..." verbiage</p>
+
+
+<h3 class="md-subhead">Available Options</h3>
+
+<table>
+    <thead>
+    <tr>
+        <th>
+            "Sponsored by Revcontent"(default)
+        </th>
+    </tr>
+    <tr>
+        <th>
+            "Your Custom Label" (2 - 50 Characters)
+        </th>
+    </tr>
+    </thead>
+</table>
+
+<h3 class="md-subhead">Example</h3>
+
+<code hljs language="javascript">
+new RevSlider({
+    ...
+    disclosure_text: 'My Ad Network'
+});
+</code>
+    <div id="rev-slider" ></div>
+<script>
+setTimeout(function() {
+    new RevSlider({
+        id: 'rev-slider',
+        url: 'http://trends.revcontent.com/api/v1/',
+        api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+        pub_id : 945,
+        widget_id : 6181,
+        domain : 'apiexamples.powr.com',
+        rev_position: 'bottom_right',
+        disclosure_text: 'My Ad Network'
+    });
+});
+</script>
+    <!-- endinject -->
 
 
 
@@ -618,17 +664,6 @@
 
                                                     <!--<div class="articles-large-col">
                                 <div class="articals-contant"> -->
-                            <div class="adds-banners" >
-
-                                            <div id="revslider796156"></div>
-                                            <script src="http://labs-cdn.revcontent.com/build/revslider.min.js"></script> <script> new RevSlider({id: 'revslider796156', api_key: '2557166a1b52a3afba2b8920899d7ca47991b6fc', pub_id: 770, widget_id: 32427, domain: 'dailygreatest.com', rev_position: 'top_right'});</script>
-
-
-
-
-
-
-                            </div>
                             <!--</div>
                         </div>   -->
 
