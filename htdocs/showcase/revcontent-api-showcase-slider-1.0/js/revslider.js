@@ -461,11 +461,15 @@ RevSlider({
     RevSlider.prototype.updatePagination = function() {
 
         if (this.maxPages() <= 1) {
+            this.backBtn.style.display = 'none';
+            this.forwardBtn.style.display = 'none';
             this.mc.set({enable: false}); // disable touch events
             if (this.options.pagination_dots) {
                 revUtils.remove(this.paginationDotsContainer); // remove the pagination dots all together
             }
         } else {
+            this.backBtn.style.display = 'block';
+            this.forwardBtn.style.display = 'block';
             this.mc.set({enable: true});// make sure touch events are enabled
             if (this.options.pagination_dots && !this.paginationDotsContainer.parentNode) { // add pagination dots if not there
                 revUtils.prepend(this.innerContainerElement, this.paginationDotsContainer);
@@ -576,14 +580,14 @@ RevSlider({
             this.btnContainer.setAttribute('class', 'rev-btn-dual');
             revUtils.append(this.btnContainer, this.backBtn);
             revUtils.append(this.btnContainer, this.forwardBtn);
-            revUtils.append(this.innerContainerElement, this.btnContainer);
+            revUtils.append(this.innerElement, this.btnContainer);
         } else {
             if (this.options.buttons.back) {
-                revUtils.append(this.innerContainerElement, this.backBtn);
+                revUtils.append(this.innerElement, this.backBtn);
             }
 
             if (this.options.buttons.forward) {
-                revUtils.append(this.innerContainerElement, this.forwardBtn);
+                revUtils.append(this.innerElement, this.forwardBtn);
             }
         }
     };
