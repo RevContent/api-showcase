@@ -47,10 +47,14 @@ utils.validateApiParams = function(params) {
     return errors;
 };
 
-utils.appendStyle = function(style, namespace) {
+utils.appendStyle = function(style, namespace, extra) {
     var namespace = namespace + '-append-style';
 
     if (!document.getElementById(namespace)) {
+        if (typeof extra === 'string') {
+            style += extra;
+        }
+
         var el = document.createElement('style');
         el.type = 'text/css';
         el.id = namespace;
@@ -67,7 +71,11 @@ utils.extend = function( a, b ) {
     }
 
     for ( var prop in b ) {
-        c[ prop ] = b[ prop ];
+        if (typeof b[prop] == 'object') { // if the prop is an obj recurse
+            c[prop] = this.extend(c[prop], b[prop]);
+        } else {
+            c[prop] = b[prop];
+        }
     }
     return c;
 };
@@ -108,7 +116,7 @@ utils.append = function(el, html) {
 }
 
 utils.remove = function(el) {
-    if (el) {
+    if (el && el.parentNode) {
         el.parentNode.removeChild(el);
     }
 }
@@ -162,22 +170,35 @@ utils.removeEventListener = function(el, eventName, handler) {
     } else {
         el.detachEvent('on' + eventName, handler);
     }
-}
+};
 
-utils.ellipsisText = function(el, text, height) {
-    var ellipText = '';
-    var t = el.cloneNode(true);
-    t.style.visibility = 'hidden';
-    t.style.height = 'auto';
-    this.append(el.parentNode, t);
-    t.innerHTML = text;
-    while (text.length > 0 && (t.clientHeight > height)) {
-        text = text.substr(0, text.length - 1);
-        t.innerHTML = text + "...";
+utils.transformCss = function(el, css) {
+    el.style.transform = css;
+    el.style.MsTransform = css;
+    el.style.WebkitTransform = css;
+    el.style.OTransform = css;
+};
+
+utils.transitionDurationCss = function(el, css) {
+    el.style.transitionDuration = css;
+    el.style.WebkitTransitionDuration = css;
+    el.style.MozTransitionDuration = css;
+    el.style.OTransitionDuration = css;
+};
+
+utils.ellipsisText = function(headlines) {
+    for (var i = 0; i < headlines.length; i++) {
+        var text,
+            container = headlines[i],
+            headline = container.children[0];
+        while(container.clientHeight < (container.scrollHeight > container.clientHeight ? (container.scrollHeight - 1) : container.scrollHeight)) {
+            text = headline.innerHTML.trim();
+            if(text.split(' ').length <= 1) {
+                break;
+            }
+            headline.innerHTML = text.replace(/\W*\s(\S)*$/, '...');
+        }
     }
-    ellipText = t.innerHTML;
-    this.remove(t);
-    return ellipText;
 };
 
 // -----  ----- //
