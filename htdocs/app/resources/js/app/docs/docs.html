@@ -18,9 +18,7 @@
 
             <p class="md-subhead">Requests to the API can be sent over HTTP or using JSONP and will utilize the following parameter set.</p>
 
-            <div class="text-danger">
-                <i class="fa fa-warning"></i> All HTTP requests must be made using xhr.withCredentials = true;
-            </div>
+            <div class="text-danger">All HTTP requests must be made using xhr.withCredentials = true;</div>
 
             <p style="margin-top:4px;">More information on <code>withCredentials</code> can be found <a href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials">here</a> for standard XMLHttpRequest or <a href="http://api.jquery.com/jquery.ajax/">here</a> for jQuery AJAX usage.</p>
 
@@ -261,6 +259,21 @@
                 </div>
 
             </div>
+
+        </md-card>
+
+        <md-card>
+            <h2 class="md-display-1">Advanced Usage</h2>
+
+            <p class="md-subhead">For more advanced implementations widget and creative impressions must be managed. The API provides helper parameters for common use cases.</p>
+
+            <h3 class="md-title">UITM Parameter</h3>
+
+            <p style="margin-top:4px;">The UITM parameter allows a request to be made without registering either widget or creative impressions. Pass <code>uitm=true</code> to return a response without registering any impressions.</p>
+            <p style="margin-top:0;" class="text-danger">When using the <code>uitm</code> parameter the click link urls will be returned with <code>uitm=1</code> preventing clicks from being counted. If these urls are used remove this with <code>url.replace('&uitm=1', '').replace('uitm=1', '')</code></p sty>
+
+            <h3 class="md-title">FILL Parameter and offset rule</h3>
+            <p style="margin-top:4px;">Sometimes it is necessary to only register creative impressions while ignoring the widget impression. If either the <code>sponsored_offset</code> or <code>trending_offset</code> is greater than 0 the system will automatically only register creative impressions. This behavior can be forced by using the <code>fill</code> param passing <code>fill=true</code></p>
 
         </md-card>
 
