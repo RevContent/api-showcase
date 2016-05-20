@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <!-- inject:js -->
+    <script type="text/javascript" id="" src="http://labs-cdn.revcontent.com/build/revslider.min.js"></script>
+    <!-- endinject -->
+
+    <!-- inject:html -->
+    <p class="md-body-1">The per_row option allows you to define how many ads will be visible on a row. The total columns. This does not include the halved ad. per_row works on a breakpoint system to provide an <a href="https://www.google.com/design/spec/layout/adaptive-ui.html#" target="_blank">adaptive UI</a></p>
+
+
+<h3 class="md-subhead">Available Options</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>
+                <code hljs language="json">
+per_row: {
+    xxs: 1,
+    xs: 1,
+    sm: 3,
+    md: 4,
+    lg: 5,
+    xl: 6,
+    xxl: 7
+}</code>
+
+            </th>
+        </tr>
+    </thead>
+</table>
+
+<h3 class="md-subhead">Example</h3>
+
+<code hljs language="javascript">
+new RevSlider({
+    ...
+    per_row: {
+        xxs: 1,
+        xs: 1,
+        sm: 2,
+        md: 2,
+        lg: 3,
+        xl: 4,
+        xxl: 5
+    }
+});
+</code>
+    <div id="rev-slider" ></div>
+<script>
+setTimeout(function() {
+    new RevSlider({
+        id: 'rev-slider',
+        url: 'http://trends.revcontent.com/api/v1/',
+        api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+        pub_id : 945,
+        widget_id : 6181,
+        domain : 'apiexamples.powr.com',
+        per_row: {
+            xxs: 1,
+            xs: 1,
+            sm: 2,
+            md: 2,
+            lg: 3,
+            xl: 4,
+            xxl: 5
+        }
+    });
+});
+</script>
+    <!-- endinject -->
+</body>
+</html>

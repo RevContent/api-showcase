@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <!-- inject:js -->
+    <script type="text/javascript" id="" src="http://labs-cdn.revcontent.com/build/revtoaster.min.js"></script>
+    <!-- endinject -->
+
+    <!-- inject:html -->
+    <p class="md-body-1">disclosure_text is used to set a custom label for the "Sponsored By..." verbiage</p>
+
+
+<h3 class="md-subhead">Available Options</h3>
+
+<table>
+    <thead>
+    <tr>
+        <th>
+            "Sponsored by Revcontent"(default)
+        </th>
+    </tr>
+    <tr>
+        <th>
+            "Your Custom Label" (2 - 50 Characters)
+        </th>
+    </tr>
+    </thead>
+</table>
+
+<h3 class="md-subhead">Example</h3>
+
+<code hljs language="javascript">
+new RevToaster({
+    ...
+    disclosure_text : 'My Ad Network'
+});
+</code>
+    <script>
+setTimeout(function() {
+    var toaster = new RevToaster({
+        testing: true,
+        url: 'http://trends.revcontent.com/api/v1/',
+        api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+        pub_id : 945,
+        widget_id : 6181,
+        domain : 'apiexamples.powr.com',
+        disclosure_text : 'My Ad Network'
+    });
+    toaster.show();
+});
+</script>
+    <!-- endinject -->
+</body>
+</html>
