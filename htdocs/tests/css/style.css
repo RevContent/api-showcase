@@ -1,0 +1,26 @@
+a {
+    color: rgb(76,175,80);
+}
+
+.mdl-button {
+    margin-right: 10px;
+}
+
+#links li {
+    list-style: none;
+}
+
+#links li.active {
+    color: rgb(76,175,80);
+    list-style: inherit;
+}
+
+#links li a {
+    line-height: 28px;
+}
+
+#links li.active a {
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 28px;
+}

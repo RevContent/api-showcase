@@ -1,53 +1,41 @@
 {
+    "urls" : {
+        "prod": "http://labs-cdn.revcontent.com",
+        "stg": "http://labs-stg.revcontent.com",
+        "dev": "http://localhost:8000"
+    },
     "tests": [
         {
             "name": "flicker",
             "templates": ["./tests/templates/forums.androidcentral.com.html", "./tests/templates/newser.com.html"],
-            "script": "./build/revflicker.min.js",
-            "cdn": false,
-            "cdn_url": "http://labs-cdn.revcontent.com/build/revflicker.min.js",
-            "auto_inject": true
+            "script": "./build/revflicker.min.js"
         },
         {
             "name": "shifter",
             "templates": ["./tests/templates/thehealthlane.com.html", "./tests/templates/forums.androidcentral.com.html"],
-            "script": "./build/revshifter.min.js",
-            "cdn": false,
-            "cdn_url": "http://labs-cdn.revcontent.com/build/revshifter.min.js",
-            "auto_inject": true
+            "script": "./build/revshifter.min.js"
         },
         {
             "name": "slider",
             "templates": [],
-            "script": "./build/revslider.min.js",
-            "cdn": false,
-            "cdn_url": "http://labs-cdn.revcontent.com/build/revslider.min.js",
-            "auto_inject": true
+            "script": "./build/revslider.min.js"
         },
         {
             "name": "exit",
             "templates": ["./tests/templates/photographyblog.com.html"],
-            "script": "./build/revexit.min.js?w=6181&p=945&k=3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b&d=apiexamples.powr.com&x=both&t=true",
-            "cdn": false,
-            "cdn_url": "http://labs-cdn.revcontent.com/build/revexit.min.js?w=6181&p=945&k=3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b&d=apiexamples.powr.com&x=both&t=true",
+            "script": "./build/revexit.min.js",
             "script_id": "rev2exit",
-            "auto_inject": false
+            "read_demo": true
         },
         {
             "name": "toaster",
             "templates": ["./tests/templates/sickchirpse.com.html", "./tests/templates/alphatrendz.com.html"],
-            "script": "./build/revtoaster.min.js",
-            "cdn": false,
-            "cdn_url": "http://labs-cdn.revcontent.com/build/revtoaster.min.js",
-            "auto_inject": true
+            "script": "./build/revtoaster.min.js"
         },
         {
             "name": "more",
             "templates": ["./tests/templates/reuters.com.html", "./tests/templates/rightwingnews.com.html", "./tests/templates/forums.androidcentral.com.html"],
-            "script": "./build/revmore.min.js",
-            "cdn": false,
-            "cdn_url": "http://labs-cdn.revcontent.com/build/revmore.min.js",
-            "auto_inject": true
+            "script": "./build/revmore.min.js"
         }
     ]
 }
