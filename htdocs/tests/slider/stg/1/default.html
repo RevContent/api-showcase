@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <!-- inject:js -->
+    <script type="text/javascript" id="" src="http://labs-stg.revcontent.com/build/revslider.min.js"></script>
+    <!-- endinject -->
+
+    <!-- inject:html -->
+    <p class="md-body-1">Slider or sometimes called a carousel is an engaging way to showcase Revcontent ads on your site! Give your readers the ability to navigate through all of the ads availible to your widget. Fully responsive and configurable to display as many rows and columns as you like at various breakpoints. Slider is a great choice for any site!</p>
+
+<h3 class="md-subhead">Add html element to the page</h3>
+
+<code hljs language="html">
+<div id="slider"></div>
+</code>
+
+<h3 class="md-subhead">Create a new RevFlicker</h3>
+
+<code hljs language="javascript">
+new RevSlider({
+    id: 'slider',
+    url: 'http://trends.revcontent.com/api/v1/',
+    api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+    pub_id : 945,
+    widget_id : 6181,
+    domain : 'apiexamples.powr.com'
+});
+</code>
+    <div id="rev-slider" ></div>
+<script>
+setTimeout(function() {
+    new RevSlider({
+        id: 'rev-slider',
+        url: 'http://trends.revcontent.com/api/v1/',
+        api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+        pub_id : 945,
+        widget_id : 6181,
+        domain : 'apiexamples.powr.com'
+    });
+});
+</script>
+    <!-- endinject -->
+</body>
+</html>
