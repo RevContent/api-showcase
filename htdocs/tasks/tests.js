@@ -50,7 +50,7 @@ gulp.task('tests', function() {
 function injectTests(data) {
 
   gulp.src(data.src)
-    .pipe(inject(gulp.src(['./app/resources/js/app/demo/'+ data.name +'/'+ data.folder +'/description.html', './app/resources/js/app/demo/'+ data.name +'/'+ data.folder +'/demo.html']), {
+    .pipe(inject(gulp.src(['./app/resources/js/app/demo/'+ data.name +'/'+ data.folder +'/demo.html']), {
       starttag: '<!-- inject:html -->',
       endtag: '<!-- endinject -->',
       transform: function (filePath, file) {
