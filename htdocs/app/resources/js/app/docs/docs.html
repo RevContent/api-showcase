@@ -16,7 +16,11 @@
 
             <h2 class="md-display-1">Request</h2>
 
-            <p class="md-subhead">All requests to the API are sent over HTTP and will utilize the following parameter set.</p>
+            <p class="md-subhead">Requests to the API can be sent over HTTP or using JSONP and will utilize the following parameter set.</p>
+
+            <div class="text-danger">All HTTP requests must be made using xhr.withCredentials = true;</div>
+
+            <p style="margin-top:4px;">More information on <code>withCredentials</code> can be found <a href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials">here</a> for standard XMLHttpRequest or <a href="http://api.jquery.com/jquery.ajax/">here</a> for jQuery AJAX usage.</p>
 
             <div class="table-responsive">
                 <table class="">
@@ -57,23 +61,23 @@
                             <td><code>user_ip</code></td>
                             <td><var>string</var></td>
                             <td>
-                                <code style="cursor:pointer;">
+                                <code>
                                     <span>Request IP</span>
-                                    <md-tooltip class="md-tooltip-lg md-tooltip-dark" md-direction="right">If not provided, the request IP is used. So if your calling the API with client side code, like Javascript, we can detect the user's IP, but if your using backend code you have to pass the user's IP.</md-tooltip>
                                 </code>
                             </td>
-                            <td>The end user's IP address required because response is tailored to end users geography.</td>
+                            <td>The end user's IP address required because response is tailored to end users geography.
+                            <br /><br />If not provided, the request IP is used. So if your calling the API with client side code, like Javascript, we can detect the user's IP, but if your using backend code you have to pass the user's IP.</td>
                         </tr>
                         <tr>
                             <td><code>user_agent</code></td>
                             <td><var>string</var></td>
                             <td>
-                                <code style="cursor:pointer;">
+                                <code>
                                     <span>Request User Agent</span>
-                                    <md-tooltip class="md-tooltip-lg md-tooltip-dark" md-direction="right">If not provided, the request user agent is used. So if your calling the API with client side code, like Javascript, we can detect the user's user agent, but if your using backend code you have to pass the user's user agent.</md-tooltip>
                                 </code>
                             </td>
                             <td>The end user's user agent is used to report segmented stats based on device type.
+                            <br /><br />If not provided, the request user agent is used. So if your calling the API with client side code, like Javascript, we can detect the user's user agent, but if your using backend code you have to pass the user's user agent.
                                 <br /><span class="text-danger" style="line-height:1.8">NOTE: <strong>This value must be URL-encoded into valid ASCII format.</strong></span></td>
                         </tr>
                         <tr>
@@ -146,12 +150,20 @@
 
                 <div>
                     <md-button ng-class="{'md-primary': (active.request == 'http')}" ng-click="active.request = 'http'" class="md-raised md-hue-1">http</md-button>
+                    <md-button ng-class="{'md-primary': (active.request == 'jsonp')}" ng-click="active.request = 'jsonp'" class="md-raised md-hue-1">jsonp</md-button>
                     <md-button ng-class="{'md-primary': (active.request == 'curl')}" ng-click="active.request = 'curl'" class="md-raised md-hue-1">curl</md-button>
                 </div>
 
                 <div class="margin-top">
                     <div ng-show="active.request == 'http'" hljs language="bash" escape="false"># HTTP GET Request
     http://trends.revcontent.com/api/v1/?api_key=your_api_key&pub_id=111&widget_id=222&domain=yourdomain.com</div>
+
+                    <div ng-show="active.request == 'jsonp'" hljs language="bash" escape="false"># JSONP
+    var script = document.createElement('script');
+
+    script.src = 'http://trends.revcontent.com/api/v1/?api_key=a5633fda442db914a2acbe77789fbe324a83d0fb&pub_id=890&widget_id=2594&domain=m.todayslifestyle.com&user_ip=71.100.91.34&referer=www.revcontent.com&format=json&sponsored_count=25&sponsored_offset=0&internal_count=3&internal_offset=2&callback=my_callback';
+
+    document.body.appendChild(script);</div>
 
                     <div ng-show="active.request == 'curl'" hljs language="bash" escape="false"># Sample cURL call with No Cache-control
     curl -X GET -H "Cache-Control: no-cache" http://trends.revcontent.com/api/v1/?api_key=your_api_key&pub_id=111&widget_id=222&domain=yourdomain.com</div>
@@ -193,6 +205,14 @@
                             <td>Who is providing the content.</td>
                         </tr>
                         <tr>
+                            <td><code>content_type</code></td>
+                            <td>Content type: article or video</td>
+                        </tr>
+                        <tr>
+                            <td><code>type</code></td>
+                            <td>Type: sponsored or internal.</td>
+                        </tr>
+                        <tr>
                             <td><code>uid</code></td>
                             <td>Unique content id to the system.</td>
                         </tr>
@@ -217,6 +237,7 @@
             "image": "//img.revcontent.com/?url=https://revcontent-production.s3.amazonaws.com/content/images/1430757674.jpg&pos=face&h=315&w=420",
             "url": "//trends.revcontent.com/click.php?d=eJwVk8kVxDAIQ1tiMVs5GEz%2FJYSc5mWwsZA%2BRaQQl1ztRMQNj2nKAxGiKOivuueBPbmY8t",
             "type": "sponsored",
+            "content_type": "article",
             "uid": "sponsored_248"
         },
         ...
@@ -230,6 +251,7 @@
             <image>//img.revcontent.com/?url=https://revcontent-production.s3.amazonaws.com/content/images/1430757674.jpg&pos=face&h=315&w=420</image>
             <url>//trends.revcontent.com/click.php?d=eJwVk8kVxDAIQ1tiMVs5GEz%2FJYSc5mWwsZA%2BRaQQl1ztRMQNj2nKAxGiKOivuueBPbmY8t</url>
             <type>sponsored</type>
+            <content-type>article</content-type>
             <uid>sponsored_248</uid>
         </element>
     ...
@@ -237,6 +259,21 @@
                 </div>
 
             </div>
+
+        </md-card>
+
+        <md-card>
+            <h2 class="md-display-1">Advanced Usage</h2>
+
+            <p class="md-subhead">For more advanced implementations widget and creative impressions must be managed. The API provides helper parameters for common use cases.</p>
+
+            <h3 class="md-title">UITM Parameter</h3>
+
+            <p style="margin-top:4px;">The UITM parameter allows a request to be made without registering either widget or creative impressions. Pass <code>uitm=true</code> to return a response without registering any impressions.</p>
+            <p style="margin-top:0;" class="text-danger">When using the <code>uitm</code> parameter the click link urls will be returned with <code>uitm=1</code> preventing clicks from being counted. If these urls are used remove this with <code>url.replace('&uitm=1', '').replace('uitm=1', '')</code></p sty>
+
+            <h3 class="md-title">FILL Parameter and offset rule</h3>
+            <p style="margin-top:4px;">Sometimes it is necessary to only register creative impressions while ignoring the widget impression. If either the <code>sponsored_offset</code> or <code>trending_offset</code> is greater than 0 the system will automatically only register creative impressions. This behavior can be forced by using the <code>fill</code> param passing <code>fill=true</code></p>
 
         </md-card>
 
