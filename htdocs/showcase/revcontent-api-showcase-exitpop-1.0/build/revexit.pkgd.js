@@ -10939,7 +10939,7 @@ return jQuery;
               choices_list = choices.split(','),
               total_choices = choices_list.length;
             if(total_choices > 0){
-                for(c=0;c<total_choices;c++){
+                for(var c=0;c<total_choices;c++){
                     var opt_html = '<option value="' + choices_list[c] + '">' + choices_list[c] + '</option>';
                     options_stack.push(opt_html);
                 }
