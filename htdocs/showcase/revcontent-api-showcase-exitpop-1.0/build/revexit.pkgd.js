@@ -11631,7 +11631,7 @@ return jQuery;
                 revpayload.push(fake_payload);
             }
 
-            for (i = 0; i < revpayload.length; i++) {
+            for (var i = 0; i < revpayload.length; i++) {
                 revpayload1 = revpayload1 + "<div class='revexititem' id='revexititem_"+i+"'><a rel='nofollow' title='"+revpayload[i].headline+"' href='"+revpayload[i].url+"' target='_blank'><div class='revexitimgholder' style='background-image: url(" + revUrlPrefixer(revpayload[i].image) +");'><div class='revexititemmask'><div class='revexitheadlinewrap'><div class='revexitheadline'>"+ revpayload[i].headline + revcontentAdProviderLabel(revcontentexitvars.po, revpayload[i].type, revpayload[i].brand) + "</div></div></div></div></a></div>";
             }
 
