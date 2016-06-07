@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <!-- inject:js -->
+    <script type="text/javascript" id="" src="http://localhost:8000/build/revflicker.min.js"></script>
+    <!-- endinject -->
+
+    <!-- inject:html -->
+    <!-- text_right -->
+<!-- show the text on the right -->
+
+<p class="md-body-1">hide_provider is used to turn on/off the Creative Provider</p>
+
+
+<h3 class="md-subhead">Available Options</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>
+                false (default)
+            </th>
+        </tr>
+        <tr>
+            <th>
+                true (Do NOT show Ad provider)
+            </th>
+        </tr>
+    </thead>
+</table>
+
+<h3 class="md-subhead">Example</h3>
+
+<code hljs language="javascript">
+new RevFlicker({
+    ...
+    text_right: true
+});
+</code>
+    <div id="rev-flicker" ></div>
+<script>
+setTimeout(function() {
+    new RevFlicker({
+        id: 'rev-flicker',
+        url: 'http://trends.revcontent.com/api/v1/',
+        api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+        pub_id : 945,
+        widget_id : 6181,
+        domain : 'apiexamples.powr.com',
+        text_right: true
+    });
+});
+</script>
+    <!-- endinject -->
+</body>
+</html>
