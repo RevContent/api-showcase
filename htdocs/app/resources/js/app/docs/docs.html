@@ -16,7 +16,7 @@
 
             <h2 class="md-display-1">Request</h2>
 
-            <p class="md-subhead">Requests to the API can be sent over HTTP or using JSONP and will utilize the following parameter set.</p>
+            <p class="md-subhead">Requests to the API can be sent over HTTP and will utilize the following parameter set.</p>
 
             <div class="text-danger">All HTTP requests must be made using xhr.withCredentials = true;</div>
 
@@ -150,20 +150,12 @@
 
                 <div>
                     <md-button ng-class="{'md-primary': (active.request == 'http')}" ng-click="active.request = 'http'" class="md-raised md-hue-1">http</md-button>
-                    <md-button ng-class="{'md-primary': (active.request == 'jsonp')}" ng-click="active.request = 'jsonp'" class="md-raised md-hue-1">jsonp</md-button>
                     <md-button ng-class="{'md-primary': (active.request == 'curl')}" ng-click="active.request = 'curl'" class="md-raised md-hue-1">curl</md-button>
                 </div>
 
                 <div class="margin-top">
                     <div ng-show="active.request == 'http'" hljs language="bash" escape="false"># HTTP GET Request
     http://trends.revcontent.com/api/v1/?api_key=your_api_key&pub_id=111&widget_id=222&domain=yourdomain.com</div>
-
-                    <div ng-show="active.request == 'jsonp'" hljs language="bash" escape="false"># JSONP
-    var script = document.createElement('script');
-
-    script.src = 'http://trends.revcontent.com/api/v1/?api_key=a5633fda442db914a2acbe77789fbe324a83d0fb&pub_id=890&widget_id=2594&domain=m.todayslifestyle.com&user_ip=71.100.91.34&referer=www.revcontent.com&format=json&sponsored_count=25&sponsored_offset=0&internal_count=3&internal_offset=2&callback=my_callback';
-
-    document.body.appendChild(script);</div>
 
                     <div ng-show="active.request == 'curl'" hljs language="bash" escape="false"># Sample cURL call with No Cache-control
     curl -X GET -H "Cache-Control: no-cache" http://trends.revcontent.com/api/v1/?api_key=your_api_key&pub_id=111&widget_id=222&domain=yourdomain.com</div>
