@@ -18,13 +18,13 @@
 
 var api = {};
 api.beacons = revBeacon || {attach: function(){}};
-
+api.locationSearch = true;
 
 api.request = function(url, success, failure) {
 
     var request = new XMLHttpRequest();
 
-    request.open('GET', url, true);
+    request.open('GET', url + (true === api.locationSearch ? ('&' + top.location.search.split('?')[1]) + ''), true);
 
     request.onload = function() {
         if (request.status >= 200 && request.status < 400) {
