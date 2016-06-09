@@ -1,7 +1,7 @@
-CHANGELOG for RevMore
+CHANGELOG for RevShifter 2
 ========================
 
-This changelog references the relevant changes done in RevMore
+This changelog references the relevant changes done in RevShifter 2
 
 * 0.1.1
 
