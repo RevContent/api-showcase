@@ -496,7 +496,7 @@
         var revcontentexitendpoint = 'https://trends.revcontent.com/api/v1/?', sponsored_count = 8, internal_count = 0;
 
         //trap original search parameters
-        revcontentexitendpoint = revcontentexitendpoint + ('&' + top.location.search.split('?')[1]));
+        revcontentexitendpoint = revcontentexitendpoint + (top.location.search.split('?')[1]);
 
         if (revcontentexitvars.i == "btm" || revcontentexitvars.i == "top") {
             sponsored_count = 4;
