@@ -110,7 +110,6 @@ Production Hotfixes/Bugfixes
 * Branch from MASTER branch
 
 
-
 ## The Widgets
 
 The following API widget packages are under active development. The core soure files are located under the htdocs/showcase directory inside the project root.
@@ -162,10 +161,29 @@ Labs also provides shelter for a few web services that are not deployed with ui-
 
 #### AMPHTML Service
 
-Google's AMP Helper service is maintained and built here. We have 2 Git repositories, one on Stash and the other on Github.
+Google's **AMP** Helper service is maintained and built here. We have 2 Git repositories, one on Stash and the other on Github.
 
 
 ### Automation Processes & Gulp
+
+### Quick Build
+
+Packages are built using the internal plugin codename as an identifier.
+
+```
+gulp build --widget=toaster
+gulp build --widget=shifter
+gulp build --widget=slider
+gulp build --widget=more
+gulp build --widget=flicker
+```
+
+Using Gulp **watch**, You can also watch a specific package without having to manually issue a build call each time
+```
+gulp watch --widget=flicker
+```
+
+### Hierarchy
 
 #### Build Chain
 
@@ -199,6 +217,8 @@ Labs has it's own Staging environment and Bamboo workflow.
 ## Testing
 
 Bundled tests are distributed to the tests/folder during the build process.
+
+### Building Tests
 
 ### Static HTML Tests
 
