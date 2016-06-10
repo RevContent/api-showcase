@@ -111,7 +111,7 @@
     "name": "rev-toaster",
     "description": "Content Toaster",
     "homepage": "http://labs.revcontent.com",
-    "version": "0.1.3",
+    "version": "0.1.2",
     "js": "./showcase/revcontent-api-showcase-toaster-1.0/js/revtoaster.js",
     "css": [
       "./showcase/revcontent-api-showcase-toaster-1.0/css/revtoaster.css",
