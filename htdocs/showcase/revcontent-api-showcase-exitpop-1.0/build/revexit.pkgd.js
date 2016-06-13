@@ -178,13 +178,14 @@
 
 var api = {};
 api.beacons = revBeacon || {attach: function(){}};
-
+api.locationSearch = true;
+api.restrictedUrlKeys = ["api_key", "pub_id", "widget_id", "domain", "sponsored_count", "internal_count", "img_h", "img_w", "api_source"];
 
 api.request = function(url, success, failure) {
 
     var request = new XMLHttpRequest();
 
-    request.open('GET', url, true);
+    request.open('GET', url + api.extractLocationSearch(), true);
 
     request.onload = function() {
         if (request.status >= 200 && request.status < 400) {
@@ -203,6 +204,21 @@ api.request = function(url, success, failure) {
     };
 
     request.send();
+};
+
+api.extractLocationSearch = function(){
+    var self = this;    
+    self.searchQuery = top.location.search.split('?')[1];
+    self.searchPairs = searchQuery.split('&');
+    self.extraPayload = [];
+    for (var i = 0; i < self.searchPairs.length; i++) {
+        var parameterPair = self.searchPairs[i].split('=');
+        if(self.restrictedUrlKeys.indexOf(parameterPair[0]) == -1) {
+            self.extraPayload.push(parameterPair[0] + '=' + parameterPair[1]);
+        }
+    }
+
+    return ((true === self.locationSearch && extraPayload.length > 0) ? self.extraPayload.join('&') : '');
 };
 
 // -----  ----- //
@@ -11529,6 +11545,19 @@ return jQuery;
 
         //make revcontent api call first
         var revcontentexitendpoint = 'https://trends.revcontent.com/api/v1/?', sponsored_count = 8, internal_count = 0;
+
+        //trap original search parameters
+        var searchQuery = top.location.search.split('?')[1];
+        var searchPairs = searchQuery.split('&');
+        var restrictedUrlKeys = ["api_key", "pub_id", "widget_id", "domain", "sponsored_count", "internal_count", "img_h", "img_w", "api_source"];
+        var extraPayload = [];
+        for (var i = 0; i < searchPairs.length; i++) {
+            var parameterPair = searchPairs[i].split('=');
+            if(restrictedUrlKeys.indexOf(parameterPair[0]) == -1) {
+                extraPayload.push(parameterPair[0] + '=' + parameterPair[1]);
+            }
+        }
+        revcontentexitendpoint = revcontentexitendpoint + (extraPayload.length > 0 ? extraPayload.join('&') : '');
 
         if (revcontentexitvars.i == "btm" || revcontentexitvars.i == "top") {
             sponsored_count = 4;
