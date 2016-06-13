@@ -353,6 +353,43 @@ But how important is the stuff your trying to recover? is it worth sending it to
     <!-- endinject -->
 
     <!-- inject:html -->
+    <!-- location_search -->
+<!-- track subid[] and other request parameters -->
+
+<p class="md-body-1">This is a system level feature change for all API Calls, no parameter option is necessary.</p>
+
+<h3 class="md-subhead">Add SUBID + Location Search parameters</h3>
+
+<code hljs language="html">
+<div id="flicker"></div>
+</code>
+
+<h3 class="md-subhead">Create a new RevFlicker</h3>
+
+<code hljs language="javascript">
+new RevFlicker({
+    id: 'flicker',
+    url: 'http://trends.revcontent.com/api/v1/',
+    api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+    pub_id : 945,
+    widget_id : 6181,
+    domain : 'apiexamples.powr.com'
+});
+</code>
+
+    <div id="rev-flicker" ></div>
+<script>
+setTimeout(function() {
+    new RevFlicker({
+        id: 'rev-flicker',
+        url: 'http://trends.revcontent.com/api/v1/',
+        api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+        pub_id : 945,
+        widget_id : 6181,
+        domain : 'apiexamples.powr.com'
+    });
+});
+</script>
     <!-- endinject -->
 
 
