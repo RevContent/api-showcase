@@ -19,7 +19,6 @@
 var api = {};
 api.beacons = revBeacon || {attach: function(){}};
 api.locationSearch = true;
-api.restrictedUrlKeys = ["api_key", "pub_id", "widget_id", "domain", "sponsored_count", "internal_count", "img_h", "img_w", "api_source"];
 
 api.request = function(url, success, failure) {
 
@@ -48,13 +47,15 @@ api.request = function(url, success, failure) {
 
 api.extractLocationSearch = function(){
     var self = this;    
+    var restrictedUrlKeys = ["api_key", "pub_id", "widget_id", "domain", "sponsored_count", "internal_count", "img_h", "img_w", "api_source"];
     self.extraPayload = [];
     self.searchQuery = top.location.search.split('?')[1];
+    
     if(self.searchQuery !== undefined && self.searchQuery.length > 0) {
         self.searchPairs = self.searchQuery.split('&'); 
         for (var i = 0; i < self.searchPairs.length; i++) {
             var parameterPair = self.searchPairs[i].split('=');
-            if(self.restrictedUrlKeys.indexOf(parameterPair[0]) == -1) {
+            if(restrictedUrlKeys.indexOf(parameterPair[0]) == -1) {
                 self.extraPayload.push(parameterPair[0] + '=' + parameterPair[1]);
             }
         }
