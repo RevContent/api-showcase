@@ -48,17 +48,19 @@ api.request = function(url, success, failure) {
 
 api.extractLocationSearch = function(){
     var self = this;    
-    self.searchQuery = top.location.search.split('?')[1];
-    self.searchPairs = searchQuery.split('&');
     self.extraPayload = [];
-    for (var i = 0; i < self.searchPairs.length; i++) {
-        var parameterPair = self.searchPairs[i].split('=');
-        if(self.restrictedUrlKeys.indexOf(parameterPair[0]) == -1) {
-            self.extraPayload.push(parameterPair[0] + '=' + parameterPair[1]);
+    self.searchQuery = top.location.search.split('?')[1];
+    if(self.searchQuery !== undefined && self.searchQuery.length > 0) {
+        self.searchPairs = self.searchQuery.split('&'); 
+        for (var i = 0; i < self.searchPairs.length; i++) {
+            var parameterPair = self.searchPairs[i].split('=');
+            if(self.restrictedUrlKeys.indexOf(parameterPair[0]) == -1) {
+                self.extraPayload.push(parameterPair[0] + '=' + parameterPair[1]);
+            }
         }
     }
 
-    return ((true === self.locationSearch && extraPayload.length > 0) ? self.extraPayload.join('&') : '');
+    return ((true === self.locationSearch && self.extraPayload.length > 0) ? self.extraPayload.join('&') : '');
 };
 
 // -----  ----- //
