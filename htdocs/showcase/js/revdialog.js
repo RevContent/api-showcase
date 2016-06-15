@@ -10,22 +10,7 @@
 'use strict';
 
     var RevDialog = function() {
-        var that = this;
-        that.id = 'rev-opt-out';
-        //this.url = url;
-        //setTimeout(function() {that.render();}, 100);
-        that.resizeEnd;
-
-        that.addEventHandler(window, 'load', function() {
-            that.render();
-        });
-
-        that.addEventHandler(window, 'resize', function() {
-            clearTimeout(that.resizeEnd);
-            that.resizeEnd = setTimeout(function() {
-                that.resize();
-            }, 100);
-        });
+        this.id = 'rev-opt-out';
     };
 
     RevDialog.prototype.addEventHandler = function(elem,eventType,handler) {
@@ -74,52 +59,52 @@
 
 
     RevDialog.prototype.render = function() {
-        var html = '<div class="rd-box-wrap" style="display:none;">' +
-                        '<div class="rd-box-overlay" onclick="revDialog.closeDialog()"> &nbsp; </div>' +
-                        '<div class="rd-vertical-offset" >' +
-                            '<div class="rd-box rd-normal">' +
-                                '<div class="rd-header">' +
-                                    '<a class="rd-close-button" onclick="revDialog.closeDialog()">' +
-                                        '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>' +
-                                    '</a>' +
-                                '</div>' +
-                                '<div class="rd-content">' +
-                                    '<div class="rd-about rd-modal-content">' +
-                                        '<a href="http://www.revcontent.com" target="_blank" class="rd-logo"></a>' +
-                                        '<p id="main">The content you see here is paid for by the advertiser or content provider whose link you click on, and is recommended to you by <a href="http://www.revcontent.com" target="_blank">Revcontent</a>. As the leading platform for native advertising and content recommendation, <a href="http://www.revcontent.com" target="_blank">Revcontent</a> uses interest based targeting to select content that we think will be of particular interest to you. We encourage you to view our <a href="http://faq.revcontent.com/support/solutions/articles/5000615200-revcontent-s-privacy-policy">Privacy Policy</a> and your opt out options here: <a class="rc-opt-out-link" href="http://faq.revcontent.com/support/solutions/articles/5000615200" target="_blank">Opt Out Options</a></p>' +
-                                        '<div class="rd-well">' +
-                                    	'<h2>Want your content to appear on sites like this?</h2>' +
-                                    	'<p><a href="http://www.revcontent.com" target="_blank">Increase your visitor engagement now!</a></p>' +
+        var rendered = document.querySelector('#' + this.id);
+
+        if (!rendered) {
+            this.element = document.createElement('div');
+            this.element.className = 'revdialog';
+            this.element.id = this.id;
+
+            this.element.innerHTML = '<div class="rd-box-wrap">' +
+                            '<div class="rd-box-overlay" onclick="revDialog.closeDialog()"> &nbsp; </div>' +
+                            '<div class="rd-vertical-offset" >' +
+                                '<div class="rd-box rd-normal">' +
+                                    '<div class="rd-header">' +
+                                        '<a class="rd-close-button" onclick="revDialog.closeDialog()">' +
+                                            '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>' +
+                                        '</a>' +
+                                    '</div>' +
+                                    '<div class="rd-content">' +
+                                        '<div class="rd-about rd-modal-content">' +
+                                            '<a href="http://www.revcontent.com" target="_blank" class="rd-logo"></a>' +
+                                            '<p id="main">The content you see here is paid for by the advertiser or content provider whose link you click on, and is recommended to you by <a href="http://www.revcontent.com" target="_blank">Revcontent</a>. As the leading platform for native advertising and content recommendation, <a href="http://www.revcontent.com" target="_blank">Revcontent</a> uses interest based targeting to select content that we think will be of particular interest to you. We encourage you to view our <a href="http://faq.revcontent.com/support/solutions/articles/5000615200-revcontent-s-privacy-policy">Privacy Policy</a> and your opt out options here: <a class="rc-opt-out-link" href="http://faq.revcontent.com/support/solutions/articles/5000615200" target="_blank">Opt Out Options</a></p>' +
+                                            '<div class="rd-well">' +
+                                            '<h2>Want your content to appear on sites like this?</h2>' +
+                                            '<p><a href="http://www.revcontent.com" target="_blank">Increase your visitor engagement now!</a></p>' +
+                                            '</div>' +
                                         '</div>' +
                                     '</div>' +
                                 '</div>' +
                             '</div>' +
-                        '</div>' +
-                    '</div>';
+                        '</div>';
 
-        var el = document.querySelector('#'+this.id);
-        if (el) {this.remove(el);}
-        var wrap = document.createElement('div');
-        wrap.className = 'revdialog';
-        wrap.id = this.id;
-        wrap.innerHTML = html;
-        var bodyEl = document.getElementsByTagName("BODY")[0];
-        if (bodyEl !== undefined)
-            this.append(bodyEl, wrap);
+            this.append(document.body, this.element);
 
+            this.attachResize();
+        }
+        return this.element;
     };
-
-
 
     RevDialog.prototype.showDialog = function(injectedDialog) {
         var that = injectedDialog || this;
-        document.querySelector('.rd-box-wrap').style.display = 'block';
+        that.render().style.display = 'block';
         that.resize();
         return false;
     };
 
     RevDialog.prototype.closeDialog = function() {
-        document.querySelector('.rd-box-wrap').style.display = 'none';
+        this.element.style.display = 'none';
         return false;
     };
 
@@ -164,6 +149,17 @@
     RevDialog.prototype.append = function(el, html) {
         if (el !== undefined)
             el.appendChild(html);
+    };
+
+    RevDialog.prototype.attachResize = function() {
+        var resizeEnd;
+        var that = this;
+        this.addEventHandler(window, 'resize', function() {
+            clearTimeout(resizeEnd);
+            resizeEnd = setTimeout(function() {
+                that.resize();
+            }, 100);
+        });
     };
 
     RevDialog.prototype.remove = function(el) {

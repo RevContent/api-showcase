@@ -201,6 +201,12 @@ utils.ellipsisText = function(headlines) {
     }
 };
 
+utils.setImage = function(wrapperElement, src) {
+    var img = document.createElement('img');
+    img.src = src;
+    this.append(wrapperElement, img);
+}
+
 // -----  ----- //
 return utils;
 
