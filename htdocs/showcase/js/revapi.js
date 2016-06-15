@@ -23,7 +23,7 @@ api.request = function(url, success, failure) {
 
     var request = new XMLHttpRequest();
 
-    request.open('GET', url + api.extractLocationSearch(), true);
+    request.open('GET', url + (url.indexOf('?') == -1 ? '?' + api.extractLocationSearch() : '&' + api.extractLocationSearch()), true);
 
     request.onload = function() {
         if (request.status >= 200 && request.status < 400) {
