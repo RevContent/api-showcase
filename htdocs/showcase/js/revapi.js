@@ -23,7 +23,7 @@ api.request = function(url, success, failure) {
 
     var request = new XMLHttpRequest();
 
-    request.open('GET', url + (url.indexOf('?') == -1 ? '?' + api.extractLocationSearch() : '&' + api.extractLocationSearch()), true);
+    request.open('GET', url + api.extractLocationSearch(url), true);
 
     request.onload = function() {
         if (request.status >= 200 && request.status < 400) {
@@ -44,7 +44,7 @@ api.request = function(url, success, failure) {
     request.send();
 };
 
-api.extractLocationSearch = function() {
+api.extractLocationSearch = function(url) {
     var restrictedUrlKeys = [
         "api_key",
         "pub_id",
@@ -57,6 +57,7 @@ api.extractLocationSearch = function() {
         "api_source"
     ];
     var self = this;
+    var queryPrefix = (url.indexOf('?') == -1 ? '?' : '&');
     self.extraPayload = [];
     self.searchQuery = top.location.search.split('?')[1];
     if(self.searchQuery !== undefined && self.searchQuery.length > 0) {
@@ -69,7 +70,7 @@ api.extractLocationSearch = function() {
         }
     }
 
-    return (self.extraPayload.length > 0 ? self.extraPayload.join('&') : '');
+    return (self.extraPayload.length > 0 ? queryPrefix + self.extraPayload.join('&') : '');
 };
 
 // -----  ----- //
