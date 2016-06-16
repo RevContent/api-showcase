@@ -1,22 +1,242 @@
-API Showcase
-===
+# API Showcase
 
-The API Showcase provides examples of what's possible with the Revcontent API using jQuery plugins.
+The API Showcase provides examples of what's possible with the Revcontent API using jQuery plugins. To see the latest running build,
+please visit [http://labs.revcontent.com](http://labs.revcontent.com)
 
-Requirements
-===
+## Requirements
 
-#### Server
-- PHP
+To get up and running with Showcase Labs, learn about the following technologies involved before diving in. A majority
+of these technologies are already apart of your daily workflow.
 
-Repository
-----------
+* LAMP/WAMP/XAMP Stack
+* Angular JS (https://angularjs.org)
+* NPM (https://www.npmjs.co/)
+* Gulp (http://gulpjs.com)
+* Bower (http://bower.io)
+* Git (https://git-scm.com)
+
+## Getting Started
+
+1. Git Clone the latest DEVELOP branch of api-showcase into a workspace.
+2. Setup a Virtual Host pointing to your api-showcase/htdocs directory (i.e http://api-showcase.localhost).
+3. Install NPM Dependencies.
+4. Install Gulp Dependencies.
+5. Open Webrowser and run http://api-showcase.localhost (or whatever vhost you established in Step #2)
+6. Troubleshoot and resolve environment errors if showcase is not running.
+7. You are ready to start coding.
+
+## Git Repository
+
+This project can be located on Revcontent's Stash instance.
 
 [https://stash.clickbooth.com/projects/RV2/repos/api-showcase/browse](https://stash.clickbooth.com/projects/RV2/repos/api-showcase/browse)
 
+```
+git clone ssh://git@stash.clickbooth.com:7999/rv2/api-showcase.git
+```
 
-License
--------
+### Sample Virtual Host
+Here's an example vhost configuration if you are using Apache HTTPd. The root file is htdocs/index.php.
+
+```
+#Labs Virtual Host
+<VirtualHost *:80>
+    ServerAdmin developer@revcontent.com
+    DocumentRoot "/www/api-showcase/htdocs"
+    ServerName api-showcase.localhost
+    ServerAlias www.api-showcase.localhost
+    ErrorLog "/private/var/log/apache2/apishow-error_log"
+    CustomLog "/private/var/log/apache2/apishow-access_log" common
+        <Directory "/www/api-showcase/htdocs">
+        AllowOverride All
+        Options Indexes MultiViews FollowSymlinks
+        Order allow,deny
+        Allow from all
+        #Header Set Cache-Control no-cache
+        </Directory>
+</VirtualHost>
+```
+
+### Directory Layout
+
+Here's a look at the directory struture, some assets and resources are no longer in use and will be cleaned in a future effort. 
+
+```
+drwxr-xr-x   11 developer  rev2   374 Apr 29 00:50 .
+drwxr-xr-x  139 developer  rev2  4726 Jun  6 12:07 ..
+-rw-r--r--    1 developer  rev2    51 Oct 27  2015 .bowerrc
+drwxr-xr-x   16 developer  rev2   544 Jun 10 08:56 .git
+-rw-r--r--    1 developer  rev2   185 Apr 29 00:50 .gitignore
+-rw-r--r--    1 developer  rev2   116 Oct 27  2015 .gitmodules
+drwxr-xr-x    9 developer  rev2   306 Apr 29 01:38 .idea
+-rw-r--r--    1 developer  rev2  1202 Jun 10 08:55 README.md
+-rw-r--r--    1 developer  rev2   583 Apr 29 00:50 bower.json
+drwxr-xr-x   19 developer  rev2   646 Jun  6 13:01 htdocs
+-rw-r--r--    1 developer  rev2  1143 Nov 10  2015 npm-debug.log
+```
+
+### Installing Dependencies
+
+You must have a healty build environment in order to begin development on showcase labs.
+
+#### NPM
+Install node packages.
+
+```
+npm install
+```
+
+#### Bower
+Install bower packages.
+
+```
+bower install
+```
+
+
+### Git Workflow
+
+Deciding on what branch you'll make your change will depend on a few factors, such as deployment date, change scope and so forth.
+Generally speaking develop branch should contain the latest future (+stable) changes that are on the way to staging.
+
+For most changes, you'll want to branch from develop and send your PR there once code complete. For core issues that arise in production,
+creating 2 branches (from DEVELOP and MASTER) may be necessary in order to keep both environments in sync without affecting the forward development timeline.
+
+
+New Feature Changes
+* Branch from DEVELOP branch
+
+Production Hotfixes/Bugfixes
+* Branch from MASTER branch
+
+
+## The Widgets
+
+The following API widget packages are under active development. The core soure files are located under the htdocs/showcase directory inside the project root.
+
+```
+api-showcase/htdocs/showcase git:(develop)] ls
+
+revcontent-api-showcase-exitpop-1.0
+revcontent-api-showcase-flicker-1.0
+revcontent-api-showcase-revmore-1.0
+revcontent-api-showcase-shifter-2.0
+revcontent-api-showcase-slider-1.0
+revcontent-api-showcase-toaster-1.0
+```
+
+### Future Widgets
+
+```
+revcontent-api-showcase-endofgallery-1.0
+revcontent-api-showcase-scrollingexp-1.0
+
+```
+
+### Legacy or Inactive Widgets
+
+```
+revcontent-api-showcase-shifter-1.0 
+revcontent-api-showcase-instream-1.0
+revcontent-api-showcase-more-1.0
+
+```
+
+### RevExit (exit)
+
+### RevFlicker (flicker)
+
+### RevMore (more)
+
+### RevShifter (shifter)
+
+### RevSlider (slider)
+
+### RevToaster (toaster)
+
+
+### Standalone Services
+
+Labs also provides shelter for a few web services that are not deployed with ui-bproc or delivery.
+
+#### AMPHTML Service
+
+Google's **AMP** Helper service is maintained and built here. We have 2 Git repositories, one on Stash and the other on Github.
+
+
+### Automation Processes & Gulp
+
+### Quick Build
+
+Packages are built using the internal plugin codename as an identifier.
+
+```
+gulp build --widget=toaster
+gulp build --widget=shifter
+gulp build --widget=slider
+gulp build --widget=more
+gulp build --widget=flicker
+```
+
+Using Gulp **watch**, You can also watch a specific package without having to manually issue a build call each time
+```
+gulp watch --widget=flicker
+```
+
+### Hierarchy
+
+#### Build Chain
+
+Please see the Gulpfile.js configuration and its related subtasks to see how the build assets are assembled.
+
+#### Source Directory
+
+#### Build or "Dist" Files
+
+Build files necessary for production use are outputted to the htdocs/build directory.
+
+```
+amphtml/           
+     revcontent.amp.min.js
+revflicker.min.js 
+revshifter.min.js 
+revsofia.min.js
+revexit.min.js    
+revmore.min.js    
+revslider.min.js  
+revtoaster.min.js
+
+```
+
+
+## Staging
+
+Labs has it's own Staging environment and Bamboo workflow.
+
+
+## Testing
+
+Bundled tests are distributed to the tests/folder during the build process.
+
+### Building Tests
+
+### Static HTML Tests
+
+### Automated Testing
+
+
+## Deployment
+
+When you've completed a labs ticket, here's the process for getting deployed to production.
+
+
+## Known Issues
+
+
+## Roadmap
+
+
+## License
 
 ```
 This source file is closed source, strictly confidential and

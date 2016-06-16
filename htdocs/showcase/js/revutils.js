@@ -71,7 +71,8 @@ utils.extend = function( a, b ) {
     }
 
     for ( var prop in b ) {
-        if (typeof b[prop] == 'object') { // if the prop is an obj recurse
+        if (typeof b[prop] == 'object' &&
+        (Object.prototype.toString.call(b[prop]) == "[object Object]")) { // if the prop is an obj recurse
             c[prop] = this.extend(c[prop], b[prop]);
         } else {
             c[prop] = b[prop];
@@ -200,6 +201,12 @@ utils.ellipsisText = function(headlines) {
         }
     }
 };
+
+utils.setImage = function(wrapperElement, src) {
+    var img = document.createElement('img');
+    img.src = src;
+    this.append(wrapperElement, img);
+}
 
 // -----  ----- //
 return utils;
