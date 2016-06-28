@@ -19,29 +19,47 @@
 var api = {};
 api.beacons = revBeacon || {attach: function(){}};
 
-api.request = function(url, success, failure) {
+api.forceJSONP = true;
 
-    var request = new XMLHttpRequest();
+api.request = function(url, success, failure, JSONPCallback) {
 
-    request.open('GET', url + api.extractLocationSearch(url), true);
+    if (this.forceJSONP || window.XDomainRequest) {
+        JSONPCallback = JSONPCallback ? JSONPCallback : ('success' + this.getTimestamp());
+        window[JSONPCallback] = success;
+        var script = document.createElement('script');
+        script.src = url + api.extractLocationSearch(url) + '&callback=' + JSONPCallback;
+        document.body.appendChild(script);
+    } else {
+        var request = new XMLHttpRequest();
 
-    request.onload = function() {
-        if (request.status >= 200 && request.status < 400) {
-            try {
-                success(JSON.parse(request.responseText));
-            } catch(e) { }
-        } else if(failure) {
-            failure(request);
-        }
+        request.open('GET', url + api.extractLocationSearch(url), true);
+
+        request.onload = function() {
+            if (request.status >= 200 && request.status < 400) {
+                try {
+                    success(JSON.parse(request.responseText));
+                } catch(e) { }
+            } else if(failure) {
+                failure(request);
+            }
+        };
+
+        request.onerror = function() {
+            if (failure) {
+                failure(request);
+            }
+        };
+
+        request.send();
+    }
+};
+
+api.getTimestamp = function() {
+    var time = Date.now || function() {
+      return +new Date;
     };
 
-    request.onerror = function() {
-        if (failure) {
-            failure(request);
-        }
-    };
-
-    request.send();
+    return time();
 };
 
 api.extractLocationSearch = function(url) {
