@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <!-- inject:js -->
+    <script type="text/javascript" id="" src="http://labs-stg.revcontent.com/build/revtoaster.min.js"></script>
+    <!-- endinject -->
+
+    <!-- inject:html -->
+    <script>
+setTimeout(function() {
+    var toaster = new RevToaster({
+        testing: true,
+        url: 'http://trends.revcontent.com/api/v1/',
+        api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+        pub_id : 945,
+        widget_id : 6181,
+        domain : 'apiexamples.powr.com',
+        closed_hours: 0
+    });
+    toaster.show();
+});
+</script>
+    <!-- endinject -->
+</body>
+</html>

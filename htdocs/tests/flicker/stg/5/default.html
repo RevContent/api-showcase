@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <!-- inject:js -->
+    <script type="text/javascript" id="" src="http://labs-stg.revcontent.com/build/revflicker.min.js"></script>
+    <!-- endinject -->
+
+    <!-- inject:html -->
+    <div id="rev-flicker" ></div>
+<script>
+setTimeout(function() {
+    new RevFlicker({
+        id: 'rev-flicker',
+        url: 'http://trends.revcontent.com/api/v1/',
+        api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+        pub_id : 945,
+        widget_id : 6181,
+        domain : 'apiexamples.powr.com',
+        next_effect: false
+    });
+});
+</script>
+    <!-- endinject -->
+</body>
+</html>

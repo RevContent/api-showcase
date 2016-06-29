@@ -2,7 +2,7 @@
   "name": "rev-exit",
   "description": "Exit Pop",
   "homepage": "http://labs.revcontent.com",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "repository": {
     "url": "git:///Revcontent/api-showcase.git"
   },

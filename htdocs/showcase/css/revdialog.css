@@ -10,7 +10,7 @@
 }
 
 
-#rev-opt-out .rd-box-wrap { /* The div that shows/hides. */
+#rev-opt-out { /* The div that shows/hides. */
     display:none; /* starts out hidden */
     z-index:2147483641; /* High z-index to ensure it appears above all content */
 }

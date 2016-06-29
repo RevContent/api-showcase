@@ -290,6 +290,12 @@ utils.imagesLoaded = function(images) {
     return emitter;
 }
 
+utils.setImage = function(wrapperElement, src) {
+    var img = document.createElement('img');
+    img.src = src;
+    this.append(wrapperElement, img);
+}
+
 // -----  ----- //
 return utils;
 
