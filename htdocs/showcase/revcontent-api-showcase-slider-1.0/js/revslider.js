@@ -130,7 +130,10 @@ RevSlider({
             hide_footer: false,
             beacons: true,
             pagination_dots: false,
-            touch_direction: Hammer.DIRECTION_HORIZONTAL // don't prevent vertical scrolling
+            touch_direction: Hammer.DIRECTION_HORIZONTAL, // don't prevent vertical scrolling
+            overlay: false, // pass key value object { content_type: icon }
+            overlay_icons: false, // pass in custom icons or overrides
+            overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
         };
 
         // merge options
@@ -533,7 +536,7 @@ RevSlider({
     };
 
     //added to prevent default drag functionality in FF
-    RevSlider.prototype.preventDefault = function(){
+    RevSlider.prototype.preventDefault = function() {
         revUtils.addEventListener(this.element, 'mousedown', function(e) {
             e.preventDefault();
         });
@@ -871,6 +874,10 @@ RevSlider({
                 data = this.displayedItems[i];
 
             ad.style.height = this.getCellHeight() + 'px';
+
+            if (this.options.overlay !== false) {
+                revUtils.imageOverlay(ad.querySelectorAll('.rev-image')[0], data.content_type, this.options.overlay, this.options.overlay_position, this.options.overlay_icons);
+            }
 
             ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', ''));
             ad.querySelectorAll('a')[0].title = data.headline;

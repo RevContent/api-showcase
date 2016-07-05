@@ -8,10 +8,11 @@
   // universal module definition
     // browser global
     window.revUtils = factory(
-      window
+      window,
+      window.revOverlay
     );
 
-}( window, function factory( window ) {
+}( window, function factory( window, revOverlay ) {
 
 'use strict';
 
@@ -80,6 +81,13 @@ utils.extend = function( a, b ) {
     }
     return c;
 };
+
+utils.merge = function(a, b) {
+    for (var prop in b) {
+        a[prop] = b[prop];
+    }
+    return a;
+}
 
 utils.inArray = function(array, item) {
     for (var i = 0; i < array.length; i++) {
@@ -206,6 +214,11 @@ utils.setImage = function(wrapperElement, src) {
     var img = document.createElement('img');
     img.src = src;
     this.append(wrapperElement, img);
+}
+
+utils.imageOverlay = function(image, content_type, overlay, position, icons) {
+    var icons = this.merge(revOverlay.icons, icons); // merge any passed icons
+    revOverlay.image(image, content_type, overlay, position, icons);
 }
 
 // -----  ----- //

@@ -82,6 +82,7 @@ body {
 }
 
 #rev-flicker .rev-image {
+    position: relative;
     transition: background .5s ease-in-out;
     background: #eee;
 }
@@ -215,4 +216,8 @@ body {
 
 #rev-flicker.rev-flicker-text-overlay .rev-ad a:hover .rev-overlay:before {
     opacity: 1;
+}
+
+#rev-flicker {
+    @import '../../css/revoverlay';
 }

@@ -24,6 +24,7 @@
     "gulp-strip-debug": "^1.0.2",
     "yargs": "latest",
     "pump": "latest",
-    "gulp-notify": "~2"
+    "gulp-notify": "~2",
+    "gulp-sass": "~2.3.1"
   }
 }
