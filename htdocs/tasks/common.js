@@ -9,6 +9,7 @@ var header       = require('gulp-header');
 var gulp      = require('gulp');
 var pump      = require('pump');
 var notify    = require("gulp-notify");
+var sass      = require('gulp-sass');
 
 var widget = yargs.widget;
 
@@ -28,6 +29,10 @@ if (!config[widget]) {
 
 gulp.task('minifycss', function() {
     return gulp.src(config[widget].css)
+        .pipe(sass().on('error', function (err) {
+            notify().write(err);
+            this.emit('end');
+        }))
         .pipe(concat('rev'+ widget +'.min.css'))
         .pipe(autoprefixer({
             browsers: ['> 1%'],

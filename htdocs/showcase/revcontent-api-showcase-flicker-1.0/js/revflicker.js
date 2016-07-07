@@ -55,6 +55,7 @@ RevFlicker({
 'use strict';
 
     var RevFlicker = function(opts) {
+
         var defaults = {
             element: false,
             per_row: {
@@ -111,7 +112,10 @@ RevFlicker({
             user_ip: false,
             user_agent: false,
             hide_header: false,
-            hide_disclosure: false
+            hide_disclosure: false,
+            overlay: false, // pass key value object { content_type: icon }
+            overlay_icons: false, // pass in custom icons or overrides
+            overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
         };
 
         // merge options
@@ -593,9 +597,16 @@ RevFlicker({
                 }
                 var ad = ads[i],
                     data = resp[dataIndex];
+
+                revUtils.setImage(ad.querySelectorAll('.rev-image')[0], data.image);
+
+                if (that.options.overlay !== false) {
+                    revUtils.imageOverlay(ad.querySelectorAll('.rev-image')[0], data.content_type, that.options.overlay, that.options.overlay_position, that.options.overlay_icons);
+                }
+
                 ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', ''));
                 ad.querySelectorAll('a')[0].title = data.headline;
-                revUtils.setImage(ad.querySelectorAll('.rev-image')[0], data.image);
+
                 ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
                 if (that.options.hide_provider === false) {
                     ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;

@@ -404,3 +404,7 @@
 #rev-slider.rev-slider-text-overlay .rev-ad a:hover .rev-overlay:before {
     opacity: 1;
 }
+
+#rev-slider {
+    @import '../../css/revoverlay';
+}
