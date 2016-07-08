@@ -616,7 +616,10 @@ RevFlicker({
 
             that.resize();
 
-            revUtils.imagesLoaded(that.flickity.element.querySelectorAll('img')).once('done', function() {
+            // convert NodeList to array and then slice only visible images
+            var images = Array.prototype.slice.call(that.flickity.element.querySelectorAll('img')).slice(0, (that.perRow + 1));
+
+            revUtils.imagesLoaded(images).once('done', function() {
                 revUtils.addClass(that.containerElement, 'loaded');
                 that.registerImpressions(true);
                 that.attachRegisterImpressions();
