@@ -219,3 +219,7 @@ body.rev-toaster-loaded #rev-toaster{
     width: 15px;
     height: 15px;
 }
+
+#rev-toaster {
+    @import '../../css/revoverlay';
+}

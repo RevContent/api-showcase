@@ -58,7 +58,10 @@ RevMore({
             devices: [
                 'phone', 'tablet', 'desktop'
             ],
-            beacons: true
+            beacons: true,
+            overlay: false, // pass key value object { content_type: icon }
+            overlay_icons: false, // pass in custom icons or overrides
+            overlay_position: 'center' // center, top_left, top_right, bottom_right, bottom_left
         };
 
         // merge options
@@ -182,6 +185,9 @@ RevMore({
                 beacons:      this.options.beacons,
                 prevent_default_pan: false,
                 disclosure_text: this.options.disclosure_text,
+                overlay: this.options.overlay, // video: rectangle, square, circle1, circle2, triangle
+                overlay_icons: this.options.overlay_icons, // pass in custom icons or overrides
+                overlay_position: this.options.overlay_position, // center, top_left, top_right, bottom_right, bottom_left
                 multipliers: {
                     font_size: 3,
                     margin: -2.2,

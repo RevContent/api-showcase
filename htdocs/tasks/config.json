@@ -7,13 +7,14 @@
     "pkg": "./showcase/revcontent-api-showcase-slider-1.0/package.json",
     "js": "./showcase/revcontent-api-showcase-slider-1.0/js/revslider.js",
     "css": [
-        "./showcase/revcontent-api-showcase-slider-1.0/css/revslider.css",
+        "./showcase/revcontent-api-showcase-slider-1.0/css/revslider.scss",
         "./showcase/css/revdialog.css"
     ],
     "build": [
       "./vendor/hammerjs/hammer.js",
       "./vendor/mobile-detect/mobile-detect.js",
       "./vendor/any-grid/dist/any-grid.js",
+      "./showcase/js/revoverlay.js",
       "./showcase/js/revutils.js",
       "./showcase/js/revdialog.js",
       "./showcase/js/revdisclose.js",
@@ -23,12 +24,8 @@
       "./build/files/slider/revslider.embed.js"
     ],
     "watch": [
-      "./showcase/js/revutils.js",
-      "./showcase/js/revdialog.js",
-      "./showcase/js/revdisclose.js",
-      "./showcase/js/revdetect.js",
-      "./showcase/js/revbeacon.js",
-      "./showcase/js/revapi.js",
+      "./showcase/js/*",
+      "./showcase/css/*",
       "./vendor/any-grid/dist/any-grid.js",
       "./showcase/revcontent-api-showcase-slider-1.0/js/*",
       "./showcase/revcontent-api-showcase-slider-1.0/css/*"
@@ -80,12 +77,13 @@
     "js": "./showcase/revcontent-api-showcase-flicker-1.0/js/revflicker.js",
     "css": [
       "./vendor/flickity/css/flickity.css",
-      "./showcase/revcontent-api-showcase-flicker-1.0/css/revflicker.css",
+      "./showcase/revcontent-api-showcase-flicker-1.0/css/revflicker.scss",
       "./showcase/css/revdialog.css"
     ],
     "build": [
       "./vendor/flickity/dist/flickity.pkgd.js",
       "./vendor/mobile-detect/mobile-detect.js",
+      "./showcase/js/revoverlay.js",
       "./showcase/js/revutils.js",
       "./showcase/js/revdialog.js",
       "./showcase/js/revdisclose.js",
@@ -95,12 +93,8 @@
       "./build/files/flicker/revflicker.embed.js"
     ],
     "watch": [
-      "./showcase/js/revutils.js",
-      "./showcase/js/revdialog.js",
-      "./showcase/js/revdisclose.js",
-      "./showcase/js/revdetect.js",
-      "./showcase/js/revbeacon.js",
-      "./showcase/js/revapi.js",
+      "./showcase/js/*",
+      "./showcase/css/*",
       "./showcase/revcontent-api-showcase-flicker-1.0/js/*",
       "./showcase/revcontent-api-showcase-flicker-1.0/css/*",
       "./vendor/flickity/dist/flickity.pkgd.js"
@@ -113,12 +107,13 @@
     "version": "0.1.2",
     "js": "./showcase/revcontent-api-showcase-toaster-1.0/js/revtoaster.js",
     "css": [
-      "./showcase/revcontent-api-showcase-toaster-1.0/css/revtoaster.css",
+      "./showcase/revcontent-api-showcase-toaster-1.0/css/revtoaster.scss",
       "./showcase/css/revdialog.css"
     ],
     "build": [
       "./vendor/mobile-detect/mobile-detect.js",
       "./vendor/eventEmitter/EventEmitter.min.js",
+      "./showcase/js/revoverlay.js",
       "./showcase/js/revutils.js",
       "./showcase/js/revdialog.js",
       "./showcase/js/revdisclose.js",
@@ -128,6 +123,8 @@
       "./build/files/toaster/revtoaster.embed.js"
     ],
     "watch": [
+      "./showcase/js/*",
+      "./showcase/css/*",
       "./showcase/revcontent-api-showcase-toaster-1.0/js/*",
       "./showcase/revcontent-api-showcase-toaster-1.0/css/*"
     ]

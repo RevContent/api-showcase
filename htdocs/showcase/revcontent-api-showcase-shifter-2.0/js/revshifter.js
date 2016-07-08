@@ -72,7 +72,10 @@ RevShifter({
         disclosure_text: 'Ads by Revcontent',
         hide_footer: false,
         hide_provider: false,
-        beacons: true
+        beacons: true,
+        overlay: false, // pass key value object { content_type: icon }
+        overlay_icons: false, // pass in custom icons or overrides
+        overlay_position: 'center' // center, top_left, top_right, bottom_right, bottom_left
     };
 
     RevShifter = function(opts) {
@@ -155,7 +158,10 @@ RevShifter({
                     dual: (revDetect.mobile() ? false : true)
                 },
                 beacons: this.options.beacons,
-                touch_direction: Hammer.DIRECTION_ALL // prevent vertical scrolling
+                touch_direction: Hammer.DIRECTION_ALL, // prevent vertical scrolling
+                overlay: this.options.overlay, // video: rectangle, square, circle1, circle2, triangle
+                overlay_icons: this.options.overlay_icons, // pass in custom icons or overrides
+                overlay_position: this.options.overlay_position // center, top_left, top_right, bottom_right, bottom_left
             });
 
             if (!this.options.hide_footer && !revDetect.mobile()) {
