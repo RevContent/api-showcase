@@ -235,11 +235,11 @@ utils.imagesLoaded = function(images) {
 
         // If none of the checks above matched, simulate loading on detached element.
         this.proxyImage = new Image();
-        eventie.bind( this.proxyImage, 'load', this );
-        eventie.bind( this.proxyImage, 'error', this );
+        utils.addEventListener(this.proxyImage, 'load', this);
+        utils.addEventListener(this.proxyImage, 'error', this);
         // bind to image as well for Firefox. #191
-        eventie.bind( this.img, 'load', this );
-        eventie.bind( this.img, 'error', this );
+        utils.addEventListener(this.img, 'load', this);
+        utils.addEventListener(this.img, 'error', this);
         this.proxyImage.src = this.img.src;
     };
 
@@ -273,10 +273,10 @@ utils.imagesLoaded = function(images) {
     };
 
     LoadingImage.prototype.unbindEvents = function() {
-        eventie.unbind( this.proxyImage, 'load', this );
-        eventie.unbind( this.proxyImage, 'error', this );
-        eventie.unbind( this.img, 'load', this );
-        eventie.unbind( this.img, 'error', this );
+        utils.removeEventListener(this.proxyImage, 'load', this);
+        utils.removeEventListener(this.proxyImage, 'error', this);
+        utils.removeEventListener(this.img, 'load', this);
+        utils.removeEventListener(this.img, 'error', this);
     };
 
     // emit done event when all images have finished loading
