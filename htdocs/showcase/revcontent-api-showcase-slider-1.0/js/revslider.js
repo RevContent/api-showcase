@@ -154,7 +154,7 @@ RevSlider({
 
         revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-slider');
 
-        this.contentItems = [];
+        this.data = [];
 
         this.containerElement = document.createElement('div');
         this.containerElement.id = 'rev-slider';
@@ -464,11 +464,15 @@ RevSlider({
     RevSlider.prototype.updatePagination = function() {
 
         if (this.maxPages() <= 1) {
+            this.backBtn.style.display = 'none';
+            this.forwardBtn.style.display = 'none';
             this.mc.set({enable: false}); // disable touch events
             if (this.options.pagination_dots) {
                 revUtils.remove(this.paginationDotsContainer); // remove the pagination dots all together
             }
         } else {
+            this.backBtn.style.display = 'block';
+            this.forwardBtn.style.display = 'block';
             this.mc.set({enable: true});// make sure touch events are enabled
             if (this.options.pagination_dots && !this.paginationDotsContainer.parentNode) { // add pagination dots if not there
                 revUtils.prepend(this.innerContainerElement, this.paginationDotsContainer);
@@ -579,14 +583,14 @@ RevSlider({
             this.btnContainer.setAttribute('class', 'rev-btn-dual');
             revUtils.append(this.btnContainer, this.backBtn);
             revUtils.append(this.btnContainer, this.forwardBtn);
-            revUtils.append(this.innerContainerElement, this.btnContainer);
+            revUtils.append(this.innerElement, this.btnContainer);
         } else {
             if (this.options.buttons.back) {
-                revUtils.append(this.innerContainerElement, this.backBtn);
+                revUtils.append(this.innerElement, this.backBtn);
             }
 
             if (this.options.buttons.forward) {
-                revUtils.append(this.innerContainerElement, this.forwardBtn);
+                revUtils.append(this.innerElement, this.forwardBtn);
             }
         }
     };
@@ -814,13 +818,14 @@ RevSlider({
         var that = this;
 
         revApi.request(url, function(resp) {
-            that.contentItems = resp;
+            that.data = resp;
+
             that.updateDisplayedItems(that.options.visible);
 
             that.emitter.emitEvent('ready');
             that.ready = true;
 
-            imagesLoaded( that.grid.element, function() {
+            revUtils.imagesLoaded(that.grid.element.querySelectorAll('img')).once('done', function() {
                 revUtils.addClass(that.containerElement, 'loaded');
             });
         });
@@ -849,18 +854,14 @@ RevSlider({
 
         this.offset = ((this.page - 1) * this.limit);
 
-        var endIndex = this.offset + this.limit;
-        var moreItemsNeeded = 0;
-        if (endIndex > this.contentItems.length) {
-            endIndex = this.contentItems.length;
-            moreItemsNeeded = this.limit - (endIndex - this.offset);
-        }
         this.displayedItems = [];
-        for (var i = this.offset; i < endIndex; i++) {
-            this.displayedItems.push(this.contentItems[i]);
-        }
-        for (var i = 0; i < moreItemsNeeded; i++) {
-            this.displayedItems.push(this.contentItems[i]);
+        var dataIndex = this.offset;
+        for (var i = 0; i < this.limit; i++) {
+            if (!this.data[dataIndex]) { // go back to the beginning if there are more ads than data
+                dataIndex = 0;
+            }
+            this.displayedItems.push(this.data[dataIndex]);
+            dataIndex++;
         }
 
         if (this.options.max_headline) {
@@ -906,7 +907,11 @@ RevSlider({
     };
 
     RevSlider.prototype.maxPages = function() {
-        return Math.floor(this.contentItems.length / this.limit);
+        var maxPages = Math.ceil(this.data.length / this.limit);
+        if (maxPages > this.options.pages) {
+            maxPages = this.options.pages;
+        }
+        return maxPages;
     };
 
     RevSlider.prototype.attachButtonEvents = function() {

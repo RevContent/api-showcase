@@ -40,7 +40,8 @@
             "name": "toaster",
             "templates": [
                 "./tests/templates/sickchirpse.com.html",
-                "./tests/templates/alphatrendz.com.html"
+                "./tests/templates/alphatrendz.com.html",
+                "./tests/templates/indiansutras.com.html"
             ],
             "script": "./build/revtoaster.min.js"
         },
