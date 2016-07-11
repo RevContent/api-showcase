@@ -297,7 +297,8 @@ RevToaster({
                 this.getData(true);
             } else {
                 var that = this;
-                imagesLoaded( this.containerElement, function() {
+
+                revUtils.imagesLoaded(that.containerElement.querySelectorAll('img')).once('done', function() {
                     that.visible = true;
                     revUtils.addClass(document.body, 'rev-toaster-loaded');
                     if(true === that.options.beacons) { revApi.beacons.setPluginSource('toaster').attach(); }
