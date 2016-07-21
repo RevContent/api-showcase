@@ -32,6 +32,25 @@
       "./showcase/revcontent-api-showcase-slider-1.0/css/*"
     ]
   },
+  "image": {
+    "name": "rev-image",
+    "description": "Image ads",
+    "homepage": "http://labs.revcontent.com",
+    "version": "0.0.1",
+    "js": "./showcase/revcontent-api-showcase-image-1.0/js/revimage.js",
+    "css": [
+      "./showcase/revcontent-api-showcase-image-1.0/css/revimage.scss"
+    ],
+    "build": [
+      "./build/files/slider/revslider.pkgd.js",
+      "./build/files/image/revimage.embed.js"
+    ],
+    "watch": [
+      "./build/files/slider/revslider.pkgd.js",
+      "./showcase/revcontent-api-showcase-image-1.0/js/*",
+      "./showcase/revcontent-api-showcase-image-1.0/css/*"
+    ]
+  },
   "shifter": {
     "name": "rev-shifter",
     "description": "Content Shifter",
