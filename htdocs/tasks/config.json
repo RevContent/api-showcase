@@ -11,6 +11,7 @@
         "./showcase/css/revdialog.css"
     ],
     "build": [
+      "./vendor/es6-promise/es6-promise.js",
       "./vendor/hammerjs/hammer.js",
       "./vendor/mobile-detect/mobile-detect.js",
       "./vendor/any-grid/dist/any-grid.js",
