@@ -427,7 +427,7 @@ Author: michael@revcontent.com
     RevSlider.prototype.setPreloaderHeight = function() {
         if (this.options.text_right) { // base off text_right_height
             this.preloaderHeight = this.getTextRightHeight();
-            this.preloaderWidth = Math.round(this.preloaderHeight * (this.imageWidth / this.imageHeight) * 100) / 100;
+            this.preloaderWidth = Math.round(this.preloaderHeight * (this.imageWidth / this.imageHeight));
         } else {
             this.preloaderHeight = Math.round((this.grid.columnWidth - (this.padding * 2) - ( this.options.ad_border ? 2 : 0 )) * (this.imageHeight / this.imageWidth));
         }
