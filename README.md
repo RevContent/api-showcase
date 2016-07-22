@@ -1,6 +1,6 @@
 # API Showcase
 
-The API Showcase provides examples of what's possible with the Revcontent API using jQuery plugins. To see the latest running build,
+The API Showcase provides examples of what's possible with the Revcontent API. To see the latest running build,
 please visit [http://labs.revcontent.com](http://labs.revcontent.com)
 
 ## Requirements
@@ -19,8 +19,8 @@ of these technologies are already apart of your daily workflow.
 
 1. Git Clone the latest DEVELOP branch of api-showcase into a workspace.
 2. Setup a Virtual Host pointing to your api-showcase/htdocs directory (i.e http://api-showcase.localhost).
-3. Install NPM Dependencies.
-4. Install Gulp Dependencies.
+3. Install NPM Dependencies in htdocs folder. (npm install)
+4. Install Bower Dependencies in htdocs folder. (bower install)
 5. Open Webrowser and run http://api-showcase.localhost (or whatever vhost you established in Step #2)
 6. Troubleshoot and resolve environment errors if showcase is not running.
 7. You are ready to start coding.
@@ -59,7 +59,7 @@ Here's an example vhost configuration if you are using Apache HTTPd. The root fi
 
 ### Directory Layout
 
-Here's a look at the directory struture, some assets and resources are no longer in use and will be cleaned in a future effort. 
+Here's a look at the directory structure, some assets and resources are no longer in use and will be cleaned in a future effort. 
 
 ```
 drwxr-xr-x   11 developer  rev2   374 Apr 29 00:50 .
@@ -123,11 +123,13 @@ revcontent-api-showcase-revmore-1.0
 revcontent-api-showcase-shifter-2.0
 revcontent-api-showcase-slider-1.0
 revcontent-api-showcase-toaster-1.0
+revcontent-api-showcase-image-1.0
 ```
 
 ### Future Widgets
 
 ```
+revcontent-api-showcase-instream-1.0
 revcontent-api-showcase-endofgallery-1.0
 revcontent-api-showcase-scrollingexp-1.0
 
@@ -137,23 +139,36 @@ revcontent-api-showcase-scrollingexp-1.0
 
 ```
 revcontent-api-showcase-shifter-1.0 
-revcontent-api-showcase-instream-1.0
 revcontent-api-showcase-more-1.0
 
 ```
 
-### RevExit (exit)
+### Gulp build/watch
 
-### RevFlicker (flicker)
+Gulp tasks are located in the htdocs/tasks folder and use the config.json file. During development it is useful to ```watch``` the widget you are working on. This is done using the ```gulp watch --{widget}``` command where ```{widget}``` is the name of the widget to watch. The watch command monitors the files under the ```watch``` config in config.json for changes. When a change occurs it builds the appropriate files into the htdocs/build and htdocs/build/files directories. 
 
-### RevMore (more)
+If your widget relies on another widget such as RevSlider it can be useful to watch both widgets at the same time in separate console tabs, when there is a change to RevSlider the dependent widget will also be built.
 
-### RevShifter (shifter)
+The Gulp build task is similar to the watch command and is run using ```gulp build --{widget}```. This is the same task that is run when the watch command detects a change. Use this when you want to build without watching for changes. All files under the ```build`` config in config.json will be used to create the minified and packaged files. CSS/Sass will also be injected.
 
-### RevSlider (slider)
+#### Available widgets for {widget} option include: 
 
-### RevToaster (toaster)
+* flicker (RevFlicker)
+* more (RevMore)
+* shifter (RevShifter)
+* slider (RevSlider)
+* toaster (RevToaster)
+* image (RevImage)
 
+##### Examples
+
+```
+gulp build --widget=flicker
+```
+
+```
+gulp watch --widget=flicker
+```
 
 ### Standalone Services
 
@@ -162,32 +177,6 @@ Labs also provides shelter for a few web services that are not deployed with ui-
 #### AMPHTML Service
 
 Google's **AMP** Helper service is maintained and built here. We have 2 Git repositories, one on Stash and the other on Github.
-
-
-### Automation Processes & Gulp
-
-### Quick Build
-
-Packages are built using the internal plugin codename as an identifier.
-
-```
-gulp build --widget=toaster
-gulp build --widget=shifter
-gulp build --widget=slider
-gulp build --widget=more
-gulp build --widget=flicker
-```
-
-Using Gulp **watch**, You can also watch a specific package without having to manually issue a build call each time
-```
-gulp watch --widget=flicker
-```
-
-### Hierarchy
-
-#### Build Chain
-
-Please see the Gulpfile.js configuration and its related subtasks to see how the build assets are assembled.
 
 #### Source Directory
 
@@ -216,9 +205,11 @@ Labs has it's own Staging environment and Bamboo workflow.
 
 ## Testing
 
-Bundled tests are distributed to the tests/folder during the build process.
+Bundled tests are distributed to the tests/folder during the build process. And use the /htdocs/app/config/demos.json config file and code from /htdocs/app/resources/js/app/demo/{widget} directories. Specific site templates are held in the /htdocs/tests/templates directory.
 
 ### Building Tests
+
+Run ```gulp tests-files``` in order to build the test files into /htdocs/tests/{widget} directories. For each of template listed in /htdocs/app/config/demos.json and demo in /htdocs/app/resources/js/app/demo/{widget} a file will be added to the /htdocs/tests/{widget} directories.
 
 ### Static HTML Tests
 
