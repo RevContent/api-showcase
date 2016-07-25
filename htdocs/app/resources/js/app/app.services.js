@@ -70,6 +70,13 @@ app.service('widgets', function() {
             description: 'Rev up your valuable image real estate with the RevImage widget! As your image makes its way into view RevImage transitions from the bottom drawing attention where the eyes are already focused. Add a timeout to delay the ad from showing. Optimized for all devices and screen sizes, RevImage is a sure fire way to increase RPMs and monetize in a new and exciting way!',
             link: 'revcontent-api-showcase-image-1.0/index.html',
             bg: '#434f5e'
+        },
+        'amp': {
+            title: 'AMP HTML',
+            img: 'amp.jpg',
+            description: 'AMP is a way to build web pages for static content that render fast. AMP HTML is HTML with some restrictions for reliable performance and some extensions for building rich content beyond basic HTML. The AMP JS library ensures the fast rendering of AMP HTML pages. The Google AMP Cache can be used to serve cached AMP HTML pages. So go ahead, amplify the web!',
+            link: 'revcontent-api-showcase-amp-1.0/index.html',
+            bg: '#3382BA'
         }
         //'scrolling-exp': {
           //  title: 'Scrolling Experience',

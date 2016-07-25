@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>AMP Example</title>
+
+    <link rel="canonical" href="http://blog.revcontent.com/revcontent-partners-with-google-amp-for-better-user-experience-on-mobile" />
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+
+    <link href="css/style.css" rel="stylesheet">
+
+    <link href="css/example.css" rel="stylesheet">
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+
+    <!-- AMPHTML! -->
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Showcase Example </a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#">Life</a>
+                    </li>
+                    <li>
+                        <a href="#">News</a>
+                    </li>
+                    <li>
+                        <a href="#">Style</a>
+                    </li>
+                    <li>
+                        <a href="#">Culture</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Fake Page Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">AMP Mobile</h1>
+            </div>
+        </div>
+
+        <div class="alert alert-danger" role="alert">This example is designed for a mobile device, it might have responsive sizing issues on other resolutions.</div>
+
+        <h3>Pic text and double link list</h3>
+
+        <hr />
+
+<!--    alternate heights sizing for bootstrap
+        <amp-ad width="320" height="470"
+                layout="responsive"
+                heights="(min-width:320px) and (max-width:480px) 440vw, (min-width:480px) and (max-width:768px) 110vw, (min-width:768px) and (max-width:1280px) 70vw, (min-width: 1280px) and (max-width: 1600px) 45vw, (min-width: 1600px) 40vw, 150vh"
+                type="revcontent"
+                data-wrapper="rcjsload_2ff711"
+                data-endpoint="trends.revcontent.com"
+                data-ssl="true"
+                data-id="2723">
+
+            <div placeholder>200 Billion Content recommendations!</div>
+            <div fallback>200 Billion Content recommendations!</div>
+        </amp-ad> -->
+
+        <amp-ad width="320" height="470"
+                layout="responsive"
+                heights="(min-width:320px) and (max-width:480px) 440vw, (min-width:480px) and (max-width:768px) 110vw, (min-width:768px) and (max-width:1280px) 70vw, (min-width: 1280px) and (max-width: 1600px) 45vw, (min-width: 1600px) 40vw, 150vh"
+                type="revcontent"
+                data-wrapper="rcjsload_2ff711"
+                data-endpoint="trends.revcontent.com"
+                data-ssl="true"
+                data-id="2723">
+
+            <div placeholder>200 Billion Content recommendations!</div>
+            <div fallback>200 Billion Content recommendations!</div>
+        </amp-ad>
+
+        <h3>Pic text</h3>
+        <hr />
+
+        <amp-ad id="test" width="400" height="260" layout="responsive" type="revcontent" heights="(min-width: 1440px) calc(0.35*100vw), (min-width: 1280px) calc(0.50*100vw), (min-width: 1142px) calc(0.6*100vw),(min-width: 1024px) calc(0.6*100vw), (min-width: 768px) calc(0.65*100vw), (min-width: 480px) calc(0.30*100vw), calc(2.2*100vw)" data-wrapper="rcjsload_3804df" data-ssl="true" data-id="22701" class="-amp-element -amp-layout-responsive -amp-layout-size-defined -amp-layout" id="AMP_10"></amp-ad>
+
+
+        <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Copyright &copy; Your Website 2015</p>
+                </div>
+            </div>
+            <!-- /.row -->
+        </footer>
+
+    </div>
+   <!-- /. Fake Page Content -->
+
+</body>
+
+
+</html>
