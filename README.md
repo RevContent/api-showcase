@@ -87,7 +87,7 @@ npm install
 ```
 
 #### Bower
-Install bower packages.
+Install bower packages. There are 2 bower files, one in the project root for site dependencies and one in the htdocs folder for widget dependencies. Navigate to each folder and run ```bower install``` to get the necessary dependencies.
 
 ```
 bower install
