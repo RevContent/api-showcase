@@ -20,6 +20,7 @@
     "bootpag": "~1",
     "angular-highlightjs": "latest",
     "re-tree": "0.0.2",
-    "ng-device-detector": "2.0.2"
+    "ng-device-detector": "2.0.2",
+    "mobile-detect": "~1"
   }
 }
