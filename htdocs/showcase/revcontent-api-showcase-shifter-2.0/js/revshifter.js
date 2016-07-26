@@ -145,7 +145,6 @@ RevShifter({
                 ad_border: this.options.inner_widget_options.ad_border,
                 text_right: this.options.inner_widget_options.text_right,
                 text_right_height: this.options.inner_widget_options.text_right_height,
-                is_layout_instant: true,
                 disclosure_text: this.options.disclosure_text,
                 hide_provider: this.options.hide_provider,
                 hide_header: true,
@@ -154,8 +153,7 @@ RevShifter({
                     forward: true,
                     back: true,
                     size: 40,
-                    position: 'inside',
-                    dual: (revDetect.mobile() ? false : true)
+                    position: (revDetect.mobile() ? 'inside' : 'dual')
                 },
                 beacons: this.options.beacons,
                 touch_direction: Hammer.DIRECTION_ALL, // prevent vertical scrolling

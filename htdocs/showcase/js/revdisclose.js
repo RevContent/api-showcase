@@ -45,7 +45,7 @@
 
     RevDisclose.prototype.setDisclosureText = function(disclosure){
         var self = this;
-        self.disclosureText = (disclosure.length > 2) ? disclosure.toString() : self.defaultDisclosureText;
+        self.disclosureText = (disclosure.length > 1) ? disclosure.toString() : self.defaultDisclosureText;
         self.truncateDisclosure();
     };
 

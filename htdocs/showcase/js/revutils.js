@@ -130,6 +130,13 @@ utils.remove = function(el) {
     }
 }
 
+utils.wrap = function(el, wrapper) {
+    var parent = el.parentNode;
+
+    wrapper.appendChild(el);
+    parent.appendChild(wrapper);
+}
+
 utils.next = function(el) {
     function nextElementSibling(el) {
         do { el = el.nextSibling; } while ( el && el.nodeType !== 1 );
@@ -186,6 +193,13 @@ utils.transformCss = function(el, css) {
     el.style.MsTransform = css;
     el.style.WebkitTransform = css;
     el.style.OTransform = css;
+};
+
+utils.transitionCss = function(el, css) {
+    el.style.transition = css;
+    el.style.MsTransition = css;
+    el.style.WebkitTransition = css;
+    el.style.OTransition = css;
 };
 
 utils.transitionDurationCss = function(el, css) {

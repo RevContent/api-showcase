@@ -63,6 +63,13 @@ app.service('widgets', function() {
             description: 'Studies show that Facebook-referred mobile users never reach the bottom of the article. By truncating the page, RevMore increase the visibility of content recommendations from standard Revcontent widgets.',
             link: 'revcontent-api-showcase-more-1.0/index.html',
             bg: '#5B7D89'
+        },
+        'revimage': {
+            title: 'RevImage',
+            img: 'revimage.jpg',
+            description: 'Rev up your valuable image real estate with the RevImage widget! As your image makes its way into view RevImage transitions from the bottom drawing attention where the eyes are already focused. Add a timeout to delay the ad from showing. Optimized for all devices and screen sizes, RevImage is a sure fire way to increase RPMs and monetize in a new and exciting way!',
+            link: 'revcontent-api-showcase-image-1.0/index.html',
+            bg: '#434f5e'
         }
         //'scrolling-exp': {
           //  title: 'Scrolling Experience',
