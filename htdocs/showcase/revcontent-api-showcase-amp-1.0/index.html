@@ -25,6 +25,8 @@
     <!-- AMPHTML! -->
     <script async src="https://cdn.ampproject.org/v0.js"></script>
 
+    <script src="/app/resources/vendor/mobile-detect/mobile-detect.js"></script>
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -79,7 +81,7 @@
             </div>
         </div>
 
-        <div class="alert alert-danger" role="alert">This example is designed for a mobile device, it might have responsive sizing issues on other resolutions.</div>
+        <div class="alert alert-danger hide" id="mobile-alert" role="alert">This example is designed for a mobile device, it might have responsive sizing issues on other resolutions.</div>
 
         <h3>Pic text and double link list</h3>
 
@@ -115,6 +117,23 @@
 
     </div>
    <!-- /. Fake Page Content -->
+
+   <script type="text/javascript">
+
+        var removeClass = function(el, className) {
+            if (!el) return false;
+            if (el.classList)
+                el.classList.remove(className);
+            else
+                el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+        };
+
+       var detect = new MobileDetect(window.navigator.userAgent);
+
+       if (!detect.mobile()) {
+            removeClass(document.getElementById('mobile-alert'), 'hide');
+       }
+   </script>
 
 </body>
 
