@@ -845,18 +845,9 @@ Author: michael@revcontent.com
 
             ad.style.height = this.getCellHeight() + 'px';
 
-            ad.querySelectorAll('.rev-image')[0].style.height = this.preloaderHeight + 'px';
-            ad.querySelectorAll('.rev-headline')[0].style.maxHeight = this.headlineMaxHeight + 'px';
-            ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
-            ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
-            ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
-
-            if(that.options.hide_provider === false) {
-                ad.querySelectorAll('.rev-provider')[0].style.margin = this.providerMarginTop + 'px ' + this.innerMargin + 'px 0';
-                ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize + 'px';
-                ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
-                ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight + 'px';
-            }
+            this.resizeImage(ad.querySelectorAll('.rev-image')[0]);
+            this.resizeHeadline(ad.querySelectorAll('.rev-headline')[0]);
+            this.resizeProvider(ad.querySelectorAll('.rev-provider')[0]);
 
             ad.querySelectorAll('.rev-headline h3')[0].innerHTML = this.displayedItems[i].headline;
         }
@@ -873,6 +864,28 @@ Author: michael@revcontent.com
         this.emitter.emitEvent('resized');
     };
 
+    RevSlider.prototype.resizeImage = function(el) {
+        el.style.height = this.preloaderHeight + 'px';
+        el.style.width = this.getImageWidth();
+    };
+
+    RevSlider.prototype.resizeHeadline = function(el) {
+        el.style.maxHeight = this.headlineMaxHeight + 'px';
+        el.style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
+        el.firstChild.style.fontSize = this.headlineFontSize +'px';
+        el.firstChild.style.lineHeight = this.headlineLineHeight +'px';
+    };
+
+    RevSlider.prototype.resizeProvider = function(el) {
+        if(this.options.hide_provider) {
+            return;
+        }
+        el.style.margin = this.providerMarginTop + 'px ' + this.innerMargin + 'px 0';
+        el.style.fontSize = this.providerFontSize + 'px';
+        el.style.lineHeight = this.providerLineHeight + 'px';
+        el.style.height = this.providerLineHeight + 'px';
+    };
+
     RevSlider.prototype.checkEllipsis = function() {
         if (this.options.max_headline && !this.options.text_right) { // text_right should be limited, but don't waste for max_headline only
             return;
@@ -885,11 +898,15 @@ Author: michael@revcontent.com
         return this.grid.getPerRow() * (this.options.rows[this.grid.getBreakPoint()] ? this.options.rows[this.grid.getBreakPoint()] : this.options.rows);
     };
 
+    RevSlider.prototype.getImageWidth = function() {
+         return typeof this.preloaderWidth === 'undefined' ? 'auto' : this.preloaderWidth + 'px';
+    };
+
     RevSlider.prototype.createNewCell = function() {
-        var imgWidth = typeof this.preloaderWidth === 'undefined' ? 'width:auto;' : 'width:' + this.preloaderWidth + 'px;';
+
         var html = '<div class="rev-ad" style="height: '+ this.getCellHeight() + 'px;' + (this.options.ad_border ? 'border:1px solid #eee' : '') +'">' +
             '<a href="" target="_blank">' +
-            '<div class="rev-image" style="'+ imgWidth +'height:'+ this.preloaderHeight +'px">' +
+            '<div class="rev-image" style="width:'+ this.getImageWidth() +';height:'+ this.preloaderHeight +'px">' +
             '<img src=""/>' +
             '</div>' +
             '<div class="rev-headline-brand">' +
@@ -991,15 +1008,10 @@ Author: michael@revcontent.com
             ad.querySelectorAll('img')[0].setAttribute('src', data.image);
             ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
             ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
-            ad.querySelectorAll('.rev-image')[0].style.height = this.preloaderHeight + 'px';
-            ad.querySelectorAll('.rev-headline')[0].style.maxHeight = this.headlineMaxHeight + 'px';
-            ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
-            ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
-            ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.margin = this.providerMarginTop + 'px ' + this.innerMargin + 'px 0';
-            ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
-            ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
+
+            this.resizeImage(ad.querySelectorAll('.rev-image')[0]);
+            this.resizeHeadline(ad.querySelectorAll('.rev-headline')[0]);
+            this.resizeProvider(ad.querySelectorAll('.rev-provider')[0]);
         }
 
         if (registerImpressions) {
