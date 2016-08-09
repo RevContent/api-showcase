@@ -95,17 +95,18 @@ Author: michael@revcontent.com
             return;
         }
 
-        this.container();
-        this.wrapper();
-        this.innerWidget();
-        this.appendElements();
-        this.checkSmall();
-        this.attachCloseButtonEvent();
-        this.addCss();
-
         this.emitter = new EventEmitter();
         var that = this;
         revUtils.imagesLoaded([this.element]).once('done', function() {
+            that.container();
+            that.wrapper();
+            that.wrapperWidth();
+            that.innerWidget();
+            that.bindResize();
+            that.appendElements();
+            that.checkSmall();
+            that.attachCloseButtonEvent();
+            that.addCss();
             that.attachScrollEvents();
             that.imageVisible();
         });
@@ -125,8 +126,13 @@ Author: michael@revcontent.com
         revUtils.append(this.container, this.wrapper);
     };
 
+    RevImage.prototype.wrapperWidth = function() {
+        this.wrapper.style.maxWidth = this.element.offsetWidth + 'px';
+    };
+
     RevImage.prototype.innerWidget = function() {
         this.innerWidget = new RevSlider({
+            is_resize_bound: false, // need to listen to window resize so don't double bind
             api_source: 'image',
             visible: false,
             element: [this.wrapper],
@@ -154,6 +160,29 @@ Author: michael@revcontent.com
             overlay_position: this.options.overlay_position // center, top_left, top_right, bottom_right, bottom_left
         });
     };
+
+    RevImage.prototype.bindResize = function() {
+        this.resizeListener = this.resize.bind(this);
+        revUtils.addEventListener(window, 'resize', this.resizeListener);
+    };
+
+    RevImage.prototype.resize = function() {
+        if ( this.resizeTimeout ) {
+            clearTimeout( this.resizeTimeout );
+        }
+
+        var that = this;
+        function delayed() {
+            that.wrapperWidth();
+            that.checkSmall();
+            // manually handle the resize layout b/c is_resize_bound: false
+            that.innerWidget.grid.layout();
+            that.innerWidget.resize();
+            delete that.resizeTimeout;
+        }
+
+        this.resizeTimeout = setTimeout( delayed, 100 );
+    }
 
     RevImage.prototype.isSmall = function() {
          return this.wrapper.offsetWidth < 400;
@@ -286,6 +315,7 @@ Author: michael@revcontent.com
     RevImage.prototype.destroy = function() {
         this.innerWidget.destroy();
         revUtils.removeEventListener(window, 'scroll', this.scrollListener);
+        revUtils.removeEventListener(window, 'resize', this.resizeListener);
         revUtils.removeEventListener(this.closeElement, 'click', this.closeListener);
         revUtils.remove(this.wrapper);
     };
