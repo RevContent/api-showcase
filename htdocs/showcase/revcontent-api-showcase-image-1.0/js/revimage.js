@@ -201,13 +201,6 @@ Author: michael@revcontent.com
         revUtils.addClass(this.header, 'rev-header');
 
         this.sponsoredElement = document.createElement('div');
-
-        var disclosureText = this.options.disclosure_text;
-        if (this.isSmall()) {
-            disclosureText = this.options.disclosure_text_small;
-        }
-
-        this.sponsoredElement.innerHTML = revDisclose.getDisclosure(disclosureText);
         revUtils.addClass(this.sponsoredElement, 'rev-sponsored');
 
         this.closeElement = document.createElement('div');
@@ -222,10 +215,15 @@ Author: michael@revcontent.com
         revUtils.prepend(this.wrapper, this.head);
     };
 
+    // disclosure and rev-img-small class depending on isSmall
     RevImage.prototype.checkSmall = function() {
+        revUtils.removeClass(this.container, 'rev-img-small');
+        var disclosureText = this.options.disclosure_text;
         if (this.isSmall()) {
+            disclosureText = this.options.disclosure_text_small;
             revUtils.addClass(this.container, 'rev-img-small');
         }
+        this.sponsoredElement.innerHTML = revDisclose.getDisclosure(disclosureText);
     };
 
     RevImage.prototype.addCss = function() {
