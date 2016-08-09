@@ -537,9 +537,19 @@ Author: michael@revcontent.com
             }
         } else if (difference > 0) {
             for (var i = 0; i < difference; i++) {
-                revUtils.append(this.paginationDots, document.createElement('div'));
+                this.appendDot();
             }
         }
+    };
+
+    RevSlider.prototype.appendDot = function(active) {
+        var dot = document.createElement('div');
+        revUtils.addClass(dot, 'rev-pagination-dot');
+        dot.innerHTML = '<div></div>';
+        if (active) {
+            revUtils.addClass(dot, 'rev-active');
+        }
+        revUtils.append(this.paginationDots, dot);
     };
 
     RevSlider.prototype.paginationDots = function() {
@@ -551,13 +561,7 @@ Author: michael@revcontent.com
         revUtils.addClass(this.paginationDots, 'rev-pagination-dots');
 
         for (var i = 0; i < this.options.pages; i++) {
-            var dot = document.createElement('div');
-            revUtils.addClass(dot, 'rev-pagination-dot');
-            dot.innerHTML = '<div></div>';
-            if (i === 0) {
-                revUtils.addClass(dot, 'rev-active');
-            }
-            revUtils.append(this.paginationDots, dot);
+            this.appendDot(i===0);
         }
 
         this.paginationDotsWrapper = document.createElement('div');
