@@ -488,7 +488,7 @@ Author: michael@revcontent.com
         this.headlineMaxHeight = maxHeight;
     };
 
-    RevSlider.prototype.updatePagination = function() {
+    RevSlider.prototype.updatePagination = function(checkPage) {
 
         if (this.maxPages() <= 1) {
             this.backBtn.style.display = 'none';
@@ -514,14 +514,6 @@ Author: michael@revcontent.com
 
         var children = this.paginationDots.childNodes
 
-        // update the active dot
-        for (var i = 0; i < children.length; i++) {
-            revUtils.removeClass(children[i], 'rev-active');
-            if ((i+1) == this.page) {
-                revUtils.addClass(children[i], 'rev-active');
-            }
-        }
-
         // make sure we don't have too many or too few dots
         var difference = (this.maxPages() - children.length);
 
@@ -538,6 +530,22 @@ Author: michael@revcontent.com
         } else if (difference > 0) {
             for (var i = 0; i < difference; i++) {
                 this.appendDot();
+            }
+        }
+
+        // check the page on resize in case the offset changes
+        if (checkPage) {
+            this.page = (this.offset / this.limit) + 1;
+            this.previousPage = Math.max(0, this.page - 1);
+        }
+
+        var children = this.paginationDots.childNodes
+
+        // update the active dot
+        for (var i = 0; i < children.length; i++) {
+            revUtils.removeClass(children[i], 'rev-active');
+            if ((i+1) == this.page) {
+                revUtils.addClass(children[i], 'rev-active');
             }
         }
     };
@@ -859,7 +867,7 @@ Author: michael@revcontent.com
         this.grid.option({transitionDuration: this.options.transition_duration});
 
         this.getAnimationDuration();
-        this.updatePagination();
+        this.updatePagination(true);
 
         this.emitter.emitEvent('resized');
     };
