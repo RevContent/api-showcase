@@ -8,7 +8,8 @@
     "imagesloaded": "~3",
     "mobile-detect": "~1",
     "flickity": "~1",
-    "any-grid": "remove-vertical-padding",
+    "any-grid": "master",
+    "es6-promise": "~3.2.2",
     "hammerjs": "~2"
   },
   "homepage": "https://api-v2.revcontent.com/",

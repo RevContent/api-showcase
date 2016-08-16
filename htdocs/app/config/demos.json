@@ -53,6 +53,11 @@
                 "./tests/templates/forums.androidcentral.com.html"
             ],
             "script": "./build/revmore.min.js"
+        },
+        {
+            "name": "image",
+            "templates": [],
+            "script": "./build/revimage.min.js"
         }
     ]
 }

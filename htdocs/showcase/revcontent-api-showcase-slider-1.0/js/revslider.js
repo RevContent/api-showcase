@@ -10,47 +10,6 @@ o888o  o888o `Y8bod8P'     `8'     8""88888P'  o888o o888o `Y8bod88P" `Y8bod8P' 
 Project: RevSlider
 Version: 1
 Author: michael@revcontent.com
-
-RevSlider({
-    api_key: 'your api_key',
-    pub_id: pub_id,
-    widget_id: widget_id,
-    domain: 'widget domain',
-    show_arrows: {
-        mobile: false,
-        desktop: true
-    },
-    rows: {
-        xxs: 2,
-        xs: 2,
-        sm: 2,
-        md: 2,
-        lg: 2,
-        xl: 2,
-        xxl: 2
-    },
-    per_row: {
-        xxs: 1,
-        xs: 1,
-        sm: 3,
-        md: 4,
-        lg: 5,
-        xl: 6,
-        xxl: 7
-    },
-    image_ratio: (revDetect.mobile() ? 'wide_rectangle' : 'rectangle'),
-    rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right'),
-    header: 'Trending Now',
-    devices: [
-        'phone', 'tablet', 'desktop'
-    ],
-    url: 'https://trends.revcontent.com/api/v1/',
-    ad_border: true,
-    disclosure_text: revDisclose.defaultDisclosureText,
-    hide_provider: false,
-    hide_header: false,
-    beacons: true
-});
 */
 
 // universal module definition
@@ -65,6 +24,7 @@ RevSlider({
     var RevSlider = function(opts) {
 
         var defaults = {
+            impression_tracker: [],
             api_source: 'slide',
             visible: true,
             element: false,
@@ -100,8 +60,9 @@ RevSlider({
             ],
             url: 'https://trends.revcontent.com/api/v1/',
             ad_border: true,
-            headline_size: 2,
+            headline_size: 3,
             max_headline: false,
+            min_headline_height: 17,
             text_overlay: false,
             vertical: false,
             wrap_pages: true, //currently the only supported option
@@ -112,7 +73,7 @@ RevSlider({
             text_right_height: 100,
             transition_duration: 0,
             multipliers: {
-                font_size: 0,
+                line_height: 0,
                 margin: 0,
                 padding: 0
             },
@@ -122,6 +83,7 @@ RevSlider({
                 back: true,
                 size: 40,
                 position: 'inside',
+                style: 'default',
                 dual: false
             },
             disclosure_text: revDisclose.defaultDisclosureText,
@@ -160,6 +122,7 @@ RevSlider({
         this.containerElement.id = 'rev-slider';
         revUtils.addClass(this.containerElement, 'rev-slider-' + (this.options.vertical ? 'vertical' : 'horizontal'));
         revUtils.addClass(this.containerElement, 'rev-slider-' + (this.options.text_right ? 'text-right' : 'text-bottom'));
+        revUtils.addClass(this.containerElement, 'rev-slider-buttons-' + (this.options.buttons.style));
 
         this.innerContainerElement = document.createElement('div');
         this.innerContainerElement.id = 'rev-slider-container';
@@ -200,11 +163,19 @@ RevSlider({
         this.page = 1;
         this.previousPage = 1;
 
+        this.paginationDots();
+
+        this.initButtons();
+
+        this.appendElements();
+
+        this.limit = this.getLimit();
+
+        this.grid.layout();
+
         this.setUp();
 
         this.getData();
-
-        this.appendElements();
 
         this.createCells();
 
@@ -219,19 +190,12 @@ RevSlider({
             this.innerContainerElement.style.padding = (this.options.buttons.back ? (this.options.buttons.size + 'px') : '0') + ' 0 ' + (this.options.buttons.forward ? (this.options.buttons.size + 'px') : '0');
         }
 
-        this.initButtons();
-
         this.initTouch();
 
-        this.paginationDots();
-
-        this.emitter.on( 'ready', function() {
+        this.dataPromise.then(function() {
             that.attachTouchEvents();
-
             that.attachButtonEvents();
         });
-
-        this.impressionTracker = [];
     };
 
     RevSlider.prototype.createCells = function() {
@@ -246,7 +210,7 @@ RevSlider({
     };
 
     RevSlider.prototype.setMultipliers = function() {
-        this.fontSizeMultiplier = Math.round( (.044 + Number((this.options.multipliers.font_size * .01).toFixed(2))) * 1000 ) / 1000;
+        this.lineHeightMultiplier = Math.round( (.06256 + Number((this.options.multipliers.line_height * .01).toFixed(2))) * 10000 ) / 10000;
         this.marginMultiplier = Math.round( (.05 + Number((this.options.multipliers.margin * .01).toFixed(2))) * 1000 ) / 1000;
         this.paddingMultiplier = Math.round( (.01 + Number((this.options.multipliers.padding * .01).toFixed(2))) * 1000 ) / 1000;
     };
@@ -425,9 +389,29 @@ RevSlider({
     };
 
     RevSlider.prototype.setUp = function() {
-        this.grid.layout();
-        this.limit = this.getLimit();
+        this.setImageSize();
 
+        this.setPreloaderHeight();
+
+        // hard code provider
+        this.providerFontSize = 11;
+        this.providerLineHeight = 16;
+        this.providerMarginTop = 2;
+
+        // headline calculation based on text_right_height or grid columnWidth and lineHeightMultiplier
+        this.setHeadlineLineHeight();
+        this.setHeadlineFontSize();
+        this.setHeadlineMarginTop();
+        this.setHeadlineMaxHeight();
+
+        this.innerMargin = Math.max(0, ((this.grid.columnWidth * this.paddingMultiplier).toFixed(2) / 1));
+    };
+
+    RevSlider.prototype.getTextRightHeight = function() {
+        return this.options.text_right_height[this.grid.getBreakPoint()] ? this.options.text_right_height[this.grid.getBreakPoint()] : this.options.text_right_height;
+    };
+
+    RevSlider.prototype.setImageSize = function() {
         if (this.options.image_ratio == 'square') {
             this.imageHeight = 400;
             this.imageWidth = 400;
@@ -438,30 +422,73 @@ RevSlider({
             this.imageHeight = 450;
             this.imageWidth = 800;
         }
-
-        this.preloaderHeight = Math.round((this.grid.columnWidth - (this.padding * 2) - ( this.options.ad_border ? 2 : 0 )) * (this.imageHeight / this.imageWidth));
-
-        if (this.options.text_right) {
-            this.preloaderHeight = this.options.text_right_height;
-            this.preloaderWidth = Math.round(this.preloaderHeight * (this.imageWidth / this.imageHeight) * 100) / 100;
-        }
-
-        this.headlineFontSize = Math.max(14, ((this.grid.columnWidth * this.fontSizeMultiplier).toFixed(2) / 1));
-
-        this.headlineLineHeight = ((this.headlineFontSize * 1.25).toFixed(2) / 1);
-        this.headlineHeight = ((this.headlineLineHeight * this.options.headline_size).toFixed(2) / 1);
-
-        this.headlineMarginTop = ((this.headlineLineHeight * .4).toFixed(2) / 1);
-
-        this.providerFontSize = ((this.headlineLineHeight / 2).toFixed(2)) / 1;
-        this.providerFontSize = this.providerFontSize < 11 ? 11 : this.providerFontSize;
-
-        this.providerLineHeight = Math.round(((this.providerFontSize * 1.8).toFixed(2) / 1));
-
-        this.innerMargin = Math.max(0, ((this.grid.columnWidth * this.paddingMultiplier).toFixed(2) / 1));
     };
 
-    RevSlider.prototype.updatePagination = function() {
+    RevSlider.prototype.setPreloaderHeight = function() {
+        if (this.options.text_right) { // base off text_right_height
+            this.preloaderHeight = this.getTextRightHeight();
+            this.preloaderWidth = Math.round(this.preloaderHeight * (this.imageWidth / this.imageHeight));
+        } else {
+            this.preloaderHeight = Math.round((this.grid.columnWidth - (this.padding * 2) - ( this.options.ad_border ? 2 : 0 )) * (this.imageHeight / this.imageWidth));
+        }
+    };
+
+    RevSlider.prototype.setHeadlineLineHeight = function() {
+        if (this.options.text_right) {
+            var headlineHeight = 0;
+            var availableSpace = (this.getTextRightHeight() - this.providerLineHeight - this.providerMarginTop);
+            for (var i = 6; i > 0; i--) {
+                headlineHeight = ((availableSpace) / i).toFixed(2) / 1;
+                if (headlineHeight > this.options.min_headline_height) {
+                    break;
+                }
+            }
+            this.headlineLineHeight = headlineHeight;
+        } else {
+            this.headlineLineHeight = Math.max(17, ((this.grid.columnWidth * this.lineHeightMultiplier).toFixed(2) / 1));
+        }
+    };
+
+    RevSlider.prototype.setHeadlineFontSize = function() {
+        this.headlineFontSize = (this.headlineLineHeight * .8).toFixed(2) / 1;
+    };
+
+    RevSlider.prototype.setHeadlineMarginTop = function() {
+        this.headlineMarginTop = 0;
+        if (!this.options.text_right) { // give some space between bottom of image and headline
+            this.headlineMarginTop = ((this.headlineLineHeight * .4).toFixed(2) / 1);
+        }
+    };
+
+    RevSlider.prototype.setHeadlineMaxHeight = function() {
+        var maxHeight = 0;
+        if (this.options.text_right) { // based on preloaderHeight/ ad height
+            var verticalSpace = this.preloaderHeight - this.providerLineHeight;
+            var headlines = Math.floor(verticalSpace / this.headlineLineHeight);
+            maxHeight = headlines * this.headlineLineHeight;
+        } else {
+            var ads = this.grid.element.querySelectorAll('.rev-ad');
+            if (this.options.max_headline && ads.length) { // max_headline and we have some ads otherwise just use the headline_size
+                for (var i = 0; i < this.limit; i++) {
+                    var ad = ads[i];
+                    var el = document.createElement('div');
+                    revUtils.addClass(el, 'rev-headline-max-check');
+                    el.style.position = 'absolute';
+                    el.style.zIndex = '100';
+                    el.style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
+                    el.innerHTML = '<h3 style="font-size:'+ this.headlineFontSize + 'px;line-height:'+ this.headlineLineHeight +'px">'+ this.displayedItems[i].headline + '</h3>';
+                    revUtils.prepend(ad, el); // do it this way b/c changin the element height on the fly needs a repaint and requestAnimationFrame is not avail in IE9
+                    maxHeight = Math.max(maxHeight, el.clientHeight);
+                    revUtils.remove(el);
+                }
+            } else {
+                maxHeight = ((this.headlineLineHeight * this.options.headline_size).toFixed(2) / 1);
+            }
+        }
+        this.headlineMaxHeight = maxHeight;
+    };
+
+    RevSlider.prototype.updatePagination = function(checkPage) {
 
         if (this.maxPages() <= 1) {
             this.backBtn.style.display = 'none';
@@ -487,14 +514,6 @@ RevSlider({
 
         var children = this.paginationDots.childNodes
 
-        // update the active dot
-        for (var i = 0; i < children.length; i++) {
-            revUtils.removeClass(children[i], 'rev-active');
-            if ((i+1) == this.page) {
-                revUtils.addClass(children[i], 'rev-active');
-            }
-        }
-
         // make sure we don't have too many or too few dots
         var difference = (this.maxPages() - children.length);
 
@@ -510,9 +529,35 @@ RevSlider({
             }
         } else if (difference > 0) {
             for (var i = 0; i < difference; i++) {
-                revUtils.append(this.paginationDots, document.createElement('div'));
+                this.appendDot();
             }
         }
+
+        // check the page on resize in case the offset changes
+        if (checkPage) {
+            this.page = (this.offset / this.limit) + 1;
+            this.previousPage = Math.max(0, this.page - 1);
+        }
+
+        var children = this.paginationDots.childNodes
+
+        // update the active dot
+        for (var i = 0; i < children.length; i++) {
+            revUtils.removeClass(children[i], 'rev-active');
+            if ((i+1) == this.page) {
+                revUtils.addClass(children[i], 'rev-active');
+            }
+        }
+    };
+
+    RevSlider.prototype.appendDot = function(active) {
+        var dot = document.createElement('div');
+        revUtils.addClass(dot, 'rev-pagination-dot');
+        dot.innerHTML = '<div></div>';
+        if (active) {
+            revUtils.addClass(dot, 'rev-active');
+        }
+        revUtils.append(this.paginationDots, dot);
     };
 
     RevSlider.prototype.paginationDots = function() {
@@ -524,19 +569,23 @@ RevSlider({
         revUtils.addClass(this.paginationDots, 'rev-pagination-dots');
 
         for (var i = 0; i < this.options.pages; i++) {
-            var dot = document.createElement('div');
-            if (i === 0) {
-                revUtils.addClass(dot, 'rev-active');
-            }
-            revUtils.append(this.paginationDots, dot);
+            this.appendDot(i===0);
+        }
+
+        this.paginationDotsWrapper = document.createElement('div');
+        revUtils.addClass(this.paginationDotsWrapper, 'rev-pagination-dots-wrapper');
+        if (this.options.buttons.position == 'dots') {
+            revUtils.addClass(this.paginationDotsWrapper, 'rev-pagination-dots-wrapper-buttons');
         }
 
         this.paginationDotsContainer = document.createElement('div');
         revUtils.addClass(this.paginationDotsContainer, 'rev-pagination-dots-container');
 
+        revUtils.append(this.paginationDotsWrapper, this.paginationDotsContainer);
+
         revUtils.append(this.paginationDotsContainer, this.paginationDots);
 
-        revUtils.prepend(this.innerContainerElement, this.paginationDotsContainer);
+        revUtils.prepend(this.containerElement, this.paginationDotsWrapper);
     };
 
     //added to prevent default drag functionality in FF
@@ -556,41 +605,103 @@ RevSlider({
         var chevronLeft  = '<path d="M23.12 11.12L21 9l-9 9 9 9 2.12-2.12L16.24 18z"/>';
         var chevronRight = '<path d="M15 9l-2.12 2.12L19.76 18l-6.88 6.88L15 27l9-9z"/>';
 
-        var btnHeight = this.options.buttons.dual ? 'auto' : (this.options.vertical ? this.options.buttons.size + 'px' : '100%');
+        var btnHeight = this.options.buttons.position == 'dual' ? 'auto' : (this.options.vertical ? this.options.buttons.size + 'px' : '100%');
 
-        this.backBtn = document.createElement('div');
-        this.backBtn.id = "back-wrapper";
-        this.backBtn.setAttribute('class', 'rev-btn-wrapper rev-btn-wrapper-back');
-        this.backBtn.style.height = btnHeight;
-        this.backBtn.style.left = this.options.buttons.dual ? 'auto' : '0';
-        this.backBtn.innerHTML = '<div id="back-btn-container" class="rev-btn-container" style="right: ' + (this.options.buttons.dual ? 'auto' : '0px') +';">' +
-            '<label id="btn-back" class="rev-chevron">' +
-                '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">' + (this.options.vertical ? chevronUp : chevronLeft) + '</svg>' +
-            '</label></div>';
+        this.backBtnWrapper = document.createElement('div');
+        this.backBtnWrapper.id = "back-wrapper";
+        this.backBtnWrapper.setAttribute('class', 'rev-btn-wrapper rev-btn-wrapper-back rev-btn-style-' + this.options.buttons.style);
+        this.backBtnWrapper.style.height = btnHeight;
+        this.backBtnWrapper.style.left = this.options.buttons.position == 'dual' ? 'auto' : '0';
 
-        this.forwardBtn = document.createElement('div');
-        this.forwardBtn.id = "forward-wrapper";
-        this.forwardBtn.setAttribute('class', 'rev-btn-wrapper rev-btn-wrapper-forward');
-        this.forwardBtn.style.height = btnHeight;
-        this.forwardBtn.style.right = this.options.buttons.dual ? 'auto' : '0';
-        this.forwardBtn.innerHTML = '<div id="forward-btn-container" class="rev-btn-container" style="right: ' + (this.options.buttons.dual ? 'auto' : '0px') + ';">' +
-            '<label id="btn-forward" class="rev-chevron">' +
-                '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">' + (this.options.vertical ? chevronDown : chevronRight) + '</svg>' +
-            '</label></div>';
+        this.backBtnContainer = document.createElement('div');
+        this.backBtnContainer.id = 'back-btn-container';
+        revUtils.addClass(this.backBtnContainer, 'rev-btn-container');
+        this.backBtnContainer.style.right = this.options.buttons.position == 'dual' ? 'auto' : '0px';
 
-        if (this.options.buttons.dual) {
+        this.backBtn = document.createElement('button');
+        revUtils.addClass(this.backBtn, 'rev-chevron');
+        this.backBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">' + (this.options.vertical ? chevronUp : chevronLeft) + '</svg>';
+
+        this.backBtnContainer.appendChild(this.backBtn);
+        this.backBtnWrapper.appendChild(this.backBtnContainer);
+
+        this.forwardBtnWrapper = document.createElement('div');
+        this.forwardBtnWrapper.id = "forward-wrapper";
+        this.forwardBtnWrapper.setAttribute('class', 'rev-btn-wrapper rev-btn-wrapper-forward rev-btn-style-' + this.options.buttons.style);
+        this.forwardBtnWrapper.style.height = btnHeight;
+        this.forwardBtnWrapper.style.right = this.options.buttons.position == 'dual' ? 'auto' : '0';
+
+        this.forwardBtnContainer = document.createElement('div');
+        this.forwardBtnContainer.id = 'back-btn-container';
+        revUtils.addClass(this.forwardBtnContainer, 'rev-btn-container');
+        this.forwardBtnContainer.style.right = this.options.buttons.position == 'dual' ? 'auto' : '0px';
+
+        this.forwardBtn = document.createElement('button');
+        revUtils.addClass(this.forwardBtn, 'rev-chevron');
+        this.forwardBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">' + (this.options.vertical ? chevronDown : chevronRight) + '</svg>';
+
+        this.forwardBtnContainer.appendChild(this.forwardBtn);
+        this.forwardBtnWrapper.appendChild(this.forwardBtnContainer);
+
+        if (this.options.buttons.position == 'dual') {
             this.btnContainer = document.createElement('div');
             this.btnContainer.setAttribute('class', 'rev-btn-dual');
-            revUtils.append(this.btnContainer, this.backBtn);
-            revUtils.append(this.btnContainer, this.forwardBtn);
-            revUtils.append(this.innerElement, this.btnContainer);
+            revUtils.append(this.btnContainer, this.backBtnWrapper);
+            revUtils.append(this.btnContainer, this.forwardBtnWrapper);
+            revUtils.append(this.innerContainerElement, this.btnContainer);
+        } else if (this.options.buttons.position == 'dots') {
+            if (!this.paginationDotsContainer) {
+                return;
+            }
+
+            this.paginationDots.style.height = this.options.buttons.size + 'px';
+            this.paginationDots.style.margin = '0 24px';
+
+            this.backBtnWrapper.style.height = this.options.buttons.size + 'px';
+            this.backBtnWrapper.style.width = this.options.buttons.size + 'px';
+            this.backBtnWrapper.style.display = 'inline-block';
+            this.backBtnContainer.style.height = '100%';
+            this.backBtn.style.height = '100%';
+            this.backBtn.style.width = '100%';
+
+            this.forwardBtnWrapper.style.height = this.options.buttons.size + 'px';
+            this.forwardBtnWrapper.style.width = this.options.buttons.size + 'px';
+            this.forwardBtnWrapper.style.display = 'inline-block';
+            this.forwardBtnContainer.style.height = '100%';
+            this.forwardBtn.style.height = '100%';
+            this.forwardBtn.style.width = '100%';
+
+            revUtils.prepend(this.paginationDotsContainer, this.backBtnWrapper);
+            revUtils.append(this.paginationDotsContainer, this.forwardBtnWrapper);
         } else {
             if (this.options.buttons.back) {
-                revUtils.append(this.innerElement, this.backBtn);
+                revUtils.append(this.innerContainerElement, this.backBtnWrapper);
             }
 
             if (this.options.buttons.forward) {
-                revUtils.append(this.innerElement, this.forwardBtn);
+                revUtils.append(this.innerContainerElement, this.forwardBtnWrapper);
+            }
+
+            if (this.options.buttons.position == 'outside') { // buttons outside for vertical only
+                if (this.options.vertical) {
+                    this.innerContainerElement.style.padding = (this.options.buttons.back ? (this.options.buttons.size + 'px') : '0') + ' 0 ' + (this.options.buttons.forward ? (this.options.buttons.size + 'px') : '0');
+                } else {
+
+                    // THIS NEEDS TO BE DYNAMIC
+                    this.containerElement.style.paddingLeft = this.options.buttons.size + 'px';
+                    this.containerElement.style.paddingRight = this.options.buttons.size + 'px';
+
+                    if (this.options.buttons.style == 'fly-out') {
+                        this.forwardBtnWrapper.style.width = (this.options.buttons.size * .8) + 'px';
+                        this.backBtnWrapper.style.width = (this.options.buttons.size * .8) + 'px';
+                    } else {
+                        this.forwardBtnWrapper.style.width = this.options.buttons.size + 'px';
+                        this.backBtnWrapper.style.width = this.options.buttons.size + 'px';
+                    }
+
+                    revUtils.transformCss(this.backBtnWrapper, 'translateX(-100%)');
+                    revUtils.transformCss(this.forwardBtnWrapper, 'translateX(100%)');
+                }
             }
         }
     };
@@ -696,8 +807,8 @@ RevSlider({
     RevSlider.prototype.getCellHeight = function() {
         var cellHeight = this.preloaderHeight;
         if (!this.options.text_overlay && !this.options.text_right) {
-            cellHeight += this.headlineHeight +
-            this.headlineMarginTop + this.providerLineHeight;
+            cellHeight += this.headlineMaxHeight +
+            this.headlineMarginTop + this.providerLineHeight + this.providerMarginTop;
             cellHeight += (this.options.ad_border) ? 2 : 0;
         }
         return cellHeight;
@@ -707,7 +818,7 @@ RevSlider({
         var that = this;
         var oldLimit = this.limit;
         this.grid.option({transitionDuration: 0});
-        this.setUp();
+        this.limit = this.getLimit();
 
         var reconfig = 0;// how many to add or remove
 
@@ -733,9 +844,7 @@ RevSlider({
             }
         }
 
-        if (this.options.max_headline) {
-            this.headlineHeight = this.getMaxHeadlineHeight();
-        }
+        this.setUp();
 
         var ads = this.element.querySelectorAll('.rev-ad');
 
@@ -744,18 +853,9 @@ RevSlider({
 
             ad.style.height = this.getCellHeight() + 'px';
 
-            ad.querySelectorAll('.rev-image')[0].style.height = this.preloaderHeight + 'px';
-            ad.querySelectorAll('.rev-headline')[0].style.maxHeight = this.headlineHeight + 'px';
-            ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
-            ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
-            ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
-
-            if(that.options.hide_provider === false) {
-                ad.querySelectorAll('.rev-provider')[0].style.margin = this.providerMargin + 'px ' + this.innerMargin + 'px ' + this.providerMargin + 'px';
-                ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize + 'px';
-                ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
-                ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight + 'px';
-            }
+            this.resizeImage(ad.querySelectorAll('.rev-image')[0]);
+            this.resizeHeadline(ad.querySelectorAll('.rev-headline')[0]);
+            this.resizeProvider(ad.querySelectorAll('.rev-provider')[0]);
 
             ad.querySelectorAll('.rev-headline h3')[0].innerHTML = this.displayedItems[i].headline;
         }
@@ -767,9 +867,31 @@ RevSlider({
         this.grid.option({transitionDuration: this.options.transition_duration});
 
         this.getAnimationDuration();
-        this.updatePagination();
+        this.updatePagination(true);
 
         this.emitter.emitEvent('resized');
+    };
+
+    RevSlider.prototype.resizeImage = function(el) {
+        el.style.height = this.preloaderHeight + 'px';
+        el.style.width = this.getImageWidth();
+    };
+
+    RevSlider.prototype.resizeHeadline = function(el) {
+        el.style.maxHeight = this.headlineMaxHeight + 'px';
+        el.style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
+        el.firstChild.style.fontSize = this.headlineFontSize +'px';
+        el.firstChild.style.lineHeight = this.headlineLineHeight +'px';
+    };
+
+    RevSlider.prototype.resizeProvider = function(el) {
+        if(this.options.hide_provider) {
+            return;
+        }
+        el.style.margin = this.providerMarginTop + 'px ' + this.innerMargin + 'px 0';
+        el.style.fontSize = this.providerFontSize + 'px';
+        el.style.lineHeight = this.providerLineHeight + 'px';
+        el.style.height = this.providerLineHeight + 'px';
     };
 
     RevSlider.prototype.checkEllipsis = function() {
@@ -784,15 +906,19 @@ RevSlider({
         return this.grid.getPerRow() * (this.options.rows[this.grid.getBreakPoint()] ? this.options.rows[this.grid.getBreakPoint()] : this.options.rows);
     };
 
+    RevSlider.prototype.getImageWidth = function() {
+         return typeof this.preloaderWidth === 'undefined' ? 'auto' : this.preloaderWidth + 'px';
+    };
+
     RevSlider.prototype.createNewCell = function() {
-        var imgWidth = typeof this.preloaderWidth === 'undefined' ? 'width:auto;' : 'width:' + this.preloaderWidth + 'px;';
+
         var html = '<div class="rev-ad" style="height: '+ this.getCellHeight() + 'px;' + (this.options.ad_border ? 'border:1px solid #eee' : '') +'">' +
             '<a href="" target="_blank">' +
-            '<div class="rev-image" style="'+ imgWidth +'height:'+ this.preloaderHeight +'px">' +
+            '<div class="rev-image" style="width:'+ this.getImageWidth() +';height:'+ this.preloaderHeight +'px">' +
             '<img src=""/>' +
             '</div>' +
             '<div class="rev-headline-brand">' +
-            '<div class="rev-headline" style="max-height:'+ this.headlineHeight +'px; margin:'+ this.headlineMarginTop +'px ' + this.innerMargin + 'px' + ' 0;">' +
+            '<div class="rev-headline" style="max-height:'+ this.headlineMaxHeight +'px; margin:'+ this.headlineMarginTop +'px ' + this.innerMargin + 'px' + ' 0;">' +
             '<h3 style="font-size:'+ this.headlineFontSize +'px; line-height:'+ this.headlineLineHeight +'px;"></h3>' +
             '</div>' +
             '<div style="margin:0 '  + this.innerMargin + 'px 0;font-size:'+ this.providerFontSize +'px;line-height:'+ this.providerLineHeight +'px;height:'+ this.providerLineHeight +'px;" class="rev-provider"></div>' +
@@ -812,27 +938,34 @@ RevSlider({
     };
 
     RevSlider.prototype.getData = function() {
-        var sponsoredCount = this.options.pages * this.limit;
-        var url = this.options.url + '?api_key='+ this.options.api_key +'&uitm=true&img_h='+ this.imageHeight +'&img_w='+ this.imageWidth + '&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&internal_count=0'+'&sponsored_count=' + sponsoredCount;
+        if (this.dataPromise) {
+            return this.dataPromise;
+        }
 
         var that = this;
 
-        revApi.request(url, function(resp) {
-            that.data = resp;
+        this.dataPromise = new Promise(function(resolve, reject) {
+            var sponsoredCount = that.options.pages * that.limit;
+            var url = that.options.url + '?api_key='+ that.options.api_key +'&uitm=true&img_h='+ that.imageHeight +'&img_w='+ that.imageWidth + '&pub_id='+ that.options.pub_id +'&widget_id='+ that.options.widget_id +'&domain='+ that.options.domain +'&internal_count=0'+'&sponsored_count=' + sponsoredCount;
 
-            that.updateDisplayedItems(that.options.visible);
+            revApi.request(url, function(resp) {
+                that.data = resp;
 
-            that.emitter.emitEvent('ready');
-            that.ready = true;
+                that.updateDisplayedItems(that.options.visible);
 
-            revUtils.imagesLoaded(that.grid.element.querySelectorAll('img')).once('done', function() {
-                revUtils.addClass(that.containerElement, 'loaded');
+                that.emitter.emitEvent('ready');
+                that.ready = true;
+
+                revUtils.imagesLoaded(that.grid.element.querySelectorAll('img')).once('done', function() {
+                    revUtils.addClass(that.containerElement, 'loaded');
+                });
+                resolve();
             });
         });
     };
 
     RevSlider.prototype.registerImpressions = function() {
-        if (this.impressionTracker[this.offset + '_' + this.limit]) {
+        if (this.options.impression_tracker[this.offset + '_' + this.limit]) {
             return; // impressions already tracked
         }
 
@@ -840,7 +973,7 @@ RevSlider({
 
         impressionsUrl += '&sponsored_count=' + (this.options.internal ? 0 : this.limit) + '&internal_count=' + (this.options.internal ? this.limit : 0) + '&sponsored_offset='+ (this.options.internal ? 0 : this.offset) +'&internal_offset=' + (this.options.internal ? this.offset : 0);
 
-        this.impressionTracker[this.offset + '_' + this.limit] = true;
+        this.options.impression_tracker[this.offset + '_' + this.limit] = true;
         var that = this;
         // don't do the same one twice, this could be improved I am sure
         revApi.request(impressionsUrl, function() {
@@ -864,9 +997,7 @@ RevSlider({
             dataIndex++;
         }
 
-        if (this.options.max_headline) {
-            this.headlineHeight = this.getMaxHeadlineHeight();
-        }
+        this.setUp();
 
         var ads = this.grid.element.querySelectorAll('.rev-ad');
 
@@ -885,15 +1016,10 @@ RevSlider({
             ad.querySelectorAll('img')[0].setAttribute('src', data.image);
             ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
             ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
-            ad.querySelectorAll('.rev-image')[0].style.height = this.preloaderHeight + 'px';
-            ad.querySelectorAll('.rev-headline')[0].style.maxHeight = this.headlineHeight + 'px';
-            ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
-            ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
-            ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.margin = '0 '  + this.innerMargin + 'px 0';
-            ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize +'px';
-            ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
-            ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight +'px';
+
+            this.resizeImage(ad.querySelectorAll('.rev-image')[0]);
+            this.resizeHeadline(ad.querySelectorAll('.rev-headline')[0]);
+            this.resizeProvider(ad.querySelectorAll('.rev-provider')[0]);
         }
 
         if (registerImpressions) {
@@ -933,7 +1059,7 @@ RevSlider({
             });
         } else {
             // dual button mouse move position
-            if (this.options.buttons.dual) {
+            if (this.options.buttons.position == 'dual') {
                 this.element.addEventListener('mousemove', function(e) {
                     // get left or right cursor position
                     if ((e.clientX - that.element.getBoundingClientRect().left) > (that.element.offsetWidth / 2)) {
@@ -953,13 +1079,21 @@ RevSlider({
                 that.showPreviousPage(true);
             });
 
-            revUtils.addEventListener(that.element, 'mouseenter', function(){
+            revUtils.addEventListener(that.element, 'mouseenter', function() {
                 revUtils.removeClass(that.containerElement, 'off');
                 revUtils.addClass(that.containerElement, 'on');
+                if (that.options.buttons.style == 'fly-out') {
+                    that.forwardBtnWrapper.style.width = that.options.buttons.size + 'px';
+                    that.backBtnWrapper.style.width = that.options.buttons.size + 'px';
+                }
             });
-            revUtils.addEventListener(that.element, 'mouseleave', function(){
+            revUtils.addEventListener(that.element, 'mouseleave', function() {
                 revUtils.removeClass(that.containerElement, 'on');
                 revUtils.addClass(that.containerElement, 'off');
+                if (that.options.buttons.style == 'fly-out') {
+                    that.forwardBtnWrapper.style.width = (that.options.buttons.size * .8) + 'px';
+                    that.backBtnWrapper.style.width = (that.options.buttons.size * .8) + 'px';
+                }
             });
         }
     };
@@ -1180,27 +1314,11 @@ RevSlider({
         }
     };
 
-    RevSlider.prototype.getMaxHeadlineHeight = function() {
-        var maxHeight = 0;
-        if (this.options.text_right) { // based on preloaderHeight/ ad height
-            var verticalSpace = this.preloaderHeight - this.providerLineHeight;
-            var headlines = Math.floor(verticalSpace / this.headlineLineHeight);
-            maxHeight = headlines * this.headlineLineHeight;
-        } else {
-            var ads = this.grid.element.querySelectorAll('.rev-ad');
-            for (var i = 0; i < this.limit; i++) {
-                var ad = ads[i];
-                var el = document.createElement('div');
-                el.style.position = 'absolute';
-                el.style.zIndex = '100';
-                el.style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
-                el.innerHTML = '<h3 style="font-size:'+ this.headlineFontSize + 'px;line-height:'+ this.headlineLineHeight +'px">'+ this.displayedItems[i].headline + '</h3>';
-                revUtils.prepend(ad, el); // do it this way b/c changin the element height on the fly needs a repaint and requestAnimationFrame is not avail in IE9
-                maxHeight = Math.max(maxHeight, el.clientHeight);
-                revUtils.remove(el);
-            }
-        }
-        return maxHeight;
+    RevSlider.prototype.destroy = function() {
+        this.grid.remove();
+        this.grid.destroy();
+        this.mc.set({enable: false});
+        this.mc.destroy();
     };
 
     return RevSlider;

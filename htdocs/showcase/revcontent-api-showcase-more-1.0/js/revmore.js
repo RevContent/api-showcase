@@ -189,7 +189,7 @@ RevMore({
                 overlay_icons: this.options.overlay_icons, // pass in custom icons or overrides
                 overlay_position: this.options.overlay_position, // center, top_left, top_right, bottom_right, bottom_left
                 multipliers: {
-                    font_size: 3,
+                    line_height: 3,
                     margin: -2.2,
                     padding: 2
                 }
