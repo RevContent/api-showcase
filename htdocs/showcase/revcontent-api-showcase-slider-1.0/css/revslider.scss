@@ -63,6 +63,7 @@
     .rev-sponsored {
         line-height: 20px;
         font-size: 12px;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
         &.top-right {
             position: absolute;
@@ -299,6 +300,7 @@
             line-height: 20px;
             overflow: hidden;
             margin: 0;
+            text-transform: none;
         }
 
         .rev-provider {

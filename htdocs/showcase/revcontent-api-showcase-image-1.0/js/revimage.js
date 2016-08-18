@@ -114,6 +114,7 @@ Author: michael@revcontent.com
 
     RevImage.prototype.container = function() {
         this.container = document.createElement('div');
+        this.container.id = 'rev-img';
         revUtils.addClass(this.container, 'rev-img');
         revUtils.addClass(this.container, 'rev-img-' + this.options.theme);
         revUtils.addClass(this.container, 'rev-img-buttons-' + this.options.buttons.position);
