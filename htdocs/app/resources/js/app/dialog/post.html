@@ -30,7 +30,7 @@
 
             <md-content>
                 <h3 style="margin-top:0;" class="md-title">Description:</h3>
-                <div class="md-body-2" ng-bind="post.description"></div>
+                <div class="md-body-2" ng-bind-html="post.description | sanitize"></div>
             </md-content>
         </div>
 
@@ -42,7 +42,7 @@
 
             <div flex-gt-md="30">
                 <md-content layout-padding style="padding-top:0;">
-                    <div class="md-body-2">{{ post.description }}</div>
+                    <div class="md-body-2" ng-bind-html="post.description | sanitize"></div>
                 </md-content>
 
                 <md-content layout="column">
