@@ -146,7 +146,19 @@
 
             <div class="col-md-12">
                 <br /><hr /><br />
-                <div id="in-article"></div>
+                <div id="rcjsload_a122d7"></div>
+                <script type="text/javascript">
+                (function() {
+                var referer="";try{if(referer=document.referrer,"undefined"==typeof referer)throw"undefined"}catch(exception){referer=document.location.href,(""==referer||"undefined"==typeof referer)&&(referer=document.URL)}referer=referer.substr(0,700);
+                var rcel = document.createElement("script");
+                rcel.id = 'rc_' + Math.floor(Math.random() * 1000);
+                rcel.type = 'text/javascript';
+                rcel.src = "http://trends.revcontent.com/serve.js.php?uitm=true&w=22701&t="+rcel.id+"&c="+(new Date()).getTime()+"&width="+(window.outerWidth || document.documentElement.clientWidth)+"&referer="+referer;
+                rcel.async = true;
+                var rcds = document.getElementById("rcjsload_a122d7"); rcds.appendChild(rcel);
+
+                })();
+                </script>
             </div>
         </div>
 
@@ -163,16 +175,11 @@
     </div>
    <!-- /. Fake Page Content -->
 
-    <script src="/build/revmore.min.js"></script>
+    <script src="/build/revmore-standard.min.js"></script>
 
     <script>
         var more = new RevMore({
-            top_id: 'top-id',
-            id: 'in-article',
-            api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
-            pub_id : 945,
-            widget_id : 6181,
-            domain : 'apiexamples.powr.com'
+            widget_id : 22701
         });
     </script>
 
