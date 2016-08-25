@@ -93,11 +93,11 @@ RevMore({
             return;
         }
 
-        var that = this;
-
         revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-more');
 
         this.init = function() {
+
+            this.impressionTracker = [];
 
             this.checkPadding();
 
@@ -108,6 +108,8 @@ RevMore({
             this.setTop();
 
             this.appendElements();
+
+            this.widget();
 
             this.innerWidget();
 
@@ -182,8 +184,41 @@ RevMore({
             revUtils.append(document.body, this.element);
         };
 
+        this.widget = function() {
+            if (this.options.id) {
+                this.sameWidget = new RevSlider({
+                    impression_tracker: this.impressionTracker,
+                    api_source:         'more',
+                    id:                 this.options.id,
+                    pagination_dots:    this.options.pagination_dots,
+                    url:                this.options.url,
+                    api_key:            this.options.api_key,
+                    pub_id:             this.options.pub_id,
+                    widget_id:          this.options.widget_id,
+                    domain:             this.options.domain,
+                    rev_position:       this.options.rev_position,
+                    header:             this.options.header,
+                    per_row:            this.options.per_row,
+                    rows:               this.options.rows,
+                    image_ratio:        this.options.image_ratio,
+                    headline_size:      this.options.headline_size,
+                    buttons:            this.options.buttons,
+                    beacons:            this.options.beacons,
+                    prevent_default_pan: false,
+                    disclosure_text: this.options.disclosure_text,
+                    multipliers: {
+                        font_size: 3,
+                        margin: -2.2,
+                        padding: 2
+                    }
+                });
+            }
+        };
+
         this.innerWidget = function() {
+
             this.innerWidget = new RevSlider({
+                impression_tracker: this.impressionTracker,
                 api_source:   'more',
                 element:      [this.innerWidgetElement],
                 pagination_dots: this.options.pagination_dots,
