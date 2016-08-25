@@ -83,7 +83,7 @@ app.service('widgets', function() {
             img: 'soloserve.jpg',
             description: 'You just got served! Solo Served.',
             link: 'revcontent-api-showcase-solo-serve-1.0/index.html',
-            bg: '#000'
+            bg: '#d6031d'
         }
         //'scrolling-exp': {
           //  title: 'Scrolling Experience',
