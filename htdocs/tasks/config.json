@@ -89,6 +89,27 @@
       "./showcase/revcontent-api-showcase-more-1.0/css/*"
     ]
   },
+  "more-standard": {
+    "name": "rev-more-standard",
+    "description": "Content Lock Standard Widget",
+    "homepage": "http://labs.revcontent.com",
+    "version": "0.0.1",
+    "js": "./showcase/revcontent-api-showcase-more-1.0/js/revmore-standard.js",
+    "css": [
+      "./showcase/revcontent-api-showcase-more-1.0/css/revmore.css"
+    ],
+    "build": [
+      "./vendor/mobile-detect/mobile-detect.js",
+      "./showcase/js/revutils.js",
+      "./showcase/js/revdetect.js",
+      "./build/files/more-standard/revmore-standard.embed.js"
+    ],
+    "watch": [
+      "./build/files/slider/revslider.pkgd.js",
+      "./showcase/revcontent-api-showcase-more-1.0/js/*",
+      "./showcase/revcontent-api-showcase-more-1.0/css/*"
+    ]
+  },
   "flicker": {
     "name": "rev-flicker",
     "description": "Scrolling Gallery",
