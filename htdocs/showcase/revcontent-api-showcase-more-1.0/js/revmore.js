@@ -35,7 +35,6 @@ RevMore({
         id: false,
         url: 'https://trends.revcontent.com/api/v1/',
         distance: 500,
-        element: false,
         unlock_text: 'Read More...',
         header: 'Trending Now',
         rev_position: 'top_right',
