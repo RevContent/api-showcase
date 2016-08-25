@@ -28,41 +28,58 @@ RevMore({
 }( window, function factory(window, revUtils, revDetect, revApi, revDialog) {
 'use strict';
 
-    var RevMore = function(opts) {
-        var defaults = {
-            id: false,
-            url: 'https://trends.revcontent.com/api/v1/',
-            distance: 500,
-            element: false,
-            unlock_text: 'Read More...',
-            header: 'Trending Now',
-            rev_position: 'top_right',
-            image_ratio: 'rectangle',
-            pagination_dots: true,
-            per_row: {
-                xxs: 2,
-                xs: 2,
-                sm: 3,
-                md: 4,
-                lg: 5,
-                xl: 6,
-                xxl: 7
-            },
-            buttons: {
-                forward: false,
-                back: false
-            },
-            rows: 2,
-            headline_size: 3,
-            disclosure_text: 'Ads by Revcontent',
-            devices: [
-                'phone', 'tablet', 'desktop'
-            ],
-            beacons: true,
-            overlay: false, // pass key value object { content_type: icon }
-            overlay_icons: false, // pass in custom icons or overrides
-            overlay_position: 'center' // center, top_left, top_right, bottom_right, bottom_left
-        };
+    var RevMore;
+    var that;
+    var defaults = {
+        top_id: false,
+        id: false,
+        url: 'https://trends.revcontent.com/api/v1/',
+        distance: 500,
+        element: false,
+        unlock_text: 'Read More...',
+        header: 'Trending Now',
+        rev_position: 'top_right',
+        image_ratio: 'rectangle',
+        pagination_dots: true,
+        gradient_height: 60,
+        per_row: {
+            xxs: 2,
+            xs: 2,
+            sm: 3,
+            md: 4,
+            lg: 5,
+            xl: 6,
+            xxl: 7
+        },
+        buttons: {
+            forward: false,
+            back: false
+        },
+        rows: 2,
+        headline_size: 3,
+        disclosure_text: 'Ads by Revcontent',
+        devices: [
+            'phone', 'tablet', 'desktop'
+        ],
+        beacons: true,
+        overlay: false, // pass key value object { content_type: icon }
+        overlay_icons: false, // pass in custom icons or overrides
+        overlay_position: 'center' // center, top_left, top_right, bottom_right, bottom_left
+    };
+
+    RevMore = function(opts) {
+        if (that) {
+            that.destroy();
+            return new RevMore(opts);
+        }
+
+        // if it wasn't newed up
+        if ( !( this instanceof RevMore ) ) {
+            that = new RevMore(opts);
+            return that;
+        } else {
+            that = this;
+        }
 
         // merge options
         this.options = revUtils.extend(defaults, opts);
@@ -218,13 +235,7 @@ RevMore({
                 revUtils.addClass(that.element, 'unlocked');
 
                 setTimeout(function() {
-                    that.innerWidget.grid.remove();
-                    that.innerWidget.grid.destroy();
-                    that.innerWidget.mc.set({enable: false});
-                    that.innerWidget.mc.destroy();
-                    revUtils.remove(that.element);
-                    that.wrapper.style.height = 'auto';
-                    revApi.beacons.detach('more');
+                    that.destroy(false);
                 }, 1000);
             });
         };
@@ -235,6 +246,23 @@ RevMore({
             this.innerWidget.emitter.on( 'resized', function() {
                 that.wrapperHeight();
             });
+        };
+
+        this.destroy = function(destroySameWidget) {
+            this.innerWidget.destroy();
+
+            if (destroySameWidget !== false && this.sameWidget) {
+                this.sameWidget.grid.remove();
+                this.sameWidget.grid.destroy();
+                this.sameWidget.mc.set({enable: false});
+                this.sameWidget.mc.destroy();
+            }
+
+            revUtils.remove(this.element);
+            this.wrapper.style.height = 'auto';
+            this.wrapper.style.overflow = 'visible';
+            revApi.beacons.detach('more');
+            that = null;
         };
 
         this.init();
