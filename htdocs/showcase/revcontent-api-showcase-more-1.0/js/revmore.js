@@ -221,10 +221,10 @@ RevMore({
 
         // unlock button
         this.attachButtonEvents = function() {
-            var that = this;
             this.unlockBtn.addEventListener('click', function() {
                 that.wrapper.style.height = 'auto';
                 that.wrapper.style.marginBottom = '0'; // remove buffer margin
+                that.wrapper.style.overflow = 'visible';
                 // reset any padding or margin set
                 document.body.style.paddingBottom = that.padding.bottom;
                 document.body.style.paddingLeft = that.padding.left;
