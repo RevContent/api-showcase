@@ -135,7 +135,7 @@ RevMore({
 
             this.element = document.createElement('div');
             this.element.id = 'rev-more';
-            this.element.innerHTML = '<div id="rev-more-gradient"></div>';
+            this.element.innerHTML = '<div style="height:' + this.options.gradient_height + 'px; top:-'+ this.options.gradient_height +'px" id="rev-more-gradient"></div>';
             this.element.setAttribute('class', 'rev-more');
 
             this.unlockBtn = document.createElement('div');
@@ -154,7 +154,7 @@ RevMore({
 
             this.top = marker ? marker.getBoundingClientRect().top : this.options.distance;
 
-            this.element.style.top = this.top + 'px';
+            this.element.style.top = this.top + this.options.gradient_height + 'px';
         };
 
         this.appendElements = function() {
@@ -199,7 +199,7 @@ RevMore({
         // set the wrapper equal to top + the element height
         this.wrapperHeight = function() {
             // subtract 20 to make up for bottom zone
-            this.wrapper.style.height = (this.top - 20) + this.element.offsetHeight + 'px';
+            this.wrapper.style.height = (this.top - 20) + this.element.offsetHeight + this.options.gradient_height + 'px';
         };
 
         // unlock button
