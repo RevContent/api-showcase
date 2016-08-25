@@ -167,9 +167,9 @@ RevMore({
 
         // get the top position using marker if it exists or distance option
         this.setTop = function() {
-            var marker = document.getElementById(this.options.id);
+            var marker = document.getElementById(this.options.top_id);
 
-            this.top = marker ? marker.getBoundingClientRect().top : this.options.distance;
+            this.top = marker ? marker.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop) : this.options.distance;
 
             this.element.style.top = this.top + this.options.gradient_height + 'px';
         };
