@@ -57,18 +57,12 @@ RevMore({
         // merge options
         this.options = revUtils.extend(defaults, opts);
 
-        if (this.options.inner_widget != 'standard') {
-            if (revUtils.validateApiParams(this.options).length) {
-                return;
-            }
-        }
-
         // don't show for this device
         if (!revDetect.show(this.options.devices)) {
             return;
         }
 
-        if (revUtils.inArray(['slider', 'standard'], this.options.inner_widget) < 0) {
+        if (!this.options.widget_id) {
             return;
         }
 
