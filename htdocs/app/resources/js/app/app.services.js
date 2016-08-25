@@ -77,6 +77,13 @@ app.service('widgets', function() {
             description: 'AMP is a way to build web pages for static content that render fast. AMP HTML is HTML with some restrictions for reliable performance and some extensions for building rich content beyond basic HTML. The AMP JS library ensures the fast rendering of AMP HTML pages. The Google AMP Cache can be used to serve cached AMP HTML pages. So go ahead, amplify the web! Learn more about the Revcontent AMP partnership <a href="http://blog.revcontent.com/revcontent-partners-with-google-for-better-user-experience-on-mobile/">here</a>.',
             link: 'revcontent-api-showcase-amp-1.0/index.html',
             bg: '#000'
+        },
+        'soloserve': {
+            title: 'Solo Serve',
+            img: 'soloserve.jpg',
+            description: 'You just got served! Solo Served.',
+            link: 'revcontent-api-showcase-solo-serve-1.0/index.html',
+            bg: '#000'
         }
         //'scrolling-exp': {
           //  title: 'Scrolling Experience',
