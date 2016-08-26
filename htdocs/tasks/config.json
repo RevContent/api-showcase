@@ -169,5 +169,20 @@
       "./showcase/revcontent-api-showcase-toaster-1.0/js/*",
       "./showcase/revcontent-api-showcase-toaster-1.0/css/*"
     ]
+  },
+  "soloserve": {
+    "name": "soloserve",
+    "description": "Solo Serve",
+    "homepage": "http://labs.revcontent.com",
+    "version": "0.1.0",
+    "js": "./showcase/revcontent-api-showcase-solo-serve-1.0/js/soloserve.js",
+    "css": [
+    ],
+    "build": [
+      "./build/files/soloserve/revsoloserve.embed.js"
+    ],
+    "watch": [
+      "./showcase/revcontent-api-showcase-solo-serve-1.0/js/*"
+    ]
   }
 }
