@@ -2,7 +2,7 @@
     "urls" : {
         "prod": "http://labs-cdn.revcontent.com",
         "stg": "http://labs-stg.revcontent.com",
-        "dev": "http://localhost:2201"
+        "dev": "http://localhost:8000"
     },
     "tests": [
         {
