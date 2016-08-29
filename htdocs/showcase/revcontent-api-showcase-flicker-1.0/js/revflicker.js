@@ -116,6 +116,7 @@ RevFlicker({
             overlay: false, // pass key value object { content_type: icon }
             overlay_icons: false, // pass in custom icons or overrides
             overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
+            query_params: false
         };
 
         // merge options
@@ -486,6 +487,13 @@ RevFlicker({
         }
     };
 
+    RevFlicker.prototype.getSerializedQueryParams = function(){
+         if (!this.serializedQueryParams) {
+            this.serializedQueryParams = revUtils.serialize(this.options.query_params);
+         }
+         return this.serializedQueryParams;
+    };
+
     RevFlicker.prototype.registerImpressions = function(initial) {
         // if its the first time register the intial viewed impressions
         var count = this.perRow;
@@ -503,6 +511,8 @@ RevFlicker({
         var impressionsUrl = this.options.url + '?&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&api_source=flick';
 
         impressionsUrl += '&sponsored_count=' + (this.options.internal ? 0 : count) + '&internal_count=' + (this.options.internal ? count : 0) + '&sponsored_offset='+ (this.options.internal ? 0 : offset) +'&internal_offset=' + (this.options.internal ? offset : 0);
+
+        impressionsUrl += '&' + this.getSerializedQueryParams();
 
         var that = this;
         // don't do the same one twice, this could be improved I am sure
@@ -577,6 +587,8 @@ RevFlicker({
         // user ip or user_agent passed?
         url += this.options.user_ip ? ('&user_ip=' + this.options.user_ip) : '';
         url += this.options.user_agent ? ('&user_agent=' + this.options.user_agent) : '';
+
+        url += '&' + this.getSerializedQueryParams();
 
         var that = this;
         revApi.request(url, function(resp) {

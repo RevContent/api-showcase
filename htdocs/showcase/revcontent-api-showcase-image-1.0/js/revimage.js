@@ -68,7 +68,8 @@ Author: michael@revcontent.com
                 size: 40,
                 position: 'dual'
             },
-            theme: 'light'
+            theme: 'light',
+            query_params: false
         };
 
         // merge options
@@ -158,7 +159,8 @@ Author: michael@revcontent.com
             touch_direction: Hammer.DIRECTION_ALL, // prevent vertical scrolling
             overlay: this.options.overlay, // video: rectangle, square, circle1, circle2, triangle
             overlay_icons: this.options.overlay_icons, // pass in custom icons or overrides
-            overlay_position: this.options.overlay_position // center, top_left, top_right, bottom_right, bottom_left
+            overlay_position: this.options.overlay_position, // center, top_left, top_right, bottom_right, bottom_left
+            query_params: this.options.query_params
         });
     };
 

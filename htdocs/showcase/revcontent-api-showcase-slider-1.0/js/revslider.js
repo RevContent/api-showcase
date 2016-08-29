@@ -96,6 +96,7 @@ Author: michael@revcontent.com
             overlay: false, // pass key value object { content_type: icon }
             overlay_icons: false, // pass in custom icons or overrides
             overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
+            query_params: false
         };
 
         // merge options
@@ -937,6 +938,13 @@ Author: michael@revcontent.com
             return cell;
     };
 
+    RevSlider.prototype.getSerializedQueryParams = function() {
+         if (!this.serializedQueryParams) {
+            this.serializedQueryParams = revUtils.serialize(this.options.query_params);
+         }
+         return this.serializedQueryParams;
+    };
+
     RevSlider.prototype.getData = function() {
         if (this.dataPromise) {
             return this.dataPromise;
@@ -947,6 +955,8 @@ Author: michael@revcontent.com
         this.dataPromise = new Promise(function(resolve, reject) {
             var sponsoredCount = that.options.pages * that.limit;
             var url = that.options.url + '?api_key='+ that.options.api_key +'&uitm=true&img_h='+ that.imageHeight +'&img_w='+ that.imageWidth + '&pub_id='+ that.options.pub_id +'&widget_id='+ that.options.widget_id +'&domain='+ that.options.domain +'&internal_count=0'+'&sponsored_count=' + sponsoredCount;
+
+            url += '&' + that.getSerializedQueryParams();
 
             revApi.request(url, function(resp) {
                 that.data = resp;
@@ -972,6 +982,8 @@ Author: michael@revcontent.com
         var impressionsUrl = this.options.url + '?&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&api_source=' + this.options.api_source;
 
         impressionsUrl += '&sponsored_count=' + (this.options.internal ? 0 : this.limit) + '&internal_count=' + (this.options.internal ? this.limit : 0) + '&sponsored_offset='+ (this.options.internal ? 0 : this.offset) +'&internal_offset=' + (this.options.internal ? this.offset : 0);
+
+        impressionsUrl += '&' + this.getSerializedQueryParams();
 
         this.options.impression_tracker[this.offset + '_' + this.limit] = true;
         var that = this;
