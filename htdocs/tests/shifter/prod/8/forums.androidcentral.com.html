@@ -1,0 +1,567 @@
+
+<!DOCTYPE html> <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en" id="vbulletin_html"> <head>
+<!--[if IE]></base><![endif]--> <meta http-equiv="X-UA-Compatible" content="IE=edge" /> <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> <meta id="e_vb_meta_bburl" name="vb_meta_bburl" content="http://forums.androidcentral.com" /> <meta name='viewport' content='width=1049'/> <meta name="msvalidate.01" content="21BE5B9D4A670657156555D9E8E78D8D" /> <meta name="serverip" content="92" /> <link rel="Shortcut Icon" href="http://forums.androidcentral.com/favicon.ico?1" type="image/x-icon" /> <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script> <script type="text/javascript" src="//www.imore.com/sites/all/libraries/jquery.plugins/jquery.appear-1.1.2.min.js?ma5898"></script> <script type="text/javascript" src="//www.imore.com/sites/all/libraries/jquery.plugins/jquery.placeholder.min.js"></script> <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/yui/2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js"></script> <script type="text/javascript"> <!--
+    if (typeof YAHOO === 'undefined') // Load ALL YUI Local
+    {
+        document.write('<script type="text/javascript" src="http://forums.androidcentral.com/clientscript/yui/yuiloader-dom-event/yuiloader-dom-event.js?v=42360"><\/script>');
+        document.write('<script type="text/javascript" src="http://forums.androidcentral.com/clientscript/yui/connection/connection-min.js?v=42360"><\/script>');
+        var yuipath = 'clientscript/yui';
+        var yuicombopath = '';
+        var remoteyui = false;
+    }
+    else    // Load Rest of YUI remotely (where possible)
+    {
+        var yuipath = 'https://ajax.googleapis.com/ajax/libs/yui/2.9.0/build';
+        var yuicombopath = '';
+        var remoteyui = true;
+        if (!yuicombopath)
+        {
+            document.write('<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/yui/2.9.0/build/connection/connection-min.js"><\/script>');
+        }
+    }
+    var SESSIONURL = "";
+    var SECURITYTOKEN = "guest";
+    var IMGDIR_MISC = "/images/misc";
+    var IMGDIR_BUTTON = "/images/buttons";
+    var vb_disable_ajax = parseInt("0", 10);
+    var SIMPLEVERSION = "42360";
+    var BBURL = "http://forums.androidcentral.com";
+    var LOGGEDIN = 0 > 0 ? true : false;
+    var THIS_SCRIPT = "showthread";
+    var RELPATH = "showthread.php?t=667469";
+    var PATHS = {
+        forum : "http://forums.androidcentral.com",
+        cms   : "",
+        blog  : ""
+    };
+    var AJAXBASEURL = "http://forums.androidcentral.com/";
+// --> </script> <script type="text/javascript" src="/clientscript/vbulletin-core.js?v=42360"></script> <script type="text/javascript">(window.NREUM||(NREUM={})).loader_config={xpid:"UA4BVlRACQoIU1lW"};window.NREUM||(NREUM={}),__nr_require=function(t,e,n){function r(n){if(!e[n]){var o=e[n]={exports:{}};t[n][0].call(o.exports,function(e){var o=t[n][1][e];return r(o||e)},o,o.exports)}return e[n].exports}if("function"==typeof __nr_require)return __nr_require;for(var o=0;o<n.length;o++)r(n[o]);return r}({1:[function(t,e,n){function r(t){try{s.console&&console.log(t)}catch(e){}}var o,i=t("ee"),a=t(14),s={};try{o=localStorage.getItem("__nr_flags").split(","),console&&"function"==typeof console.log&&(s.console=!0,-1!==o.indexOf("dev")&&(s.dev=!0),-1!==o.indexOf("nr_dev")&&(s.nrDev=!0))}catch(c){}s.nrDev&&i.on("internal-error",function(t){r(t.stack)}),s.dev&&i.on("fn-err",function(t,e,n){r(n.stack)}),s.dev&&(r("NR AGENT IN DEVELOPMENT MODE"),r("flags: "+a(s,function(t,e){return t}).join(", ")))},{}],2:[function(t,e,n){function r(t,e,n,r,o){try{d?d-=1:i("err",[o||new UncaughtException(t,e,n)])}catch(s){try{i("ierr",[s,(new Date).getTime(),!0])}catch(c){}}return"function"==typeof f?f.apply(this,a(arguments)):!1}function UncaughtException(t,e,n){this.message=t||"Uncaught error with no additional information",this.sourceURL=e,this.line=n}function o(t){i("err",[t,(new Date).getTime()])}var i=t("handle"),a=t(15),s=t("ee"),c=t("loader"),f=window.onerror,u=!1,d=0;c.features.err=!0,t(1),window.onerror=r;try{throw new Error}catch(l){"stack"in l&&(t(8),t(7),"addEventListener"in window&&t(5),c.xhrWrappable&&t(9),u=!0)}s.on("fn-start",function(t,e,n){u&&(d+=1)}),s.on("fn-err",function(t,e,n){u&&(this.thrown=!0,o(n))}),s.on("fn-end",function(){u&&!this.thrown&&d>0&&(d-=1)}),s.on("internal-error",function(t){i("ierr",[t,(new Date).getTime(),!0])})},{}],3:[function(t,e,n){t("loader").features.ins=!0},{}],4:[function(t,e,n){function r(t){}if(window.performance&&window.performance.timing&&window.performance.getEntriesByType){var o=t("ee"),i=t("handle"),a=t(8),s=t(7);t("loader").features.stn=!0,t(6);var c=NREUM.o.EV;o.on("fn-start",function(t,e){var n=t[0];n instanceof c&&(this.bstStart=Date.now())}),o.on("fn-end",function(t,e){var n=t[0];n instanceof c&&i("bst",[n,e,this.bstStart,Date.now()])}),a.on("fn-start",function(t,e,n){this.bstStart=Date.now(),this.bstType=n}),a.on("fn-end",function(t,e){i("bstTimer",[e,this.bstStart,Date.now(),this.bstType])}),s.on("fn-start",function(){this.bstStart=Date.now()}),s.on("fn-end",function(t,e){i("bstTimer",[e,this.bstStart,Date.now(),"requestAnimationFrame"])}),o.on("pushState-start",function(t){this.time=Date.now(),this.startPath=location.pathname+location.hash}),o.on("pushState-end",function(t){i("bstHist",[location.pathname+location.hash,this.startPath,this.time])}),"addEventListener"in window.performance&&(window.performance.clearResourceTimings?window.performance.addEventListener("resourcetimingbufferfull",function(t){i("bstResource",[window.performance.getEntriesByType("resource")]),window.performance.clearResourceTimings()},!1):window.performance.addEventListener("webkitresourcetimingbufferfull",function(t){i("bstResource",[window.performance.getEntriesByType("resource")]),window.performance.webkitClearResourceTimings()},!1)),document.addEventListener("scroll",r,!1),document.addEventListener("keypress",r,!1),document.addEventListener("click",r,!1)}},{}],5:[function(t,e,n){function r(t){for(var e=t;e&&!e.hasOwnProperty(u);)e=Object.getPrototypeOf(e);e&&o(e)}function o(t){s.inPlace(t,[u,d],"-",i)}function i(t,e){return t[1]}var a=t("ee").get("events"),s=t(16)(a),c=t("gos"),f=XMLHttpRequest,u="addEventListener",d="removeEventListener";e.exports=a,"getPrototypeOf"in Object?(r(document),r(window),r(f.prototype)):f.prototype.hasOwnProperty(u)&&(o(window),o(f.prototype)),a.on(u+"-start",function(t,e){if(t[1]){var n=t[1];if("function"==typeof n){var r=c(n,"nr@wrapped",function(){return s(n,"fn-",null,n.name||"anonymous")});this.wrapped=t[1]=r}else"function"==typeof n.handleEvent&&s.inPlace(n,["handleEvent"],"fn-")}}),a.on(d+"-start",function(t){var e=this.wrapped;e&&(t[1]=e)})},{}],6:[function(t,e,n){var r=t("ee").get("history"),o=t(16)(r);e.exports=r,o.inPlace(window.history,["pushState","replaceState"],"-")},{}],7:[function(t,e,n){var r=t("ee").get("raf"),o=t(16)(r);e.exports=r,o.inPlace(window,["requestAnimationFrame","mozRequestAnimationFrame","webkitRequestAnimationFrame","msRequestAnimationFrame"],"raf-"),r.on("raf-start",function(t){t[0]=o(t[0],"fn-")})},{}],8:[function(t,e,n){function r(t,e,n){t[0]=a(t[0],"fn-",null,n)}function o(t,e,n){this.method=n,this.timerDuration="number"==typeof t[1]?t[1]:0,t[0]=a(t[0],"fn-",this,n)}var i=t("ee").get("timer"),a=t(16)(i);e.exports=i,a.inPlace(window,["setTimeout","setImmediate"],"setTimer-"),a.inPlace(window,["setInterval"],"setInterval-"),a.inPlace(window,["clearTimeout","clearImmediate"],"clearTimeout-"),i.on("setInterval-start",r),i.on("setTimer-start",o)},{}],9:[function(t,e,n){function r(t,e){d.inPlace(e,["onreadystatechange"],"fn-",s)}function o(){var t=this,e=u.context(t);t.readyState>3&&!e.resolved&&(e.resolved=!0,u.emit("xhr-resolved",[],t)),d.inPlace(t,v,"fn-",s)}function i(t){w.push(t),h&&(g=-g,b.data=g)}function a(){for(var t=0;t<w.length;t++)r([],w[t]);w.length&&(w=[])}function s(t,e){return e}function c(t,e){for(var n in t)e[n]=t[n];return e}t(5);var f=t("ee"),u=f.get("xhr"),d=t(16)(u),l=NREUM.o,p=l.XHR,h=l.MO,m="readystatechange",v=["onload","onerror","onabort","onloadstart","onloadend","onprogress","ontimeout"],w=[];e.exports=u;var y=window.XMLHttpRequest=function(t){var e=new p(t);try{u.emit("new-xhr",[e],e),e.addEventListener(m,o,!1)}catch(n){try{u.emit("internal-error",[n])}catch(r){}}return e};if(c(p,y),y.prototype=p.prototype,d.inPlace(y.prototype,["open","send"],"-xhr-",s),u.on("send-xhr-start",function(t,e){r(t,e),i(e)}),u.on("open-xhr-start",r),h){var g=1,b=document.createTextNode(g);new h(a).observe(b,{characterData:!0})}else f.on("fn-end",function(t){t[0]&&t[0].type===m||a()})},{}],10:[function(t,e,n){function r(t){var e=this.params,n=this.metrics;if(!this.ended){this.ended=!0;for(var r=0;l>r;r++)t.removeEventListener(d[r],this.listener,!1);if(!e.aborted){if(n.duration=(new Date).getTime()-this.startTime,4===t.readyState){e.status=t.status;var i=o(t,this.lastSize);if(i&&(n.rxSize=i),this.sameOrigin){var a=t.getResponseHeader("X-NewRelic-App-Data");a&&(e.cat=a.split(", ").pop())}}else e.status=0;n.cbTime=this.cbTime,u.emit("xhr-done",[t],t),c("xhr",[e,n,this.startTime])}}}function o(t,e){var n=t.responseType;if("json"===n&&null!==e)return e;var r="arraybuffer"===n||"blob"===n||"json"===n?t.response:t.responseText;return i(r)}function i(t){if("string"==typeof t&&t.length)return t.length;if("object"==typeof t){if("undefined"!=typeof ArrayBuffer&&t instanceof ArrayBuffer&&t.byteLength)return t.byteLength;if("undefined"!=typeof Blob&&t instanceof Blob&&t.size)return t.size;if(!("undefined"!=typeof FormData&&t instanceof FormData))try{return JSON.stringify(t).length}catch(e){return}}}function a(t,e){var n=f(e),r=t.params;r.host=n.hostname+":"+n.port,r.pathname=n.pathname,t.sameOrigin=n.sameOrigin}var s=t("loader");if(s.xhrWrappable){var c=t("handle"),f=t(11),u=t("ee"),d=["load","error","abort","timeout"],l=d.length,p=t("id"),h=t(13),m=window.XMLHttpRequest;s.features.xhr=!0,t(9),u.on("new-xhr",function(t){var e=this;e.totalCbs=0,e.called=0,e.cbTime=0,e.end=r,e.ended=!1,e.xhrGuids={},e.lastSize=null,h&&(h>34||10>h)||window.opera||t.addEventListener("progress",function(t){e.lastSize=t.loaded},!1)}),u.on("open-xhr-start",function(t){this.params={method:t[0]},a(this,t[1]),this.metrics={}}),u.on("open-xhr-end",function(t,e){"loader_config"in NREUM&&"xpid"in NREUM.loader_config&&this.sameOrigin&&e.setRequestHeader("X-NewRelic-ID",NREUM.loader_config.xpid)}),u.on("send-xhr-start",function(t,e){var n=this.metrics,r=t[0],o=this;if(n&&r){var a=i(r);a&&(n.txSize=a)}this.startTime=(new Date).getTime(),this.listener=function(t){try{"abort"===t.type&&(o.params.aborted=!0),("load"!==t.type||o.called===o.totalCbs&&(o.onloadCalled||"function"!=typeof e.onload))&&o.end(e)}catch(n){try{u.emit("internal-error",[n])}catch(r){}}};for(var s=0;l>s;s++)e.addEventListener(d[s],this.listener,!1)}),u.on("xhr-cb-time",function(t,e,n){this.cbTime+=t,e?this.onloadCalled=!0:this.called+=1,this.called!==this.totalCbs||!this.onloadCalled&&"function"==typeof n.onload||this.end(n)}),u.on("xhr-load-added",function(t,e){var n=""+p(t)+!!e;this.xhrGuids&&!this.xhrGuids[n]&&(this.xhrGuids[n]=!0,this.totalCbs+=1)}),u.on("xhr-load-removed",function(t,e){var n=""+p(t)+!!e;this.xhrGuids&&this.xhrGuids[n]&&(delete this.xhrGuids[n],this.totalCbs-=1)}),u.on("addEventListener-end",function(t,e){e instanceof m&&"load"===t[0]&&u.emit("xhr-load-added",[t[1],t[2]],e)}),u.on("removeEventListener-end",function(t,e){e instanceof m&&"load"===t[0]&&u.emit("xhr-load-removed",[t[1],t[2]],e)}),u.on("fn-start",function(t,e,n){e instanceof m&&("onload"===n&&(this.onload=!0),("load"===(t[0]&&t[0].type)||this.onload)&&(this.xhrCbStart=(new Date).getTime()))}),u.on("fn-end",function(t,e){this.xhrCbStart&&u.emit("xhr-cb-time",[(new Date).getTime()-this.xhrCbStart,this.onload,e],e)})}},{}],11:[function(t,e,n){e.exports=function(t){var e=document.createElement("a"),n=window.location,r={};e.href=t,r.port=e.port;var o=e.href.split("://");!r.port&&o[1]&&(r.port=o[1].split("/")[0].split("@").pop().split(":")[1]),r.port&&"0"!==r.port||(r.port="https"===o[0]?"443":"80"),r.hostname=e.hostname||n.hostname,r.pathname=e.pathname,r.protocol=o[0],"/"!==r.pathname.charAt(0)&&(r.pathname="/"+r.pathname);var i=!e.protocol||":"===e.protocol||e.protocol===n.protocol,a=e.hostname===document.domain&&e.port===n.port;return r.sameOrigin=i&&(!e.hostname||a),r}},{}],12:[function(t,e,n){function r(t,e){return function(){o(t,[(new Date).getTime()].concat(a(arguments)),null,e)}}var o=t("handle"),i=t(14),a=t(15);"undefined"==typeof window.newrelic&&(newrelic=NREUM);var s=["setPageViewName","addPageAction","setCustomAttribute","finished","addToTrace","inlineHit"],c=["addPageAction"],f="api-";i(s,function(t,e){newrelic[e]=r(f+e,"api")}),i(c,function(t,e){newrelic[e]=r(f+e)}),e.exports=newrelic,newrelic.noticeError=function(t){"string"==typeof t&&(t=new Error(t)),o("err",[t,(new Date).getTime()])}},{}],13:[function(t,e,n){var r=0,o=navigator.userAgent.match(/Firefox[\/\s](\d+\.\d+)/);o&&(r=+o[1]),e.exports=r},{}],14:[function(t,e,n){function r(t,e){var n=[],r="",i=0;for(r in t)o.call(t,r)&&(n[i]=e(r,t[r]),i+=1);return n}var o=Object.prototype.hasOwnProperty;e.exports=r},{}],15:[function(t,e,n){function r(t,e,n){e||(e=0),"undefined"==typeof n&&(n=t?t.length:0);for(var r=-1,o=n-e||0,i=Array(0>o?0:o);++r<o;)i[r]=t[e+r];return i}e.exports=r},{}],16:[function(t,e,n){function r(t){return!(t&&"function"==typeof t&&t.apply&&!t[a])}var o=t("ee"),i=t(15),a="nr@original",s=Object.prototype.hasOwnProperty,c=!1;e.exports=function(t){function e(t,e,n,o){function nrWrapper(){var r,a,s,c;try{a=this,r=i(arguments),s="function"==typeof n?n(r,a):n||{}}catch(u){d([u,"",[r,a,o],s])}f(e+"start",[r,a,o],s);try{return c=t.apply(a,r)}catch(l){throw f(e+"err",[r,a,l],s),l}finally{f(e+"end",[r,a,c],s)}}return r(t)?t:(e||(e=""),nrWrapper[a]=t,u(t,nrWrapper),nrWrapper)}function n(t,n,o,i){o||(o="");var a,s,c,f="-"===o.charAt(0);for(c=0;c<n.length;c++)s=n[c],a=t[s],r(a)||(t[s]=e(a,f?s+o:o,i,s))}function f(e,n,r){if(!c){c=!0;try{t.emit(e,n,r)}catch(o){d([o,e,n,r])}c=!1}}function u(t,e){if(Object.defineProperty&&Object.keys)try{var n=Object.keys(t);return n.forEach(function(n){Object.defineProperty(e,n,{get:function(){return t[n]},set:function(e){return t[n]=e,e}})}),e}catch(r){d([r])}for(var o in t)s.call(t,o)&&(e[o]=t[o]);return e}function d(e){try{t.emit("internal-error",e)}catch(n){}}return t||(t=o),e.inPlace=n,e.flag=a,e}},{}],ee:[function(t,e,n){function r(){}function o(t){function e(t){return t&&t instanceof r?t:t?s(t,a,i):i()}function n(n,r,o){t&&t(n,r,o);for(var i=e(o),a=l(n),s=a.length,c=0;s>c;c++)a[c].apply(i,r);var u=f[v[n]];return u&&u.push([w,n,r,i]),i}function d(t,e){m[t]=l(t).concat(e)}function l(t){return m[t]||[]}function p(t){return u[t]=u[t]||o(n)}function h(t,e){c(t,function(t,n){e=e||"feature",v[n]=e,e in f||(f[e]=[])})}var m={},v={},w={on:d,emit:n,get:p,listeners:l,context:e,buffer:h};return w}function i(){return new r}var a="nr@context",s=t("gos"),c=t(14),f={},u={},d=e.exports=o();d.backlog=f},{}],gos:[function(t,e,n){function r(t,e,n){if(o.call(t,e))return t[e];var r=n();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(t,e,{value:r,writable:!0,enumerable:!1}),r}catch(i){}return t[e]=r,r}var o=Object.prototype.hasOwnProperty;e.exports=r},{}],handle:[function(t,e,n){function r(t,e,n,r){o.buffer([t],r),o.emit(t,e,n)}var o=t("ee").get("handle");e.exports=r,r.ee=o},{}],id:[function(t,e,n){function r(t){var e=typeof t;return!t||"object"!==e&&"function"!==e?-1:t===window?0:a(t,i,function(){return o++})}var o=1,i="nr@id",a=t("gos");e.exports=r},{}],loader:[function(t,e,n){function r(){if(!m++){var t=h.info=NREUM.info,e=u.getElementsByTagName("script")[0];if(t&&t.licenseKey&&t.applicationID&&e){c(l,function(e,n){t[e]||(t[e]=n)});var n="https"===d.split(":")[0]||t.sslForHttp;h.proto=n?"https://":"http://",s("mark",["onload",a()],null,"api");var r=u.createElement("script");r.src=h.proto+t.agent,e.parentNode.insertBefore(r,e)}}}function o(){"complete"===u.readyState&&i()}function i(){s("mark",["domContent",a()],null,"api")}function a(){return(new Date).getTime()}var s=t("handle"),c=t(14),f=window,u=f.document;NREUM.o={ST:setTimeout,CT:clearTimeout,XHR:f.XMLHttpRequest,REQ:f.Request,EV:f.Event,PR:f.Promise,MO:f.MutationObserver},t(12);var d=""+location,l={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-918.min.js"},p=window.XMLHttpRequest&&XMLHttpRequest.prototype&&XMLHttpRequest.prototype.addEventListener&&!/CriOS/.test(navigator.userAgent),h=e.exports={offset:a(),origin:d,features:{},xhrWrappable:p};u.addEventListener?(u.addEventListener("DOMContentLoaded",i,!1),f.addEventListener("load",r,!1)):(u.attachEvent("onreadystatechange",o),f.attachEvent("onload",r)),s("mark",["firstbyte",a()],null,"api");var m=0},{}]},{},["loader",2,10,4,3]);</script><script type='text/javascript'>var mbn_config = {"style":"full","site_abbr":"ac","domain":"androidcentral.com","subdomain":"forums","platform":"vb","section":"showthread","show_sidebar":true};</script> <script type='text/javascript' src='http://passport.mobilenations.com/js/cluetip/jquery.cluetip.min.js?v345'></script> <script type='text/javascript' async='async' src='//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.0/jquery.cookie.js'></script> <script type='text/javascript' defer='async' src='http://passport.mobilenations.com/content/topbar/nationsbar.js?v=4345'></script><script type='text/javascript'>
+var mn_disable_panels=0;
+if (typeof(mbn_config) === 'undefined') var mbn_config = {};
+mbn_config.pp_register= 'https://passport.mobilenations.com/?u=eNpVjVsOgyAQRffCAnxQQBnTdCmGwlhIVAyM6UfTvdf57N-5N_fhQMGnQi9BFAypoKf5LKuYKmgDXCISHdC2Sy7nVhu3h5JT8LhTcWvj89bWmN8UC7rQHPF40N2YQRnL_d78b85b0Ozfri-Py-hRD8EGq7pOav0M6DstpV300CvOKRA1ETJeDecZDAOlvLMYef-VKmER0_cHds9AoQ,,';
+mbn_config.pp_login     = 'https://passport.mobilenations.com/?u=eNpVjlsOwiAQRffCAvpAoDKmcSkNMlMhaUsD0_hh3LvFP_9Obu7LgYJ3gV6CyIQxk-fpyIu4FdAGRGDeoW3nlI-1NG7DnFwieto4u6XxaW1LSC8OmRw2e9jvPBozKGNrvjf_ndOKuuqXc8vTfPWkB7RoVddJrR9IvtNS2lkPvao-BaJEpopnwvkKpgLHtP0OgljSM578-QK0tD9S';
+mbn_config.pp_social_login = {
+    fb:'https://passport.mobilenations.com/?u=eNpVjV0OwiAQhO_CAfpcJ1DBGI_SUHYJxLbbwDY-GO9u8c23L5P5ZpyV9l1sP1iREVJGz9ORF3ErVmkrXCLzbts2UD7W0rgNMiXwuHF2S-NpbUukF8eMDpo97g--az1Kbarf6__NaQVV88v55TFcXD2qEQwY2XWDUjOg79QwmKDGXtaetKIkxoqn4XwFXYETbb-DMy6FpuA8zkRPcft8Ab0aQlU,',
+    tw:'https://passport.mobilenations.com/?u=eNpVjVEOgyAQRO_CAVQoYMU0PYqh7BpIVMyyxo-md6_0r38vk3kz3mn3Lk4qXCcIIREGng5axFicsU5E5t217ZzpWEvjN6CcIODG5Jcm5LUtMZ8cCT00e9yf_LC213aovrT_m9MKpua36yvgfA9oehhg0F2njHkBhs4oNcyml7r2tBMlMVa8DB8q2Aqc8vY7kFej5InPxIwkxs8XfH5CLQ,,',
+    ms:'https://passport.mobilenations.com/?u=eNpVjVsKwyAURPfiAvIwaqqhdCnBehWFmBv0hn6U7r2xf_07DHNmrBHmXc3IDSseUvGO1rNsbKlGKsNcItFh-j5gOXPt7A4FEzi_U7Fb5zD3NeKLYvEWuiMeD7orNQulmz-q_801g2z5dH05H27Oyxk0aDEMXFzKXCd4N0jOdZDzKFpPGFYT-YaXYV0D1YAS7r-D6WpUXFxzcgUrBmLL5wsCE0Ly',
+    gp:'https://passport.mobilenations.com/?u=eNpVjUEOwiAURO_CAVqKQOUb41Ea5NNC0vY3QOPCeHfBnbuXyZsZCxLeGQYBLHmMybsynWlltwxKAwulHND3M6Vzy53dMVFE5_eS7No52voc6FVC8ha7IxyPctd6lNq0_qD_N6cNVcsv9cv5-eq8GtGgkZwLpZ7oHVdCmFmNg2yeBJZj8Q1rw7oGukGJtP8OeDUyTQvRslbv8wU4xEGW'
+};
+mbn_config.user = {
+    pdevice: '',
+    puid:'',
+    cuid:'',
+    optin:'',
+    geo:'US',
+    member:'false'
+};
+mbn_config.site = {
+    site: 'ac',
+    siteid: '1',
+    name: 'Android Central',
+    cookie_domain:'.androidcentral.com',
+    push_host: 'https://push.mobilenations.com',
+    push_manage_host: 'https://www.androidcentral.com',
+    push_manage_page: '/follow/',
+    dev: ''
+};
+
+</script> <meta name="terms" content="Google Nexus 6,Google Phones &amp;amp; Tablets - Nexus, Pixel &amp;amp; More!" /> <script src="http://ads.servebom.com/tmnhead.js"></script> <script src="http://crackberry.com/sites/all/modules/gpt/gpt.js?vb1"></script> <link rel="stylesheet" type="text/css" href="http://crackberry.com/sites/all/modules/gpt/gpt.css?v1" /> <script type='text/javascript'>
+  var dfp_enabled = true;
+  targeting = {};
+
+  var terms = $('meta[name=terms]');
+  if(terms.length) {
+    terms = terms.attr("content");
+
+    var kw = $.map(terms.split(","), function(s) {
+      s = s.toLowerCase();
+      s = s.replace(/[^0-9a-zA-Z ]/g,"");
+      s = s.replace(/ /g,"_");
+      s = s.replace(/_+/g,"_");
+      s = s.replace(/^_/,"");
+      s = s.replace(/_$/,"");
+      return s;
+    });
+    if(kw.length) targeting['kw'] = kw;
+  }
+  </script> <link rel="alternate" type="application/rss+xml" title="Android Forums at AndroidCentral.com RSS Feed" href="http://feeds.feedburner.com/VBSEO_FEEDBURNER" /> <link rel="alternate" type="application/rss+xml" title="Android Forums at AndroidCentral.com - Google Nexus 6 - RSS Feed" href="http://forums.androidcentral.com/external.php?type=RSS2&amp;forumids=1125" /> <link rel="stylesheet" type="text/css" href="http://forums.androidcentral.com/clientscript/vbulletin_css/style00074l/main-rollup.css?d=1461133347" /> <link type="text/css" rel="stylesheet" href="http://forums.androidcentral.com/clientscript/vbulletin_css/style00074l/sidebar.css?d=1461133347" /><link type="text/css" rel="stylesheet" href="http://forums.androidcentral.com/clientscript/vbulletin_css/style00074l/widgets.css?d=1461133347" /><link type="text/css" rel="stylesheet" href="http://forums.androidcentral.com/clientscript/vbulletin_css/style00074l/forumhome.css?d=1461133347" /> <!--[if lt IE 8]> <link rel="stylesheet" type="text/css" href="http://forums.androidcentral.com/clientscript/vbulletin_css/style00074l/popupmenu-ie.css?d=1461133347" /> <link rel="stylesheet" type="text/css" href="http://forums.androidcentral.com/clientscript/vbulletin_css/style00074l/vbulletin-ie.css?d=1461133347" /> <link rel="stylesheet" type="text/css" href="http://forums.androidcentral.com/clientscript/vbulletin_css/style00074l/vbulletin-chrome-ie.css?d=1461133347" /> <link rel="stylesheet" type="text/css" href="http://forums.androidcentral.com/clientscript/vbulletin_css/style00074l/vbulletin-formcontrols-ie.css?d=1461133347" /> <link rel="stylesheet" type="text/css" href="http://forums.androidcentral.com/clientscript/vbulletin_css/style00074l/editor-ie.css?d=1461133347" /> <![endif]--> <link href="//www.androidcentral.com/sites/androidcentral.com/themes/android_visor/css/common.css?vb=42360" rel="stylesheet" type="text/css"> <link href="//www.androidcentral.com/sites/all/modules/visor_header/css/header.css?v=42360" rel="stylesheet" type="text/css"> <link href="//www.androidcentral.com/sites/all/modules/visor_header/css/header-ac.css?v=42360" rel="stylesheet" type="text/css"> <link rel='stylesheet' type='text/css' href='/passport/widget/follow/follow.css?v=42360' /> <script type='text/javascript'>
+  // Make the status column match the height of the parent
+  $(function() {
+  $('.threadstats.td.alt').each(function() { $(this).height( $(this).parent().height() - 8.5 - 8.5); });
+});
+</script> <script type="text/javascript">
+
+(function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","//www.google-analytics.com/analytics.js","ga");
+ga("create", "UA-5727237-3", {"cookieDomain":".androidcentral.com"});
+ga("set", "dimension1", "full");
+ga("set", "dimension2", mbn_config.section);
+ga("set", "dimension3", 'true');
+ga("send", "pageview");
+setTimeout("ga('send','event','NoBounce','Over 10 seconds')",10000);
+
+</script> <script type="text/javascript" src="//www.imore.com/sites/all/libraries/jquery.plugins/jquery.cookie.min.js"></script> <script type="text/javascript" src="//www.androidcentral.com/sites/all/libraries/jquery.reflect/jquery.reflect.js"></script> <script type="text/javascript" src="//www.androidcentral.com/sites/all/modules/spe_store/spe_store.js"></script> <script type="text/javascript" src="//www.androidcentral.com/sites/all/libraries/bxslider/bxslider.js?v=42360"></script> <script type="text/javascript" src="//www.androidcentral.com/sites/all/libraries/headroom/headroom.min.js?v=42360"></script> <script type="text/javascript" src="//www.androidcentral.com/sites/all/libraries/sticky/sticky.js?v=42360"></script> <script type="text/javascript" src="//www.androidcentral.com/sites/all/libraries/swiper/swiper.js?v=42360"></script> <script type="text/javascript" src="//www.androidcentral.com/sites/all/libraries/hoverintent/hoverintent.js?v=42360"></script> <script type="text/javascript" src="//www.androidcentral.com/sites/all/libraries/debouncedresized/debouncedresized.js?v=42360"></script> <script type="text/javascript" src="//www.androidcentral.com/sites/all/modules/visor_header/js/header.js?v=42360"></script> <script type="application/ld+json">
+{ "@context" : "http://schema.org",
+  "@type" : "Organization",
+  "name" : "Android Central Forums",
+  "url" : "http://forums.androidcentral.com",
+  "sameAs" : [ "http://www.facebook.com/AndroidCentral",
+    "http://www.twitter.com/AndroidCentral",
+    "http://plus.google.com/+AndroidCentral","http://instagram.com/androidcentral","http://www.youtube.com/user/androidcentral"]
+}
+</script><style type="text/css">
+
+span.tab-menu {
+     background: none repeat scroll 0 0 #EBEBEB;
+     border-top:1px solid #ccc;
+     border-right:1px solid #ccc;
+     border-left:1px solid #ccc;
+     color: black; cursor: pointer;
+     display: inline-block;
+     font-weight: 300;
+     margin-right: 5px;
+     padding: 3px 5px;
+}
+
+span.tab-menu:hover {
+     background:#F6F6F6;
+     color: #000000;
+}
+
+span.tab-menu span {
+     display:none;
+     padding:2px 15px;
+}
+
+.tabtitle {
+     color: #222;
+     font-weight: 700;
+     padding-bottom: 5px;
+}
+
+.tabc {
+     font-size: 11px;
+     color: #000000;
+     max-width:94%;
+     margin-bottom: 10px;
+     padding: 4px 0 4px 10px;
+}
+
+.tabci {
+max-width:95%;
+}
+
+.tabc2 {
+border:1px solid #ccc;
+padding:10px;
+min-height:200px;
+}
+.activetab {
+padding:1px;
+}
+</style> <script type='text/javascript'>
+
+function tab_content_make_active(e) {
+  $(e).parent().find(".tab-menu.active").removeClass('active');
+  $(e).addClass('active');
+  $(e).siblings('.tabc2').html( $('span',e).html() );
+}
+
+$(function() {
+  $('.tabc2','#posts').parent().find('.tab-menu:eq(0)').each( function() {
+    tab_content_make_active(this);
+  });
+});
+
+</script><script type="text/javascript"> vBulletin.add_event("SkimlinksActivate"); </script> <meta name="keywords" content="there,way,recover,data,dead,Android,phone,data, there, from, dead, recover, way, android, phone, nexus, its, internal, storage" /> <meta name="description" content="My Nexus 6 is dead. Is there a way to recover data from its internal storage?" /> <title> Is there a way to recover data from a dead Android phone? - Android Forums at AndroidCentral.com</title> <link rel="canonical" href="http://forums.androidcentral.com/google-nexus-6/667469-there-way-recover-data-dead-android-phone.html" /> <link rel="stylesheet" type="text/css" href="http://forums.androidcentral.com/clientscript/vbulletin_css/style00074l/showthread-rollup.css?d=1461133347" /> <!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://forums.androidcentral.com/clientscript/vbulletin_css/style00074l/toolsmenu-ie.css?d=1461133347" /> <link rel="stylesheet" type="text/css" href="http://forums.androidcentral.com/clientscript/vbulletin_css/style00074l/postlist-ie.css?d=1461133347" /> <link rel="stylesheet" type="text/css" href="http://forums.androidcentral.com/clientscript/vbulletin_css/style00074l/showthread-ie.css?d=1461133347" /> <link rel="stylesheet" type="text/css" href="http://forums.androidcentral.com/clientscript/vbulletin_css/style00074l/postbit-ie.css?d=1461133347" /> <link rel="stylesheet" type="text/css" href="http://forums.androidcentral.com/clientscript/vbulletin_css/style00074l/poll-ie.css?d=1461133347" /><![endif]--> <script type="text/javascript" src="/clientscript/ncode_imageresizer_v1.6.js"></script> <script type="text/javascript"> <!--
+NcodeImageResizer.MODE = 'newwindow';
+NcodeImageResizer.MAXWIDTH = '800';
+NcodeImageResizer.MAXHEIGHT = '0';
+NcodeImageResizer.BBURL = 'http://forums.androidcentral.com';
+
+vbphrase['ncode_imageresizer_warning_small'] = 'Click here to view the full image.';
+vbphrase['ncode_imageresizer_warning_filesize'] = 'Click here to view the original image of %1$sx%2$spx and %3$sKB.';
+vbphrase['ncode_imageresizer_warning_no_filesize'] = 'Click here to view the original image of %1$sx%2$spx.';
+vbphrase['ncode_imageresizer_warning_fullsize'] = 'Click here to view the small image.';
+// --> </script> <style type="text/css">
+.brTag1 {
+  height: 0px;
+  font-size: 0px;
+}
+
+textarea.ncode_imageresizer_warning {
+  font-size: 11px;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  background: #FFFACD url(images/misc/nCode.png) 6px 6px no-repeat;
+  color: #4F4300;
+  border: 1px solid #FFEC7D;
+  padding: 6px 0px 6px 30px;
+  margin-top: 12px;
+  height:27px !important;
+  cursor: pointer;
+  resize: none;
+  overflow:hidden;
+  -moz-border-radius: 6px 6px 0px 0px;
+  -webkit-border-radius: 6px 6px 0px 0px;
+  border-radius: 6px 6px 0px 0px;
+}
+
+
+</style> <link rel='stylesheet' type='text/css' href='//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css'> <link rel='stylesheet' type='text/css' href='http://passport.mobilenations.com/content/topbar/nationsbar_vb_ac.css?v345' /> <link rel='stylesheet' type='text/css' href='http://passport.mobilenations.com/js/cluetip/jquery.cluetip.css?v345' /><script type='text/javascript' src='/spe/js/quick-search-forum.js.php' ></script> <link rel="stylesheet" type="text/css" href="http://forums.androidcentral.com/clientscript/vbulletin_css/style00074l/additional.css?d=1461133347" /> <script type="text/javascript" src="http://forums.androidcentral.com/vbseo/resources/scripts/vbseo_ui.js?v=a5"></script> <script type="text/javascript">
+ YAHOO.util.Event.onDOMReady(function (){
+    vbseoui = new vBSEO_UI();
+    vbseoui.page_init(Array('postbody','blogbit','content','postcontainer','vbseo_like_postbit'), Array("php",1));
+ });
+</script> <link rel="stylesheet" type="text/css" href="http://forums.androidcentral.com/css.php?styleid=74&amp;langid=1&amp;d=&amp;sheet=forumhome_sub_forum_manager.css" /> <script type='text/javascript'>
+  if(dfp_enabled) {
+    $(function() {
+      if(typeof(tmntag)!='undefined') {
+        tmntag.target(targeting);
+        tmntag.placement('2181'); // [tmnp.AndroidCentral/forum_post2 DESKTOP]
+        tmntag.start();
+      }
+    });
+  }
+  </script></head> <body> <div id='site-global-wrap' class='logged-out showthread'>   <section id='page-top' class='header-small interior'> <header id='header' class='header'> <div class='header-navigation' id='header-navigation-left'> <ul> <li class='menu'><a href='http://forums.androidcentral.com/google-nexus-6/667469-there-way-recover-data-dead-android-phone.html#vhm3'><span class='icomoon-burger'></span></a></li> </ul> </div> <a href='http://www.androidcentral.com/' id='logo' class='logo'>Android Central</a> <div class='header-navigation' id='header-navigation-right'> <ul> <li class='forums'><a rel='nofollow' href='http://forums.androidcentral.com/?utm_medium=navbar&amp;utm_campaign=navigation&amp;utm_source=ac' ><span class='icomoon-forum'></span>Forums</a> <ul> <li><a rel='nofollow' href='http://forums.androidcentral.com/ask-question/?utm_medium=navbar&amp;utm_campaign=navigation&amp;utm_source=ac' >Ask a Question</a></li> <li><a rel='nofollow' href='http://forums.androidcentral.com/search.php?do=getnew&amp;utm_medium=navbar&amp;utm_campaign=navigation&amp;utm_source=ac' >New Posts</a></li> <li><a rel='nofollow' href='http://forums.androidcentral.com/activity.php?sortby=popular&amp;show=all&amp;time=week&amp;utm_medium=navbar&amp;utm_campaign=navigation&amp;utm_source=ac' >Trending Discussions</a></li> <li><a rel='nofollow' href='http://forums.androidcentral.com/android-n/?utm_medium=navbar&amp;utm_campaign=navigation&amp;utm_source=ac' >Android N</a></li> <li><a rel='nofollow' href='http://forums.androidcentral.com/samsung-galaxy-s7/?utm_medium=navbar&amp;utm_campaign=navigation&amp;utm_source=ac' >Samsung Galaxy S7</a></li> <li><a rel='nofollow' href='http://forums.androidcentral.com/samsung-galaxy-s7-edge/?utm_medium=navbar&amp;utm_campaign=navigation&amp;utm_source=ac' >Samsung Galaxy S7 edge</a></li> <li><a rel='nofollow' href='http://forums.androidcentral.com/samsung-galaxy-s6/?utm_medium=navbar&amp;utm_campaign=navigation&amp;utm_source=ac' >Samsung Galaxy S6</a></li> <li><a rel='nofollow' href='http://forums.androidcentral.com/htc-10/?utm_medium=navbar&amp;utm_campaign=navigation&amp;utm_source=ac' >HTC 10</a></li> <li><a rel='nofollow' href='http://forums.androidcentral.com/moto-x-pure-edition/?utm_medium=navbar&amp;utm_campaign=navigation&amp;utm_source=ac' >Moto X Pure Edition</a></li> <li><a rel='nofollow' href='http://forums.androidcentral.com/nexus-6p/?utm_medium=navbar&amp;utm_campaign=navigation&amp;utm_source=ac' >Nexus 6P</a></li> <li><a rel='nofollow' href='http://forums.androidcentral.com/lg-g5/?utm_medium=navbar&amp;utm_campaign=navigation&amp;utm_source=ac' >LG G5</a></li></ul></li> <li class='shop'><a href='http://www.shopandroid.com/?utm_medium=navbar&utm_campaign=navigation&utm_source=ac' ><span class='icomoon-cart'></span>Shop</a> <ul> <li><a href='http://www.shopandroid.com/deals.htm?utm_medium=navbar&utm_campaign=navigation&utm_source=ac' >HOT DEAL$</a></li> <li><a href='http://www.shopandroid.com/?utm_medium=navbar&utm_campaign=navigation&utm_source=ac' >All Accessories</a></li> <li><a href='http://www.shopandroid.com/android-cases.htm?utm_medium=navbar&utm_campaign=navigation&utm_source=ac' >Cases & Covers</a></li> <li><a href='http://www.shopandroid.com/android-chargers-and-cables.htm?utm_medium=navbar&utm_campaign=navigation&utm_source=ac' >Chargers & Cables</a></li> <li><a href='http://www.shopandroid.com/cradles.htm?utm_medium=navbar&utm_campaign=navigation&utm_source=ac' >Docks & Cradles</a></li> <li><a href='http://www.shopandroid.com/batteries.htm?utm_medium=navbar&utm_campaign=navigation&utm_source=ac' >Batteries</a></li> <li><a href='http://www.shopandroid.com/screen-protectors.htm?utm_medium=navbar&utm_campaign=navigation&utm_source=ac' >Screen Protectors</a></li></ul></li> <li class='mobile-h search'> <a href='http://forums.androidcentral.com/google-nexus-6/667469-there-way-recover-data-dead-android-phone.html#vhm1'><span class='icomoon-search'></span></a> <form id='form-main-search' class='st-search-input' action='http://www.androidcentral.com/search'> <button type='submit'></button> <input type='text' id='main-search' name='query'  placeholder='Search...'/> </form> </li> </ul> </div> <nav id='navigation'> <ul> <li><a href='http://www.androidcentral.com/reviews?utm_medium=burger&utm_campaign=navigation&utm_source=ac' >Reviews</a></li> <li><a href='http://www.androidcentral.com/apps' >Apps</a></li> <li><a href='http://www.androidcentral.com/devices' >Devices</a></li> <li><a href='http://www.androidcentral.com/help' >Help</a></li> <li><a href='http://androidcentral.com/ask?utm_medium=navbar&utm_campaign=navigation&utm_source=ac' >Q&A</a></li> <li><a href='http://www.androidcentral.com/best?utm_medium=navbar&utm_campaign=navigation&utm_source=ac' >The Best</a></li> <li><a href='http://www.androidcentral.com/root?utm_medium=navbar&utm_campaign=navigation&utm_source=ac' >Root</a></li> <li><a href='http://www.androidcentral.com/deals?utm_medium=navbar&utm_campaign=navigation&utm_source=ac' >Deals</a></li> </ul> <ul> </ul> </nav>  <div id='header-sponsored'> </div> </header> <nav id='navigation-right' class='navigation-right'> <div class='inner'> <div id='menu-login-links'> <a href='https://passport.mobilenations.com/?u=eNpVjlsOwiAQRffCAvpAoDKmcSkNMlMhaUsD0_hh3LvFP_9Obu7LgYJ3gV6CyIQxk-fpyIu4FdAGRGDeoW3nlI-1NG7DnFwieto4u6XxaW1LSC8OmRw2e9jvPBozKGNrvjf_ndOKuuqXc8vTfPWkB7RoVddJrR9IvtNS2lkPvao-BaJEpopnwvkKpgLHtP0OgljSM578-QK0tD9S'>Log in</a> or <a href='https://passport.mobilenations.com/?u=eNpVjVsOgyAQRffCAnxQQBnTdCmGwlhIVAyM6UfTvdf57N-5N_fhQMGnQi9BFAypoKf5LKuYKmgDXCISHdC2Sy7nVhu3h5JT8LhTcWvj89bWmN8UC7rQHPF40N2YQRnL_d78b85b0Ozfri-Py-hRD8EGq7pOav0M6DstpV300CvOKRA1ETJeDecZDAOlvLMYef-VKmER0_cHds9AoQ,,&utm_source=ac&utm_medium=signup&utm_campaign=passport'>Sign up</a> <span>Fewer ads and it's free!</span> </div> <div class='menu'> <form id='menu_search' action='http://www.androidcentral.com/search'> <button type='submit'><i class='icon-search icon-flip-horizontal'></i></button> <input type='text' name='query' placeholder='Search...' id='menu_search_input' /> </form> <ul>  <li><a rel='nofollow' href='http://forums.androidcentral.com/?utm_medium=burger&amp;utm_campaign=navigation&amp;utm_source=ac' >Forums</a></li> <li><a href='http://www.androidcentral.com/news?utm_medium=burger&utm_campaign=navigation&utm_source=ac'  rel='all'>News</a></li> <li><a href='http://www.androidcentral.com/reviews?utm_medium=burger&utm_campaign=navigation&utm_source=ac'  rel='reviews'>Reviews</a></li> <li><a href='http://www.androidcentral.com/apps?utm_medium=burger&utm_campaign=navigation&utm_source=ac'  rel='apps'>Apps</a></li> <li><a href='http://www.androidcentral.com/help?utm_medium=burger&utm_campaign=navigation&utm_source=ac'  rel='help'>Help & How To</a></li> <li><a href='http://androidcentral.com/ask?utm_medium=burger&utm_campaign=navigation&utm_source=ac' >Question & Answer </a></li> <li><a href='http://androidcentral.com/contests?utm_medium=burger&utm_campaign=navigation&utm_source=ac' >Contests</a></li> <li><a href='http://www.androidcentral.com/podcast?utm_medium=burger&utm_campaign=navigation&utm_source=ac'  rel='podcast'>Podcasts</a></li> <li><a href='http://www.androidcentral.com/best?utm_medium=burger&utm_campaign=navigation&utm_source=ac' >The Best</a></li> <li><a href='http://www.androidcentral.com/wallpaper?utm_medium=burger&utm_campaign=navigation&utm_source=ac' >Wallpapers</a></li> <li><a rel='nofollow' href='http://www.youtube.com/channel/UC-kFCSJLpxuJdgMnQz8Dvrg?sub_confirmation=1&utm_medium=burger&utm_campaign=navigation&utm_source=ac'  target='_blank'>Videos</a></li> <li><a href='http://www.shopandroid.com/?utm_medium=burger&utm_campaign=navigation&utm_source=ac' >Shop Accessories</a></li> <li><a href='http://www.androidcentral.com/about?utm_medium=burger&utm_campaign=navigation&utm_source=ac' >About Android Central</a></li> <li class='tip-us'><a href='http://www.androidcentral.com/contact?utm_medium=burger&utm_campaign=navigation&utm_source=ac' ><span class='icomoon-paper-plane'></span>Tip Us On News</a></li> <li class='tip-us'><a rel='nofollow' href='http://phon.es/4sru?utm_medium=burger&utm_campaign=navigation&utm_source=ac'  target='_blank'><span class='icomoon-play'></span>Download our app!</a></li> <li><a href='http://www.mobilenations.com/terms-and-conditions.html?utm_medium=burger&utm_campaign=navigation&utm_source=ac' >Terms & Conditions</a></li> </ul> </div> <section class='other-channels'> <ul class='channels-list'> <li><a href='http://google.com/+androidcentral?utm_medium=burger&utm_campaign=navigation&utm_source=ac' ><span class='icomoon-gplus'></span></a></li> <li><a rel='nofollow' href='http://www.twitter.com/androidcentral?utm_medium=burger&utm_campaign=navigation&utm_source=ac' ><span class='icomoon-twitter'></span></a></li> <li><a rel='nofollow' href='http://www.facebook.com/androidcentral?utm_medium=burger&utm_campaign=navigation&utm_source=ac' ><span class='icomoon-fb'></span></a></li> <li><a rel='nofollow' href='http://phon.es/acsub?utm_medium=burger&utm_campaign=navigation&utm_source=ac' ><span class='icomoon-yt'></span></a></li> <li><a rel='nofollow' href='http://instagram.com/androidcentral?utm_medium=burger&utm_campaign=navigation&utm_source=ac' ><span class='icomoon-instagram'></span></a></li> <li><a href='http://www.androidcentral.com/rss.xml?utm_medium=burger&utm_campaign=navigation&utm_source=ac' ><span class='icomoon-rss'></span></a></li> </ul> </section> <div class='menu'> <ul> <li class='mona_sidebar_site_link ac'><a href='http://www.androidcentral.com?utm_medium=burger&utm_campaign=navigation&utm_source='>Android Central</a></li> <li class='mona_sidebar_site_link sw'><a rel='nofollow' href='http://www.connectedly.com?utm_medium=burger&utm_campaign=navigation&utm_source='>Connectedly</a></li> <li class='mona_sidebar_site_link cb'><a href='http://www.crackberry.com?utm_medium=burger&utm_campaign=navigation&utm_source='>CrackBerry</a></li> <li class='mona_sidebar_site_link im'><a href='http://www.imore.com?utm_medium=burger&utm_campaign=navigation&utm_source='>iMore</a></li> <li class='mona_sidebar_site_link wp'><a rel='nofollow' href='http://www.windowscentral.com?utm_medium=burger&utm_campaign=navigation&utm_source='>Windows Central</a></li> </ul> </div> </div>  </nav> <div class='recent-posts'> <div class='swiper-container' id='header-swiper-container' > <div class='swiper-wrapper'> <a href='http://www.androidcentral.com/htc-10-vs-iphone-6s-no-place-home-button?utm_medium=superfeature&utm_campaign=navigation&utm_source=ac' class='swiper-slide' data-src='http://www.androidcentral.com/sites/androidcentral.com/files/styles/w400h388cropvo/public/article_images/2016/04/htc-10-iphone-6s-front.jpg?itok=7civuzse'> <div class='title'> <p><span>Battle!</span></p> <h2><span>HTC 10 vs. iPhone 6s: No place like home (button)</span></h2> </div> </a> <a href='http://www.androidcentral.com/htc-10?utm_medium=superfeature&utm_campaign=navigation&utm_source=ac' class='swiper-slide' data-src='http://www.androidcentral.com/sites/androidcentral.com/files/styles/w400h388cropvo/public/article_images/2016/04/htc-10-review-hero2.jpg?itok=iMEsobgK'> <div class='title'> <p><span>A return to form</span></p> <h2><span>HTC 10: Reviewed!</span></h2> </div> </a> <a href='http://www.androidcentral.com/can-chromebook-replace-my-macbook-or-windows-laptop?utm_medium=superfeature&utm_campaign=navigation&utm_source=ac' class='swiper-slide' data-src='http://www.androidcentral.com/sites/androidcentral.com/files/styles/w400h388cropvo/public/article_images/2016/04/Chromebook-macbook-1.jpg?itok=S5zCDtkx'> <div class='title'> <p><span>Chromebooks</span></p> <h2><span>Can a Chromebook replace a &#039;real&#039; laptop?</span></h2> </div> </a> <a href='http://www.androidcentral.com/samsung-galaxy-s7-versus-lg-nexus-5x?utm_medium=superfeature&utm_campaign=navigation&utm_source=ac' class='swiper-slide' data-src='http://www.androidcentral.com/sites/androidcentral.com/files/styles/w400h388cropvo/public/article_images/2016/04/galaxy-s7-nexus-5x-backs.jpg?itok=hUvgI1Ng'> <div class='title'> <p><span>Lopsided affair</span></p> <h2><span>Galaxy S7 vs. Nexus 5X: Same size, different audiences</span></h2> </div> </a> <a href='http://www.androidcentral.com/lg-g5-second-opinion-least-camera-nice?utm_medium=superfeature&utm_campaign=navigation&utm_source=ac' class='swiper-slide' data-src='http://www.androidcentral.com/sites/androidcentral.com/files/styles/w400h388cropvo/public/article_images/2016/04/g5-hero.jpg?itok=swVWzdE9'> <div class='title'> <p><span>It's ok I guess</span></p> <h2><span>LG G5 second opinion</span></h2> </div> </a> <a href='http://www.androidcentral.com/htc-10-versus-galaxy-s7?utm_medium=superfeature&utm_campaign=navigation&utm_source=ac' class='swiper-slide' data-src='http://www.androidcentral.com/sites/androidcentral.com/files/styles/w400h388cropvo/public/article_images/2016/04/htc-10-galaxy-s7-front-6.jpg?itok=xkD08x7B'> <div class='title'> <p><span>Let the battle begin</span></p> <h2><span>HTC 10 vs Galaxy S7: A grown-up rivalry</span></h2> </div> </a> <a href='http://www.androidcentral.com/htc-10-initial-photo-and-video-samples?utm_medium=superfeature&utm_campaign=navigation&utm_source=ac' class='swiper-slide' data-src='http://www.androidcentral.com/sites/androidcentral.com/files/styles/w400h388cropvo/public/article_images/2016/04/htc-10-gold-camera.jpg?itok=5BkFdOhH'> <div class='title'> <p><span>UltraPixel 2</span></p> <h2><span>HTC 10 photo and video samples</span></h2> </div> </a> <a href='http://www.androidcentral.com/htc-10-review-preview?utm_medium=superfeature&utm_campaign=navigation&utm_source=ac' class='swiper-slide' data-src='http://www.androidcentral.com/sites/androidcentral.com/files/styles/w400h388cropvo/public/article_images/2016/04/htc-10-colors-1-edit-jsidkghrorhjiej_0.jpg?itok=jSZoYxZ7'> <div class='title'> <p><span>power of 10</span></p> <h2><span>HTC 10 preview: The full story of HTC&#039;s best phone in years</span></h2> </div> </a> <a href='http://www.androidcentral.com/lg-g5-review?utm_medium=superfeature&utm_campaign=navigation&utm_source=ac' class='swiper-slide' data-src='http://www.androidcentral.com/sites/androidcentral.com/files/styles/w400h388cropvo/public/article_images/2016/04/lg-g5-review-6.jpg?itok=2TXGrGKR'> <div class='title'> <p><span>So much going on here ...</span></p> <h2><span>LG G5 review</span></h2> </div> </a> <a href='http://www.androidcentral.com/should-you-upgrade-galaxy-s7?utm_medium=superfeature&utm_campaign=navigation&utm_source=ac' class='swiper-slide' data-src='http://www.androidcentral.com/sites/androidcentral.com/files/styles/w400h388cropvo/public/article_images/2016/04/galaxy-s7-above-pile.jpg?itok=hsOYwoDx'> <div class='title'> <p><span>Big choices</span></p> <h2><span>Galaxy S7 and S7 edge: Should you upgrade?</span></h2> </div> </a> <a href='http://www.androidcentral.com/are-galaxy-s7s-box-headphones-worth-your-time?utm_medium=superfeature&utm_campaign=navigation&utm_source=ac' class='swiper-slide' data-src='http://www.androidcentral.com/sites/androidcentral.com/files/styles/w400h388cropvo/public/article_images/2016/04/galaxy-s7-in-box-headphones.jpg?itok=RBsVEfJf'> <div class='title'> <p><span>Actually good</span></p> <h2><span>Are the Galaxy S7&#039;s in-box earbuds worth your time?</span></h2> </div> </a> <a href='http://www.androidcentral.com/galaxy-s7-edge-second-opinion?utm_medium=superfeature&utm_campaign=navigation&utm_source=ac' class='swiper-slide' data-src='http://www.androidcentral.com/sites/androidcentral.com/files/styles/w400h388cropvo/public/article_images/2016/04/Galaxy-S7-edge-1.jpg?itok=F1uxmUh2'> <div class='title'> <p><span>The new standard</span></p> <h2><span>A second look at the Galaxy S7 edge</span></h2> </div> </a> <a href='http://www.androidcentral.com/why-you-might-want-encrypt-sd-card-your-galaxy-s7?utm_medium=superfeature&utm_campaign=navigation&utm_source=ac' class='swiper-slide' data-src='http://www.androidcentral.com/sites/androidcentral.com/files/styles/w400h388cropvo/public/article_images/2016/04/Galaxy-S7-SD-card-2.jpg?itok=qIeU4HZm'> <div class='title'> <p><span>Security</span></p> <h2><span>Should I encrypt the SD card in my Galaxy S7?</span></h2> </div> </a> <a href='http://www.androidcentral.com/huawei-p9?utm_medium=superfeature&utm_campaign=navigation&utm_source=ac' class='swiper-slide' data-src='http://www.androidcentral.com/sites/androidcentral.com/files/styles/w400h388cropvo/public/article_images/2016/04/p9-and-plus-2_0.jpg?itok=hjwSzMEi'> <div class='title'> <p><span>#oo</span></p> <h2><span>Huawei P9 + P9 Plus hands-on</span></h2> </div> </a> <a href='http://www.androidcentral.com/things-know-about-samsung-galaxy-s7s-sd-card-slot?utm_medium=superfeature&utm_campaign=navigation&utm_source=ac' class='swiper-slide' data-src='http://www.androidcentral.com/sites/androidcentral.com/files/styles/w400h388cropvo/public/article_images/2016/04/galaxy-s7-sd-card-slot-2.jpg?itok=jxMBz2ub'> <div class='title'> <p><span>Expand your knowledge, too</span></p> <h2><span>Getting to know the Samsung Galaxy S7&#039;s SD card</span></h2> </div> </a> <a href='http://www.androidcentral.com/huawei-p9-first-7-things-you-need-know?utm_medium=superfeature&utm_campaign=navigation&utm_source=ac' class='swiper-slide' data-src='http://www.androidcentral.com/sites/androidcentral.com/files/styles/w400h388cropvo/public/article_images/2016/04/p9-7_0.jpg?itok=7EwjNtFT'> <div class='title'> <p><span>Dual Cameras for All!</span></p> <h2><span>7 things to know about the new Huawei P9</span></h2> </div> </a> <a href='http://www.androidcentral.com/nexus-5x-versus-iphone-se?utm_medium=superfeature&utm_campaign=navigation&utm_source=ac' class='swiper-slide' data-src='http://www.androidcentral.com/sites/androidcentral.com/files/styles/w400h388cropvo/public/article_images/2016/04/nexus5x-iphonese-comparison-1.jpg?itok=ZY70R373'> <div class='title'> <p><span>Into the middle</span></p> <h2><span>Nexus 5X vs. iPhone SE</span></h2> </div> </a> <a href='http://www.androidcentral.com/samsung-galaxy-s7-review-t-mobile?utm_medium=superfeature&utm_campaign=navigation&utm_source=ac' class='swiper-slide' data-src='http://www.androidcentral.com/sites/androidcentral.com/files/styles/w400h388cropvo/public/article_images/2016/04/GalaxyS7-edge-T-Mobile-1.jpg?itok=CrtdZ5vp'> <div class='title'> <p><span>Carrier take</span></p> <h2><span>Review: Galaxy S7 edge on T-Mobile</span></h2> </div> </a> <a href='http://www.androidcentral.com/amazon-echo-dot-review?utm_medium=superfeature&utm_campaign=navigation&utm_source=ac' class='swiper-slide' data-src='http://www.androidcentral.com/sites/androidcentral.com/files/styles/w400h388cropvo/public/article_images/2016/04/amazon-echo-dot-2.jpg?itok=-x9ww4CG'> <div class='title'> <p><span>Little Alexa</span></p> <h2><span>Amazon Echo Dot review</span></h2> </div> </a> <a href='http://www.androidcentral.com/deeper-look-themes-galaxy-s7-and-s7-edge?utm_medium=superfeature&utm_campaign=navigation&utm_source=ac' class='swiper-slide' data-src='http://www.androidcentral.com/sites/androidcentral.com/files/styles/w400h388cropvo/public/article_images/2016/03/themes-s7-hero.jpg?itok=SIwvIb0H'> <div class='title'> <p><span>All grown up now</span></p> <h2><span>A deeper look at themes on the Galaxy S7</span></h2> </div> </a> </div> <div class='pagination'></div> <div class='prevnext'> <a class='swiper-prev' href='http://forums.androidcentral.com/google-nexus-6/667469-there-way-recover-data-dead-android-phone.html#' title='Prev'>&lt;</a> <a class='swiper-next' href='http://forums.androidcentral.com/google-nexus-6/667469-there-way-recover-data-dead-android-phone.html#' title='Next'>&gt;</a> </div> </div> <div class='topics crumb-ad-showing'> <ul> <li><a href='http://www.androidcentral.com/best-android-tablets?utm_medium=topicbar&utm_campaign=navigation&utm_source=ac' >Best Tablets</a></li> <li><a href='http://www.androidcentral.com/best-android-phones?utm_medium=topicbar&utm_campaign=navigation&utm_source=ac' >Best Phones</a></li> <li><a href='http://www.androidcentral.com/samsung-galaxy-s7?utm_medium=topicbar&utm_campaign=navigation&utm_source=ac' >Galaxy S7</a></li> <li><a href='http://www.androidcentral.com/samsung-galaxy-s6?utm_medium=topicbar&utm_campaign=navigation&utm_source=ac' >Galaxy S6</a></li> <li><a href='http://www.androidcentral.com/nexus-6p?utm_medium=topicbar&utm_campaign=navigation&utm_source=ac' >Nexus 6P</a></li> <li><a href='http://www.androidcentral.com/nexus-5x?utm_medium=topicbar&utm_campaign=navigation&utm_source=ac' >Nexus 5X</a></li> <li><a href='http://www.androidcentral.com/samsung-galaxy-note-5?utm_medium=topicbar&utm_campaign=navigation&utm_source=ac' >Note 5</a></li> <li><a href='http://www.androidcentral.com/lg-g5' >LG G5</a></li> <li><a href='http://www.androidcentral.com/asus-zenfone-zoom' >ZenFone Zoom</a></li> <li><a href='http://androidcentral.com/blackberry-priv-review' >BlackBerry Priv</a></li> <li><a href='http://www.androidcentral.com/moto-g-2015?utm_medium=topicbar&utm_campaign=navigation&utm_source=ac' >Moto G</a></li> <li><a href='http://www.androidcentral.com/devices?utm_medium=topicbar&utm_campaign=navigation&utm_source=ac' >Find Your Device</a></li> <li class='icon_button'><a href='http://www.shopandroid.com/?utm_medium=topicbar&utm_campaign=navigation&utm_source=ac' ><span class="icomoon-cart"></span></a></li> <li class='shop_link'><a href='http://www.shopandroid.com/android-cases.htm?utm_medium=topicbar&utm_campaign=navigation&utm_source=ac' >Cases</a></li> <li class='shop_link'><a href='http://www.shopandroid.com/android-chargers-and-cables.htm?utm_medium=topicbar&utm_campaign=navigation&utm_source=ac' >Chargers & Cables</a></li> <li class='shop_link'><a href='http://www.shopandroid.com/android-batteries.htm?utm_medium=topicbar&utm_campaign=navigation&utm_source=ac' >Batteries</a></li> </ul> <div id='topic-pencil-rt' class=' crumb-ad' style=''></div> <script type='text/javascript'>
+    window.googletag = window.googletag || {};
+    googletag.cmd = googletag.cmd || [];
+    googletag.cmd.push(function() {
+      googletag.defineSlot('/25586680/HeaderPencilRT', [386, 50], 'topic-pencil-rt').addService(googletag.pubads());
+      googletag.pubads().setTargeting('site','ac');
+      googletag.pubads().enableSingleRequest();
+      googletag.enableServices();
+      googletag.display('topic-pencil-rt');
+    });
+  </script> </div> </div>  </section> <div id='ctBoc'> <div id='Leaderboard_Header_ATF-wrap' class='netshelter-ad gpt'> <div class='netshelter-ad-inner'><div class="adunit" id='purch_Y_L_1_1' data-adunit='Leaderboard_Header_ATF' data-size-map="800x0=728x90,970x66,970x90,970x250,980x120,930x120;0x0=300x150,320x50,300x100" ><script type='text/javascript'>
+      if(typeof(tmntag)!='undefined') tmntag.adTag('purch_Y_L_1_1',false);
+    </script></div></div> </div> <div id='page-wrap' class='logged-out page-showthread cc-us'>  <div class="above_body">  <div id="welcome_newusers"> <span class="welcome">Welcome to the Android Central Forums</span> <a class="welcome_create" href="https://passport.mobilenations.com/?u=eNpVjVsOgyAQRffCAnxQQBnTdCmGwlhIVAyM6UfTvdf57N-5N_fhQMGnQi9BFAypoKf5LKuYKmgDXCISHdC2Sy7nVhu3h5JT8LhTcWvj89bWmN8UC7rQHPF40N2YQRnL_d78b85b0Ozfri-Py-hRD8EGq7pOav0M6DstpV300CvOKRA1ETJeDecZDAOlvLMYef-VKmER0_cHds9AoQ,,">Create Your Account</a> <span class="welcome_or">or</span> <a rel="nofollow" class="welcome_ask" href="/newthread.php?do=newthread&amp;f=1126">Ask a Question</a> <span class="welcome_5minutes">Answers in 5 minutes - no registration required!</span> </div> <div id="forums_super_nav"> <div id="ref"></div> <div class='sn_body'> <div class='sn_s1'> <div class='sn_meta'> <ul class='sn_links'> <li><a href='/search.php?do=getdaily'>Today's Posts</a></li> <li><a rel='nofollow' href='/activity.php?sortby=popular&amp;show=all&amp;time=week'>Popular This Week</a></li> <li><a href='https://passport.mobilenations.com/?u=eNpVjVsOgyAQRffCAnxQQBnTdCmGwlhIVAyM6UfTvdf57N-5N_fhQMGnQi9BFAypoKf5LKuYKmgDXCISHdC2Sy7nVhu3h5JT8LhTcWvj89bWmN8UC7rQHPF40N2YQRnL_d78b85b0Ozfri-Py-hRD8EGq7pOav0M6DstpV300CvOKRA1ETJeDecZDAOlvLMYef-VKmER0_cHds9AoQ,,'>Ask a Question</a></li> </ul> </div> <div></div> <div class='sn_search'> <div class='sn_search2'> <form action="/search.php?do=process" method="post" class="sn_search_forums"> <input type='submit' /> <input type="hidden" name="do" value="process"> <input type="hidden" name="quicksearch" value="1"> <input type="hidden" name="childforums" value="1"> <input type="hidden" name="exactname" value="1"> <input type="hidden" name="showposts" value="0" checked="checked"> <input type="hidden" name="securitytoken" value="guest" /> <input type='text' name="query" placeholder="SEARCH FORUMS"> <div class='search_extra'> <a class='adv_search' href='/search.php'>Advanced Search</a> <input id='search_titles' type="checkbox" name="titleonly" value="1" /><label for="search_titles">Titles Only</label> </div> </form> <span>OR</span> <div id="sn_find_device_wrap"> <input type='text' placeholder="FIND YOUR DEVICE FORUM" id="sn_find_device"> <input type='submit' /> <ul id="sn_find_device_result"> </ul> </div> </div> </div> <div></div> <div class='clearfix2'></div> </div> </div> </div>  <ul id='extra-cp' style='display:none'> <li><a href="http://forums.androidcentral.com/usercp.php">Settings</a></li> <li><a href="http://forums.androidcentral.com/subscription.php" rel="nofollow">Subscribed Threads</a></li> <li><a rel="nofollow" href="http://forums.androidcentral.com/profile.php?do=editavatar">Edit Avatar</a></li> <li><a rel="nofollow" href="http://forums.androidcentral.com/profile.php?do=editprofile">Edit Profile</a></li> <li><a rel="nofollow" href="http://forums.androidcentral.com/profile.php?do=editoptions">General Settings</a></li> <li><a rel="nofollow" href="http://forums.androidcentral.com/profile.php?do=buddylist&amp;buddies=0">Friends &amp; Contacts</a></li> <li><a rel="nofollow" href="http://forums.androidcentral.com/member.php">My Profile</a></li> <li><a href="http://forums.androidcentral.com/forumdisplay.php?do=markread&amp;markreadhash=guest" rel="nofollow">Mark Forums Read</a></li> </ul>  <div id='mbn_form_notifications' style='display:none'> <a href="http://forums.androidcentral.com/google-nexus-6/667469-there-way-recover-data-dead-android-phone.html#"> <i style="padding-left: 8px; font-size:16px; vertical-align:middle;" class="icon-envelope-alt"></i>
+    0 New
+  </a> </div> <script type='text/javascript'>
+  $('input[placeholder], textarea[placeholder]').placeholder();
+  /*$('#mn_cogwheel_dropdown ul').append( $('#extra-cp>li').detach() );*/
+  /*$('#mbn_after_cog').append( $('#mbn_form_notifications>a').detach() );*/
+  $('#sn_s2_min li').hide();
+  $('#sn_s2_min li:eq(0)').show();
+  $('#sn_s2_min ul').css('display','inline');
+
+  // Animate Trending forums in collapsed view
+  $(function() {
+  window.setInterval( function() {
+     var n = $('#sn_s2_min li:visible').next();
+     if(n.length==0) n = $('#sn_s2_min li:eq(0)');
+
+     $('#sn_s2_min li:visible').hide(250,'linear',function() {
+       n.show(250);
+     });
+  }, 5000);
+  });
+
+  // Enable toggle between collapse/expand view
+  $('#sn_minimize').click( function() {
+    $(this).parent().toggleClass('expanded');
+    $.cookie('spe_supernav_collapsed',!$(this).parent().hasClass('expanded'),{ expires: 365, path: '/' });
+    return false;
+  });
+
+  var supernav_state = $.cookie('spe_supernav_collapsed');
+
+    if( supernav_state != "false" ) $('#sn_minimize').parent().toggleClass('expanded');
+
+
+</script> </div> <div class="body_wrapper">  <div class='main-content'>  <div id="breadcrumb" class="breadcrumb"> <ul class="floatcontainer">   <li class="navbithome"><a href="http://forums.androidcentral.com/" accesskey="1"><img src="/images/misc/navbit-home.png" alt="Home" /></a></li> <li class="navbit"><a href="http://forums.androidcentral.com/">Forum</a></li> <li class="navbit"><a href="http://forums.androidcentral.com/google-phones-tablets-nexus-pixel-more/">Google Phones &amp; Tablets - Nexus, Pixel &amp; More!</a></li> <li class="navbit"><a href="http://forums.androidcentral.com/google-nexus-6/">Google Nexus 6</a></li> <li class="navbit lastnavbit showthread"><h1> Is there a way to recover data from a dead Android phone?</h1></li> </ul> <hr /> </div> <div id="above_postlist" class="above_postlist"> <div id="pagination_top" class="pagination_top" style="border:1px solid #E7E7E7"> <div id="postpagestats_above" class="postpagestats">
+                Results 1 to 4 of 4
+            </div> </div> </div> <div id="thread_controls" class="thread_controls toolsmenu"> <div> <ul id="postlist_popups" class="postlist_popups popupgroup"> <li class="popupmenu" id="threadtools"> <h6><a class="popupctrl" href="javascript://">Thread Tools</a></h6> <ul class="popupbody popuphover"> <li><a href="http://forums.androidcentral.com/google-nexus-6/667469-there-way-recover-data-dead-android-phone-print.html" accesskey="3" rel="nofollow">Show Printable Version</a></li> <li> </li> </ul> </li> <li class="popupmenu searchthread menusearch" id="searchthread"> <h6><a class="popupctrl" href="javascript://">Search Thread</a></h6> <form action="http://forums.androidcentral.com/search.php" method="post"> <ul class="popupbody popuphover"> <li> <input type="text" name="query" class="searchbox" value="Search..." tabindex="13" /> <input type="submit" class="button" value="Search" tabindex="14" /> </li> <li class="formsubmit" id="popupsearch"> <div class="submitoptions">&nbsp;</div> <div class="advancedsearchlink"><a rel="nofollow" href="http://forums.androidcentral.com/search.php?search_type=1&amp;searchthreadid=667469&amp;contenttype=vBForum_Post">Advanced Search</a></div> </li> </ul> <input type="hidden" name="s" value="" /> <input type="hidden" name="securitytoken" value="guest" /> <input type="hidden" name="do" value="process" /> <input type="hidden" name="searchthreadid" value="667469" /> <input type="hidden" name="search_type" value="1" /> <input type="hidden" name="contenttype" value="vBForum_Post" /> </form> </li> </ul> </div> </div> <div id="postlist" class="postlist restrain"> <ol id="posts" class="posts" start="1"> <li class="postbitlegacy postbitim postcontainer old" id="post_5122164">  <div class="posthead"> <span class="postdate old"> <span class="date">04-13-2016,&nbsp;<span class="time">07:43 AM</span></span> </span> <span class="nodecontrols"> <img src="/images/misc/threadauthor.png" alt="Thread Author  " width="16" height="16" /><a rel="nofollow" href="http://forums.androidcentral.com/search.php?do=process&amp;userid=0&amp;contenttype=vBForum_Post&amp;searchthreadid=667469&amp;starteronly=1">Thread Author  &nbsp;&nbsp;</a> <a class='postref' name="post5122164"></a> <a href="http://forums.androidcentral.com/google-nexus-6/667469-there-way-recover-data-dead-android-phone.html#post5122164" class="postcounter">#1</a><a id="postcount5122164" name="1"></a>&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+            </span> </div> <div class="postdetails"> <table class='postdetailsalign'> <tr><td valign="top" class='userinfowrap postdetailstd'> <div class="userinfo"> <div class="username_container"> <span class="username guest">AC Question</span> </div> <a rel="nofollow" data-luid='0' data-pid='vb_ac'  class="mp-username-oh" style="display:block;margin:0px auto;width:100px;" href="http://forums.androidcentral.com/member.php"> <img src="http://forums.androidcentral.com/images/misc/default.jpg" style="padding-top:5px" alt="AC Question's Avatar" title="AC Question's Avatar" /> </a> <div style="text-align:center;padding-top:5px;">
+                Guest
+                           </div> </div> </td><td valign="top" class="postdetailstd"> <table class="postbody "> <tr><td valign="top" class="postrowwrap"> <div class='postarrow'></div> <div class="postrow has_after_content"> <h2 class="title icon"> <img src="http://forums.androidcentral.com/images/icons/icon1.png" alt="Default" /> Is there a way to recover data from a dead Android phone?
+                </h2> <div class="content"> <div id="post_message_5122164"> <blockquote class="postcontent restore ">
+                            My Nexus 6 is dead. Is there a way to recover data from its internal storage?
+                        </blockquote> </div> </div> </div> </td></tr> <tr><td valign='bottom' class="postfootwrap"> <div class="after_content"> </div> <div class="postfoot">  <div class="textcontrols floatcontainer"> <span class="postcontrols"> <img style="display:none" id="progress_5122164" src="/images/misc/progress.gif" alt="" /> <a id="qr_5122164" class='butstyle quickreply' href="http://forums.androidcentral.com/newreply.php?do=newreply&amp;p=5122164&amp;noquote=1" rel="nofollow" title="Quick reply to this message"><img id="replyimg_5122164" src="http://forums.androidcentral.com/clear.gif" alt="Quick reply to this message" /> Reply</a> </span> <span style="position:relative;top:7px;text-transform:uppercase" class="postlinking">   </span>  </div> <div class="vbseo_buttons" id="lkbtn_1.667469.5122164"> <div class="vbseo_liked" style="display:none"></div> </div> <div class="cleardiv"></div> </td></tr></table> </div> </td></tr></table> </div> </li> <script type="text/javascript">
+            vBulletin.events.SkimlinksActivate.subscribe(function()
+            {
+                YAHOO.util.Dom.addClass('post_5122164', 'noskimlinks');
+            });
+            </script><li class="postbitlegacy postbitim postcontainer old noskimwords bestanswer" id="post_5122325"> <a name="bestanswer" id="postcount667469" class="ui-link"></a> <div class="posthead"><span class='bestanswer-title'><i class="icon-star"></i> Best Answer</span> <div class="postdate old"> <span class="date">Apr 13 2016 | 8:56 am EDT</span> </div> </div> <div class="postdetails"> <table class="postdetailsalign"> <tr> <td valign="top" class='userinfowrap postdetailstd'> <div class="userinfo"> <div class="username_container"> <div class="popupmenu memberaction"> <a href="/members/Rukbat-684514/" class="mp-username username" data-pid="vb_ac" data-luid="684514" rel="nofollow" ><strong>Rukbat</strong></a> </div> </div> <a href="/members/Rukbat-684514/" style="display:block;margin:0px auto;width:100px;" class="mp-username-oh" data-pid="vb_ac" data-luid="684514" rel="nofollow"> <img style="padding-top:5px" src="http://forums.androidcentral.com/avatars/vb_ac/avatar684514_6.gif"> </a> <dl class="userinfo_extra"> <dt class="postbitposts postbitextra" title="Post Count">Posts</dt> <dd class="postbitextra"> <a href="/search.php?do=finduser&amp;u=684514&amp;contenttype=vBForum_Post&amp;showposts=1" style="color:#222" rel="nofollow">18087 Posts</a></dd> <dt class="postbitposts postbitextra">Global Posts</dt> <dd class="postbitextra" title="Global Posts"><a data-pid="vb_ac" data-luid="684514" class="mp-username" onclick="return false;" style="color:#222" href="/">18,089 Global Posts</a></dd> </dl> </div> </div> </td> <td valign="top" class="postdetailstd"> <table class='postbody'> <tr> <td valign="top" class="postrowwrap"> <div class='postarrow'></div> <div class="postrow"> <h2 class="title icon"></h2> <blockquote class="postcontent restore ">Unfortunately not.  When the phone dies, the data dies.  That's why you should have <i><b>everything</b></i> important backed up to at least 2 independent sources.  (Cloud accounts are huge and free, even if you have no space left on your local hard drives.)</blockquote> <blockquote class="postcontent restore "></blockquote> </div> </td> </tr> </table> </td> </tr> </table> </div> <hr /> </li>  <li class="postbitlegacy postbitim postcontainer old noskimwords dfp-wrap"> <div class="postdetails"> <table class="postdetailsalign"> <tbody><tr> <td valign="top" class="userinfowrap postdetailstd"><div class="userinfo"></div></td> <td valign="top" class="postdetailstd"> <table class="postbody "> <tbody><tr><td valign="top" class="postrowwrap" style="padding-left:0px;"> <div class="postrow" style="padding:0px 0px 10px;"> <div class="adunit" id="purch_N_L_0_2" data-adunit="in-forum-unit_BTF_1" data-dimensions="728x92" data-abp='0'><script type='text/javascript'>
+      if(typeof(tmntag)!='undefined') tmntag.adTag('purch_N_L_0_2',false);
+    </script></div> </div> </td></tr> </tbody></table> </td></tr></tbody></table> </div> </li>  <li class="postbitlegacy postbitim postcontainer old" id="post_5122325">  <div class="posthead"> <span class="postdate old"> <span class="date">04-13-2016,&nbsp;<span class="time">08:56 AM</span></span> </span> <span class="nodecontrols"> <a class='postref' name="post5122325"></a> <a href="http://forums.androidcentral.com/google-nexus-6/667469-there-way-recover-data-dead-android-phone.html#post5122325" class="postcounter">#2</a><a id="postcount5122325" name="2"></a>&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+            </span> </div> <div class="postdetails"> <table class='postdetailsalign'> <tr><td valign="top" class='userinfowrap postdetailstd'> <div class="userinfo"> <div class="username_container"> <div class="popupmenu memberaction"> <a rel="nofollow" data-luid='684514' data-pid='vb_ac'  class="mp-username username offline" href="http://forums.androidcentral.com/members/rukbat-684514/"><strong><b><span style="color: #000000">Rukbat</span></b></strong></a> </div> <img class="inlineimg onlinestatus" src="/images/statusicon/user-offline.png" alt="Rukbat is offline" border="0" /> </div> <a rel="nofollow" data-luid='684514' data-pid='vb_ac'  class="mp-username-oh" style="display:block;margin:0px auto;width:100px;" href="http://forums.androidcentral.com/members/rukbat-684514/"> <img src="http://forums.androidcentral.com/avatars/vb_ac/avatar684514_6.gif" style="padding-top:5px" alt="Rukbat's Avatar" title="Rukbat's Avatar" /> </a> <div style="text-align:center;padding-top:5px;"> <img src="/images/ranks/ambassador.png" alt="" border="" /> </div> <hr /> <dl class="userinfo_extra"> <dt title='Post Count' class='postbitposts postbitextra'>Posts</dt> <dd title='Post Count' class='postbitextra'><a rel="nofollow" style="color:#222" href="http://forums.androidcentral.com/search.php?do=finduser&amp;u=684514&amp;contenttype=vBForum_Post&amp;showposts=1">18,087 Posts</a></dd> <dt title="Global Posts" class="postbitposts postbitextra">Global Posts</dt> <dd title="Global Posts" class="postbitextra"><a href="http://forums.androidcentral.com/" style="color:#222" onclick="return false;" class="mp-username" data-luid="684514" data-pid="vb_ac">18,089 Global Posts</a></dd>  <div class='postbitextra_optional'> <dt title="Carrier" class="postbitcarrier postbitextra">Carrier</dt> <dd title="Carrier" class="postbitextra">Modified Stock 4.4.2</dd> </div> </dl> <button title="Collapse/Expand Postbits" type="button" class="postbitextra_show"></button> </div> </td><td valign="top" class="postdetailstd"> <table class="postbody "> <tr><td valign="top" class="postrowwrap"> <div class='postarrow'></div> <div class="postrow has_after_content"> <h2 class="title icon"> <img src="http://forums.androidcentral.com/images/icons/icon1.png" alt="Default" /> Re: Is there a way to recover data from a dead Android phone?
+                </h2> <div class="content"> <div id="post_message_5122325"> <blockquote class="postcontent restore ">
+                            Unfortunately not.  When the phone dies, the data dies.  That's why you should have <i><b>everything</b></i> important backed up to at least 2 independent sources.  (Cloud accounts are huge and free, even if you have no space left on your local hard drives.)
+                        </blockquote> </div> </div> </div> </td></tr> <tr><td valign='bottom' class="postfootwrap"> <div class="after_content"> </div> <div class="postfoot">  <div class="textcontrols floatcontainer"> <span class="postcontrols"> <img style="display:none" id="progress_5122325" src="/images/misc/progress.gif" alt="" /> <a id="qr_5122325" class='butstyle quickreply' href="http://forums.androidcentral.com/newreply.php?do=newreply&amp;p=5122325&amp;noquote=1" rel="nofollow" title="Quick reply to this message"><img id="replyimg_5122325" src="http://forums.androidcentral.com/clear.gif" alt="Quick reply to this message" /> Reply</a> </span> <span style="position:relative;top:7px;text-transform:uppercase" class="postlinking">   </span>  </div> <div class="vbseo_buttons" id="lkbtn_1.667469.5122325"> <div class="vbseo_liked" style="display:none"></div> </div> <div class="cleardiv"></div> </td></tr></table> </div> </td></tr></table> </div> </li> <script type="text/javascript">
+            vBulletin.events.SkimlinksActivate.subscribe(function()
+            {
+                YAHOO.util.Dom.addClass('post_5122325', 'noskimwords');
+            });
+            </script> <li class="postbitlegacy postbitim postcontainer old" id="post_5123150">  <div class="posthead"> <span class="postdate old"> <span class="date">04-13-2016,&nbsp;<span class="time">02:51 PM</span></span> </span> <span class="nodecontrols"> <a class='postref' name="post5123150"></a> <a href="http://forums.androidcentral.com/google-nexus-6/667469-there-way-recover-data-dead-android-phone.html#post5123150" class="postcounter">#3</a><a id="postcount5123150" name="3"></a>&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+            </span> </div> <div class="postdetails"> <table class='postdetailsalign'> <tr><td valign="top" class='userinfowrap postdetailstd'> <div class="userinfo"> <div class="username_container"> <div class="popupmenu memberaction"> <a rel="nofollow" data-luid='120492' data-pid='vb_ac'  class="mp-username username offline" href="http://forums.androidcentral.com/members/jj14x-120492/"><strong>jj14x</strong></a> </div> <img class="inlineimg onlinestatus" src="/images/statusicon/user-offline.png" alt="jj14x is offline" border="0" /> </div> <a rel="nofollow" data-luid='120492' data-pid='vb_ac'  class="mp-username-oh" style="display:block;margin:0px auto;width:100px;" href="http://forums.androidcentral.com/members/jj14x-120492/"> <img src="http://forums.androidcentral.com/images/misc/default.jpg" style="padding-top:5px" alt="jj14x's Avatar" title="jj14x's Avatar" /> </a> <div style="text-align:center;padding-top:5px;"> </div> <hr /> <dl class="userinfo_extra"> <dt title='Post Count' class='postbitposts postbitextra'>Posts</dt> <dd title='Post Count' class='postbitextra'><a rel="nofollow" style="color:#222" href="http://forums.androidcentral.com/search.php?do=finduser&amp;u=120492&amp;contenttype=vBForum_Post&amp;showposts=1">965 Posts</a></dd>  <div class='postbitextra_optional'> <dt title="Carrier" class="postbitcarrier postbitextra">Carrier</dt> <dd title="Carrier" class="postbitextra">Stock</dd> </div> </dl> <button title="Collapse/Expand Postbits" type="button" class="postbitextra_show"></button> </div> </td><td valign="top" class="postdetailstd"> <table class="postbody "> <tr><td valign="top" class="postrowwrap"> <div class='postarrow'></div> <div class="postrow has_after_content"> <h2 class="title icon"> <img src="http://forums.androidcentral.com/images/icons/icon1.png" alt="Default" /> Re: Is there a way to recover data from a dead Android phone?
+                </h2> <div class="content"> <div id="post_message_5123150"> <blockquote class="postcontent restore ">
+                            Define dead - is the battery dead? Or is it just not booting up? Is it smashed up completely? <br />
+Does pressing the power button not do anything?
+                        </blockquote> </div> </div> </div> </td></tr> <tr><td valign='bottom' class="postfootwrap"> <div class="after_content"> </div> <div class="postfoot">  <div class="textcontrols floatcontainer"> <span class="postcontrols"> <img style="display:none" id="progress_5123150" src="/images/misc/progress.gif" alt="" /> <a id="qr_5123150" class='butstyle quickreply' href="http://forums.androidcentral.com/newreply.php?do=newreply&amp;p=5123150&amp;noquote=1" rel="nofollow" title="Quick reply to this message"><img id="replyimg_5123150" src="http://forums.androidcentral.com/clear.gif" alt="Quick reply to this message" /> Reply</a> </span> <span style="position:relative;top:7px;text-transform:uppercase" class="postlinking">   </span>  </div> <div class="vbseo_buttons" id="lkbtn_1.667469.5123150"> <div class="vbseo_liked" style="display:none"></div> </div> <div class="cleardiv"></div> </td></tr></table> </div> </td></tr></table> </div> </li> <script type="text/javascript">
+            vBulletin.events.SkimlinksActivate.subscribe(function()
+            {
+                YAHOO.util.Dom.addClass('post_5123150', 'noskimwords');
+            });
+            </script> <li class="postbitlegacy postbitim postcontainer old" id="post_5125098">  <div class="posthead"> <span class="postdate old"> <span class="date">04-14-2016,&nbsp;<span class="time">11:20 AM</span></span> </span> <span class="nodecontrols"> <a class='postref' name="post5125098"></a> <a href="http://forums.androidcentral.com/google-nexus-6/667469-there-way-recover-data-dead-android-phone.html#post5125098" class="postcounter">#4</a><a id="postcount5125098" name="4"></a>&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+            </span> </div> <div class="postdetails"> <table class='postdetailsalign'> <tr><td valign="top" class='userinfowrap postdetailstd'> <div class="userinfo"> <div class="username_container"> <div class="popupmenu memberaction"> <a rel="nofollow" data-luid='28354' data-pid='vb_ac'  class="mp-username username offline" href="http://forums.androidcentral.com/members/iamsixnine-28354/"><strong>IAmSixNine</strong></a> </div> <img class="inlineimg onlinestatus" src="/images/statusicon/user-offline.png" alt="IAmSixNine is offline" border="0" /> </div> <a rel="nofollow" data-luid='28354' data-pid='vb_ac'  class="mp-username-oh" style="display:block;margin:0px auto;width:100px;" href="http://forums.androidcentral.com/members/iamsixnine-28354/"> <img src="http://forums.androidcentral.com/avatars/vb_ac/avatar28354_4.gif" style="padding-top:5px" alt="IAmSixNine's Avatar" title="IAmSixNine's Avatar" /> </a> <div style="text-align:center;padding-top:5px;"> </div> <hr /> <dl class="userinfo_extra"> <dt title='Post Count' class='postbitposts postbitextra'>Posts</dt> <dd title='Post Count' class='postbitextra'><a rel="nofollow" style="color:#222" href="http://forums.androidcentral.com/search.php?do=finduser&amp;u=28354&amp;contenttype=vBForum_Post&amp;showposts=1">2,622 Posts</a></dd>  <div class='postbitextra_optional'> </div> </dl> <button title="Collapse/Expand Postbits" type="button" class="postbitextra_show"></button> </div> </td><td valign="top" class="postdetailstd"> <table class="postbody "> <tr><td valign="top" class="postrowwrap"> <div class='postarrow'></div> <div class="postrow has_after_content"> <h2 class="title icon"> <img src="http://forums.androidcentral.com/images/icons/icon1.png" alt="Default" /> Re: Is there a way to recover data from a dead Android phone?
+                </h2> <div class="content"> <div id="post_message_5125098"> <blockquote class="postcontent restore ">
+                            jj14x is spot on, worse case scenario is your memory module is damaged and non recoverable, best case its a battery issue. <br />
+But how important is the stuff your trying to recover? is it worth sending it to a company that specializes in that type of stuff?
+                        </blockquote> </div> </div> </div> </td></tr> <tr><td valign='bottom' class="postfootwrap"> <div class="after_content"> </div> <div class="postfoot">  <div class="textcontrols floatcontainer"> <span class="postcontrols"> <img style="display:none" id="progress_5125098" src="/images/misc/progress.gif" alt="" /> <a id="qr_5125098" class='butstyle quickreply' href="http://forums.androidcentral.com/newreply.php?do=newreply&amp;p=5125098&amp;noquote=1" rel="nofollow" title="Quick reply to this message"><img id="replyimg_5125098" src="http://forums.androidcentral.com/clear.gif" alt="Quick reply to this message" /> Reply</a> </span> <span style="position:relative;top:7px;text-transform:uppercase" class="postlinking">   </span>  </div> <div class="vbseo_buttons" id="lkbtn_1.667469.5125098"> <div class="vbseo_liked" style="display:none"></div> </div> <div class="cleardiv"></div> </td></tr></table> </div> </td></tr></table> </div> </li> <script type="text/javascript">
+            vBulletin.events.SkimlinksActivate.subscribe(function()
+            {
+                YAHOO.util.Dom.addClass('post_5125098', 'noskimwords');
+            });
+            </script>  <li class="postbitlegacy postbitim postcontainer old noskimwords dfp-wrap"> <div class="postdetails"> <table class="postdetailsalign"> <tbody><tr> <td valign="top" class="userinfowrap postdetailstd"><div class="userinfo"></div></td> <td valign="top" class="postdetailstd"> <table class="postbody "> <tbody><tr><td valign="top" class="postrowwrap" style="padding-left:0px;"> <div class="postrow" style="padding:0px 0px 10px;"> <div class="adunit" id="purch_N_L_0_4" data-adunit="in-forum-unit_BTF_3" data-dimensions="728x94" data-abp='0'><script type='text/javascript'>
+      if(typeof(tmntag)!='undefined') tmntag.adTag('purch_N_L_0_4',false);
+    </script></div> </div> </td></tr> </tbody></table> </td></tr></tbody></table> </div> </li>  </ol> <div class="separator"></div> <div class="postlistfoot"> </div> </div> <div id="below_postlist" class="noinlinemod below_postlist"> <span data-type='forumThread' data-id='667469' class='getfollow gfpill'></span> <div id="pagination_bottom" class="pagination_bottom"> </div> </div> <div id="breadcrumb_two" class="breadcrumb" style="margin-bottom:10px"> <ul class="floatcontainer"> <li class="navbithome"><a href="http://forums.androidcentral.com/" ><img src="/images/misc/navbit-home.png" alt="Home" /></a></li> <li class="navbit"><a href="http://forums.androidcentral.com/">Forum</a></li> <li class="navbit"><a href="http://forums.androidcentral.com/google-phones-tablets-nexus-pixel-more/">Google Phones &amp; Tablets - Nexus, Pixel &amp; More!</a></li> <li class="navbit"><a href="http://forums.androidcentral.com/google-nexus-6/">Google Nexus 6</a></li> <li class="navbit lastnavbit showthread"><h1> Is there a way to recover data from a dead Android phone?</h1></li> </ul> <hr /> </div>
+
+
+    <!-- inject:js -->
+    <script type="text/javascript" id="" src="http://labs-cdn.revcontent.com/build/revshifter.min.js"></script>
+    <!-- endinject -->
+
+    <!-- inject:html -->
+    <script>
+setTimeout(function() {
+    new RevShifter({
+        url: 'http://trends.revcontent.com/api/v1/',
+        api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+        pub_id : 945,
+        widget_id : 6181,
+        domain : 'apiexamples.powr.com',
+        query_params: {
+            tester: 'another',
+            and: 'blah',
+            test: {
+                check: 'hiii',
+                blah: 'vet'
+            }
+        }
+    });
+});
+</script>
+    <!-- endinject -->
+
+
+ <div class="navlinks"> <strong>&laquo;</strong> <a href="http://forums.androidcentral.com/google-nexus-6/610343-would-you-leave-nexus.html">Would you leave the Nexus??</a>
+
+             |
+
+                <a href="http://forums.androidcentral.com/google-nexus-6/665064-security-update-issue.html">security update issue?</a> <strong>&raquo;</strong> </div>  <div id="thread_info" class="thread_info block"> <div id="similar_threads"> <h4 class="threadinfohead blockhead">Similar Threads</h4> <div id="similar_threads_list" class="thread_info_block blockbody formcontrols"> <ol class="similar_threads"> <li class="floatcontainer"> <div class="titleblock"> <h6><a href="http://forums.androidcentral.com/introductions/667456-hiiii-everyone.html" title="hiiiii....
+
+a big hiiiiii to everyone, I am new here, and very much excited to know new things...
+
+thanks:D :D :cool:">hiiii to everyone....</a></h6> <div class="starter_forum">
+       By ChristopherV1 in forum Introductions
+    </div> </div> <div class="dateblock"> <span class="shade">Replies:</span> 22
+      <div class="starter_forum"> <span class="shade">Last Post:</span> Today, <span class="time">11:57 AM</span> </div> </div> </li><li class="floatcontainer"> <div class="titleblock"> <h6><a href="http://forums.androidcentral.com/samsung-gear-s2/667453-editing-canned-responses-gmail-messages.html" title="I've started to respond to gmails using the quick responses the watch offers, but I'd like to be able to add my own and am kind of surprised that...">Editing canned responses to gmail messages?</a></h6> <div class="starter_forum">
+       By 44Joan in forum Samsung Gear S2
+    </div> </div> <div class="dateblock"> <span class="shade">Replies:</span> 3
+      <div class="starter_forum"> <span class="shade">Last Post:</span> 04-16-2016, <span class="time">07:45 AM</span> </div> </div> </li><li class="floatcontainer"> <div class="titleblock"> <h6><a href="http://forums.androidcentral.com/samsung-galaxy-s6/667457-data-saving-apps.html" title="I was wondering if anyone uses data saving apps such as Opera Max or Onavo extend. If so, which one are you using? Or which one is better between the...">Data Saving Apps</a></h6> <div class="starter_forum">
+       By Est_XCIV in forum Samsung Galaxy S6
+    </div> </div> <div class="dateblock"> <span class="shade">Replies:</span> 1
+      <div class="starter_forum"> <span class="shade">Last Post:</span> 04-13-2016, <span class="time">03:13 PM</span> </div> </div> </li><li class="floatcontainer"> <div class="titleblock"> <h6><a href="http://forums.androidcentral.com/ask-question/667466-my-s7-won-t-connect-my-pavilion-laptop.html" title="tried a lot of things-still won't recognize laptop">my s7 won't connect to my pavilion laptop</a></h6> <div class="starter_forum">
+       By AC Question in forum Ask a Question
+    </div> </div> <div class="dateblock"> <span class="shade">Replies:</span> 1
+      <div class="starter_forum"> <span class="shade">Last Post:</span> 04-13-2016, <span class="time">08:58 AM</span> </div> </div> </li><li class="floatcontainer"> <div class="titleblock"> <h6><a href="http://forums.androidcentral.com/moto-360-2015/667465-there-way-keep-moto-360-2-always-bright.html" title="I know this will drain the battery, but sometimes this would be ok.
+
+I would really like the android wear screens to stay on, and not dim.">Is there a way to keep the Moto 360 2 always on and bright?</a></h6> <div class="starter_forum">
+       By AC Question in forum Moto 360 (2015)
+    </div> </div> <div class="dateblock"> <span class="shade">Replies:</span> 0
+      <div class="starter_forum"> <span class="shade">Last Post:</span> 04-13-2016, <span class="time">07:39 AM</span> </div> </div> </li> </ol> </div> </div> <div class="options_block_container"> <div class="options_block"> <h4 class="collapse blockhead options_correct"> <a class="collapse" id="collapse_posting_rules" href="http://forums.androidcentral.com/google-nexus-6/667469-there-way-recover-data-dead-android-phone.html#top"><img src="/images/buttons/collapse_40b.png" alt="" /></a>
+                Posting Permissions
+            </h4> <div id="posting_rules" class="thread_info_block blockbody formcontrols floatcontainer options_correct">  </div> </div> </div> </div> <script type='text/javascript'>
+// Hide collapse optional postbits
+$('.userinfowrap').each(function() {
+  var e = $(this);
+  if(e.height() > 325 || e.parent().find(".postbitextra_optional *").length==0) {
+    e.find(".postbitextra_optional").addClass("expand");
+    e.find(".postbitextra_show").addClass("expand").hide();
+  }
+});
+
+$('#posts').on('click','.postbitextra_show',function() {
+  var e = $(this);
+  var t = e.parent().find(".postbitextra_optional");
+  e.hide();
+  t.toggleClass('expand');
+});
+</script> <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script> <script type='text/javascript'>        if(typeof(window.abp)=='undefined' || window.abp==false) {
+          var vm = document.createElement('script');
+          vm.type = 'text/javascript';
+          vm.src = 'http://androidcentral.us.intellitxt.com/intellitxt/front.asp?ipid=71408';
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(vm, s);
+        }</script> <div id="footer" class="floatcontainer footer"> <form action="http://forums.androidcentral.com/" method="get" id="footer_select" class="footer_select"> </form> <ul id="footer_links" class="footer_links"> <li><a href="http://forums.androidcentral.com/sendmessage.php" rel="nofollow" accesskey="9">Contact Us</a></li> <li><a href="http://www.androidcentral.com">Android Forums at AndroidCentral.com</a></li> <li><a href="http://forums.androidcentral.com/google-nexus-6/667469-there-way-recover-data-dead-android-phone.html#top" onclick="document.location.hash='top'; return false;">Top</a></li> </ul> <script type="text/javascript"> <!--
+        // Main vBulletin Javascript Initialization
+        $(function() {
+                   vBulletin_init();
+                });
+    //--> </script> </div> </div>  <div id='sidebar-second' class='sidebar'> <div class='sidebar-inner'> <div class='sidebar-body'> <div id="block-block-90" class="block block-block"> <div class="content"> <div id='Inline_ATF_1-wrap' class='netshelter-ad gpt' > <div class='netshelter-ad-inner'><div class="adunit" id='purch_Y_R_1_1'><script type='text/javascript'>
+      if(typeof(tmntag)!='undefined') tmntag.adTag('purch_Y_R_1_1',false);
+    </script></div></div> </div><script>
+if(typeof(window.abp)!='undefined' && window.abp==true) {
+  $('#block-block-90').after($('#block-spe-store-store-ad'));
+}
+</script> </div> </div> <div id="block-block-174" class="block block-block"> <div class="content"> <script type='text/javascript'>
+                googletag.cmd.push(function() {
+                  googletag.defineSlot('/25586680/StoreVisorSidebar', [[300, 285]], 'store-ad').addService(googletag.pubads());
+                  googletag.pubads().setTargeting('site','ac');
+                  googletag.pubads().enableSingleRequest();
+                  googletag.pubads().collapseEmptyDivs();
+                  googletag.enableServices();
+                });
+              </script> <div id='store-ad' style="margin-top:25px"> <script type='text/javascript'>
+                  googletag.cmd.push(function() { googletag.display('store-ad'); });
+                </script> </div> </div> </div> <div id="block-block-148" class="block block-block"> <div class="content"> <div id='Inline_BTF_2-wrap' class='netshelter-ad gpt' > <div class='netshelter-ad-inner'><div class="adunit" id='purch_Y_R_0_1'><script type='text/javascript'>
+      if(typeof(tmntag)!='undefined') tmntag.adTag('purch_Y_R_0_1',false);
+    </script></div></div> </div> </div> </div> <div id="block-block-123" class="block block-block modern"> <h2>Follow Android Central</h2> <div class="content"> <img alt="Mobile Nations Snapchat" src="http://www.androidcentral.com/sites/androidcentral.com/files/styles/larger/public/article_images/2016/04/mobilenations-snapchat.jpg" style="width:300px;height:auto" /><div class="social-block-content follow-content"> <ul><li> <a rel="nofollow" href="http://www.twitter.com/androidcentral" title="Follow AndroidCentral on Twitter"><img alt="AndroidCentral Twitter" src="http://www.androidcentral.com/sites/androidcentral.com/themes/android/images/sidebar/social/follow-twitter.gif" /></a></li> <li> <a rel="nofollow" href="http://www.facebook.com/androidcentral" title="AndroidCentral Facebook Page"><img alt="AndroidCentral Facebook Page" src="http://www.androidcentral.com/sites/androidcentral.com/themes/android/images/sidebar/social/follow-fb.gif" /></a></li> <li> <a rel="nofollow" href="http://phon.es/acsub" title="AndroidCentral YouTube Channel"><img alt="AndroidCentral YouTube Channel" src="http://www.androidcentral.com/sites/androidcentral.com/themes/android/images/sidebar/social/follow-youtube.gif" /></a></li> <li> <a href="http://www.androidcentral.com/podcast" title="Listen to AndroidCentral Podcasts"><img alt="AndroidCentral Podcasts" src="http://www.androidcentral.com/sites/androidcentral.com/themes/android/images/sidebar/social/follow-podcast.png?1" /></a></li> <li> <a href="http://www.androidcentral.com/rss.xml" title="Subscribe to AndroidCentral RSS"><img alt="AndroidCentral News RSS" src="http://www.androidcentral.com/sites/androidcentral.com/themes/android/images/sidebar/social/follow-feed.gif" /></a></li> </ul></div> </div> </div> <div id="block-block-118" class="block block-block"> <div class="content"> <div id='Inline_BTF_3-wrap' class='netshelter-ad gpt' > <div class='netshelter-ad-inner'><div class="adunit" id='purch_Y_R_0_2'><script type='text/javascript'>
+      if(typeof(tmntag)!='undefined') tmntag.adTag('purch_Y_R_0_2',false);
+    </script></div></div> </div> </div> </div> <div id="block-block-159" class="block block-block modern-new"> <h2>Latest poll</h2> <div class="content"> <p><img alt="VR" src="http://admin.androidcentral.com/sites/androidcentral.com/files/article_images/2016/01/nexus-5x-best-fiends.jpg" style="width: 300px; height: 225px;" /><script type="text/javascript" charset="utf-8" src="http://static.polldaddy.com/p/9374239.js"></script></p><noscript><a rel="nofollow" href="http://polldaddy.com/poll/9374239/">How much time do you spend gaming?</a></noscript> </div> </div> <div id="block-block-18" class="block block-block"> <div class="content"> <div id='Inline_BTF_4-wrap' class='netshelter-ad gpt' > <div class='netshelter-ad-inner'><div class="adunit" id='purch_Y_R_0_3'><script type='text/javascript'>
+      if(typeof(tmntag)!='undefined') tmntag.adTag('purch_Y_R_0_3',false);
+    </script></div></div> </div> </div> </div> <div id="block-block-113" class="block block-block"> <div class="content"> <ul class="side-fancy-links"><li> <a href="https://play.google.com/store/apps/details?id=com.androidcentral.app" rel="nofollow" target="_blank"><img src="http://www.androidcentral.com/sites/androidcentral.com/themes/android/images/sidebar/side-app2.png" style="width: 261px; height: 159px;" /></a></li> <li> <a href="http://www.androidcentral.com/free-android-wallpapers"><img src="http://www.androidcentral.com/sites/androidcentral.com/themes/android/images/sidebar/side-wallpapers.png" /></a></li> </ul> </div> </div> <div id="block-mbn-offers-mbn-offers" class="block block-mbn-offers modern"> <h2>You Might Want...</h2> <div class="content"> <div id='mbn-offers-anchor' data-href='http://www.androidcentral.com/sites/all/modules/mbn_offers/mbn_offers.php'></div><script type='text/javascript'>(function($) {
+
+        $.fn.render_mbn_offers = function() {
+            $('#mbn-offers-anchor',this).each( function(i,e) {
+
+        $.ajax({
+          dataType: "jsonp",
+          cache: true,
+          jsonpCallback:"mbn_offers_loaded",
+          url: $(e).attr('data-href') + "?mode=a&items=10&sloc=us,ca,gb",
+          data: {},
+          success: function(data) {
+            $(e).after(data).remove();
+          }
+        });
+
+            });
+            return this;
+        };
+    })(jQuery);
+
+    $(function(){ $('body').render_mbn_offers();});</script> </div> </div> <div id="block-block-164" class="block block-block"> <div class="content"> <div id='Inline_BTF_5-wrap' class='netshelter-ad gpt' > <div class='netshelter-ad-inner'><div class="adunit" id='purch_Y_R_0_4'><script type='text/javascript'>
+      if(typeof(tmntag)!='undefined') tmntag.adTag('purch_Y_R_0_4',false);
+    </script></div></div> </div> </div> </div> </div> <script type='text/javascript'>
+    var target = $('.sidebar .block:not(:has(.gpt)):eq(0)');
+    if(target.length) {
+       $('.sidebar-close').css('top',(target.position().top+20) + "px").css('display','');
+       $('.sidebar-close').show();
+    }
+  </script> </div> </div> </div>  <div class="below_body"> <div id="footer_time" class="shade footer_time">All times are GMT -5. The time now is <span class="time">03:10 PM</span>.</div> <div id="footer_copyright" class="shade footer_copyright">    </div> <div id="footer_morecopyright" class="shade footer_morecopyright">      </div> <div style="max-width:1000px;width:100%; margin:auto; text-align:center"> <div style="display: inline-block; margin-bottom:5px;"> <div id="Leaderboard_Footer_BTF-wrap" class="netshelter-ad gpt"> <div class="netshelter-ad-inner"> <div class="adunit" id="purch_Y_L_0_1" data-adunit="Leaderboard_Footer_BTF" data-size-map="800x0=728x91,970x67,970x91,970x251,980x121,930x121;0x0=301x252"><script type='text/javascript'>
+      if(typeof(tmntag)!='undefined') tmntag.adTag('purch_Y_L_0_1',false);
+    </script></div> </div> </div> </div></div> </div> </div>  </div>   <script type="text/javascript">
+setTimeout(function(){var a=document.createElement("script");
+var b=document.getElementsByTagName("script")[0];
+a.src=document.location.protocol+"//dnn506yrbagrg.cloudfront.net/pages/scripts/0017/9426.js?"+Math.floor(new Date().getTime()/3600000);
+a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+</script> <script type='text/javascript'>
+        $('a[href*="//itunes.apple.com"],a[href*="//itun.es"]').addClass('noskim');
+      </script> </div>  <script type='text/javascript' src='/passport/widget/follow/follow.js?v=42360'></script> <script type="text/javascript">
+  enableFollowing('.getfollow');
+</script> <script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"beacon":"bam.nr-data.net","licenseKey":"c0a1194d5d","applicationID":"198784,141468","transactionName":"ZVxaNhFRXkEHW0BZWFwWexcQRF9fSXt2HURaVk8WC0JVUwIYGRBwR1xLFg==","queueTime":0,"applicationTime":88,"atts":"SRtZQFlLTU8=","errorBeacon":"bam.nr-data.net","agent":""}</script><script type="text/javascript">
+  var spe_url = document.domain;
+  var spe_url_array = new Array;
+  spe_url_array = spe_url.split(".");
+  spe_url_array.reverse();
+  var spe_root_url = spe_url_array[1] + '.' + spe_url_array[0];
+
+  if (spe_url_array[2]) {
+    var spe_segments = spe_url_array[1] + '.' + spe_url_array[2];
+  } else {
+    var spe_segments = spe_url_array[1];
+  }
+
+</script> <script type="text/javascript">
+  var _qevents = _qevents || [];
+
+  (function() {
+  var elem = document.createElement('script');
+  elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge") + ".quantserve.com/quant.js";
+  elem.async = true;
+  elem.type = "text/javascript";
+  var scpt = document.getElementsByTagName('script')[0];
+  scpt.parentNode.insertBefore(elem, scpt);
+  })();
+
+
+  _qevents.push({
+    qacct:"p-ebutdjFEkjMk-",
+    labels: spe_segments
+  },
+  {
+    qacct:"p-8bC03lZwjgqy2",
+    labels: spe_segments
+  }
+  );
+</script> <noscript> <div style="display:none;"> <img src="//pixel.quantserve.com/pixel?a.1=p-ebutdjFEkjMk-&amp;a.2=p-8bC03lZwjgqy2" border="0" height="1" width="1" alt="Quantcast"/> </div> </noscript>  <script>
+  var _comscore = _comscore || [];
+  _comscore.push({ c1: "2", c2: "6035753" });
+  (function() {
+    var s = document.createElement("script"), el = document.getElementsByTagName("script")[0]; s.async = true;
+    s.src = (document.location.protocol == "https:" ? "https://sb" : "http://b") + ".scorecardresearch.com/beacon.js";
+    el.parentNode.insertBefore(s, el);
+  })();
+</script> <noscript> <img src="http://b.scorecardresearch.com/p?c1=2&c2=6035753&cv=2.0&cj=1" /> </noscript>  <script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-4245582-4', "." + spe_root_url, 'global', {
+    allowLinker: true
+  });
+  ga("global.set", "dimension1", "full");
+  ga("global.set", "dimension2", mbn_config.section);
+  ga("global.set", "dimension3", 'true');
+
+  ga('global.require', 'linker');
+  ga('global.linker:autoLink', ["crackberry.com","androidcentral.com","imore.com","windowscentral.com","mobilenations.com"]);
+  ga('global.send', 'pageview');
+  setTimeout("ga('global.send','event','NoBounce','Over 20 seconds')",20000);
+</script>  <div class="adunit" id="purch_Y_O_1_1" data-dimensions='0x0'><script type='text/javascript'>
+      if(typeof(tmntag)!='undefined') tmntag.adTag('purch_Y_O_1_1',false);
+    </script></div> <div class="adunit" id="purch_Y_P_1_1" data-dimensions='1x1'><script type='text/javascript'>
+      if(typeof(tmntag)!='undefined') tmntag.adTag('purch_Y_P_1_1',false);
+    </script></div> <script type="text/javascript">
+
+        var noskimlinks = false,
+            noskimwords = true,
+            skimlinks_product = 'vbulletin';
+
+        vBulletin.events.SkimlinksActivate.fire();
+
+    </script> <script type="text/javascript" src="http://s.skimresources.com/js/23432X820452.skimlinks.js"></script> </body> </html>
