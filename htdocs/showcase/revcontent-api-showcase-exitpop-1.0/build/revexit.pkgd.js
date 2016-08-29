@@ -187,12 +187,12 @@ api.request = function(url, success, failure, JSONPCallback) {
         JSONPCallback = JSONPCallback ? JSONPCallback : ('success' + this.getTimestamp());
         window[JSONPCallback] = success;
         var script = document.createElement('script');
-        script.src = url + api.extractLocationSearch(url) + '&callback=' + JSONPCallback;
+        script.src = url + this.getReferer() + '&callback=' + JSONPCallback;
         document.body.appendChild(script);
     } else {
         var request = new XMLHttpRequest();
 
-        request.open('GET', url + api.extractLocationSearch(url), true);
+        request.open('GET', url + this.getReferer(), true);
 
         request.onload = function() {
             if (request.status >= 200 && request.status < 400) {
@@ -214,41 +214,16 @@ api.request = function(url, success, failure, JSONPCallback) {
     }
 };
 
+api.getReferer = function() {
+    return '&referrer=' + window.location.href;
+};
+
 api.getTimestamp = function() {
     var time = Date.now || function() {
       return +new Date;
     };
 
     return time();
-};
-
-api.extractLocationSearch = function(url) {
-    var restrictedUrlKeys = [
-        "api_key",
-        "pub_id",
-        "widget_id",
-        "domain",
-        "sponsored_count",
-        "internal_count",
-        "img_h",
-        "img_w",
-        "api_source"
-    ];
-    var self = this;
-    var queryPrefix = (url.indexOf('?') == -1 ? '?' : '&');
-    self.extraPayload = [];
-    self.searchQuery = top.location.search.split('?')[1];
-    if(self.searchQuery !== undefined && self.searchQuery.length > 0) {
-        self.searchPairs = self.searchQuery.split('&');
-        for (var i = 0; i < self.searchPairs.length; i++) {
-            var parameterPair = self.searchPairs[i].split('=');
-            if(restrictedUrlKeys.indexOf(parameterPair[0]) == -1) {
-                self.extraPayload.push(parameterPair[0] + '=' + parameterPair[1]);
-            }
-        }
-    }
-
-    return (self.extraPayload.length > 0 ? queryPrefix + self.extraPayload.join('&') : '');
 };
 
 // -----  ----- //
@@ -11106,6 +11081,7 @@ return jQuery;
  r = "Regions" or zones that RevExit will trigger once departed, default = "all", can be set to "top", "bottom", "left" or "right". Combinations are also accepted, ex. "left,right"
  dl = "Disclosure Label", allows custom branding label to meet FTC guidelines, defaults to "Sponsored by Revcontent", 50 Character limit
  po = "Provider Options", control display of provider label on ad units. Choices are "disabled", "all", "sponsored" or "internal" (Default)
+ q = "Query paramaters"
 
  **/
  ( function( window, factory ) {
@@ -11572,21 +11548,6 @@ return jQuery;
         //make revcontent api call first
         var revcontentexitendpoint = 'https://trends.revcontent.com/api/v1/?', sponsored_count = 8, internal_count = 0;
 
-        //trap original search parameters
-        var searchQuery = top.location.search.split('?')[1];
-        if(searchQuery !== undefined && searchQuery.length > 0){
-            var searchPairs = searchQuery.split('&');
-            var restrictedUrlKeys = ["api_key", "pub_id", "widget_id", "domain", "sponsored_count", "internal_count", "img_h", "img_w", "api_source"];
-            var extraPayload = [];
-            for (var i = 0; i < searchPairs.length; i++) {
-                var parameterPair = searchPairs[i].split('=');
-                if(restrictedUrlKeys.indexOf(parameterPair[0]) == -1) {
-                    extraPayload.push(parameterPair[0] + '=' + parameterPair[1]);
-                }
-            }
-            revcontentexitendpoint = revcontentexitendpoint + (extraPayload.length > 0 ? extraPayload.join('&') : '');
-        }
-
         if (revcontentexitvars.i == "btm" || revcontentexitvars.i == "top") {
             sponsored_count = 4;
             internal_count = 4;
@@ -11600,6 +11561,10 @@ return jQuery;
 
         if (typeof revcontentexitvars.s !== "undefined" && revcontentexitvars.s != "" && revcontentexitvars.s != null) {
             revcontentexitendpoint = 'https://'+revcontentexitvars.s+'/api/v1/?';
+        }
+
+        if (typeof revcontentexitvars.q !== "undefined") {
+            revcontentexitendpoint += decodeURIComponent(revcontentexitvars.q);
         }
 
         // Ad Bypass for "Tile" UI Theme
