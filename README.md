@@ -124,6 +124,7 @@ revcontent-api-showcase-shifter-2.0
 revcontent-api-showcase-slider-1.0
 revcontent-api-showcase-toaster-1.0
 revcontent-api-showcase-image-1.0
+revcontent-api-showcase-solo-serve-1.0
 ```
 
 ### Future Widgets
@@ -159,6 +160,7 @@ The Gulp build task is similar to the watch command and is run using ```gulp bui
 * slider (RevSlider)
 * toaster (RevToaster)
 * image (RevImage)
+* soloserve (RevSoloServe)
 
 ##### Examples
 
@@ -194,7 +196,7 @@ revexit.min.js
 revmore.min.js    
 revslider.min.js  
 revtoaster.min.js
-
+revsoloserve.min.js
 ```
 
 

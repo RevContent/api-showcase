@@ -32,38 +32,12 @@ RevMore({
     var that;
     var defaults = {
         top_id: false,
-        id: false,
-        url: 'https://trends.revcontent.com/api/v1/',
         distance: 500,
         unlock_text: 'Read More...',
-        header: 'Trending Now',
-        rev_position: 'top_right',
-        image_ratio: 'rectangle',
-        pagination_dots: true,
         gradient_height: 60,
-        per_row: {
-            xxs: 2,
-            xs: 2,
-            sm: 3,
-            md: 4,
-            lg: 5,
-            xl: 6,
-            xxl: 7
-        },
-        buttons: {
-            forward: false,
-            back: false
-        },
-        rows: 2,
-        headline_size: 3,
-        disclosure_text: 'Ads by Revcontent',
         devices: [
             'phone', 'tablet', 'desktop'
-        ],
-        beacons: true,
-        overlay: false, // pass key value object { content_type: icon }
-        overlay_icons: false, // pass in custom icons or overrides
-        overlay_position: 'center' // center, top_left, top_right, bottom_right, bottom_left
+        ]
     };
 
     RevMore = function(opts) {
@@ -83,20 +57,18 @@ RevMore({
         // merge options
         this.options = revUtils.extend(defaults, opts);
 
-        if (revUtils.validateApiParams(this.options).length) {
+        // don't show for this device
+        if (!revDetect.show(this.options.devices)) {
             return;
         }
 
-        // don't show for this device
-        if (!revDetect.show(this.options.devices)) {
+        if (!this.options.widget_id) {
             return;
         }
 
         revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-more');
 
         this.init = function() {
-
-            this.impressionTracker = [];
 
             this.checkPadding();
 
@@ -108,11 +80,7 @@ RevMore({
 
             this.appendElements();
 
-            this.widget();
-
             this.innerWidget();
-
-            this.wrapperHeight();
 
             this.attachButtonEvents();
 
@@ -183,74 +151,51 @@ RevMore({
             revUtils.append(document.body, this.element);
         };
 
-        this.widget = function() {
-            if (this.options.id) {
-                this.sameWidget = new RevSlider({
-                    impression_tracker: this.impressionTracker,
-                    api_source:         'more',
-                    id:                 this.options.id,
-                    pagination_dots:    this.options.pagination_dots,
-                    url:                this.options.url,
-                    api_key:            this.options.api_key,
-                    pub_id:             this.options.pub_id,
-                    widget_id:          this.options.widget_id,
-                    domain:             this.options.domain,
-                    rev_position:       this.options.rev_position,
-                    header:             this.options.header,
-                    per_row:            this.options.per_row,
-                    rows:               this.options.rows,
-                    image_ratio:        this.options.image_ratio,
-                    headline_size:      this.options.headline_size,
-                    buttons:            this.options.buttons,
-                    beacons:            this.options.beacons,
-                    prevent_default_pan: false,
-                    disclosure_text: this.options.disclosure_text,
-                    multipliers: {
-                        font_size: 3,
-                        margin: -2.2,
-                        padding: 2
-                    }
-                });
+        this.innerWidget = function() {
+            var referer="";try{if(referer=document.referrer,"undefined"==typeof referer)throw"undefined"}catch(exception){referer=document.location.href,(""==referer||"undefined"==typeof referer)&&(referer=document.URL)}referer=referer.substr(0,700);
+            this.standardScript = document.createElement("script");
+            this.standardScript.id = 'rc_' + Math.floor(Math.random() * 1000);
+            this.standardScript.type = 'text/javascript';
+            this.standardScript.src = "http://trends.revcontent.com/serve.js.php?w="+ this.options.widget_id +"&t="+this.standardScript.id+"&c="+(new Date()).getTime()+"&width="+(window.outerWidth || document.documentElement.clientWidth)+"&referer="+referer;
+            this.standardScript.async = true;
+            // var rcds = document.getElementById("rcjsload_44c3e1");
+            this.innerWidgetElement.appendChild(this.standardScript);
+
+            // set the wrapper right away
+            this.wrapperHeight();
+            // check the wrapper height for size changes
+            var that = this;
+            this.standardScript.onload = function() {
+                that.checkStandardWrapperHeight();
             }
         };
 
-        this.innerWidget = function() {
-
-            this.innerWidget = new RevSlider({
-                impression_tracker: this.impressionTracker,
-                api_source:   'more',
-                element:      [this.innerWidgetElement],
-                pagination_dots: this.options.pagination_dots,
-                url:          this.options.url,
-                api_key:      this.options.api_key,
-                pub_id:       this.options.pub_id,
-                widget_id:    this.options.widget_id,
-                domain:       this.options.domain,
-                rev_position: this.options.rev_position,
-                header:       this.options.header,
-                per_row:      this.options.per_row,
-                rows:         this.options.rows,
-                image_ratio:  this.options.image_ratio,
-                headline_size: this.options.headline_size,
-                buttons:      this.options.buttons,
-                beacons:      this.options.beacons,
-                prevent_default_pan: false,
-                disclosure_text: this.options.disclosure_text,
-                overlay: this.options.overlay, // video: rectangle, square, circle1, circle2, triangle
-                overlay_icons: this.options.overlay_icons, // pass in custom icons or overrides
-                overlay_position: this.options.overlay_position, // center, top_left, top_right, bottom_right, bottom_left
-                multipliers: {
-                    line_height: 3,
-                    margin: -2.2,
-                    padding: 2
+        this.checkStandardWrapperHeight = function() {
+            var wrapperHeight;
+            var count = 0;
+            var checkInterval;
+            var check = function() {
+                var prevWrapperHeight = wrapperHeight;
+                wrapperHeight = that.wrapperHeight();
+                if (wrapperHeight == prevWrapperHeight) {
+                    count++;
+                } else {
+                    count--;
                 }
-            });
-        };
+                if (count >= 5) {
+                    clearInterval(checkInterval);
+                }
+            }
+            // start the check
+            checkInterval = setInterval(check, 20);
+        }
 
         // set the wrapper equal to top + the element height
         this.wrapperHeight = function() {
             // subtract 20 to make up for bottom zone
-            this.wrapper.style.height = (this.top - 20) + this.element.offsetHeight + this.options.gradient_height + 'px';
+            var height = (this.top - 20) + this.element.offsetHeight + this.options.gradient_height;
+            this.wrapper.style.height = height + 'px';
+            return height;
         };
 
         // unlock button
@@ -276,26 +221,29 @@ RevMore({
 
         // reset the wrapper height on resize
         this.attachResizedEvents = function() {
-            var that = this;
-            this.innerWidget.emitter.on( 'resized', function() {
-                that.wrapperHeight();
-            });
+            // attach to window resize
+            this.resizeListener = this.resize.bind(this);
+            revUtils.addEventListener(window, 'resize', this.resizeListener);
         };
 
-        this.destroy = function(destroySameWidget) {
-            this.innerWidget.destroy();
-
-            if (destroySameWidget !== false && this.sameWidget) {
-                this.sameWidget.grid.remove();
-                this.sameWidget.grid.destroy();
-                this.sameWidget.mc.set({enable: false});
-                this.sameWidget.mc.destroy();
+        this.resize = function() {
+            if ( this.resizeTimeout ) {
+                clearTimeout( this.resizeTimeout );
             }
 
+            var that = this;
+            function delayed() {
+                that.checkStandardWrapperHeight();
+                delete that.resizeTimeout;
+            }
+
+            this.resizeTimeout = setTimeout( delayed, 100 );
+        }
+
+        this.destroy = function(destroySameWidget) {
             revUtils.remove(this.element);
             this.wrapper.style.height = 'auto';
             this.wrapper.style.overflow = 'visible';
-            revApi.beacons.detach('more');
             that = null;
         };
 
