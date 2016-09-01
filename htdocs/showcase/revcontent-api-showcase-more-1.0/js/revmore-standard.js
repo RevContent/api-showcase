@@ -156,7 +156,7 @@ RevMore({
             this.standardScript = document.createElement("script");
             this.standardScript.id = 'rc_' + Math.floor(Math.random() * 1000);
             this.standardScript.type = 'text/javascript';
-            this.standardScript.src = "https://trends.revcontent.com/serve.js.php?w="+ this.options.widget_id +"&t="+this.standardScript.id+"&c="+(new Date()).getTime()+"&width="+(window.outerWidth || document.documentElement.clientWidth)+"&referer="+referer;
+            this.standardScript.src = "//trends.revcontent.com/serve.js.php?w="+ this.options.widget_id +"&t="+this.standardScript.id+"&c="+(new Date()).getTime()+"&width="+(window.outerWidth || document.documentElement.clientWidth)+"&referer="+referer;
             this.standardScript.async = true;
             // var rcds = document.getElementById("rcjsload_44c3e1");
             this.innerWidgetElement.appendChild(this.standardScript);
