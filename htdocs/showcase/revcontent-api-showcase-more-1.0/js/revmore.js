@@ -108,9 +108,9 @@ RevMore({
 
             this.appendElements();
 
-            this.widget();
-
             this.innerWidget();
+
+            this.widget();
 
             this.wrapperHeight();
 
@@ -185,31 +185,34 @@ RevMore({
 
         this.widget = function() {
             if (this.options.id) {
-                this.sameWidget = new RevSlider({
-                    impression_tracker: this.impressionTracker,
-                    api_source:         'more',
-                    id:                 this.options.id,
-                    pagination_dots:    this.options.pagination_dots,
-                    url:                this.options.url,
-                    api_key:            this.options.api_key,
-                    pub_id:             this.options.pub_id,
-                    widget_id:          this.options.widget_id,
-                    domain:             this.options.domain,
-                    rev_position:       this.options.rev_position,
-                    header:             this.options.header,
-                    per_row:            this.options.per_row,
-                    rows:               this.options.rows,
-                    image_ratio:        this.options.image_ratio,
-                    headline_size:      this.options.headline_size,
-                    buttons:            this.options.buttons,
-                    beacons:            this.options.beacons,
-                    prevent_default_pan: false,
-                    disclosure_text: this.options.disclosure_text,
-                    multipliers: {
-                        font_size: 3,
-                        margin: -2.2,
-                        padding: 2
-                    }
+                var that = this;
+                that.innerWidgetDataPromise.then(function() {
+                    that.sameWidget = new RevSlider({
+                        impression_tracker: that.impressionTracker,
+                        api_source:         'more',
+                        id:                 that.options.id,
+                        pagination_dots:    that.options.pagination_dots,
+                        url:                that.options.url,
+                        api_key:            that.options.api_key,
+                        pub_id:             that.options.pub_id,
+                        widget_id:          that.options.widget_id,
+                        domain:             that.options.domain,
+                        rev_position:       that.options.rev_position,
+                        header:             that.options.header,
+                        per_row:            that.options.per_row,
+                        rows:               that.options.rows,
+                        image_ratio:        that.options.image_ratio,
+                        headline_size:      that.options.headline_size,
+                        buttons:            that.options.buttons,
+                        beacons:            that.options.beacons,
+                        prevent_default_pan: false,
+                        disclosure_text: that.options.disclosure_text,
+                        multipliers: {
+                            font_size: 3,
+                            margin: -2.2,
+                            padding: 2
+                        }
+                    });
                 });
             }
         };
@@ -245,6 +248,7 @@ RevMore({
                     padding: 2
                 }
             });
+            this.innerWidgetDataPromise = this.innerWidget.dataPromise;
         };
 
         // set the wrapper equal to top + the element height
