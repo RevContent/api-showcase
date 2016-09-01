@@ -169,7 +169,7 @@ var js = '<script type="text/javascript">'+
         'var rcel = document.createElement("script");'+
         'rcel.id = "rc_" + Math.floor(Math.random() * 1000);'+
         'rcel.type = "text/javascript";'+
-        'rcel.src = "http://trends.revcontent.com/serve.js.php?w='+solo_widget_id+'&t="+rcel.id+"&c="+(new Date()).getTime()+"&width="+(window.outerWidth || document.documentElement.clientWidth)+"&referer="+referer;'+
+        'rcel.src = "https://trends.revcontent.com/serve.js.php?w='+solo_widget_id+'&t="+rcel.id+"&c="+(new Date()).getTime()+"&width="+(window.outerWidth || document.documentElement.clientWidth)+"&referer="+referer;'+
         'rcel.async = true;'+
         'var rcds = document.getElementById("rcjsload_soloserve_'+solo_widget_id+'"); rcds.appendChild(rcel);'+
         'rcruntime.innerHTML = rcruntime.innerHTML + rcruntimec();'+
