@@ -169,9 +169,9 @@ Author: michael@revcontent.com
 
         this.appendElements();
 
-        this.limit = this.getLimit();
-
         this.grid.layout();
+
+        this.limit = this.getLimit();
 
         this.setUp();
 
