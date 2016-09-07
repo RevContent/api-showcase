@@ -67,7 +67,7 @@
         {
             "name": "soloserve",
             "templates": [],
-            "script": "./build/files/soloserve/revsoloserve.pkgd.js",
+            "script": "./build/revsoloserve.min.js",
             "script_id": "revsoloserve",
             "read_demo": true,
             "has_script": true
