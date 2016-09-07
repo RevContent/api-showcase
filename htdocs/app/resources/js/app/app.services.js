@@ -79,7 +79,7 @@ app.service('widgets', function() {
             bg: '#000'
         },
         'soloserve': {
-            title: 'Solo Serve',
+            title: 'Solo Serve Native',
             img: 'soloserve.jpg',
             description: 'Our content is on fire! This single ad widget is sure to get your audience\'s attention. With a customizable call to action and popularity meter, increase viewer engagement and your returns with Solo Serve Native today.',
             link: 'revcontent-api-showcase-solo-serve-1.0/index.html',
