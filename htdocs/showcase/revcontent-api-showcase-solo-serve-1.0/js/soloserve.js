@@ -45,9 +45,11 @@ if (typeof RevContentSolo != 'undefined') {
     if (RevContentSolo.theme === undefined) {
         RevContentSolo.theme = "default";
     }
-}
 
-console.log(RevContentSolo.theme);
+    if (RevContentSolo.url === undefined) {
+        RevContentSolo.url = "trends.revcontent.com";
+    }
+}
 
 var css = '<style>'+
 '#rc-solo {' +
@@ -193,7 +195,7 @@ var js = '<script type="text/javascript">'+
         'var rcel = document.createElement("script");'+
         'rcel.id = "rc_" + Math.floor(Math.random() * 1000);'+
         'rcel.type = "text/javascript";'+
-        'rcel.src = "//trends.revcontent.com/serve.js.php?w='+solo_widget_id+'&t="+rcel.id+"&c="+(new Date()).getTime()+"&width="+(window.outerWidth || document.documentElement.clientWidth)+"&referer="+referer;'+
+        'rcel.src = "//"+RevContentSolo.url+"/serve.js.php?w='+solo_widget_id+'&t="+rcel.id+"&c="+(new Date()).getTime()+"&width="+(window.outerWidth || document.documentElement.clientWidth)+"&referer="+referer;'+
         'rcel.async = true;'+
         'var rcds = document.getElementById("rcjsload_soloserve_'+solo_widget_id+'"); rcds.appendChild(rcel);'+
         'rcruntime.innerHTML = rcruntime.innerHTML + rcruntimec();'+
