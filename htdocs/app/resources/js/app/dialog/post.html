@@ -16,18 +16,7 @@
         <div class="item-detail" hide-gt-md>
 
             <md-content layout="row" layout-wrap>
-                <div flex="50" layout layout-align="center center">
-                    <md-button flex style="margin:8px;" ng-show="post.demo" ng-click="demo(id, post.demo)" class="md-accent md-raised md-hue-2">Docs</md-button>
-                </div>
-                <div flex="50" layout layout-align="center center">
-                    <md-button flex style="margin:8px;" ng-click="preview(id, post.preview)" class="md-accent md-raised md-hue-2">Live Preview</md-button>
-                </div>
-                <div flex="50" layout layout-align="center center">
-                    <md-button flex style="margin:8px;" href="https://github.com/Revcontent/api-showcase/archive/master.zip" class="md-raised md-primary md-hue-1">Download</md-button>
-                </div>
-                <div flex="50" layout layout-align="center center">
-                    <md-button flex style="margin:8px;" href="https://github.com/Revcontent/api-showcase" class="md-raised md-primary md-hue-1" target="_blank">Github</md-button>
-                </div>
+                <md-button flex style="margin:8px;" ng-click="preview(id, post.preview)" class="md-accent md-raised md-hue-2">Live Preview</md-button>
             </md-content>
 
             <br />
@@ -41,7 +30,7 @@
 
             <md-content>
                 <h3 style="margin-top:0;" class="md-title">Description:</h3>
-                <div class="md-body-2" ng-bind="post.description"></div>
+                <div class="md-body-2" ng-bind-html="post.description | sanitize"></div>
             </md-content>
         </div>
 
@@ -53,19 +42,11 @@
 
             <div flex-gt-md="30">
                 <md-content layout-padding style="padding-top:0;">
-                    <div class="md-body-2">{{ post.description }}</div>
+                    <div class="md-body-2" ng-bind-html="post.description | sanitize"></div>
                 </md-content>
 
                 <md-content layout="column">
-
-                    <md-button style="margin-bottom:16px;" ng-show="post.demo" ng-click="demo(id)" class="md-accent md-raised md-hue-2">Docs</md-button>
-
                     <md-button style="margin-bottom:16px;" ng-click="preview(id, post.preview)" class="md-accent md-raised md-hue-2">Live Preview</md-button>
-
-                    <md-button style="margin-bottom:16px;" href="https://github.com/Revcontent/api-showcase/archive/master.zip" class="md-raised md-primary md-hue-1">Download</md-button>
-
-                    <md-button style="margin-bottom:16px;" href="https://github.com/Revcontent/api-showcase" class="md-raised md-hue-1 md-primary" target="_blank">Github</md-button>
-
                 </md-content>
             </div>
 

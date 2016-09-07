@@ -51,7 +51,10 @@ RevToaster({
         ],
         disclosure_text: revDisclose.defaultDisclosureText,
         hide_provider: false,
-        beacons: true
+        beacons: true,
+        overlay: false, // pass key value object { content_type: icon }
+        overlay_icons: false, // pass in custom icons or overrides
+        overlay_position: 'center' // center, top_left, top_right, bottom_right, bottom_left
     };
     // var options;
     var lastScrollTop = 0;
@@ -252,6 +255,12 @@ RevToaster({
                 for (var i = 0; i < resp.length; i++) {
                     var ad = ads[i],
                         data = resp[i];
+
+
+                    if (that.options.overlay !== false) {
+                        revUtils.imageOverlay(ad.querySelectorAll('.rev-image')[0], data.content_type, that.options.overlay, that.options.overlay_position, that.options.overlay_icons);
+                    }
+
                     ad.querySelectorAll('a')[0].setAttribute('href', data.url);
                     ad.querySelectorAll('img')[0].setAttribute('src', data.image);
                     ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
@@ -288,7 +297,8 @@ RevToaster({
                 this.getData(true);
             } else {
                 var that = this;
-                imagesLoaded( this.containerElement, function() {
+
+                revUtils.imagesLoaded(that.containerElement.querySelectorAll('img')).once('done', function() {
                     that.visible = true;
                     revUtils.addClass(document.body, 'rev-toaster-loaded');
                     if(true === that.options.beacons) { revApi.beacons.setPluginSource('toaster').attach(); }

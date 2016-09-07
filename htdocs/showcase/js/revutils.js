@@ -8,10 +8,11 @@
   // universal module definition
     // browser global
     window.revUtils = factory(
-      window
+      window,
+      window.revOverlay
     );
 
-}( window, function factory( window ) {
+}( window, function factory( window, revOverlay ) {
 
 'use strict';
 
@@ -71,7 +72,8 @@ utils.extend = function( a, b ) {
     }
 
     for ( var prop in b ) {
-        if (typeof b[prop] == 'object') { // if the prop is an obj recurse
+        if (typeof b[prop] == 'object' &&
+        (Object.prototype.toString.call(b[prop]) == "[object Object]")) { // if the prop is an obj recurse
             c[prop] = this.extend(c[prop], b[prop]);
         } else {
             c[prop] = b[prop];
@@ -79,6 +81,13 @@ utils.extend = function( a, b ) {
     }
     return c;
 };
+
+utils.merge = function(a, b) {
+    for (var prop in b) {
+        a[prop] = b[prop];
+    }
+    return a;
+}
 
 utils.inArray = function(array, item) {
     for (var i = 0; i < array.length; i++) {
@@ -119,6 +128,13 @@ utils.remove = function(el) {
     if (el && el.parentNode) {
         el.parentNode.removeChild(el);
     }
+}
+
+utils.wrap = function(el, wrapper) {
+    var parent = el.parentNode;
+
+    wrapper.appendChild(el);
+    parent.appendChild(wrapper);
 }
 
 utils.next = function(el) {
@@ -179,6 +195,13 @@ utils.transformCss = function(el, css) {
     el.style.OTransform = css;
 };
 
+utils.transitionCss = function(el, css) {
+    el.style.transition = css;
+    el.style.MsTransition = css;
+    el.style.WebkitTransition = css;
+    el.style.OTransition = css;
+};
+
 utils.transitionDurationCss = function(el, css) {
     el.style.transitionDuration = css;
     el.style.WebkitTransitionDuration = css;
@@ -200,6 +223,112 @@ utils.ellipsisText = function(headlines) {
         }
     }
 };
+
+utils.imagesLoaded = function(images) {
+
+    var maxMilliseconds = 4000;
+
+    // LoadingImage code from https://github.com/desandro/imagesloaded
+    function LoadingImage( img ) {
+        this.img = img;
+    }
+
+    LoadingImage.prototype = new EventEmitter();
+
+    LoadingImage.prototype.check = function() {
+        // If complete is true and browser supports natural sizes,
+        // try to check for image status manually.
+        var isComplete = this.getIsImageComplete();
+        if ( isComplete ) {
+            // HACK check async to allow time to bind listeners
+            var that = this;
+            setTimeout(function() {
+                // report based on naturalWidth
+                that.confirm( that.img.naturalWidth !== 0, 'naturalWidth' );
+            });
+            return;
+        }
+
+        // If none of the checks above matched, simulate loading on detached element.
+        this.proxyImage = new Image();
+        utils.addEventListener(this.proxyImage, 'load', this);
+        utils.addEventListener(this.proxyImage, 'error', this);
+        // bind to image as well for Firefox. #191
+        utils.addEventListener(this.img, 'load', this);
+        utils.addEventListener(this.img, 'error', this);
+        this.proxyImage.src = this.img.src;
+    };
+
+    LoadingImage.prototype.getIsImageComplete = function() {
+        return this.img.complete && this.img.naturalWidth !== undefined;
+    };
+
+    LoadingImage.prototype.confirm = function( isLoaded, message ) {
+        this.isLoaded = isLoaded;
+        this.emit( 'progress', this, this.img, message );
+    };
+
+    // ----- events ----- //
+
+    // trigger specified handler for event type
+    LoadingImage.prototype.handleEvent = function( event ) {
+        var method = 'on' + event.type;
+        if ( this[ method ] ) {
+          this[ method ]( event );
+        }
+    };
+
+    LoadingImage.prototype.onload = function() {
+        this.confirm( true, 'onload' );
+        this.unbindEvents();
+    };
+
+    LoadingImage.prototype.onerror = function() {
+        this.confirm( false, 'onerror' );
+        this.unbindEvents();
+    };
+
+    LoadingImage.prototype.unbindEvents = function() {
+        utils.removeEventListener(this.proxyImage, 'load', this);
+        utils.removeEventListener(this.proxyImage, 'error', this);
+        utils.removeEventListener(this.img, 'load', this);
+        utils.removeEventListener(this.img, 'error', this);
+    };
+
+    // emit done event when all images have finished loading
+    var emitter = new EventEmitter();
+
+    var progressedCount = 0;
+
+    for (var i=0; i < images.length; i++ ) {
+        var loadingImage = new LoadingImage(images[i]);
+        loadingImage.once( 'progress', function() {
+            progressedCount++;
+            if (progressedCount == images.length) {
+                emitter.emitEvent('done');
+            }
+        });
+        loadingImage.check();
+    }
+
+    // don't wait longer than maxMilliseconds, this is a safety for network slowness or other issues
+    setTimeout(function() {
+        emitter.emitEvent('done');
+    }, maxMilliseconds);
+
+    return emitter;
+}
+
+utils.setImage = function(wrapperElement, src) {
+    var img = document.createElement('img');
+    img.src = src;
+    this.append(wrapperElement, img);
+}
+
+utils.imageOverlay = function(image, content_type, overlay, position, icons) {
+    var icons = this.merge(revOverlay.icons, icons); // merge any passed icons
+    revOverlay.image(image, content_type, overlay, position, icons);
+}
 
 // -----  ----- //
 return utils;

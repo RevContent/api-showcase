@@ -55,6 +55,7 @@ RevFlicker({
 'use strict';
 
     var RevFlicker = function(opts) {
+
         var defaults = {
             element: false,
             per_row: {
@@ -111,7 +112,10 @@ RevFlicker({
             user_ip: false,
             user_agent: false,
             hide_header: false,
-            hide_disclosure: false
+            hide_disclosure: false,
+            overlay: false, // pass key value object { content_type: icon }
+            overlay_icons: false, // pass in custom icons or overrides
+            overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
         };
 
         // merge options
@@ -455,7 +459,7 @@ RevFlicker({
         for (var j = index; j < count; j++) {
             var html = '<div class="rev-ad" style="height: '+ that.getCellHeight() +'px; border-width:' + (that.options.ad_border ? '1px' : '0') + '">' +
                         '<a href="" rel="nofollow" target="_blank">' +
-                            '<div class="rev-image" style="'+ imgWidth +'height:'+ that.preloaderHeight +'px"><img src=""/></div>' +
+                            '<div class="rev-image" style="'+ imgWidth +'height:'+ that.preloaderHeight +'px"></div>' +
                             '<div class="rev-headline" style="max-height:'+ that.headlineHeight +'px; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>' +
                             ( that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'margin: ' + that.providerMarginTop + 'px '  + that.innerMargin + 'px '+ that.providerMarginBottom +'px;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;height:' + that.providerLineHeight + 'px;') : '') +
                         '</a>' +
@@ -593,9 +597,16 @@ RevFlicker({
                 }
                 var ad = ads[i],
                     data = resp[dataIndex];
+
+                revUtils.setImage(ad.querySelectorAll('.rev-image')[0], data.image);
+
+                if (that.options.overlay !== false) {
+                    revUtils.imageOverlay(ad.querySelectorAll('.rev-image')[0], data.content_type, that.options.overlay, that.options.overlay_position, that.options.overlay_icons);
+                }
+
                 ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', ''));
                 ad.querySelectorAll('a')[0].title = data.headline;
-                ad.querySelectorAll('img')[0].setAttribute('src', data.image);
+
                 ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
                 if (that.options.hide_provider === false) {
                     ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
@@ -605,7 +616,10 @@ RevFlicker({
 
             that.resize();
 
-            imagesLoaded( that.flickity.element, function() {
+            // convert NodeList to array and then slice only visible images
+            var images = Array.prototype.slice.call(that.flickity.element.querySelectorAll('img')).slice(0, (that.perRow + 1));
+
+            revUtils.imagesLoaded(images).once('done', function() {
                 revUtils.addClass(that.containerElement, 'loaded');
                 that.registerImpressions(true);
                 that.attachRegisterImpressions();

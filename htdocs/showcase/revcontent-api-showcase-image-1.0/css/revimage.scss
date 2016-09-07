@@ -1,0 +1,171 @@
+$headerSize: 16px;
+
+#rev-img {
+    position: relative;
+    overflow: hidden;
+
+    .rev-img-wrapper {
+        transform: translateY(100%);
+        position: absolute;
+        bottom: 0;
+
+        #rev-slider {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        #rev-slider .rev-ad {
+            border-radius: 0;
+            background: transparent;
+            img {
+                border-radius: 0;
+            }
+        }
+
+        .rev-head {
+            margin: 0;
+            .rev-head-spacer {
+                height: $headerSize + 1;
+            }
+        }
+
+        .rev-header {
+            position: absolute;
+            top: 0;
+            line-height: $headerSize;
+            border-top: 1px solid #4CC93D;
+
+            .inner {
+                border-top: $headerSize solid rgba(255, 255, 255, .7);
+                h2 {
+                    margin-top: -10px;
+                    font-size: 18px;
+                    line-height: 18px;
+                    margin-left: 4px;
+                    margin-bottom: 0;
+                    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                    text-transform: none;
+                    font-weight: 500;
+                    letter-spacing: .2px;
+                }
+            }
+
+            &:before, &:after {
+                box-sizing: border-box;
+                display: block;
+                position: absolute;
+                width: $headerSize;
+                height: $headerSize;
+                top: 0;
+                right: -$headerSize;
+                content: "";
+            }
+            &:before {
+                border-top: solid ($headerSize / 2) transparent;
+                border-right: solid ($headerSize / 2) transparent;
+                border-left: solid ($headerSize / 2) transparent;
+                border-bottom: solid ($headerSize / 2) transparent;
+            }
+            &:after {
+                border-bottom: solid ($headerSize / 2) rgba(255, 255, 255, .7);
+                border-left: solid ($headerSize / 2) rgba(255, 255, 255, .7);
+                border-right: solid ($headerSize / 2) transparent;
+                border-top: solid ($headerSize / 2) transparent;
+            }
+        }
+
+        .rev-sponsored {
+            line-height: 18px;
+            font-size: 12px;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            position: absolute;
+            right: 34px;
+            z-index: 100000;
+
+            a {
+                text-decoration: none;
+                color: #999;
+            }
+        }
+
+        .rev-close {
+            position: absolute;
+            top: ($headerSize - 6);
+            right: 0;
+            cursor: pointer;
+            padding: 5px;
+            fill: #555;
+            z-index: 1;
+        }
+    }
+
+    &.rev-img-buttons-dots {
+        .rev-sponsored {
+            line-height: 30px;
+        }
+
+        .rev-close {
+            top: ($headerSize - 1);
+        }
+    }
+
+    &.rev-img-small {
+        .rev-sponsored {
+            right: 28px;
+            font-size: 11px;
+        }
+        &.rev-img-buttons-dots {
+            .rev-pagination-dots {
+                margin: 0 !important;
+            }
+        }
+    }
+
+    &.rev-img-dark {
+
+        .rev-img-wrapper {
+
+            .rev-header {
+                .inner {
+                    border-color: rgba(0, 0, 0, 0.53);
+                }
+
+                h2 {
+                    color: #eee;
+                }
+            }
+
+            .rev-header:after {
+                border-bottom-color: rgba(0, 0, 0, 0.53);
+                border-left-color: rgba(0, 0, 0, 0.53);
+            }
+
+            .rev-sponsored a {
+                color: #ccc;
+            }
+
+            .rev-close {
+                fill: #ccc;
+            }
+
+            #rev-slider {
+                background: rgba(0, 0, 0, 0.53);
+
+                .rev-ad .rev-headline h3 {
+                    color: #fff;
+                }
+
+                .rev-ad .rev-provider {
+                    color: #eee;
+                }
+
+                .rev-pagination-dots .rev-pagination-dot.rev-active>div {
+                    background-color: #fff;
+                }
+
+                .rev-pagination-dots-container button {
+                    fill: #eee;
+                }
+            }
+        }
+    }
+}
