@@ -31,6 +31,7 @@ RevMore({
     var RevMore;
     var that;
     var defaults = {
+        url: 'trends.revcontent.com',
         top_id: false,
         distance: 500,
         unlock_text: 'Read More...',
@@ -156,7 +157,7 @@ RevMore({
             this.standardScript = document.createElement("script");
             this.standardScript.id = 'rc_' + Math.floor(Math.random() * 1000);
             this.standardScript.type = 'text/javascript';
-            this.standardScript.src = "//trends.revcontent.com/serve.js.php?w="+ this.options.widget_id +"&t="+this.standardScript.id+"&c="+(new Date()).getTime()+"&width="+(window.outerWidth || document.documentElement.clientWidth)+"&referer="+referer;
+            this.standardScript.src = "//"+ this.options.url +"/serve.js.php?w="+ this.options.widget_id +"&t="+this.standardScript.id+"&c="+(new Date()).getTime()+"&width="+(window.outerWidth || document.documentElement.clientWidth)+"&referer="+referer;
             this.standardScript.async = true;
             // var rcds = document.getElementById("rcjsload_44c3e1");
             this.innerWidgetElement.appendChild(this.standardScript);
