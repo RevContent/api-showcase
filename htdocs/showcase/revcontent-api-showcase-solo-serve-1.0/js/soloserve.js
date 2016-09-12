@@ -91,9 +91,20 @@ var css = '<style>'+
     'border-top-left-radius: 3px;'+
     'border-top-right-radius: 3px;'+
 '}'+
-'#rc-solo .rc-uid-'+solo_widget_id+' .rc-branding-label {'+
+'#rc-solo .rc-branding {' +
+    'width: auto;' +
+'}'+
+'#rc-solo .rc-branding.rc-text-center {' +
+    'width: 100%;' +
+'}'+
+'#rc-solo .rc-uid-'+solo_widget_id+' .rc-text-bottom .rc-branding-label,'+
+'#rc-solo .rc-uid-'+solo_widget_id+' .rc-text-bottom .hateit {'+
     'position: relative;'+
     'top: 77px;'+
+'}'+
+'#rc-solo .rc-text-center.rc-branding,'+
+'#rc-solo .rc-text-left.rc-branding {'+
+    'float: left;'+
 '}'+
 '#rc-solo .rc-solo-more-button {'+
     'box-shadow: none;'+
