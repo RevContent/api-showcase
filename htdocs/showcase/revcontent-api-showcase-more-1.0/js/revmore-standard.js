@@ -183,12 +183,12 @@ RevMore({
                 } else {
                     count--;
                 }
-                if (count >= 5) {
+                if (count >= 10) {
                     clearInterval(checkInterval);
                 }
             }
             // start the check
-            checkInterval = setInterval(check, 20);
+            checkInterval = setInterval(check, 40);
         }
 
         // set the wrapper equal to top + the element height
