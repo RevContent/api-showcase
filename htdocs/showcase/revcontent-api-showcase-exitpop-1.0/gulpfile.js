@@ -9,6 +9,8 @@ var uglify       = require('gulp-uglify');
 var autoprefixer = require('gulp-autoprefixer');
 var stripDebug   = require('gulp-strip-debug');
 var preprocess   = require('gulp-preprocess');
+var pump      = require('pump');
+var notify    = require("gulp-notify");
 
 gulp.task('default', ['build-rx']);
 
@@ -74,7 +76,7 @@ gulp.task('revexit-inject', ['revexit-css'], function () {
         .pipe(gulp.dest('./build'));
 });
 
-gulp.task('build-rx', ['revexit-css', 'revchimp-css', 'revchimp-inject', 'revexit-inject', 'revexit-jquery'], function() {
+gulp.task('build-rx', ['revexit-css', 'revchimp-css', 'revchimp-inject', 'revexit-inject', 'revexit-jquery'], function(cb) {
 
     var banner = ['/**',
       ' * <%= pkg.name %> - <%= pkg.description %>',
@@ -84,17 +86,26 @@ gulp.task('build-rx', ['revexit-css', 'revchimp-css', 'revchimp-inject', 'revexi
       ' */',
       ''].join('\n');
 
-    return gulp.src(['../js/revbeacon.js', '../js/revapi.js', '../js/revdialog.js', './js/jquery-1.11.3.js', './build/revchimp.js', './build/revexit.js'])
-        .pipe(concat('revexit.pkgd.js'))
-        .pipe(gulp.dest('./build'))
-        .pipe(uglify({
-            mangle: false
-            }))
-        .pipe(stripDebug())
-        .pipe(rename('revexit.min.js'))
-        .pipe(header(banner, { pkg : pkg } ))
-        .pipe(gulp.dest('./build'))
-        .pipe(gulp.dest('../../build'));
+      pump([
+            gulp.src(['../js/revbeacon.js', '../js/revapi.js', '../js/revutils.js', '../js/revdialog.js', './js/jquery-1.11.3.js', './build/revchimp.js', './build/revexit.js']),
+            concat('revexit.pkgd.js'),
+            gulp.dest('./build'),
+            uglify({
+                mangle: false
+            }).on('error', function (err) {
+                var fileArr = err.fileName.split('/');
+                var messageArr = err.message.split(': ');
+                notify().write(fileArr[fileArr.length - 1] + ' Line: ' + err.lineNumber + ' ' + messageArr[messageArr.length - 1]);
+                this.emit('end');
+            }),
+            stripDebug(),
+            rename('revexit.min.js'),
+            header(banner, { pkg : pkg } ),
+            gulp.dest('./build'),
+            gulp.dest('../../build')
+        ],
+        cb
+      );
 });
 
 gulp.task('watch', function () {
