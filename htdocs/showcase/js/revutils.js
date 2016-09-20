@@ -319,6 +319,14 @@ utils.imagesLoaded = function(images) {
     return emitter;
 }
 
+utils.getComputedStyle = function (el, prop) {
+    if (getComputedStyle !== 'undefined') {
+        return getComputedStyle(el, null).getPropertyValue(prop);
+    } else {
+        return el.currentStyle[prop];
+    }
+}
+
 utils.setImage = function(wrapperElement, src) {
     var img = document.createElement('img');
     img.src = src;
