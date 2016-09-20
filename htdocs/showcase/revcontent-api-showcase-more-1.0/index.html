@@ -75,6 +75,16 @@
             </div>
         </div>
 
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Examples:</h3>
+                    <ul>
+                        <li><a href="/showcase/revcontent-api-showcase-more-1.0/index.html">Slider Widget</a></li>
+                        <li><a href="/showcase/revcontent-api-showcase-more-1.0/standard.html">Standard Widget</a></li>
+                    </ul>
+                </div>
+            </div>
+
         <div class="row">
             <div class="col-md-8">
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -89,6 +99,9 @@
                 consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
                 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
                 proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+                <div id="top-id"></div>
+
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                 tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
                 quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
@@ -130,22 +143,10 @@
                     <li>Adipiscing Elit</li>
                 </ul>
             </div>
-        </div>
-        <br /><hr /><br />
-        <div class="row">
-            <div class="col-md-8">
-                <img alt="" src="http://placehold.it/750x500" class="img-responsive">
-            </div>
-            <div class="col-md-4">
-                <h3>This is just a testing title</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
-                <h3>Project Details</h3>
-                <ul>
-                    <li>Lorem Ipsum</li>
-                    <li>Dolor Sit Amet</li>
-                    <li>Consectetur</li>
-                    <li>Adipiscing Elit</li>
-                </ul>
+
+            <div class="col-md-12">
+                <br /><hr /><br />
+                <div id="in-article"></div>
             </div>
         </div>
 
@@ -166,6 +167,8 @@
 
     <script>
         var more = new RevMore({
+            top_id: 'top-id',
+            id: 'in-article',
             api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
             pub_id : 945,
             widget_id : 6181,

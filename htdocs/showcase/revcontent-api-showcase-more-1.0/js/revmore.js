@@ -28,42 +28,58 @@ RevMore({
 }( window, function factory(window, revUtils, revDetect, revApi, revDialog) {
 'use strict';
 
-    var RevMore = function(opts) {
-        var defaults = {
-            id: false,
-            url: 'https://trends.revcontent.com/api/v1/',
-            distance: 500,
-            element: false,
-            unlock_text: 'Read More...',
-            header: 'Trending Now',
-            rev_position: 'top_right',
-            image_ratio: 'rectangle',
-            pagination_dots: true,
-            per_row: {
-                xxs: 2,
-                xs: 2,
-                sm: 3,
-                md: 4,
-                lg: 5,
-                xl: 6,
-                xxl: 7
-            },
-            buttons: {
-                forward: false,
-                back: false
-            },
-            rows: 2,
-            headline_size: 3,
-            disclosure_text: 'Ads by Revcontent',
-            devices: [
-                'phone', 'tablet', 'desktop'
-            ],
-            beacons: true,
-            overlay: false, // pass key value object { content_type: icon }
-            overlay_icons: false, // pass in custom icons or overrides
-            overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
-            query_params: false
-        };
+    var RevMore;
+    var that;
+    var defaults = {
+        top_id: false,
+        id: false,
+        url: 'https://trends.revcontent.com/api/v1/',
+        distance: 500,
+        unlock_text: 'Read More...',
+        header: 'Trending Now',
+        rev_position: 'top_right',
+        image_ratio: 'rectangle',
+        pagination_dots: true,
+        gradient_height: 60,
+        per_row: {
+            xxs: 2,
+            xs: 2,
+            sm: 3,
+            md: 4,
+            lg: 5,
+            xl: 6,
+            xxl: 7
+        },
+        buttons: {
+            forward: false,
+            back: false
+        },
+        rows: 2,
+        headline_size: 3,
+        disclosure_text: 'Ads by Revcontent',
+        devices: [
+            'phone', 'tablet', 'desktop'
+        ],
+        beacons: true,
+        overlay: false, // pass key value object { content_type: icon }
+        overlay_icons: false, // pass in custom icons or overrides
+        overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
+        query_params: false
+    };
+
+    RevMore = function(opts) {
+        if (that) {
+            that.destroy();
+            return new RevMore(opts);
+        }
+
+        // if it wasn't newed up
+        if ( !( this instanceof RevMore ) ) {
+            that = new RevMore(opts);
+            return that;
+        } else {
+            that = this;
+        }
 
         // merge options
         this.options = revUtils.extend(defaults, opts);
@@ -77,11 +93,11 @@ RevMore({
             return;
         }
 
-        var that = this;
-
         revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-more');
 
         this.init = function() {
+
+            this.impressionTracker = [];
 
             this.checkPadding();
 
@@ -94,6 +110,8 @@ RevMore({
             this.appendElements();
 
             this.innerWidget();
+
+            this.widget();
 
             this.wrapperHeight();
 
@@ -136,7 +154,7 @@ RevMore({
 
             this.element = document.createElement('div');
             this.element.id = 'rev-more';
-            this.element.innerHTML = '<div id="rev-more-gradient"></div>';
+            this.element.innerHTML = '<div style="height:' + this.options.gradient_height + 'px; top:-'+ this.options.gradient_height +'px" id="rev-more-gradient"></div>';
             this.element.setAttribute('class', 'rev-more');
 
             this.unlockBtn = document.createElement('div');
@@ -151,11 +169,11 @@ RevMore({
 
         // get the top position using marker if it exists or distance option
         this.setTop = function() {
-            var marker = document.getElementById(this.options.id);
+            var marker = document.getElementById(this.options.top_id);
 
-            this.top = marker ? marker.getBoundingClientRect().top : this.options.distance;
+            this.top = marker ? marker.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop) : this.options.distance;
 
-            this.element.style.top = this.top + 'px';
+            this.element.style.top = this.top + this.options.gradient_height + 'px';
         };
 
         this.appendElements = function() {
@@ -166,8 +184,44 @@ RevMore({
             revUtils.append(document.body, this.element);
         };
 
+        this.widget = function() {
+            if (this.options.id) {
+                var that = this;
+                that.innerWidgetDataPromise.then(function() {
+                    that.sameWidget = new RevSlider({
+                        impression_tracker: that.impressionTracker,
+                        api_source:         'more',
+                        id:                 that.options.id,
+                        pagination_dots:    that.options.pagination_dots,
+                        url:                that.options.url,
+                        api_key:            that.options.api_key,
+                        pub_id:             that.options.pub_id,
+                        widget_id:          that.options.widget_id,
+                        domain:             that.options.domain,
+                        rev_position:       that.options.rev_position,
+                        header:             that.options.header,
+                        per_row:            that.options.per_row,
+                        rows:               that.options.rows,
+                        image_ratio:        that.options.image_ratio,
+                        headline_size:      that.options.headline_size,
+                        buttons:            that.options.buttons,
+                        beacons:            that.options.beacons,
+                        prevent_default_pan: false,
+                        disclosure_text: that.options.disclosure_text,
+                        multipliers: {
+                            font_size: 3,
+                            margin: -2.2,
+                            padding: 2
+                        }
+                    });
+                });
+            }
+        };
+
         this.innerWidget = function() {
+
             this.innerWidget = new RevSlider({
+                impression_tracker: this.impressionTracker,
                 api_source:   'more',
                 element:      [this.innerWidgetElement],
                 pagination_dots: this.options.pagination_dots,
@@ -196,20 +250,21 @@ RevMore({
                 },
                 query_params: this.options.query_params
             });
+            this.innerWidgetDataPromise = this.innerWidget.dataPromise;
         };
 
         // set the wrapper equal to top + the element height
         this.wrapperHeight = function() {
             // subtract 20 to make up for bottom zone
-            this.wrapper.style.height = (this.top - 20) + this.element.offsetHeight + 'px';
+            this.wrapper.style.height = (this.top - 20) + this.element.offsetHeight + this.options.gradient_height + 'px';
         };
 
         // unlock button
         this.attachButtonEvents = function() {
-            var that = this;
             this.unlockBtn.addEventListener('click', function() {
                 that.wrapper.style.height = 'auto';
                 that.wrapper.style.marginBottom = '0'; // remove buffer margin
+                that.wrapper.style.overflow = 'visible';
                 // reset any padding or margin set
                 document.body.style.paddingBottom = that.padding.bottom;
                 document.body.style.paddingLeft = that.padding.left;
@@ -220,13 +275,7 @@ RevMore({
                 revUtils.addClass(that.element, 'unlocked');
 
                 setTimeout(function() {
-                    that.innerWidget.grid.remove();
-                    that.innerWidget.grid.destroy();
-                    that.innerWidget.mc.set({enable: false});
-                    that.innerWidget.mc.destroy();
-                    revUtils.remove(that.element);
-                    that.wrapper.style.height = 'auto';
-                    revApi.beacons.detach('more');
+                    that.destroy(false);
                 }, 1000);
             });
         };
@@ -237,6 +286,23 @@ RevMore({
             this.innerWidget.emitter.on( 'resized', function() {
                 that.wrapperHeight();
             });
+        };
+
+        this.destroy = function(destroySameWidget) {
+            this.innerWidget.destroy();
+
+            if (destroySameWidget !== false && this.sameWidget) {
+                this.sameWidget.grid.remove();
+                this.sameWidget.grid.destroy();
+                this.sameWidget.mc.set({enable: false});
+                this.sameWidget.mc.destroy();
+            }
+
+            revUtils.remove(this.element);
+            this.wrapper.style.height = 'auto';
+            this.wrapper.style.overflow = 'visible';
+            revApi.beacons.detach('more');
+            that = null;
         };
 
         this.init();
