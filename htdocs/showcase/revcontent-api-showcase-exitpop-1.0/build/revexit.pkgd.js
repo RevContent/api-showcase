@@ -280,6 +280,21 @@ utils.validateApiParams = function(params) {
     return errors;
 };
 
+utils.serialize = function(obj, prefix) {
+    if (!obj) {
+        return '';
+    }
+    var str = [];
+    for(var prop in obj) {
+        if (obj.hasOwnProperty(prop)) {
+            var k = prefix ? prefix + "[" + prop + "]" : prop, v = obj[prop];
+            str.push(typeof v == "object" &&
+            (Object.prototype.toString.call(v) == "[object Object]") ? this.serialize(v, k) : k + "=" + v);
+        }
+    }
+    return str.join("&");
+}
+
 utils.appendStyle = function(style, namespace, extra) {
     var namespace = namespace + '-append-style';
 
