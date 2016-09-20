@@ -169,9 +169,9 @@ Author: michael@revcontent.com
 
         this.appendElements();
 
-        this.limit = this.getLimit();
-
         this.grid.layout();
+
+        this.limit = this.getLimit();
 
         this.setUp();
 
@@ -965,21 +965,41 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.registerImpressions = function() {
-        if (this.options.impression_tracker[this.offset + '_' + this.limit]) {
-            return; // impressions already tracked
+
+        if (!this.options.impression_tracker.length && this.options.beacons) {
+            revApi.beacons.setPluginSource(this.options.api_source).attach();
         }
 
-        var impressionsUrl = this.options.url + '?&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&api_source=' + this.options.api_source;
+        // check to see if we have not already registered for the offset
+        var register = [];
+        for (var i = this.offset; i < (this.offset + this.limit); i++) {
+            if (!this.options.impression_tracker[i]) {
+                register.push(i);
+            }
+            this.options.impression_tracker[i] = true;
+        }
 
-        impressionsUrl += '&sponsored_count=' + (this.options.internal ? 0 : this.limit) + '&internal_count=' + (this.options.internal ? this.limit : 0) + '&sponsored_offset='+ (this.options.internal ? 0 : this.offset) +'&internal_offset=' + (this.options.internal ? this.offset : 0);
+        // do we have impressions to register
+        if (register.length) {
+            // compress into single call
+            var offset = register[0];
+            var count = (register[(register.length - 1)] + 1) - offset;
 
-        this.options.impression_tracker[this.offset + '_' + this.limit] = true;
-        var that = this;
-        // don't do the same one twice, this could be improved I am sure
-        revApi.request(impressionsUrl, function() {
-            if(that.offset == 0 && true === that.options.beacons) { revApi.beacons.setPluginSource(that.options.api_source).attach(); }
-            return;
-        });
+            var impressionsUrl = this.options.url +
+            '?&api_key=' + this.options.api_key +
+            '&pub_id=' + this.options.pub_id +
+            '&widget_id=' + this.options.widget_id +
+            '&domain=' + this.options.domain +
+            '&api_source=' + this.options.api_source;
+
+            impressionsUrl +=
+            '&sponsored_count=' + (this.options.internal ? 0 : count) +
+            '&internal_count=' + (this.options.internal ? count : 0) +
+            '&sponsored_offset=' + (this.options.internal ? 0 : offset) +
+            '&internal_offset=' + (this.options.internal ? offset : 0);
+
+            revApi.request(impressionsUrl, function() { return });
+        }
     };
 
     RevSlider.prototype.updateDisplayedItems = function(registerImpressions) {

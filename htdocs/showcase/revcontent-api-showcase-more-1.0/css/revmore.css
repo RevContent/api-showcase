@@ -1,8 +1,16 @@
 body {
     margin: 0;
 }
+
+.rc-modal-shade {
+    z-index: 2147483641 !important;
+}
+.rc-modal-panel {
+    z-index: 2147483642 !important;
+}
+
 #rev-more {
-    z-index: 100000000;
+    z-index: 2147483640;
 }
 
 #rev-more-wrapper {
