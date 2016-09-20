@@ -4,166 +4,203 @@
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.revDialog = factory(window);
+    window.revDialog = factory(window, revUtils);
 
-}( window, function factory(window) {
-'use strict';
+}( window, function factory(window, revUtils) {
+// turn off strict for arguments.callee usage
+// 'use strict';
 
     var RevDialog = function() {
         this.id = 'rev-opt-out';
+
+        this.aboutFrame = null;
+        this.aboutSrc = '//trends.revcontent.com/rc-about.php/%3Fdomain=http://code.revcontent.com&lg=//cdn.revcontent.com/assets/img/rc-logo.png';
+        // this.aboutSrc = 'http://deelay.me/3000/http://trends.revcontent.com/rc-about.php/%3Fdomain=http://code.revcontent.com&lg=//cdn.revcontent.com/assets/img/rc-logo.png';
+        this.aboutHeight = 455;
+        this.aboutLoaded = false;
+
+        this.interestFrame = null;
+        this.interestSrc = '//trends.revcontent.com/rc-interests.php/?domain='+location.protocol + '//' + location.host+'&interests=1';
+        // this.interestSrc = 'http://deelay.me/3000/http://trends.revcontent.com/rc-interests.php/?domain='+location.protocol + '//' + location.host+'&interests=1';
+        this.interestHeight = 520;
+        this.interestLoaded = false;
     };
 
-    RevDialog.prototype.addEventHandler = function(elem,eventType,handler) {
-     if (elem.addEventListener)
-         elem.addEventListener (eventType,handler,false);
-     else if (elem.attachEvent)
-         elem.attachEvent ('on'+eventType,handler);
-    }
+    RevDialog.prototype.setActive = function(active) {
+        this.active = active;
 
-    RevDialog.prototype.resize = function() {
-        var that = this;
-        that.containerWidth = document.documentElement.clientWidth;
-        that.containerHeight = document.documentElement.clientHeight;
-        if (that.containerHeight < 455) {
-            that.setFullHeight();
-        } else if (that.containerHeight >= 455) {
-            that.setNormalHeight();
-            that.centerDialog();
+        // hide the frames
+        this.aboutFrame.style.display = 'none';
+        if (this.interestFrame) {
+            this.interestFrame.style.display = 'none';
+        }
+
+        switch (active) {
+            case 'about':
+                // set height and class right away b/c is always first
+                revUtils.removeClass(this.element, 'rev-interest-dialog');
+                // wait for load before showing and centering
+                if (!this.aboutLoaded) {
+                    this.loading.style.display = 'block';
+                    // create about iframe
+                    var that = this;
+                    revUtils.addEventListener(this.aboutFrame, 'load', function() {
+                        that.loading.style.display = 'none';
+                        that.aboutFrame.style.display = 'block';
+                        that.centerDialog();
+                        that.aboutLoaded = true;
+                        revUtils.removeEventListener(that.aboutFrame, 'load', arguments.callee);
+                    });
+                } else {
+                    this.aboutFrame.style.display = 'block';
+                    this.centerDialog();
+                }
+                break;
+            case 'interest':
+                if (!this.interestLoaded) {
+                    this.loading.style.display = 'block';
+                    this.interestFrame = this.createFrame(this.interestSrc);
+                    this.interestFrame.style.display = 'none';
+                    this.modalContentContainer.appendChild(this.interestFrame);
+                    var that = this;
+                    revUtils.addEventListener(this.interestFrame, 'load', function() {
+                        that.loading.style.display = 'none';
+                        revUtils.addClass(that.element, 'rev-interest-dialog');
+                        that.interestFrame.style.display = 'block';
+                        that.centerDialog();
+                        that.interestLoaded = true;
+                        revUtils.removeEventListener(that.interestFrame, 'load', arguments.callee);
+                    });
+                } else {
+                    revUtils.addClass(this.element, 'rev-interest-dialog');
+                    this.interestFrame.style.display = 'block';
+                    this.centerDialog();
+                }
+                break;
         }
     };
 
-    RevDialog.prototype.setFullHeight = function() {
-        var revDialogBox = document.querySelector('.rd-box');
-        this.removeClass(revDialogBox, 'rd-normal');
-        this.addClass(revDialogBox, 'rd-full-screen');
-        revDialogBox.style.left = '15px';
-        revDialogBox.style.top = '15px';
-    };
-
-    RevDialog.prototype.setNormalHeight = function() {
-        var revDialogBox = document.querySelector('.rd-box');
-        this.removeClass(revDialogBox, 'rd-full-screen');
-        this.addClass(revDialogBox, 'rd-normal');
-
-    };
-
-    RevDialog.prototype.getContainerWidth = function() {
-        var revDialogBox = document.querySelector('.rd-box');
-        return revDialogBox.offsetWidth;
-    };
-
-    RevDialog.prototype.getContainerHeight = function() {
-        var revDialogBox = document.querySelector('.rd-box');
-        return revDialogBox.offsetWidth;
-    };
-
+    RevDialog.prototype.createFrame = function(src) {
+        var frame = document.createElement('iframe');
+        frame.setAttribute('class', 'rc-frame');
+        frame.setAttribute('frameborder', 0);
+        frame.setAttribute('width', '100%');
+        frame.setAttribute('height', '100%');
+        frame.setAttribute('src', src);
+        return frame;
+    }
 
     RevDialog.prototype.render = function() {
         var rendered = document.querySelector('#' + this.id);
 
         if (!rendered) {
+            this.bodyOverflow = revUtils.getComputedStyle(document.body, 'overflow');
+
             this.element = document.createElement('div');
             this.element.className = 'revdialog';
             this.element.id = this.id;
 
+            this.loading = document.createElement('p');
+            this.loading.setAttribute('class', 'rd-loading');
+            this.loading.innerHTML = 'Loading<span>.</span><span>.</span><span>.</span>';
+
             this.element.innerHTML = '<div class="rd-box-wrap">' +
-                            '<div class="rd-box-overlay" onclick="revDialog.closeDialog()"> &nbsp; </div>' +
-                            '<div class="rd-vertical-offset" >' +
-                                '<div class="rd-box rd-normal">' +
-                                    '<div class="rd-header">' +
-                                        '<a class="rd-close-button" onclick="revDialog.closeDialog()">' +
-                                            '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>' +
-                                        '</a>' +
-                                    '</div>' +
-                                    '<div class="rd-content">' +
-                                        '<div class="rd-about rd-modal-content">' +
-                                            '<a href="http://www.revcontent.com" target="_blank" class="rd-logo"></a>' +
-                                            '<p id="main">The content you see here is paid for by the advertiser or content provider whose link you click on, and is recommended to you by <a href="http://www.revcontent.com" target="_blank">Revcontent</a>. As the leading platform for native advertising and content recommendation, <a href="http://www.revcontent.com" target="_blank">Revcontent</a> uses interest based targeting to select content that we think will be of particular interest to you. We encourage you to view our <a href="http://faq.revcontent.com/support/solutions/articles/5000615200-revcontent-s-privacy-policy">Privacy Policy</a> and your opt out options here: <a class="rc-opt-out-link" href="http://faq.revcontent.com/support/solutions/articles/5000615200" target="_blank">Opt Out Options</a></p>' +
-                                            '<div class="rd-well">' +
-                                            '<h2>Want your content to appear on sites like this?</h2>' +
-                                            '<p><a href="http://www.revcontent.com" target="_blank">Increase your visitor engagement now!</a></p>' +
-                                            '</div>' +
-                                        '</div>' +
-                                    '</div>' +
-                                '</div>' +
+                '<div class="rd-box-overlay" onclick="revDialog.closeDialog()"> &nbsp; </div>' +
+                    '<div class="rd-vertical-offset">' +
+                        '<div class="rd-box">' +
+                            '<a class="rd-close-button" onclick="revDialog.closeDialog()">' +
+                                '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>' +
+                            '</a>' +
+                            '<div class="rd-content">' +
+                                '<div class="rd-modal-content"></div>' +
                             '</div>' +
-                        '</div>';
+                        '</div>' +
+                    '</div>' +
+                '</div>';
 
-            this.append(document.body, this.element);
+            document.body.appendChild(this.element);
 
+            // cache the modal content container
+            this.modalContentContainer = this.element.querySelectorAll('.rd-modal-content')[0]
+
+            this.modalContentContainer.appendChild(this.loading);
+
+            this.aboutFrame = this.createFrame(this.aboutSrc);
+            this.setActive('about');
+            // append iframe
+            this.modalContentContainer.appendChild(this.aboutFrame);
+
+            this.attachPostMesssage();
             this.attachResize();
         }
+
+        // set the body to overflow hidden
+        document.body.style.overflow = 'hidden';
+
         return this.element;
     };
 
     RevDialog.prototype.showDialog = function(injectedDialog) {
         var that = injectedDialog || this;
         that.render().style.display = 'block';
-        that.resize();
+        that.centerDialog();
         return false;
     };
 
     RevDialog.prototype.closeDialog = function() {
+        document.body.style.overflow = this.bodyOverflow;
         this.element.style.display = 'none';
+        // make sure we are ready for the about dialog if opened again
+        this.setActive('about');
         return false;
     };
 
-    RevDialog.prototype.centerDialog = function() {
+    RevDialog.prototype.centerDialog = function(context) {
+        var containerWidth = document.documentElement.clientWidth;
+        var containerHeight = document.documentElement.clientHeight;
+
+        // do we need to go to compact mode?
+        this.frameHeight = this.active == 'about' ? this.aboutHeight : this.interestHeight;
+
+        this.modalContentContainer.style.height = this.frameHeight + 'px';
+
+        var availableSpace = containerHeight - 20;
+        if (availableSpace < this.frameHeight) {
+            var compact = true;
+            this.modalContentContainer.style.height = availableSpace + 'px';
+        }
+
+        var left = Math.max(0, (containerWidth / 2) - (this.modalContentContainer.offsetWidth / 2));
+        var top = compact ? 0 : Math.max(0, (containerHeight / 2) - (this.modalContentContainer.offsetHeight / 2));
+
         var db = document.querySelector('.rd-box');
-        var w = db.offsetWidth;
-        var h = db.offsetHeight;
-
-        var left = (this.containerWidth/2)-(w/2);
-        var top = (this.containerHeight/2)-(h/2);
-
         db.style.top = top+'px';
         db.style.left = left+'px';
     };
 
-    RevDialog.prototype.addEventListener = function(el, eventName, handler) {
-      if (el.addEventListener) {
-        el.addEventListener(eventName, handler);
-      } else {
-        el.attachEvent('on' + eventName, function(){
-          handler.call(el);
+    RevDialog.prototype.attachPostMesssage = function() {
+        var that = this;
+        revUtils.addEventListener(window, 'message', function(e) {
+            switch (e.data.msg) {
+                case 'open_me':
+                    that.setActive('interest');
+                    break;
+                case 'close_me':
+                    that.closeDialog();
+                    break;
+            }
         });
-      }
-    };
-
-    RevDialog.prototype.addClass = function(el, className) {
-        if (!el) return false;
-        if (el.classList)
-          el.classList.add(className);
-        else
-          el.className += ' ' + className;
-    };
-
-    RevDialog.prototype.removeClass = function(el, className) {
-        if (!el) return false;
-        if (el.classList)
-            el.classList.remove(className);
-        else
-            el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
-    };
-
-    RevDialog.prototype.append = function(el, html) {
-        if (el !== undefined)
-            el.appendChild(html);
     };
 
     RevDialog.prototype.attachResize = function() {
         var resizeEnd;
         var that = this;
-        this.addEventHandler(window, 'resize', function() {
+        revUtils.addEventListener(window, 'resize', function() {
             clearTimeout(resizeEnd);
             resizeEnd = setTimeout(function() {
-                that.resize();
+                that.centerDialog('resize');
             }, 100);
         });
-    };
-
-    RevDialog.prototype.remove = function(el) {
-        el.parentNode.removeChild(el);
     };
 
     var rD = new RevDialog();
