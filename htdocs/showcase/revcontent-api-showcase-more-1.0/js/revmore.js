@@ -283,7 +283,7 @@ RevMore({
         // reset the wrapper height on resize
         this.attachResizedEvents = function() {
             var that = this;
-            this.innerWidget.emitter.on( 'resized', function() {
+            this.innerWidget.grid.on( 'resized', function() {
                 that.wrapperHeight();
             });
         };

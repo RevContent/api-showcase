@@ -152,7 +152,7 @@ Author: michael@revcontent.com
 
         this.grid = new AnyGrid(gridElement, this.gridOptions());
 
-        this.grid.on('resized', function() {
+        this.grid.on('resize', function() {
             that.resize();
         });
 
@@ -381,7 +381,7 @@ Author: michael@revcontent.com
         this.grid.bindResize();
 
         var that = this;
-        this.grid.on('resized', function() {
+        this.grid.on('resize', function() {
             that.resize();
         });
 
@@ -506,8 +506,6 @@ Author: michael@revcontent.com
                 revUtils.prepend(this.innerContainerElement, this.paginationDotsContainer);
             }
         }
-
-        this.emitter.emitEvent('resized'); // emit resize in case dots changed size
 
         if (!this.options.pagination_dots) { // if no pagination dots we can return now
             return;
@@ -818,7 +816,13 @@ Author: michael@revcontent.com
     RevSlider.prototype.resize = function() {
         var that = this;
         var oldLimit = this.limit;
+
+        // set transitionDuration to 0 and then reset it
         this.grid.option({transitionDuration: 0});
+        this.grid.once('resized', function() {
+            that.grid.option({transitionDuration: that.options.transition_duration});
+        });
+
         this.limit = this.getLimit();
 
         var reconfig = 0;// how many to add or remove
@@ -860,17 +864,15 @@ Author: michael@revcontent.com
 
             ad.querySelectorAll('.rev-headline h3')[0].innerHTML = this.displayedItems[i].headline;
         }
-        this.textOverlay();
-        this.checkEllipsis();
 
         this.grid.reloadItems();
         this.grid.layout();
-        this.grid.option({transitionDuration: this.options.transition_duration});
+
+        this.textOverlay();
+        this.checkEllipsis();
 
         this.getAnimationDuration();
         this.updatePagination(true);
-
-        this.emitter.emitEvent('resized');
     };
 
     RevSlider.prototype.resizeImage = function(el) {

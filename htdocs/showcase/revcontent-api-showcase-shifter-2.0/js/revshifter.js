@@ -290,7 +290,7 @@ RevShifter({
 
             if (this.options.width !== oldOpts.width) {
                 this.element.style.width = this.options.width + 'px';
-                this.innerWidget.resize();
+                this.innerWidget.grid.resize();
             }
 
             if ( (this.options.size !== oldOpts.size) ||

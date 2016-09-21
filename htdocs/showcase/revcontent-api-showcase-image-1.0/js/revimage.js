@@ -179,8 +179,10 @@ Author: michael@revcontent.com
             that.wrapperWidth();
             that.checkSmall();
             // manually handle the resize layout b/c is_resize_bound: false
-            that.innerWidget.grid.layout();
-            that.innerWidget.resize();
+            that.innerWidget.grid.isResizeBound = true;
+            that.innerWidget.grid.resize();
+            that.innerWidget.grid.isResizeBound = false;
+
             delete that.resizeTimeout;
         }
 
@@ -287,7 +289,9 @@ Author: michael@revcontent.com
 
         if (this.options.width !== oldOpts.width) {
             this.element.style.width = this.options.width + 'px';
-            this.innerWidget.resize();
+            this.innerWidget.grid.isResizeBound = true;
+            this.innerWidget.grid.resize();
+            this.innerWidget.grid.isResizeBound = false;
         }
 
         if ( (this.options.size !== oldOpts.size) ||
