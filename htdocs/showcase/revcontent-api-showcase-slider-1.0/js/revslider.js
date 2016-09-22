@@ -942,7 +942,8 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.getSerializedQueryParams = function() {
          if (!this.serializedQueryParams) {
-            this.serializedQueryParams = revUtils.serialize(this.options.query_params);
+            var serialized = revUtils.serialize(this.options.query_params);
+            this.serializedQueryParams = serialized ? '&' + serialized : '';
          }
          return this.serializedQueryParams;
     };
@@ -958,7 +959,7 @@ Author: michael@revcontent.com
             var sponsoredCount = that.options.pages * that.limit;
             var url = that.options.url + '?api_key='+ that.options.api_key +'&uitm=true&img_h='+ that.imageHeight +'&img_w='+ that.imageWidth + '&pub_id='+ that.options.pub_id +'&widget_id='+ that.options.widget_id +'&domain='+ that.options.domain +'&internal_count=0'+'&sponsored_count=' + sponsoredCount;
 
-            url += '&' + that.getSerializedQueryParams();
+            url += that.getSerializedQueryParams();
 
             revApi.request(url, function(resp) {
                 that.data = resp;
@@ -999,7 +1000,7 @@ Author: michael@revcontent.com
 
             var impressionsUrl = this.options.url +
             '?api_key=' + this.options.api_key +
-            '&' + this.getSerializedQueryParams() +
+            this.getSerializedQueryParams() +
             '&pub_id=' + this.options.pub_id +
             '&widget_id=' + this.options.widget_id +
             '&domain=' + this.options.domain +

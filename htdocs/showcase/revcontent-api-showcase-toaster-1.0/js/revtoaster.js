@@ -247,7 +247,10 @@ RevToaster({
             loaded = true;
             var url = this.options.url + '?api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + this.options.sponsored + '&sponsored_offset=0&internal_count=0&api_source=toast';
 
-            url += '&' + revUtils.serialize(this.options.query_params);
+            var serializedQueryParams = revUtils.serialize(this.options.query_params);
+            if (serializedQueryParams) {
+                url += '&' + serializedQueryParams;
+            }
 
             var that = this;
 

@@ -487,9 +487,10 @@ RevFlicker({
         }
     };
 
-    RevFlicker.prototype.getSerializedQueryParams = function(){
+    RevFlicker.prototype.getSerializedQueryParams = function() {
          if (!this.serializedQueryParams) {
-            this.serializedQueryParams = revUtils.serialize(this.options.query_params);
+            var serialized = revUtils.serialize(this.options.query_params);
+            this.serializedQueryParams = serialized ? '&' + serialized : '';
          }
          return this.serializedQueryParams;
     };
@@ -512,7 +513,7 @@ RevFlicker({
 
         impressionsUrl += '&sponsored_count=' + (this.options.internal ? 0 : count) + '&internal_count=' + (this.options.internal ? count : 0) + '&sponsored_offset='+ (this.options.internal ? 0 : offset) +'&internal_offset=' + (this.options.internal ? offset : 0);
 
-        impressionsUrl += '&' + this.getSerializedQueryParams();
+        impressionsUrl += this.getSerializedQueryParams();
 
         var that = this;
         // don't do the same one twice, this could be improved I am sure
@@ -588,7 +589,7 @@ RevFlicker({
         url += this.options.user_ip ? ('&user_ip=' + this.options.user_ip) : '';
         url += this.options.user_agent ? ('&user_agent=' + this.options.user_agent) : '';
 
-        url += '&' + this.getSerializedQueryParams();
+        url += this.getSerializedQueryParams();
 
         var that = this;
         revApi.request(url, function(resp) {
