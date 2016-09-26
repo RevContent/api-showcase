@@ -33,6 +33,7 @@
         self.rcjsload = document.createElement("div");
         self.rcjsload.id = self.data.wrapper !== undefined ? self.data.wrapper : self.defaultWrapperId;
         document.body.appendChild(self.rcjsload);
+        return self;
     };
 
     RevAMP.prototype.createScript = function(){
@@ -46,13 +47,21 @@
         self.rcel.async = true;
         var rcds = document.getElementById(self.rcjsload.id);
         rcds.appendChild(self.rcel);
+        return self;
+    };
+
+    RevAMP.prototype.renderStart = function(w, h){
+        var self = this;
+        window.context.renderStart({width: w, height: h});
+        return self;
     };
 
     RevAMP.prototype.init = function(){
         var self = this;
         self.createWrapper();
         self.createScript();
-
+        self.renderStart(document.body.scrollWidth, document.body.scrollHeight);
+        return self;
     };
 
     var RevcontentNetwork = new RevAMP();
