@@ -35,6 +35,7 @@ gulp.task('tests', function() {
                   read_demo: demos.tests[i].read_demo,
                   script_id: demos.tests[i].script_id ? demos.tests[i].script_id : '',
                   script: demos.tests[i].script,
+                  has_script: demos.tests[i].has_script,
                   url: url,
                   urlPath: demos.urls[url],
                   src: src[k],
@@ -54,19 +55,34 @@ function injectTests(data) {
       starttag: '<!-- inject:html -->',
       endtag: '<!-- endinject -->',
       transform: function (filePath, file) {
+        if (data.read_demo) {
+          return '';
+        }
         return file.contents.toString('utf8');
       }
     }))
     .pipe(inject(gulp.src(data.script), {
       transform: function (filePath, file) {
 
+        var script = '';
         var path = data.urlPath + filePath;
 
         if (data.read_demo) {
           var file = fs.readFileSync('./app/resources/js/app/demo/' + data.name + '/' + data.folder +'/demo.html', 'utf8');
-          path = path + file;
+          //split on scripts if they are needed and pop the last string to append, remove any new lines
+          var scriptParamsArr = file.split('</script>'); // split on the script
+
+          if (data.has_script) {
+            var script = scriptParamsArr[0]; // output the script if there is one
+            script = script + '</script>';
+          }
+
+          var params = scriptParamsArr.pop().replace(/(\r\n|\n|\r)/gm,"");
+
+          path += params;
         }
-        return '<script type="text/javascript" id="'+ data.script_id +'" src="' + path + '"></script>';
+
+        return script + '<script type="text/javascript" id="'+ data.script_id +'" src="' + path + '"></script>';
       }
     }
     ))

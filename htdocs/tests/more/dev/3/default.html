@@ -7,7 +7,7 @@
 </head>
 <body>
     <!-- inject:js -->
-    <script type="text/javascript" id="" src="http://localhost:2201/build/revmore.min.js"></script>
+    <script type="text/javascript" id="" src="http://localhost:8000/build/revmore.min.js"></script>
     <!-- endinject -->
 
     <!-- inject:html -->
@@ -79,10 +79,8 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 <script>
 setTimeout(function() {
     new RevMore({
-        id: 'check',
-        inner_widget_options: {
-            header: 'Check it out!'
-        },
+        top_id: 'check',
+        header: 'Check it out!'
         api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
         pub_id : 945,
         widget_id : 6181,
