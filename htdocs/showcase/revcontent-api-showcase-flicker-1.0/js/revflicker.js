@@ -181,6 +181,8 @@ RevFlicker({
             that.resize();
         });
 
+        revUtils.dispatchScrollbarResizeEvent();
+
         this.flickity.on( 'cellSelect', function() {
             that.emitter.emit('cellSelect');
         });

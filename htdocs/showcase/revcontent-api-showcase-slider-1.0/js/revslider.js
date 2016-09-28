@@ -118,6 +118,7 @@ Author: michael@revcontent.com
         revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-slider');
 
         this.data = [];
+        this.displayedItems = [];
 
         this.containerElement = document.createElement('div');
         this.containerElement.id = 'rev-slider';
@@ -155,6 +156,8 @@ Author: michael@revcontent.com
         this.grid.on('resize', function() {
             that.resize();
         });
+
+        revUtils.dispatchScrollbarResizeEvent();
 
         this.setMultipliers();
 
@@ -490,6 +493,10 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.updatePagination = function(checkPage) {
+
+        if (!this.data.length) { // need data to determine max pages
+            return;
+        }
 
         if (this.maxPages() <= 1) {
             this.backBtn.style.display = 'none';
@@ -862,7 +869,9 @@ Author: michael@revcontent.com
             this.resizeHeadline(ad.querySelectorAll('.rev-headline')[0]);
             this.resizeProvider(ad.querySelectorAll('.rev-provider')[0]);
 
-            ad.querySelectorAll('.rev-headline h3')[0].innerHTML = this.displayedItems[i].headline;
+            if (this.displayedItems[i]) { // reset headlines for new ellipsis check
+                ad.querySelectorAll('.rev-headline h3')[0].innerHTML = this.displayedItems[i].headline;
+            }
         }
 
         this.grid.reloadItems();
