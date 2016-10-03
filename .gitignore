@@ -7,3 +7,10 @@ htdocs/node_modules
 htdocs/showcase/**/node_modules
 htdocs/showcase/**/vendor
 htdocs/app/resources/vendor/material-design-icons
+!htdocs/vendor/es6-promise/es6-promise.js
+!htdocs/vendor/hammerjs/hammer.js
+!htdocs/vendor/mobile-detect/mobile-detect.js
+!htdocs/vendor/any-grid/dist/any-grid.js
+!htdocs/vendor/flickity/css/flickity.css
+!htdocs/vendor/flickity/dist/flickity.pkgd.js
+!htdocs/vendor/eventEmitter/EventEmitter.min.js
