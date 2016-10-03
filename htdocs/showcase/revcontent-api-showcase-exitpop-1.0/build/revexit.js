@@ -549,7 +549,8 @@
             'internal_count' : internal_count,
             'img_h':   274,
             'img_w': 239,
-            'api_source': 'exit'
+            'api_source': 'exit',
+            'viewed': true
         };
 
         var subscribe_ajax = $.ajax({

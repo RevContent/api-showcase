@@ -131,6 +131,7 @@
       "./showcase/js/revdetect.js",
       "./showcase/js/revbeacon.js",
       "./showcase/js/revapi.js",
+      "./showcase/js/revview.js",
       "./build/files/flicker/revflicker.embed.js"
     ],
     "watch": [
