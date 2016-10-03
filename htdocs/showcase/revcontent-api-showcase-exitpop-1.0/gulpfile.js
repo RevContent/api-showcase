@@ -11,6 +11,7 @@ var stripDebug   = require('gulp-strip-debug');
 var preprocess   = require('gulp-preprocess');
 var pump      = require('pump');
 var notify    = require("gulp-notify");
+const fs      = require('fs');
 
 gulp.task('default', ['build-rx']);
 
@@ -78,6 +79,22 @@ gulp.task('revexit-inject', ['revexit-css'], function () {
 
 gulp.task('build-rx', ['revexit-css', 'revchimp-css', 'revchimp-inject', 'revexit-inject', 'revexit-jquery'], function(cb) {
 
+    var src = ['../js/revbeacon.js', '../js/revapi.js', '../js/revutils.js', '../js/revdialog.js', './js/jquery-1.11.3.js', './build/revchimp.js', './build/revexit.js'];
+
+    var missingFiles = [];
+    src.forEach(function(file) {
+        try {
+            !fs.statSync(file).isFile();
+        } catch(e) {
+            missingFiles.push(file);
+        }
+    });
+
+    if (missingFiles.length) {
+        console.log('\x1b[31m ', 'Missing Files! ' + missingFiles, '\x1b[0m');
+        return;
+    }
+
     var banner = ['/**',
       ' * <%= pkg.name %> - <%= pkg.description %>',
       ' * @date - <%= new Date() %>',
@@ -87,7 +104,7 @@ gulp.task('build-rx', ['revexit-css', 'revchimp-css', 'revchimp-inject', 'revexi
       ''].join('\n');
 
       pump([
-            gulp.src(['../js/revbeacon.js', '../js/revapi.js', '../js/revutils.js', '../js/revdialog.js', './js/jquery-1.11.3.js', './build/revchimp.js', './build/revexit.js']),
+            gulp.src(src),
             concat('revexit.pkgd.js'),
             gulp.dest('./build'),
             uglify({

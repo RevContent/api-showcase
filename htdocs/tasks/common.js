@@ -10,6 +10,7 @@ var gulp      = require('gulp');
 var pump      = require('pump');
 var notify    = require("gulp-notify");
 var sass      = require('gulp-sass');
+const fs      = require('fs');
 
 var widget = yargs.widget;
 
@@ -56,6 +57,21 @@ gulp.task('embedcss', ['minifycss'], function () {
 });
 
 gulp.task('build', ['minifycss', 'embedcss'], function(cb) {
+
+    var missingFiles = [];
+    config[widget].build.forEach(function(file) {
+        try {
+            !fs.statSync(file).isFile();
+        } catch(e) {
+            missingFiles.push(file);
+        }
+    });
+
+    if (missingFiles.length) {
+        console.log('\x1b[31m ', 'Missing Files! ' + missingFiles, '\x1b[0m');
+        return;
+    }
+
       pump([
             gulp.src(config[widget].build),
             concat('rev'+ widget +'.pkgd.js'),
