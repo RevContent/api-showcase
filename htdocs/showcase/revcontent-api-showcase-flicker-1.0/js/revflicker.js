@@ -131,8 +131,6 @@ RevFlicker({
             return;
         }
 
-        this.maxHeadlineHeight = 0;
-
         this.impressionTracker = {};
 
         var that = this;
@@ -652,6 +650,9 @@ RevFlicker({
         } else {
             var ads = this.flickity.element.querySelectorAll('.rev-ad');
             for (var i = 0; i < ads.length; i++) {
+                if (!this.data[i]) {
+                    continue;
+                }
                 var ad = ads[i];
                 var el = document.createElement('div');
                 el.style.position = 'absolute';
