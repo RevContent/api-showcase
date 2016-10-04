@@ -182,6 +182,7 @@ RevFlicker({
             that.resize();
         });
 
+        revView.viewable(that);
         revUtils.addEventListener(window, 'scroll', function() {
             revView.viewable(that);
         });
