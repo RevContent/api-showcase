@@ -20,7 +20,8 @@
     var view = {};
 
     view.viewable = function(that) {
-        var viewBottom = (window.innerHeight || document.documentElement.clientHeight) + (window.ScrollY || document.documentElement.scrollTop);
+        var viewBottom = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight)
+            + (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop);
         var divTop = document.getElementById(that.containerElement.id).getBoundingClientRect().top;
 
         if(viewBottom >= divTop) {
