@@ -29,7 +29,7 @@
 
             var count = that.perRow;
 
-            var viewsUrl = that.options.url + '?uitm=true&viewed=true&api_key='+ options.api_key +'&pub_id='+ that.options.pub_id +'&widget_id='+ that.options.widget_id +'&domain='+ that.options.domain +'&api_source=' + that.source;
+            var viewsUrl = that.options.url + '?uitm=true&viewed=true&api_key='+ that.options.api_key +'&pub_id='+ that.options.pub_id +'&widget_id='+ that.options.widget_id +'&domain='+ that.options.domain +'&api_source=' + that.source;
             viewsUrl += '&sponsored_count=' + (that.options.internal ? 0 : count) + '&internal_count=' + (that.options.internal ? count : 0) + '&sponsored_offset=0&internal_offset=0';
 
             revApi.request(viewsUrl);
