@@ -55,7 +55,7 @@ api.request = function(url, success, failure, JSONPCallback) {
 };
 
 api.getReferer = function() {
-    return '&referrer=' + window.location.href;
+    return '&referer=' + window.location.href;
 };
 
 api.getTimestamp = function() {
