@@ -75,7 +75,8 @@ RevShifter({
         beacons: true,
         overlay: false, // pass key value object { content_type: icon }
         overlay_icons: false, // pass in custom icons or overrides
-        overlay_position: 'center' // center, top_left, top_right, bottom_right, bottom_left
+        overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
+        query_params: false
     };
 
     RevShifter = function(opts) {
@@ -159,7 +160,8 @@ RevShifter({
                 touch_direction: Hammer.DIRECTION_ALL, // prevent vertical scrolling
                 overlay: this.options.overlay, // video: rectangle, square, circle1, circle2, triangle
                 overlay_icons: this.options.overlay_icons, // pass in custom icons or overrides
-                overlay_position: this.options.overlay_position // center, top_left, top_right, bottom_right, bottom_left
+                overlay_position: this.options.overlay_position, // center, top_left, top_right, bottom_right, bottom_left
+                query_params: this.options.query_params
             });
 
             if (!this.options.hide_footer && !revDetect.mobile()) {
@@ -288,7 +290,7 @@ RevShifter({
 
             if (this.options.width !== oldOpts.width) {
                 this.element.style.width = this.options.width + 'px';
-                this.innerWidget.resize();
+                this.innerWidget.grid.resize();
             }
 
             if ( (this.options.size !== oldOpts.size) ||
