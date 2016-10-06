@@ -20,6 +20,8 @@
     "angular-highlightjs": "latest",
     "re-tree": "0.0.2",
     "ng-device-detector": "2.0.2",
-    "mobile-detect": "~1"
+    "mobile-detect": "~1",
+    "showdown": "~1.4",
+    "angular-sanitize": "1.4.8"
   }
 }

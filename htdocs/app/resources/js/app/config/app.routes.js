@@ -22,13 +22,24 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
         })
         .state('docs', {
             url: "/docs",
-            sticky: true,
             views: {
                 main: {
                     templateUrl: "app/resources/js/app/docs/docs.html",
                     controller: 'DocsCtrl'
-                },
-                sidenav: false
+                }
+            }
+        })
+        .state('docs_widget', {
+            // parent: 'docs',
+            url: "/docs{page:any}",
+            views: {
+                main: {
+                    controller: function($stateParams) {
+                        this.markdown = 'app/resources/js/app/docs'+ $stateParams.page +'.md';
+                    },
+                    controllerAs: 'ctrl',
+                    templateUrl: "app/resources/js/app/docs/widget.html"
+                }
             }
         })
         .state('post', {

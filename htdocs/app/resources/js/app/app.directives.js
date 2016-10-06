@@ -1,3 +1,55 @@
+// showdown hljs extension for prettyprint
+showdown.extension('hljs', function() {
+  function htmlunencode(text) {
+    return (
+      text
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+      );
+  }
+  return [
+    {
+      type: 'output',
+      filter: function (text, converter, options) {
+        // use new shodown's regexp engine to conditionally parse codeblocks
+        var left  = '<pre><code\\b[^>]*>',
+            right = '</code></pre>',
+            flags = 'g',
+            replacement = function (wholeMatch, match, left, right) {
+              // unescape match to prevent double escaping
+              match = htmlunencode(match);
+              return '<pre><code class="hljs bash">' + hljs.highlight('bash', match).value + right;
+            };
+        return showdown.helper.replaceRecursiveRegExp(text, replacement, left, right, flags);
+      }
+    }
+  ];
+});
+
+app.provider('markdownConverter', function () {
+    var opts = {extensions: ['hljs']};
+    return {
+        config: function (newOpts) {
+            opts = newOpts;
+        },
+        $get: function () {
+            return new showdown.Converter(opts);
+        }
+    };
+});
+
+app.directive('markdown', ['$sanitize', 'markdownConverter', function ($sanitize, markdownConverter) {
+    return {
+        restrict: 'AE',
+        link: function (scope, element, attrs) {
+            var html = $sanitize(markdownConverter.makeHtml(element.text()));
+            element.html(html);
+        }
+    };
+}]);
+
+
 app.directive('mdCard', ['$location', '$mdCardContent', function ($location, $mdCardContent) {
   return {
     restrict: "AEC",

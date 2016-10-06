@@ -1,20 +1,49 @@
-<div class="container">
+<div class="container docs">
     <md-content style="background:transparent;" layout="column" layout-padding>
+
+        <md-card>
+            <h2 class="md-display-1">Widget Documentation</h2>
+            <ul>
+                <li>
+                    <a ui-sref="docs_widget({page: '/widgets/exit'})">RevExit</a>
+                </li>
+                <li>
+                    <a ui-sref="docs_widget({page: '/widgets/flicker'})">RevFlicker</a>
+                </li>
+                <li>
+                    <a ui-sref="docs_widget({page: '/widgets/toaster'})">RevToaster</a>
+                </li>
+                <li>
+                    <a ui-sref="docs_widget({page: '/widgets/slider'})">RevSlider</a>
+                </li>
+                <li>
+                    <a ui-sref="docs_widget({page: '/widgets/shifter'})">RevShifter</a>
+                </li>
+                <li>
+                    <a ui-sref="docs_widget({page: '/widgets/more'})">RevMore</a>
+                </li>
+                <li>
+                    <a ui-sref="docs_widget({page: '/widgets/more-standard'})">RevMore Standard</a>
+                </li>
+                <li>
+                    <a ui-sref="docs_widget({page: '/widgets/image'})">RevImage</a>
+                </li>
+                <li>
+                    <a ui-sref="docs_widget({page: '/widgets/solo-serve-native'})">Solo Serve Native</a>
+                </li>
+            </ul>
+        </md-card>
 
         <md-card>
             <h2 class="md-display-1">API Documentation</h2>
             <p class="md-subhead">The Revcontent API enables you to receive the same ad fill you would see in our traditional ad placements in a more flexible format, including json and xml. API usage requires <a target="_blank" href="http://faq.revcontent.com/support/solutions/articles/5000615197-revcontent-advertiser-terms-and-conditions">Full Advertising Disclosure.</a></p>
 
-            <h3 class="md-title">URI / Endpoint</h3>
+            <h3 class="md-headline">URI / Endpoint</h3>
 
             <div hljs language="bash"># Content-Type application/json or text/xml
     GET http://trends.revcontent.com/api/v1/</div>
 
-        </md-card>
-
-        <md-card>
-
-            <h2 class="md-display-1">Request</h2>
+            <h3 class="md-headline">Request</h3>
 
             <p class="md-subhead">Requests to the API can be sent over HTTP using JSONP and will utilize the following parameter set.</p>
 
@@ -166,11 +195,7 @@
 
             </div>
 
-        </md-card>
-
-        <md-card>
-
-            <h2 class="md-display-1">Response</h2>
+            <h3 class="md-headline">Response</h3>
 
             <p class="md-subhead">The expected response values in the return payload are shown below.</p>
 
@@ -255,19 +280,15 @@
 
             </div>
 
-        </md-card>
-
-        <md-card>
-            <h2 class="md-display-1">Advanced Usage</h2>
+            <h3 class="md-headline">Advanced Usage</h3>
 
             <p class="md-subhead">For more advanced implementations widget and creative impressions must be managed. The API provides helper parameters for common use cases.</p>
 
-            <h3 class="md-title">UITM Parameter</h3>
+            <h4 class="md-title">Empty Parameter</h4>
 
-            <p style="margin-top:4px;">The UITM parameter allows a request to be made without registering either widget or creative impressions. Pass <code>uitm=true</code> to return a response without registering any impressions.</p>
-            <p style="margin-top:0;" class="text-danger">When using the <code>uitm</code> parameter the click link urls will be returned with <code>uitm=1</code> preventing clicks from being counted. If these urls are used remove this with <code>url.replace('&uitm=1', '').replace('uitm=1', '')</code></p sty>
+            <p style="margin-top:4px;">The <code>empty</code> parameter allows a request to be made without registering either widget or creative impressions. Pass <code>empty=true</code> to return a response without registering any impressions.</p>
 
-            <h3 class="md-title">FILL Parameter and offset rule</h3>
+            <h4 class="md-title">Fill Parameter and offset rule</h4>
             <p style="margin-top:4px;">Sometimes it is necessary to only register creative impressions while ignoring the widget impression. If either the <code>sponsored_offset</code> or <code>trending_offset</code> is greater than 0 the system will automatically only register creative impressions. This behavior can be forced by using the <code>fill</code> param passing <code>fill=true</code></p>
 
         </md-card>

@@ -24,6 +24,8 @@
         <script src="app/resources/vendor/ui-router-extras/release/modular/ct-ui-router-extras.sticky.js"></script>
         <script src="app/resources/vendor/angular-material/angular-material.js"></script>
         <script src="app/resources/vendor/angular-messages/angular-messages.js"></script>
+        <script src="app/resources/vendor/angular-sanitize/angular-sanitize.js"></script>
+        <script src="app/resources/vendor/showdown/dist/showdown.js"></script>
         <script src="app/resources/vendor/lodash/dist/lodash.js"></script>
         <script src="app/resources/vendor/highlightjs/highlight.pack.js"></script>
         <script src="app/resources/vendor/re-tree/re-tree.js"></script>
