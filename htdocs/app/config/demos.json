@@ -2,7 +2,7 @@
     "urls" : {
         "prod": "http://labs-cdn.revcontent.com",
         "stg": "http://labs-stg.revcontent.com",
-        "dev": "http://localhost:2201"
+        "dev": "http://localhost:8000"
     },
     "tests": [
         {
@@ -55,9 +55,22 @@
             "script": "./build/revmore.min.js"
         },
         {
+            "name": "more-standard",
+            "templates": [],
+            "script": "./build/revmore-standard.min.js"
+        },
+        {
             "name": "image",
             "templates": ["./tests/templates/bs.americancolumn.com.html"],
             "script": "./build/revimage.min.js"
+        },
+        {
+            "name": "soloserve",
+            "templates": [],
+            "script": "./build/revsoloserve.min.js",
+            "script_id": "revsoloserve",
+            "read_demo": true,
+            "has_script": true
         }
     ]
 }
