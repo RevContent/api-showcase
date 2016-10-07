@@ -57,7 +57,7 @@ utils.serialize = function(obj, prefix) {
         if (obj.hasOwnProperty(prop)) {
             var k = prefix ? prefix + "[" + prop + "]" : prop, v = obj[prop];
             str.push(typeof v == "object" &&
-            (Object.prototype.toString.call(v) == "[object Object]") ? this.serialize(v, k) : k + "=" + v);
+            (Object.prototype.toString.call(v) == "[object Object]") ? this.serialize(v, k) : encodeURIComponent(k) + "=" + encodeURIComponent(v));
         }
     }
     return str.join("&");
