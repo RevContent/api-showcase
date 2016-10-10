@@ -22,10 +22,6 @@
         self.rcel = null;
         self.serveParameters = null;
         self.testing = ((self.data.testing !== undefined) ? true : false);
-        self.unlisten = window.context.onResizeSuccess(function (requestedHeight) {
-
-            console.log("RESIZE SUCCESS!");
-        });
     };
 
     RevAMP.prototype.createWrapper = function () {
@@ -44,38 +40,33 @@
         self.serveParameters = '?' + (self.testing === true ? 'uitm=1&' : '') + "w=" + self.data.id + "&t=" + self.rcel.id + "&c=" + (new Date()).getTime() + "&width=" + (self.forceWidth || self.viewportWidth);
         self.serveUrl = self.serveProtocol + self.serveHost + self.serveScript + self.serveParameters;
         self.rcel.src = self.serveUrl;
-        self.rcel.async = true;
+        self.rcel.async = false;
         var rcds = document.getElementById(self.rcjsload.id);
         rcds.appendChild(self.rcel);
         return self;
     };
 
     RevAMP.prototype.renderStart = function (timeout) {
-        console.log("RENDER START!");
 
         var self = this;
         if (!timeout || isNaN(timeout)) {
             var timeout = 3000;
         }
-        window.context.renderStart({width: document.body.clientWidth, height: document.body.clientHeight});
+        window.context.renderStart();
 
         setTimeout(function () {
             self.adjustHeight();
-            console.log("ADJUSTED HEIGHT!", {width: document.body.clientWidth, height: self.widgetEl.clientHeight});
         }, timeout);
 
         window.addEventListener('resize', function (event) {
             setTimeout(function () {
-                console.log("Resizing!!!! RE-ADJUSTING HEIGHT!");
                 self.adjustHeight();
             }, timeout);
         });
 
         window.addEventListener('orientationchange', function (event) {
             console.log(event);
-            console.log("Resizing!!!! RE-ADJUSTING HEIGHT!");
             setTimeout(function () {
-                console.log("Resizing!!!! RE-ADJUSTING HEIGHT!");
                 self.adjustHeight();
             }, timeout);
         });
@@ -85,27 +76,16 @@
 
     RevAMP.prototype.adjustHeight = function () {
         var self = this;
-        /*
-         console.log(window.context, window.parent.postMessage);
-         window.parent.postMessage({
-         sentinel: 'amp',
-         type: 'embed-size',
-         height: h
-         }, '*');
-         */
-        //window.context.renderStart({width:w, height: h});\\
         self.widgetEl = document.getElementById(self.rcjsload.id);
         window.context.requestResize(self.widgetEl.clientWidth, Math.max(400, self.widgetEl.clientHeight));
     };
 
     RevAMP.prototype.noContentAvailable = function () {
         var self = this;
-
         return self;
     };
 
     RevAMP.prototype.init = function () {
-        console.log("INIT!");
         var self = this;
         self.createWrapper();
         self.createScript();
@@ -117,9 +97,6 @@
     document.onreadystatechange = function () {
         if (document.readyState === "complete") {
             RevcontentNetwork.init();
-            console.log("Done!");
-
-
         }
     }
 
