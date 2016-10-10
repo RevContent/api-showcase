@@ -55,7 +55,17 @@ api.request = function(url, success, failure, JSONPCallback) {
 };
 
 api.getReferer = function() {
-    return '&referer=' + window.location.href;
+    var referer = "";
+    try { // from standard widget
+        referer = document.referrer;
+        if ("undefined" == typeof referer) {
+            throw "undefined";
+        }
+    } catch(e) {
+        referer = document.location.href, (""==referer||"undefined"==typeof referer)&&(referer=document.URL);
+    }
+    referer = encodeURIComponent(referer.substr(0,700));
+    return '&referer=' + referer;
 };
 
 api.getTimestamp = function() {

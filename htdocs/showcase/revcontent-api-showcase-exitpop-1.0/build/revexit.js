@@ -530,6 +530,19 @@
 
         }
 
+        var getReferer = function() {
+            var referer = "";
+            try { // from standard widget
+                referer = document.referrer;
+                if ("undefined" == typeof referer) {
+                    throw "undefined";
+                }
+            } catch(e) {
+                referer = document.location.href, (""==referer||"undefined"==typeof referer)&&(referer=document.URL);
+            }
+            return encodeURIComponent(referer.substr(0,700));
+        }
+
         var revcontentexitdata = {
             'api_key' : revcontentexitvars.k,
             'pub_id' : revcontentexitvars.p,
@@ -540,7 +553,7 @@
             'img_h':   274,
             'img_w': 239,
             'api_source': 'exit',
-            'referer': window.location.href
+            'referer': getReferer()
         };
 
         var subscribe_ajax = $.ajax({

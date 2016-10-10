@@ -215,7 +215,17 @@ api.request = function(url, success, failure, JSONPCallback) {
 };
 
 api.getReferer = function() {
-    return '&referer=' + window.location.href;
+    var referer = "";
+    try { // from standard widget
+        referer = document.referrer;
+        if ("undefined" == typeof referer) {
+            throw "undefined";
+        }
+    } catch(e) {
+        referer = document.location.href, (""==referer||"undefined"==typeof referer)&&(referer=document.URL);
+    }
+    referer = encodeURIComponent(referer.substr(0,700));
+    return '&referer=' + referer;
 };
 
 api.getTimestamp = function() {
@@ -289,7 +299,7 @@ utils.serialize = function(obj, prefix) {
         if (obj.hasOwnProperty(prop)) {
             var k = prefix ? prefix + "[" + prop + "]" : prop, v = obj[prop];
             str.push(typeof v == "object" &&
-            (Object.prototype.toString.call(v) == "[object Object]") ? this.serialize(v, k) : k + "=" + v);
+            (Object.prototype.toString.call(v) == "[object Object]") ? this.serialize(v, k) : encodeURIComponent(k) + "=" + encodeURIComponent(v));
         }
     }
     return str.join("&");
@@ -12013,6 +12023,19 @@ return jQuery;
 
         }
 
+        var getReferer = function() {
+            var referer = "";
+            try { // from standard widget
+                referer = document.referrer;
+                if ("undefined" == typeof referer) {
+                    throw "undefined";
+                }
+            } catch(e) {
+                referer = document.location.href, (""==referer||"undefined"==typeof referer)&&(referer=document.URL);
+            }
+            return encodeURIComponent(referer.substr(0,700));
+        }
+
         var revcontentexitdata = {
             'api_key' : revcontentexitvars.k,
             'pub_id' : revcontentexitvars.p,
@@ -12023,7 +12046,7 @@ return jQuery;
             'img_h':   274,
             'img_w': 239,
             'api_source': 'exit',
-            'referer': window.location.href
+            'referer': getReferer()
         };
 
         var subscribe_ajax = $.ajax({
