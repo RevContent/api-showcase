@@ -28,9 +28,14 @@
     RevAMP.prototype.createWrapper = function () {
         var self = this;
         self.rcjsload = document.createElement("div");
-        self.rcjsload.id = self.data.wrapper !== undefined ? self.data.wrapper : self.defaultWrapperId;
+        self.rcjsload.id = self.getWrapperId();
         document.body.appendChild(self.rcjsload);
         return self;
+    };
+
+    RevAMP.prototype.getWrapperId = function(){
+        var self  = this;
+        return self.data.wrapper !== undefined ? self.data.wrapper : self.defaultWrapperId;
     };
 
     RevAMP.prototype.createScript = function () {
@@ -65,25 +70,25 @@
             }, timeout);
         });
 
-        window.addEventListener('orientationchange', function (event) {
-            setTimeout(function () {
-                self.adjustHeight();
-            }, timeout);
-        });
-
         return self;
     };
 
     RevAMP.prototype.adjustHeight = function () {
         var self = this;
-        self.widgetEl = document.getElementById(self.rcjsload.id);
-        window.context.requestResize(self.widgetEl.clientWidth, Math.max(400, Math.max(document.body.scrollHeight, self.widgetEl.clientHeight)));
+        var providerHeight = 0;
+        self.widgetEl = document.getElementById(self.getWrapperId());
+        self.providerEl = self.widgetEl.querySelector('.rc-branding');
+        if(self.providerEl && self.providerEl.length > 0 && self.providerEl.classList.contains('rc-text-bottom')){
+            providerHeight = self.providerEl.clientHeight;
+        }
+        window.context.requestResize('100%', Math.max(320, providerHeight + Math.max(document.body.offsetHeight, self.widgetEl.clientHeight)));
     };
 
     RevAMP.prototype.noContentAvailable = function () {
         var self = this;
         setTimeout(function(){
             if(typeof RevContentLoader !== "object") {
+                self.stopObservingIntersection();
                 window.context.noContentAvailable();
             }
         }, 2 * (60 * 1000));
@@ -94,9 +99,16 @@
         var self = this;
         self.createWrapper();
         self.createScript();
-        self.renderStart(3000);
+        self.renderStart(125);
         self.noContentAvailable();
         window.context.reportRenderedEntityIdentifier(self.ENTITY_ID);
+        self.stopObservingIntersection = window.context.observeIntersection(function(changes) {
+            changes.forEach(function(c) {
+                setTimeout(function(){
+                    self.adjustHeight();
+                }, 125);
+            });
+        });
         return self;
     };
 
