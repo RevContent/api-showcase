@@ -1,5 +1,7 @@
 #RevSlider
 
+RevSlider is a touch enabled content slider. Use it by placing an element along with the script and ad code definition on the page
+
 ```
 &lt;div id="rev-slider"&gt;&lt;div&gt;
 
@@ -15,8 +17,6 @@
         });
 &lt;/script&gt;
 ```
-
-Slider is awesome
 
 ##Options
 Default values are shown.
