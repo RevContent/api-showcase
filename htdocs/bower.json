@@ -5,7 +5,6 @@
   "description": "RevShifter",
   "main": "js/revshifter.js",
   "dependencies": {
-    "imagesloaded": "~3",
     "mobile-detect": "~1",
     "flickity": "~1",
     "any-grid": "master",
