@@ -59,6 +59,7 @@
             var timeout = 3000;
         }
         window.context.renderStart();
+        self.adjustHeight();
 
         setTimeout(function () {
             self.adjustHeight();
@@ -99,7 +100,7 @@
         var self = this;
         self.createWrapper();
         self.createScript();
-        self.renderStart(125);
+        self.renderStart(3000);
         self.noContentAvailable();
         window.context.reportRenderedEntityIdentifier(self.ENTITY_ID);
         self.stopObservingIntersection = window.context.observeIntersection(function(changes) {
