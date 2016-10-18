@@ -38,6 +38,10 @@ if (revcontentsolovars.w === undefined || isNaN(revcontentsolovars.w)) {
 
 if (typeof RevContentSolo != 'undefined') {
 
+    if (RevContentSolo.query_params) {
+        RevContentSolo.serialized_query_params = window.revUtils.serialize(RevContentSolo.query_params)
+    }
+
     if (RevContentSolo.button_text === undefined) {
         RevContentSolo.button_text = "Find Out More";
     }
@@ -206,7 +210,7 @@ var js = '<script type="text/javascript">'+
         'var rcel = document.createElement("script");'+
         'rcel.id = "rc_" + Math.floor(Math.random() * 1000);'+
         'rcel.type = "text/javascript";'+
-        'rcel.src = "//"+RevContentSolo.url+"/serve.js.php?w='+solo_widget_id+'&t="+rcel.id+"&c="+(new Date()).getTime()+"&width="+(window.outerWidth || document.documentElement.clientWidth)+"&referer="+referer;'+
+        'rcel.src = "//" + RevContentSolo.url + "/serve.js.php?w=" + solo_widget_id + "&t=" + rcel.id + "&c=" + (new Date()).getTime() + "&width=" + (window.outerWidth || document.documentElement.clientWidth) + "&referer=" + referer + (RevContentSolo.serialized_query_params ? ("&" + RevContentSolo.serialized_query_params) : "");'+
         'rcel.async = true;'+
         'var rcds = document.getElementById("rcjsload_soloserve_'+solo_widget_id+'"); rcds.appendChild(rcel);'+
         'rcruntime.innerHTML = rcruntime.innerHTML + rcruntimec();'+
