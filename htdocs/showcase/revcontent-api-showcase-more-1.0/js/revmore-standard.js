@@ -38,7 +38,8 @@ RevMore({
         gradient_height: 60,
         devices: [
             'phone', 'tablet', 'desktop'
-        ]
+        ],
+        query_params: false
     };
 
     RevMore = function(opts) {
@@ -153,11 +154,18 @@ RevMore({
         };
 
         this.innerWidget = function() {
+            var serializedQueryParams = revUtils.serialize(this.options.query_params);
             var referer="";try{if(referer=document.referrer,"undefined"==typeof referer)throw"undefined"}catch(exception){referer=document.location.href,(""==referer||"undefined"==typeof referer)&&(referer=document.URL)}referer=referer.substr(0,700);
             this.standardScript = document.createElement("script");
             this.standardScript.id = 'rc_' + Math.floor(Math.random() * 1000);
             this.standardScript.type = 'text/javascript';
-            this.standardScript.src = "//"+ this.options.url +"/serve.js.php?w="+ this.options.widget_id +"&t="+this.standardScript.id+"&c="+(new Date()).getTime()+"&width="+(window.outerWidth || document.documentElement.clientWidth)+"&referer="+referer;
+            this.standardScript.src = "//"+ this.options.url +"/serve.js.php?w=" +
+                this.options.widget_id +
+                "&t="+this.standardScript.id +
+                "&c="+(new Date()).getTime() +
+                "&width="+(window.outerWidth || document.documentElement.clientWidth) +
+                "&referer="+referer +
+                (serializedQueryParams ? ('&' + serializedQueryParams) : '');
             this.standardScript.async = true;
             // var rcds = document.getElementById("rcjsload_44c3e1");
             this.innerWidgetElement.appendChild(this.standardScript);
