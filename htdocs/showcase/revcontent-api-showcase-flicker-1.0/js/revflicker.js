@@ -108,6 +108,7 @@ RevFlicker({
             text_right: false,
             text_right_height: 100,
             next_width: false,
+            transition_content: false,
             css: '',
             user_ip: false,
             user_agent: false,
@@ -142,6 +143,10 @@ RevFlicker({
         this.containerElement.id = 'rev-flicker';
         this.containerElement.setAttribute('class', 'rev-flicker');
         revUtils.addClass(this.containerElement, 'rev-flicker-' + (this.options.text_right ? 'text-right' : 'text-bottom'));
+
+        if (this.options.transition_content) {
+            revUtils.addClass(this.containerElement, 'transition-content');
+        }
 
         this.flickerElement = document.createElement('div');
 
