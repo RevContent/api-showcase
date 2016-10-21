@@ -165,15 +165,7 @@ RevShifter({
                 query_params: this.options.query_params
             });
 
-            if (!this.options.hide_footer && !revDetect.mobile()) {
-                this.closeElement = document.createElement('div');
-                this.closeElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>';
-                revUtils.addClass(this.closeElement, 'rev-close');
-
-                revUtils.append(this.innerWidget.foot, this.closeElement);
-
-                this.attachCloseButtonEvent();
-            }
+            this.closeButton();
 
             this.size = this.element.clientHeight;
 
@@ -406,6 +398,26 @@ RevShifter({
                 that.hideTimeout = false;
             }, this.options.transition_duration);
         };
+
+        this.closeButton = function() {
+            // if desktop and hide footer get out of here
+            if (!revDetect.mobile() && this.options.hide_footer) {
+                return;
+            }
+
+            this.closeElement = document.createElement('div');
+            this.closeElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>';
+            revUtils.addClass(this.closeElement, 'rev-close');
+
+            if (revDetect.mobile()) { // up top on mobile
+                revUtils.append(this.element, this.closeElement);
+            } else if (!this.options.hide_footer) { // footer on desktop
+                revUtils.append(this.innerWidget.foot, this.closeElement);
+            }
+
+            this.attachCloseButtonEvent();
+
+        }
 
         this.attachCloseButtonEvent = function() {
             var that = this;
