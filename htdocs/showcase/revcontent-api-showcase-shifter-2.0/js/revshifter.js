@@ -45,24 +45,22 @@ RevShifter({
         show_on_scroll: true,
         show_on_touch: true,
         scroll_natural: true,
-        inner_widget_options: {
-            header: 'Trending Now',
-            per_row: {
-                xxs: 1,
-                xs: 1,
-                sm: 2,
-                md: 2,
-                lg: 3,
-                xl: 4,
-                xxl: 5
-            },
-            rows: 1,
-            max_headline: true,
-            ad_border: false,
-            text_right: true,
-            text_right_height: 100
         hide_header: true,
+        header: 'Trending Now',
+        per_row: {
+            xxs: 1,
+            xs: 1,
+            sm: 2,
+            md: 2,
+            lg: 3,
+            xl: 4,
+            xxl: 5
         },
+        rows: 1,
+        max_headline: true,
+        ad_border: false,
+        text_right: true,
+        text_right_height: 100,
         touch_simulation: false,
         closed_hours: 24,
         pagination_dots: false,
@@ -94,6 +92,31 @@ RevShifter({
             return instance;
         } else {
             instance = this;
+        }
+
+        // deprecated inner_widget_options
+        if (opts.inner_widget_options) {
+            if (typeof opts.inner_widget_options.header !== 'undefined') {
+                opts.header = opts.inner_widget_options.header;
+            }
+            if (typeof opts.inner_widget_options.per_row !== 'undefined') {
+                opts.per_row = opts.inner_widget_options.per_row;
+            }
+            if (typeof opts.inner_widget_options.rows !== 'undefined') {
+                opts.rows = opts.inner_widget_options.rows;
+            }
+            if (typeof opts.inner_widget_options.max_headline !== 'undefined') {
+                opts.max_headline = opts.inner_widget_options.max_headline;
+            }
+            if (typeof opts.inner_widget_options.ad_border !== 'undefined') {
+                opts.ad_border = opts.inner_widget_options.ad_border;
+            }
+            if (typeof opts.inner_widget_options.text_right !== 'undefined') {
+                opts.text_right = opts.inner_widget_options.text_right;
+            }
+            if (typeof opts.inner_widget_options.text_right_height !== 'undefined') {
+                opts.text_right_height = opts.inner_widget_options.text_right_height;
+            }
         }
 
         // merge options
@@ -150,16 +173,15 @@ RevShifter({
                 widget_id : this.options.widget_id,
                 domain : this.options.domain,
                 rev_position: 'bottom_right',
-                header : this.options.inner_widget_options.header,
-                per_row: this.options.inner_widget_options.per_row,
-                rows: this.options.inner_widget_options.rows,
-                max_headline: this.options.inner_widget_options.max_headline,
-                ad_border: this.options.inner_widget_options.ad_border,
-                text_right: this.options.inner_widget_options.text_right,
-                text_right_height: this.options.inner_widget_options.text_right_height,
+                header : this.options.header,
+                per_row: this.options.per_row,
+                rows: this.options.rows,
+                max_headline: this.options.max_headline,
+                ad_border: this.options.ad_border,
+                text_right: this.options.text_right,
+                text_right_height: this.options.text_right_height,
                 disclosure_text: this.options.disclosure_text,
                 hide_provider: this.options.hide_provider,
-                hide_header: true,
                 hide_header: this.options.hide_header,
                 hide_footer: this.options.hide_footer,
                 pagination_dots: this.options.pagination_dots,
@@ -181,13 +203,13 @@ RevShifter({
 
             this.size = this.element.clientHeight;
 
-            if (typeof this.options.inner_widget_options.per_row === 'object') {
+            if (typeof this.options.per_row === 'object') {
                 this.options.single_per_row = {};
-                for (var prop in this.options.inner_widget_options.per_row) {
-                    this.options.single_per_row[prop] = (this.options.inner_widget_options.per_row[prop] * this.options.inner_widget_options.rows);
+                for (var prop in this.options.per_row) {
+                    this.options.single_per_row[prop] = (this.options.per_row[prop] * this.options.rows);
                 }
             } else {
-                this.options.single_per_row = (this.options.inner_widget_options.per_row * this.options.inner_widget_options.rows);
+                this.options.single_per_row = (this.options.per_row * this.options.rows);
             }
 
             this.setTransitionDuration();
@@ -298,10 +320,10 @@ RevShifter({
 
             if ( (this.options.size !== oldOpts.size) ||
                 (this.options.realSize !== oldOpts.realSize) ||
-                (this.options.inner_widget_options.header !== oldOpts.inner_widget_options.header) ||
-                (this.options.inner_widget_options.per_row !== oldOpts.inner_widget_options.per_row) ||
-                (this.options.inner_widget_options.rows !== oldOpts.inner_widget_options.rows)) {
-                this.innerWidget.update(this.options.inner_widget_options,  oldOpts.inner_widget_options);
+                (this.options.header !== oldOpts.header) ||
+                (this.options.per_row !== oldOpts.per_row) ||
+                (this.options.rows !== oldOpts.rows)) {
+                this.innerWidget.update(this.options,  oldOpts);
             }
         };
 
