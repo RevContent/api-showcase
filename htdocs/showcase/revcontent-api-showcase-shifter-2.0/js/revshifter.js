@@ -61,9 +61,11 @@ RevShifter({
             ad_border: false,
             text_right: true,
             text_right_height: 100
+        hide_header: true,
         },
         touch_simulation: false,
         closed_hours: 24,
+        pagination_dots: false,
         transition_duration: 1200,
         devices: [
             'phone', 'tablet', 'desktop'
@@ -120,6 +122,14 @@ RevShifter({
             revUtils.addClass(this.element, 'rev-hidden');
             revUtils.addClass(this.element, this.options.side);
 
+            if (this.options.hide_header === false) {
+                revUtils.addClass(this.element, 'rev-shifter-header');
+            }
+
+            if (this.options.pagination_dots === true) {
+                revUtils.addClass(this.element, 'rev-shifter-pagination-dots');
+            }
+
             revUtils.append(document.body, this.element);
 
             if (revDetect.mobile()) {
@@ -150,7 +160,9 @@ RevShifter({
                 disclosure_text: this.options.disclosure_text,
                 hide_provider: this.options.hide_provider,
                 hide_header: true,
+                hide_header: this.options.hide_header,
                 hide_footer: this.options.hide_footer,
+                pagination_dots: this.options.pagination_dots,
                 buttons: {
                     forward: true,
                     back: true,
