@@ -43,6 +43,7 @@ RevShifter({
         side: 'bottom',
         show_on_load: false,
         show_on_scroll: true,
+        show_on_touch: true,
         scroll_natural: true,
         inner_widget_options: {
             header: 'Trending Now',
@@ -192,9 +193,9 @@ RevShifter({
                 this.show();
             }
 
-            if (revDetect.mobile()) {
+            if (revDetect.mobile() && this.options.show_on_touch) {
                 this.attachTouchEvents();
-            } else {
+            } else if (this.options.show_on_scroll) {
                 this.attachScrollEvents();
             }
         };
@@ -265,16 +266,14 @@ RevShifter({
 
             this.scrollTimeout;
             // wait a tick or two before doing the scroll b/c of auto scroll feature in some browsers
-            if (this.options.show_on_scroll) {
-                setTimeout(function() {
-                    that.lastScrollTop = window.pageYOffset;
-                    if (revDetect.mobile()) {
-                        revUtils.addEventListener(window, 'touchmove', move);
-                    } else {
-                        revUtils.addEventListener(window, 'scroll', move);
-                    }
-                }, 300);
-            }
+            setTimeout(function() {
+                that.lastScrollTop = window.pageYOffset;
+                if (revDetect.mobile()) {
+                    revUtils.addEventListener(window, 'touchmove', move);
+                } else {
+                    revUtils.addEventListener(window, 'scroll', move);
+                }
+            }, 300);
         }
 
         this.update = function(newOpts, oldOpts) {
