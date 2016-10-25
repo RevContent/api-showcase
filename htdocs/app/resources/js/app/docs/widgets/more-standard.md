@@ -69,6 +69,12 @@ Number in pixels for the height of the gradient.
 gradient_height: 60
 ```
 
+###query_params
+Key value object for query params to send to server. Can be multidimensional
+```
+query_params: false
+```
+
 ###top_id
 Id for element where the top of the gradient should start. This will override the ```distance``` option.
 ```

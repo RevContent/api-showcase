@@ -1,5 +1,5 @@
 #RevShifter
-RevShifter shows from the bottom or top of the page on scroll or pan. It's used by placing the script and ad code definition to a page.
+RevShifter shows from the bottom or top of the page on scroll or pan. It's used by placing the script and ad code definition on the page.
 
 ```
 &lt;script src="http://labs-cdn.revcontent.com/build/revshifter.min.js">&lt;script&gt;
@@ -29,6 +29,12 @@ your widget id
 ###domain(required)
 your widget domain
 
+###ad_border
+Display a border around each ad
+```
+ad_border: false
+```
+
 ###closed_hours
 Number of hours to keep closed
 ```
@@ -51,10 +57,22 @@ Text to display for disclosure. This text triggers the disclosure/interests dial
 disclosure_text: 'Sponsored by Revcontent'
 ```
 
+###header
+Text displayed above ads. Wrapped inside ```<h2 class="rev-header">```.
+```
+header: 'Trending Now'
+```
+
 ###hide_footer
 Set true to not display the disclosure text.
 ```
 hide_footer: false
+```
+
+###hide_header
+Set true to not display the headerl
+```
+hide_header: true
 ```
 
 ###hide\_on\_show\_transition
@@ -67,6 +85,12 @@ hide_on_show_transition: true
 Display the provider in the ads.
 ```
 hide_provider: false
+```
+
+###max_headline
+Show all of the headline for all ads. No ellipsis. This option overrides ```headline_size```
+```
+max_headline: true
 ```
 
 ###overlay
@@ -87,6 +111,26 @@ The position of the overlay icon. Available options include ```center```, ```top
 overlay_position: 'center'
 ```
 
+###pagination_dots
+To show the pagination dots
+```
+pagination_dots: false
+```
+
+###per_row
+Number of ads per row. Object or single value. Pass a single number to be used for every breakpoint or provide a value for each breakpoint.
+```
+per_row: {
+    xxs: 1,
+    xs: 1,
+    sm: 2,
+    md: 2,
+    lg: 3,
+    xl: 4,
+    xxl: 5
+}
+```
+
 ###side
 Show from the top or bottom of the page
 ```
@@ -105,32 +149,28 @@ Show on vertical scroll event
 show_on_scroll: true
 ```
 
+###show\_on\_touch
+Show on vertical pan touch gesture
+```
+show_on_touch: true
+```
+
 ###scroll_natural
 By default scrolling up will hide and scrolling down will show. Set to false for the opposite behavior.
 ```
 scroll_natural: true
 ```
 
-###inner\_widget\_options
-Options passed to inner RevSlider. See RevSlider docs for details.
+###query_params
+Key value object for query params to send to server. Can be multidimensional
 ```
-inner_widget_options: {
-    header: 'Trending Now',
-    per_row: {
-        xxs: 1,
-        xs: 1,
-        sm: 2,
-        md: 2,
-        lg: 3,
-        xl: 4,
-        xxl: 5
-    },
-    rows: 1,
-    max_headline: true,
-    ad_border: false,
-    text_right: true,
-    text_right_height: 100
-}
+query_params: false
+```
+
+###rows
+Number of rows to display. Object or single value. Pass a single number to be used for every breakpoint or provide a value for each breakpoint.
+```
+rows: 1
 ```
 
 ###touch_simulation
@@ -143,6 +183,18 @@ touch_simulation: false
 Ignores ```closed_hours``` if true
 ```
 testing: false
+```
+
+###text_right
+Text will be positioned to the right of the image
+```
+text_right: true
+```
+
+###text\_right\_height
+Value in pixels of the ad image if ```text_right``` is enabled
+```
+text_right_height: 100
 ```
 
 ###transition_duration

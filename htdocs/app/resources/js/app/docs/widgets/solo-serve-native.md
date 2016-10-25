@@ -22,6 +22,12 @@ widget id
 var RevContentSolo = { button_text: 'Find Out More'}
 ```
 
+###query_params
+Key value object for query params to send to server. Can be multidimensional
+```
+query_params: false
+```
+
 ###theme
 Theme available values ```default```, ```social```
 ```

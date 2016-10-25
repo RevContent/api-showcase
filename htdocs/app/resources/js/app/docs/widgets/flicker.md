@@ -125,7 +125,7 @@ internal: false
 ###max_headline
 Show all of the headline for all ads. No ellipsis. This option overrides ```headline_size```
 ```
-max_headline:false
+max_headline: false
 ```
 
 ###multipliers
@@ -181,6 +181,12 @@ per_row: {
     xl: 6,
     xxl: 7
 }
+```
+
+###query_params
+Key value object for query params to send to server. Can be multidimensional
+```
+query_params: false
 ```
 
 ###rev_position

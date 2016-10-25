@@ -1,6 +1,6 @@
 #RevToaster
 
-RevToaster displays as the user scrolls back to the top. It's used by placing the script and ad code definition to a page.
+RevToaster displays as the user scrolls back to the top of the page. It's used by placing the script and ad code definition on the page.
 
 ```
 &lt;script src="http://labs-cdn.revcontent.com/build/revtoaster.min.js">&lt;script&gt;
@@ -82,6 +82,12 @@ overlay_icons: false
 The position of the overlay icon. Available options include ```center```, ```top_left```, ```top_right```, ```bottom_right```, ```bottom_left```.
 ```
 overlay_position: 'center'
+```
+
+###query_params
+Key value object for query params to send to server. Can be multidimensional
+```
+query_params: false
 ```
 
 ###rev_position

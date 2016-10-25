@@ -58,3 +58,6 @@ Panel Size, choices are "3x2" or "4x2" defaults to 4x2, NOTE: for HD modes only!
 
 ###po
 "Provider Options", control display of provider label on ad units. Choices are "disabled", "all", "sponsored" or "internal" (Default)
+
+###q
+"query_params", key value object for query params to send to server. Can be multidimensional

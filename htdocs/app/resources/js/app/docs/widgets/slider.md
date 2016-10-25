@@ -160,7 +160,7 @@ overlay_position: 'center'
 ###max_headline
 Show all of the headline for all ads. No ellipsis. This option overrides ```headline_size```
 ```
-max_headline:false
+max_headline: false
 ```
 
 ###min_headline_height
@@ -209,6 +209,12 @@ per_row: {
 If the user is paning over the ad prevent the default browser behavior.
 ```
 prevent_default_pan: true
+```
+
+###query_params
+Key value object for query params to send to server. Can be multidimensional
+```
+query_params: false
 ```
 
 ###rev_position

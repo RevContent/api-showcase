@@ -62,7 +62,7 @@ header: 'Trending'
 ###max_headline
 Show all of the headline for all ads. No ellipsis. This option overrides ```headline_size```
 ```
-max_headline:false
+max_headline: false
 ```
 
 
@@ -220,7 +220,11 @@ To show the pagination dots
 pagination_dots: true
 ```
 
-
+###query_params
+Key value object for query params to send to server. Can be multidimensional
+```
+query_params: false
+```
 
 ###rev_position
 Position of the disclosure text if ```hide_disclosure``` is not enabled. Options include: ```'bottom_right'```, ```'top_right'```, ```'bottom_left'```.
@@ -233,3 +237,5 @@ Number of rows to display. Object or single value. Pass a single number to be us
 ```
 rows: 2
 ```
+
+

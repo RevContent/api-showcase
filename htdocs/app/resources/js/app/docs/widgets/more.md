@@ -1,6 +1,6 @@
 #RevMore
 
-RevMore locks the page to display a widget. It can optionally share impressions with an in article widget. Use it by placing an option element along with the script and ad code definition to the page.
+RevMore locks the page to display a widget. It can optionally share impressions with an in article widget. Use it by placing an optional in article element, top element, script and ad code definition on the page.
 
 ```
 &lt;div id="top-id"&gt;&lt;/div&gt;
@@ -133,6 +133,12 @@ per_row: {
     xl: 6,
     xxl: 7
 }
+```
+
+###query_params
+Key value object for query params to send to server. Can be multidimensional
+```
+query_params: false
 ```
 
 ###rev_position
