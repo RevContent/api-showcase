@@ -20,14 +20,14 @@ Default values are shown.
 ###api_key(required)
 your api key
 
+###domain(required)
+your widget domain
+
 ###pub_id(required)
 your pub id
 
 ###widget_id(required)
 your widget id
-
-###domain(required)
-your widget domain
 
 ###ad_border
 Display a border around each ad

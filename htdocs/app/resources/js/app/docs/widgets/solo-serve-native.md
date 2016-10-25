@@ -14,7 +14,7 @@ Solo Serve Native wraps a standard widget to show a button and engagement counte
 ##Options
 Default values are shown. ```w``` option is passed as query param all other options are used in widget definition.
 
-###w
+###w(required)
 widget id
 
 ###button_text

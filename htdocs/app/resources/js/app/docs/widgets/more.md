@@ -27,14 +27,14 @@ Default values are shown.
 ###api_key(required)
 your api key
 
+###domain(required)
+your widget domain
+
 ###pub_id(required)
 your pub id
 
 ###widget_id(required)
 your widget id
-
-###domain(required)
-your widget domain
 
 ###buttons
 Button config. Enable/disable forward/back, size, position(```dots```, ```inside```, ```outside```, ```dual```), and style(```default```, ```fly-out```).

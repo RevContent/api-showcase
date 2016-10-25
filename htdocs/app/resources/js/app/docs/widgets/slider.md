@@ -24,14 +24,14 @@ Default values are shown.
 ###api_key(required)
 your api key
 
+###domain(required)
+your widget domain
+
 ###pub_id(required)
 your pub id
 
 ###widget_id(required)
 your widget id
-
-###domain(required)
-your widget domain
 
 ###id(required if element is not used)
 matches a div id on the page. For example to target ```<div id="myFlicker"></div></div>```

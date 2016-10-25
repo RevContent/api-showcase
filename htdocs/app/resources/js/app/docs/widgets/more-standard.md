@@ -35,17 +35,8 @@ var rcds = document.getElementById("rcjsload_a122d7"); rcds.appendChild(rcel);
 ##Options
 Default values are shown.
 
-###api_key(required)
-your api key
-
-###pub_id(required)
-your pub id
-
 ###widget_id(required)
 your widget id
-
-###domain(required)
-your widget domain
 
 ###devices
 Devices to show on. Options include ```phone```, ```tablet``` and ```desktop```.
