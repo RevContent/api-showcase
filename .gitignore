@@ -9,6 +9,7 @@ htdocs/showcase/**/vendor
 htdocs/app
 htdocs/css
 htdocs/js
+htdocs/fonts
 !htdocs/js/amphtml
 !htdocs/vendor/es6-promise/es6-promise.js
 !htdocs/vendor/hammerjs/hammer.js
