@@ -6,7 +6,10 @@ htdocs/vendor
 htdocs/node_modules
 htdocs/showcase/**/node_modules
 htdocs/showcase/**/vendor
-htdocs/app/resources/vendor/material-design-icons
+htdocs/app
+htdocs/css
+htdocs/js
+!htdocs/js/amphtml
 !htdocs/vendor/es6-promise/es6-promise.js
 !htdocs/vendor/hammerjs/hammer.js
 !htdocs/vendor/mobile-detect/mobile-detect.js
