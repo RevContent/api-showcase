@@ -114,9 +114,9 @@ Run ```gulp tests-files``` in order to build the test files into /htdocs/tests/{
 
 ```
 This source file is closed source, strictly confidential and
-proprietary to Integraclick Inc. Viewing the contents of this file binds the
-viewer to the NDA agreement  available by Integraclick Inc. Electronic
-transfer of this file outside of the Integraclick corporate network is
+proprietary to Revcontent Inc. Viewing the contents of this file binds the
+viewer to the NDA agreement  available by Revcontent Inc. Electronic
+transfer of this file outside of the Revcontent corporate network is
 strictly prohibited. Questions, comments or concerns should be directed to
-compliance@integraclick.com
+compliance@revcontent.com
 ```
