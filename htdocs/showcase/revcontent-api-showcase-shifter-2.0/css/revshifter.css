@@ -229,12 +229,16 @@ body.rev-shifter-no-transform #rev-shifter.rev-shifter {
     opacity: .8;
 }
 
+#rev-shifter.rev-shifter.rev-mobile .rev-close {
+    top: -2px;
+}
+
 #rev-shifter.rev-shifter.rev-mobile {
-    padding-top: 28px;
+    padding-top: 16px;
 }
 
 #rev-shifter.rev-shifter.rev-mobile.rev-shifter-pagination-dots {
-    padding-top: 10px;
+    padding-top: 4px;
 }
 
 #rev-shifter.rev-shifter.rev-mobile.rev-shifter-header {
