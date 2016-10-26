@@ -252,52 +252,48 @@ RevShifter({
             });
         }
 
+        this.move = function() {
+            if (this.scrollTimeout) {
+                return;
+            }
+
+            var that = this;
+            function delayed() {
+                var scrollTop = window.pageYOffset;
+                var scrollDirection = false;
+                if (scrollTop < that.lastScrollTop) {
+                    scrollDirection = 'up';
+                } else if(scrollTop > that.lastScrollTop) {
+                    scrollDirection = 'down';
+                }
+
+                that.lastScrollTop = scrollTop;
+                that.scrollTimeout = false;
+
+                if (that.transitioning && !that.options.hide_on_show_transition) { // don't do anything if already transitioning and option is false
+                    return;
+                } else if (scrollDirection === 'up') {
+                    that.options.scroll_natural ? that.hide() : that.show();
+                } else if (scrollDirection === 'down') {
+                    that.options.scroll_natural ? that.show() : that.hide();
+                }
+            }
+
+            that.scrollTimeout = setTimeout(delayed, 300);
+        }
+
         this.attachScrollEvents = function() {
             // scrolling
-            var that = this;
-            var move = function() {
-                if (this.removed) {
-                    revUtils.removeEventListener(window, 'scroll', move);
-                    revUtils.removeEventListener(window, 'touchmove', move);
-                    return;
-                }
-
-                if (that.scrollTimeout) {
-                    return;
-                }
-
-                function delayed() {
-                    var scrollTop = window.pageYOffset;
-                    var scrollDirection = false;
-                    if (scrollTop < that.lastScrollTop) {
-                        scrollDirection = 'up';
-                    } else if(scrollTop > that.lastScrollTop) {
-                        scrollDirection = 'down';
-                    }
-
-                    that.lastScrollTop = scrollTop;
-                    that.scrollTimeout = false;
-
-                    if (that.transitioning && !that.options.hide_on_show_transition) { // don't do anything if already transitioning and option is false
-                        return;
-                    } else if (scrollDirection === 'up') {
-                        that.options.scroll_natural ? that.hide() : that.show();
-                    } else if (scrollDirection === 'down') {
-                        that.options.scroll_natural ? that.show() : that.hide();
-                    }
-                }
-
-                that.scrollTimeout = setTimeout( delayed, 300);
-            };
-
-            this.scrollTimeout;
+            this.scrollListener = this.move.bind(this);
             // wait a tick or two before doing the scroll b/c of auto scroll feature in some browsers
+            var that = this;
             setTimeout(function() {
                 that.lastScrollTop = window.pageYOffset;
+
                 if (revDetect.mobile()) {
-                    revUtils.addEventListener(window, 'touchmove', move);
+                    revUtils.addEventListener(window, 'touchmove', that.scrollListener);
                 } else {
-                    revUtils.addEventListener(window, 'scroll', move);
+                    revUtils.addEventListener(window, 'scroll', that.scrollListener);
                 }
             }, 300);
         }
@@ -327,17 +323,23 @@ RevShifter({
             }
         };
 
+        // this is a bit of a hack but is the best/ only working way to
+        // prevent show/hide when paning vertically on element
+        this.cancelPan = function() {
+            this.panCancelled = true;
+        }
+
         this.attachTouchEvents = function() {
 
-            var mc = new Hammer(window, {
+            this.mc = new Hammer(window, {
                 touchAction: 'auto'
             });
-            mc.add(new Hammer.Pan({ threshold: 0, direction: Hammer.DIRECTION_ALL }));
+            this.mc.add(new Hammer.Pan({ threshold: 0, direction: Hammer.DIRECTION_ALL }));
 
             var that = this;
-            mc.on("panup pandown", function(ev){
-                if ( that.cancelPan || (that.transitioning && !that.options.hide_on_show_transition)) { // don't do anything if already transitioning and option is false
-                    that.cancelPan = false;
+            this.mc.on("panup pandown", function(ev){
+                if ( that.panCancelled || (that.transitioning && !that.options.hide_on_show_transition)) { // don't do anything if already transitioning and option is false
+                    that.panCancelled = false;
                     return;
                 }
                 if (ev.type === 'panup') {
@@ -347,17 +349,11 @@ RevShifter({
                 }
             });
 
-            // this is a bit of a hack but is the best/ only working way to
-            // prevent show/hide when paning vertically on element
-            var cancelPan = function() {
-                that.cancelPan = true;
-            }
+            this.cancelPanListener = this.cancelPan.bind(this);
 
-            revUtils.addEventListener(this.element, 'touchstart', cancelPan);
-
-            revUtils.addEventListener(this.element, 'touchend', cancelPan);
-
-            revUtils.addEventListener(this.element, 'touchmove', cancelPan);
+            revUtils.addEventListener(this.element, 'touchstart', this.cancelPanListener);
+            revUtils.addEventListener(this.element, 'touchend', this.cancelPanListener);
+            revUtils.addEventListener(this.element, 'touchmove', this.cancelPanListener);
         }
 
         this.show = function() {
@@ -457,9 +453,29 @@ RevShifter({
             var that = this;
             this.closeElement.addEventListener('click', function() {
                 that.hide();
-                that.removed = true;
                 revUtils.setCookie('rev-shifter-closed', 1, (that.options.closed_hours / 24));
+                setTimeout(function() {
+                    that.destroy();
+                }, that.options.transition_duration);
             });
+        };
+
+        this.destroy = function() {
+            if (this.mc && this.cancelPanListener) {
+                this.mc.set({enable: false});
+                this.mc.destroy();
+                revUtils.removeEventListener(this.element, 'touchstart', this.cancelPanListener);
+                revUtils.removeEventListener(this.element, 'touchend', this.cancelPanListener);
+                revUtils.removeEventListener(this.element, 'touchmove', this.cancelPanListener);
+            }
+
+            if (this.scrollListener) {
+                revUtils.removeEventListener(window, 'touchmove', this.scrollListener);
+                revUtils.removeEventListener(window, 'scroll', this.scrollListener);
+            }
+
+            this.innerWidget.destroy();
+            revUtils.remove(this.element);
         };
 
         this.init();
