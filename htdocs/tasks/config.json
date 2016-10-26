@@ -179,6 +179,7 @@
     "css": [
     ],
     "build": [
+      "./showcase/js/revutils.js",
       "./build/files/soloserve/revsoloserve.embed.js"
     ],
     "watch": [
