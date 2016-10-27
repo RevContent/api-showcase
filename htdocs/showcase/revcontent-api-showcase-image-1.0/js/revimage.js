@@ -121,6 +121,7 @@ Author: michael@revcontent.com
         this.emitter = new EventEmitter();
         var that = this;
         revUtils.imagesLoaded([this.element]).once('done', function() {
+            that.resetElementStyle();
             that.container();
             that.wrapper();
             that.wrapperWidth();
@@ -135,6 +136,16 @@ Author: michael@revcontent.com
         });
     }
 
+    /*
+    reset any styles that will cause issues and cache them to be placed on the element later
+    */
+    Item.prototype.resetElementStyle = function() {
+        this.elementMargin = revUtils.getComputedStyle(this.element, 'margin');
+        this.elementPadding = revUtils.getComputedStyle(this.element, 'padding');
+        this.element.style.padding = 0;
+        this.element.style.margin = 0;
+    };
+
     Item.prototype.container = function() {
         this.container = document.createElement('div');
         this.container.id = 'rev-img';
@@ -142,6 +153,8 @@ Author: michael@revcontent.com
         revUtils.addClass(this.container, 'rev-img-' + this.options.theme);
         revUtils.addClass(this.container, 'rev-img-buttons-' + this.options.buttons.position);
         revUtils.wrap(this.element, this.container);
+        this.container.style.margin = this.elementMargin;
+        this.container.style.padding = this.elementPadding;
     };
 
     Item.prototype.wrapper = function() {
