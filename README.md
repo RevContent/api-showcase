@@ -3,6 +3,17 @@
 The API Showcase provides examples of what's possible with the Revcontent API. To see the latest running build,
 please visit [http://labs.revcontent.com](http://labs.revcontent.com)
 
+## Widgets
+* [RevExit](https://github.com/RevContent/api-showcase/tree/master/htdocs/showcase/revcontent-api-showcase-exitpop-1.0)
+* [RevFlicker](https://github.com/RevContent/api-showcase/tree/master/htdocs/showcase/revcontent-api-showcase-flicker-1.0)
+* [RevToaster](https://github.com/RevContent/api-showcase/tree/master/htdocs/showcase/revcontent-api-showcase-toaster-1.0)
+* [RevSlider](https://github.com/RevContent/api-showcase/tree/master/htdocs/showcase/revcontent-api-showcase-slider-1.0)
+* [RevShifter](https://github.com/RevContent/api-showcase/tree/master/htdocs/showcase/revcontent-api-showcase-shifter-2.0)
+* [RevMore](https://github.com/RevContent/api-showcase/tree/master/htdocs/showcase/revcontent-api-showcase-more-1.0)
+* [RevMore Standard](https://github.com/RevContent/api-showcase/tree/master/htdocs/showcase/revcontent-api-showcase-more-1.0/README_Standard.md)
+* [RevImage](https://github.com/RevContent/api-showcase/tree/master/htdocs/showcase/revcontent-api-showcase-image-1.0)
+* [Solo Serve Native](https://github.com/RevContent/api-showcase/tree/master/htdocs/showcase/revcontent-api-showcase-solo-serve-1.0)
+
 ## Requirements
 
 To get up and running with Showcase Labs, learn about the following technologies involved before diving in. A majority
