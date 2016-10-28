@@ -28,7 +28,7 @@ var rcds = document.getElementById("rcjsload_a122d7"); rcds.appendChild(rcel);
         pub_id: 123,
         widget_id: 456,
         domain: 'mysite.com'
-        });
+    });
 &lt;/script&gt;
 ```
 

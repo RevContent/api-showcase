@@ -31,11 +31,17 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
         })
         .state('docs_widget', {
             // parent: 'docs',
-            url: "/docs{page:any}",
+            url: "/docs/widget/{widget}",
             views: {
                 main: {
-                    controller: function($stateParams) {
-                        this.markdown = 'app/resources/js/app/docs'+ $stateParams.page +'.md';
+                    controller: function($state, $stateParams, widgets) {
+                        var widget = widgets.data[$stateParams.widget];
+
+                        if (!widget) {
+                            $state.go('404', {path:  'docs/widget' + $stateParams.widget});
+                            return false;
+                        }
+                        this.markdown = 'showcase/' + widget.docs;
                     },
                     controllerAs: 'ctrl',
                     templateUrl: "app/resources/js/app/docs/widget.html"

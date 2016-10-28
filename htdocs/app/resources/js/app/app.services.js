@@ -5,6 +5,7 @@ app.service('widgets', function() {
             img: 'exitpop.jpg',
             description: 'RevExit is an API implementation that pops up on a user\'s first impression every 24 hours for non-touch enabled devices (e.g. desktops). When the user mouses off the page they are usually trying to close the window or navigate away from the page. RevExit is a great way to give these users one more chance to view your Revcontent API widget.',
             link: 'revcontent-api-showcase-exitpop-1.0/index.html',
+            docs: 'revcontent-api-showcase-exitpop-1.0/README.md',
             bg: '#00A650'
         },
         flicker: {
@@ -12,6 +13,7 @@ app.service('widgets', function() {
             img: 'flicker.jpg',
             description: 'With responsive styling and touch enabled gestures RevFlicker puts the fun into your content slider. You can configure the RevFlicker widget to show on phone, tablet and desktop and you can even decide how many units to display at various breakpoints. Include RevFlicker on your page and let the engagement begin!',
             link: 'revcontent-api-showcase-flicker-1.0/index.html',
+            docs: 'revcontent-api-showcase-flicker-1.0/README.md',
             bg: '#F7F9F8',
             // preview: true,
             // demo: true
@@ -21,6 +23,7 @@ app.service('widgets', function() {
             img: 'toaster.jpg',
             description: 'Pop! content toasters are an engaging way to interact with your readers. The Mobile RevToaster will appear as the user pans back to the top of the page and disapear as they scroll back down. Show your reader what\'s trending and get great results with the Mobile RevToaster.',
             link: 'revcontent-api-showcase-toaster-1.0/index.html',
+            docs: 'revcontent-api-showcase-toaster-1.0/README.md',
             bg: '#CFC28E',
             // preview: true,
             // demo: true
@@ -30,6 +33,7 @@ app.service('widgets', function() {
             img: 'slider.jpg',
             description: 'RevSlider is an engaging carousel and a great way to showcase Revcontent ads on your site! Give your readers the ability to navigate through all of the ads availible to your widget. Fully responsive and configurable to display as many rows and columns as you like at various breakpoints. RevSlider is a great choice for any site!',
             link: 'revcontent-api-showcase-slider-1.0/index.html',
+            docs: 'revcontent-api-showcase-slider-1.0/README.md',
             bg: '#2E4E5D',
             //preview: true,
             //demo: true
@@ -39,6 +43,7 @@ app.service('widgets', function() {
             img: 'shifter.jpg',
             description: 'Monetize valuable site real estate on the top or bottom of the page, show RevShifter on demand or as the user scrolls. Great for engaging users on high bounce rate experiences with pagination and touch support. RevShifter is sure to increase revenue, customize one to fit your site today!',
             link: 'revcontent-api-showcase-shifter-2.0/index.html',
+            docs: 'revcontent-api-showcase-shifter-2.0/README.md',
             bg: '#EEBF77'
             // preview: true,
             // demo: true
@@ -62,6 +67,15 @@ app.service('widgets', function() {
             img: 'revmore.jpg',
             description: 'Studies show that Facebook-referred mobile users never reach the bottom of the article. By truncating the page, RevMore increase the visibility of content recommendations from standard Revcontent widgets.',
             link: 'revcontent-api-showcase-more-1.0/index.html',
+            docs: 'revcontent-api-showcase-more-1.0/README.md',
+            bg: '#5B7D89'
+        },
+        'revmore-standard': {
+            title: 'Mobile RevMore Standard',
+            img: 'revmore.jpg',
+            description: 'Studies show that Facebook-referred mobile users never reach the bottom of the article. By truncating the page, RevMore increase the visibility of content recommendations from standard Revcontent widgets.',
+            link: 'revcontent-api-showcase-more-1.0/index.html',
+            docs: 'revcontent-api-showcase-more-1.0/README_Standard.md',
             bg: '#5B7D89'
         },
         'revimage': {
@@ -69,6 +83,7 @@ app.service('widgets', function() {
             img: 'revimage.jpg',
             description: 'Rev up your valuable image real estate with the RevImage widget! As your image makes its way into view RevImage transitions from the bottom drawing attention where the eyes are already focused. Add a timeout to delay the ad from showing. Optimized for all devices and screen sizes, RevImage is a sure fire way to increase RPMs and monetize in a new and exciting way!',
             link: 'revcontent-api-showcase-image-1.0/index.html',
+            docs: 'revcontent-api-showcase-image-1.0/README.md',
             bg: '#434f5e'
         },
         'amp': {
@@ -83,6 +98,7 @@ app.service('widgets', function() {
             img: 'soloserve.jpg',
             description: 'Our content is on fire! This single ad widget is sure to get your audience\'s attention. With a customizable call to action and popularity meter, increase viewer engagement and your returns with Solo Serve Native today.',
             link: 'revcontent-api-showcase-solo-serve-1.0/index.html',
+            docs: 'revcontent-api-showcase-solo-serve-1.0/README.md',
             bg: '#d6031d'
         }
         //'scrolling-exp': {
