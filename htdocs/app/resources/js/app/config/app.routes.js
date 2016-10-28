@@ -38,7 +38,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                         var widget = widgets.data[$stateParams.widget];
 
                         if (!widget) {
-                            $state.go('404', {path:  'docs/widget' + $stateParams.widget});
+                            $state.go('404', {path:  'docs/widget/' + $stateParams.widget});
                             return false;
                         }
                         this.markdown = 'showcase/' + widget.docs;
