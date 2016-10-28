@@ -34,14 +34,19 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
             url: "/docs/widget/{widget}",
             views: {
                 main: {
-                    controller: function($state, $stateParams, widgets) {
+                    controller: function($state, $stateParams, $timeout, widgets) {
                         var widget = widgets.data[$stateParams.widget];
 
                         if (!widget) {
                             $state.go('404', {path:  'docs/widget/' + $stateParams.widget});
                             return false;
                         }
+
                         this.markdown = 'showcase/' + widget.docs;
+
+                        $timeout(function() {
+                            document.body.scrollTop = document.documentElement.scrollTop = 0;
+                        })
                     },
                     controllerAs: 'ctrl',
                     templateUrl: "app/resources/js/app/docs/widget.html"
@@ -93,7 +98,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                     }
                 })
                 .then(function(answer) { //close
-                    previousState();
+                    // previousState();
                 }, function() { //cancel
                     previousState();
                 });
