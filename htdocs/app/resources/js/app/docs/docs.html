@@ -3,35 +3,13 @@
 
         <md-card>
             <h2 class="md-display-1">Widget Documentation</h2>
-            <ul>
-                <li>
-                    <a ui-sref="docs_widget({widget: 'exit-pop'})">RevExit</a>
-                </li>
-                <li>
-                    <a ui-sref="docs_widget({widget: 'flicker'})">RevFlicker</a>
-                </li>
-                <li>
-                    <a ui-sref="docs_widget({widget: 'toaster'})">RevToaster</a>
-                </li>
-                <li>
-                    <a ui-sref="docs_widget({widget: 'slider'})">RevSlider</a>
-                </li>
-                <li>
-                    <a ui-sref="docs_widget({widget: 'shifter'})">RevShifter</a>
-                </li>
-                <li>
-                    <a ui-sref="docs_widget({widget: 'revmore'})">RevMore</a>
-                </li>
-                <li>
-                    <a ui-sref="docs_widget({widget: 'revmore-standard'})">RevMore Standard</a>
-                </li>
-                <li>
-                    <a ui-sref="docs_widget({widget: 'revimage'})">RevImage</a>
-                </li>
-                <li>
-                    <a ui-sref="docs_widget({widget: 'soloserve'})">Solo Serve Native</a>
-                </li>
-            </ul>
+
+            <md-list class="widget-docs-list">
+                <md-list-item ng-repeat="(key, widget) in widgets" ui-sref="docs_widget({widget: key})" class="noright">
+                    <img class="md-avatar" ng-src="/app/resources/img/{{key}}.jpg" alt="{{widget.title}}">
+                    <p ng-bind="widget.title"></p>
+                </md-list-item>
+            </md-list>
         </md-card>
 
         <md-card>

@@ -671,3 +671,13 @@ body.os-windows-phone.browser-ie.md-dialog-is-showing md-dialog.md-transition-in
 .demo-description table {
   width: auto;
 }
+
+.widget-docs-list a.md-button {
+  margin: 0;
+}
+
+.widget-docs-list .md-avatar {
+  border-radius: 0;
+  width: 40px;
+  height: 30px;
+}
