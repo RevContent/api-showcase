@@ -25,7 +25,8 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
             views: {
                 main: {
                     templateUrl: "app/resources/js/app/docs/docs.html",
-                    controller: 'DocsCtrl'
+                    controller: 'DocsCtrl',
+                    controllerAs: 'ctrl'
                 }
             }
         })

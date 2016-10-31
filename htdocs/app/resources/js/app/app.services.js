@@ -74,9 +74,10 @@ app.service('widgets', function() {
             title: 'Mobile RevMore Standard',
             img: 'revmore.jpg',
             description: 'Studies show that Facebook-referred mobile users never reach the bottom of the article. By truncating the page, RevMore increase the visibility of content recommendations from standard Revcontent widgets.',
-            link: 'revcontent-api-showcase-more-1.0/index.html',
+            link: 'revcontent-api-showcase-more-1.0/standard.html',
             docs: 'revcontent-api-showcase-more-1.0/README_Standard.md',
-            bg: '#5B7D89'
+            bg: '#5B7D89',
+            hide_grid: true
         },
         'revimage': {
             title: 'RevImage',
