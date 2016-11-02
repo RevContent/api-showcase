@@ -22,6 +22,7 @@
         self.rcel = null;
         self.serveParameters = null;
         self.testing = ((self.data.testing !== undefined) ? true : false);
+        self.useAutoSizer = ((self.data.sizer !== undefined && self.data.sizer != "true") ? false : true);
         self.ENTITY_ID = "rev2-wid-" + self.data.id.toString();
     };
 
@@ -59,17 +60,18 @@
             var timeout = 3000;
         }
         window.context.renderStart();
-        self.adjustHeight();
 
-        setTimeout(function () {
+        if(self.useAutoSizer) {
             self.adjustHeight();
-        }, timeout);
-
-        window.addEventListener('resize', function (event) {
             setTimeout(function () {
                 self.adjustHeight();
             }, timeout);
-        });
+            window.addEventListener('resize', function (event) {
+                setTimeout(function () {
+                    self.adjustHeight();
+                }, timeout);
+            });
+        }
 
         return self;
     };
@@ -82,7 +84,7 @@
         if(self.providerEl && self.providerEl.length > 0 && self.providerEl.classList.contains('rc-text-bottom')){
             providerHeight = self.providerEl.clientHeight;
         }
-        window.context.requestResize('100%', Math.max(320, providerHeight + Math.max(document.body.offsetHeight, self.widgetEl.clientHeight)));
+        window.context.requestResize(document.clientWidth, Math.max(320, providerHeight + Math.max(document.body.offsetHeight, self.widgetEl.clientHeight)));
     };
 
     RevAMP.prototype.noContentAvailable = function () {
