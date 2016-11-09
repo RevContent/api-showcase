@@ -188,10 +188,7 @@ RevFlicker({
 
         revUtils.dispatchScrollbarResizeEvent();
 
-        revView.viewable(that);
-        revUtils.addEventListener(window, 'scroll', function() {
-            revView.viewable(that);
-        });
+        revView.init(this);
 
         this.flickity.on( 'cellSelect', function() {
             that.emitter.emit('cellSelect');

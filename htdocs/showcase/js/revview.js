@@ -19,20 +19,28 @@
 
     var view = {};
 
-    view.viewable = function(that) {
+    var widget;
+
+    view.init = function(that) {
+        widget = that;
+        view.viewable();
+        revUtils.addEventListener(window, 'scroll', view.viewable);
+    };
+
+    view.viewable = function() {
         var viewBottom = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight)
             + (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop);
-        var divTop = document.getElementById(that.containerElement.id).getBoundingClientRect().top;
+        var divTop = document.getElementById(widget.containerElement.id).getBoundingClientRect().top;
 
         if(viewBottom >= divTop) {
             revUtils.removeEventListener(window, 'scroll', view.viewable);
 
-            var count = that.perRow;
+            var count = widget.perRow;
 
-            var viewsUrl = that.options.url + '?uitm=true&viewed=true&api_key='+ that.options.api_key +'&pub_id='+ that.options.pub_id +'&widget_id='+ that.options.widget_id +'&domain='+ that.options.domain +'&api_source=' + that.source;
-            viewsUrl += '&sponsored_count=' + (that.options.internal ? 0 : count) + '&internal_count=' + (that.options.internal ? count : 0) + '&sponsored_offset=0&internal_offset=0';
+            var viewsUrl = widget.options.url + '?uitm=true&viewed=true&api_key='+ widget.options.api_key +'&pub_id='+ widget.options.pub_id +'&widget_id='+ widget.options.widget_id +'&domain='+ widget.options.domain +'&api_source=' + widget.source;
+            viewsUrl += '&sponsored_count=' + (widget.options.internal ? 0 : count) + '&internal_count=' + (widget.options.internal ? count : 0) + '&sponsored_offset=0&internal_offset=0';
 
-            revApi.request(viewsUrl);
+            revApi.request(viewsUrl, function() { return });
         }
     };
 
