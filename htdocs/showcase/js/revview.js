@@ -23,8 +23,8 @@
 
     view.init = function(that) {
         widget = that;
-        view.viewable();
         revUtils.addEventListener(window, 'scroll', view.viewable);
+        view.viewable();
     };
 
     view.viewable = function() {
