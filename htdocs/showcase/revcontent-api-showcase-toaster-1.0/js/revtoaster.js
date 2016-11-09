@@ -54,7 +54,8 @@ RevToaster({
         beacons: true,
         overlay: false, // pass key value object { content_type: icon }
         overlay_icons: false, // pass in custom icons or overrides
-        overlay_position: 'center' // center, top_left, top_right, bottom_right, bottom_left
+        overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
+        query_params: false
     };
     // var options;
     var lastScrollTop = 0;
@@ -245,6 +246,11 @@ RevToaster({
         this.getData = function(show) {
             loaded = true;
             var url = this.options.url + '?api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + this.options.sponsored + '&sponsored_offset=0&internal_count=0&api_source=toast&viewed=true';
+
+            var serializedQueryParams = revUtils.serialize(this.options.query_params);
+            if (serializedQueryParams) {
+                url += '&' + serializedQueryParams;
+            }
 
             var that = this;
 

@@ -43,26 +43,27 @@ RevShifter({
         side: 'bottom',
         show_on_load: false,
         show_on_scroll: true,
+        show_on_touch: true,
         scroll_natural: true,
-        inner_widget_options: {
-            header: 'Trending Now',
-            per_row: {
-                xxs: 1,
-                xs: 1,
-                sm: 2,
-                md: 2,
-                lg: 3,
-                xl: 4,
-                xxl: 5
-            },
-            rows: 1,
-            max_headline: true,
-            ad_border: false,
-            text_right: true,
-            text_right_height: 100
+        hide_header: true,
+        header: 'Trending Now',
+        per_row: {
+            xxs: 1,
+            xs: 1,
+            sm: 2,
+            md: 2,
+            lg: 3,
+            xl: 4,
+            xxl: 5
         },
+        rows: 1,
+        max_headline: true,
+        ad_border: false,
+        text_right: true,
+        text_right_height: 100,
         touch_simulation: false,
         closed_hours: 24,
+        pagination_dots: false,
         transition_duration: 1200,
         devices: [
             'phone', 'tablet', 'desktop'
@@ -75,7 +76,8 @@ RevShifter({
         beacons: true,
         overlay: false, // pass key value object { content_type: icon }
         overlay_icons: false, // pass in custom icons or overrides
-        overlay_position: 'center' // center, top_left, top_right, bottom_right, bottom_left
+        overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
+        query_params: false
     };
 
     RevShifter = function(opts) {
@@ -90,6 +92,31 @@ RevShifter({
             return instance;
         } else {
             instance = this;
+        }
+
+        // deprecated inner_widget_options
+        if (opts.inner_widget_options) {
+            if (typeof opts.inner_widget_options.header !== 'undefined') {
+                opts.header = opts.inner_widget_options.header;
+            }
+            if (typeof opts.inner_widget_options.per_row !== 'undefined') {
+                opts.per_row = opts.inner_widget_options.per_row;
+            }
+            if (typeof opts.inner_widget_options.rows !== 'undefined') {
+                opts.rows = opts.inner_widget_options.rows;
+            }
+            if (typeof opts.inner_widget_options.max_headline !== 'undefined') {
+                opts.max_headline = opts.inner_widget_options.max_headline;
+            }
+            if (typeof opts.inner_widget_options.ad_border !== 'undefined') {
+                opts.ad_border = opts.inner_widget_options.ad_border;
+            }
+            if (typeof opts.inner_widget_options.text_right !== 'undefined') {
+                opts.text_right = opts.inner_widget_options.text_right;
+            }
+            if (typeof opts.inner_widget_options.text_right_height !== 'undefined') {
+                opts.text_right_height = opts.inner_widget_options.text_right_height;
+            }
         }
 
         // merge options
@@ -118,6 +145,14 @@ RevShifter({
             revUtils.addClass(this.element, 'rev-hidden');
             revUtils.addClass(this.element, this.options.side);
 
+            if (this.options.hide_header === false) {
+                revUtils.addClass(this.element, 'rev-shifter-header');
+            }
+
+            if (this.options.pagination_dots === true) {
+                revUtils.addClass(this.element, 'rev-shifter-pagination-dots');
+            }
+
             revUtils.append(document.body, this.element);
 
             if (revDetect.mobile()) {
@@ -138,17 +173,18 @@ RevShifter({
                 widget_id : this.options.widget_id,
                 domain : this.options.domain,
                 rev_position: 'bottom_right',
-                header : this.options.inner_widget_options.header,
-                per_row: this.options.inner_widget_options.per_row,
-                rows: this.options.inner_widget_options.rows,
-                max_headline: this.options.inner_widget_options.max_headline,
-                ad_border: this.options.inner_widget_options.ad_border,
-                text_right: this.options.inner_widget_options.text_right,
-                text_right_height: this.options.inner_widget_options.text_right_height,
+                header : this.options.header,
+                per_row: this.options.per_row,
+                rows: this.options.rows,
+                max_headline: this.options.max_headline,
+                ad_border: this.options.ad_border,
+                text_right: this.options.text_right,
+                text_right_height: this.options.text_right_height,
                 disclosure_text: this.options.disclosure_text,
                 hide_provider: this.options.hide_provider,
-                hide_header: true,
+                hide_header: this.options.hide_header,
                 hide_footer: this.options.hide_footer,
+                pagination_dots: this.options.pagination_dots,
                 buttons: {
                     forward: true,
                     back: true,
@@ -159,28 +195,21 @@ RevShifter({
                 touch_direction: Hammer.DIRECTION_ALL, // prevent vertical scrolling
                 overlay: this.options.overlay, // video: rectangle, square, circle1, circle2, triangle
                 overlay_icons: this.options.overlay_icons, // pass in custom icons or overrides
-                overlay_position: this.options.overlay_position // center, top_left, top_right, bottom_right, bottom_left
+                overlay_position: this.options.overlay_position, // center, top_left, top_right, bottom_right, bottom_left
+                query_params: this.options.query_params
             });
 
-            if (!this.options.hide_footer && !revDetect.mobile()) {
-                this.closeElement = document.createElement('div');
-                this.closeElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>';
-                revUtils.addClass(this.closeElement, 'rev-close');
-
-                revUtils.append(this.innerWidget.foot, this.closeElement);
-
-                this.attachCloseButtonEvent();
-            }
+            this.closeButton();
 
             this.size = this.element.clientHeight;
 
-            if (typeof this.options.inner_widget_options.per_row === 'object') {
+            if (typeof this.options.per_row === 'object') {
                 this.options.single_per_row = {};
-                for (var prop in this.options.inner_widget_options.per_row) {
-                    this.options.single_per_row[prop] = (this.options.inner_widget_options.per_row[prop] * this.options.inner_widget_options.rows);
+                for (var prop in this.options.per_row) {
+                    this.options.single_per_row[prop] = (this.options.per_row[prop] * this.options.rows);
                 }
             } else {
-                this.options.single_per_row = (this.options.inner_widget_options.per_row * this.options.inner_widget_options.rows);
+                this.options.single_per_row = (this.options.per_row * this.options.rows);
             }
 
             this.setTransitionDuration();
@@ -190,9 +219,9 @@ RevShifter({
                 this.show();
             }
 
-            if (revDetect.mobile()) {
+            if (revDetect.mobile() && this.options.show_on_touch) {
                 this.attachTouchEvents();
-            } else {
+            } else if (this.options.show_on_scroll) {
                 this.attachScrollEvents();
             }
         };
@@ -223,56 +252,50 @@ RevShifter({
             });
         }
 
+        this.move = function() {
+            if (this.scrollTimeout) {
+                return;
+            }
+
+            var that = this;
+            function delayed() {
+                var scrollTop = window.pageYOffset;
+                var scrollDirection = false;
+                if (scrollTop < that.lastScrollTop) {
+                    scrollDirection = 'up';
+                } else if(scrollTop > that.lastScrollTop) {
+                    scrollDirection = 'down';
+                }
+
+                that.lastScrollTop = scrollTop;
+                that.scrollTimeout = false;
+
+                if (that.transitioning && !that.options.hide_on_show_transition) { // don't do anything if already transitioning and option is false
+                    return;
+                } else if (scrollDirection === 'up') {
+                    that.options.scroll_natural ? that.hide() : that.show();
+                } else if (scrollDirection === 'down') {
+                    that.options.scroll_natural ? that.show() : that.hide();
+                }
+            }
+
+            that.scrollTimeout = setTimeout(delayed, 300);
+        }
+
         this.attachScrollEvents = function() {
             // scrolling
-            var that = this;
-            var move = function() {
-                if (this.removed) {
-                    revUtils.removeEventListener(window, 'scroll', move);
-                    revUtils.removeEventListener(window, 'touchmove', move);
-                    return;
-                }
-
-                if (that.scrollTimeout) {
-                    return;
-                }
-
-                function delayed() {
-                    var scrollTop = window.pageYOffset;
-                    var scrollDirection = false;
-                    if (scrollTop < that.lastScrollTop) {
-                        scrollDirection = 'up';
-                    } else if(scrollTop > that.lastScrollTop) {
-                        scrollDirection = 'down';
-                    }
-
-                    that.lastScrollTop = scrollTop;
-                    that.scrollTimeout = false;
-
-                    if (that.transitioning && !that.options.hide_on_show_transition) { // don't do anything if already transitioning and option is false
-                        return;
-                    } else if (scrollDirection === 'up') {
-                        that.options.scroll_natural ? that.hide() : that.show();
-                    } else if (scrollDirection === 'down') {
-                        that.options.scroll_natural ? that.show() : that.hide();
-                    }
-                }
-
-                that.scrollTimeout = setTimeout( delayed, 300);
-            };
-
-            this.scrollTimeout;
+            this.scrollListener = this.move.bind(this);
             // wait a tick or two before doing the scroll b/c of auto scroll feature in some browsers
-            if (this.options.show_on_scroll) {
-                setTimeout(function() {
-                    that.lastScrollTop = window.pageYOffset;
-                    if (revDetect.mobile()) {
-                        revUtils.addEventListener(window, 'touchmove', move);
-                    } else {
-                        revUtils.addEventListener(window, 'scroll', move);
-                    }
-                }, 300);
-            }
+            var that = this;
+            setTimeout(function() {
+                that.lastScrollTop = window.pageYOffset;
+
+                if (revDetect.mobile()) {
+                    revUtils.addEventListener(window, 'touchmove', that.scrollListener);
+                } else {
+                    revUtils.addEventListener(window, 'scroll', that.scrollListener);
+                }
+            }, 300);
         }
 
         this.update = function(newOpts, oldOpts) {
@@ -288,29 +311,35 @@ RevShifter({
 
             if (this.options.width !== oldOpts.width) {
                 this.element.style.width = this.options.width + 'px';
-                this.innerWidget.resize();
+                this.innerWidget.grid.resize();
             }
 
             if ( (this.options.size !== oldOpts.size) ||
                 (this.options.realSize !== oldOpts.realSize) ||
-                (this.options.inner_widget_options.header !== oldOpts.inner_widget_options.header) ||
-                (this.options.inner_widget_options.per_row !== oldOpts.inner_widget_options.per_row) ||
-                (this.options.inner_widget_options.rows !== oldOpts.inner_widget_options.rows)) {
-                this.innerWidget.update(this.options.inner_widget_options,  oldOpts.inner_widget_options);
+                (this.options.header !== oldOpts.header) ||
+                (this.options.per_row !== oldOpts.per_row) ||
+                (this.options.rows !== oldOpts.rows)) {
+                this.innerWidget.update(this.options,  oldOpts);
             }
         };
 
+        // this is a bit of a hack but is the best/ only working way to
+        // prevent show/hide when paning vertically on element
+        this.cancelPan = function() {
+            this.panCancelled = true;
+        }
+
         this.attachTouchEvents = function() {
 
-            var mc = new Hammer(window, {
+            this.mc = new Hammer(window, {
                 touchAction: 'auto'
             });
-            mc.add(new Hammer.Pan({ threshold: 0, direction: Hammer.DIRECTION_ALL }));
+            this.mc.add(new Hammer.Pan({ threshold: 0, direction: Hammer.DIRECTION_ALL }));
 
             var that = this;
-            mc.on("panup pandown", function(ev){
-                if ( that.cancelPan || (that.transitioning && !that.options.hide_on_show_transition)) { // don't do anything if already transitioning and option is false
-                    that.cancelPan = false;
+            this.mc.on("panup pandown", function(ev){
+                if ( that.panCancelled || (that.transitioning && !that.options.hide_on_show_transition)) { // don't do anything if already transitioning and option is false
+                    that.panCancelled = false;
                     return;
                 }
                 if (ev.type === 'panup') {
@@ -320,17 +349,11 @@ RevShifter({
                 }
             });
 
-            // this is a bit of a hack but is the best/ only working way to
-            // prevent show/hide when paning vertically on element
-            var cancelPan = function() {
-                that.cancelPan = true;
-            }
+            this.cancelPanListener = this.cancelPan.bind(this);
 
-            revUtils.addEventListener(this.element, 'touchstart', cancelPan);
-
-            revUtils.addEventListener(this.element, 'touchend', cancelPan);
-
-            revUtils.addEventListener(this.element, 'touchmove', cancelPan);
+            revUtils.addEventListener(this.element, 'touchstart', this.cancelPanListener);
+            revUtils.addEventListener(this.element, 'touchend', this.cancelPanListener);
+            revUtils.addEventListener(this.element, 'touchmove', this.cancelPanListener);
         }
 
         this.show = function() {
@@ -406,13 +429,53 @@ RevShifter({
             }, this.options.transition_duration);
         };
 
+        this.closeButton = function() {
+            // if desktop and hide footer get out of here
+            if (!revDetect.mobile() && this.options.hide_footer) {
+                return;
+            }
+
+            this.closeElement = document.createElement('div');
+            this.closeElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>';
+            revUtils.addClass(this.closeElement, 'rev-close');
+
+            if (revDetect.mobile()) { // up top on mobile
+                revUtils.append(this.element, this.closeElement);
+            } else if (!this.options.hide_footer) { // footer on desktop
+                revUtils.append(this.innerWidget.foot, this.closeElement);
+            }
+
+            this.attachCloseButtonEvent();
+
+        }
+
         this.attachCloseButtonEvent = function() {
             var that = this;
             this.closeElement.addEventListener('click', function() {
                 that.hide();
-                that.removed = true;
                 revUtils.setCookie('rev-shifter-closed', 1, (that.options.closed_hours / 24));
+                setTimeout(function() {
+                    that.destroy();
+                }, that.options.transition_duration);
             });
+        };
+
+        this.destroy = function() {
+            if (this.mc && this.cancelPanListener) {
+                this.mc.set({enable: false});
+                this.mc.destroy();
+                revUtils.removeEventListener(this.element, 'touchstart', this.cancelPanListener);
+                revUtils.removeEventListener(this.element, 'touchend', this.cancelPanListener);
+                revUtils.removeEventListener(this.element, 'touchmove', this.cancelPanListener);
+            }
+
+            if (this.scrollListener) {
+                revUtils.removeEventListener(window, 'touchmove', this.scrollListener);
+                revUtils.removeEventListener(window, 'scroll', this.scrollListener);
+            }
+
+            this.innerWidget.destroy();
+            revUtils.remove(this.element);
         };
 
         this.init();

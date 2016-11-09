@@ -83,14 +83,28 @@ body {
 
 #rev-flicker .rev-image {
     position: relative;
-    transition: background .5s ease-in-out;
     background: #eee;
 }
 
 #rev-flicker .rev-image img {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    transition: opacity .5s ease-in-out;
+}
+
+#rev-flicker.transition-content.loaded .rev-image img {
+    opacity: 1;
+}
+
+#rev-flicker.loaded .rev-image {
+    background: transparent;
+}
+
+#rev-flicker.transition-content .rev-image {
+    transition: background 300ms ease-in-out;
+}
+
+#rev-flicker.transition-content .rev-image img {
+    transition: opacity 300ms ease-in-out;
     opacity: 0;
 }
 
@@ -106,14 +120,6 @@ body {
 
 #rev-flicker.rev-flicker-text-right .rev-ad a .rev-headline {
     margin-top: 0 !important;
-}
-
-#rev-flicker.loaded .rev-image {
-    background: transparent;
-}
-
-#rev-flicker.loaded .rev-image img {
-    opacity: 1;
 }
 
 #rev-flicker .rev-image img {
