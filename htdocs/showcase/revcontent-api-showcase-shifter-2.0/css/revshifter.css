@@ -26,6 +26,18 @@ body.rev-shifter-no-transform #rev-shifter.rev-shifter {
     line-height: 0;
 }
 
+#rev-shifter #rev-slider .rev-head {
+    margin-bottom: 0;
+    padding: 4px 5px 2px;
+    z-index: 100;
+    background: #fff;
+}
+
+#rev-shifter #rev-slider .rev-pagination-dots-wrapper {
+    z-index: 100;
+    background: #fff;
+}
+
 #rev-shifter.rev-shifter #rev-slider-container {
     background: #fff;
     padding: 5px;
@@ -79,7 +91,12 @@ body.rev-shifter-no-transform #rev-shifter.rev-shifter {
     right: 2px;
     cursor: pointer;
     fill: #555;
-    z-index: 1;
+    z-index: 101;
+}
+
+#rev-shifter.rev-shifter.rev-mobile .rev-close svg {
+    height: 28px;
+    width: 28px;
 }
 
 #rev-shifter.rev-shifter.top {
@@ -212,14 +229,25 @@ body.rev-shifter-no-transform #rev-shifter.rev-shifter {
     opacity: .8;
 }
 
+#rev-shifter.rev-shifter.rev-mobile .rev-close {
+    top: -2px;
+}
+
+#rev-shifter.rev-shifter.rev-mobile {
+    padding-top: 16px;
+}
+
+#rev-shifter.rev-shifter.rev-mobile.rev-shifter-pagination-dots {
+    padding-top: 4px;
+}
+
+#rev-shifter.rev-shifter.rev-mobile.rev-shifter-header {
+    padding-top: 0;
+}
+
 #rev-shifter.rev-shifter.rev-mobile .rev-sponsored {
     font-size: 10px;
     line-height: 10px;
-}
-
-#rev-shifter.rev-shifter.rev-mobile .rev-close {
-    top: 0;
-    right: 0;
 }
 
 #rev-shifter.rev-shifter.rev-mobile .rev-foot {

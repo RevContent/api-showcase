@@ -63,7 +63,8 @@ RevMore({
         beacons: true,
         overlay: false, // pass key value object { content_type: icon }
         overlay_icons: false, // pass in custom icons or overrides
-        overlay_position: 'center' // center, top_left, top_right, bottom_right, bottom_left
+        overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
+        query_params: false
     };
 
     RevMore = function(opts) {
@@ -246,7 +247,8 @@ RevMore({
                     line_height: 3,
                     margin: -2.2,
                     padding: 2
-                }
+                },
+                query_params: this.options.query_params
             });
             this.innerWidgetDataPromise = this.innerWidget.dataPromise;
         };
@@ -281,7 +283,7 @@ RevMore({
         // reset the wrapper height on resize
         this.attachResizedEvents = function() {
             var that = this;
-            this.innerWidget.emitter.on( 'resized', function() {
+            this.innerWidget.grid.on( 'resized', function() {
                 that.wrapperHeight();
             });
         };

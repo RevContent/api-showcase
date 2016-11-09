@@ -17,6 +17,8 @@
     "gulp-preprocess": "^1.2.0",
     "gulp-rename": "~1",
     "gulp-strip-debug": "^1.0.2",
-    "gulp-uglify": "~1"
+    "gulp-uglify": "~1",
+    "pump": "latest",
+    "gulp-notify": "~2"
   }
 }

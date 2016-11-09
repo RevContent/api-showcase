@@ -96,6 +96,7 @@ Author: michael@revcontent.com
             overlay: false, // pass key value object { content_type: icon }
             overlay_icons: false, // pass in custom icons or overrides
             overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
+            query_params: false
         };
 
         // merge options
@@ -117,6 +118,7 @@ Author: michael@revcontent.com
         revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-slider');
 
         this.data = [];
+        this.displayedItems = [];
 
         this.containerElement = document.createElement('div');
         this.containerElement.id = 'rev-slider';
@@ -151,9 +153,11 @@ Author: michael@revcontent.com
 
         this.grid = new AnyGrid(gridElement, this.gridOptions());
 
-        this.grid.on('resized', function() {
+        this.grid.on('resize', function() {
             that.resize();
         });
+
+        revUtils.dispatchScrollbarResizeEvent();
 
         this.setMultipliers();
 
@@ -380,7 +384,7 @@ Author: michael@revcontent.com
         this.grid.bindResize();
 
         var that = this;
-        this.grid.on('resized', function() {
+        this.grid.on('resize', function() {
             that.resize();
         });
 
@@ -490,6 +494,10 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.updatePagination = function(checkPage) {
 
+        if (!this.data.length) { // need data to determine max pages
+            return;
+        }
+
         if (this.maxPages() <= 1) {
             this.backBtn.style.display = 'none';
             this.forwardBtn.style.display = 'none';
@@ -505,8 +513,6 @@ Author: michael@revcontent.com
                 revUtils.prepend(this.innerContainerElement, this.paginationDotsContainer);
             }
         }
-
-        this.emitter.emitEvent('resized'); // emit resize in case dots changed size
 
         if (!this.options.pagination_dots) { // if no pagination dots we can return now
             return;
@@ -817,7 +823,13 @@ Author: michael@revcontent.com
     RevSlider.prototype.resize = function() {
         var that = this;
         var oldLimit = this.limit;
+
+        // set transitionDuration to 0 and then reset it
         this.grid.option({transitionDuration: 0});
+        this.grid.once('resized', function() {
+            that.grid.option({transitionDuration: that.options.transition_duration});
+        });
+
         this.limit = this.getLimit();
 
         var reconfig = 0;// how many to add or remove
@@ -857,19 +869,19 @@ Author: michael@revcontent.com
             this.resizeHeadline(ad.querySelectorAll('.rev-headline')[0]);
             this.resizeProvider(ad.querySelectorAll('.rev-provider')[0]);
 
-            ad.querySelectorAll('.rev-headline h3')[0].innerHTML = this.displayedItems[i].headline;
+            if (this.displayedItems[i]) { // reset headlines for new ellipsis check
+                ad.querySelectorAll('.rev-headline h3')[0].innerHTML = this.displayedItems[i].headline;
+            }
         }
-        this.textOverlay();
-        this.checkEllipsis();
 
         this.grid.reloadItems();
         this.grid.layout();
-        this.grid.option({transitionDuration: this.options.transition_duration});
+
+        this.textOverlay();
+        this.checkEllipsis();
 
         this.getAnimationDuration();
         this.updatePagination(true);
-
-        this.emitter.emitEvent('resized');
     };
 
     RevSlider.prototype.resizeImage = function(el) {
@@ -937,6 +949,14 @@ Author: michael@revcontent.com
             return cell;
     };
 
+    RevSlider.prototype.getSerializedQueryParams = function() {
+         if (!this.serializedQueryParams) {
+            var serialized = revUtils.serialize(this.options.query_params);
+            this.serializedQueryParams = serialized ? '&' + serialized : '';
+         }
+         return this.serializedQueryParams;
+    };
+
     RevSlider.prototype.getData = function() {
         if (this.dataPromise) {
             return this.dataPromise;
@@ -947,6 +967,8 @@ Author: michael@revcontent.com
         this.dataPromise = new Promise(function(resolve, reject) {
             var sponsoredCount = that.options.pages * that.limit;
             var url = that.options.url + '?api_key='+ that.options.api_key +'&uitm=true&img_h='+ that.imageHeight +'&img_w='+ that.imageWidth + '&pub_id='+ that.options.pub_id +'&widget_id='+ that.options.widget_id +'&domain='+ that.options.domain +'&internal_count=0'+'&sponsored_count=' + sponsoredCount;
+
+            url += that.getSerializedQueryParams();
 
             revApi.request(url, function(resp) {
                 that.data = resp;
@@ -986,7 +1008,8 @@ Author: michael@revcontent.com
             var count = (register[(register.length - 1)] + 1) - offset;
 
             var impressionsUrl = this.options.url +
-            '?&api_key=' + this.options.api_key +
+            '?api_key=' + this.options.api_key +
+            this.getSerializedQueryParams() +
             '&pub_id=' + this.options.pub_id +
             '&widget_id=' + this.options.widget_id +
             '&domain=' + this.options.domain +

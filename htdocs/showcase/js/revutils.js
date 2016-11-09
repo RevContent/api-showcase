@@ -48,6 +48,21 @@ utils.validateApiParams = function(params) {
     return errors;
 };
 
+utils.serialize = function(obj, prefix) {
+    if (!obj) {
+        return '';
+    }
+    var str = [];
+    for(var prop in obj) {
+        if (obj.hasOwnProperty(prop)) {
+            var k = prefix ? prefix + "[" + prop + "]" : prop, v = obj[prop];
+            str.push(typeof v == "object" &&
+            (Object.prototype.toString.call(v) == "[object Object]") ? this.serialize(v, k) : encodeURIComponent(k) + "=" + encodeURIComponent(v));
+        }
+    }
+    return str.join("&");
+}
+
 utils.appendStyle = function(style, namespace, extra) {
     var namespace = namespace + '-append-style';
 
@@ -169,6 +184,41 @@ utils.removeClass = function(el, className) {
     else
         el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
 };
+
+utils.dispatchScrollbarResizeEvent = function() {
+    var id = 'rc-scrollbar-resize-listener-frame';
+    if (document.getElementById(id)) { // singleton
+        return;
+    }
+    var iframe = document.createElement('iframe');
+    iframe.id = id;
+    iframe.style.cssText = 'height: 0; background-color: transparent; margin: 0; padding: 0; overflow: hidden; border-width: 0; position: absolute; width: 100%;';
+
+    var that = this;
+    // Register our event when the iframe loads
+    iframe.onload = function() {
+        // trigger resize event once when the iframe resizes
+        var callback = function() {
+            try {
+                if (Event.prototype.initEvent) { // deprecated
+                    var evt = document.createEvent('UIEvents');
+                    evt.initUIEvent('resize', true, false, window, 0);
+                } else {
+                    var evt = new UIEvent('resize');
+                }
+                window.dispatchEvent(evt);
+                // only trigger once
+                that.removeEventListener(iframe.contentWindow, 'resize', callback);
+            } catch(e) {
+            }
+        };
+
+        that.addEventListener(iframe.contentWindow, 'resize', callback);
+    };
+
+    // Stick the iframe somewhere out of the way
+    document.body.appendChild(iframe);
+}
 
 utils.addEventListener = function(el, eventName, handler) {
   if (el.addEventListener) {
@@ -317,6 +367,14 @@ utils.imagesLoaded = function(images) {
     }, maxMilliseconds);
 
     return emitter;
+}
+
+utils.getComputedStyle = function (el, prop) {
+    if (getComputedStyle !== 'undefined') {
+        return getComputedStyle(el, null).getPropertyValue(prop);
+    } else {
+        return el.currentStyle[prop];
+    }
 }
 
 utils.setImage = function(wrapperElement, src) {
