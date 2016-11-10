@@ -26,22 +26,21 @@
         self.ENTITY_ID = "rev2-wid-" + self.data.id.toString();
         self.api = {
             enabled: ((self.data.api !== undefined) ? true : false),
-            key: self.data.key || '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+            key: self.data.key !== undefined ? self.data.key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
             endpoint: self.data.labs !== undefined ? self.data.labs : "https://trends.revcontent.com/api/v1",
-            publisher : self.data.publisher || 945,
-            widget : self.widget.id || 6181,
-            domain : self.data.domain || 'apiexamples.powr.com',
+            publisher : self.data.publisher !== undefined ? self.data.publisher : 945,
+            widget : self.data.id,
+            domain : self.data.domain !== undefined ? self.data.domain : 'apiexamples.powr.com',
             testing: self.testing,
             dimensions: {
-                rows: self.data.rows || 4,
-                cols: self.data.cols || 1
+                rows: !isNaN(self.data.rows) ? self.data.rows : 4,
+                cols: !isNaN(self.data.cols) ? self.data.cols : 1
             }
         };
     };
 
     RevAMP.prototype.createWrapper = function () {
         var self = this;
-        if(self.api.enabled) { return; }
         self.rcjsload = document.createElement("div");
         self.rcjsload.id = self.getWrapperId();
         document.body.appendChild(self.rcjsload);
