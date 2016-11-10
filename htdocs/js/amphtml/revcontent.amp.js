@@ -35,7 +35,10 @@
             dimensions: {
                 rows: !isNaN(self.data.rows) ? self.data.rows : 4,
                 cols: !isNaN(self.data.cols) ? self.data.cols : 1
-            }
+            },
+            useJSONP: true,
+            JSONPCallbackName: 'revcontentAds',
+            JSONPCallback: '',
         };
     };
 
@@ -133,27 +136,38 @@
     RevAMP.prototype.fetchAds = function(){
         var self = this;
         if(self.api.enabled && self.validateApiSettings()) {
-            self.api.request = new XMLHttpRequest();
+            
             self.api.parameters = [];
             self.api.parameters.push("api_key=" + self.api.key);
             self.api.parameters.push("pub_id=" + self.api.publisher);
             self.api.parameters.push("widget_id=" + self.api.widget);
             self.api.parameters.push("domain=" + self.api.domain);
             self.api.parameters.push("sponsored_count=" + (self.api.dimensions.rows * self.api.dimensions.cols) + "&internal_count=0&img_h=274&img_w=239&api_source=amp");
-            self.api.request.open('GET', self.api.endpoint + '?' + self.api.parameters.join('&'), true);
-            self.api.request.onload = function() {
-                if (self.api.request.status >= 200 && self.api.request.status < 400) {
-                    try {
-                        self.renderNative(JSON.parse(self.api.request.responseText));
-                    } catch(e) { }
-                }
-            };
-
-            self.api.request.onerror = function() {
-                self.apiError();
-            };
-
-            self.api.request.send();
+            
+            if(self.api.useJSONP){
+                self.api.JSONPCallback = self.api.JSONPCallbackName ? self.api.JSONPCallbackName : ('success' + self.getTimestamp());
+                window[JSONPCallback] = function(ads){
+                    self.renderNative(JSON.parse(ads));
+                };
+                self.ApiJSONScript = document.createElement('script');
+                self.ApiJSONScript.src = self.api.endpoint + '?' + self.api.parameters.join('&') + '&callback=' + self.api.JSONPCallback;
+                document.body.appendChild(self.ApiJSONScript);
+                self.api.ads = revcontetAds();callbac
+            } else {
+                self.api.request = new XMLHttpRequest();    
+                self.api.request.open('GET', self.api.endpoint + '?' + self.api.parameters.join('&'), true);
+                self.api.request.onload = function() {
+                    if (self.api.request.status >= 200 && self.api.request.status < 400) {
+                        try {
+                            self.renderNative(JSON.parse(self.api.request.responseText));
+                        } catch(e) { }
+                    }
+                };
+                self.api.request.onerror = function() {
+                    self.apiError();
+                };
+                self.api.request.send();
+            }
         }
     };
 
@@ -192,7 +206,7 @@
 
     RevAMP.prototype.createAMPDocument = function(){
         var self = this;
-        
+
     };
 
     RevAMP.prototype.createStyles = function () {
@@ -215,6 +229,14 @@
 
     RevAMP.prototype.apiError = function(){
 
+    };
+
+    RevAMP.prototype.getTimestamp = function() {
+        var time = Date.now || function() {
+          return +new Date;
+        };
+
+        return time();
     };
 
     var RevcontentNetwork = new RevAMP();
