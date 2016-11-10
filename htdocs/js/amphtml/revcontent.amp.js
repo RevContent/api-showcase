@@ -117,6 +117,7 @@
         self.createWrapper();
         self.createScript();
         self.renderStart(3000);
+        self.fetchAds();
         self.noContentAvailable();
         window.context.reportRenderedEntityIdentifier(self.ENTITY_ID);
         self.stopObservingIntersection = window.context.observeIntersection(function(changes) {
@@ -131,30 +132,46 @@
 
     RevAMP.prototype.fetchAds = function(){
         var self = this;
-        self.api.request = new XMLHttpRequest();
-        self.api.parameters = [];
-        self.api.parameters.push("apikey=" + self.api.key);
-        self.api.parameters.push("pub_id=" + self.api.publisher);
-        self.api.parameters.push("widget_id=" + self.api.widget);
-        self.api.parameters.push("domain=" + self.api.domain);
-        self.api.parameter.push("sponsored_count=" + (self.api.dimensions.rows * self.api.dimensions.cols) + "&internal_count=0&img_h=274&img_w=239&api_source=amp");
-        self.api.request.open('GET', self.api.endpoint + '?' + self.api.parameters.join('&'), true);
-        self.api.request.onload = function() {
-            if (self.api.request.status >= 200 && self.api.request.status < 400) {
-                try {
-                    self.renderNative(JSON.parse(self.api.request.responseText));
-                } catch(e) { }
-            }
-        };
+        if(self.api.enabled && self.validateApiSettings()) {
+            self.api.request = new XMLHttpRequest();
+            self.api.parameters = [];
+            self.api.parameters.push("api_key=" + self.api.key);
+            self.api.parameters.push("pub_id=" + self.api.publisher);
+            self.api.parameters.push("widget_id=" + self.api.widget);
+            self.api.parameters.push("domain=" + self.api.domain);
+            self.api.parameters.push("sponsored_count=" + (self.api.dimensions.rows * self.api.dimensions.cols) + "&internal_count=0&img_h=274&img_w=239&api_source=amp");
+            self.api.request.open('GET', self.api.endpoint + '?' + self.api.parameters.join('&'), true);
+            self.api.request.onload = function() {
+                if (self.api.request.status >= 200 && self.api.request.status < 400) {
+                    try {
+                        self.renderNative(JSON.parse(self.api.request.responseText));
+                    } catch(e) { }
+                }
+            };
 
-        self.api.request.onerror = function() {
-            self.apiError();
-        };
+            self.api.request.onerror = function() {
+                self.apiError();
+            };
 
-        self.api.request.send();
+            self.api.request.send();
+        }
     };
 
-    RevAMP.renderNative = function(ads){
+    RevAMP.prototype.validateApiSettings = function(){
+        var self = this;
+        var errs = [];
+        var isValid = false;
+
+        if(errs.length == 0) {
+            isValid = true;
+        } else {
+            isValid = false;
+        }
+
+        return isValid;
+    };
+
+    RevAMP.prototype.renderNative = function(ads){
         var markup = '';
         for(var a =0; a < ads.length; a++){
             markup = '<div class="rc-amp-ad-item">';
@@ -167,15 +184,22 @@
         };
     };
 
-    RevAMP.generateAMPImage = function(src, width, height, alt, layout){
+    RevAMP.prototype.generateAMPImage = function(src, width, height, alt, layout){
         if(!layout){ layout = responsive; }
         if(!src || src.length == 0){ return; }
         return '<amp-img class="rc-img" alt="' + alt + '" src="' + src + '" width="' + width + '" height="' + height + '" layout="responsive"></amp-img>';
     };
 
+    RevAMP.prototype.createAMPDocument = function(){
+        var self = this;
+        
+    };
+
     RevAMP.prototype.createStyles = function () {
         self.styles = document.createElement("style");
         self.styles.setAttribute("amp-custom");
+        var cssStyles = '';
+        self.styles.insertAdjacentHTML('afterbegin', cssStyles);
         document.body.appendChild(self.styles);
         /*<style amp-custom>
           @font-face {
@@ -189,7 +213,7 @@
         </style>*/
     };
 
-    RevAMP.apiError = function(){
+    RevAMP.prototype.apiError = function(){
 
     };
 
