@@ -24,10 +24,24 @@
         self.testing = ((self.data.testing !== undefined) ? true : false);
         self.useAutoSizer = ((self.data.sizer !== undefined && self.data.sizer != "true") ? false : true);
         self.ENTITY_ID = "rev2-wid-" + self.data.id.toString();
+        self.api = {
+            enabled: ((self.data.api !== undefined) ? true : false),
+            key: self.data. || '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+            endpoint: self.data.labs !== undefined ? self.data.labs : "https://trends.revcontent.com/api/v1",
+            publisher : self.data.publisher || 945,
+            widget : self.widget.id || 6181,
+            domain : self.data.domain || 'apiexamples.powr.com',
+            testing: self.testing,
+            dimensions: {
+                rows: self.data.rows || 4,
+                cols: self.data.cols || 1
+            };
+        };
     };
 
     RevAMP.prototype.createWrapper = function () {
         var self = this;
+        if(self.api.enabled) { return; }
         self.rcjsload = document.createElement("div");
         self.rcjsload.id = self.getWrapperId();
         document.body.appendChild(self.rcjsload);
@@ -41,6 +55,7 @@
 
     RevAMP.prototype.createScript = function () {
         var self = this;
+        if(self.api.enabled) { return; }
         self.rcel = document.createElement("script");
         self.rcel.id = 'rc_' + Math.floor(Math.random() * 1000);
         self.rcel.type = 'text/javascript';
@@ -113,6 +128,68 @@
             });
         });
         return self;
+    };
+
+    RevAMP.prototype.fetchAds = function(){
+        var self = this;
+        self.api.request = new XMLHttpRequest();
+        self.api.parameters = [];
+        self.api.parameters.push("apikey=" + self.api.key);
+        self.api.parameters.push("pub_id=" + self.api.publisher);
+        self.api.parameters.push("widget_id=" + self.api.widget);
+        self.api.parameters.push("domain=" + self.api.domain);
+        self.api.parameter.push("sponsored_count=" (self.api.dimensions.rows * self.api.dimensions.cols) + "&internal_count=0&img_h=274&img_w=239&api_source=amp");
+        self.api.request.open('GET', self.api.endpoint + '?' + self.api.parameters.join('&'), true);
+        self.api.request.onload = function() {
+            if (self.api.request.status >= 200 && self.api.request.status < 400) {
+                try {
+                    self.renderNative(JSON.parse(self.api.request.responseText));
+                } catch(e) { }
+            }
+        };
+
+        self.api.request.onerror = function() {
+            self.apiError();
+        };
+
+        self.api.request.send();
+    };
+
+    RevAMP.renderNative = function(ads){
+        var markup = '';
+        for(var a =0; a < ads.length; a++){
+            markup = '<div class="rc-amp-ad-item">';
+            markup += self.generateAMPImage(ads[a].url, 239, 274, ads[a].headline, "responsive");
+            markup += '<h2 class="rc-headline">' + ads[a].headline + '</h2>'
+            markup += '</div>';
+            self.rcjsload.appendChild(markup);
+        };
+    };
+
+    RevAMP.generateAMPImage = function(src, width, height, alt, layout){
+        if(!layout){ layout = responsive; }
+        if(!src || src.length == 0){ return; }
+        return '<amp-img class="rc-img" alt="' + alt + '" src="' + src + '" width="' + width + '" height="' + height + '" layout="responsive"></amp-img>';
+    };
+
+    RevAMP.prototype.createStyles = function () {
+        self.styles = document.createElement("style");
+        self.styles.setAttribute("amp-custom");
+        document.body.appendChild(self.styles);
+        /*<style amp-custom>
+          @font-face {
+            font-family: "Tangerine";
+            src: url("https://fonts.googleapis.com/css?family=Tangerine");
+          }
+
+          body {
+            font-family: "Tangerine", serif;
+          }
+        </style>*/
+    };
+
+    RevAMP.apiError = function(){
+
     };
 
     var RevcontentNetwork = new RevAMP();
