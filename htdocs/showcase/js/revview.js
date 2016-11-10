@@ -28,9 +28,10 @@
     };
 
     view.viewable = function() {
-        var viewBottom = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight)
-            + (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop);
-        var divTop = document.getElementById(widget.containerElement.id).getBoundingClientRect().top;
+        var height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+        var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        var viewBottom = height + scroll;
+        var divTop = document.getElementById(widget.containerElement.id).getBoundingClientRect().top + scroll;
 
         if(viewBottom >= divTop) {
             revUtils.removeEventListener(window, 'scroll', view.viewable);
