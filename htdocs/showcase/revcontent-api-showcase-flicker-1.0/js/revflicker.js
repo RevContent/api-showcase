@@ -49,9 +49,9 @@ RevFlicker({
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevFlicker = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDisclose);
+    window.RevFlicker = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDisclose, window.revView);
 
-}( window, function factory(window, revUtils, revDetect, revApi, revDisclose) {
+}( window, function factory(window, revUtils, revDetect, revApi, revDisclose, revView) {
 'use strict';
 
     var RevFlicker = function(opts) {
@@ -153,6 +153,8 @@ RevFlicker({
         this.innerElement = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
         this.innerElement.style.width = '100%';
 
+        this.source = 'flick';
+
         revUtils.append(this.containerElement, this.flickerElement);
         revUtils.append(this.innerElement, this.containerElement);
 
@@ -174,6 +176,7 @@ RevFlicker({
         this.getContainerWidth();
         this.emitter.on('containerReady', function() {
             that.setUp();
+            revView.init(that);
             that.appendElements();
             that.preData();
             that.textOverlay();
@@ -504,10 +507,12 @@ RevFlicker({
         // if its the first time register the intial viewed impressions
         var count = this.perRow;
         var offset = 0;
+        var viewed = false;
 
         if (!initial) { //otherwise register the new one
             count = 1;
             offset = this.flickity.selectedIndex;
+            viewed = true;
 
             if ( (offset + (this.perRow - 1)) < this.getOptionLimit() ) {
                 offset += (this.perRow - 1);
@@ -516,7 +521,7 @@ RevFlicker({
 
         var impressionsUrl = this.options.url + '?&api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&api_source=flick';
 
-        impressionsUrl += '&sponsored_count=' + (this.options.internal ? 0 : count) + '&internal_count=' + (this.options.internal ? count : 0) + '&sponsored_offset='+ (this.options.internal ? 0 : offset) +'&internal_offset=' + (this.options.internal ? offset : 0);
+        impressionsUrl += '&sponsored_count=' + (this.options.internal ? 0 : count) + '&internal_count=' + (this.options.internal ? count : 0) + '&sponsored_offset='+ (this.options.internal ? 0 : offset) +'&internal_offset=' + (this.options.internal ? offset : 0) + (viewed ? '&viewed=true' : '');
 
         impressionsUrl += this.getSerializedQueryParams();
 
