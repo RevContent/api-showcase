@@ -176,6 +176,7 @@ RevFlicker({
         this.getContainerWidth();
         this.emitter.on('containerReady', function() {
             that.setUp();
+            revView.init(that);
             that.appendElements();
             that.preData();
             that.textOverlay();
@@ -187,8 +188,6 @@ RevFlicker({
         });
 
         revUtils.dispatchScrollbarResizeEvent();
-
-        revView.init(this);
 
         this.flickity.on( 'cellSelect', function() {
             that.emitter.emit('cellSelect');
