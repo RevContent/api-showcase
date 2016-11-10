@@ -26,7 +26,7 @@
         self.ENTITY_ID = "rev2-wid-" + self.data.id.toString();
         self.api = {
             enabled: ((self.data.api !== undefined) ? true : false),
-            key: self.data. || '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+            key: self.data.key || '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
             endpoint: self.data.labs !== undefined ? self.data.labs : "https://trends.revcontent.com/api/v1",
             publisher : self.data.publisher || 945,
             widget : self.widget.id || 6181,
@@ -35,7 +35,7 @@
             dimensions: {
                 rows: self.data.rows || 4,
                 cols: self.data.cols || 1
-            };
+            }
         };
     };
 
@@ -138,7 +138,7 @@
         self.api.parameters.push("pub_id=" + self.api.publisher);
         self.api.parameters.push("widget_id=" + self.api.widget);
         self.api.parameters.push("domain=" + self.api.domain);
-        self.api.parameter.push("sponsored_count=" (self.api.dimensions.rows * self.api.dimensions.cols) + "&internal_count=0&img_h=274&img_w=239&api_source=amp");
+        self.api.parameter.push("sponsored_count=" + (self.api.dimensions.rows * self.api.dimensions.cols) + "&internal_count=0&img_h=274&img_w=239&api_source=amp");
         self.api.request.open('GET', self.api.endpoint + '?' + self.api.parameters.join('&'), true);
         self.api.request.onload = function() {
             if (self.api.request.status >= 200 && self.api.request.status < 400) {
@@ -159,8 +159,10 @@
         var markup = '';
         for(var a =0; a < ads.length; a++){
             markup = '<div class="rc-amp-ad-item">';
-            markup += self.generateAMPImage(ads[a].url, 239, 274, ads[a].headline, "responsive");
+            markup += '<a href="' + ads[a].url + '">';
+            markup += self.generateAMPImage(ads[a].image, 239, 274, ads[a].headline, "responsive");
             markup += '<h2 class="rc-headline">' + ads[a].headline + '</h2>'
+            markup += '</a>';
             markup += '</div>';
             self.rcjsload.appendChild(markup);
         };
