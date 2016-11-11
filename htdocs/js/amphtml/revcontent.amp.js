@@ -44,7 +44,8 @@
                     width: !isNaN(self.data.adxw) ? self.data.adxw : 239,
                     height: !isNaN(self.data.adxh) ? self.data.adxh : 274,
                 }
-            }
+            },
+            cssOverrides: (self.data.css !== undefined && self.data.css.length > 0) ? self.data.css : ''
         };
     };
 
@@ -107,7 +108,16 @@
         if(self.providerEl && self.providerEl.length > 0 && self.providerEl.classList.contains('rc-text-bottom')){
             providerHeight = self.providerEl.clientHeight;
         }
-        window.context.requestResize(document.clientWidth, Math.max(320, providerHeight + Math.max(document.body.offsetHeight, self.widgetEl.clientHeight)));
+        var frameHeight = Math.max(
+            document.body.scrollHeight, document.documentElement.scrollHeight,
+            document.body.offsetHeight, document.documentElement.offsetHeight,
+            document.body.clientHeight, document.documentElement.clientHeight
+        );
+        if(self.widgetEl.clientHeight > 0 && frameHeight > self.widgetEl.clientHeight) {
+            frameHeight = self.widgetEl.clientHeight;
+        } 
+        console.log("AdReszing to WIDTH =", document.clientWidth, "HEIGHT = ", frameHeight );
+        window.context.requestResize(document.clientWidth, Math.max(50, providerHeight + frameHeight));
     };
 
     RevAMP.prototype.noContentAvailable = function () {
@@ -205,6 +215,7 @@
             adMarkup += '<a href="' + ads[a].url + '" class="rc-cta" target="_blank">';
             adMarkup += self.generateAMPImage(ads[a].image, self.api.ads.size.width, self.api.ads.size.height, ads[a].headline, "responsive");
             adMarkup += '<h2 class="rc-headline">' + ads[a].headline + '</h2>'
+            adMarkup += '<span class="rc-brand-label">' + ads[a].brand + '</span>'
             adMarkup += '</a>';
             adMarkup += '</div></div>';
             self.rcjsload.querySelector('.rc-amp-row').insertAdjacentHTML('beforeend', adMarkup);
@@ -254,11 +265,22 @@
 
         .rc-amp-ad-item {
             font-family: "Tangerine", sans-serif;
+            margin-bottom: 10px;
         }
 
         .rc-headline {
             font-family: "Tangerine", sans-serif;
-            font-size: 12px;
+            font-size: 16px;
+            margin: 4px 0;
+            padding: 0;
+        }
+
+        .rc-brand-label {
+            font-size: 8px;
+            color: #777777;
+            text-align:left;
+            clear: both;
+            display: block;
         }
 
         @media screen and (min-width: 568px) {
@@ -275,36 +297,30 @@
                 float: left;
             }
             .rc-amp-row .rc-amp-ad-item .rc-amp-ad-wrapper {
-                padding-right: 10px;
+                padding: 0 10px;
             }
             .rc-amp-row .rc-amp-ad-item:last-child  .rc-amp-ad-wrapper {
-                padding-right: 0;
+               
             }
+
+            .rc-amp-ad-item {
+                margin-bottom: 0;
+            }
+
             .rc-headline {
                 font-family: "Tangerine", sans-serif;
-                font-size: 14px;
+                font-size: 13px;
             }
         }
 
         @media screen and (min-width: 732px) {
-            .rc-headline {
-                font-size: 14px;
-            }
+  
         }
         `;
         var cssStyles = cssBaseStyles + ' ' + '/* inject:css *//* endinject */';
+            cssStyles += '   ' + self.api.cssOverrides.toString();
         self.styles.insertAdjacentHTML('afterbegin', cssStyles);
         document.body.appendChild(self.styles);
-        /*<style amp-custom>
-          @font-face {
-            font-family: "Tangerine";
-            src: url("https://fonts.googleapis.com/css?family=Tangerine");
-          }
-
-          body {
-            font-family: "Tangerine", serif;
-          }
-        </style>*/
     };
 
     RevAMP.prototype.apiError = function(){
