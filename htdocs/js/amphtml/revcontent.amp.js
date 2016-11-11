@@ -146,13 +146,12 @@
             
             if(self.api.useJSONP){
                 self.api.JSONPCallback = self.api.JSONPCallbackName ? self.api.JSONPCallbackName : ('success' + self.getTimestamp());
-                window[JSONPCallback] = function(ads){
+                window[self.api.JSONPCallback] = function(ads){
                     self.renderNative(JSON.parse(ads));
                 };
                 self.ApiJSONScript = document.createElement('script');
                 self.ApiJSONScript.src = self.api.endpoint + '?' + self.api.parameters.join('&') + '&callback=' + self.api.JSONPCallback;
                 document.body.appendChild(self.ApiJSONScript);
-                self.api.ads = revcontetAds();callbac
             } else {
                 self.api.request = new XMLHttpRequest();    
                 self.api.request.open('GET', self.api.endpoint + '?' + self.api.parameters.join('&'), true);
