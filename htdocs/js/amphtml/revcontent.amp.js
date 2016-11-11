@@ -27,7 +27,7 @@
         self.api = {
             enabled: ((self.data.api !== undefined) ? true : false),
             key: self.data.key !== undefined ? self.data.key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
-            endpoint: self.data.labs !== undefined ? self.data.labs : "https://trends.revcontent.com/api/v1",
+            endpoint: self.data.labs !== undefined ? self.data.labs : "https://trends.revcontent.com/api/v1/",
             publisher : self.data.publisher !== undefined ? self.data.publisher : 945,
             widget : self.data.id,
             domain : self.data.domain !== undefined ? self.data.domain : 'apiexamples.powr.com',
@@ -147,11 +147,15 @@
             if(self.api.useJSONP){
                 self.api.JSONPCallback = self.api.JSONPCallbackName ? self.api.JSONPCallbackName : ('success' + self.getTimestamp());
                 window[self.api.JSONPCallback] = function(ads){
-                    self.renderNative(JSON.parse(ads));
+                    self.renderNative(ads);
                 };
                 self.ApiJSONScript = document.createElement('script');
+                self.ApiJSONScript.type = "text/javascript";
+                self.ApiJSONScript.async = false;
                 self.ApiJSONScript.src = self.api.endpoint + '?' + self.api.parameters.join('&') + '&callback=' + self.api.JSONPCallback;
-                document.body.appendChild(self.ApiJSONScript);
+                //document.body.appendChild(self.ApiJSONScript);
+                var rcds = document.getElementById(self.rcjsload.id);
+                rcds.appendChild(self.ApiJSONScript);
             } else {
                 self.api.request = new XMLHttpRequest();    
                 self.api.request.open('GET', self.api.endpoint + '?' + self.api.parameters.join('&'), true);
@@ -185,15 +189,19 @@
     };
 
     RevAMP.prototype.renderNative = function(ads){
-        var markup = '';
+        var self = this;
+        self.createAMPDocument();
+        var adRow = '<div class="rc-amp-row" data-row="1"></div>';
+        self.rcjsload.insertAdjacentHTML('beforeend', adRow);
+        var adMarkup = '';
         for(var a =0; a < ads.length; a++){
-            markup = '<div class="rc-amp-ad-item">';
-            markup += '<a href="' + ads[a].url + '">';
-            markup += self.generateAMPImage(ads[a].image, 239, 274, ads[a].headline, "responsive");
-            markup += '<h2 class="rc-headline">' + ads[a].headline + '</h2>'
-            markup += '</a>';
-            markup += '</div>';
-            self.rcjsload.appendChild(markup);
+            adMarkup = '<div class="rc-amp-ad-item">';
+            adMarkup += '<a href="' + ads[a].url + '" class="rc-cta" target="_blank">';
+            adMarkup += self.generateAMPImage(ads[a].image, 239, 274, ads[a].headline, "responsive");
+            adMarkup += '<h2 class="rc-headline">' + ads[a].headline + '</h2>'
+            adMarkup += '</a>';
+            adMarkup += '</div>';
+            self.rcjsload.querySelector('.rc-amp-row').insertAdjacentHTML('beforeend', adMarkup);
         };
     };
 
@@ -205,13 +213,45 @@
 
     RevAMP.prototype.createAMPDocument = function(){
         var self = this;
-
+        self.createAMPStyles();
     };
 
-    RevAMP.prototype.createStyles = function () {
+    RevAMP.prototype.createAMPStyles = function () {
+        var self = this;
         self.styles = document.createElement("style");
         self.styles.setAttribute("amp-custom");
-        var cssStyles = '';
+        var cssBaseStyles = `
+        <style amp-custom>
+        @font-face {
+            font-family: "Tangerine";
+            src: url("https://fonts.googleapis.com/css?family=Tangerine");
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .rc-amp-row {
+
+        }
+
+        .rc-cta {
+            text-decoration: none;
+            outline: none;
+            font-family: "Tangerine", sans-serif;
+        }
+
+        .rc-amp-ad-item {
+            font-family: "Tangerine", sans-serif;
+        }
+
+        .rc-headline {
+            font-family: "Tangerine", sans-serif;
+        }
+
+        </style>`;
+        var cssStyles = cssBaseStyles + ' ' + '/* inject:css *//* endinject */';
         self.styles.insertAdjacentHTML('afterbegin', cssStyles);
         document.body.appendChild(self.styles);
         /*<style amp-custom>
