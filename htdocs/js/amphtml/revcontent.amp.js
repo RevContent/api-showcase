@@ -191,16 +191,16 @@
     RevAMP.prototype.renderNative = function(ads){
         var self = this;
         self.createAMPDocument();
-        var adRow = '<div class="rc-amp-row" data-row="1"></div>';
+        var adRow = '<div class="rc-amp-row" data-rows="' + self.api.dimensions.rows + '" data-cols="' + self.api.dimensions.cols + '"></div>';
         self.rcjsload.insertAdjacentHTML('beforeend', adRow);
         var adMarkup = '';
         for(var a =0; a < ads.length; a++){
-            adMarkup = '<div class="rc-amp-ad-item">';
+            adMarkup = '<div class="rc-amp-ad-item"><div class="rc-amp-ad-wrapper">';
             adMarkup += '<a href="' + ads[a].url + '" class="rc-cta" target="_blank">';
             adMarkup += self.generateAMPImage(ads[a].image, 239, 274, ads[a].headline, "responsive");
             adMarkup += '<h2 class="rc-headline">' + ads[a].headline + '</h2>'
             adMarkup += '</a>';
-            adMarkup += '</div>';
+            adMarkup += '</div></div>';
             self.rcjsload.querySelector('.rc-amp-row').insertAdjacentHTML('beforeend', adMarkup);
         };
     };
@@ -219,9 +219,8 @@
     RevAMP.prototype.createAMPStyles = function () {
         var self = this;
         self.styles = document.createElement("style");
-        self.styles.setAttribute("amp-custom");
+        self.styles.setAttribute("amp-custom","");
         var cssBaseStyles = `
-        <style amp-custom>
         @font-face {
             font-family: "Tangerine";
             src: url("https://fonts.googleapis.com/css?family=Tangerine");
@@ -240,6 +239,11 @@
             text-decoration: none;
             outline: none;
             font-family: "Tangerine", sans-serif;
+            color: #000000;
+
+        }
+        .rc-cta:hover {
+            text-decoration: underline;
         }
 
         .rc-amp-ad-item {
@@ -248,9 +252,22 @@
 
         .rc-headline {
             font-family: "Tangerine", sans-serif;
+            font-size: 16px;
         }
 
-        </style>`;
+        @media screen and (min-width: 640px) {
+            .rc-amp-row[data-rows="4"] .rc-amp-ad-item {
+                width: 25%;
+                float: left;
+            }
+            .rc-amp-row[data-rows="4"] .rc-amp-ad-item .rc-amp-ad-wrapper {
+                padding-right: 10px;
+            }
+            .rc-amp-row[data-rows="4"] .rc-amp-ad-item:last-child  .rc-amp-ad-wrapper {
+                padding-right: 0;
+            }
+        }
+        `;
         var cssStyles = cssBaseStyles + ' ' + '/* inject:css *//* endinject */';
         self.styles.insertAdjacentHTML('afterbegin', cssStyles);
         document.body.appendChild(self.styles);
