@@ -258,19 +258,37 @@
 
         .rc-headline {
             font-family: "Tangerine", sans-serif;
-            font-size: 16px;
+            font-size: 12px;
         }
 
-        @media screen and (min-width: 640px) {
+        @media screen and (min-width: 568px) {
+            .rc-amp-row[data-rows="2"] .rc-amp-ad-item {
+                width: 50%;
+                float: left;
+            }
+            .rc-amp-row[data-rows="3"] .rc-amp-ad-item {
+                width: 33.3333333333%;
+                float: left;
+            }
             .rc-amp-row[data-rows="4"] .rc-amp-ad-item {
                 width: 25%;
                 float: left;
             }
-            .rc-amp-row[data-rows="4"] .rc-amp-ad-item .rc-amp-ad-wrapper {
+            .rc-amp-row .rc-amp-ad-item .rc-amp-ad-wrapper {
                 padding-right: 10px;
             }
-            .rc-amp-row[data-rows="4"] .rc-amp-ad-item:last-child  .rc-amp-ad-wrapper {
+            .rc-amp-row .rc-amp-ad-item:last-child  .rc-amp-ad-wrapper {
                 padding-right: 0;
+            }
+            .rc-headline {
+                font-family: "Tangerine", sans-serif;
+                font-size: 14px;
+            }
+        }
+
+        @media screen and (min-width: 732px) {
+            .rc-headline {
+                font-size: 14px;
             }
         }
         `;
