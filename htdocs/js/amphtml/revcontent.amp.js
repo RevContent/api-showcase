@@ -39,6 +39,12 @@
             useJSONP: true,
             JSONPCallbackName: 'revcontentAds',
             JSONPCallback: '',
+            ads: {
+                size: {
+                    width: !isNaN(self.data.adxw) ? self.data.adxw : 239,
+                    height: !isNaN(self.data.adxh) ? self.data.adxh : 274,
+                }
+            }
         };
     };
 
@@ -142,7 +148,7 @@
             self.api.parameters.push("pub_id=" + self.api.publisher);
             self.api.parameters.push("widget_id=" + self.api.widget);
             self.api.parameters.push("domain=" + self.api.domain);
-            self.api.parameters.push("sponsored_count=" + (self.api.dimensions.rows * self.api.dimensions.cols) + "&internal_count=0&img_h=274&img_w=239&api_source=amp");
+            self.api.parameters.push("sponsored_count=" + (self.api.dimensions.rows * self.api.dimensions.cols) + "&internal_count=0&img_h=" + self.api.ads.size.height + "&img_w=" + self.api.ads.size.width + "&api_source=amp");
             
             if(self.api.useJSONP){
                 self.api.JSONPCallback = self.api.JSONPCallbackName ? self.api.JSONPCallbackName : ('success' + self.getTimestamp());
@@ -197,7 +203,7 @@
         for(var a =0; a < ads.length; a++){
             adMarkup = '<div class="rc-amp-ad-item"><div class="rc-amp-ad-wrapper">';
             adMarkup += '<a href="' + ads[a].url + '" class="rc-cta" target="_blank">';
-            adMarkup += self.generateAMPImage(ads[a].image, 239, 274, ads[a].headline, "responsive");
+            adMarkup += self.generateAMPImage(ads[a].image, self.api.ads.size.width, self.api.ads.size.height, ads[a].headline, "responsive");
             adMarkup += '<h2 class="rc-headline">' + ads[a].headline + '</h2>'
             adMarkup += '</a>';
             adMarkup += '</div></div>';
