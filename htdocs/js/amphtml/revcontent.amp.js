@@ -52,8 +52,9 @@
     RevAMP.prototype.createWrapper = function () {
         var self = this;
         self.rcjsload = document.createElement("div");
-        self.rcjsload.id = self.getWrapperId();
-        document.body.appendChild(self.rcjsload);
+        self.rcjsload.id = self.getWrapperId();        
+        //self.rcjsload.setAttribute("style", "");
+        document.body.querySelector('div').appendChild(self.rcjsload);
         return self;
     };
 
@@ -95,6 +96,24 @@
                     self.adjustHeight();
                 }, timeout);
             });
+            window.addEventListener('orientationchage', function (event) {
+                var orientatioHandler = function(e){
+                    self.adjustHeight();
+                    window.removeEventListener('resize', orientationHandler);
+                }
+                window.addEventListener('resize', orientationHandler);
+            });
+
+            window.context.onResizeDenied(function() {
+                document.body.classList.remove("resize-success");
+                document.body.classList.add("resize-denied");
+                // Queue another resize call here...
+            });       
+            window.context.onResizeSuccess(function() {
+                document.body.classList.remove("resize-denied");
+                document.body.classList.add("resize-success");
+            }); 
+
         }
 
         return self;
@@ -113,10 +132,12 @@
             document.body.offsetHeight, document.documentElement.offsetHeight,
             document.body.clientHeight, document.documentElement.clientHeight
         );
-        if(self.widgetEl.clientHeight > 0 && frameHeight > self.widgetEl.clientHeight) {
-            frameHeight = self.widgetEl.clientHeight;
+
+        if(self.widgetEl.offsetHeight > 0 && frameHeight > self.widgetEl.offsetHeight) {
+            frameHeight = self.widgetEl.offsetHeight;
         } 
-        console.log("AdReszing to WIDTH =", document.clientWidth, "HEIGHT = ", frameHeight );
+
+        //console.log("AdReszing to WIDTH =", document.clientWidth, "HEIGHT = ", frameHeight);
         window.context.requestResize(document.clientWidth, Math.max(50, providerHeight + frameHeight));
     };
 
@@ -141,7 +162,8 @@
         window.context.reportRenderedEntityIdentifier(self.ENTITY_ID);
         self.stopObservingIntersection = window.context.observeIntersection(function(changes) {
             changes.forEach(function(c) {
-                setTimeout(function(){
+                clearTimeout(self.ioTimeout);
+                self.ioTimeout = setTimeout(function(){
                     self.adjustHeight();
                 }, 125);
             });
@@ -207,9 +229,13 @@
     RevAMP.prototype.renderNative = function(ads){
         var self = this;
         self.createAMPDocument();
+        var adPanel = '<div class="rc-amp-panel rc-amp-panel-' + self.data.id + '"></div>';
         var adRow = '<div class="rc-amp-row" data-rows="' + self.api.dimensions.rows + '" data-cols="' + self.api.dimensions.cols + '"></div>';
-        self.rcjsload.insertAdjacentHTML('beforeend', adRow);
         var adMarkup = '';
+
+        self.rcjsload.insertAdjacentHTML('beforeend', adPanel);
+        self.rcjsload.querySelector('.rc-amp-panel').insertAdjacentHTML('beforeend', adRow);
+       
         for(var a =0; a < ads.length; a++){
             adMarkup = '<div class="rc-amp-ad-item"><div class="rc-amp-ad-wrapper">';
             adMarkup += '<a href="' + ads[a].url + '" class="rc-cta" target="_blank">';
@@ -220,6 +246,7 @@
             adMarkup += '</div></div>';
             self.rcjsload.querySelector('.rc-amp-row').insertAdjacentHTML('beforeend', adMarkup);
         };
+        self.rcjsload.querySelector('.rc-amp-row').insertAdjacentHTML('beforeend', '<div style="clear:both">&nbsp;</div>');
     };
 
     RevAMP.prototype.generateAMPImage = function(src, width, height, alt, layout){
