@@ -23,6 +23,7 @@
         self.serveParameters = null;
         self.testing = ((self.data.testing !== undefined) ? true : false);
         self.useAutoSizer = ((self.data.sizer !== undefined && self.data.sizer != "true") ? false : true);
+        self.isObserving = false;
         self.ENTITY_ID = "rev2-wid-" + self.data.id.toString();
         self.api = {
             enabled: ((self.data.api !== undefined) ? true : false),
@@ -78,6 +79,22 @@
         return self;
     };
 
+    RevAMP.prototype.startObservingIntersection = function(){
+        var self = this;
+        self.isObserving = true;
+        self.stopObservingIntersection = window.context.observeIntersection(function(changes) {
+            changes.forEach(function(c) {
+                console.log(c);
+                clearTimeout(self.ioTimeout);
+                //self.oiTimeout = setTimeout(function(){
+                    if(c.intersectionRatio == 0){
+                        self.adjustHeight();
+                    }
+                //}, 125);
+            });
+        });
+    };
+
     RevAMP.prototype.renderStart = function (timeout) {
 
         var self = this;
@@ -88,17 +105,21 @@
 
         if(self.useAutoSizer) {
             self.adjustHeight();
-            setTimeout(function () {
-                self.adjustHeight();
-            }, timeout);
+            //setTimeout(function () {
+            //    self.adjustHeight();
+            //}, timeout);
             window.addEventListener('resize', function (event) {
-                setTimeout(function () {
-                    self.adjustHeight();
-                }, timeout);
+                //setTimeout(function () {
+                    //self.adjustHeight();
+                    if(!self.isObserving){
+                        self.startObservingIntersection();
+                    }
+                //},  timeout);
             });
             window.addEventListener('orientationchage', function (event) {
-                var orientatioHandler = function(e){
-                    self.adjustHeight();
+                var orientationHandler = function(e){
+                    //self.adjustHeight();
+                    self.startObservingIntersection();
                     window.removeEventListener('resize', orientationHandler);
                 }
                 window.addEventListener('resize', orientationHandler);
@@ -112,6 +133,8 @@
             window.context.onResizeSuccess(function() {
                 document.body.classList.remove("resize-denied");
                 document.body.classList.add("resize-success");
+                self.stopObservingIntersection();
+                self.isObserving = false;
             }); 
 
         }
@@ -146,6 +169,7 @@
         setTimeout(function(){
             if(typeof RevContentLoader !== "object") {
                 self.stopObservingIntersection();
+                self.isObserving = false;
                 window.context.noContentAvailable();
             }
         }, 2 * (60 * 1000));
@@ -160,14 +184,7 @@
         self.fetchAds();
         self.noContentAvailable();
         window.context.reportRenderedEntityIdentifier(self.ENTITY_ID);
-        self.stopObservingIntersection = window.context.observeIntersection(function(changes) {
-            changes.forEach(function(c) {
-                clearTimeout(self.ioTimeout);
-                self.ioTimeout = setTimeout(function(){
-                    self.adjustHeight();
-                }, 125);
-            });
-        });
+        self.startObservingIntersection();
         return self;
     };
 
