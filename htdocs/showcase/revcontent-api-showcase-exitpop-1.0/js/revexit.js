@@ -553,7 +553,8 @@
             'img_h':   274,
             'img_w': 239,
             'api_source': 'exit',
-            'referer': getReferer()
+            'referer': getReferer(),
+            'viewed': true
         };
 
         var subscribe_ajax = $.ajax({
