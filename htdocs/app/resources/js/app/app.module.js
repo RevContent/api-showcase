@@ -4,6 +4,7 @@ var app = angular.module('app', [
     'ngAnimate',
     'ngMaterial',
     'ngMessages',
+    'ngSanitize',
     'hljs',
     'ng.deviceDetector',
     'ngStorage'

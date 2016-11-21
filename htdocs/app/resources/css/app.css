@@ -178,6 +178,10 @@ code {
   font-weight: 800;
 }
 
+.docs .md-title {
+  font-weight: 400;
+}
+
 .md-title, .md-toolbar-tools {
   font-size: 2rem;
   font-weight: 500;
@@ -666,4 +670,14 @@ body.os-windows-phone.browser-ie.md-dialog-is-showing md-dialog.md-transition-in
 
 .demo-description table {
   width: auto;
+}
+
+.widget-docs-list a.md-button {
+  margin: 0;
+}
+
+.widget-docs-list .md-avatar {
+  border-radius: 0 !important;
+  width: 40px  !important;
+  height: 30px  !important;
 }
