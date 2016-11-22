@@ -12,8 +12,8 @@ The Accelerated Mobile Pages (AMP) Project is an open source initiative that emb
         data-ssl="true"
         data-id="2723">
 
-    <div placeholder>200 Billion Content recommendations!</div>
-    <div fallback>200 Billion Content recommendations!</div>
+    &lt;div placeholder>200 Billion Content recommendations!&lt;/div>
+    &lt;div fallback>200 Billion Content recommendations!&lt;/div>
 &lt;/amp-ad>
 ```
 
