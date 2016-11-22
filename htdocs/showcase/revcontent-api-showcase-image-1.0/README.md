@@ -37,6 +37,24 @@ your pub id
 ###widget_id(required)
 your widget id
 
+###id(required if element is not used)
+matches a div id on the page. For example to target ```&lt;div id="my-image">&lt;/div>```
+```
+id: 'my-image'
+```
+
+###selector(required if id or element is not used)
+query selector used to target multiple elements
+```
+selector: false
+```
+
+###element(required if id or selector is not used)
+A jQuery wrapped element, will be used instead of ```id``` option
+```
+element: false
+```
+
 ###ad_border
 Display a border around each ad
 ```
@@ -54,7 +72,7 @@ devices: [
 ```
 
 ###header
-Text displayed above ads. Wrapped inside ```<h2 class="rev-header">```.
+Text displayed above ads. Wrapped inside ```&lt;h2 class="rev-header">```.
 ```
 header: 'Trending'
 ```
@@ -114,40 +132,6 @@ Use an alternate API url
 url: 'https://trends.revcontent.com/api/v1/'
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ###buttons
 Button config. Enable/disable forward/back, size, position(```dots```, ```inside```, ```outside```, ```dual```), and style(```default```, ```fly-out```).
 ```
@@ -203,7 +187,7 @@ overlay: false
 ```
 
 ###overlay_icons
-Pass in custom icons where the key is the icon name and the value is the svg icon. For example ```{article_square: '<svg></svg>'}```
+Pass in custom icons where the key is the icon name and the value is the svg icon. For example ```{article_square: '&lt;svg>&lt;/svg>'}```
 ```
 overlay_icons: false
 ```

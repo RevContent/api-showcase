@@ -3,6 +3,7 @@ $headerSize: 16px;
 #rev-img {
     position: relative;
     overflow: hidden;
+    line-height:0;
 
     .rev-img-wrapper {
         transform: translateY(100%);

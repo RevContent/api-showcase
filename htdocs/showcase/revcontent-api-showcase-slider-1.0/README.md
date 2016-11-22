@@ -34,9 +34,9 @@ your pub id
 your widget id
 
 ###id(required if element is not used)
-matches a div id on the page. For example to target ```<div id="myFlicker"></div></div>```
+matches a div id on the page. For example to target ```&lt;div id="my-slider">&lt;/div>```
 ```
-id: 'myFlicker'
+id: 'my-slider'
 ```
 
 ###element(required if id is not used)
@@ -86,7 +86,7 @@ disclosure_text: 'Sponsored by Revcontent'
 ```
 
 ###header
-Text displayed above ads. Wrapped inside ```<h2 class="rev-header">```.
+Text displayed above ads. Wrapped inside ```&lt;h2 class="rev-header">```.
 ```
 header: 'Trending Now'
 ```
@@ -146,7 +146,7 @@ overlay: false
 ```
 
 ###overlay_icons
-Pass in custom icons where the key is the icon name and the value is the svg icon. For example ```{article_square: '<svg></svg>'}```
+Pass in custom icons where the key is the icon name and the value is the svg icon. For example ```{article_square: '&lt;svg>&lt;/svg>'}```
 ```
 overlay_icons: false
 ```
