@@ -66,6 +66,10 @@
     };
 
 
+    /**
+     * Create Outer DIV.wrapper
+     * -- i.e creates div#rcjsload_2ff711
+     */
     RevAMP.prototype.createWrapper = function () {
         var self = this;
         self.rcjsload = document.createElement("div");
@@ -74,11 +78,17 @@
         return self;
     };
 
+    /**
+     * Get Outer Wrapper Element.ID
+     */
     RevAMP.prototype.getWrapperId = function () {
         var self = this;
         return self.data.wrapper !== undefined ? self.data.wrapper : self.defaultWrapperId;
     };
 
+    /**
+     * Create Serve.js script (ASYNC = false)
+     */
     RevAMP.prototype.createScript = function () {
         var self = this;
         if (self.api.enabled) {
@@ -96,6 +106,14 @@
         return self;
     };
 
+    /**
+     * Viewport Observer/Handler
+     * -------------------------
+     * Callback for triggering resize requests.
+     * NOTE: As AMP only honors resizes when ads are OUTSIDE viewport scope, i.e not in the visible region,
+     * resizing is only engaged when the "Intersection Ratio" equals "0", this means user must not be viewing
+     * the ad panel when the request is received.
+     */
     RevAMP.prototype.startObservingIntersection = function () {
         var self = this;
         self.isObserving = true;
@@ -109,6 +127,12 @@
         return self;
     };
 
+    /**
+     * Startup Hooks
+     * 1. Trigger window.context.renderStart() API Call
+     * 2. Enable Auto-sizer by default and bind for "resize" and "orientationchange"
+     *
+     */
     RevAMP.prototype.renderStart = function (timeout) {
 
         var self = this;
@@ -118,10 +142,7 @@
         window.context.renderStart();
 
         if (self.useAutoSizer) {
-            //self.adjustHeight();
-            setTimeout(function () {
-                self.adjustHeight();
-            }, timeout);
+            self.adjustHeight();
             window.addEventListener('resize', function (event) {
                 if (!self.isObserving) {
                     self.startObservingIntersection();
@@ -140,6 +161,12 @@
         return self;
     };
 
+    /**
+     * Dynamic Height Adjustment
+     * -------------------------
+     * This resize handler is triggered by the intersection observer in order to set optimal height of the ad panel.
+     * NOTE: Observers are STOPPED once a successful resize request occurs, they are re-engaged automatically.
+     */
     RevAMP.prototype.adjustHeight = function () {
         var self = this;
         var providerHeight = 0;
@@ -167,6 +194,7 @@
         window.context.onResizeDenied(function () {
             // Conditionally Start Observing again...
         });
+
         window.context.onResizeSuccess(function () {
             document.body.classList.remove("resize-denied");
             document.body.classList.add("resize-success");
@@ -177,6 +205,14 @@
         return self;
     };
 
+    /**
+     * No Content Available Hook
+     * --------------------------
+     * After 2 minutes of no network activity, window.context.noContentAvailable() API is triggered, observers
+     * are also stopped.
+     *
+     * See #5234 on Gituhb - https://github.com/ampproject/amphtml/issues/5234
+     */
     RevAMP.prototype.noContentAvailable = function () {
         var self = this;
         setTimeout(function () {
@@ -190,6 +226,10 @@
         return self;
     };
 
+    /**
+     * Service INIT
+     * ----------
+     */
     RevAMP.prototype.init = function () {
         var self = this;
         self.createWrapper();
@@ -202,6 +242,19 @@
         return self;
     };
 
+    /**
+     * Native API Support
+     * ------------------
+     * data-api="true" must be set to allow API Access
+     * Required amp-ad tag parameters are:
+     *
+     * data-api="true"
+     * data-key="API_KEY"
+     * data-publisher="PUBLISHER_ID"
+     * data-domain="DOMAIN"
+     * data-rows="1"
+     * data-cols="4"
+     */
     RevAMP.prototype.fetchAds = function () {
         var self = this;
         if (self.api.enabled && self.validateApiSettings()) {
@@ -245,6 +298,9 @@
         return self;
     };
 
+    /**
+     * Validate API Settings
+     */
     RevAMP.prototype.validateApiSettings = function () {
         var self = this;
         var errs = [];
@@ -257,6 +313,11 @@
         return isValid;
     };
 
+    /**
+     * Render Native AMP Creatives
+     * ---------------------------
+     * Generate AMP-IMG Elements for improved loading.
+     */
     RevAMP.prototype.renderNative = function (ads) {
         var self = this;
         self.createAMPDocument();
@@ -282,6 +343,14 @@
         return self;
     };
 
+    /**
+     * Generate AMP Image Element
+     * @param {String} src
+     * @param {Integer} width
+     * @param {Integer} height
+     * @param {String} alt
+     * @param {String} layout
+     */
     RevAMP.prototype.generateAMPImage = function (src, width, height, alt, layout) {
         if (!layout) {
             layout = responsive;
@@ -292,12 +361,18 @@
         return '<amp-img class="rc-img" alt="' + alt + '" src="' + src + '" width="' + width + '" height="' + height + '" layout="responsive"></amp-img>';
     };
 
+    /**
+     * Create AMP Document Elements
+     */
     RevAMP.prototype.createAMPDocument = function () {
         var self = this;
         self.createAMPStyles();
         return self;
     };
 
+    /**
+     * Create AMP Styles
+     */
     RevAMP.prototype.createAMPStyles = function () {
         var self = this;
         self.styles = document.createElement("style");
@@ -310,10 +385,17 @@
         return self;
     };
 
+    /**
+     * Native API Error Handler
+     */
     RevAMP.prototype.apiError = function () {
 
     };
 
+    /**
+     * Utility: Get Timestamp
+     * @returns {*}
+     */
     RevAMP.prototype.getTimestamp = function () {
         var time = Date.now || function () {
                 return +new Date;
@@ -322,6 +404,10 @@
         return time();
     };
 
+    /**
+     * Revcontent AMP Service Instance
+     * @type {RevAMP}
+     */
     var RevcontentNetwork = new RevAMP();
     document.onreadystatechange = function () {
         if (document.readyState === "complete") {
