@@ -1,0 +1,78 @@
+@font-face {
+    font-family: "Tangerine";
+    src: url("https://fonts.googleapis.com/css?family=Tangerine");
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.rc-amp-row {
+
+}
+
+.rc-cta {
+    text-decoration: none;
+    outline: none;
+    font-family: "Tangerine", sans-serif;
+    color: #000000;
+
+}
+.rc-cta:hover {
+    text-decoration: underline;
+}
+
+.rc-amp-ad-item {
+    font-family: "Tangerine", sans-serif;
+    margin-bottom: 10px;
+}
+
+.rc-headline {
+    font-family: "Tangerine", sans-serif;
+    font-size: 16px;
+    margin: 4px 0;
+    padding: 0;
+}
+
+.rc-brand-label {
+    font-size: 8px;
+    color: #777777;
+    text-align:left;
+    clear: both;
+    display: block;
+}
+
+@media screen and (min-width: 568px) {
+    .rc-amp-row[data-rows="2"] .rc-amp-ad-item {
+        width: 50%;
+        float: left;
+    }
+    .rc-amp-row[data-rows="3"] .rc-amp-ad-item {
+        width: 33.3333333333%;
+        float: left;
+    }
+    .rc-amp-row[data-rows="4"] .rc-amp-ad-item {
+        width: 25%;
+        float: left;
+    }
+    .rc-amp-row .rc-amp-ad-item .rc-amp-ad-wrapper {
+        padding: 0 10px;
+    }
+    .rc-amp-row .rc-amp-ad-item:last-child  .rc-amp-ad-wrapper {
+
+    }
+
+    .rc-amp-ad-item {
+        margin-bottom: 0;
+    }
+
+    .rc-headline {
+        font-family: "Tangerine", sans-serif;
+        font-size: 13px;
+    }
+}
+
+@media screen and (min-width: 732px) {
+
+}

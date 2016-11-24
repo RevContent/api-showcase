@@ -29,7 +29,6 @@ gulp.task('amphtml', [], function() {
                 return file.contents.toString('utf8');
             }
         }))
-        
         .pipe(rename('revcontent.amp.bundled.js'))
         .pipe(gulp.dest('./build/amphtml'))
         .pipe(uglify({
