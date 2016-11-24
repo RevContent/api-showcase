@@ -45,6 +45,7 @@
             widget: self.data.id,
             domain: self.data.domain !== undefined ? self.data.domain : 'apiexamples.powr.com',
             testing: self.testing,
+            branding: ((self.data.branding !== undefined && self.data.branding != "true") ? false : true),
             dimensions: {
                 rows: !isNaN(self.data.rows) ? self.data.rows : 4,
                 cols: !isNaN(self.data.cols) ? self.data.cols : 1
@@ -88,6 +89,7 @@
 
     /**
      * Create Serve.js script (ASYNC = false)
+     * NOTE: When native API is requested this operation is aborted.
      */
     RevAMP.prototype.createScript = function () {
         var self = this;
@@ -132,6 +134,7 @@
      * 1. Trigger window.context.renderStart() API Call
      * 2. Enable Auto-sizer by default and bind for "resize" and "orientationchange"
      *
+     * See #5234 on Gituhb - https://github.com/ampproject/amphtml/issues/5234
      */
     RevAMP.prototype.renderStart = function (timeout) {
 
@@ -229,6 +232,7 @@
     /**
      * Service INIT
      * ----------
+     * Create Wrapper, Embed serve.js, Run startup hooks, Allow API Support, Report Entity Identifier, Start Observers
      */
     RevAMP.prototype.init = function () {
         var self = this;
@@ -334,7 +338,7 @@
             adMarkup += '<a href="' + ads[a].url + '" class="rc-cta" target="_blank">';
             adMarkup += self.generateAMPImage(ads[a].image, self.api.ads.size.width, self.api.ads.size.height, ads[a].headline, "responsive");
             adMarkup += '<h2 class="rc-headline">' + ads[a].headline + '</h2>'
-            adMarkup += '<span class="rc-brand-label">' + ads[a].brand + '</span>'
+            adMarkup += (self.api.branding ? '<span class="rc-brand-label">' + ads[a].brand + '</span>' : '')
             adMarkup += '</a>';
             adMarkup += '</div></div>';
             self.rcjsload.querySelector('.rc-amp-row').insertAdjacentHTML('beforeend', adMarkup);
