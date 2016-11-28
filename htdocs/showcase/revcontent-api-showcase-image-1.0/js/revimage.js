@@ -133,8 +133,16 @@ Author: michael@revcontent.com
             that.addCss();
             that.attachScrollEvents();
             that.imageVisible();
+            that.registerImpressions(); // register on page load
         });
     }
+
+    Item.prototype.registerImpressions = function() {
+        var that = this;
+        this.innerWidget.dataPromise.then(function() {
+            that.innerWidget.registerImpressions();
+        });
+    };
 
     /*
     reset any styles that will cause issues and cache them to be placed on the element later
@@ -296,10 +304,13 @@ Author: michael@revcontent.com
             revUtils.transformCss(that.wrapper, 'translateY(100%)');
         });
 
+        this.emitter.once('visible', function() {
+            that.innerWidget.registerView();
+        });
+
         this.emitter.on('visible', function() {
             that.showing = true;
             that.innerWidget.dataPromise.then(function() {
-                that.innerWidget.registerImpressions();
                 setTimeout(function() {
                     revUtils.transformCss(that.wrapper, 'none');
                     setTimeout(function() {
