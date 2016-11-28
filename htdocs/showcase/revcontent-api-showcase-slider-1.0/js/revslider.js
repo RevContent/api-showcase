@@ -326,7 +326,7 @@ Author: michael@revcontent.com
         this.grid.reloadItems();
         this.grid.layout();
 
-        this.updateDisplayedItems(true);
+        this.updateDisplayedItems(true, true);
     };
 
     RevSlider.prototype.transitionClass = function(transitioning) {
@@ -852,7 +852,7 @@ Author: michael@revcontent.com
                 }
                 this.page = 1;
                 this.previousPage = 1;
-                this.updateDisplayedItems(false);
+                this.updateDisplayedItems(false, false);
             }
         }
 
@@ -957,6 +957,36 @@ Author: michael@revcontent.com
          return this.serializedQueryParams;
     };
 
+    RevSlider.prototype.generateUrl = function(offset, count, empty, viewed) {
+        var url = this.options.url +
+        '?api_key=' + this.options.api_key +
+        this.getSerializedQueryParams() +
+        '&pub_id=' + this.options.pub_id +
+        '&widget_id=' + this.options.widget_id +
+        '&domain=' + this.options.domain +
+        '&api_source=' + this.options.api_source;
+
+        url +=
+        '&img_h=' + this.imageHeight +
+        '&img_w=' + this.imageWidth;
+
+        url +=
+        '&sponsored_count=' + (this.options.internal ? 0 : count) +
+        '&internal_count=' + (this.options.internal ? count : 0) +
+        '&sponsored_offset=' + (this.options.internal ? 0 : offset) +
+        '&internal_offset=' + (this.options.internal ? offset : 0);
+
+        if (empty) {
+            url += '&empty=true';
+        }
+
+        if (viewed) {
+            url += '&viewed=true';
+        }
+
+        return url;
+    }
+
     RevSlider.prototype.getData = function() {
         if (this.dataPromise) {
             return this.dataPromise;
@@ -965,15 +995,13 @@ Author: michael@revcontent.com
         var that = this;
 
         this.dataPromise = new Promise(function(resolve, reject) {
-            var sponsoredCount = that.options.pages * that.limit;
-            var url = that.options.url + '?api_key='+ that.options.api_key +'&uitm=true&img_h='+ that.imageHeight +'&img_w='+ that.imageWidth + '&pub_id='+ that.options.pub_id +'&widget_id='+ that.options.widget_id +'&domain='+ that.options.domain +'&internal_count=0'+'&sponsored_count=' + sponsoredCount;
-
-            url += that.getSerializedQueryParams();
+            // prime data - empty and not viewed
+            var url = that.generateUrl(0, (that.options.pages * that.limit), true, false);
 
             revApi.request(url, function(resp) {
                 that.data = resp;
 
-                that.updateDisplayedItems(that.options.visible);
+                that.updateDisplayedItems(that.options.visible, that.options.visible);
 
                 that.emitter.emitEvent('ready');
                 that.ready = true;
@@ -986,7 +1014,7 @@ Author: michael@revcontent.com
         });
     };
 
-    RevSlider.prototype.registerImpressions = function() {
+    RevSlider.prototype.registerImpressions = function(viewed) {
 
         if (!this.options.impression_tracker.length && this.options.beacons) {
             revApi.beacons.setPluginSource(this.options.api_source).attach();
@@ -1006,26 +1034,25 @@ Author: michael@revcontent.com
             // compress into single call
             var offset = register[0];
             var count = (register[(register.length - 1)] + 1) - offset;
+            // register impression - not empty and viewed on pagination
+            var url = this.generateUrl(offset, count, false, viewed);
 
-            var impressionsUrl = this.options.url +
-            '?api_key=' + this.options.api_key +
-            this.getSerializedQueryParams() +
-            '&pub_id=' + this.options.pub_id +
-            '&widget_id=' + this.options.widget_id +
-            '&domain=' + this.options.domain +
-            '&api_source=' + this.options.api_source;
-
-            impressionsUrl +=
-            '&sponsored_count=' + (this.options.internal ? 0 : count) +
-            '&internal_count=' + (this.options.internal ? count : 0) +
-            '&sponsored_offset=' + (this.options.internal ? 0 : offset) +
-            '&internal_offset=' + (this.options.internal ? offset : 0);
-
-            revApi.request(impressionsUrl, function() { return });
+            revApi.request(url, function() { return });
         }
     };
 
-    RevSlider.prototype.updateDisplayedItems = function(registerImpressions) {
+    RevSlider.prototype.registerView = function() {
+        if (!this.viewed) {
+            this.viewed = true;
+
+            // register a view without impressions(empty)
+            var url = this.generateUrl(0, this.limit, true, true);
+
+            revApi.request(url, function() { return });
+        }
+    };
+
+    RevSlider.prototype.updateDisplayedItems = function(registerImpressions, viewed) {
         this.oldOffset = this.offset;
 
         this.offset = ((this.page - 1) * this.limit);
@@ -1066,7 +1093,7 @@ Author: michael@revcontent.com
         }
 
         if (registerImpressions) {
-            this.registerImpressions();
+            this.registerImpressions(viewed);
         }
 
         this.grid.reloadItems();
