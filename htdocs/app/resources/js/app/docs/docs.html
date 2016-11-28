@@ -139,6 +139,18 @@
                             <td><code>0</code></td>
                             <td>The internal content item that you would like the response to start from.</td>
                         </tr>
+                        <tr>
+                            <td><code>viewed</code></td>
+                            <td><var>string</var></td>
+                            <td><code>empty</code></td>
+                            <td>Should a view be registered for the widget and creatives. See Viewability below.</td>
+                        </tr>
+                        <tr>
+                            <td><code>empty</code></td>
+                            <td><var>string</var></td>
+                            <td><code>empty</code></td>
+                            <td>Should an impression be registered for the widget and creatives. See Advanced Usage below.</td>
+                        </tr>
                     </tbody>
                     <tfoot>
                         <tr>
@@ -257,6 +269,14 @@
                 </div>
 
             </div>
+
+            <h3 class="md-headline">Viewibility</h3>
+
+            <p class="md-subhead">Views must be tracked. A view occurs when a widget or new creative comes into the users viewport.</p>
+
+            <h4 class="md-title">Viewed Parameter</h4>
+
+            <p style="margin-top:4px;">The <code>viewed</code> parameter allows a request to be made that will register a view for the widget and creatives within the limit and offset. Pass <code>viewed=true</code> to track views for a widget and its creatives. Pass <code>empty=true</code> as well if impressions should be ignored.</p>
 
             <h3 class="md-headline">Advanced Usage</h3>
 
