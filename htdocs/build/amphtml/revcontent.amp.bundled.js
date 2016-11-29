@@ -21,6 +21,10 @@
 
     'use strict';
 
+    /**
+     * Revcontent Network Ad Service (Constructor)
+     * @constructor
+     */
     var RevAMP = function () {
         var self = this;
         self.data = window.data;
@@ -81,6 +85,8 @@
      * -- i.e creates div#rcjsload_2ff711
      * NOTE: We attach to first absolute positioned DIV in the 3p/remote.html template
      * as a precaution we'll attach to document.body if this element does not exist...
+     *
+     * @returns {RevAMP}
      */
     RevAMP.prototype.createWrapper = function () {
         var self = this;
@@ -97,6 +103,7 @@
 
     /**
      * Get Outer Wrapper Element.ID
+     * @returns {String} of wrapper Dom Id
      */
     RevAMP.prototype.getWrapperId = function () {
         var self = this;
@@ -106,6 +113,8 @@
     /**
      * Create Serve.js script (ASYNC = false)
      * NOTE: When native API is requested this operation is aborted.
+     *
+     * @returns {RevAMP}
      */
     RevAMP.prototype.createScript = function () {
         var self = this;
@@ -131,6 +140,8 @@
      * NOTE: As AMP only honors resizes when ads are OUTSIDE viewport scope, i.e not in the visible region,
      * resizing is only engaged when the "Intersection Ratio" equals "0", this means user must not be viewing
      * the ad panel when the request is received.
+     *
+     * @returns {RevAMP}
      */
     RevAMP.prototype.startObservingIntersection = function () {
         var self = this;
@@ -151,6 +162,8 @@
      * 2. Enable Auto-sizer by default and bind for "resize" and "orientationchange"
      *
      * See #5234 on Github - https://github.com/ampproject/amphtml/issues/5234
+     * @param {Integer} timeout
+     * @returns {RevAMP}
      */
     RevAMP.prototype.renderStart = function (timeout) {
 
@@ -187,6 +200,7 @@
      * NOTE: Observers are STOPPED once a successful resize request occurs, they are re-engaged automatically.
      *
      * @param {Integer} specificHeight to use instead of the "frame height" from a set of compatible values...
+     * @returns {RevAMP}
      */
     RevAMP.prototype.adjustHeight = function (specificHeight) {
         var self = this;
@@ -233,6 +247,8 @@
      * are also stopped.
      *
      * See #5234 on Github - https://github.com/ampproject/amphtml/issues/5234
+     *
+     * @returns {RevAMP}
      */
     RevAMP.prototype.noContentAvailable = function () {
         var self = this;
@@ -251,6 +267,8 @@
      * Service INIT
      * ----------
      * Create Wrapper, Embed serve.js, Run startup hooks, Allow API Support, Report Entity Identifier, Start Observers
+     *
+     * @returns {RevAMP}
      */
     RevAMP.prototype.init = function () {
         var self = this;
@@ -278,6 +296,8 @@
      * data-cols="4"
      * data-adxw="320"
      * data-adxh="240"
+     *
+     * @returns {RevAMP}
      */
     RevAMP.prototype.fetchAds = function () {
         var self = this;
@@ -324,6 +344,7 @@
 
     /**
      * Validate API Settings
+     * @returns {Boolean}
      */
     RevAMP.prototype.validateApiSettings = function () {
         var self = this;
@@ -343,6 +364,7 @@
      * Generate AMP-IMG Elements for improved loading.
      *
      * @param {Object} ads collection of items from our Native API, JSON
+     * @returns {RevAMP}
      */
     RevAMP.prototype.renderNative = function (ads) {
         var self = this;
@@ -379,6 +401,7 @@
      * @param {Integer} height
      * @param {String} alt
      * @param {String} layout
+     * @returns {String}
      */
     RevAMP.prototype.generateAMPImage = function (src, width, height, alt, layout) {
         if (!layout) {
@@ -392,6 +415,7 @@
 
     /**
      * Create AMP Document Elements
+     * @returns {RevAMP}
      */
     RevAMP.prototype.createAMPDocument = function () {
         var self = this;
@@ -401,16 +425,37 @@
 
     /**
      * Create AMP Styles
+     *
+     * @returns {RevAMP}
      */
     RevAMP.prototype.createAMPStyles = function () {
         var self = this;
         self.styles = document.createElement("style");
         self.styles.setAttribute("amp-custom", "");
         var cssBaseStyles = '';
-        var cssStyles = cssBaseStyles + ' ' + '/* inject:css */.rc-cta,.rc-cta:hover{text-decoration:none}.rc-amp-ad-item,.rc-cta,.rc-headline{font-family:Roboto,sans-serif}@font-face{font-family:Roboto;src:url(https://fonts.googleapis.com/css?family=Roboto)}body{margin:0;padding:0}.rc-cta{outline:0;color:#000}.rc-amp-ad-item{margin-bottom:10px}.rc-headline{font-size:16px;margin:4px 0;padding:0;font-weight:700}.rc-brand-label{font-size:10px;color:#777;text-align:left;clear:both;display:block}@media screen and (min-width:568px){.rc-amp-row[data-rows="2"] .rc-amp-ad-item{width:50%;float:left}.rc-amp-row[data-rows="3"] .rc-amp-ad-item{width:33.3333333333%;float:left}.rc-amp-row[data-rows="4"] .rc-amp-ad-item{width:25%;float:left}.rc-amp-row .rc-amp-ad-item .rc-amp-ad-wrapper{padding:0 10px}.rc-amp-ad-item{margin-bottom:0}.rc-headline{font-family:Roboto,sans-serif;font-size:13px}}/* endinject */';
+        var cssStyles = cssBaseStyles + ' ' + '/* inject:css */.rc-cta,.rc-cta:hover{text-decoration:none}@font-face{font-family:Roboto;src:url(https://fonts.googleapis.com/css?family=Roboto)}.roboto{font-family:Roboto,sans-serif}.rc-amp-ad-item,.rc-cta,.rc-headline,body{font-family:Roboto,"Helvetica Neue",sans-serif}body{margin:0;padding:0}.rc-cta{outline:0;color:#000}.rc-amp-ad-item{margin-bottom:10px}.rc-headline{font-size:16px;margin:4px 0;padding:0;font-weight:700}.rc-brand-label{font-size:10px;color:#777;text-align:left;clear:both;display:block;font-family:"Open Sans","Helvetica Neue",Arial,Helvetica,sans-serif}@media screen and (min-width:568px){.rc-amp-row[data-rows="2"] .rc-amp-ad-item{width:50%;float:left}.rc-amp-row[data-rows="3"] .rc-amp-ad-item,.rc-amp-row[data-rows="6"] .rc-amp-ad-item{width:33.3333333333%;float:left}.rc-amp-row[data-rows="4"] .rc-amp-ad-item,.rc-amp-row[data-rows="8"] .rc-amp-ad-item{width:25%;float:left}.rc-amp-row .rc-amp-ad-item .rc-amp-ad-wrapper{padding:0 10px}.rc-amp-ad-item{margin-bottom:0}.rc-headline{font-size:13px}}/* endinject */';
         cssStyles += '   ' + self.api.cssOverrides.toString();
         self.styles.insertAdjacentHTML('afterbegin', cssStyles);
         document.head.appendChild(self.styles);
+        return self;
+    };
+
+    /**
+     * Create AMP Fonts
+     * @returns {RevAMP}
+     */
+    RevAMP.prototype.createFontTags = function(){
+        var self = this;
+        self.fonts = {};
+        self.fonts.roboto = document.createElement("style");
+        self.fonts.roboto.setAttribute("layout", "nodisplay");
+        self.fonts.roboto.setAttribute("font-family", "Roboto");
+        self.fonts.roboto.setAttribute("timeout", "2000");
+        self.fonts.roboto.setAttribute("on-error-remove-class", "unavailable-font-loading");
+        self.fonts.roboto.setAttribute("on-error-add-class", "unavailable-font-missing");
+        self.fonts.roboto.setAttribute("on-load-remove-class", "unavailable-font-loading");
+        self.fonts.roboto.setAttribute("on-load-add-class", "unavailable-font-loaded");
+        document.body.appendChild(self.fonts.roboto);
         return self;
     };
 
