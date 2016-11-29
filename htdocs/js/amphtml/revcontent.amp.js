@@ -180,9 +180,8 @@
                     self.startObservingIntersection();
                 }
             });
-            window.addEventListener('orientationchage', function (event) {
+            window.addEventListener('orientationchange', function (event) {
                 var orientationHandler = function (e) {
-                    //self.adjustHeight();
                     self.startObservingIntersection();
                     window.removeEventListener('resize', orientationHandler);
                 };
@@ -210,15 +209,24 @@
         if (self.providerEl && self.providerEl.length > 0 && self.providerEl.classList.contains('rc-text-bottom')) {
             providerHeight = self.providerEl.clientHeight;
         }
-        var frameHeight = Math.max(
-            document.body.scrollHeight, document.documentElement.scrollHeight,
-            document.body.offsetHeight, document.documentElement.offsetHeight,
-            document.body.clientHeight, document.documentElement.clientHeight
-        );
 
-        if (self.widgetEl.offsetHeight > 0 && frameHeight > self.widgetEl.offsetHeight) {
-            frameHeight = self.widgetEl.offsetHeight;
-        }
+        // Start with element's content height as optimal value
+        var frameHeight = self.widgetEl.offsetHeight;
+
+        /**
+         * Dynamic Frameheight calculations (DISABLED!!)
+         * -- could be used in the future, relying on Element.offsetHeight for now
+         * var frameHeight = Math.max(
+         *   document.body.scrollHeight, document.documentElement.scrollHeight,
+         *   document.body.offsetHeight, document.documentElement.offsetHeight,
+         *   document.body.clientHeight, document.documentElement.clientHeight
+         * );
+         *
+         * if (self.widgetEl.offsetHeight > 0 && frameHeight > self.widgetEl.offsetHeight) {
+         *  frameHeight = self.widgetEl.offsetHeight;
+         * }
+         *
+         */
 
         //clearTimeout(self.timeouts.resize);
         //self.timeouts.resize = setTimeout(function () {
