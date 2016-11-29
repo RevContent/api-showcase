@@ -1049,6 +1049,15 @@ Author: michael@revcontent.com
             var url = this.generateUrl(0, this.limit, true, true);
 
             revApi.request(url, function() { return });
+
+            var that = this;
+            // make sure we have some data
+            this.dataPromise.then(function() {
+                var anchors = that.element.querySelectorAll('.rev-ad a');
+                for (var i = 0; i < anchors.length; i++) {
+                    anchors[i].setAttribute('href', anchors[i].getAttribute('href') + '&viewed=true');
+                }
+            });
         }
     };
 
@@ -1081,7 +1090,7 @@ Author: michael@revcontent.com
                 revUtils.imageOverlay(ad.querySelectorAll('.rev-image')[0], data.content_type, this.options.overlay, this.options.overlay_position, this.options.overlay_icons);
             }
 
-            ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', ''));
+            ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', '') + (this.viewed ? '&viewed=true' : ''));
             ad.querySelectorAll('a')[0].title = data.headline;
             ad.querySelectorAll('img')[0].setAttribute('src', data.image);
             ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
