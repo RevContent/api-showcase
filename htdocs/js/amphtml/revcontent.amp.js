@@ -397,7 +397,7 @@
         var cssStyles = cssBaseStyles + ' ' + '/* inject:css *//* endinject */';
         cssStyles += '   ' + self.api.cssOverrides.toString();
         self.styles.insertAdjacentHTML('afterbegin', cssStyles);
-        document.body.appendChild(self.styles);
+        document.head.appendChild(self.styles);
         return self;
     };
 
