@@ -67,18 +67,31 @@
         self.timeouts = {
             resize: 0
         };
+        // This element should be present in the 3p/remote.html
+        // div#c , style="position:absolute;top:0;left:0;bottom:0;right:0;"
+        // IMPORTANT: Our outermost wrapper should be embedded as a child of this absolute element...
+        self.remote3p = {
+            domId: 'c'
+        };
     };
 
 
     /**
      * Create Outer DIV.wrapper
      * -- i.e creates div#rcjsload_2ff711
+     * NOTE: We attach to first absolute positioned DIV in the 3p/remote.html template
+     * as a precaution we'll attach to document.body if this element does not exist...
      */
     RevAMP.prototype.createWrapper = function () {
         var self = this;
         self.rcjsload = document.createElement("div");
         self.rcjsload.id = self.getWrapperId();
-        document.body.appendChild(self.rcjsload);
+        self.remote3p.node = document.getElementById(self.remote3p.domId);
+        if(self.remote3p.node !== undefined && self.remote3p.node !== null){
+            self.remote3p.node.appendChild(self.rcjsload);
+        } else {
+            document.body.appendChild(self.rcjsload);
+        }
         return self;
     };
 
