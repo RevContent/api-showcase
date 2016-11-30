@@ -8,6 +8,7 @@
  * @todo A4A Extension Support (Milestone 3)
  * @todo API Showcase Plugin Extensions (Milestone 4)
  * @todo Add DEBUG support
+ * @todo Additional Font support
  */
 
 ( function (window, factory) {
@@ -76,6 +77,24 @@
         // IMPORTANT: Our outermost wrapper should be embedded as a child of this absolute element...
         self.remote3p = {
             domId: 'c'
+        };
+        self.fonts = {
+            default: 'openSans',
+            selected: (self.data.font !== undefined && self.data.font.length > 0) ? self.data.font : 'openSans',
+            available: {
+                roboto: {
+                    family: 'Roboto',
+                    stylesheet: '<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">'
+                },
+                openSans: {
+                    family: 'Open Sans',
+                    stylesheet: '<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">'
+                },
+                montserrat: {
+                    family: 'Montserrat',
+                    stylesheet: '<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">'
+                }
+            }
         };
     };
 
@@ -441,29 +460,31 @@
         self.styles = document.createElement("style");
         self.styles.setAttribute("amp-custom", "");
         var cssBaseStyles = '';
-        var cssStyles = cssBaseStyles + ' ' + '/* inject:css */.rc-cta,.rc-cta:hover{text-decoration:none}@font-face{font-family:Roboto;src:url(https://fonts.googleapis.com/css?family=Roboto)}.roboto{font-family:Roboto,sans-serif}.rc-amp-ad-item,.rc-cta,.rc-headline,body{font-family:Roboto,"Helvetica Neue",sans-serif}body{margin:0;padding:0}.rc-cta{outline:0;color:#000}.rc-amp-ad-item{margin-bottom:10px}.rc-headline{font-size:16px;margin:4px 0;padding:0;font-weight:700}.rc-brand-label{font-size:10px;color:#777;text-align:left;clear:both;display:block;font-family:"Open Sans","Helvetica Neue",Arial,Helvetica,sans-serif}@media screen and (min-width:568px){.rc-amp-row[data-rows="2"] .rc-amp-ad-item{width:50%;float:left}.rc-amp-row[data-rows="3"] .rc-amp-ad-item,.rc-amp-row[data-rows="6"] .rc-amp-ad-item{width:33.3333333333%;float:left}.rc-amp-row[data-rows="4"] .rc-amp-ad-item,.rc-amp-row[data-rows="8"] .rc-amp-ad-item{width:25%;float:left}.rc-amp-row .rc-amp-ad-item .rc-amp-ad-wrapper{padding:0 10px}.rc-amp-ad-item{margin-bottom:0}.rc-headline{font-size:13px}}/* endinject */';
+        var cssStyles = cssBaseStyles + ' ' + '/* inject:css */.rc-cta,.rc-cta:hover{text-decoration:none}body{margin:0;padding:0;font-family:"Open Sans","Helvetica Neue",Arial,Helvetica,sans-serif}.rc-amp-ad-item,.rc-brand-label,.rc-cta,.rc-headline{font-family:inherit}.rc-cta{outline:0;color:#000}.rc-amp-ad-item{margin-bottom:10px}.rc-headline{font-size:16px;margin:4px 0;padding:0;font-weight:700}.rc-brand-label{font-size:10px;color:#777;text-align:left;clear:both;display:block}@media screen and (min-width:568px){.rc-amp-row[data-rows="2"] .rc-amp-ad-item{width:50%;float:left}.rc-amp-row[data-rows="3"] .rc-amp-ad-item,.rc-amp-row[data-rows="6"] .rc-amp-ad-item{width:33.3333333333%;float:left}.rc-amp-row[data-rows="4"] .rc-amp-ad-item,.rc-amp-row[data-rows="8"] .rc-amp-ad-item{width:25%;float:left}.rc-amp-row .rc-amp-ad-item .rc-amp-ad-wrapper{padding:0 10px}.rc-amp-ad-item{margin-bottom:0}.rc-headline{font-size:13px}}/* endinject */';
+        if(self.fonts.selected != self.fonts.default){
+            cssStyles += '   ' + ' body {font-family: "' + self.fonts.available[self.fonts.selected].family + '", Arial, Helvetica, sans-serif;} ';
+        }
         cssStyles += '   ' + self.api.cssOverrides.toString();
         self.styles.insertAdjacentHTML('afterbegin', cssStyles);
+        self.createFontTags();
         document.head.appendChild(self.styles);
+
         return self;
     };
 
     /**
      * Create AMP Fonts
+     * Links stylesheet for Whitelisted font providers, choices are:
+     *
+     * - data-font="openSans"     : "Open Sans" (Default)***
+     * - data-font-"roboto"       : Roboto
+     * - data-font="montserrat"   : Montserrat
+     *
      * @returns {RevAMP}
      */
     RevAMP.prototype.createFontTags = function(){
         var self = this;
-        self.fonts = {};
-        self.fonts.roboto = document.createElement("style");
-        self.fonts.roboto.setAttribute("layout", "nodisplay");
-        self.fonts.roboto.setAttribute("font-family", "Roboto");
-        self.fonts.roboto.setAttribute("timeout", "2000");
-        self.fonts.roboto.setAttribute("on-error-remove-class", "unavailable-font-loading");
-        self.fonts.roboto.setAttribute("on-error-add-class", "unavailable-font-missing");
-        self.fonts.roboto.setAttribute("on-load-remove-class", "unavailable-font-loading");
-        self.fonts.roboto.setAttribute("on-load-add-class", "unavailable-font-loaded");
-        document.body.appendChild(self.fonts.roboto);
+        document.head.insertAdjacentHTML('beforeend', self.fonts.available[self.fonts.selected].stylesheet);
         return self;
     };
 

@@ -8,6 +8,7 @@
  * @todo A4A Extension Support (Milestone 3)
  * @todo API Showcase Plugin Extensions (Milestone 4)
  * @todo Add DEBUG support
+ * @todo Additional Font support
  */
 
 ( function (window, factory) {
@@ -76,6 +77,24 @@
         // IMPORTANT: Our outermost wrapper should be embedded as a child of this absolute element...
         self.remote3p = {
             domId: 'c'
+        };
+        self.fonts = {
+            default: 'openSans',
+            selected: (self.data.font !== undefined && self.data.font.length > 0) ? self.data.font : 'openSans',
+            available: {
+                roboto: {
+                    family: 'Roboto',
+                    stylesheet: '<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">'
+                },
+                openSans: {
+                    family: 'Open Sans',
+                    stylesheet: '<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">'
+                },
+                montserrat: {
+                    family: 'Montserrat',
+                    stylesheet: '<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">'
+                }
+            }
         };
     };
 
@@ -442,28 +461,30 @@
         self.styles.setAttribute("amp-custom", "");
         var cssBaseStyles = '';
         var cssStyles = cssBaseStyles + ' ' + '/* inject:css *//* endinject */';
+        if(self.fonts.selected != self.fonts.default){
+            cssStyles += '   ' + ' body {font-family: "' + self.fonts.available[self.fonts.selected].family + '", Arial, Helvetica, sans-serif;} ';
+        }
         cssStyles += '   ' + self.api.cssOverrides.toString();
         self.styles.insertAdjacentHTML('afterbegin', cssStyles);
+        self.createFontTags();
         document.head.appendChild(self.styles);
+
         return self;
     };
 
     /**
      * Create AMP Fonts
+     * Links stylesheet for Whitelisted font providers, choices are:
+     *
+     * - data-font="openSans"     : "Open Sans" (Default)***
+     * - data-font-"roboto"       : Roboto
+     * - data-font="montserrat"   : Montserrat
+     *
      * @returns {RevAMP}
      */
     RevAMP.prototype.createFontTags = function(){
         var self = this;
-        self.fonts = {};
-        self.fonts.roboto = document.createElement("style");
-        self.fonts.roboto.setAttribute("layout", "nodisplay");
-        self.fonts.roboto.setAttribute("font-family", "Roboto");
-        self.fonts.roboto.setAttribute("timeout", "2000");
-        self.fonts.roboto.setAttribute("on-error-remove-class", "unavailable-font-loading");
-        self.fonts.roboto.setAttribute("on-error-add-class", "unavailable-font-missing");
-        self.fonts.roboto.setAttribute("on-load-remove-class", "unavailable-font-loading");
-        self.fonts.roboto.setAttribute("on-load-add-class", "unavailable-font-loaded");
-        document.body.appendChild(self.fonts.roboto);
+        document.head.insertAdjacentHTML('beforeend', self.fonts.available[self.fonts.selected].stylesheet);
         return self;
     };
 
