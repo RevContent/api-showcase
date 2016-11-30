@@ -22,13 +22,36 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
         })
         .state('docs', {
             url: "/docs",
-            sticky: true,
             views: {
                 main: {
                     templateUrl: "app/resources/js/app/docs/docs.html",
-                    controller: 'DocsCtrl'
-                },
-                sidenav: false
+                    controller: 'DocsCtrl',
+                    controllerAs: 'ctrl'
+                }
+            }
+        })
+        .state('docs_widget', {
+            // parent: 'docs',
+            url: "/docs/widget/{widget}",
+            views: {
+                main: {
+                    controller: function($state, $stateParams, $timeout, widgets) {
+                        var widget = widgets.data[$stateParams.widget];
+
+                        if (!widget) {
+                            $state.go('404', {path:  'docs/widget/' + $stateParams.widget});
+                            return false;
+                        }
+
+                        this.markdown = 'showcase/' + widget.docs;
+
+                        $timeout(function() {
+                            document.body.scrollTop = document.documentElement.scrollTop = 0;
+                        })
+                    },
+                    controllerAs: 'ctrl',
+                    templateUrl: "app/resources/js/app/docs/widget.html"
+                }
             }
         })
         .state('post', {
@@ -76,7 +99,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                     }
                 })
                 .then(function(answer) { //close
-                    previousState();
+                    // previousState();
                 }, function() { //cancel
                     previousState();
                 });

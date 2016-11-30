@@ -1,73 +1,262 @@
-# Flicker
+#RevFlicker
+
+RevFlicker is a touch enabled content carousel. Use it by placing an element along with the script and ad code definition on the page.
+
+```
+&lt;div id="rev-flicker"&gt;&lt;div&gt;
+
+&lt;script src="http://labs-cdn.revcontent.com/build/revflicker.min.js">&lt;script&gt;
+
+&lt;script&gt;
+    new RevFlicker({
+        id: 'rev-flicker',
+        api_key: 'api_key',
+        pub_id: 123,
+        widget_id: 456,
+        domain: 'mysite.com'
+    });
+&lt;/script&gt;
+```
+
+##Options
+Default values are shown.
+
+###api_key(required)
+your api key
+
+###domain(required)
+your widget domain
+
+###pub_id(required)
+your pub id
+
+###widget_id(required)
+your widget id
+
+###id(required if element is not used)
+matches a div id on the page. For example to target ```&lt;div id="my-flicker">&lt;/div>```
+```
+id: 'my-flicker'
+```
+
+###element(required if id is not used)
+A jQuery wrapped element, will be used instead of ```id``` option
+```
+element: false
+```
+
+###ad_border
+Display a border around each ad
+```
+ad_border: true
+```
+
+###css
+Additional CSS to append.
+```
+css: ''
+```
 
 
-With responsive styling and touch enabled gestures Flicker puts the fun into your content slider. You can configure the Flicker widget to show on phone, tablet and desktop and you can even decide how many units to display at various breakpoints. Include Flicker on your page and let the engagement begin!
+###devices
+Devices to show on. Options include ```phone```, ```tablet``` and ```desktop```.
+```
+devices: [
+    'phone', 
+    'tablet', 
+    'desktop'
+]
+```
 
-## How to use
+###disclosure_text
+Text to display for disclosure. This text triggers the disclosure/interests dialog on click.
+```
+disclosure_text: 'Sponsored by Revcontent'
+```
 
-Add the packaged or minified revtoaster script before the closing ```</body>``` tag
+###dots
+To show the pagination dots
+```
+dots: false
+```
 
-    <script src="js/revflicker.min.js"></script>
+###header
+Text displayed above ads. Wrapped inside ```&lt;h2 class="rev-header">```.
+```
+header: 'Trending Now'
+```
 
-Insert the proper values for your widget and set any optional options
+###headline_size
+Number of lines that the headline can take up. Ignored if ```max_headline``` is set to true.
+```
+headline_size: 2
+```
 
-    <script>
-        new RevFlicker({
-            id: 'rev-flicker',
-            api_key: 'your api_key',
-            pub_id: pub_id,
-            widget_id: widget_id,
-            domain: 'widget domain'
-        });
-    </script>
+###hide_provider
+Display the provider in the ads.
+```
+hide_provider: false
+```
 
-Add the html div to the page with matching id
+###image_ratio
+Ratio of the images. Available options include ```wide_rectangle```, ```rectangle```, ```square```.
+```
+image_ratio: (revDetect.mobile() ? 'wide_rectangle' : 'rectangle')
+```
 
-    <div id="rev-flicker"></div>
+###hide_disclosure
+Set true to not display the disclosure text.
+```
+hide_disclosure: false
+```
 
-## Optional options
+###hide_header
+Set true to not display the headerl
+```
+hide_header: false
+```
 
-**per_row** - defines how many ads are visible at various breakpoints
+###internal
+Number of internal ads to display. ```sponsored``` option is ignored and only internal ads are shown.
+```
+internal: false
+```
 
-    per_row: {
-        xxs: 1,
-        xs: 1,
-        sm: 3,
-        md: 4,
-        lg: 5,
-        xl: 6,
-        xxl: 7
-    }
+###max_headline
+Show all of the headline for all ads. No ellipsis. This option overrides ```headline_size```
+```
+max_headline: false
+```
 
-**devices** - Determines what devices the widget will be displayed on. Default is all devices
+###multipliers
+Tweak sizing relative to the ad size. Can be negative values.
+```
+{
+    line_height: 0,
+    font_size: 0,
+    margin: 0,
+    padding: 0
+}
+```
 
-    devices:  ['phone', 'tablet', 'desktop']
+###next_effect
+Allows the next/halved ad to have a slight transition.
+```
+next_effect: true
+```
 
-**header** - Header text value
+###next_width
+false
+```
+next_width: false
+```
 
-    header: 'Trending Now',
+###overlay
+Key value object where the key is the content type and the value is the icon to use. This key value will be concatenated to make up the icon name string. For example ```video: 'circle'``` will use the ```video_circle``` icon
+```
+overlay: false
+```
 
-**rev_position** - position of Revcontent link, options include ```top_right```, ```bottom_left``` and ```bottom_right```. Default is ```bottom_right``` for mobile and ```top_right``` otherwise
+###overlay_icons
+Pass in custom icons where the key is the icon name and the value is the svg icon. For example ```{article_square: '&lt;svg>&lt;/svg>'}```
+```
+overlay_icons: false
+```
 
-    rev_position:  (revDetect.mobile() ? 'bottom_right' : 'top_right'
+###overlay_position
+The position of the overlay icon. Available options include ```center```, ```top_left```, ```top_right```, ```bottom_right```, ```bottom_left```.
+```
+overlay_position: 'center'
+```
 
-**next_width** - the width of the next/halved ad
+###per_row
+Object or single value. Pass a single number to be used for every breakpoint or provide a value for each breakpoint.
+```
+per_row: {
+    xxs: 1,
+    xs: 1,
+    sm: 3,
+    md: 4,
+    lg: 5,
+    xl: 6,
+    xxl: 7
+}
+```
 
-    next_width: 60
+###query_params
+Key value object for query params to send to server. Can be multidimensional
+```
+query_params: false
+```
 
-**next_effect** - whether or not to add an effect to the next/halved ad
+###rev_position
+Position of the disclosure text if ```hide_disclosure``` is not enabled. Options include: ```'bottom_right'```, ```'top_right'```, ```'bottom_left'```.
+```
+rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right')
+```
 
-    next_effect: true
+###show_arrows
+Show paging arrows for mobile devices or desktop.
+```
+{
+    mobile: false,
+    desktop: true
+}
+```
 
-**sponsored** - number of ads to display
+###size
+Set fixed size for various measurements.
+```
+{
+    margin: false,
+    image_height: false,
+    headline_line_height: false,
+    headline_margin_top: false,
+    provider_line_height: false,
+    provider_margin_top: false,
+    provider_margin_bottom: false,
+    inner_margin: false
+}
+```
 
-    sponsored: 10
+###sponsored
+Number of sponsored ads to show. ```internal``` option overrides this value to only show internal.
+```
+sponsored: 10
+```
 
-## Building
-Gulp is used to embed css, concat and uglify the revtoaster script. To build the scripts:
-1. change directory to the revcontent-api-showcase-toaster-1.0 directory
-2. run ```npm install``` to get the gulp dependencies
-3. run ```gulp``` this will run the default task and populate the build directory
+###text_overlay
+Text will overlay the image rather than be position below it
+```
+text_overlay: false
+```
 
-## Watch
-During development it can be useful to build the files on the fly when modifications are made. To have gulp watch the ./js/revtoaster and ./css/example.css files run ```gulp watch```
+###text_right
+Text will be positioned to the right of the image
+```
+text_right: false
+```
+
+###text\_right\_height
+Value in pixels of the ad image if ```text_right``` is enabled
+```
+text_right_height: 100
+```
+
+###url
+Use an alternate API url
+```
+url: 'https://trends.revcontent.com/api/v1/'
+```
+
+###user_agent
+Pass user_agent param to API
+```
+user_agent: false
+```
+
+###user_ip
+Pass user_ip to API
+```
+user_ip: false
+```
