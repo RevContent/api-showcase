@@ -169,23 +169,28 @@
         self.dispatch("Serve.js URL has been generated! Please verify for accuracy: " + self.serveUrl);
         var rcds = document.getElementById(self.rcjsload.id);
         rcds.appendChild(self.rcel);
+        rcds.insertAdjacentHTML('afterend', '<div style="clear:both">&nbsp;</div>');
         self.dispatch("--- INJECTING SERVE.JS (Triggers load of rev2.js/rev2.css) --- ", 'warn');
         self.observers.wrapper = new MutationObserver(function(mutations) {
             self.dispatch("Setup a Mutation Observer to check for fill data to be added... ");
             mutations.forEach(function(mutation) {
-                //var panel = rcds.querySelector('.rc-uid-' + self.data.id);
-                //if(panel !== undefined && panel !== null){
-                //    self.adjustHeight(panel.scrollHeight);
-                //}
-                if(self.remote3p.node !== undefined && self.remote3p.node !== null){
-                    self.dispatch("Mutation Received!! Triggering a call for height resize with a value of: " + self.remote3p.node.scrollHeight + 'px');
-                    self.adjustHeight(self.remote3p.node.scrollHeight);
+                var panel = rcds.querySelector('.rc-uid-' + self.data.id);
+                if(panel !== undefined && panel !== null){
+                    self.dispatch("Mutation Received!! Triggering a call for height resize with a value of: " + panel.offsetHeight + 'px');
+                    self.adjustHeight(panel.offsetHeight);
                 }
+                // -- DISABLING -- the Size by the 3P Node, as it's absolute with 0,0,0,0 boundaries,
+                // it will always be too tall, preferring the panel's offsetHeight above.
+                //if(self.remote3p.node !== undefined && self.remote3p.node !== null){
+                //    self.dispatch("Mutation Received!! Triggering a call for height resize with a value of: " + self.remote3p.node.scrollHeight + 'px');
+                //    self.adjustHeight(self.remote3p.node.scrollHeight);
+                //}
             });
         });
         //self.rev2ObserverConfig = { attributes: true, childList: true, characterData: true };
         self.observers.wrapper.observe(rcds, self.observers.config);
-        self.adjustHeight(self.remote3p.node.scrollHeight);
+        // DISABLE manual height adjust here, rely on the Mutation Observer above for more accuracy...
+        //self.adjustHeight(self.remote3p.node.scrollHeight);
         return self;
     };
 
@@ -237,12 +242,17 @@
             self.adjustHeight();
             window.addEventListener('resize', function (event) {
                 self.dispatch("-- RESIZE.event -- if not already listening START OBSERVING...", 'warn');
+                self.adjustHeight();
                 if (!self.isObserving) {
                     self.startObservingIntersection();
                 }
             });
             window.addEventListener('orientationchange', function (event) {
                 self.dispatch("-- ORIENTATION-CHANGE.event -- if not already listening START OBSERVING...", 'warn');
+                setTimeout(function(){
+                    self.dispatch("Optimizing height after 125ms Delay (from previous Orientation change)", 'warn');
+                    self.adjustHeight();
+                }, 125);
                 var orientationHandler = function (e) {
                     self.startObservingIntersection();
                     window.removeEventListener('resize', orientationHandler);
