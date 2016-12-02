@@ -210,8 +210,8 @@
         self.dispatch("Starting Intersection Observer, resizes are requested only when the ratio is 0 (Ad is NOT in viewport)");
         self.stopObservingIntersection = window.context.observeIntersection(function (changes) {
             changes.forEach(function (c) {
-                if (c.intersectionRatio == 0) {
-                    self.dispatch("INTERSECTION EVENT: Ratio is at 0, requesting height resize....", 'warn');
+                if (c.intersectionRatio == 0 || c.intersectionRatio <= 0.5) {
+                    self.dispatch("INTERSECTION EVENT: Ratio is at 0 or less than or equal to 0.5, requesting height resize....", 'warn');
                     self.adjustHeight();
                 }
             });
@@ -276,6 +276,11 @@
     RevAMP.prototype.adjustHeight = function (specificHeight) {
         var self = this;
         var providerHeight = 0;
+        if(document.body.classList.contains('is-resizing')){
+            self.dispatch("-- RESIZE IN PROGRESS, SKIPPING UNTIL LAST ONE COMPLETES --", "warn");
+            return;
+        }
+        document.body.classList.add("is-resizing");
         self.dispatch("AUTO-SIZER - Starting Resize, user provided height = " + specificHeight);
         self.widgetEl = document.getElementById(self.getWrapperId());
         self.providerEl = self.widgetEl.querySelector('.rc-branding');
@@ -313,17 +318,22 @@
         window.context.onResizeDenied(function () {
             // Conditionally Start Observing again...
             self.dispatch("AUTO-SIZER - Resize was DENIED, this is expected if called too early, repeated denials indicates a real problem.", 'error');
+            document.body.classList.remove("is-resizing");
         });
 
         window.context.onResizeSuccess(function () {
             self.dispatch("AUTO-SIZER - RESIZE SUCCESS! Panel should be scaled to an optimal size of: " + self.remote3p.node.scrollHeight + 'px');
             document.body.classList.remove("resize-denied");
+            document.body.classList.remove("is-resizing");
             if(!document.body.classList.contains("resize-success")) {
                 document.body.classList.add("resize-success");
             }
-            self.stopObservingIntersection();
-            self.isObserving = false;
-            self.dispatch("AUTO-SIZER - Stopping Intersection Observers (Will be restarted automatically when triggered)");
+            // Ony stop listening for API based tags
+            if(self.api.enabled){
+                self.stopObservingIntersection();
+                self.isObserving = false;
+                self.dispatch("AUTO-SIZER - Stopping Intersection Observers (Will be restarted automatically when triggered)");
+            }
         });
 
         return self;
