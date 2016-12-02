@@ -37,7 +37,7 @@
         self.serveUrl = null;
         self.forceWidth = ((self.data.width !== undefined) ? self.data.width : undefined);
         self.defaultWrapperId = "rcjsload_2ff711";
-        self.viewportWidth = self.forceWidth || (window.outerWidth || document.documentElement.clientWidth);
+        self.viewportWidth = window.outerWidth || document.documentElement.clientWidth;
         self.rcjsload = null;
         self.rcel = null;
         self.serveParameters = null;
@@ -67,7 +67,7 @@
                     height: !isNaN(self.data.adxh) ? self.data.adxh : 274,
                 }
             },
-            cssOverrides: (self.data.css !== undefined && self.data.css.length > 0) ? self.data.css : ''
+            cssOverrides: (self.data.css !== undefined && self.data.css.length > 0) ? self.data.css.toString().trim() : ''
         };
         self.timeouts = {
             resize: 0
@@ -162,10 +162,10 @@
         self.rcel = document.createElement("script");
         self.rcel.id = 'rc_' + Math.floor(Math.random() * 1000);
         self.rcel.type = 'text/javascript';
-        self.serveParameters = '?' + (self.testing === true ? 'uitm=1&' : '') + "w=" + self.data.id + "&t=" + self.rcel.id + "&c=" + (new Date()).getTime() + "&width=" + (self.forceWidth || self.viewportWidth);
+        self.serveParameters = '?' + (self.testing === true ? 'uitm=1&' : '') + "w=" + self.data.id + "&t=" + self.rcel.id + "&c=" + (new Date()).getTime() + "&width=" + self.viewportWidth;
         self.serveUrl = self.serveProtocol + self.serveHost + self.serveScript + self.serveParameters;
         self.rcel.src = self.serveUrl;
-        self.rcel.async = false;
+        self.rcel.async = true;
         self.dispatch("Serve.js URL has been generated! Please verify for accuracy: " + self.serveUrl);
         var rcds = document.getElementById(self.rcjsload.id);
         rcds.appendChild(self.rcel);
@@ -423,7 +423,7 @@
                 };
                 self.ApiJSONScript = document.createElement('script');
                 self.ApiJSONScript.type = "text/javascript";
-                self.ApiJSONScript.async = false;
+                self.ApiJSONScript.async = true;
                 self.ApiJSONScript.src = self.api.endpoint + '?' + self.api.parameters.join('&') + '&callback=' + self.api.JSONPCallback;
                 //document.body.appendChild(self.ApiJSONScript);
                 var rcds = document.getElementById(self.rcjsload.id);
