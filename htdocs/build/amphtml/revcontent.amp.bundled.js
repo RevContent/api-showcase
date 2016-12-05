@@ -113,6 +113,9 @@
                 }
             }
         };
+        self.preload = {
+            on: true
+        };
     };
 
 
@@ -180,32 +183,24 @@
             mutations.forEach(function (mutation) {
                 var panel = rcds.querySelector('.rc-uid-' + self.data.id);
                 if (panel !== undefined && panel !== null) {
-                    //window.context.renderStart();
+                    window.context.renderStart();
                     panel.insertAdjacentHTML('afterend', '<div style="clear:both">&nbsp;</div>');
                     self.dispatch("Mutation Received!! Triggering a call for height resize with a value of: " + panel.offsetHeight + 'px');
                     self.dispatch("Begin RENDER: Firing context.renderStart() NOW! for standard amp-tag (Serve.js fill), height = " + panel.offsetHeight, "warn");
-                    var loadCreative = function (imageUrl, index, lastIndex, rcel) {
-                        self.dispatch("Preloading Creative Image Source.." + imageUrl, 'special');
-                        var creative = new Image();
-                        creative.src = imageUrl;
-                        if (index == lastIndex) {
-                            creative.onload = function () {
-                                self.dispatch("Final Image Preloaded, " + imageUrl + ", firing renderStart() and requesting resize after 250ms delay.... ", 'special');
-                                window.context.renderStart();
-                                setTimeout(function () {
-                                    //self.adjustHeight(panel.offsetHeight);
-                                    self.adjustHeight(rcel.scrollHeight);
-                                }, 250);
-                            };
-                        }
-                    };
                     if (typeof rcel == "object") {
-                        self.dispatch("Got RCEL OBJECT! Serve.js should have been loaded at this point... preparing to preload creatives!", 'important');
-                        var adPhotos = rcel.querySelectorAll('.rc-photo');
-                        for (var a = 0; a < adPhotos.length; a++) {
-                            var photo = adPhotos[a];
-                            var bgImage = photo.style["background-image"].split('"')[1];
-                            loadCreative(bgImage, a, adPhotos.length - 1, rcel);
+                        if (self.preload.on) {
+                            self.dispatch("Got RCEL OBJECT! Serve.js should have been loaded at this point... preparing to preload creatives and trigger renderStart()!!", 'important');
+                            var adPhotos = rcel.querySelectorAll('.rc-photo');
+                            if (adPhotos.length > 0) {
+                                self.preloader(adPhotos, function () {
+                                    window.context.renderStart({width: self.viewportWidth, height: rcel.scrollHeight});
+                                    // ***************
+                                    //self.adjustHeight(rcel.scrollHeight);
+                                    // ***************
+                                });
+                            } else {
+                                self.dispatch("PRELOADER: No RC-PHOTO Items have been found in the DOM!!", 'severe');
+                            }
                         }
                     }
 
@@ -317,6 +312,10 @@
                 //    window.removeEventListener('resize', orientationHandler);
                 //};
                 //window.addEventListener('resize', orientationHandler);
+            });
+            window.addEventListener('amp:visibilitychange', function(){
+                self.dispatch("AMP Visibility Change Detected! Requesting resize...", 'special');
+                self.adjustHeight();
             });
         }
 
@@ -676,6 +675,13 @@
         return time();
     };
 
+    /**
+     * Debug Dispatch (Basic logging via console.log)
+     *
+     * @param msg
+     * @param level
+     * @returns {RevAMP}
+     */
     RevAMP.prototype.dispatch = function (msg, level) {
         var self = this;
         if (!level) {
@@ -683,6 +689,64 @@
         }
         if (self.debug.on) {
             self.debug.log(msg, level);
+        }
+        return self;
+    };
+
+
+    /**
+     * Preloader for Ad Items
+     * NOTE: This Expects a collection of rc-photo elements found on a standard serve.js fill, and extracts the
+     * creative from the background-image definition.
+     *
+     * @param images collection of rc-photo items
+     * @param callback to execute once last creative loads...
+     * @param rawStack if set this means a raw array of images are provided, no bg extraction required
+     * @returns {RevAMP}
+     * @todo    Research the implications of preloading with respect to CDN hit metrics
+     */
+    RevAMP.prototype.preloader = function (images, callback, rawStack) {
+        var self = this;
+        if (!rawStack) {
+            rawStack = false;
+        }
+        for (var a = 0; a < images.length; a++) {
+            var photo = images[a];
+            var imageUrl = '';
+            if (!rawStack) {
+                imageUrl = photo;
+            } else {
+                imageUrl = photo.style["background-image"].split('"')[1];
+            }
+            self.loadCreative(imageUrl, a, images.length - 1, callback);
+        }
+        return self;
+    };
+
+    /**
+     * Preloader: Load Creative
+     * NOTE: The callback function is executed only once the final creative has loaded (After hardset 250ms delay).
+     *
+     * @param imageUrl   Image URL to preload
+     * @param index      current image Index
+     * @param lastIndex  last image Index
+     * @returns {RevAMP}
+     */
+    RevAMP.prototype.loadCreative = function (imageUrl, index, lastIndex) {
+        var self = this;
+        self.dispatch("Preloading Creative Image Source from CDN.." + imageUrl, 'special');
+        var creative = new Image();
+        creative.src = imageUrl;
+        if (index == lastIndex) {
+            creative.onload = function () {
+                self.dispatch("Final Image Preloaded, " + imageUrl + ", firing callback after 250ms delay.... ", 'special');
+                setTimeout(function () {
+                    if (typeof callback == "function") {
+                        self.dispatch("PRELOADER Callback Executing NOW!", 'special');
+                        callback();
+                    }
+                }, 250);
+            };
         }
         return self;
     };
