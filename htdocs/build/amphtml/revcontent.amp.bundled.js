@@ -68,7 +68,10 @@
                     height: !isNaN(self.data.adxh) ? self.data.adxh : 274,
                 }
             },
-            cssOverrides: (self.data.css !== undefined && self.data.css.length > 0) ? self.data.css.toString().trim() : ''
+            cssOverrides: (self.data.css !== undefined && self.data.css.length > 0) ? self.data.css.toString().trim() : '',
+            amp: {
+                useAmpImage: true
+            }
         };
         self.timeouts = {
             resize: 0,
@@ -115,6 +118,9 @@
         };
         self.preload = {
             on: true
+        };
+        self.branding = {
+            sponsorText: 'Ads by Revcontent'
         };
     };
 
@@ -176,6 +182,8 @@
         self.dispatch("Serve.js URL has been generated! Please verify for accuracy: " + self.serveUrl);
         var rcds = document.getElementById(self.rcjsload.id);
         rcds.appendChild(self.rcel);
+        self.dispatch("Triggering renderStart with NO size payload (height adjustment will follow)");
+        window.context.renderStart();
         //rcds.insertAdjacentHTML('afterend', '<div style="clear:both">&nbsp;</div>');
         self.dispatch("--- INJECTING SERVE.JS (Triggers load of rev2.js/rev2.css) --- ", 'warn');
         self.observers.wrapper = new MutationObserver(function (mutations) {
@@ -183,7 +191,7 @@
             mutations.forEach(function (mutation) {
                 var panel = rcds.querySelector('.rc-uid-' + self.data.id);
                 if (panel !== undefined && panel !== null) {
-                    window.context.renderStart();
+                    //window.context.renderStart();
                     panel.insertAdjacentHTML('afterend', '<div style="clear:both">&nbsp;</div>');
                     self.dispatch("Mutation Received!! Triggering a call for height resize with a value of: " + panel.offsetHeight + 'px');
                     self.dispatch("Begin RENDER: Firing context.renderStart() NOW! for standard amp-tag (Serve.js fill), height = " + panel.offsetHeight, "warn");
@@ -193,9 +201,9 @@
                             var adPhotos = rcel.querySelectorAll('.rc-photo');
                             if (adPhotos.length > 0) {
                                 self.preloader(adPhotos, function () {
-                                    window.context.renderStart({width: self.viewportWidth, height: rcel.scrollHeight});
+                                    // window.context.renderStart({width: self.viewportWidth, height: rcel.scrollHeight});
                                     // ***************
-                                    //self.adjustHeight(rcel.scrollHeight);
+                                    self.adjustHeight(rcel.scrollHeight);
                                     // ***************
                                 });
                             } else {
@@ -376,7 +384,7 @@
         //clearTimeout(self.timeouts.resize);
         //self.timeouts.resize = setTimeout(function () {
         // -- DISABLE Timeoout in order to avoid losing scope or causing conflicts with the sizing rules...
-        window.context.requestResize(document.clientWidth, (!isNaN(specificHeight) ? specificHeight : adHeight));
+        window.context.requestResize(self.viewportWidth, (!isNaN(specificHeight) ? specificHeight : adHeight));
         self.dispatch("AUTO-SIZER - Final API Call for resize: window.context.requestResize(" + document.clientWidth + "," + (!isNaN(specificHeight) ? specificHeight : Math.max(50, providerHeight + frameHeight)));
         //}, 125);
 
@@ -554,17 +562,23 @@
         var self = this;
         self.createAMPDocument();
         var adPanel = '<div class="rc-amp-panel rc-amp-panel-' + self.data.id + '"></div>';
+        var adSponsor = '<span class="rc-sponsored-by">' + self.branding.sponsorText + '</span>';
         var adRow = '<div class="rc-amp-row" data-rows="' + self.api.dimensions.rows + '" data-cols="' + self.api.dimensions.cols + '"></div>';
         self.rcjsload.insertAdjacentHTML('beforeend', adRow);
         var adMarkup = '';
 
         self.rcjsload.insertAdjacentHTML('beforeend', adPanel);
+        self.rcjsload.insertAdjacentHTML('afterbegin', adSponsor);
         self.rcjsload.querySelector('.rc-amp-panel').insertAdjacentHTML('beforeend', adRow);
 
         for (var a = 0; a < ads.length; a++) {
             adMarkup = '<div class="rc-amp-ad-item"><div class="rc-amp-ad-wrapper">';
             adMarkup += '<a href="' + ads[a].url + '" class="rc-cta" target="_blank">';
-            adMarkup += self.generateAMPImage(ads[a].image, self.api.ads.size.width, self.api.ads.size.height, ads[a].headline, "responsive");
+            if(self.api.amp.useAmpImage) {
+                adMarkup += self.generateAMPImage(ads[a].image, self.api.ads.size.width, self.api.ads.size.height, ads[a].headline, "responsive");
+            } else {
+                adMarkup += self.generateHtmlImage(ads[a].image, self.api.ads.size.width, self.api.ads.size.height, ads[a].headline);
+            }
             adMarkup += '<h2 class="rc-headline">' + ads[a].headline + '</h2>';
             adMarkup += (self.api.branding ? '<span class="rc-brand-label">' + ads[a].brand + '</span>' : '');
             adMarkup += '</a>';
@@ -577,7 +591,7 @@
         //self.adjustHeight(self.widgetEl.offsetHeight);
         self.dispatch("Begin RENDER: Firing context.renderStart() NOW! for API-based amp-tag: height = " + self.widgetEl.offsetHeight);
         window.context.renderStart({
-            width: document.clientWidth,
+            width: self.viewportWidth,
             height: self.widgetEl.offsetHeight
         });
         self.isResizing = true;
@@ -605,12 +619,29 @@
     };
 
     /**
+     * Generate HTML Image Element
+     * @param {String} src
+     * @param {Integer} width
+     * @param {Integer} height
+     * @param {String} alt
+     * @returns {String}
+     */
+    RevAMP.prototype.generateHtmlImage = function (src, width, height, alt) {
+        if (!src || src.length == 0) {
+            return;
+        }
+        return '<img class="rc-img" alt="' + alt + '" src="' + src + '" width="' + width + '" height="' + height + '" />';
+    };
+
+    /**
      * Create AMP Document Elements
      * @returns {RevAMP}
      */
     RevAMP.prototype.createAMPDocument = function () {
         var self = this;
-        self.createAMPStyles();
+        if(self.api.amp.useAmpImage){
+            self.createAMPStyles();
+        }
         return self;
     };
 
@@ -626,7 +657,7 @@
         self.styles = document.createElement("style");
         self.styles.setAttribute("amp-custom", "");
         var cssBaseStyles = '';
-        var cssStyles = cssBaseStyles + ' ' + '/* inject:css */.rc-cta,.rc-cta:hover{text-decoration:none}body{margin:0;padding:0;font-family:"Open Sans","Helvetica Neue",Arial,Helvetica,sans-serif}.rc-amp-ad-item,.rc-brand-label,.rc-cta,.rc-headline{font-family:inherit}.rc-cta{outline:0;color:#000}.rc-amp-ad-item{margin-bottom:10px}.rc-headline{font-size:16px;margin:4px 0;padding:0;font-weight:700}.rc-brand-label{font-size:10px;color:#777;text-align:left;clear:both;display:block}@media screen and (min-width:568px){.rc-amp-row[data-rows="2"] .rc-amp-ad-item{width:50%;float:left}.rc-amp-row[data-rows="3"] .rc-amp-ad-item,.rc-amp-row[data-rows="6"] .rc-amp-ad-item{width:33.3333333333%;float:left}.rc-amp-row[data-rows="4"] .rc-amp-ad-item,.rc-amp-row[data-rows="8"] .rc-amp-ad-item{width:25%;float:left}.rc-amp-row .rc-amp-ad-item .rc-amp-ad-wrapper{padding:0 10px}.rc-amp-ad-item{margin-bottom:0}.rc-headline{font-size:13px}}/* endinject */';
+        var cssStyles = cssBaseStyles + ' ' + '/* inject:css */.rc-cta,.rc-cta:hover{text-decoration:none}body{margin:0;padding:0;font-family:"Open Sans","Helvetica Neue",Arial,Helvetica,sans-serif}.rc-amp-ad-item,.rc-brand-label,.rc-cta,.rc-headline{font-family:inherit}.rc-cta{outline:0;color:#000}.rc-amp-ad-item{margin-bottom:10px}.rc-headline{font-size:16px;margin:4px 0;padding:0;font-weight:700}.rc-brand-label,.rc-sponsored-by{display:block;font-size:10px;clear:both}.rc-brand-label{color:#777;text-align:left}.rc-sponsored-by{text-align:right;color:#999;line-height:2em;font-family:"Helvetica Neue",Arial,Helvetica,sans-serif}@media screen and (min-width:568px){.rc-amp-row[data-rows="2"] .rc-amp-ad-item{width:50%;float:left}.rc-amp-row[data-rows="3"] .rc-amp-ad-item,.rc-amp-row[data-rows="6"] .rc-amp-ad-item{width:33.3333333333%;float:left}.rc-amp-row[data-rows="4"] .rc-amp-ad-item,.rc-amp-row[data-rows="8"] .rc-amp-ad-item{width:25%;float:left}.rc-amp-row .rc-amp-ad-item .rc-amp-ad-wrapper{padding:0 10px}.rc-amp-ad-item{margin-bottom:0}.rc-headline{font-size:13px}.rc-sponsored-by{padding-right:10px}}/* endinject */';
         if (self.fonts.selected != self.fonts.default) {
             cssStyles += '   ' + ' body {font-family: "' + self.fonts.available[self.fonts.selected].family + '", Arial, Helvetica, sans-serif;} ';
         }
