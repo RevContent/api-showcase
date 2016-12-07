@@ -183,7 +183,7 @@
         var rcds = document.getElementById(self.rcjsload.id);
         rcds.appendChild(self.rcel);
         self.dispatch("Triggering renderStart with NO size payload (height adjustment will follow)");
-        window.context.renderStart();
+        //window.context.renderStart();
         //rcds.insertAdjacentHTML('afterend', '<div style="clear:both">&nbsp;</div>');
         self.dispatch("--- INJECTING SERVE.JS (Triggers load of rev2.js/rev2.css) --- ", 'warn');
         self.observers.wrapper = new MutationObserver(function (mutations) {
@@ -203,7 +203,7 @@
                                 self.preloader(adPhotos, function () {
                                     // window.context.renderStart({width: self.viewportWidth, height: rcel.scrollHeight});
                                     // ***************
-                                    self.adjustHeight(rcel.scrollHeight);
+                                    self.adjustHeight(panel.scrollHeight);
                                     // ***************
                                 });
                             } else {
@@ -283,7 +283,9 @@
         // RELOCATE renderStart() to optimial locations....
         // API and non-api tags will need to invoke this at different times
         //self.dispatch("Begin RENDER: window.context.renderStart() is being called now.", "warn");
-        //window.context.renderStart();
+        if(!self.api.enabled) {
+            window.context.renderStart({width: document.clientWidth});
+        }
 
         if (self.useAutoSizer) {
             self.dispatch("Auto-Sizer is turned ON (Default setting, to disable set data-sizer=false on your amp tag)");
@@ -384,7 +386,7 @@
         //clearTimeout(self.timeouts.resize);
         //self.timeouts.resize = setTimeout(function () {
         // -- DISABLE Timeoout in order to avoid losing scope or causing conflicts with the sizing rules...
-        window.context.requestResize(self.viewportWidth, (!isNaN(specificHeight) ? specificHeight : adHeight));
+        window.context.requestResize(document.clientWidth, (!isNaN(specificHeight) ? specificHeight : adHeight));
         self.dispatch("AUTO-SIZER - Final API Call for resize: window.context.requestResize(" + document.clientWidth + "," + (!isNaN(specificHeight) ? specificHeight : Math.max(50, providerHeight + frameHeight)));
         //}, 125);
 
@@ -588,10 +590,10 @@
         self.rcjsload.querySelector('.rc-amp-row').insertAdjacentHTML('beforeend', '<div style="clear:both">&nbsp;</div>');
         // To set a reliable height for initial render we have to send a height request immediately after
         // adding these elements to the DOM.
-        //self.adjustHeight(self.widgetEl.offsetHeight);
-        self.dispatch("Begin RENDER: Firing context.renderStart() NOW! for API-based amp-tag: height = " + self.widgetEl.offsetHeight);
+        self.adjustHeight(self.widgetEl.offsetHeight);
+        //self.dispatch("Begin RENDER: Firing context.renderStart() NOW! for API-based amp-tag: height = " + self.widgetEl.offsetHeight);
         window.context.renderStart({
-            width: self.viewportWidth,
+            width: document.clientWidth,
             height: self.widgetEl.offsetHeight
         });
         self.isResizing = true;
