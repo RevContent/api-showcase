@@ -77,7 +77,9 @@ RevShifter({
         overlay: false, // pass key value object { content_type: icon }
         overlay_icons: false, // pass in custom icons or overrides
         overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
-        query_params: false
+        query_params: false,
+        user_ip: false,
+        user_agent: false
     };
 
     RevShifter = function(opts) {
@@ -196,7 +198,9 @@ RevShifter({
                 overlay: this.options.overlay, // video: rectangle, square, circle1, circle2, triangle
                 overlay_icons: this.options.overlay_icons, // pass in custom icons or overrides
                 overlay_position: this.options.overlay_position, // center, top_left, top_right, bottom_right, bottom_left
-                query_params: this.options.query_params
+                query_params: this.options.query_params,
+                user_ip: this.options.user_ip,
+                user_agent: this.options.user_agent
             });
 
             this.closeButton();

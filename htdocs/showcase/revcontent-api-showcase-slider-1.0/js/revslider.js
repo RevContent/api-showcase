@@ -96,7 +96,9 @@ Author: michael@revcontent.com
             overlay: false, // pass key value object { content_type: icon }
             overlay_icons: false, // pass in custom icons or overrides
             overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
-            query_params: false
+            query_params: false,
+            user_ip: false,
+            user_agent: false
         };
 
         // merge options
@@ -975,6 +977,9 @@ Author: michael@revcontent.com
         '&internal_count=' + (this.options.internal ? count : 0) +
         '&sponsored_offset=' + (this.options.internal ? 0 : offset) +
         '&internal_offset=' + (this.options.internal ? offset : 0);
+
+        url += this.options.user_ip ? ('&user_ip=' + this.options.user_ip) : '';
+        url += this.options.user_agent ? ('&user_agent=' + this.options.user_agent) : '';
 
         if (empty) {
             url += '&empty=true';

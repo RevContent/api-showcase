@@ -70,7 +70,9 @@ Author: michael@revcontent.com
             },
             theme: 'light',
             query_params: false,
-            selector: false
+            selector: false,
+            user_ip: false,
+            user_agent: false
         };
 
         // merge options
@@ -203,7 +205,9 @@ Author: michael@revcontent.com
             overlay: this.options.overlay, // video: rectangle, square, circle1, circle2, triangle
             overlay_icons: this.options.overlay_icons, // pass in custom icons or overrides
             overlay_position: this.options.overlay_position, // center, top_left, top_right, bottom_right, bottom_left
-            query_params: this.options.query_params
+            query_params: this.options.query_params,
+            user_ip: this.options.user_ip,
+            user_agent: this.options.user_agent
         });
     };
 
