@@ -167,7 +167,6 @@ RevShifter({
 
             this.innerWidget = new RevSlider({
                 api_source: 'shift',
-                visible: this.options.show_on_load,
                 element: [this.element],
                 url: this.options.url,
                 api_key : this.options.api_key,
@@ -199,6 +198,7 @@ RevShifter({
                 overlay_icons: this.options.overlay_icons, // pass in custom icons or overrides
                 overlay_position: this.options.overlay_position, // center, top_left, top_right, bottom_right, bottom_left
                 query_params: this.options.query_params,
+                register_views: false, // handle viewibility/prevent Slider from doing checks
                 user_ip: this.options.user_ip,
                 user_agent: this.options.user_agent
             });
@@ -364,15 +364,17 @@ RevShifter({
             this.hideTimeout = clearTimeout(this.hideTimeout);
             revUtils.removeClass(this.element, 'rev-hidden');
 
-            this.innerWidget.registerImpressions();
-
             this.visible = true;
             this.transitioning = true;
 
             revUtils.addClass(document.body, 'rev-shifter-no-transform');
 
+            if (this.showTimeout) {
+                return;
+            }
+
             var that = this;
-            setTimeout(function() {
+            this.showTimeout = setTimeout(function() {
                 if (that.doTouchSimulation()) {
                     revUtils.addClass(that.touchEnabledElement, 'rev-touch-enabled-scale-down');
                     revUtils.addClass(that.touchEnabledElement, 'rev-touch-enabled-scale');
@@ -405,6 +407,8 @@ RevShifter({
                     }, that.innerWidget.animationDuration * 1000);
                 } else {
                     that.transitioning = false;
+                    that.showTimeout = false;
+                    that.innerWidget.visible();
                 }
             }, this.options.transition_duration);
 
@@ -414,7 +418,10 @@ RevShifter({
         };
 
         this.hide = function() {
+            this.showTimeout = clearTimeout(this.showTimeout);
+
             this.visible = false;
+            this.transitioning = true;
 
             revUtils.removeClass(document.body, 'rev-shifter-no-transform');
 
@@ -430,6 +437,7 @@ RevShifter({
             this.hideTimeout = setTimeout(function() {
                 revUtils.addClass(that.element, 'rev-hidden');
                 that.hideTimeout = false;
+                that.transitioning = false;
             }, this.options.transition_duration);
         };
 

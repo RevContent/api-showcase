@@ -26,7 +26,6 @@ Author: michael@revcontent.com
         var defaults = {
             impression_tracker: [],
             api_source: 'slide',
-            visible: true,
             element: false,
             rows: {
                 xxs: 2,
@@ -97,6 +96,7 @@ Author: michael@revcontent.com
             overlay_icons: false, // pass in custom icons or overrides
             overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
             query_params: false,
+            register_views: true, // manage views or false to let someone else do it
             user_ip: false,
             user_agent: false
         };
@@ -198,10 +198,34 @@ Author: michael@revcontent.com
 
         this.initTouch();
 
+        // manage views
+        this.registerViewOnceVisible();
+        if (this.options.register_views) { // widgets that use revSlider might need to do this on their own
+            that.attachVisibleListener();
+            revUtils.checkVisible.bind(this, this.containerElement, this.visible)();
+        }
+
         this.dataPromise.then(function() {
             that.attachTouchEvents();
             that.attachButtonEvents();
         });
+    };
+
+    RevSlider.prototype.registerViewOnceVisible = function() {
+        var that = this;
+        this.emitter.once('visible', function() {
+            revUtils.removeEventListener(window, 'scroll', that.visibleListener);
+            that.registerView();
+        });
+    };
+
+    RevSlider.prototype.visible = function() {
+        this.emitter.emitEvent('visible');
+    };
+
+    RevSlider.prototype.attachVisibleListener = function() {
+        this.visibleListener = revUtils.checkVisible.bind(this, this.containerElement, this.visible);
+        revUtils.addEventListener(window, 'scroll', this.visibleListener);
     };
 
     RevSlider.prototype.createCells = function() {
@@ -328,7 +352,7 @@ Author: michael@revcontent.com
         this.grid.reloadItems();
         this.grid.layout();
 
-        this.updateDisplayedItems(true, true);
+        this.updateDisplayedItems(true);
     };
 
     RevSlider.prototype.transitionClass = function(transitioning) {
@@ -854,7 +878,7 @@ Author: michael@revcontent.com
                 }
                 this.page = 1;
                 this.previousPage = 1;
-                this.updateDisplayedItems(false, false);
+                this.updateDisplayedItems(false);
             }
         }
 
@@ -1006,7 +1030,7 @@ Author: michael@revcontent.com
             revApi.request(url, function(resp) {
                 that.data = resp;
 
-                that.updateDisplayedItems(that.options.visible, that.options.visible);
+                that.updateDisplayedItems(false);
 
                 that.emitter.emitEvent('ready');
                 that.ready = true;
@@ -1066,7 +1090,12 @@ Author: michael@revcontent.com
         }
     };
 
-    RevSlider.prototype.updateDisplayedItems = function(registerImpressions, viewed) {
+    RevSlider.prototype.updateDisplayedItems = function(viewed) {
+        if (!this.data.length) { // if no data remove the container and call it a day
+            revUtils.remove(this.containerElement);
+            return;
+        }
+
         this.oldOffset = this.offset;
 
         this.offset = ((this.page - 1) * this.limit);
@@ -1106,9 +1135,7 @@ Author: michael@revcontent.com
             this.resizeProvider(ad.querySelectorAll('.rev-provider')[0]);
         }
 
-        if (registerImpressions) {
-            this.registerImpressions(viewed);
-        }
+        this.registerImpressions(viewed);
 
         this.grid.reloadItems();
         this.grid.layout();

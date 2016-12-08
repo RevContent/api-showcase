@@ -394,6 +394,21 @@ utils.imageOverlay = function(image, content_type, overlay, position, icons) {
     revOverlay.image(image, content_type, overlay, position, icons);
 }
 
+utils.checkVisible = function(element, callback) {
+    // did the user scroll past the bottom of the element
+    if ((window.pageYOffset + window.innerHeight >= (element.getBoundingClientRect().top + document.body.scrollTop) + element.offsetHeight) &&
+        element.getBoundingClientRect().top > 0) {
+        callback.bind(this)();
+    }
+};
+
+utils.checkHidden = function(element, callback) {
+    if ((window.pageYOffset + window.innerHeight < element.getBoundingClientRect().top + document.body.scrollTop ||
+        element.getBoundingClientRect().top + element.offsetHeight <= 0)) {
+        callback.bind(this)();
+    }
+}
+
 // -----  ----- //
 return utils;
 
