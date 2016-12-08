@@ -221,16 +221,22 @@ utils.dispatchScrollbarResizeEvent = function() {
 }
 
 utils.addEventListener = function(el, eventName, handler) {
-  if (el.addEventListener) {
-    el.addEventListener(eventName, handler);
-  } else {
-    el.attachEvent('on' + eventName, function(){
-      handler.call(el);
-    });
-  }
+    if (!handler) {
+        return;
+    }
+    if (el.addEventListener) {
+        el.addEventListener(eventName, handler);
+    } else {
+        el.attachEvent('on' + eventName, function(){
+            handler.call(el);
+        });
+    }
 };
 
 utils.removeEventListener = function(el, eventName, handler) {
+    if (!handler) {
+        return;
+    }
     if (el.removeEventListener) {
         el.removeEventListener(eventName, handler);
     } else {
