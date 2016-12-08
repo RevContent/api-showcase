@@ -42,7 +42,7 @@
         self.rcel = null;
         self.serveParameters = null;
         self.testing = ((self.data.testing !== undefined) ? true : false);
-        self.useAutoSizer = ((self.data.sizer !== undefined && self.data.sizer != "true") ? false : true);
+        self.useAutoSizer = ((self.data.sizer !== undefined && self.data.sizer != "false") ? true : false);
         self.isObserving = false;
         self.isResizing = false;
         self.ENTITY_ID = "rev2-wid-" + self.data.id.toString();
@@ -70,12 +70,13 @@
             },
             cssOverrides: (self.data.css !== undefined && self.data.css.length > 0) ? self.data.css.toString().trim() : '',
             amp: {
-                useAmpImage: true
+                useAmpImage: ((self.data.ampcreative !== undefined && self.data.ampcreative != "true") ? false : true)
             }
         };
         self.timeouts = {
             resize: 0,
-            orientation: 0
+            orientation: 0,
+            denied: 0
         };
         // This element should be present in the 3p/remote.html
         // div#c , style="position:absolute;top:0;left:0;bottom:0;right:0;"
@@ -175,7 +176,7 @@
         self.rcel = document.createElement("script");
         self.rcel.id = 'rc_' + Math.floor(Math.random() * 1000);
         self.rcel.type = 'text/javascript';
-        self.serveParameters = '?' + (self.testing === true ? 'uitm=1&' : '') + "w=" + self.data.id + "&t=" + self.rcel.id + "&c=" + (new Date()).getTime() + "&width=" + self.viewportWidth;
+        self.serveParameters = '?' + (self.testing === true ? 'uitm=1&' : '') + "w=" + self.data.id + "&t=" + self.rcel.id + "&c=" + (new Date()).getTime() + "&width=" + document.clientWidth;
         self.serveUrl = self.serveProtocol + self.serveHost + self.serveScript + self.serveParameters;
         self.rcel.src = self.serveUrl;
         self.rcel.async = true;
@@ -280,16 +281,15 @@
         if (!timeout || isNaN(timeout)) {
             timeout = 3000;
         }
-        // RELOCATE renderStart() to optimial locations....
-        // API and non-api tags will need to invoke this at different times
-        //self.dispatch("Begin RENDER: window.context.renderStart() is being called now.", "warn");
+        // Trigger renderStart() Here for non-api based tags...
         if(!self.api.enabled) {
             window.context.renderStart({width: document.clientWidth});
         }
 
         if (self.useAutoSizer) {
             self.dispatch("Auto-Sizer is turned ON (Default setting, to disable set data-sizer=false on your amp tag)");
-            self.adjustHeight();
+            // --- IS THIS CALL NEEDED?
+            //self.adjustHeight();
             window.addEventListener('resize', function (event) {
                 self.dispatch("-- RESIZE.event -- if not already listening START OBSERVING...", 'warn');
                 //self.adjustHeight();
@@ -344,6 +344,9 @@
     RevAMP.prototype.adjustHeight = function (specificHeight) {
         var self = this;
         var providerHeight = 0;
+        if(!self.useAutoSizer){
+            self.dispatch("AUTO-SIZER: DISABLED, aborting sizing operations via RETURN...");
+        }
         //if(document.body.classList.contains('is-resizing')){
         //if(self.isResizing){
         //    self.dispatch("-- RESIZE IN PROGRESS, SKIPPING UNTIL LAST ONE COMPLETES --", "warn");
@@ -427,7 +430,7 @@
     /**
      * No Content Available Hook
      * --------------------------
-     * After 2 minutes of no network activity, window.context.noContentAvailable() API is triggered, observers
+     * After 5 minutes of no network activity, window.context.noContentAvailable() API is triggered, observers
      * are also stopped.
      *
      * See #5234 on Github - https://github.com/ampproject/amphtml/issues/5234
@@ -445,7 +448,7 @@
                 self.dispatch("NO CONTENT AVAILABLE AFTER ~2 MINUTES, THIS AMP TAG WILL BE COLLAPSED. CHECK API AND/OR DATA STREAM", 'severe');
                 window.context.noContentAvailable();
             }
-        }, 2 * (60 * 1000));
+        }, 5 * (60 * 1000));
         return self;
     };
 
@@ -615,7 +618,7 @@
             layout = responsive;
         }
         if (!src || src.length == 0) {
-            return;
+            return '';
         }
         return '<amp-img class="rc-img" alt="' + alt + '" src="' + src + '" width="' + width + '" height="' + height + '" layout="responsive"></amp-img>';
     };
@@ -630,7 +633,7 @@
      */
     RevAMP.prototype.generateHtmlImage = function (src, width, height, alt) {
         if (!src || src.length == 0) {
-            return;
+            return '';
         }
         return '<img class="rc-img" alt="' + alt + '" src="' + src + '" width="' + width + '" height="' + height + '" />';
     };
@@ -746,7 +749,7 @@
         for (var a = 0; a < images.length; a++) {
             var photo = images[a];
             var imageUrl = '';
-            if (!rawStack) {
+            if (rawStack) {
                 imageUrl = photo;
             } else {
                 imageUrl = photo.style["background-image"].split('"')[1];
@@ -772,13 +775,13 @@
         creative.src = imageUrl;
         if (index == lastIndex) {
             creative.onload = function () {
-                self.dispatch("Final Image Preloaded, " + imageUrl + ", firing callback after 250ms delay.... ", 'special');
-                setTimeout(function () {
+                self.dispatch("Final Image Preloaded, " + imageUrl + ", firing callback after 0ms delay.... ", 'special');
+                //setTimeout(function () {
                     if (typeof callback == "function") {
                         self.dispatch("PRELOADER Callback Executing NOW!", 'special');
                         callback();
                     }
-                }, 250);
+                //}, 250);
             };
         }
         return self;
