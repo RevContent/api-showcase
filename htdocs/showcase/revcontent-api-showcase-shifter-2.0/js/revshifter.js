@@ -218,16 +218,25 @@ RevShifter({
 
             this.setTransitionDuration();
 
-
             if (this.options.show_on_load) {
                 this.show();
             }
 
-            if (revDetect.mobile() && this.options.show_on_touch) {
-                this.attachTouchEvents();
-            } else if (this.options.show_on_scroll) {
-                this.attachScrollEvents();
-            }
+            var that = this;
+            // wait a tick or two before attaching to scroll/touch b/c of auto scroll feature in some browsers
+            setTimeout(function() {
+                if (revDetect.mobile() && that.options.show_on_touch) {
+                    that.attachTouchEvents();
+                } else if (that.options.show_on_scroll) {
+                    that.attachScrollEvents();
+                }
+                // destroy if no data
+                that.innerWidget.dataPromise.then(function(data) {
+                    if (!data.length) {
+                        that.destroy();
+                    }
+                });
+            }, 300);
         };
 
         this.setTransitionDuration = function(transitionDuration) {
@@ -289,17 +298,13 @@ RevShifter({
         this.attachScrollEvents = function() {
             // scrolling
             this.scrollListener = this.move.bind(this);
-            // wait a tick or two before doing the scroll b/c of auto scroll feature in some browsers
-            var that = this;
-            setTimeout(function() {
-                that.lastScrollTop = window.pageYOffset;
+            this.lastScrollTop = window.pageYOffset;
 
-                if (revDetect.mobile()) {
-                    revUtils.addEventListener(window, 'touchmove', that.scrollListener);
-                } else {
-                    revUtils.addEventListener(window, 'scroll', that.scrollListener);
-                }
-            }, 300);
+            if (revDetect.mobile()) {
+                revUtils.addEventListener(window, 'touchmove', this.scrollListener);
+            } else {
+                revUtils.addEventListener(window, 'scroll', this.scrollListener);
+            }
         }
 
         this.update = function(newOpts, oldOpts) {
