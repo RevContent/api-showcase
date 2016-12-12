@@ -49,6 +49,16 @@ body {
     font-family: inherit;
 }
 
+.rc-sponsored-by {
+    display: block;
+    text-align: right;
+    color: #999999;
+    font-size: 10px;
+    line-height: 2em;
+    font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+    clear: both;
+}
+
 @media screen and (min-width: 568px) {
     .rc-amp-row[data-rows="2"] .rc-amp-ad-item {
         width: 50%;
@@ -81,6 +91,10 @@ body {
 
     .rc-headline {
         font-size: 13px;
+    }
+
+    .rc-sponsored-by {
+        padding-right: 10px;
     }
 }
 

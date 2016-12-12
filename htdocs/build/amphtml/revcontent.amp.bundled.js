@@ -37,13 +37,14 @@
         self.serveUrl = null;
         self.forceWidth = ((self.data.width !== undefined) ? self.data.width : undefined);
         self.defaultWrapperId = "rcjsload_2ff711";
-        self.viewportWidth = self.forceWidth || (window.outerWidth || document.documentElement.clientWidth);
+        self.viewportWidth = window.outerWidth || document.documentElement.clientWidth;
         self.rcjsload = null;
         self.rcel = null;
         self.serveParameters = null;
         self.testing = ((self.data.testing !== undefined) ? true : false);
-        self.useAutoSizer = ((self.data.sizer !== undefined && self.data.sizer != "true") ? false : true);
+        self.useAutoSizer = ((self.data.sizer !== undefined && self.data.sizer != "false") ? true : false);
         self.isObserving = false;
+        self.isResizing = false;
         self.ENTITY_ID = "rev2-wid-" + self.data.id.toString();
         self.api = {
             enabled: ((self.data.api !== undefined) ? true : false),
@@ -67,10 +68,15 @@
                     height: !isNaN(self.data.adxh) ? self.data.adxh : 274,
                 }
             },
-            cssOverrides: (self.data.css !== undefined && self.data.css.length > 0) ? self.data.css : ''
+            cssOverrides: (self.data.css !== undefined && self.data.css.length > 0) ? self.data.css.toString().trim() : '',
+            amp: {
+                useAmpImage: ((self.data.ampcreative !== undefined && self.data.ampcreative != "true") ? false : true)
+            }
         };
         self.timeouts = {
-            resize: 0
+            resize: 0,
+            orientation: 0,
+            denied: 0
         };
         // This element should be present in the 3p/remote.html
         // div#c , style="position:absolute;top:0;left:0;bottom:0;right:0;"
@@ -96,6 +102,27 @@
                 }
             }
         };
+        self.observers = {
+            config: {attributes: true, childList: true, characterData: true},
+            wrapper: null
+        };
+        self.debug = {
+            on: (window.DEBUG || (self.data.debug !== undefined)) ? true : false,
+            log: function (msg, level) {
+                if (!level) {
+                    level = 'notice';
+                }
+                if (typeof console == "object") {
+                    console.log(level.toUpperCase() + " -  Revcontent.AMP : " + msg);
+                }
+            }
+        };
+        self.preload = {
+            on: true
+        };
+        self.branding = {
+            sponsorText: 'Ads by Revcontent'
+        };
     };
 
 
@@ -111,10 +138,14 @@
         var self = this;
         self.rcjsload = document.createElement("div");
         self.rcjsload.id = self.getWrapperId();
+        self.dispatch("Creating Outer DOM Wrapper with ID of. #" + self.rcjsload.id);
         self.remote3p.node = document.getElementById(self.remote3p.domId);
-        if(self.remote3p.node !== undefined && self.remote3p.node !== null){
+        self.dispatch("Obtained 3p-frame node element (Used for embedding): " + self.remote3p.node);
+        if (self.remote3p.node !== undefined && self.remote3p.node !== null) {
+            self.dispatch("3P Node frame found! Attaching our load wrapper now, div#" + self.rcjsload.id);
             self.remote3p.node.appendChild(self.rcjsload);
         } else {
+            self.dispatch("3P node frame element (div#c) is MISSING! attaching to body as a failsafe, please verify the 3p frame source file is functional!" + self.rcjsload.id, 'warn');
             document.body.appendChild(self.rcjsload);
         }
         return self;
@@ -137,18 +168,71 @@
      */
     RevAMP.prototype.createScript = function () {
         var self = this;
+        self.dispatch("Attempting to create Serve.js embed script.");
         if (self.api.enabled) {
+            self.dispatch("API Mode Detected!! Aborting script embed, this must mean data-api is TRUE. Rendering Native Ads instead (3p amp-img creatives), ", 'warn');
             return;
         }
         self.rcel = document.createElement("script");
         self.rcel.id = 'rc_' + Math.floor(Math.random() * 1000);
         self.rcel.type = 'text/javascript';
-        self.serveParameters = '?' + (self.testing === true ? 'uitm=1&' : '') + "w=" + self.data.id + "&t=" + self.rcel.id + "&c=" + (new Date()).getTime() + "&width=" + (self.forceWidth || self.viewportWidth);
+        self.serveParameters = '?' + (self.testing === true ? 'uitm=1&' : '') + "w=" + self.data.id + "&t=" + self.rcel.id + "&c=" + (new Date()).getTime() + "&width=" + document.clientWidth;
         self.serveUrl = self.serveProtocol + self.serveHost + self.serveScript + self.serveParameters;
         self.rcel.src = self.serveUrl;
-        self.rcel.async = false;
+        self.rcel.async = true;
+        self.dispatch("Serve.js URL has been generated! Please verify for accuracy: " + self.serveUrl);
         var rcds = document.getElementById(self.rcjsload.id);
         rcds.appendChild(self.rcel);
+        self.dispatch("Triggering renderStart with NO size payload (height adjustment will follow)");
+        //window.context.renderStart();
+        //rcds.insertAdjacentHTML('afterend', '<div style="clear:both">&nbsp;</div>');
+        self.dispatch("--- INJECTING SERVE.JS (Triggers load of rev2.js/rev2.css) --- ", 'warn');
+        self.observers.wrapper = new MutationObserver(function (mutations) {
+            self.dispatch("Setup a Mutation Observer to check for fill data to be added... ");
+            mutations.forEach(function (mutation) {
+                var panel = rcds.querySelector('.rc-uid-' + self.data.id);
+                if (panel !== undefined && panel !== null) {
+                    //window.context.renderStart();
+                    panel.insertAdjacentHTML('afterend', '<div style="clear:both">&nbsp;</div>');
+                    self.dispatch("Mutation Received!! Triggering a call for height resize with a value of: " + panel.offsetHeight + 'px');
+                    self.dispatch("Begin RENDER: Firing context.renderStart() NOW! for standard amp-tag (Serve.js fill), height = " + panel.offsetHeight, "warn");
+                    if (typeof rcel == "object") {
+                        if (self.preload.on) {
+                            self.dispatch("Got RCEL OBJECT! Serve.js should have been loaded at this point... preparing to preload creatives and trigger renderStart()!!", 'important');
+                            var adPhotos = rcel.querySelectorAll('.rc-photo');
+                            if (adPhotos.length > 0) {
+                                self.preloader(adPhotos, function () {
+                                    // window.context.renderStart({width: self.viewportWidth, height: rcel.scrollHeight});
+                                    // ***************
+                                    self.adjustHeight(panel.scrollHeight);
+                                    // ***************
+                                });
+                            } else {
+                                self.dispatch("PRELOADER: No RC-PHOTO Items have been found in the DOM!!", 'severe');
+                            }
+                        }
+                    }
+
+                    //window.context.renderStart({
+                    //    width: document.clientWidth,
+                    //    height: panel.offsetHeight
+                    //});
+                    //self.adjustHeight(panel.offsetHeight);
+                    self.isResizing = true;
+
+                }
+                // -- DISABLING -- the Size by the 3P Node, as it's absolute with 0,0,0,0 boundaries,
+                // it will always be too tall, preferring the panel's offsetHeight above.
+                //if(self.remote3p.node !== undefined && self.remote3p.node !== null){
+                //    self.dispatch("Mutation Received!! Triggering a call for height resize with a value of: " + self.remote3p.node.scrollHeight + 'px');
+                //    self.adjustHeight(self.remote3p.node.scrollHeight);
+                //}
+            });
+        });
+        //self.rev2ObserverConfig = { attributes: true, childList: true, characterData: true };
+        self.observers.wrapper.observe(rcds, self.observers.config);
+        // DISABLE manual height adjust here, rely on the Mutation Observer above for more accuracy...
+        //self.adjustHeight(self.remote3p.node.scrollHeight);
         return self;
     };
 
@@ -165,11 +249,18 @@
     RevAMP.prototype.startObservingIntersection = function () {
         var self = this;
         self.isObserving = true;
+        document.body.classList.add("is-observing-intersection");
+        self.dispatch("Starting Intersection Observer, resizes are requested only when the ratio is 0 (Ad is NOT in viewport)");
         self.stopObservingIntersection = window.context.observeIntersection(function (changes) {
             changes.forEach(function (c) {
-                if (c.intersectionRatio == 0) {
+                if (c.intersectionRatio == 0 || c.intersectionRatio <= 0.5) {
+                    self.dispatch("INTERSECTION EVENT: Ratio is at 0 or less than or equal to 0.5, requesting height resize....", 'warn');
                     self.adjustHeight();
                 }
+                /*else if (c.intersectionRatio == 1) {
+                 self.dispatch("INTERSECTION EVENT: Ratio is 1+ --- STOPPING INTERSECTION OBSERVERS!", 'warn');
+                 self.stopObservingIntersection();
+                 }*/
             });
         });
         return self;
@@ -190,21 +281,51 @@
         if (!timeout || isNaN(timeout)) {
             timeout = 3000;
         }
-        window.context.renderStart();
+        // Trigger renderStart() Here for non-api based tags...
+        if(!self.api.enabled) {
+            window.context.renderStart({width: document.clientWidth});
+        }
 
         if (self.useAutoSizer) {
-            self.adjustHeight();
+            self.dispatch("Auto-Sizer is turned ON (Default setting, to disable set data-sizer=false on your amp tag)");
+            // --- IS THIS CALL NEEDED?
+            //self.adjustHeight();
             window.addEventListener('resize', function (event) {
+                self.dispatch("-- RESIZE.event -- if not already listening START OBSERVING...", 'warn');
+                //self.adjustHeight();
                 if (!self.isObserving) {
                     self.startObservingIntersection();
                 }
+                clearTimeout(self.timeouts.resize);
+                self.timeouts.resize = setTimeout(function () {
+                    self.adjustHeight();
+                }, 250);
             });
             window.addEventListener('orientationchange', function (event) {
-                var orientationHandler = function (e) {
+                self.dispatch("-- ORIENTATION-CHANGE.event -- if not already listening START OBSERVING...", 'warn');
+                if (!self.isObserving) {
                     self.startObservingIntersection();
-                    window.removeEventListener('resize', orientationHandler);
-                };
-                window.addEventListener('resize', orientationHandler);
+                }
+                clearTimeout(self.timeouts.orientation);
+                self.timeouts.orientation = setTimeout(function () {
+                    self.adjustHeight();
+                }, 250);
+                //clearTimeout(self.timeouts.orientation);
+                //self.timeouts.orientation = setTimeout(function(){
+                //    self.dispatch("Optimizing height after 125ms Delay (from previous Orientation change)", 'warn');
+                //    self.adjustHeight();
+                //}, 125);
+                //var orientationHandler = function (e) {
+                //    if (!self.isObserving) {
+                //        self.startObservingIntersection();
+                //    }
+                //    window.removeEventListener('resize', orientationHandler);
+                //};
+                //window.addEventListener('resize', orientationHandler);
+            });
+            window.addEventListener('amp:visibilitychange', function(){
+                self.dispatch("AMP Visibility Change Detected! Requesting resize...", 'special');
+                self.adjustHeight();
             });
         }
 
@@ -223,15 +344,33 @@
     RevAMP.prototype.adjustHeight = function (specificHeight) {
         var self = this;
         var providerHeight = 0;
+        if(!self.useAutoSizer){
+            self.dispatch("AUTO-SIZER: DISABLED, aborting sizing operations via RETURN...");
+        }
+        //if(document.body.classList.contains('is-resizing')){
+        //if(self.isResizing){
+        //    self.dispatch("-- RESIZE IN PROGRESS, SKIPPING UNTIL LAST ONE COMPLETES --", "warn");
+        //    return;
+        //}
+        //document.body.classList.add("is-resizing");
+        self.isResizing = true;
+        self.dispatch("AUTO-SIZER - Starting Resize, user provided height = " + specificHeight);
         self.widgetEl = document.getElementById(self.getWrapperId());
         self.providerEl = self.widgetEl.querySelector('.rc-branding');
         if (self.providerEl && self.providerEl.length > 0 && self.providerEl.classList.contains('rc-text-bottom')) {
+            self.dispatch("AUTO-SIZER - Detected floating provider label, incorporating extra height.");
             providerHeight = self.providerEl.clientHeight;
         }
 
         // Start with element's content height as optimal value
-        var frameHeight = self.widgetEl.offsetHeight;
-
+        // For non-api tags we want scrollHeight instead
+        var frameHeight = (self.api.enabled ? self.widgetEl.offsetHeight : self.widgetEl.scrollHeight);
+        var adHeight = providerHeight + frameHeight;
+        if (adHeight == 0 || (specificHeight !== undefined && specificHeight == 0)) {
+            self.dispatch("AUTO-SIZER: ABORTING!!! Invalid Height received", "severe");
+            return;
+        }
+        self.dispatch("AUTO-SIZER - Optimal Frame height = " + frameHeight + ", the provided height value will override this value! Fallback height of 50PX is used.");
         /**
          * Dynamic Frameheight calculations (DISABLED!!)
          * -- could be used in the future, relying on Element.offsetHeight for now
@@ -250,18 +389,39 @@
         //clearTimeout(self.timeouts.resize);
         //self.timeouts.resize = setTimeout(function () {
         // -- DISABLE Timeoout in order to avoid losing scope or causing conflicts with the sizing rules...
-        window.context.requestResize(document.clientWidth, (!isNaN(specificHeight) ? specificHeight : Math.max(50, providerHeight + frameHeight)));
+        window.context.requestResize(document.clientWidth, (!isNaN(specificHeight) ? specificHeight : adHeight));
+        self.dispatch("AUTO-SIZER - Final API Call for resize: window.context.requestResize(" + document.clientWidth + "," + (!isNaN(specificHeight) ? specificHeight : Math.max(50, providerHeight + frameHeight)));
         //}, 125);
 
-        window.context.onResizeDenied(function () {
+        window.context.onResizeDenied(function (h, w) {
             // Conditionally Start Observing again...
+            self.dispatch("AUTO-SIZER - Resize was DENIED (" + w + "x" + h + "), this is expected if called too early, repeated denials indicates a real problem.", 'error');
+            //document.body.classList.remove("is-resizing");
+            document.body.classList.remove("resize-success");
+            self.isResizing = false;
         });
 
-        window.context.onResizeSuccess(function () {
+        window.context.onResizeSuccess(function (h, w) {
+            self.widgetEl = document.getElementById(self.getWrapperId());
+            self.dispatch("AUTO-SIZER - RESIZE SUCCESS! (" + w + "x" + h + ") Panel should be scaled to an requested size of: " + h + 'px, optimal size = ' + self.widgetEl.offsetHeight + 'px');
             document.body.classList.remove("resize-denied");
-            document.body.classList.add("resize-success");
-            self.stopObservingIntersection();
-            self.isObserving = false;
+            //document.body.classList.remove("is-resizing");
+            self.isResizing = false;
+            if (!document.body.classList.contains("resize-success")) {
+                document.body.classList.add("resize-success");
+            }
+            // Ony stop listening for API based tags
+            if (self.api.enabled) {
+                self.stopObservingIntersection();
+                self.isObserving = false;
+                document.body.classList.remove("is-observing-intersection");
+                self.dispatch("AUTO-SIZER - Stopping Intersection Observers (Will be restarted automatically when triggered)", 'warn');
+            }
+
+            //if(h > 0 && self.widgetEl.offsetHeight > 0 && (h < self.widgetEl.offsetHeight || h > self.widgetEl.offsetHeight)) {
+            //    self.dispatch("AUTO-SIZER - UNDERSIZE OR OVERSIZE DETECTED! Requesting another resize to the panel's offsetHeight of: "  + self.widgetEl.offsetHeight + 'px to correct the problem!', 'special');
+            //    self.adjustHeight(self.widgetEl.offsetHeight);
+            //}
         });
 
         return self;
@@ -270,7 +430,7 @@
     /**
      * No Content Available Hook
      * --------------------------
-     * After 2 minutes of no network activity, window.context.noContentAvailable() API is triggered, observers
+     * After 5 minutes of no network activity, window.context.noContentAvailable() API is triggered, observers
      * are also stopped.
      *
      * See #5234 on Github - https://github.com/ampproject/amphtml/issues/5234
@@ -283,10 +443,12 @@
             if (typeof RevContentLoader !== "object") {
                 self.stopObservingIntersection();
                 self.isObserving = false;
-                //console.log("STOP Observing...");
+                document.body.classList.add("is-observing-intersection");
+                document.body.classList.add("no-content-available");
+                self.dispatch("NO CONTENT AVAILABLE AFTER ~2 MINUTES, THIS AMP TAG WILL BE COLLAPSED. CHECK API AND/OR DATA STREAM", 'severe');
                 window.context.noContentAvailable();
             }
-        }, 2 * (60 * 1000));
+        }, 5 * (60 * 1000));
         return self;
     };
 
@@ -299,13 +461,18 @@
      */
     RevAMP.prototype.init = function () {
         var self = this;
+        self.dispatch("Starting Up...");
+        self.dispatch("Tag property configuration: ");
+        self.dispatch(self.data);
         self.createWrapper();
         self.createScript();
         self.renderStart(3000);
         self.fetchAds();
         self.noContentAvailable();
         window.context.reportRenderedEntityIdentifier(self.ENTITY_ID);
+        self.dispatch("Reporting Entity Identifier AS: " + self.ENTITY_ID);
         self.startObservingIntersection();
+        self.dispatch("Init sequence completed. ");
         return self;
     };
 
@@ -329,27 +496,30 @@
     RevAMP.prototype.fetchAds = function () {
         var self = this;
         if (self.api.enabled && self.validateApiSettings()) {
-
             self.api.parameters = [];
             self.api.parameters.push("api_key=" + self.api.key);
             self.api.parameters.push("pub_id=" + self.api.publisher);
             self.api.parameters.push("widget_id=" + self.api.widget);
             self.api.parameters.push("domain=" + self.api.domain);
             self.api.parameters.push("sponsored_count=" + (self.api.dimensions.rows * self.api.dimensions.cols) + "&internal_count=0&img_h=" + self.api.ads.size.height + "&img_w=" + self.api.ads.size.width + "&api_source=amp");
-
+            self.dispatch("API Parameters are: ", self.api.parameters.join(', '));
             if (self.api.useJSONP) {
+                self.dispatch("API Access Enabled, fetching ads using JSONP for a Native render");
+                self.dispatch("Using Endpoint: " + self.api.endpoint);
                 self.api.JSONPCallback = self.api.JSONPCallbackName ? self.api.JSONPCallbackName : ('success' + self.getTimestamp());
                 window[self.api.JSONPCallback] = function (ads) {
+                    self.dispatch("JSONP Callback is Running NOW!!", 'success');
                     self.renderNative(ads);
                 };
                 self.ApiJSONScript = document.createElement('script');
                 self.ApiJSONScript.type = "text/javascript";
-                self.ApiJSONScript.async = false;
+                self.ApiJSONScript.async = true;
                 self.ApiJSONScript.src = self.api.endpoint + '?' + self.api.parameters.join('&') + '&callback=' + self.api.JSONPCallback;
                 //document.body.appendChild(self.ApiJSONScript);
                 var rcds = document.getElementById(self.rcjsload.id);
                 rcds.appendChild(self.ApiJSONScript);
             } else {
+                self.dispatch("API Access ENABLED, fetching Ads using XHR with Native render");
                 self.api.request = new XMLHttpRequest();
                 self.api.request.open('GET', self.api.endpoint + '?' + self.api.parameters.join('&'), true);
                 self.api.request.onload = function () {
@@ -378,7 +548,7 @@
         var errs = [];
         var isValid = false;
 
-        if(errs.length == 0) {
+        if (errs.length == 0) {
             isValid = true;
         }
 
@@ -397,19 +567,25 @@
         var self = this;
         self.createAMPDocument();
         var adPanel = '<div class="rc-amp-panel rc-amp-panel-' + self.data.id + '"></div>';
+        var adSponsor = '<span class="rc-sponsored-by">' + self.branding.sponsorText + '</span>';
         var adRow = '<div class="rc-amp-row" data-rows="' + self.api.dimensions.rows + '" data-cols="' + self.api.dimensions.cols + '"></div>';
         self.rcjsload.insertAdjacentHTML('beforeend', adRow);
         var adMarkup = '';
 
         self.rcjsload.insertAdjacentHTML('beforeend', adPanel);
+        self.rcjsload.insertAdjacentHTML('afterbegin', adSponsor);
         self.rcjsload.querySelector('.rc-amp-panel').insertAdjacentHTML('beforeend', adRow);
 
         for (var a = 0; a < ads.length; a++) {
             adMarkup = '<div class="rc-amp-ad-item"><div class="rc-amp-ad-wrapper">';
             adMarkup += '<a href="' + ads[a].url + '" class="rc-cta" target="_blank">';
-            adMarkup += self.generateAMPImage(ads[a].image, self.api.ads.size.width, self.api.ads.size.height, ads[a].headline, "responsive");
-            adMarkup += '<h2 class="rc-headline">' + ads[a].headline + '</h2>'
-            adMarkup += (self.api.branding ? '<span class="rc-brand-label">' + ads[a].brand + '</span>' : '')
+            if(self.api.amp.useAmpImage) {
+                adMarkup += self.generateAMPImage(ads[a].image, self.api.ads.size.width, self.api.ads.size.height, ads[a].headline, "responsive");
+            } else {
+                adMarkup += self.generateHtmlImage(ads[a].image, self.api.ads.size.width, self.api.ads.size.height, ads[a].headline);
+            }
+            adMarkup += '<h2 class="rc-headline">' + ads[a].headline + '</h2>';
+            adMarkup += (self.api.branding ? '<span class="rc-brand-label">' + ads[a].brand + '</span>' : '');
             adMarkup += '</a>';
             adMarkup += '</div></div>';
             self.rcjsload.querySelector('.rc-amp-row').insertAdjacentHTML('beforeend', adMarkup);
@@ -418,6 +594,13 @@
         // To set a reliable height for initial render we have to send a height request immediately after
         // adding these elements to the DOM.
         self.adjustHeight(self.widgetEl.offsetHeight);
+        //self.dispatch("Begin RENDER: Firing context.renderStart() NOW! for API-based amp-tag: height = " + self.widgetEl.offsetHeight);
+        window.context.renderStart({
+            width: document.clientWidth,
+            height: self.widgetEl.offsetHeight
+        });
+        self.isResizing = true;
+        self.dispatch("Rendering Native Ads COMPLETE, requesting a resize of panel to height: " + self.widgetEl.offsetHeight, 'success');
         return self;
     };
 
@@ -435,9 +618,24 @@
             layout = responsive;
         }
         if (!src || src.length == 0) {
-            return;
+            return '';
         }
         return '<amp-img class="rc-img" alt="' + alt + '" src="' + src + '" width="' + width + '" height="' + height + '" layout="responsive"></amp-img>';
+    };
+
+    /**
+     * Generate HTML Image Element
+     * @param {String} src
+     * @param {Integer} width
+     * @param {Integer} height
+     * @param {String} alt
+     * @returns {String}
+     */
+    RevAMP.prototype.generateHtmlImage = function (src, width, height, alt) {
+        if (!src || src.length == 0) {
+            return '';
+        }
+        return '<img class="rc-img" alt="' + alt + '" src="' + src + '" width="' + width + '" height="' + height + '" />';
     };
 
     /**
@@ -446,7 +644,9 @@
      */
     RevAMP.prototype.createAMPDocument = function () {
         var self = this;
-        self.createAMPStyles();
+        if(self.api.amp.useAmpImage){
+            self.createAMPStyles();
+        }
         return self;
     };
 
@@ -457,11 +657,13 @@
      */
     RevAMP.prototype.createAMPStyles = function () {
         var self = this;
+        self.dispatch("Attaching AMP custom styles to document.");
+        self.dispatch("Using a font family selection of: " + self.fonts.available[self.fonts.selected].family);
         self.styles = document.createElement("style");
         self.styles.setAttribute("amp-custom", "");
         var cssBaseStyles = '';
-        var cssStyles = cssBaseStyles + ' ' + '/* inject:css */.rc-cta,.rc-cta:hover{text-decoration:none}body{margin:0;padding:0;font-family:"Open Sans","Helvetica Neue",Arial,Helvetica,sans-serif}.rc-amp-ad-item,.rc-brand-label,.rc-cta,.rc-headline{font-family:inherit}.rc-cta{outline:0;color:#000}.rc-amp-ad-item{margin-bottom:10px}.rc-headline{font-size:16px;margin:4px 0;padding:0;font-weight:700}.rc-brand-label{font-size:10px;color:#777;text-align:left;clear:both;display:block}@media screen and (min-width:568px){.rc-amp-row[data-rows="2"] .rc-amp-ad-item{width:50%;float:left}.rc-amp-row[data-rows="3"] .rc-amp-ad-item,.rc-amp-row[data-rows="6"] .rc-amp-ad-item{width:33.3333333333%;float:left}.rc-amp-row[data-rows="4"] .rc-amp-ad-item,.rc-amp-row[data-rows="8"] .rc-amp-ad-item{width:25%;float:left}.rc-amp-row .rc-amp-ad-item .rc-amp-ad-wrapper{padding:0 10px}.rc-amp-ad-item{margin-bottom:0}.rc-headline{font-size:13px}}/* endinject */';
-        if(self.fonts.selected != self.fonts.default){
+        var cssStyles = cssBaseStyles + ' ' + '/* inject:css */.rc-cta,.rc-cta:hover{text-decoration:none}body{margin:0;padding:0;font-family:"Open Sans","Helvetica Neue",Arial,Helvetica,sans-serif}.rc-amp-ad-item,.rc-brand-label,.rc-cta,.rc-headline{font-family:inherit}.rc-cta{outline:0;color:#000}.rc-amp-ad-item{margin-bottom:10px}.rc-headline{font-size:16px;margin:4px 0;padding:0;font-weight:700}.rc-brand-label,.rc-sponsored-by{display:block;font-size:10px;clear:both}.rc-brand-label{color:#777;text-align:left}.rc-sponsored-by{text-align:right;color:#999;line-height:2em;font-family:"Helvetica Neue",Arial,Helvetica,sans-serif}@media screen and (min-width:568px){.rc-amp-row[data-rows="2"] .rc-amp-ad-item{width:50%;float:left}.rc-amp-row[data-rows="3"] .rc-amp-ad-item,.rc-amp-row[data-rows="6"] .rc-amp-ad-item{width:33.3333333333%;float:left}.rc-amp-row[data-rows="4"] .rc-amp-ad-item,.rc-amp-row[data-rows="8"] .rc-amp-ad-item{width:25%;float:left}.rc-amp-row .rc-amp-ad-item .rc-amp-ad-wrapper{padding:0 10px}.rc-amp-ad-item{margin-bottom:0}.rc-headline{font-size:13px}.rc-sponsored-by{padding-right:10px}}/* endinject */';
+        if (self.fonts.selected != self.fonts.default) {
             cssStyles += '   ' + ' body {font-family: "' + self.fonts.available[self.fonts.selected].family + '", Arial, Helvetica, sans-serif;} ';
         }
         cssStyles += '   ' + self.api.cssOverrides.toString();
@@ -482,8 +684,10 @@
      *
      * @returns {RevAMP}
      */
-    RevAMP.prototype.createFontTags = function(){
+    RevAMP.prototype.createFontTags = function () {
         var self = this;
+        self.dispatch("Injecting font stylesheet from Google Font APIs...");
+        self.dispatch("Linking: " + self.fonts.available[self.fonts.selected].stylesheet);
         document.head.insertAdjacentHTML('beforeend', self.fonts.available[self.fonts.selected].stylesheet);
         return self;
     };
@@ -505,6 +709,82 @@
             };
 
         return time();
+    };
+
+    /**
+     * Debug Dispatch (Basic logging via console.log)
+     *
+     * @param msg
+     * @param level
+     * @returns {RevAMP}
+     */
+    RevAMP.prototype.dispatch = function (msg, level) {
+        var self = this;
+        if (!level) {
+            level = 'notice';
+        }
+        if (self.debug.on) {
+            self.debug.log(msg, level);
+        }
+        return self;
+    };
+
+
+    /**
+     * Preloader for Ad Items
+     * NOTE: This Expects a collection of rc-photo elements found on a standard serve.js fill, and extracts the
+     * creative from the background-image definition.
+     *
+     * @param images collection of rc-photo items
+     * @param callback to execute once last creative loads...
+     * @param rawStack if set this means a raw array of images are provided, no bg extraction required
+     * @returns {RevAMP}
+     * @todo    Research the implications of preloading with respect to CDN hit metrics
+     */
+    RevAMP.prototype.preloader = function (images, callback, rawStack) {
+        var self = this;
+        if (!rawStack) {
+            rawStack = false;
+        }
+        for (var a = 0; a < images.length; a++) {
+            var photo = images[a];
+            var imageUrl = '';
+            if (rawStack) {
+                imageUrl = photo;
+            } else {
+                imageUrl = photo.style["background-image"].split('"')[1];
+            }
+            self.loadCreative(imageUrl, a, images.length - 1, callback);
+        }
+        return self;
+    };
+
+    /**
+     * Preloader: Load Creative
+     * NOTE: The callback function is executed only once the final creative has loaded (After hardset 250ms delay).
+     *
+     * @param imageUrl   Image URL to preload
+     * @param index      current image Index
+     * @param lastIndex  last image Index
+     * @returns {RevAMP}
+     */
+    RevAMP.prototype.loadCreative = function (imageUrl, index, lastIndex) {
+        var self = this;
+        self.dispatch("Preloading Creative Image Source from CDN.." + imageUrl, 'special');
+        var creative = new Image();
+        creative.src = imageUrl;
+        if (index == lastIndex) {
+            creative.onload = function () {
+                self.dispatch("Final Image Preloaded, " + imageUrl + ", firing callback after 0ms delay.... ", 'special');
+                //setTimeout(function () {
+                    if (typeof callback == "function") {
+                        self.dispatch("PRELOADER Callback Executing NOW!", 'special');
+                        callback();
+                    }
+                //}, 250);
+            };
+        }
+        return self;
     };
 
     /**
