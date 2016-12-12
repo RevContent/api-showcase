@@ -111,7 +111,7 @@ RevMore({
 
             this.appendElements();
 
-            this.innerWidget();
+            this.createInnerWidget();
 
             this.widget();
 
@@ -120,6 +120,14 @@ RevMore({
             this.attachButtonEvents();
 
             this.attachResizedEvents();
+
+            // destroy if no data
+            var that = this;
+            this.innerWidget.dataPromise.then(function(data) {
+                if (!data.length) {
+                    that.destroy();
+                }
+            });
         };
 
         // we don't want any padding on the body
@@ -189,7 +197,7 @@ RevMore({
         this.widget = function() {
             if (this.options.id) {
                 var that = this;
-                that.innerWidgetDataPromise.then(function() {
+                this.innerWidget.dataPromise.then(function() {
                     that.sameWidget = new RevSlider({
                         impression_tracker: that.impressionTracker,
                         api_source:         'more',
@@ -222,7 +230,7 @@ RevMore({
             }
         };
 
-        this.innerWidget = function() {
+        this.createInnerWidget = function() {
 
             this.innerWidget = new RevSlider({
                 impression_tracker: this.impressionTracker,
@@ -256,7 +264,6 @@ RevMore({
                 user_ip: this.options.user_ip,
                 user_agent: this.options.user_agent
             });
-            this.innerWidgetDataPromise = this.innerWidget.dataPromise;
         };
 
         // set the wrapper equal to top + the element height
@@ -298,10 +305,7 @@ RevMore({
             this.innerWidget.destroy();
 
             if (destroySameWidget !== false && this.sameWidget) {
-                this.sameWidget.grid.remove();
-                this.sameWidget.grid.destroy();
-                this.sameWidget.mc.set({enable: false});
-                this.sameWidget.mc.destroy();
+                this.sameWidget.destroy();
             }
 
             revUtils.remove(this.element);
