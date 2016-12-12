@@ -1038,7 +1038,7 @@ Author: michael@revcontent.com
                 revUtils.imagesLoaded(that.grid.element.querySelectorAll('img')).once('done', function() {
                     revUtils.addClass(that.containerElement, 'loaded');
                 });
-                resolve();
+                resolve(resp);
             });
         });
     };
@@ -1092,7 +1092,7 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.updateDisplayedItems = function(viewed) {
         if (!this.data.length) { // if no data remove the container and call it a day
-            revUtils.remove(this.containerElement);
+            this.destroy();
             return;
         }
 
@@ -1428,6 +1428,7 @@ Author: michael@revcontent.com
     RevSlider.prototype.destroy = function() {
         this.grid.remove();
         this.grid.destroy();
+        revUtils.remove(this.containerElement);
         this.mc.set({enable: false});
         this.mc.destroy();
     };
