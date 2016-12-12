@@ -565,6 +565,7 @@
      */
     RevAMP.prototype.renderNative = function (ads) {
         var self = this;
+        self.widgetEl = document.getElementById(self.getWrapperId());
         self.createAMPDocument();
         var adPanel = '<div class="rc-amp-panel rc-amp-panel-' + self.data.id + '"></div>';
         var adSponsor = '<span class="rc-sponsored-by">' + self.branding.sponsorText + '</span>';
@@ -593,12 +594,14 @@
         self.rcjsload.querySelector('.rc-amp-row').insertAdjacentHTML('beforeend', '<div style="clear:both">&nbsp;</div>');
         // To set a reliable height for initial render we have to send a height request immediately after
         // adding these elements to the DOM.
-        self.adjustHeight(self.widgetEl.offsetHeight);
-        //self.dispatch("Begin RENDER: Firing context.renderStart() NOW! for API-based amp-tag: height = " + self.widgetEl.offsetHeight);
-        window.context.renderStart({
-            width: document.clientWidth,
-            height: self.widgetEl.offsetHeight
-        });
+        if(typeof self.widgetEl == "object") {
+            self.adjustHeight(self.widgetEl.offsetHeight);
+            //self.dispatch("Begin RENDER: Firing context.renderStart() NOW! for API-based amp-tag: height = " + self.widgetEl.offsetHeight);
+            window.context.renderStart({
+                width: document.clientWidth,
+                height: self.widgetEl.offsetHeight
+            });
+        }
         self.isResizing = true;
         self.dispatch("Rendering Native Ads COMPLETE, requesting a resize of panel to height: " + self.widgetEl.offsetHeight, 'success');
         return self;
