@@ -665,7 +665,7 @@
         self.styles = document.createElement("style");
         self.styles.setAttribute("amp-custom", "");
         var cssBaseStyles = '';
-        var cssStyles = cssBaseStyles + ' ' + '/* inject:css *//* endinject */';
+        var cssStyles = cssBaseStyles + ' ' + '/* inject:css */.rc-cta,.rc-cta:hover{text-decoration:none}body{margin:0;padding:0;font-family:"Open Sans","Helvetica Neue",Arial,Helvetica,sans-serif}.rc-amp-ad-item,.rc-brand-label,.rc-cta,.rc-headline{font-family:inherit}.rc-cta{outline:0;color:#000}.rc-amp-ad-item{margin-bottom:10px}.rc-headline{font-size:16px;margin:4px 0;padding:0;font-weight:700}.rc-brand-label,.rc-sponsored-by{display:block;font-size:10px;clear:both}.rc-brand-label{color:#777;text-align:left}.rc-sponsored-by{text-align:right;color:#999;line-height:2em;font-family:"Helvetica Neue",Arial,Helvetica,sans-serif}@media screen and (min-width:568px){.rc-amp-row[data-rows="2"] .rc-amp-ad-item{width:50%;float:left}.rc-amp-row[data-rows="3"] .rc-amp-ad-item,.rc-amp-row[data-rows="6"] .rc-amp-ad-item{width:33.3333333333%;float:left}.rc-amp-row[data-rows="4"] .rc-amp-ad-item,.rc-amp-row[data-rows="8"] .rc-amp-ad-item{width:25%;float:left}.rc-amp-row .rc-amp-ad-item .rc-amp-ad-wrapper{padding:0 10px}.rc-amp-ad-item{margin-bottom:0}.rc-headline{font-size:13px}.rc-sponsored-by{padding-right:10px}}/* endinject */';
         if (self.fonts.selected != self.fonts.default) {
             cssStyles += '   ' + ' body {font-family: "' + self.fonts.available[self.fonts.selected].family + '", Arial, Helvetica, sans-serif;} ';
         }
