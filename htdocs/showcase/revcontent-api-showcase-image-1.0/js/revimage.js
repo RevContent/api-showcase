@@ -127,13 +127,17 @@ Author: michael@revcontent.com
             that.container();
             that.wrapper();
             that.wrapperWidth();
-            that.innerWidget();
-            that.bindResize();
             that.appendElements();
             that.checkSmall();
-            that.attachCloseButtonEvent();
             that.addCss();
+            that.bindResize();
+            that.attachCloseButtonEvent();
             that.attachScrollEvents();
+            that.createInnerWidget().dataPromise.then(function(data) {
+                if (!data.length) { // if we have data continue
+                    that.destroy();
+                }
+            });
             that.imageVisible();
         });
     }
@@ -169,7 +173,7 @@ Author: michael@revcontent.com
         this.wrapper.style.maxWidth = this.element.offsetWidth + 'px';
     };
 
-    Item.prototype.innerWidget = function() {
+    Item.prototype.createInnerWidget = function() {
         this.innerWidget = new RevSlider({
             is_resize_bound: false, // need to listen to window resize so don't double bind
             api_source: 'image',
@@ -201,6 +205,7 @@ Author: michael@revcontent.com
             user_ip: this.options.user_ip,
             user_agent: this.options.user_agent
         });
+        return this.innerWidget;
     };
 
     Item.prototype.bindResize = function() {
@@ -283,8 +288,10 @@ Author: michael@revcontent.com
     };
 
     Item.prototype.imageVisible = function() {
-        revUtils.checkVisible.bind(this, this.container, this.onVisible)();
-        revUtils.checkHidden.bind(this, this.container, this.onHidden)();
+        // image is 100 percent visible
+        revUtils.checkVisible.bind(this, this.container, this.onVisible, 100)();
+        // image is 100 percent hidden
+        revUtils.checkHidden.bind(this, this.container, this.onHidden, 100)();
     };
 
     Item.prototype.attachScrollEvents = function() {
