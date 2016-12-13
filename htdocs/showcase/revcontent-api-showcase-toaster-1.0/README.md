@@ -1,30 +1,123 @@
-# Mobile Toaster
+#RevToaster
 
-Pop! Content toasters are an engaging way to interact with your readers. The Mobile Toaster will appear as the user pans back to the top of the page and disapear as they scroll back down. Show your reader what's trending and get great results with the Mobile Toaster.
+RevToaster displays as the user scrolls back to the top of the page. It's used by placing the script and ad code definition on the page.
 
-## How to use
+```
+&lt;script src="http://labs-cdn.revcontent.com/build/revtoaster.min.js">&lt;script&gt;
 
-Add the packaged or minified revtoaster script before the closing ```</body>``` tag
+&lt;script&gt;
+    RevToaster({ 
+        api_key: 'ap_key', 
+        pub_id: 123, 
+        widget_id: 456, 
+        domain: 'mysite.com',
+        sponsored: 2
+    }); 
+&lt;/script&gt;
+```
 
-    <script src="js/revtoaster.min.js"></script>
+##Options
+Default values are shown.
 
-    <script>
-        RevToaster({
-            api_key: 'your api_key',
-            pub_id: pub_id,
-            widget_id: widget_id,
-            domain: 'widget domain',
-            sponsored: 2,
-        });
-    </script>
+###api_key(required)
+your api key
 
-Insert the proper values for your widget and optionally set the ```sponsored``` count(accepted values are 1 or 2 sponsored ads).
+###domain(required)
+your widget domain
 
-## Building
-Gulp is used to embed css, concat and uglify the revtoaster script. To build the scripts:
-1. change directory to the revcontent-api-showcase-toaster-1.0 directory
-2. run ```npm install``` to get the gulp dependencies
-3. run ```gulp``` this will run the default task and populate the build directory
+###pub_id(required)
+your pub id
 
-## Watch
-During development it can be useful to build the files on the fly when modifications are made. To have gulp watch the ./js/revtoaster and ./css/example.css files run ```gulp watch```
+###widget_id(required)
+your widget id
+
+###closed_hours
+Number of hours to keep closed
+```
+closed_hours: 24
+```
+
+###devices
+Devices to show on. Options include ```phone```, ```tablet``` and ```desktop```.
+```
+devices: [
+    'phone', 
+    'tablet', 
+    'desktop'
+]
+```
+
+###disclosure_text
+Text to display for disclosure. This text triggers the disclosure/interests dialog on click.
+```
+disclosure_text: 'Sponsored by Revcontent'
+```
+
+###header
+Text displayed above ads. Wrapped inside ```<h2 class="rev-header">```.
+```
+header: 'Trending Now'
+```
+
+###hide_provider
+Display the provider in the ads.
+```
+hide_provider: false
+```
+
+###overlay
+Key value object where the key is the content type and the value is the icon to use. This key value will be concatenated to make up the icon name string. For example ```video: 'circle'``` will use the ```video_circle``` icon
+```
+overlay: false
+```
+
+###overlay_icons
+Pass in custom icons where the key is the icon name and the value is the svg icon. For example ```{article_square: '<svg></svg>'}```
+```
+overlay_icons: false
+```
+
+###overlay_position
+The position of the overlay icon. Available options include ```center```, ```top_left```, ```top_right```, ```bottom_right```, ```bottom_left```.
+```
+overlay_position: 'center'
+```
+
+###query_params
+Key value object for query params to send to server. Can be multidimensional
+```
+query_params: false
+```
+
+###rev_position
+Position of the disclosure text. Options include: ```'bottom_right'```, ```'top_right'```, ```'bottom_left'```.
+```
+rev_position: 'bottom_right'
+```
+
+###sponsored
+Number of sponsored ads to show. Max 2.
+```
+sponsored: 1
+```
+
+###testing
+Ignores ```closed_hours``` if true
+```
+testing: false
+```
+
+###url
+Use an alternate API url
+```
+url: 'https://trends.revcontent.com/api/v1/'
+```
+
+
+
+
+
+
+
+
+
