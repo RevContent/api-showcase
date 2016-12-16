@@ -121,9 +121,9 @@ RevToaster({
 
             revUtils.append(document.body, that.revToaster);
 
-            // window.addEventListener('scroll', this.move); // for debugging
+            // revUtils.addEventListener(window, 'scroll', this.move); // for debugging
 
-            window.addEventListener('touchmove', this.move);
+            revUtils.addEventListener(window, 'touchmove', this.move);
         };
 
         this.update = function(newOpts, oldOpts) {
@@ -192,7 +192,7 @@ RevToaster({
 
         this.move = function() {
             if (removed) {
-                window.removeEventListener('touchmove', this.move);
+                revUtils.removeEventListener(window, 'touchmove', this.move);
                 return;
             }
 
@@ -256,12 +256,16 @@ RevToaster({
 
             revApi.request(url, function(resp) {
 
+                if (!resp.length) {
+                    that.destroy();
+                    return;
+                }
+
                 var ads = that.containerElement.querySelectorAll('.rev-ad');
 
                 for (var i = 0; i < resp.length; i++) {
                     var ad = ads[i],
                         data = resp[i];
-
 
                     if (that.options.overlay !== false) {
                         revUtils.imageOverlay(ad.querySelectorAll('.rev-image')[0], data.content_type, that.options.overlay, that.options.overlay_position, that.options.overlay_icons);
@@ -287,7 +291,7 @@ RevToaster({
             }
             var that = this;
 
-            this.closeButton.addEventListener('click', function(e) {
+            revUtils.addEventListener(this.closeButton, 'click', function(e) {
                 revUtils.removeClass(document.body, 'rev-toaster-loaded');
                 setTimeout(function() {
                     that.revToaster.parentNode.removeChild(that.revToaster);
@@ -316,6 +320,11 @@ RevToaster({
             this.visible = false;
             revUtils.removeClass(document.body, 'rev-toaster-loaded');
         };
+
+        this.destroy = function() {
+            revUtils.remove(this.revToaster);
+            revUtils.removeEventListener(window, 'touchmove', this.move);
+        }
 
         this.init();
     };

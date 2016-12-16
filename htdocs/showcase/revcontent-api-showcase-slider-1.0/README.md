@@ -282,16 +282,22 @@ Use an alternate API url
 url: 'https://trends.revcontent.com/api/v1/'
 ```
 
+###user_agent
+Pass user_agent param to API
+```
+user_agent: false
+```
+
+###user_ip
+Pass user_ip to API
+```
+user_ip: false
+```
+
 ###vertical
 Slide vertical rather than horizontal
 ```
 vertical: false
-```
-
-###visible
-If the widget is immediately visible. Determines if impressions will be registerred right away or if they are managed when the widget is shown.
-```
-visible: true
 ```
 
 

@@ -209,4 +209,14 @@ Use an alternate API url
 url: 'https://trends.revcontent.com/api/v1/'
 ```
 
+###user_agent
+Pass user_agent param to API
+```
+user_agent: false
+```
 
+###user_ip
+Pass user_ip to API
+```
+user_ip: false
+```

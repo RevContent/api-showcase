@@ -4,31 +4,31 @@ app.config(function($mdThemingProvider) {
         .accentPalette('blue');
 });
 
-app.run(function($rootScope, $stateParams, $stateManager, $timeout) {
+// app.run(function($rootScope, $stateParams, $stateManager, $timeout) {
 
-    $rootScope.$on("$stateChangeStart", function(evt, toState, toStateParams, fromState, fromStateParams) {
+//     $rootScope.$on("$stateChangeStart", function(evt, toState, toStateParams, fromState, fromStateParams) {
 
-        if (toState.name == 'post_demo_id') {
-            $timeout(function() {
-                $rootScope.showDemoSideNav = true;
-            });
-        } else if (!toState.dialog) {
-            $timeout(function() {
-                $rootScope.showDemoSideNav = false;
-            });
-        }
+//         if (toState.name == 'post_demo_id') {
+//             $timeout(function() {
+//                 $rootScope.showDemoSideNav = true;
+//             });
+//         } else if (!toState.dialog) {
+//             $timeout(function() {
+//                 $rootScope.showDemoSideNav = false;
+//             });
+//         }
 
-        if (fromState.name == 'post_demo_id') {
-            if ($stateParams.id == 'shifter') {
-                RevShifter({});
-            } else if ($stateParams.id == 'toaster') {
-                RevToaster({});
-            }
-        }
+//         if (fromState.name == 'post_demo_id') {
+//             if ($stateParams.id == 'shifter') {
+//                 RevShifter({});
+//             } else if ($stateParams.id == 'toaster') {
+//                 RevToaster({});
+//             }
+//         }
 
-        $stateManager.previousStateDialog = fromState.dialog ? true : false;
-        $stateManager.nextStateDialog     = toState.dialog ? true : false;
-        $stateManager.previousState       = fromState.name;
-        $stateManager.previousStateParams = fromStateParams;
-    });
-});
+//         $stateManager.previousStateDialog = fromState.dialog ? true : false;
+//         $stateManager.nextStateDialog     = toState.dialog ? true : false;
+//         $stateManager.previousState       = fromState.name;
+//         $stateManager.previousStateParams = fromStateParams;
+//     });
+// });

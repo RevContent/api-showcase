@@ -77,7 +77,9 @@ RevShifter({
         overlay: false, // pass key value object { content_type: icon }
         overlay_icons: false, // pass in custom icons or overrides
         overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
-        query_params: false
+        query_params: false,
+        user_ip: false,
+        user_agent: false
     };
 
     RevShifter = function(opts) {
@@ -165,7 +167,6 @@ RevShifter({
 
             this.innerWidget = new RevSlider({
                 api_source: 'shift',
-                visible: this.options.show_on_load,
                 element: [this.element],
                 url: this.options.url,
                 api_key : this.options.api_key,
@@ -196,7 +197,10 @@ RevShifter({
                 overlay: this.options.overlay, // video: rectangle, square, circle1, circle2, triangle
                 overlay_icons: this.options.overlay_icons, // pass in custom icons or overrides
                 overlay_position: this.options.overlay_position, // center, top_left, top_right, bottom_right, bottom_left
-                query_params: this.options.query_params
+                query_params: this.options.query_params,
+                register_views: false, // handle viewibility/prevent Slider from doing checks
+                user_ip: this.options.user_ip,
+                user_agent: this.options.user_agent
             });
 
             this.closeButton();
@@ -214,16 +218,25 @@ RevShifter({
 
             this.setTransitionDuration();
 
-
             if (this.options.show_on_load) {
                 this.show();
             }
 
-            if (revDetect.mobile() && this.options.show_on_touch) {
-                this.attachTouchEvents();
-            } else if (this.options.show_on_scroll) {
-                this.attachScrollEvents();
-            }
+            var that = this;
+            // wait a tick or two before attaching to scroll/touch b/c of auto scroll feature in some browsers
+            setTimeout(function() {
+                if (revDetect.mobile() && that.options.show_on_touch) {
+                    that.attachTouchEvents();
+                } else if (that.options.show_on_scroll) {
+                    that.attachScrollEvents();
+                }
+                // destroy if no data
+                that.innerWidget.dataPromise.then(function(data) {
+                    if (!data.length) {
+                        that.destroy();
+                    }
+                });
+            }, 300);
         };
 
         this.setTransitionDuration = function(transitionDuration) {
@@ -285,17 +298,13 @@ RevShifter({
         this.attachScrollEvents = function() {
             // scrolling
             this.scrollListener = this.move.bind(this);
-            // wait a tick or two before doing the scroll b/c of auto scroll feature in some browsers
-            var that = this;
-            setTimeout(function() {
-                that.lastScrollTop = window.pageYOffset;
+            this.lastScrollTop = window.pageYOffset;
 
-                if (revDetect.mobile()) {
-                    revUtils.addEventListener(window, 'touchmove', that.scrollListener);
-                } else {
-                    revUtils.addEventListener(window, 'scroll', that.scrollListener);
-                }
-            }, 300);
+            if (revDetect.mobile()) {
+                revUtils.addEventListener(window, 'touchmove', this.scrollListener);
+            } else {
+                revUtils.addEventListener(window, 'scroll', this.scrollListener);
+            }
         }
 
         this.update = function(newOpts, oldOpts) {
@@ -360,15 +369,17 @@ RevShifter({
             this.hideTimeout = clearTimeout(this.hideTimeout);
             revUtils.removeClass(this.element, 'rev-hidden');
 
-            this.innerWidget.registerImpressions();
-
             this.visible = true;
             this.transitioning = true;
 
             revUtils.addClass(document.body, 'rev-shifter-no-transform');
 
+            if (this.showTimeout) {
+                return;
+            }
+
             var that = this;
-            setTimeout(function() {
+            this.showTimeout = setTimeout(function() {
                 if (that.doTouchSimulation()) {
                     revUtils.addClass(that.touchEnabledElement, 'rev-touch-enabled-scale-down');
                     revUtils.addClass(that.touchEnabledElement, 'rev-touch-enabled-scale');
@@ -401,6 +412,8 @@ RevShifter({
                     }, that.innerWidget.animationDuration * 1000);
                 } else {
                     that.transitioning = false;
+                    that.showTimeout = false;
+                    that.innerWidget.visible();
                 }
             }, this.options.transition_duration);
 
@@ -410,7 +423,10 @@ RevShifter({
         };
 
         this.hide = function() {
+            this.showTimeout = clearTimeout(this.showTimeout);
+
             this.visible = false;
+            this.transitioning = true;
 
             revUtils.removeClass(document.body, 'rev-shifter-no-transform');
 
@@ -426,6 +442,7 @@ RevShifter({
             this.hideTimeout = setTimeout(function() {
                 revUtils.addClass(that.element, 'rev-hidden');
                 that.hideTimeout = false;
+                that.transitioning = false;
             }, this.options.transition_duration);
         };
 
