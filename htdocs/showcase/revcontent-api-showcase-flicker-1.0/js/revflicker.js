@@ -57,6 +57,7 @@ RevFlicker({
     var RevFlicker = function(opts) {
 
         var defaults = {
+            api_source: 'flick',
             element: false,
             per_row: {
                 xxs: 1,
