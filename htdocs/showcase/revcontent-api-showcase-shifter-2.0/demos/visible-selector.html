@@ -99,6 +99,11 @@
                 <img alt="" src="http://placehold.it/750x500" class="img-responsive">
             </div>
             <div class="col-md-4">
+
+                <div id="test" class="text-info">
+                    <h3>Shifter will come into view when this elment becomes visible</h3>
+                </div>
+
                 <h3>This is just a testing title</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
                 <h3>Project Details</h3>
@@ -158,17 +163,16 @@
     </div>
    <!-- /. Fake Page Content -->
 
-    <script src="/build/revshifter.min.js"></script>
+    <script src="/build/files/shifter/revshifter.pkgd.js"></script>
 
     <script>
         var shifter = new RevShifter({
             api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+            show_visible_selector: '#test',
             pub_id : 945,
             widget_id : 6181,
             domain : 'apiexamples.powr.com',
-            show_on_scroll: true,
-            testing: true,
-            show_on_load: true
+            testing: true
         });
     </script>
 
