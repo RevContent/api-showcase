@@ -222,4 +222,14 @@ Number of rows to display. Object or single value. Pass a single number to be us
 rows: 2
 ```
 
+###user_agent
+Pass user_agent param to API
+```
+user_agent: false
+```
 
+###user_ip
+Pass user_ip to API
+```
+user_ip: false
+```

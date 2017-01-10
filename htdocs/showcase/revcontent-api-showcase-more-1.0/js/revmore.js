@@ -64,7 +64,9 @@ RevMore({
         overlay: false, // pass key value object { content_type: icon }
         overlay_icons: false, // pass in custom icons or overrides
         overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
-        query_params: false
+        query_params: false,
+        user_ip: false,
+        user_agent: false
     };
 
     RevMore = function(opts) {
@@ -109,7 +111,7 @@ RevMore({
 
             this.appendElements();
 
-            this.innerWidget();
+            this.createInnerWidget();
 
             this.widget();
 
@@ -118,6 +120,14 @@ RevMore({
             this.attachButtonEvents();
 
             this.attachResizedEvents();
+
+            // destroy if no data
+            var that = this;
+            this.innerWidget.dataPromise.then(function(data) {
+                if (!data.length) {
+                    that.destroy();
+                }
+            });
         };
 
         // we don't want any padding on the body
@@ -187,7 +197,7 @@ RevMore({
         this.widget = function() {
             if (this.options.id) {
                 var that = this;
-                that.innerWidgetDataPromise.then(function() {
+                this.innerWidget.dataPromise.then(function() {
                     that.sameWidget = new RevSlider({
                         impression_tracker: that.impressionTracker,
                         api_source:         'more',
@@ -212,13 +222,15 @@ RevMore({
                             font_size: 3,
                             margin: -2.2,
                             padding: 2
-                        }
+                        },
+                        user_ip: that.options.user_ip,
+                        user_agent: that.options.user_agent
                     });
                 });
             }
         };
 
-        this.innerWidget = function() {
+        this.createInnerWidget = function() {
 
             this.innerWidget = new RevSlider({
                 impression_tracker: this.impressionTracker,
@@ -248,9 +260,10 @@ RevMore({
                     margin: -2.2,
                     padding: 2
                 },
-                query_params: this.options.query_params
+                query_params: this.options.query_params,
+                user_ip: this.options.user_ip,
+                user_agent: this.options.user_agent
             });
-            this.innerWidgetDataPromise = this.innerWidget.dataPromise;
         };
 
         // set the wrapper equal to top + the element height
@@ -292,10 +305,7 @@ RevMore({
             this.innerWidget.destroy();
 
             if (destroySameWidget !== false && this.sameWidget) {
-                this.sameWidget.grid.remove();
-                this.sameWidget.grid.destroy();
-                this.sameWidget.mc.set({enable: false});
-                this.sameWidget.mc.destroy();
+                this.sameWidget.destroy();
             }
 
             revUtils.remove(this.element);

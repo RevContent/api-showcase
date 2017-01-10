@@ -113,26 +113,26 @@ app.service('widgets', function() {
     };
 });
 
-app.service('$stateManager', function() {
-    this.stickyPath;
-    this.originPath;
+// app.service('$stateManager', function() {
+//     this.stickyPath;
+//     this.originPath;
 
-    this.setPath = function(stickyPath) {
-        this.stickyPath = stickyPath;
-    };
+//     this.setPath = function(stickyPath) {
+//         this.stickyPath = stickyPath;
+//     };
 
-    this.getPath = function() {
-        return this.stickyPath;
-    };
+//     this.getPath = function() {
+//         return this.stickyPath;
+//     };
 
-    this.setOriginPath = function(originPath) {
-        this.originPath = originPath;
-    };
+//     this.setOriginPath = function(originPath) {
+//         this.originPath = originPath;
+//     };
 
-    this.getOriginPath = function() {
-        return this.originPath;
-    };
-});
+//     this.getOriginPath = function() {
+//         return this.originPath;
+//     };
+// });
 
 app.service('$mdCardContent', function() {
     this.clickEvent = null;

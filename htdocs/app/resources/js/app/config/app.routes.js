@@ -57,7 +57,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
         .state('post', {
             url: "/{id}",
             dialog: true,
-            onEnter: ['$stateParams', '$state', '$mdDialog', '$window', '$mdCardContent', '$stateManager', 'widgets', function($stateParams, $state, $mdDialog, $window, $mdCardContent, $stateManager, widgets) {
+            onEnter: ['$stateParams', '$state', '$mdDialog', '$window', '$mdCardContent', 'widgets', function($stateParams, $state, $mdDialog, $window, $mdCardContent, widgets) {
 
                 var widget = widgets.data[$stateParams.id];
 
@@ -66,9 +66,9 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                     return false;
                 }
 
-                var previousState = function() {
-                    $state.go(($stateManager.previousState && !$stateManager.previousStateDialog) ? $stateManager.previousState : 'home', $stateManager.previousStateParams);
-                };
+                // var previousState = function() {
+                //     $state.go(($stateManager.previousState && !$stateManager.previousStateDialog) ? $stateManager.previousState : 'home', $stateManager.previousStateParams);
+                // };
 
                 $mdDialog.show({
                     templateUrl: 'app/resources/js/app/dialog/post.html',
@@ -78,7 +78,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                         $scope.id = $stateParams.id;
                         $scope.post = widget;
                         $scope.close = function() {
-                            $mdDialog.hide();
+                            $mdDialog.hide(true);
                         };
                         $scope.preview = function(id, preview) {
                             if (preview) { // go to the post preview page once the dialog is done hiding
@@ -98,10 +98,12 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                     onComplete: function() {
                     }
                 })
-                .then(function(answer) { //close
-                    // previousState();
+                .then(function(goHome) { //close
+                    if (goHome) {
+                         $state.go('home');
+                    }
                 }, function() { //cancel
-                    previousState();
+                    $state.go('home');
                 });
             }],
             onExit: ['$mdDialog', function($mdDialog) {
@@ -131,9 +133,9 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
             dialog: true,
             onEnter: ['$stateParams', '$state', '$mdDialog', '$location', '$mdCardContent', '$stateManager', 'options', function($stateParams, $state, $mdDialog, $location, $mdCardContent, $stateManager, options) {
 
-                var previousState = function() {
-                    $state.go('post_preview', {id: $stateParams.id});
-                };
+                // var previousState = function() {
+                //     $state.go('post_preview', {id: $stateParams.id});
+                // };
 
                 $mdDialog.show({
                     templateUrl: 'app/resources/js/app/dialog/demo-link.html',
@@ -149,9 +151,9 @@ app.config(['$stateProvider', '$locationProvider', '$urlMatcherFactoryProvider',
                     }
                 })
                 .then(function(answer) { //close
-                    previousState();
+                    // previousState();
                 }, function() { //cancel
-                    previousState();
+                    // previousState();
                 });
             }],
             onExit: ['$mdDialog', function($mdDialog) {

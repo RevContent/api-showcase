@@ -61,7 +61,7 @@ utils.serialize = function(obj, prefix) {
         }
     }
     return str.join("&");
-}
+};
 
 utils.appendStyle = function(style, namespace, extra) {
     var namespace = namespace + '-append-style';
@@ -102,7 +102,7 @@ utils.merge = function(a, b) {
         a[prop] = b[prop];
     }
     return a;
-}
+};
 
 utils.inArray = function(array, item) {
     for (var i = 0; i < array.length; i++) {
@@ -110,7 +110,7 @@ utils.inArray = function(array, item) {
       return i;
     }
     return -1;
-}
+};
 
 utils.setCookie = function(cname, cvalue, exdays) {
     var d = new Date();
@@ -133,24 +133,24 @@ utils.getCookie = function(cname) {
 
 utils.prepend = function(el, html) {
     el.insertBefore(html, el.firstChild);
-}
+};
 
 utils.append = function(el, html) {
     el.appendChild(html);
-}
+};
 
 utils.remove = function(el) {
     if (el && el.parentNode) {
         el.parentNode.removeChild(el);
     }
-}
+};
 
 utils.wrap = function(el, wrapper) {
     var parent = el.parentNode;
 
     wrapper.appendChild(el);
     parent.appendChild(wrapper);
-}
+};
 
 utils.next = function(el) {
     function nextElementSibling(el) {
@@ -167,7 +167,7 @@ utils.hasClass = function(el, className) {
       return el.classList.contains(className);
     else
       return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
-}
+};
 
 utils.addClass = function(el, className) {
     if (!el) return false;
@@ -221,16 +221,22 @@ utils.dispatchScrollbarResizeEvent = function() {
 }
 
 utils.addEventListener = function(el, eventName, handler) {
-  if (el.addEventListener) {
-    el.addEventListener(eventName, handler);
-  } else {
-    el.attachEvent('on' + eventName, function(){
-      handler.call(el);
-    });
-  }
+    if (!handler) {
+        return;
+    }
+    if (el.addEventListener) {
+        el.addEventListener(eventName, handler);
+    } else {
+        el.attachEvent('on' + eventName, function(){
+            handler.call(el);
+        });
+    }
 };
 
 utils.removeEventListener = function(el, eventName, handler) {
+    if (!handler) {
+        return;
+    }
     if (el.removeEventListener) {
         el.removeEventListener(eventName, handler);
     } else {
@@ -375,18 +381,48 @@ utils.getComputedStyle = function (el, prop) {
     } else {
         return el.currentStyle[prop];
     }
-}
+};
 
 utils.setImage = function(wrapperElement, src) {
     var img = document.createElement('img');
     img.src = src;
     this.append(wrapperElement, img);
-}
+};
 
 utils.imageOverlay = function(image, content_type, overlay, position, icons) {
     var icons = this.merge(revOverlay.icons, icons); // merge any passed icons
     revOverlay.image(image, content_type, overlay, position, icons);
-}
+};
+
+// TODO: probably don't need to bind these
+utils.checkVisible = function(element, callback, percentVisible) {
+    // what percentage of the element should be visible
+    var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
+
+    var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+    var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+    var elementTop = element.getBoundingClientRect().top;
+    var elementBottom = element.getBoundingClientRect().bottom;
+    var elementVisibleHeight = element.offsetHeight * visibleHeightMultiplier;
+
+    if ((scroll + windowHeight >= (elementTop + scroll + elementVisibleHeight)) &&
+        elementBottom > elementVisibleHeight) {
+        callback.bind(this)();
+    }
+};
+
+utils.checkHidden = function(element, callback, percentHidden) {
+    // what percentage of the element should be hidden
+    var visibleHeightMultiplier = (typeof percentHidden === 'number') ? (parseInt(percentHidden) * .01) : 0;
+
+    var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+    var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+
+    if ((scroll + windowHeight < element.getBoundingClientRect().top + scroll ||
+        element.getBoundingClientRect().top + (element.offsetHeight * visibleHeightMultiplier) <= 0)) {
+        callback.bind(this)();
+    }
+};
 
 // -----  ----- //
 return utils;
