@@ -44,6 +44,7 @@ RevShifter({
         show_on_load: false,
         show_on_scroll: true,
         show_on_touch: true,
+        show_visible_selector: false,
         scroll_natural: true,
         hide_header: true,
         header: 'Trending Now',
@@ -222,21 +223,55 @@ RevShifter({
                 this.show();
             }
 
-            var that = this;
-            // wait a tick or two before attaching to scroll/touch b/c of auto scroll feature in some browsers
-            setTimeout(function() {
-                if (revDetect.mobile() && that.options.show_on_touch) {
-                    that.attachTouchEvents();
-                } else if (that.options.show_on_scroll) {
-                    that.attachScrollEvents();
-                }
-                // destroy if no data
-                that.innerWidget.dataPromise.then(function(data) {
-                    if (!data.length) {
-                        that.destroy();
+            // if show visible element show once that is visible
+            if (this.setShowVisibleElement()) {
+                // get all images
+                var images = document.querySelectorAll('img');
+                // top position of show visible element
+                var showVisibleElementTop = this.showVisibleElement.getBoundingClientRect().top;
+                // if show visible element is below image add to imagesAboveShowVisibleElement array
+                var imagesAboveShowVisibleElement = [];
+                for (var i = 0; i < images.length; i++) {
+                    if (images[i].getBoundingClientRect().top < showVisibleElementTop) {
+                        imagesAboveShowVisibleElement.push(images[i]);
                     }
+                }
+                // show once visible
+                this.showOnceVisible();
+                // check element visibility on scroll
+                this.attachShowElementVisibleListener();
+
+                var that = this;
+                // wait for all images above show visible elemnt to load before checking visibility
+                revUtils.imagesLoaded(imagesAboveShowVisibleElement).once('done', function() {
+                    revUtils.checkVisible.bind(that, that.showVisibleElement, that.emitVisibleEvent)();
                 });
-            }, 300);
+            } else { // otherwise show on scroll
+                var that = this;
+                // wait a tick or two before attaching to scroll/touch b/c of auto scroll feature in some browsers
+                setTimeout(function() {
+                    if (revDetect.mobile() && that.options.show_on_touch) {
+                        that.attachTouchEvents();
+                    } else if (that.options.show_on_scroll) {
+                        that.attachScrollEvents();
+                    }
+                    // destroy if no data
+                    that.innerWidget.dataPromise.then(function(data) {
+                        if (!data.length) {
+                            that.destroy();
+                        }
+                    });
+                }, 300);
+            }
+        };
+
+        this.setShowVisibleElement = function() {
+            this.showVisibleElement = false;
+            var elements = document.querySelectorAll(this.options.show_visible_selector);
+            if (elements.length) {
+                this.showVisibleElement = elements[0];
+            }
+            return this.showVisibleElement;
         };
 
         this.setTransitionDuration = function(transitionDuration) {
@@ -474,6 +509,27 @@ RevShifter({
                 setTimeout(function() {
                     that.destroy();
                 }, that.options.transition_duration);
+            });
+        };
+
+        this.attachShowElementVisibleListener = function() {
+            var elements = document.querySelectorAll(this.options.show_visible_selector);
+            if (!elements.length) {
+                return;
+            }
+            this.visibleListener = revUtils.checkVisible.bind(this, elements[0], this.emitVisibleEvent);
+            revUtils.addEventListener(window, 'scroll', this.visibleListener);
+        };
+
+        this.emitVisibleEvent = function() {
+            this.innerWidget.emitter.emitEvent('visible');
+        };
+
+        this.showOnceVisible = function() {
+            var that = this;
+            this.innerWidget.emitter.once('visible', function() {
+                revUtils.removeEventListener(window, 'scroll', that.visibleListener);
+                that.show();
             });
         };
 
