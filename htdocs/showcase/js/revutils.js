@@ -282,6 +282,11 @@ utils.ellipsisText = function(headlines) {
 
 utils.imagesLoaded = function(images) {
 
+    if (!images.length) {
+        emitter.emitEvent('done');
+        return;
+    }
+
     var maxMilliseconds = 4000;
 
     // LoadingImage code from https://github.com/desandro/imagesloaded
