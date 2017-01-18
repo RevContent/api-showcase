@@ -499,12 +499,12 @@ RevShifter({
         };
 
         this.attachShowElementVisibleListener = function() {
-            var elements = document.querySelectorAll(this.options.show_visible_selector);
-            if (!elements.length) {
-                return;
+            this.visibleListener = revUtils.throttle(revUtils.checkVisible.bind(this, this.showVisibleElement, this.emitVisibleEvent), 60);
+            if (revDetect.mobile()) {
+                revUtils.addEventListener(window, 'touchmove', this.visibleListener);
+            } else {
+                revUtils.addEventListener(window, 'scroll', this.visibleListener);
             }
-            this.visibleListener = revUtils.checkVisible.bind(this, elements[0], this.emitVisibleEvent);
-            revUtils.addEventListener(window, 'scroll', this.visibleListener);
         };
 
         this.emitVisibleEvent = function() {
