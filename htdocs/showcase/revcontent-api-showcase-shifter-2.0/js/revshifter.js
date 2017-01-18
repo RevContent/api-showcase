@@ -438,7 +438,7 @@ RevShifter({
                 }
             }, this.options.transition_duration);
 
-            if (!this.options.show_on_scroll) {
+            if (!this.options.show_on_scroll || this.showVisibleElement) {
                 document.body.style[this.options.side == 'bottom' ? 'marginBottom' : 'marginTop'] = this.size + 'px';
             }
         };
@@ -451,7 +451,7 @@ RevShifter({
 
             revUtils.removeClass(document.body, 'rev-shifter-no-transform');
 
-            if (!this.options.show_on_scroll) {
+            if (!this.options.show_on_scroll || this.showVisibleElement) {
                 document.body.style[this.options.side == 'bottom' ? 'marginBottom' : 'marginTop'] = 0;
             }
 
