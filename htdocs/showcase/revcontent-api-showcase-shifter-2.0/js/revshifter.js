@@ -243,14 +243,15 @@ RevShifter({
                     } else if (that.options.show_on_scroll) {
                         that.attachScrollEvents();
                     }
-                    // destroy if no data
-                    that.innerWidget.dataPromise.then(function(data) {
-                        if (!data.length) {
-                            that.destroy();
-                        }
-                    });
                 }, 300);
             }
+
+            // destroy if no data
+            that.innerWidget.dataPromise.then(function(data) {
+                if (!data.length) {
+                    that.destroy();
+                }
+            });
         };
 
         this.setShowVisibleElement = function() {
