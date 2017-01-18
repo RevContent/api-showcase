@@ -291,11 +291,11 @@ RevShifter({
 
         this.move = function() {
             if (this.scrollTimeout) {
-                return;
+                cancelAnimationFrame(this.scrollTimeout);
             }
 
             var that = this;
-            function delayed() {
+            this.scrollTimeout = requestAnimationFrame(function() {
                 var scrollTop = window.pageYOffset;
                 var scrollDirection = false;
                 if (scrollTop < that.lastScrollTop) {
@@ -314,14 +314,11 @@ RevShifter({
                 } else if (scrollDirection === 'down') {
                     that.options.scroll_natural ? that.show() : that.hide();
                 }
-            }
-
-            that.scrollTimeout = setTimeout(delayed, 300);
-        }
+            });
 
         this.attachScrollEvents = function() {
             // scrolling
-            this.scrollListener = this.move.bind(this);
+            this.scrollListener = revUtils.throttle(this.move.bind(this), 60);
             this.lastScrollTop = window.pageYOffset;
 
             if (revDetect.mobile()) {
