@@ -514,9 +514,25 @@ RevShifter({
         this.showOnceVisible = function() {
             var that = this;
             this.innerWidget.emitter.once('visible', function() {
-                revUtils.removeEventListener(window, 'scroll', that.visibleListener);
+                that.removeVisibleListener();
                 that.show();
             });
+        };
+
+        this.removeVisibleListener = function() {
+            if (revDetect.mobile()) {
+                revUtils.removeEventListener(window, 'touchmove', this.visibleListener);
+            } else {
+                revUtils.removeEventListener(window, 'scroll', this.visibleListener);
+            }
+        };
+
+        this.removeScrollListener = function() {
+            if (revDetect.mobile()) {
+                revUtils.removeEventListener(window, 'touchmove', this.scrollListener);
+            } else {
+                revUtils.removeEventListener(window, 'scroll', this.scrollListener);
+            }
         };
 
         this.destroy = function() {
@@ -528,10 +544,8 @@ RevShifter({
                 revUtils.removeEventListener(this.element, 'touchmove', this.cancelPanListener);
             }
 
-            if (this.scrollListener) {
-                revUtils.removeEventListener(window, 'touchmove', this.scrollListener);
-                revUtils.removeEventListener(window, 'scroll', this.scrollListener);
-            }
+            this.removeScrollListener();
+            this.removeVisibleListener();
 
             this.innerWidget.destroy();
             revUtils.remove(this.element);
