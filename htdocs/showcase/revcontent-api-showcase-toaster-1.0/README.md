@@ -42,8 +42,7 @@ Devices to show on. Options include ```phone```, ```tablet``` and ```desktop```.
 ```
 devices: [
     'phone', 
-    'tablet', 
-    'desktop'
+    'tablet'
 ]
 ```
 
@@ -93,6 +92,12 @@ query_params: false
 Position of the disclosure text. Options include: ```'bottom_right'```, ```'top_right'```, ```'bottom_left'```.
 ```
 rev_position: 'bottom_right'
+```
+
+###show\_visible\_selector
+query selector for element that will trigger widget to show once visible
+```
+scroll_visible_selector: false
 ```
 
 ###sponsored
