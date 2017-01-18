@@ -44,10 +44,13 @@ RevToaster({
         header: 'Trending Today',
         closed_hours: 24,
         sponsored: 1,
+        internal: false,
+        api_source: 'toast',
         url: 'https://trends.revcontent.com/api/v1/',
         rev_position: 'bottom_right',
+        // default is mobile only, no 'desktop'
         devices: [
-            'phone', 'tablet', 'desktop'
+            'phone', 'tablet'
         ],
         disclosure_text: revDisclose.defaultDisclosureText,
         hide_provider: false,
@@ -55,13 +58,12 @@ RevToaster({
         overlay: false, // pass key value object { content_type: icon }
         overlay_icons: false, // pass in custom icons or overrides
         overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
-        query_params: false
+        query_params: false,
+        show_visible_selector: false
     };
     // var options;
     var lastScrollTop = 0;
     var scrollTimeout;
-    var loaded = false;
-    var removed = false;
 
     var RevToaster = function( opts ) {
         if (instance) {
@@ -96,6 +98,8 @@ RevToaster({
 
         revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-toaster');
 
+        this.emitter = new EventEmitter();
+
         var that = this;
 
         this.init = function() {
@@ -119,11 +123,52 @@ RevToaster({
 
             this.bindClose();
 
-            revUtils.append(document.body, that.revToaster);
+            revUtils.append(document.body, this.revToaster);
 
-            // revUtils.addEventListener(window, 'scroll', this.move); // for debugging
+            this.limit = this.getLimit();
 
-            revUtils.addEventListener(window, 'touchmove', this.move);
+            this.getData();
+
+            var that = this;
+
+            if (this.setShowVisibleElement()) {
+                // show once visible
+                this.showOnceVisible();
+                // check element visibility on scroll
+                this.attachShowElementVisibleListener();
+
+                // wait for all images above show visible elemnt to load before checking visibility
+                revUtils.imagesLoaded(revUtils.imagesAbove(this.showVisibleElement)).once('done', function() {
+                    revUtils.checkVisible.bind(that, that.showVisibleElement, that.emitVisibleEvent)();
+                });
+            } else {
+                // wait a tick or two before attaching to scroll/touch b/c of auto scroll feature in some browsers
+                setTimeout(function() {
+                    that.scrollListener = revUtils.throttle(that.move.bind(that), 60);
+
+                    if (revDetect.mobile()) {
+                        revUtils.addEventListener(window, 'touchmove', that.scrollListener);
+                    } else {
+                        revUtils.addEventListener(window, 'scroll', that.scrollListener);
+                    }
+                }, 300);
+            }
+
+            // destroy if no data
+            this.dataPromise.then(function(data) {
+                if (!data.length) {
+                    that.destroy();
+                }
+            });
+        };
+
+        this.setShowVisibleElement = function() {
+            this.showVisibleElement = false;
+            var elements = document.querySelectorAll(this.options.show_visible_selector);
+            if (elements.length) {
+                this.showVisibleElement = elements[0];
+            }
+            return this.showVisibleElement;
         };
 
         this.update = function(newOpts, oldOpts) {
@@ -160,9 +205,9 @@ RevToaster({
 
             this.header = document.createElement('div');
             this.header.className = 'rev-header';
-            this.header.innerHTML = that.options.header;
+            this.header.innerHTML = this.options.header;
 
-            revUtils.append(that.revToaster, this.header);
+            revUtils.append(this.revToaster, this.header);
 
             if (!this.closeButton) {
                 this.closeButton = document.createElement('button');
@@ -171,7 +216,7 @@ RevToaster({
                                         '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>' +
                                     '</div>';
 
-                revUtils.append(that.revToaster, this.closeButton);
+                revUtils.append(this.revToaster, this.closeButton);
             }
 
             if (this.sponsored) {
@@ -191,35 +236,22 @@ RevToaster({
         };
 
         this.move = function() {
-            if (removed) {
-                revUtils.removeEventListener(window, 'touchmove', this.move);
-                return;
-            }
-
             if (scrollTimeout) {
-                return;
+                cancelAnimationFrame(scrollTimeout);
             }
 
-            function delayed() {
-
+            scrollTimeout = requestAnimationFrame(function() {
                 var scrollTop = window.pageYOffset,
                     scrollDirection = (scrollTop < lastScrollTop) ? 'up' : 'down';
 
                 if (scrollDirection === 'up') {
-                    if (!loaded) {
-                        that.getData(true);
-                    } else {
-                        that.show();
-                    }
+                    that.show();
                 } else if (scrollDirection === 'down') {
                     that.hide();
-
                 }
                 lastScrollTop = scrollTop;
                 scrollTimeout = false;
-            }
-
-            scrollTimeout = setTimeout( delayed, 300);
+            });
         };
 
         this.appendCell = function() {
@@ -243,46 +275,91 @@ RevToaster({
             that.containerElement.appendChild(cell);
         };
 
-        this.getData = function(show) {
-            loaded = true;
-            var url = this.options.url + '?api_key='+ this.options.api_key +'&pub_id='+ this.options.pub_id +'&widget_id='+ this.options.widget_id +'&domain='+ this.options.domain +'&sponsored_count=' + this.options.sponsored + '&sponsored_offset=0&internal_count=0&api_source=toast&viewed=true';
+        this.getSerializedQueryParams = function() {
+             if (!this.serializedQueryParams) {
+                var serialized = revUtils.serialize(this.options.query_params);
+                this.serializedQueryParams = serialized ? '&' + serialized : '';
+             }
+             return this.serializedQueryParams;
+        };
 
-            var serializedQueryParams = revUtils.serialize(this.options.query_params);
-            if (serializedQueryParams) {
-                url += '&' + serializedQueryParams;
+        this.generateUrl = function(offset, count, empty, viewed) {
+            var url = this.options.url +
+            '?api_key=' + this.options.api_key +
+            this.getSerializedQueryParams() +
+            '&pub_id=' + this.options.pub_id +
+            '&widget_id=' + this.options.widget_id +
+            '&domain=' + this.options.domain +
+            '&api_source=' + this.options.api_source;
+
+            // TODO
+            // url +=
+            // '&img_h=' + this.imageHeight +
+            // '&img_w=' + this.imageWidth;
+
+            url +=
+            '&sponsored_count=' + (this.options.internal ? 0 : count) +
+            '&internal_count=' + (this.options.internal ? count : 0) +
+            '&sponsored_offset=' + (this.options.internal ? 0 : offset) +
+            '&internal_offset=' + (this.options.internal ? offset : 0);
+
+            url += this.options.user_ip ? ('&user_ip=' + this.options.user_ip) : '';
+            url += this.options.user_agent ? ('&user_agent=' + this.options.user_agent) : '';
+
+            if (empty) {
+                url += '&empty=true';
+            }
+
+            if (viewed) {
+                url += '&viewed=true';
+            }
+
+            return url;
+        };
+
+        this.getLimit = function() {
+            return (this.options.internal ? this.options.internal : this.options.sponsored);
+        }
+
+        this.getData = function(show) {
+            if (this.dataPromise) {
+                return this.dataPromise;
             }
 
             var that = this;
 
-            revApi.request(url, function(resp) {
+            this.dataPromise = new Promise(function(resolve, reject) {
 
-                if (!resp.length) {
-                    that.destroy();
-                    return;
-                }
+                var url = that.generateUrl(0, that.limit, false, false);
 
-                var ads = that.containerElement.querySelectorAll('.rev-ad');
+                revApi.request(url, function(resp) {
 
-                for (var i = 0; i < resp.length; i++) {
-                    var ad = ads[i],
-                        data = resp[i];
-
-                    if (that.options.overlay !== false) {
-                        revUtils.imageOverlay(ad.querySelectorAll('.rev-image')[0], data.content_type, that.options.overlay, that.options.overlay_position, that.options.overlay_icons);
-                    }
-
-                    ad.querySelectorAll('a')[0].setAttribute('href', data.url);
-                    ad.querySelectorAll('img')[0].setAttribute('src', data.image);
-                    ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
-                    if(that.options.hide_provider === false) {
-                        ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
-                    }
-
-                }
-                if (show) {
-                    that.show();
-                }
+                    that.data = resp;
+                    that.updateDisplayedItems();
+                    resolve(resp);
+                });
             });
+        };
+
+        this.updateDisplayedItems = function() {
+            var ads = this.containerElement.querySelectorAll('.rev-ad');
+
+            for (var i = 0; i < this.data.length; i++) {
+                var ad = ads[i],
+                    data = this.data[i];
+
+                if (this.options.overlay !== false) {
+                    revUtils.imageOverlay(ad.querySelectorAll('.rev-image')[0], data.content_type, this.options.overlay, this.options.overlay_position, this.options.overlay_icons);
+                }
+
+                ad.querySelectorAll('a')[0].setAttribute('href', data.url);
+                ad.querySelectorAll('img')[0].setAttribute('src', data.image);
+                ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
+                if(this.options.hide_provider === false) {
+                    ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
+                }
+
+            }
         };
 
         this.bindClose = function() {
@@ -296,35 +373,102 @@ RevToaster({
                 setTimeout(function() {
                     that.revToaster.parentNode.removeChild(that.revToaster);
                     revApi.beacons.detach('toaster');
-                    removed = true;
+                    that.removeScrollListener();
                     revUtils.setCookie('revtoaster-closed', 1, (that.options.closed_hours / 24));
                 }, 2000);
             });
         };
 
-        this.show = function() {
-            if (!loaded) {
-                this.getData(true);
+        this.attachShowElementVisibleListener = function() {
+            this.visibleListener = revUtils.throttle(revUtils.checkVisible.bind(this, this.showVisibleElement, this.emitVisibleEvent), 60);
+            if (revDetect.mobile()) {
+                revUtils.addEventListener(window, 'touchmove', this.visibleListener);
             } else {
-                var that = this;
+                revUtils.addEventListener(window, 'scroll', this.visibleListener);
+            }
+        };
 
+        this.emitVisibleEvent = function() {
+            this.emitter.emitEvent('visible');
+        };
+
+        this.showOnceVisible = function() {
+            var that = this;
+            this.emitter.once('visible', function() {
+                that.removeVisibleListener();
+                that.show();
+            });
+        };
+
+        this.getSize = function() {
+            return this.revToaster.offsetHeight + 21; // 21 is the size of the trending now banner
+        };
+
+        this.show = function() {
+            var that = this;
+            this.dataPromise.then(function() {
                 revUtils.imagesLoaded(that.containerElement.querySelectorAll('img')).once('done', function() {
                     that.visible = true;
                     revUtils.addClass(document.body, 'rev-toaster-loaded');
+                    that.registerView();
+                    if (that.showVisibleElement) {
+                        document.body.style.marginBottom = that.getSize() + 'px';
+                    }
                     if(true === that.options.beacons) { revApi.beacons.setPluginSource('toaster').attach(); }
+                });
+            });
+        };
+
+        this.registerView = function() {
+            if (!this.viewed) {
+                this.viewed = true;
+
+                // register a view without impressions(empty)
+                var url = this.generateUrl(0, this.limit, true, true);
+
+                revApi.request(url, function() { return });
+
+                var that = this;
+                // make sure we have some data
+                this.dataPromise.then(function() {
+                    var anchors = that.containerElement.querySelectorAll('.rev-ad a');
+                    for (var i = 0; i < anchors.length; i++) {
+                        anchors[i].setAttribute('href', anchors[i].getAttribute('href') + '&viewed=true');
+                    }
                 });
             }
         };
 
         this.hide = function() {
             this.visible = false;
+            if (this.showVisibleElement) {
+                document.body.style.marginBottom = 0;
+            }
             revUtils.removeClass(document.body, 'rev-toaster-loaded');
+        };
+
+        this.removeVisibleListener = function() {
+            if (revDetect.mobile()) {
+                revUtils.removeEventListener(window, 'touchmove', this.visibleListener);
+            } else {
+                revUtils.removeEventListener(window, 'scroll', this.visibleListener);
+            }
+        };
+
+        this.removeScrollListener = function() {
+            if (revDetect.mobile()) {
+                revUtils.removeEventListener(window, 'touchmove', this.scrollListener);
+            } else {
+                revUtils.removeEventListener(window, 'scroll', this.scrollListener);
+            }
         };
 
         this.destroy = function() {
             revUtils.remove(this.revToaster);
-            revUtils.removeEventListener(window, 'touchmove', this.move);
-        }
+
+            this.removeScrollListener();
+            this.removeVisibleListener();
+        };
 
         this.init();
     };
