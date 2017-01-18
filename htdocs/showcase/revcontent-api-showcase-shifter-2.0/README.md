@@ -155,6 +155,12 @@ Show on vertical pan touch gesture
 show_on_touch: true
 ```
 
+###show\_visible\_selector
+query selector for element that will trigger widget to show once visible
+```
+scroll_visible_selector: false
+```
+
 ###scroll_natural
 By default scrolling up will hide and scrolling down will show. Set to false for the opposite behavior.
 ```
