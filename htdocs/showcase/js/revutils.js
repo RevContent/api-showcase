@@ -220,17 +220,37 @@ utils.dispatchScrollbarResizeEvent = function() {
     document.body.appendChild(iframe);
 }
 
-utils.addEventListener = function(el, eventName, handler) {
+utils.addEventListener = function(el, eventName, handler, options) {
     if (!handler) {
         return;
     }
+
+    var defaultOptions = false; // useCapture defaults to false
+    if (this.eventListenerPassiveSupported()) {
+        // passive by default
+        var defaultOptions = {
+          passive: (options && typeof options.passive !== 'undefined' ? options.passive : true)
+        };
+    }
     if (el.addEventListener) {
-        el.addEventListener(eventName, handler);
+        el.addEventListener(eventName, handler, defaultOptions);
     } else {
         el.attachEvent('on' + eventName, function(){
             handler.call(el);
         });
     }
+};
+
+// if event listener does not preventDefault it should be passive
+utils.eventListenerPassiveSupported = function() {
+    var supportsCaptureOption = false;
+    try {
+      addEventListener("test", null, Object.defineProperty({}, 'passive', {get: function () {
+        supportsCaptureOption = true;
+      }}));
+    } catch(e) {}
+
+    return supportsCaptureOption
 };
 
 utils.removeEventListener = function(el, eventName, handler) {

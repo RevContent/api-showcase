@@ -624,11 +624,11 @@ Author: michael@revcontent.com
     RevSlider.prototype.preventDefault = function() {
         revUtils.addEventListener(this.element, 'mousedown', function(e) {
             e.preventDefault();
-        });
+        }, {passive: false});
 
         revUtils.addEventListener(this.element, 'dragstart', function(e) {
             e.preventDefault();
-        });
+        }, {passive: false});
     };
 
     RevSlider.prototype.initButtons = function() {
@@ -1227,12 +1227,12 @@ Author: michael@revcontent.com
     RevSlider.prototype.attachTouchEvents = function() {
         var that = this;
 
-        this.element.addEventListener('click', function(e) {
+        revUtils.addEventListener(this.element, 'click', function(e) {
             if (that.made || that.movement) {
                 e.stopPropagation();
                 e.preventDefault();
             }
-        });
+        }, {passive: false});
 
         this.mc.on('pan swipe', function(e) {
             // prevent default on pan by default, or atleast if the thing is moving
