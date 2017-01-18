@@ -426,7 +426,20 @@ utils.checkHidden = function(element, callback, percentHidden) {
     if ((scroll + windowHeight < element.getBoundingClientRect().top + scroll ||
         element.getBoundingClientRect().top + (element.offsetHeight * visibleHeightMultiplier) <= 0)) {
         callback.bind(this)();
+// get all images above an element
+utils.imagesAbove = function(element) {
+    // get all images
+    var images = document.querySelectorAll('img');
+    // top position of show visible element
+    var elementTop = element.getBoundingClientRect().top;
+    // if show visible element is below image add to imagesAboveElement array
+    var imagesAboveElement = [];
+    for (var i = 0; i < images.length; i++) {
+        if (images[i].getBoundingClientRect().top < elementTop) {
+            imagesAboveElement.push(images[i]);
+        }
     }
+    return imagesAboveElement;
 };
 
 // -----  ----- //

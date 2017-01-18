@@ -222,20 +222,8 @@ RevShifter({
             if (this.options.show_on_load) {
                 this.show();
             }
-
             // if show visible element show once that is visible
             if (this.setShowVisibleElement()) {
-                // get all images
-                var images = document.querySelectorAll('img');
-                // top position of show visible element
-                var showVisibleElementTop = this.showVisibleElement.getBoundingClientRect().top;
-                // if show visible element is below image add to imagesAboveShowVisibleElement array
-                var imagesAboveShowVisibleElement = [];
-                for (var i = 0; i < images.length; i++) {
-                    if (images[i].getBoundingClientRect().top < showVisibleElementTop) {
-                        imagesAboveShowVisibleElement.push(images[i]);
-                    }
-                }
                 // show once visible
                 this.showOnceVisible();
                 // check element visibility on scroll
@@ -243,7 +231,7 @@ RevShifter({
 
                 var that = this;
                 // wait for all images above show visible elemnt to load before checking visibility
-                revUtils.imagesLoaded(imagesAboveShowVisibleElement).once('done', function() {
+                revUtils.imagesLoaded(revUtils.imagesAbove(this.showVisibleElement)).once('done', function() {
                     revUtils.checkVisible.bind(that, that.showVisibleElement, that.emitVisibleEvent)();
                 });
             } else { // otherwise show on scroll
