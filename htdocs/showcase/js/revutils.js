@@ -419,33 +419,41 @@ utils.imageOverlay = function(image, content_type, overlay, position, icons) {
     revOverlay.image(image, content_type, overlay, position, icons);
 };
 
-// TODO: probably don't need to bind these
 utils.checkVisible = function(element, callback, percentVisible) {
-    // what percentage of the element should be visible
-    var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
+    var that = this;
+    requestAnimationFrame(function() {
+        // what percentage of the element should be visible
+        var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
 
-    var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-    var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-    var elementTop = element.getBoundingClientRect().top;
-    var elementBottom = element.getBoundingClientRect().bottom;
-    var elementVisibleHeight = element.offsetHeight * visibleHeightMultiplier;
+        var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+        var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        var elementTop = element.getBoundingClientRect().top;
+        var elementBottom = element.getBoundingClientRect().bottom;
+        var elementVisibleHeight = element.offsetHeight * visibleHeightMultiplier;
 
-    if ((scroll + windowHeight >= (elementTop + scroll + elementVisibleHeight)) &&
-        elementBottom > elementVisibleHeight) {
-        callback.bind(this)();
-    }
+        if ((scroll + windowHeight >= (elementTop + scroll + elementVisibleHeight)) &&
+            elementBottom > elementVisibleHeight) {
+            callback.call(that);
+        }
+    });
 };
 
 utils.checkHidden = function(element, callback, percentHidden) {
-    // what percentage of the element should be hidden
-    var visibleHeightMultiplier = (typeof percentHidden === 'number') ? (parseInt(percentHidden) * .01) : 0;
+    var that = this;
+    requestAnimationFrame(function() {
+        // what percentage of the element should be hidden
+        var visibleHeightMultiplier = (typeof percentHidden === 'number') ? (parseInt(percentHidden) * .01) : 0;
 
-    var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-    var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+        var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
-    if ((scroll + windowHeight < element.getBoundingClientRect().top + scroll ||
-        element.getBoundingClientRect().top + (element.offsetHeight * visibleHeightMultiplier) <= 0)) {
-        callback.bind(this)();
+        if ((scroll + windowHeight < element.getBoundingClientRect().top + scroll ||
+            element.getBoundingClientRect().top + (element.offsetHeight * visibleHeightMultiplier) <= 0)) {
+            callback.call(that);
+        }
+    });
+};
+
 // get all images above an element
 utils.imagesAbove = function(element) {
     // get all images
