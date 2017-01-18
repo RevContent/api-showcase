@@ -275,7 +275,7 @@ RevShifter({
                 return true;
             }
             return false;
-        }
+        };
 
         this.appendTouchEnabledElement = function() {
             this.touchEnabledElement = document.createElement('div');
@@ -287,7 +287,7 @@ RevShifter({
             requestAnimationFrame(function() {
                 that.touchEnabledElement.style.width = that.touchEnabledElement.offsetHeight + 'px';
             });
-        }
+        };
 
         this.move = function() {
             if (this.scrollTimeout) {
@@ -315,6 +315,7 @@ RevShifter({
                     that.options.scroll_natural ? that.show() : that.hide();
                 }
             });
+        };
 
         this.attachScrollEvents = function() {
             // scrolling
@@ -326,7 +327,7 @@ RevShifter({
             } else {
                 revUtils.addEventListener(window, 'scroll', this.scrollListener);
             }
-        }
+        };
 
         this.update = function(newOpts, oldOpts) {
             this.options = revUtils.extend(defaults, newOpts);
@@ -357,7 +358,7 @@ RevShifter({
         // prevent show/hide when paning vertically on element
         this.cancelPan = function() {
             this.panCancelled = true;
-        }
+        };
 
         this.attachTouchEvents = function() {
 
@@ -384,7 +385,7 @@ RevShifter({
             revUtils.addEventListener(this.element, 'touchstart', this.cancelPanListener);
             revUtils.addEventListener(this.element, 'touchend', this.cancelPanListener);
             revUtils.addEventListener(this.element, 'touchmove', this.cancelPanListener);
-        }
+        };
 
         this.show = function() {
             this.hideTimeout = clearTimeout(this.hideTimeout);
@@ -484,8 +485,7 @@ RevShifter({
             }
 
             this.attachCloseButtonEvent();
-
-        }
+        };
 
         this.attachCloseButtonEvent = function() {
             var that = this;
