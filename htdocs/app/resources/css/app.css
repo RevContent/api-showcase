@@ -672,6 +672,11 @@ body.os-windows-phone.browser-ie.md-dialog-is-showing md-dialog.md-transition-in
   width: auto;
 }
 
+.widget-docs-list md-list-item {
+  float: left;
+  width: 50%;
+}
+
 .widget-docs-list a.md-button {
   margin: 0;
 }
