@@ -19,15 +19,12 @@ var rcds = document.getElementById("rcjsload_a122d7"); rcds.appendChild(rcel);
 })();
 &lt;script&gt;
 
-&lt;script src="http://labs-cdn.revcontent.com/build/revmore.min.js">&lt;script&gt;
+&lt;script src="http://labs-cdn.revcontent.com/build/revmore-standard.min.js">&lt;script&gt;
 
 &lt;script&gt;
     new RevMore({
-        top_id: 'top-id',
-        api_key: 'api_key',
-        pub_id: 123,
         widget_id: 456,
-        domain: 'mysite.com'
+        top_id: 'top-id'
     });
 &lt;/script&gt;
 ```
@@ -76,10 +73,4 @@ top_id: false
 Text for the unlock button.
 ```
 unlock_text: 'Read More...'
-```
-
-###url
-Use an alternate API url
-```
-url: 'https://trends.revcontent.com/api/v1/'
 ```
