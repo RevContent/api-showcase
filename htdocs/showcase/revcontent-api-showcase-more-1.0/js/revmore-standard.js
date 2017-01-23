@@ -31,15 +31,16 @@ RevMore({
     var RevMore;
     var that;
     var defaults = {
-        url: 'trends.revcontent.com',
-        top_id: false,
-        distance: 500,
-        unlock_text: 'Read More...',
-        gradient_height: 60,
         devices: [
             'phone', 'tablet', 'desktop'
         ],
-        query_params: false
+        distance: 500,
+        gradient_height: 60,
+        hide_selectors: false,
+        query_params: false,
+        top_id: false,
+        unlock_text: 'Read More...',
+        url: 'trends.revcontent.com',
     };
 
     RevMore = function(opts) {
