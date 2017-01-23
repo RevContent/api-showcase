@@ -99,6 +99,7 @@
       "./showcase/revcontent-api-showcase-more-1.0/css/revmore.css"
     ],
     "build": [
+      "./vendor/eventEmitter/EventEmitter.min.js",
       "./vendor/mobile-detect/mobile-detect.js",
       "./showcase/js/revutils.js",
       "./showcase/js/revdetect.js",
