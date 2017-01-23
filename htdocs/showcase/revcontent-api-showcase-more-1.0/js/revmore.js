@@ -390,18 +390,3 @@ RevMore({
 
     return RevMore;
 }));
-
-$(function() {
-    var more = new RevMore({
-        // top_id: 'top-id',
-        // id: 'in-article',
-        api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
-        pub_id : 945,
-        widget_id : 6181,
-        domain : 'apiexamples.powr.com',
-        hide_selectors: [ // elements to hide if they become visible while more is open
-            'body > #cnx-autoplay-container',
-            'body > #wtfff'
-        ]
-    });
-});
