@@ -32,17 +32,6 @@
                 styles: ''
             }
         };
-
-        self.init();
-    };
-
-    RevBeacon.prototype.init = function () {
-        var self = this;
-        document.onreadystatechange = function () {
-            if (document.readyState == "complete") {
-
-            }
-        }
     };
 
     RevBeacon.prototype.setPluginSource = function(pluginSource){
