@@ -284,12 +284,16 @@ RevMore({
             var that = this;
             var matches = function(element) {
                 var matched = false;
-                for (var i = 0; i < that.options.hide_selectors.length; i++) {
-                    if (element.matches(that.options.hide_selectors[i])) {
-                        matched = true;
-                        break;
+
+                try {
+                    for (var i = 0; i < that.options.hide_selectors.length; i++) {
+                        if (element.matches(that.options.hide_selectors[i])) {
+                            matched = true;
+                            break;
+                        }
                     }
-                }
+                } catch(e) {}
+
                 return matched;
             };
 
