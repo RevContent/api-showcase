@@ -81,6 +81,7 @@
       "./showcase/revcontent-api-showcase-more-1.0/css/revmore.css"
     ],
     "build": [
+      "./showcase/js/matches.js",
       "./build/files/slider/revslider.pkgd.js",
       "./build/files/more/revmore.embed.js"
     ],
@@ -100,6 +101,7 @@
       "./showcase/revcontent-api-showcase-more-1.0/css/revmore.css"
     ],
     "build": [
+      "./showcase/js/matches.js",
       "./vendor/eventEmitter/EventEmitter.min.js",
       "./vendor/mobile-detect/mobile-detect.js",
       "./showcase/js/revutils.js",
