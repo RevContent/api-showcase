@@ -80,7 +80,8 @@ RevShifter({
         overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
         query_params: false,
         user_ip: false,
-        user_agent: false
+        user_agent: false,
+        css: ''
     };
 
     RevShifter = function(opts) {
@@ -201,7 +202,8 @@ RevShifter({
                 query_params: this.options.query_params,
                 register_views: false, // handle viewibility/prevent Slider from doing checks
                 user_ip: this.options.user_ip,
-                user_agent: this.options.user_agent
+                user_agent: this.options.user_agent,
+                css: this.options.css
             });
 
             this.closeButton();
