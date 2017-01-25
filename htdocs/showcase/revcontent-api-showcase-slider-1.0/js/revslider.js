@@ -98,7 +98,8 @@ Author: michael@revcontent.com
             query_params: false,
             register_views: true, // manage views or false to let someone else do it
             user_ip: false,
-            user_agent: false
+            user_agent: false,
+            css: '',
         };
 
         // merge options
@@ -117,7 +118,7 @@ Author: michael@revcontent.com
 
         this.emitter = new EventEmitter();
 
-        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-slider');
+        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-slider', this.options.css);
 
         this.data = [];
         this.displayedItems = [];
