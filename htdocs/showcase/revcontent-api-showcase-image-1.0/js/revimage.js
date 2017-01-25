@@ -72,7 +72,8 @@ Author: michael@revcontent.com
             query_params: false,
             selector: false,
             user_ip: false,
-            user_agent: false
+            user_agent: false,
+            css: ''
         };
 
         // merge options
@@ -203,7 +204,8 @@ Author: michael@revcontent.com
             query_params: this.options.query_params,
             register_views: false, // handle viewibility/prevent Slider from doing checks
             user_ip: this.options.user_ip,
-            user_agent: this.options.user_agent
+            user_agent: this.options.user_agent,
+            css: this.options.css
         });
         return this.innerWidget;
     };

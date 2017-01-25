@@ -45,6 +45,12 @@ Button config. Enable/disable forward/back, size, position(```dots```, ```inside
 }
 ```
 
+###css
+Additional CSS to append.
+```
+css: ''
+```
+
 ###devices
 Devices to show on. Options include ```phone```, ```tablet``` and ```desktop```.
 ```

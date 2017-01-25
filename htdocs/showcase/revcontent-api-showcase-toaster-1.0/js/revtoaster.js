@@ -59,7 +59,8 @@ RevToaster({
         overlay_icons: false, // pass in custom icons or overrides
         overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
         query_params: false,
-        show_visible_selector: false
+        show_visible_selector: false,
+        css: '',
     };
     // var options;
     var lastScrollTop = 0;
@@ -96,7 +97,7 @@ RevToaster({
             return;
         }
 
-        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-toaster');
+        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-toaster', this.options.css);
 
         this.emitter = new EventEmitter();
 

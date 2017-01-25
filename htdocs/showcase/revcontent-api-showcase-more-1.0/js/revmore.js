@@ -68,7 +68,8 @@ RevMore({
         query_params: false,
         user_ip: false,
         user_agent: false,
-        hide_selectors: false
+        hide_selectors: false,
+        css: ''
     };
 
     RevMore = function(opts) {
@@ -256,7 +257,8 @@ RevMore({
                             padding: 2
                         },
                         user_ip: that.options.user_ip,
-                        user_agent: that.options.user_agent
+                        user_agent: that.options.user_agent,
+                        css: that.options.css
                     });
                 });
             }
@@ -294,7 +296,8 @@ RevMore({
                 },
                 query_params: this.options.query_params,
                 user_ip: this.options.user_ip,
-                user_agent: this.options.user_agent
+                user_agent: this.options.user_agent,
+                css: this.options.css
             });
         };
 

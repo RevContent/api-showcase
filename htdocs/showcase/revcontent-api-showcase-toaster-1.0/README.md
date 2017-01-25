@@ -37,6 +37,12 @@ Number of hours to keep closed
 closed_hours: 24
 ```
 
+###css
+Additional CSS to append.
+```
+css: ''
+```
+
 ###devices
 Devices to show on. Options include ```phone```, ```tablet``` and ```desktop```.
 ```
