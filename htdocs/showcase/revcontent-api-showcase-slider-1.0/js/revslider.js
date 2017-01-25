@@ -100,6 +100,7 @@ Author: michael@revcontent.com
             user_ip: false,
             user_agent: false,
             css: '',
+            disable_pagination: false
         };
 
         // merge options
@@ -207,8 +208,10 @@ Author: michael@revcontent.com
         }
 
         this.dataPromise.then(function() {
-            that.attachTouchEvents();
-            that.attachButtonEvents();
+            if (that.options.disable_pagination === false) {
+                that.attachTouchEvents();
+                that.attachButtonEvents();
+            }
         });
     };
 
