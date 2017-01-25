@@ -31,15 +31,16 @@ RevMore({
     var RevMore;
     var that;
     var defaults = {
-        url: 'trends.revcontent.com',
-        top_id: false,
-        distance: 500,
-        unlock_text: 'Read More...',
-        gradient_height: 60,
         devices: [
             'phone', 'tablet', 'desktop'
         ],
-        query_params: false
+        distance: 500,
+        gradient_height: 60,
+        hide_selectors: false,
+        query_params: false,
+        top_id: false,
+        unlock_text: 'Read More...',
+        url: 'trends.revcontent.com',
     };
 
     RevMore = function(opts) {
@@ -68,6 +69,8 @@ RevMore({
             return;
         }
 
+        this.emitter = new EventEmitter();
+
         revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-more');
 
         this.init = function() {
@@ -87,6 +90,8 @@ RevMore({
             this.attachButtonEvents();
 
             this.attachResizedEvents();
+
+            this.observeBodyChildList();
         };
 
         // we don't want any padding on the body
@@ -222,6 +227,8 @@ RevMore({
 
                 revUtils.addClass(that.element, 'unlocked');
 
+                that.emitter.emitEvent('unlocked');
+
                 setTimeout(function() {
                     that.destroy(false);
                 }, 1000);
@@ -233,6 +240,70 @@ RevMore({
             // attach to window resize
             this.resizeListener = this.resize.bind(this);
             revUtils.addEventListener(window, 'resize', this.resizeListener);
+        };
+
+        this.observeBodyChildList = function() {
+            // if we don't have any selectors return
+            if (typeof this.options.hide_selectors !== 'object' || !this.options.hide_selectors.length) {
+                return;
+            }
+
+            // store any hidden elements
+            var hidden = [];
+
+            // helper to see if the observed element matches any of the hide_selectors option
+            var that = this;
+            var matches = function(element) {
+                var matched = false;
+                for (var i = 0; i < that.options.hide_selectors.length; i++) {
+                    if (element.matches(that.options.hide_selectors[i])) {
+                        matched = true;
+                        break;
+                    }
+                }
+                return matched;
+            };
+
+            // mutation observer for any new body children
+            var observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    // if the added node matches hide_selectors option
+                    if (mutation.addedNodes[0] && matches(mutation.addedNodes[0])) {
+                        // another observer on the element in case the style changes at any point, set hidden
+                        var foundObserver = new MutationObserver(function(mutations) {
+                            mutation.addedNodes[0].style.display = 'none';
+                        });
+                        // cache the original display
+                        var display = revUtils.getComputedStyle(mutation.addedNodes[0], 'display');
+
+                        // push observer, element and original display into hidden
+                        hidden.push({
+                            observer: foundObserver,
+                            element: mutation.addedNodes[0],
+                            display: (display !== 'none' ? display : 'block')
+                        });
+                        // set element hidden
+                        mutation.addedNodes[0].style.display = 'none';
+                        // observe
+                        foundObserver.observe(mutation.addedNodes[0], {
+                            attributes:    true,
+                            attributeFilter: ["style"]
+                        });
+                    }
+                });
+            });
+            // observe
+            observer.observe(document.body, {
+                childList: true
+            });
+            // when unlocked disconnect all observers and show the elements that were hidden
+            this.emitter.once('unlocked', function() {
+                observer.disconnect();
+                for (var i = 0; i < hidden.length; i++) {
+                    hidden[i].observer.disconnect();
+                    hidden[i].element.style.display = hidden[i].display;
+                }
+            });
         };
 
         this.resize = function() {

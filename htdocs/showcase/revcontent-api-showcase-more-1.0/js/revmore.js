@@ -66,7 +66,8 @@ RevMore({
         overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
         query_params: false,
         user_ip: false,
-        user_agent: false
+        user_agent: false,
+        hide_selectors: false
     };
 
     RevMore = function(opts) {
@@ -120,6 +121,8 @@ RevMore({
             this.attachButtonEvents();
 
             this.attachResizedEvents();
+
+            this.observeBodyChildList();
 
             // destroy if no data
             var that = this;
@@ -274,6 +277,7 @@ RevMore({
 
         // unlock button
         this.attachButtonEvents = function() {
+            var that = this;
             this.unlockBtn.addEventListener('click', function() {
                 that.wrapper.style.height = 'auto';
                 that.wrapper.style.marginBottom = '0'; // remove buffer margin
@@ -287,6 +291,8 @@ RevMore({
 
                 revUtils.addClass(that.element, 'unlocked');
 
+                that.innerWidget.emitter.emitEvent('unlocked');
+
                 setTimeout(function() {
                     that.destroy(false);
                 }, 1000);
@@ -298,6 +304,70 @@ RevMore({
             var that = this;
             this.innerWidget.grid.on( 'resized', function() {
                 that.wrapperHeight();
+            });
+        };
+
+        this.observeBodyChildList = function() {
+            // if we don't have any selectors return
+            if (typeof this.options.hide_selectors !== 'object' || !this.options.hide_selectors.length) {
+                return;
+            }
+
+            // store any hidden elements
+            var hidden = [];
+
+            // helper to see if the observed element matches any of the hide_selectors option
+            var that = this;
+            var matches = function(element) {
+                var matched = false;
+                for (var i = 0; i < that.options.hide_selectors.length; i++) {
+                    if (element.matches(that.options.hide_selectors[i])) {
+                        matched = true;
+                        break;
+                    }
+                }
+                return matched;
+            };
+
+            // mutation observer for any new body children
+            var observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    // if the added node matches hide_selectors option
+                    if (mutation.addedNodes[0] && matches(mutation.addedNodes[0])) {
+                        // another observer on the element in case the style changes at any point, set hidden
+                        var foundObserver = new MutationObserver(function(mutations) {
+                            mutation.addedNodes[0].style.display = 'none';
+                        });
+                        // cache the original display
+                        var display = revUtils.getComputedStyle(mutation.addedNodes[0], 'display');
+
+                        // push observer, element and original display into hidden
+                        hidden.push({
+                            observer: foundObserver,
+                            element: mutation.addedNodes[0],
+                            display: (display !== 'none' ? display : 'block')
+                        });
+                        // set element hidden
+                        mutation.addedNodes[0].style.display = 'none';
+                        // observe
+                        foundObserver.observe(mutation.addedNodes[0], {
+                            attributes:    true,
+                            attributeFilter: ["style"]
+                        });
+                    }
+                });
+            });
+            // observe
+            observer.observe(document.body, {
+                childList: true
+            });
+            // when unlocked disconnect all observers and show the elements that were hidden
+            this.innerWidget.emitter.once('unlocked', function() {
+                observer.disconnect();
+                for (var i = 0; i < hidden.length; i++) {
+                    hidden[i].observer.disconnect();
+                    hidden[i].element.style.display = hidden[i].display;
+                }
             });
         };
 
