@@ -41,6 +41,12 @@ Number of hours to keep closed
 closed_hours: 24
 ```
 
+###css
+Additional CSS to append.
+```
+css: ''
+```
+
 ###devices
 Devices to show on. Options include ```phone```, ```tablet``` and ```desktop```.
 ```
@@ -153,6 +159,12 @@ show_on_scroll: true
 Show on vertical pan touch gesture
 ```
 show_on_touch: true
+```
+
+###show\_visible\_selector
+query selector for element that will trigger widget to show once visible
+```
+scroll_visible_selector: false
 ```
 
 ###scroll_natural

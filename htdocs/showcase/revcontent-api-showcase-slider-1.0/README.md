@@ -69,6 +69,18 @@ Button config. Enable/disable forward/back, size, position(```dots```, ```inside
 }
 ```
 
+###css
+Additional CSS to append.
+```
+css: ''
+```
+
+###disable_pagination
+click and touch pagination events will be disabled
+```
+disable_pagination: false
+```
+
 ###devices
 Devices to show on. Options include ```phone```, ```tablet``` and ```desktop```.
 ```

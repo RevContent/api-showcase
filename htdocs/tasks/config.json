@@ -15,6 +15,7 @@
       "./vendor/hammerjs/hammer.js",
       "./vendor/mobile-detect/mobile-detect.js",
       "./vendor/any-grid/dist/any-grid.js",
+      "./showcase/js/requestAnimationFrame.js",
       "./showcase/js/revoverlay.js",
       "./showcase/js/revutils.js",
       "./showcase/js/revdialog.js",
@@ -99,6 +100,7 @@
       "./showcase/revcontent-api-showcase-more-1.0/css/revmore.css"
     ],
     "build": [
+      "./vendor/eventEmitter/EventEmitter.min.js",
       "./vendor/mobile-detect/mobile-detect.js",
       "./showcase/js/revutils.js",
       "./showcase/js/revdetect.js",
@@ -125,6 +127,7 @@
       "./vendor/flickity/dist/flickity.pkgd.js",
       "./vendor/mobile-detect/mobile-detect.js",
       "./vendor/es6-promise/es6-promise.js",
+      "./showcase/js/requestAnimationFrame.js",
       "./showcase/js/revoverlay.js",
       "./showcase/js/revutils.js",
       "./showcase/js/revdialog.js",
@@ -154,7 +157,9 @@
     ],
     "build": [
       "./vendor/mobile-detect/mobile-detect.js",
+      "./vendor/es6-promise/es6-promise.js",
       "./vendor/eventEmitter/EventEmitter.min.js",
+      "./showcase/js/requestAnimationFrame.js",
       "./showcase/js/revoverlay.js",
       "./showcase/js/revutils.js",
       "./showcase/js/revdialog.js",

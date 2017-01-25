@@ -220,17 +220,37 @@ utils.dispatchScrollbarResizeEvent = function() {
     document.body.appendChild(iframe);
 }
 
-utils.addEventListener = function(el, eventName, handler) {
+utils.addEventListener = function(el, eventName, handler, options) {
     if (!handler) {
         return;
     }
+
+    var defaultOptions = false; // useCapture defaults to false
+    if (this.eventListenerPassiveSupported()) {
+        // passive by default
+        var defaultOptions = {
+          passive: (options && typeof options.passive !== 'undefined' ? options.passive : true)
+        };
+    }
     if (el.addEventListener) {
-        el.addEventListener(eventName, handler);
+        el.addEventListener(eventName, handler, defaultOptions);
     } else {
         el.attachEvent('on' + eventName, function(){
             handler.call(el);
         });
     }
+};
+
+// if event listener does not preventDefault it should be passive
+utils.eventListenerPassiveSupported = function() {
+    var supportsCaptureOption = false;
+    try {
+      addEventListener("test", null, Object.defineProperty({}, 'passive', {get: function () {
+        supportsCaptureOption = true;
+      }}));
+    } catch(e) {}
+
+    return supportsCaptureOption
 };
 
 utils.removeEventListener = function(el, eventName, handler) {
@@ -281,6 +301,11 @@ utils.ellipsisText = function(headlines) {
 };
 
 utils.imagesLoaded = function(images) {
+
+    if (!images.length) {
+        emitter.emitEvent('done');
+        return;
+    }
 
     var maxMilliseconds = 4000;
 
@@ -394,34 +419,78 @@ utils.imageOverlay = function(image, content_type, overlay, position, icons) {
     revOverlay.image(image, content_type, overlay, position, icons);
 };
 
-// TODO: probably don't need to bind these
 utils.checkVisible = function(element, callback, percentVisible) {
-    // what percentage of the element should be visible
-    var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
+    var that = this;
+    requestAnimationFrame(function() {
+        // what percentage of the element should be visible
+        var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
 
-    var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-    var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-    var elementTop = element.getBoundingClientRect().top;
-    var elementBottom = element.getBoundingClientRect().bottom;
-    var elementVisibleHeight = element.offsetHeight * visibleHeightMultiplier;
+        var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+        var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        var elementTop = element.getBoundingClientRect().top;
+        var elementBottom = element.getBoundingClientRect().bottom;
+        var elementVisibleHeight = element.offsetHeight * visibleHeightMultiplier;
 
-    if ((scroll + windowHeight >= (elementTop + scroll + elementVisibleHeight)) &&
-        elementBottom > elementVisibleHeight) {
-        callback.bind(this)();
-    }
+        if ((scroll + windowHeight >= (elementTop + scroll + elementVisibleHeight)) &&
+            elementBottom > elementVisibleHeight) {
+            callback.call(that);
+        }
+    });
 };
 
 utils.checkHidden = function(element, callback, percentHidden) {
-    // what percentage of the element should be hidden
-    var visibleHeightMultiplier = (typeof percentHidden === 'number') ? (parseInt(percentHidden) * .01) : 0;
+    var that = this;
+    requestAnimationFrame(function() {
+        // what percentage of the element should be hidden
+        var visibleHeightMultiplier = (typeof percentHidden === 'number') ? (parseInt(percentHidden) * .01) : 0;
 
-    var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-    var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+        var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
-    if ((scroll + windowHeight < element.getBoundingClientRect().top + scroll ||
-        element.getBoundingClientRect().top + (element.offsetHeight * visibleHeightMultiplier) <= 0)) {
-        callback.bind(this)();
+        if ((scroll + windowHeight < element.getBoundingClientRect().top + scroll ||
+            element.getBoundingClientRect().top + (element.offsetHeight * visibleHeightMultiplier) <= 0)) {
+            callback.call(that);
+        }
+    });
+};
+
+// get all images above an element
+utils.imagesAbove = function(element) {
+    // get all images
+    var images = document.querySelectorAll('img');
+    // top position of show visible element
+    var elementTop = element.getBoundingClientRect().top;
+    // if show visible element is below image add to imagesAboveElement array
+    var imagesAboveElement = [];
+    for (var i = 0; i < images.length; i++) {
+        if (images[i].getBoundingClientRect().top < elementTop) {
+            imagesAboveElement.push(images[i]);
+        }
     }
+    return imagesAboveElement;
+};
+
+utils.throttle = function throttle(fn, threshhold, scope) {
+    threshhold || (threshhold = 250);
+    var last,
+        deferTimer;
+    return function () {
+        var context = scope || this;
+
+        var now = +new Date,
+            args = arguments;
+        if (last && now < last + threshhold) {
+            // hold on to it
+            clearTimeout(deferTimer);
+            deferTimer = setTimeout(function () {
+                last = now;
+                fn.apply(context, args);
+            }, threshhold);
+        } else {
+            last = now;
+            fn.apply(context, args);
+        }
+    };
 };
 
 // -----  ----- //
