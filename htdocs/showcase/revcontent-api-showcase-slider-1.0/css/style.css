@@ -11,7 +11,7 @@
 
 }
 
-@font-face {
+/*@font-face {
     font-family: 'redacted_scriptbold';
     src: url('../../../app/resources/font/redacted-script-bold.eot');
     src: url('../../../app/resources/font/redacted-script-bold.eot?#iefix') format('embedded-opentype'),
@@ -48,7 +48,7 @@
     font-weight: normal;
     font-style: normal;
 
-}
+}*/
 
 footer {
     margin: 50px 0;
@@ -63,7 +63,8 @@ footer {
 }
 
 .redacted {
-  font-family: "redacted_scriptregular", times, "Helvetica Neue", sans-serif;
+  font-family: "redactedregular", times, "Helvetica Neue", sans-serif;
+  color: #ccc;
 }
 
 .redacted-image {
