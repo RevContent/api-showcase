@@ -32,6 +32,7 @@ RevMore({
     var that;
     var defaults = {
         top_id: false,
+        watch_top_id_interval: 500, // time in ms to watch the top_id position change
         id: false,
         url: 'https://trends.revcontent.com/api/v1/',
         distance: 500,
@@ -108,11 +109,11 @@ RevMore({
 
             this.setPadding();
 
-            this.setTop();
-
             this.appendElements();
 
             this.createInnerWidget();
+
+            this.setTop();
 
             this.widget();
 
@@ -182,11 +183,39 @@ RevMore({
 
         // get the top position using marker if it exists or distance option
         this.setTop = function() {
+            this.top = this.options.distance;
+
             var marker = document.getElementById(this.options.top_id);
 
-            this.top = marker ? marker.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop) : this.options.distance;
+            if (marker) {
+                var markerTop = marker.getBoundingClientRect().top;
+                this.top = markerTop + (window.pageYOffset || document.documentElement.scrollTop);
+                this.watchMarkerTop(marker, markerTop);
+            }
 
+            this.setElementTop();
+        };
+
+        // set the element top position
+        this.setElementTop = function() {
             this.element.style.top = this.top + this.options.gradient_height + 'px';
+        };
+
+        this.watchMarkerTop = function(marker, currentTop) {
+            var that = this;
+            var watchMarkerTopInterval = setInterval(function() {
+                var markerTop = marker.getBoundingClientRect().top;
+                if (currentTop !== markerTop) {
+                    that.top = markerTop + (window.pageYOffset || document.documentElement.scrollTop);
+                    that.setElementTop();
+                    that.wrapperHeight();
+                }
+                currentTop = markerTop;
+            }, this.options.watch_top_id_interval);
+
+            this.innerWidget.emitter.once('unlocked', function() {
+                clearInterval(watchMarkerTopInterval);
+            });
         };
 
         this.appendElements = function() {
