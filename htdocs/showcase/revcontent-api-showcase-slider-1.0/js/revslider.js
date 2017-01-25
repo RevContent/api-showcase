@@ -98,7 +98,9 @@ Author: michael@revcontent.com
             query_params: false,
             register_views: true, // manage views or false to let someone else do it
             user_ip: false,
-            user_agent: false
+            user_agent: false,
+            css: '',
+            disable_pagination: false
         };
 
         // merge options
@@ -117,7 +119,7 @@ Author: michael@revcontent.com
 
         this.emitter = new EventEmitter();
 
-        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-slider');
+        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-slider', this.options.css);
 
         this.data = [];
         this.displayedItems = [];
@@ -206,8 +208,10 @@ Author: michael@revcontent.com
         }
 
         this.dataPromise.then(function() {
-            that.attachTouchEvents();
-            that.attachButtonEvents();
+            if (that.options.disable_pagination === false) {
+                that.attachTouchEvents();
+                that.attachButtonEvents();
+            }
         });
     };
 
