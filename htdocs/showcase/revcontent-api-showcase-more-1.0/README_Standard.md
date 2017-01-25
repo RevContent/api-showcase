@@ -74,3 +74,9 @@ Text for the unlock button.
 ```
 unlock_text: 'Read More...'
 ```
+
+###url
+Use an alternate API url
+```
+url: 'https://trends.revcontent.com/api/v1/'
+```
