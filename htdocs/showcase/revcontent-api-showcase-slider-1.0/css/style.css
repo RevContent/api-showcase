@@ -1,5 +1,53 @@
-body {
-    padding-top: 70px;
+@font-face {
+    font-family: 'redactedregular';
+    src: url('../../../app/resources/font/redacted-regular.eot');
+    src: url('../../../app/resources/font/redacted-regular.eot?#iefix') format('embedded-opentype'),
+         url('../../../app/resources/font/redacted-regular.woff2') format('woff2'),
+         url('../../../app/resources/font/redacted-regular.woff') format('woff'),
+         url('../../../app/resources/font/redacted-regular.ttf') format('truetype'),
+         url('../../../app/resources/font/redacted-regular.svg#redactedregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'redacted_scriptbold';
+    src: url('../../../app/resources/font/redacted-script-bold.eot');
+    src: url('../../../app/resources/font/redacted-script-bold.eot?#iefix') format('embedded-opentype'),
+         url('../../../app/resources/font/redacted-script-bold.woff2') format('woff2'),
+         url('../../../app/resources/font/redacted-script-bold.woff') format('woff'),
+         url('../../../app/resources/font/redacted-script-bold.ttf') format('truetype'),
+         url('../../../app/resources/font/redacted-script-bold.svg#redacted_scriptbold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'redacted_scriptlight';
+    src: url('../../../app/resources/font/redacted-script-light.eot');
+    src: url('../../../app/resources/font/redacted-script-light.eot?#iefix') format('embedded-opentype'),
+         url('../../../app/resources/font/redacted-script-light.woff2') format('woff2'),
+         url('../../../app/resources/font/redacted-script-light.woff') format('woff'),
+         url('../../../app/resources/font/redacted-script-light.ttf') format('truetype'),
+         url('../../../app/resources/font/redacted-script-light.svg#redacted_scriptlight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'redacted_scriptregular';
+    src: url('../../../app/resources/font/redacted-script-regular.eot');
+    src: url('../../../app/resources/font/redacted-script-regular.eot?#iefix') format('embedded-opentype'),
+         url('../../../app/resources/font/redacted-script-regular.woff2') format('woff2'),
+         url('../../../app/resources/font/redacted-script-regular.woff') format('woff'),
+         url('../../../app/resources/font/redacted-script-regular.ttf') format('truetype'),
+         url('../../../app/resources/font/redacted-script-regular.svg#redacted_scriptregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
 }
 
 footer {
@@ -12,4 +60,84 @@ footer {
 
 .navbar-nav {
     margin-left: 20px;
+}
+
+.redacted {
+  font-family: "redacted_scriptregular", times, "Helvetica Neue", sans-serif;
+}
+
+.redacted-image {
+  width: 100%;
+  background: #ccc;
+}
+
+.redacted-image-33 {
+  padding-bottom: 33%;
+}
+
+.redacted-image-50 {
+  padding-bottom: 50%;
+}
+
+.redacted-image-66 {
+  padding-bottom: 66%;
+}
+
+.redacted-image-100 {
+  padding-bottom: 100%;
+}
+
+.single-line {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.margin-left {
+  margin-left: 10px;
+}
+
+.margin-bottom {
+  margin-bottom: 10px;
+}
+
+.redacted-logo {
+  cursor: pointer;
+  width: 250px;
+}
+
+.redacted-nav {
+  white-space: nowrap;
+  overflow: hidden;
+  margin-left: 30px;
+  margin-right: 30px;
+}
+
+.redacted-search {
+  margin-left: auto;
+}
+
+.redacted-nav ul {
+  margin: 0;
+  padding: 0;
+}
+
+.redacted-nav ul li {
+  list-style: none;
+  display: inline-block;
+  margin-right: 10px;
+  font-family: "Redacted";
+  font-size: 28px;
+  line-height: 28px;
+  border-right: 1px solid #D6D6D6;
+  padding-right: 10px;
+  cursor: pointer;
+}
+
+.redacted-nav ul li:hover {
+  text-decoration: underline;
+}
+
+.redacted-nav ul li:last-child {
+  margin-right: 0;
+  border-right: none;
 }
