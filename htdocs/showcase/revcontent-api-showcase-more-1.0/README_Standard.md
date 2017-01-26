@@ -57,6 +57,12 @@ Number in pixels for the height of the gradient.
 gradient_height: 60
 ```
 
+###hide_selectors
+Pass an array of query selectors to look for. If/when these elements become visible they will be set to display: none. When the screen is unlocked, they return to previous display state.
+```
+hide_selectors: false
+```
+
 ###query_params
 Key value object for query params to send to server. Can be multidimensional
 ```
