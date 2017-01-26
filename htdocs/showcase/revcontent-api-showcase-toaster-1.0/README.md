@@ -103,7 +103,7 @@ rev_position: 'bottom_right'
 ###show\_visible\_selector
 query selector for element that will trigger widget to show once visible
 ```
-scroll_visible_selector: false
+show_visible_selector: false
 ```
 
 ###sponsored
