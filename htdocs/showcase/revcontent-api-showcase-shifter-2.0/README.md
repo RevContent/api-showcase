@@ -164,7 +164,7 @@ show_on_touch: true
 ###show\_visible\_selector
 query selector for element that will trigger widget to show once visible
 ```
-scroll_visible_selector: false
+show_visible_selector: false
 ```
 
 ###scroll_natural
