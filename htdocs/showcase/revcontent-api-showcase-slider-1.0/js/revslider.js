@@ -126,9 +126,6 @@ Author: michael@revcontent.com
 
         this.containerElement = document.createElement('div');
         this.containerElement.id = 'rev-slider';
-        revUtils.addClass(this.containerElement, 'rev-slider-' + (this.options.vertical ? 'vertical' : 'horizontal'));
-        revUtils.addClass(this.containerElement, 'rev-slider-' + (this.options.text_right ? 'text-right' : 'text-bottom'));
-        revUtils.addClass(this.containerElement, 'rev-slider-buttons-' + (this.options.buttons.style));
 
         this.innerContainerElement = document.createElement('div');
         this.innerContainerElement.id = 'rev-slider-container';
@@ -191,6 +188,7 @@ Author: michael@revcontent.com
 
         this.grid.reloadItems();
         this.grid.layout();
+        this.setGridClasses();
 
         this.getAnimationDuration();
 
@@ -213,6 +211,19 @@ Author: michael@revcontent.com
                 that.attachButtonEvents();
             }
         });
+    };
+
+    RevSlider.prototype.setGridClasses = function() {
+        revUtils.addClass(this.containerElement, 'rev-slider-' + (this.options.vertical ? 'vertical' : 'horizontal'));
+        revUtils.addClass(this.containerElement, 'rev-slider-' + (this.options.text_right ? 'text-right' : 'text-bottom'));
+        revUtils.addClass(this.containerElement, 'rev-slider-buttons-' + (this.options.buttons.style));
+
+        revUtils.addClass(this.containerElement, 'rev-slider-buttons-' + (this.options.buttons.style));
+
+        revUtils.removeClass(this.containerElement, 'rev-slider-col', true);
+        revUtils.removeClass(this.containerElement, 'rev-slider-row', true);
+        revUtils.addClass(this.containerElement, 'rev-slider-col-' + (typeof this.options.per_row === 'object' ? this.options.per_row[this.grid.getBreakPoint()] : this.options.per_row));
+        revUtils.addClass(this.containerElement, 'rev-slider-row-' + (typeof this.options.rows === 'object' ? this.options.rows[this.grid.getBreakPoint()] : this.options.rows));
     };
 
     RevSlider.prototype.registerViewOnceVisible = function() {
@@ -912,6 +923,7 @@ Author: michael@revcontent.com
 
         this.getAnimationDuration();
         this.updatePagination(true);
+        this.setGridClasses();
     };
 
     RevSlider.prototype.resizeImage = function(el) {
