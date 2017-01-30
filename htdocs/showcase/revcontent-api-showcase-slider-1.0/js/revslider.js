@@ -157,6 +157,7 @@ Author: michael@revcontent.com
         this.grid.on('resize', function() {
             that.resize();
         });
+        this.maxLimit = this.getMaxLimit();
 
         revUtils.dispatchScrollbarResizeEvent();
 
@@ -960,6 +961,47 @@ Author: michael@revcontent.com
         return this.grid.getPerRow() * (this.options.rows[this.grid.getBreakPoint()] ? this.options.rows[this.grid.getBreakPoint()] : this.options.rows);
     };
 
+    RevSlider.prototype.getMaxLimit = function() {
+        var maxLimit = 0;
+        var iteratorMax = 0;
+
+        if (typeof this.options.rows === 'object') {
+            for (var rowKey in this.options.rows) {
+                iteratorMax = 0;
+                if (this.options.rows.hasOwnProperty(rowKey)) {
+                    if (typeof this.options.per_row === 'object') {
+                        iteratorMax = this.options.rows[rowKey] * this.options.per_row[rowKey];
+                        if (iteratorMax > maxLimit) {
+                            maxLimit = iteratorMax;
+                        }
+                    } else {
+                        iteratorMax = this.options.rows[rowKey] * this.options.per_row;
+                        if (iteratorMax > maxLimit) {
+                            maxLimit = iteratorMax;
+                        }
+                    }
+                }
+            }
+        } else {
+            if (typeof this.options.per_row === 'object') {
+                for (var perRowKey in this.options.per_row) {
+                    iteratorMax = 0;
+                    if (this.options.per_row.hasOwnProperty(perRowKey)) {
+                        iteratorMax = this.options.per_row[perRowKey] * this.options.rows;
+                        if (iteratorMax > maxLimit) {
+                            maxLimit = iteratorMax;
+                        }
+                    }
+                }
+            } else {
+                iteratorMax = this.options.rows * this.options.per_row;
+                if (iteratorMax > maxLimit) {
+                    maxLimit = iteratorMax;
+                }
+            }
+        }
+        return maxLimit;
+    };
     RevSlider.prototype.getImageWidth = function() {
          return typeof this.preloaderWidth === 'undefined' ? 'auto' : this.preloaderWidth + 'px';
     };
@@ -1041,7 +1083,7 @@ Author: michael@revcontent.com
 
         this.dataPromise = new Promise(function(resolve, reject) {
             // prime data - empty and not viewed
-            var url = that.generateUrl(0, (that.options.pages * that.limit), true, false);
+            var url = that.generateUrl(0, that.getMaxCount(), true, false);
 
             revApi.request(url, function(resp) {
                 that.data = resp;
@@ -1157,6 +1199,11 @@ Author: michael@revcontent.com
         this.grid.layout();
         this.checkEllipsis();
         this.updatePagination();
+    };
+
+    RevSlider.prototype.getMaxCount = function() {
+        // if pagination is disabled multiply maxLimit by 1 page otherwise by configed pages
+        return (this.options.disable_pagination ? 1 : this.options.pages) * this.maxLimit;
     };
 
     RevSlider.prototype.maxPages = function() {
