@@ -51,13 +51,20 @@
             "templates": [
                 "./tests/templates/reuters.com.html",
                 "./tests/templates/rightwingnews.com.html",
-                "./tests/templates/forums.androidcentral.com.html"
+                "./tests/templates/forums.androidcentral.com.html",
+                "./tests/templates/conservativetribune.com.html",
+                "./tests/templates/inquisitr.com.html",
+                "./tests/templates/westernjournalism.com.html"
             ],
             "script": "./build/revmore.min.js"
         },
         {
             "name": "more-standard",
-            "templates": [],
+            "templates": [
+                "./tests/templates/conservativetribune.com.html",
+                "./tests/templates/inquisitr.com.html",
+                "./tests/templates/westernjournalism.com.html"
+            ],
             "script": "./build/revmore-standard.min.js"
         },
         {
