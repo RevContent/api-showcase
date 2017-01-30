@@ -171,18 +171,26 @@ utils.hasClass = function(el, className) {
 
 utils.addClass = function(el, className) {
     if (!el) return false;
-    if (el.classList)
-      el.classList.add(className);
-    else
-      el.className += ' ' + className;
+
+    if (el.classList) {
+        el.classList.add(className);
+    } else {
+        this.removeClass(el, className); // make sure we don't double up
+        el.className += ' ' + className;
+    }
 };
 
-utils.removeClass = function(el, className) {
+utils.removeClass = function(el, className, prefix) {
     if (!el) return false;
-    if (el.classList)
-        el.classList.remove(className);
-    else
-        el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+
+    var classes = el.className.trim().split(" ").filter(function(c) {
+        if (prefix) {
+            return c.lastIndexOf(className, 0) !== 0;
+        }
+        return c !== className;
+    });
+
+    el.className = classes.join(" ").trim();
 };
 
 utils.dispatchScrollbarResizeEvent = function() {
