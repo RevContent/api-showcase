@@ -58,7 +58,6 @@ Author: michael@revcontent.com
                 'phone', 'tablet', 'desktop'
             ],
             url: 'https://trends.revcontent.com/api/v1/',
-            ad_border: true,
             headline_size: 3,
             max_headline: false,
             min_headline_height: 17,
@@ -152,18 +151,34 @@ Author: michael@revcontent.com
 
         revUtils.append(this.element, this.containerElement);
 
+        revUtils.dispatchScrollbarResizeEvent();
+
         this.grid = new AnyGrid(gridElement, this.gridOptions());
 
-        this.grid.on('resize', function() {
-            that.resize();
-        });
         this.maxLimit = this.getMaxLimit();
 
-        revUtils.dispatchScrollbarResizeEvent();
+        this.limit = this.getLimit();
+
+        this.createCells();
 
         this.setMultipliers();
 
         this.grid.option({gutter: this.getPadding()});
+
+        this.grid.reloadItems();
+        this.grid.layout();
+
+        this.setUp();
+
+        this.setSize();
+
+        this.grid.layout();
+
+        this.grid.on('resize', function() {
+            that.resize();
+        });
+
+        this.getData();
 
         this.offset = 0;
         this.page = 1;
@@ -175,20 +190,8 @@ Author: michael@revcontent.com
 
         this.appendElements();
 
-        this.grid.layout();
-
-        this.limit = this.getLimit();
-
-        this.setUp();
-
-        this.getData();
-
-        this.createCells();
-
         this.textOverlay();
 
-        this.grid.reloadItems();
-        this.grid.layout();
         this.setGridClasses();
 
         this.getAnimationDuration();
@@ -453,6 +456,19 @@ Author: michael@revcontent.com
         this.innerMargin = Math.max(0, ((this.grid.columnWidth * this.paddingMultiplier).toFixed(2) / 1));
     };
 
+    RevSlider.prototype.setSize = function() {
+        var ads = this.grid.element.querySelectorAll('.rev-ad');
+        for (var i = 0; i < ads.length; i++) {
+            var ad = ads[i];
+
+            ad.style.height = this.getCellHeight(ad) + 'px';
+
+            this.resizeImage(ad.querySelectorAll('.rev-image')[0]);
+            this.resizeHeadline(ad.querySelectorAll('.rev-headline')[0]);
+            this.resizeProvider(ad.querySelectorAll('.rev-provider')[0]);
+        }
+    };
+
     RevSlider.prototype.getTextRightHeight = function() {
         return this.options.text_right_height[this.grid.getBreakPoint()] ? this.options.text_right_height[this.grid.getBreakPoint()] : this.options.text_right_height;
     };
@@ -475,7 +491,14 @@ Author: michael@revcontent.com
             this.preloaderHeight = this.getTextRightHeight();
             this.preloaderWidth = Math.round(this.preloaderHeight * (this.imageWidth / this.imageHeight));
         } else {
-            this.preloaderHeight = Math.round((this.grid.columnWidth - (this.padding * 2) - ( this.options.ad_border ? 2 : 0 )) * (this.imageHeight / this.imageWidth));
+            var ad = this.grid.element.querySelectorAll('.rev-ad')[0];
+            var adWidth = parseFloat(revUtils.getComputedStyle(ad, 'width'));
+            var adPaddingLeft = parseInt(revUtils.getComputedStyle(ad, 'padding-left'));
+            var adPaddingRight = parseInt(revUtils.getComputedStyle(ad, 'padding-right'));
+            var adBorderLeft = parseInt(revUtils.getComputedStyle(ad, 'border-left-width'));
+            var adBorderRight = parseInt(revUtils.getComputedStyle(ad, 'border-right-width'));
+
+            this.preloaderHeight = ((Math.round((adWidth - adPaddingLeft - adPaddingRight - adBorderLeft - adBorderRight) * 100) / 100) * (this.imageHeight / this.imageWidth));
         }
     };
 
@@ -491,7 +514,7 @@ Author: michael@revcontent.com
             }
             this.headlineLineHeight = headlineHeight;
         } else {
-            this.headlineLineHeight = Math.max(17, ((this.grid.columnWidth * this.lineHeightMultiplier).toFixed(2) / 1));
+            this.headlineLineHeight = Math.max(17, Math.round(this.grid.columnWidth * this.lineHeightMultiplier));
         }
     };
 
@@ -852,13 +875,21 @@ Author: michael@revcontent.com
         }
     };
 
-    RevSlider.prototype.getCellHeight = function() {
+    RevSlider.prototype.getCellHeight = function(ad) {
         var cellHeight = this.preloaderHeight;
+
+        cellHeight += parseInt(revUtils.getComputedStyle(ad, 'border-top-width')) +
+            parseInt(revUtils.getComputedStyle(ad, 'border-bottom-width')) +
+            parseInt(revUtils.getComputedStyle(ad, 'padding-top')) +
+            parseInt(revUtils.getComputedStyle(ad, 'padding-bottom'));
+
         if (!this.options.text_overlay && !this.options.text_right) {
             cellHeight += this.headlineMaxHeight +
-            this.headlineMarginTop + this.providerLineHeight + this.providerMarginTop;
-            cellHeight += (this.options.ad_border) ? 2 : 0;
+                this.headlineMarginTop +
+                this.providerLineHeight +
+                this.providerMarginTop;
         }
+
         return cellHeight;
     };
 
@@ -905,7 +936,7 @@ Author: michael@revcontent.com
         for (var i = 0; i < ads.length; i++) {
             var ad = ads[i];
 
-            ad.style.height = this.getCellHeight() + 'px';
+            ad.style.height = this.getCellHeight(ad) + 'px';
 
             this.resizeImage(ad.querySelectorAll('.rev-image')[0]);
             this.resizeHeadline(ad.querySelectorAll('.rev-headline')[0]);
@@ -1002,32 +1033,28 @@ Author: michael@revcontent.com
         }
         return maxLimit;
     };
+
     RevSlider.prototype.getImageWidth = function() {
          return typeof this.preloaderWidth === 'undefined' ? 'auto' : this.preloaderWidth + 'px';
     };
 
     RevSlider.prototype.createNewCell = function() {
-
-        var html = '<div class="rev-ad" style="height: '+ this.getCellHeight() + 'px;' + (this.options.ad_border ? 'border:1px solid #eee' : '') +'">' +
+        var html = '<div class="rev-ad">' +
             '<a href="" target="_blank">' +
-            '<div class="rev-image" style="width:'+ this.getImageWidth() +';height:'+ this.preloaderHeight +'px">' +
+            '<div class="rev-image">' +
             '<img src=""/>' +
             '</div>' +
             '<div class="rev-headline-brand">' +
-            '<div class="rev-headline" style="max-height:'+ this.headlineMaxHeight +'px; margin:'+ this.headlineMarginTop +'px ' + this.innerMargin + 'px' + ' 0;">' +
-            '<h3 style="font-size:'+ this.headlineFontSize +'px; line-height:'+ this.headlineLineHeight +'px;"></h3>' +
+            '<div class="rev-headline">' +
+            '<h3></h3>' +
             '</div>' +
-            '<div style="margin:0 '  + this.innerMargin + 'px 0;font-size:'+ this.providerFontSize +'px;line-height:'+ this.providerLineHeight +'px;height:'+ this.providerLineHeight +'px;" class="rev-provider"></div>' +
+            '<div class="rev-provider"></div>' +
             '</div>' +
             '</a>' +
             '</div>';
 
             var cell = document.createElement('div');
-
-            cell.style.padding = this.padding + 'px';
-
-            revUtils.addClass(cell, 'rev-content');
-
+            cell.className = 'rev-content';
             cell.innerHTML = html;
 
             return cell;
@@ -1176,7 +1203,7 @@ Author: michael@revcontent.com
             var ad = ads[i],
                 data = this.displayedItems[i];
 
-            ad.style.height = this.getCellHeight() + 'px';
+            ad.style.height = this.getCellHeight(ad) + 'px';
 
             if (this.options.overlay !== false) {
                 revUtils.imageOverlay(ad.querySelectorAll('.rev-image')[0], data.content_type, this.options.overlay, this.options.overlay_position, this.options.overlay_icons);
