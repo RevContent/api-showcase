@@ -926,29 +926,17 @@ Author: michael@revcontent.com
             }
         }
 
-        this.setUp();
-
-        var ads = this.element.querySelectorAll('.rev-ad');
-
-        for (var i = 0; i < ads.length; i++) {
-            var ad = ads[i];
-
-            ad.style.height = this.getCellHeight(ad) + 'px';
-
-            this.resizeImage(ad.querySelectorAll('.rev-image')[0]);
-            this.resizeHeadline(ad.querySelectorAll('.rev-headline')[0]);
-            this.resizeProvider(ad.querySelectorAll('.rev-provider')[0]);
-
-            if (this.displayedItems[i]) { // reset headlines for new ellipsis check
-                ad.querySelectorAll('.rev-headline h3')[0].innerHTML = this.displayedItems[i].headline;
-            }
-        }
-
         this.grid.reloadItems();
         this.grid.layout();
 
+        this.setUp();
+
+        this.setSize();
+
+        this.grid.layout();
+
         this.textOverlay();
-        this.checkEllipsis();
+        this.checkEllipsis(true);
 
         this.getAnimationDuration();
         this.updatePagination(true);
@@ -977,10 +965,22 @@ Author: michael@revcontent.com
         el.style.height = this.providerLineHeight + 'px';
     };
 
-    RevSlider.prototype.checkEllipsis = function() {
+    RevSlider.prototype.checkEllipsis = function(reset) {
         if (this.options.max_headline && !this.options.text_right) { // text_right should be limited, but don't waste for max_headline only
             return;
         }
+        // reset headlines
+        if (reset) {
+            var ads = this.element.querySelectorAll('.rev-ad');
+            for (var i = 0; i < ads.length; i++) {
+                var ad = ads[i];
+
+                if (this.displayedItems[i]) { // reset headlines for new ellipsis check
+                    ad.querySelectorAll('.rev-headline h3')[0].innerHTML = this.displayedItems[i].headline;
+                }
+            }
+        }
+
         revUtils.ellipsisText(this.grid.element.querySelectorAll('.rev-content .rev-headline'));
     };
 
