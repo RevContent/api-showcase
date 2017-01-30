@@ -790,10 +790,7 @@ Author: michael@revcontent.com
             }
         } else {
             revUtils.removeClass(this.containerElement, 'rev-slider-text-overlay');
-            for (var i = 0; i < ads.length; i++) {
-                var ad = ads[i];
-                //ad.style.height = 'auto';
-            }
+            // TODO
         }
     };
 
