@@ -199,7 +199,15 @@
             pub_id : 945,
             widget_id : 6181,
             domain : 'apiexamples.powr.com',
-            per_row: 1,
+            per_row: {
+                xxs: 1,
+                xs: 1,
+                sm: 2,
+                md: 2,
+                lg: 2,
+                xl: 2,
+                xxl: 2
+            },
             rows: 10,
             multipliers: {
                 margin: -2.4
@@ -210,9 +218,8 @@
                 back: false,
             },
             image_ratio: 'square',
-            ad_border: false,
             hide_header: true,
-            css: '.rev-image, .rev-image img { border-radius: 50% !important; overflow: hidden !important;}.rev-headline, .rev-provider { text-align: center !important; }',
+            css: '.rev-ad { border: 1px solid rgb(238, 238, 238); padding-bottom: 5px !important; padding-top: 5px !important; padding-left: 30px !important; padding-right: 30px !important; } .rev-image, .rev-image img { border-radius: 50% !important; overflow: hidden !important;}.rev-headline, .rev-provider { text-align: center !important; }',
             disable_pagination: true
         });
     </script>
