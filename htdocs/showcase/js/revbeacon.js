@@ -7,7 +7,6 @@
     'use strict';
     var RevBeacon = function () {
         var self = this;
-        self.parent = document.getElementsByTagName('body')[0];
         self.pluginSource = '';
         self.push = true;
         self.pushed = 0;
@@ -33,17 +32,6 @@
                 styles: ''
             }
         };
-
-        self.init();
-    };
-
-    RevBeacon.prototype.init = function () {
-        var self = this;
-        document.onreadystatechange = function () {
-            if (document.readyState == "complete") {
-
-            }
-        }
     };
 
     RevBeacon.prototype.setPluginSource = function(pluginSource){
@@ -103,6 +91,11 @@
         return self;
     };
 
+    RevBeacon.prototype.getParent = function() {
+        var self = this;
+        return (typeof self.parent === 'object' ? self.parent : document.getElementsByTagName('body')[0]);
+    };
+
     RevBeacon.prototype.attach = function(){
         var self = this;
         if(true === self.push && !self.pushed) {
@@ -126,7 +119,7 @@
                             beaconEl = beaconImage.replace('$1', beacon.pixel_url).replace('$2', beaconDomId);
                             break;
                     }
-                    self.parent.insertAdjacentHTML('beforeend', beaconEl);
+                    self.getParent().insertAdjacentHTML('beforeend', beaconEl);
                     self.renderedBeacons.push(document.getElementById(beaconDomId));
                 }
             }

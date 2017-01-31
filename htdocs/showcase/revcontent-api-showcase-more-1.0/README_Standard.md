@@ -19,15 +19,12 @@ var rcds = document.getElementById("rcjsload_a122d7"); rcds.appendChild(rcel);
 })();
 &lt;script&gt;
 
-&lt;script src="http://labs-cdn.revcontent.com/build/revmore.min.js">&lt;script&gt;
+&lt;script src="http://labs-cdn.revcontent.com/build/revmore-standard.min.js">&lt;script&gt;
 
 &lt;script&gt;
     new RevMore({
-        top_id: 'top-id',
-        api_key: 'api_key',
-        pub_id: 123,
         widget_id: 456,
-        domain: 'mysite.com'
+        top_id: 'top-id'
     });
 &lt;/script&gt;
 ```
@@ -58,6 +55,12 @@ distance: 500
 Number in pixels for the height of the gradient.
 ```
 gradient_height: 60
+```
+
+###hide_selectors
+Pass an array of query selectors to look for. If/when these elements become visible they will be set to display: none. When the screen is unlocked, they return to previous display state.
+```
+hide_selectors: false
 ```
 
 ###query_params

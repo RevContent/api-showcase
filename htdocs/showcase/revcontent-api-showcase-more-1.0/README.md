@@ -45,6 +45,12 @@ Button config. Enable/disable forward/back, size, position(```dots```, ```inside
 }
 ```
 
+###css
+Additional CSS to append.
+```
+css: ''
+```
+
 ###devices
 Devices to show on. Options include ```phone```, ```tablet``` and ```desktop```.
 ```
@@ -83,6 +89,12 @@ header: 'Trending Now'
 Number of lines that the headline can take up. Ignored if ```max_headline``` is set to true.
 ```
 headline_size: 3
+```
+
+###hide_selectors
+Pass an array of query selectors to look for. If/when these elements become visible they will be set to display: none. When the screen is unlocked, they return to previous display state.
+```
+hide_selectors: false
 ```
 
 ###id

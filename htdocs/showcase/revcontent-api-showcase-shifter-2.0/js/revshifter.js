@@ -44,6 +44,7 @@ RevShifter({
         show_on_load: false,
         show_on_scroll: true,
         show_on_touch: true,
+        show_visible_selector: false,
         scroll_natural: true,
         hide_header: true,
         header: 'Trending Now',
@@ -79,7 +80,8 @@ RevShifter({
         overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
         query_params: false,
         user_ip: false,
-        user_agent: false
+        user_agent: false,
+        css: ''
     };
 
     RevShifter = function(opts) {
@@ -200,7 +202,8 @@ RevShifter({
                 query_params: this.options.query_params,
                 register_views: false, // handle viewibility/prevent Slider from doing checks
                 user_ip: this.options.user_ip,
-                user_agent: this.options.user_agent
+                user_agent: this.options.user_agent,
+                css: this.options.css
             });
 
             this.closeButton();
@@ -221,22 +224,45 @@ RevShifter({
             if (this.options.show_on_load) {
                 this.show();
             }
+            // if show visible element show once that is visible
+            if (this.setShowVisibleElement()) {
+                // show once visible
+                this.showOnceVisible();
+                // check element visibility on scroll
+                this.attachShowElementVisibleListener();
 
-            var that = this;
-            // wait a tick or two before attaching to scroll/touch b/c of auto scroll feature in some browsers
-            setTimeout(function() {
-                if (revDetect.mobile() && that.options.show_on_touch) {
-                    that.attachTouchEvents();
-                } else if (that.options.show_on_scroll) {
-                    that.attachScrollEvents();
-                }
-                // destroy if no data
-                that.innerWidget.dataPromise.then(function(data) {
-                    if (!data.length) {
-                        that.destroy();
-                    }
+                var that = this;
+                // wait for all images above show visible elemnt to load before checking visibility
+                revUtils.imagesLoaded(revUtils.imagesAbove(this.showVisibleElement)).once('done', function() {
+                    revUtils.checkVisible.bind(that, that.showVisibleElement, that.emitVisibleEvent)();
                 });
-            }, 300);
+            } else { // otherwise show on scroll
+                var that = this;
+                // wait a tick or two before attaching to scroll/touch b/c of auto scroll feature in some browsers
+                setTimeout(function() {
+                    if (revDetect.mobile() && that.options.show_on_touch) {
+                        that.attachTouchEvents();
+                    } else if (that.options.show_on_scroll) {
+                        that.attachScrollEvents();
+                    }
+                }, 300);
+            }
+
+            // destroy if no data
+            that.innerWidget.dataPromise.then(function(data) {
+                if (!data.length) {
+                    that.destroy();
+                }
+            });
+        };
+
+        this.setShowVisibleElement = function() {
+            this.showVisibleElement = false;
+            var elements = document.querySelectorAll(this.options.show_visible_selector);
+            if (elements.length) {
+                this.showVisibleElement = elements[0];
+            }
+            return this.showVisibleElement;
         };
 
         this.setTransitionDuration = function(transitionDuration) {
@@ -251,7 +277,7 @@ RevShifter({
                 return true;
             }
             return false;
-        }
+        };
 
         this.appendTouchEnabledElement = function() {
             this.touchEnabledElement = document.createElement('div');
@@ -263,15 +289,15 @@ RevShifter({
             requestAnimationFrame(function() {
                 that.touchEnabledElement.style.width = that.touchEnabledElement.offsetHeight + 'px';
             });
-        }
+        };
 
         this.move = function() {
             if (this.scrollTimeout) {
-                return;
+                cancelAnimationFrame(this.scrollTimeout);
             }
 
             var that = this;
-            function delayed() {
+            this.scrollTimeout = requestAnimationFrame(function() {
                 var scrollTop = window.pageYOffset;
                 var scrollDirection = false;
                 if (scrollTop < that.lastScrollTop) {
@@ -290,14 +316,12 @@ RevShifter({
                 } else if (scrollDirection === 'down') {
                     that.options.scroll_natural ? that.show() : that.hide();
                 }
-            }
-
-            that.scrollTimeout = setTimeout(delayed, 300);
-        }
+            });
+        };
 
         this.attachScrollEvents = function() {
             // scrolling
-            this.scrollListener = this.move.bind(this);
+            this.scrollListener = revUtils.throttle(this.move.bind(this), 60);
             this.lastScrollTop = window.pageYOffset;
 
             if (revDetect.mobile()) {
@@ -305,7 +329,7 @@ RevShifter({
             } else {
                 revUtils.addEventListener(window, 'scroll', this.scrollListener);
             }
-        }
+        };
 
         this.update = function(newOpts, oldOpts) {
             this.options = revUtils.extend(defaults, newOpts);
@@ -336,7 +360,7 @@ RevShifter({
         // prevent show/hide when paning vertically on element
         this.cancelPan = function() {
             this.panCancelled = true;
-        }
+        };
 
         this.attachTouchEvents = function() {
 
@@ -363,7 +387,7 @@ RevShifter({
             revUtils.addEventListener(this.element, 'touchstart', this.cancelPanListener);
             revUtils.addEventListener(this.element, 'touchend', this.cancelPanListener);
             revUtils.addEventListener(this.element, 'touchmove', this.cancelPanListener);
-        }
+        };
 
         this.show = function() {
             this.hideTimeout = clearTimeout(this.hideTimeout);
@@ -417,7 +441,7 @@ RevShifter({
                 }
             }, this.options.transition_duration);
 
-            if (!this.options.show_on_scroll) {
+            if (!this.options.show_on_scroll || this.showVisibleElement) {
                 document.body.style[this.options.side == 'bottom' ? 'marginBottom' : 'marginTop'] = this.size + 'px';
             }
         };
@@ -430,7 +454,7 @@ RevShifter({
 
             revUtils.removeClass(document.body, 'rev-shifter-no-transform');
 
-            if (!this.options.show_on_scroll) {
+            if (!this.options.show_on_scroll || this.showVisibleElement) {
                 document.body.style[this.options.side == 'bottom' ? 'marginBottom' : 'marginTop'] = 0;
             }
 
@@ -463,8 +487,7 @@ RevShifter({
             }
 
             this.attachCloseButtonEvent();
-
-        }
+        };
 
         this.attachCloseButtonEvent = function() {
             var that = this;
@@ -477,6 +500,43 @@ RevShifter({
             });
         };
 
+        this.attachShowElementVisibleListener = function() {
+            this.visibleListener = revUtils.throttle(revUtils.checkVisible.bind(this, this.showVisibleElement, this.emitVisibleEvent), 60);
+            if (revDetect.mobile()) {
+                revUtils.addEventListener(window, 'touchmove', this.visibleListener);
+            } else {
+                revUtils.addEventListener(window, 'scroll', this.visibleListener);
+            }
+        };
+
+        this.emitVisibleEvent = function() {
+            this.innerWidget.emitter.emitEvent('visible');
+        };
+
+        this.showOnceVisible = function() {
+            var that = this;
+            this.innerWidget.emitter.once('visible', function() {
+                that.removeVisibleListener();
+                that.show();
+            });
+        };
+
+        this.removeVisibleListener = function() {
+            if (revDetect.mobile()) {
+                revUtils.removeEventListener(window, 'touchmove', this.visibleListener);
+            } else {
+                revUtils.removeEventListener(window, 'scroll', this.visibleListener);
+            }
+        };
+
+        this.removeScrollListener = function() {
+            if (revDetect.mobile()) {
+                revUtils.removeEventListener(window, 'touchmove', this.scrollListener);
+            } else {
+                revUtils.removeEventListener(window, 'scroll', this.scrollListener);
+            }
+        };
+
         this.destroy = function() {
             if (this.mc && this.cancelPanListener) {
                 this.mc.set({enable: false});
@@ -486,10 +546,8 @@ RevShifter({
                 revUtils.removeEventListener(this.element, 'touchmove', this.cancelPanListener);
             }
 
-            if (this.scrollListener) {
-                revUtils.removeEventListener(window, 'touchmove', this.scrollListener);
-                revUtils.removeEventListener(window, 'scroll', this.scrollListener);
-            }
+            this.removeScrollListener();
+            this.removeVisibleListener();
 
             this.innerWidget.destroy();
             revUtils.remove(this.element);

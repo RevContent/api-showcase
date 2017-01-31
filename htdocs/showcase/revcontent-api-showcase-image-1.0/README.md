@@ -61,6 +61,12 @@ Display a border around each ad
 ad_border: true
 ```
 
+###css
+Additional CSS to append.
+```
+css: ''
+```
+
 ###devices
 Devices to show on. Options include ```phone```, ```tablet``` and ```desktop```.
 ```
