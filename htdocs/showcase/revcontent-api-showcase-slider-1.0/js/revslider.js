@@ -1112,6 +1112,8 @@ Author: michael@revcontent.com
             revApi.request(url, function(resp) {
                 that.data = resp;
 
+                revUtils.addClass(that.containerElement, 'rev-slider-has-data');
+
                 that.updateDisplayedItems(false);
 
                 that.emitter.emitEvent('ready');
