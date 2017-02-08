@@ -1054,6 +1054,9 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.createNewCell = function() {
         var html = '<div class="rev-ad">' +
+            '<div class="rev-ad-container">' +
+            '<div class="rev-ad-outer">' +
+            '<div class="rev-ad-inner">' +
             '<a href="" target="_blank">' +
             '<div class="rev-image">' +
             '<img src=""/>' +
@@ -1063,6 +1066,9 @@ Author: michael@revcontent.com
             '<h3></h3>' +
             '</div>' +
             '<div class="rev-provider"></div>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
             '</div>' +
             '</a>' +
             '</div>';
