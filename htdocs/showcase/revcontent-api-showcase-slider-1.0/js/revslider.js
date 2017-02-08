@@ -159,6 +159,8 @@ Author: michael@revcontent.com
 
         revUtils.append(this.element, this.containerElement);
 
+        this.initButtons();
+
         revUtils.dispatchScrollbarResizeEvent();
 
         this.grid = new AnyGrid(gridElement, this.gridOptions());
@@ -167,18 +169,26 @@ Author: michael@revcontent.com
 
         this.limit = this.getLimit();
 
+        this.setGridClasses();
+
         this.createCells();
+
+        this.grid.reloadItems();
+        this.grid.layout();
 
         this.setMultipliers();
 
-        this.grid.option({gutter: this.getPadding()});
+        this.getPadding();
 
-        this.grid.reloadItems();
+        this.setContentPadding();
+
         this.grid.layout();
 
         this.setUp();
 
         this.setSize();
+
+        this.grid.option({removeVerticalGutters: true});
 
         this.grid.layout();
 
@@ -194,13 +204,9 @@ Author: michael@revcontent.com
 
         this.paginationDots();
 
-        this.initButtons();
-
         this.appendElements();
 
         this.textOverlay();
-
-        this.setGridClasses();
 
         this.getAnimationDuration();
 
@@ -428,11 +434,19 @@ Author: michael@revcontent.com
             this.gridContainerElement.style.width = (containerWidth * 2) + (this.padding.left * 2) + 'px';
         }
 
+        this.setGridClasses();
+
         this.createCells();
 
-        this.textOverlay();
-
         this.grid.reloadItems();
+        this.grid.layout();
+
+        this.getPadding();
+
+        this.setContentPadding();
+
+        this.grid.option({removeVerticalGutters: true});
+
         this.grid.layout();
 
         this.updateDisplayedItems(true);
@@ -991,9 +1005,15 @@ Author: michael@revcontent.com
                 this.previousPage = 1;
                 this.updateDisplayedItems(false);
             }
+            this.grid.reloadItems();
         }
 
-        this.grid.reloadItems();
+        this.setGridClasses();
+
+        this.getPadding(true);
+
+        this.setContentPadding();
+
         this.grid.layout();
 
         this.setUp();
@@ -1007,7 +1027,6 @@ Author: michael@revcontent.com
 
         this.getAnimationDuration();
         this.updatePagination(true);
-        this.setGridClasses();
     };
 
     RevSlider.prototype.resizeImage = function(el) {
