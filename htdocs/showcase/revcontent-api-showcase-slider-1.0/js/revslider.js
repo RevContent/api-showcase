@@ -27,6 +27,14 @@ Author: michael@revcontent.com
             impression_tracker: [],
             api_source: 'slide',
             element: false,
+            breakpoints: {
+                xs: 250,
+                sm: 500,
+                md: 750,
+                lg: 1000,
+                xl: 1250,
+                xxl: 1500
+            },
             rows: {
                 xxs: 2,
                 xs: 2,
@@ -265,7 +273,16 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.gridOptions = function() {
-        return { masonry: false, perRow: this.options.per_row, transitionDuration: this.options.transition_duration, isResizeBound: this.options.is_resize_bound, adjustGutter:true, removeVerticalGutters: true, gutter: this.padding };
+        return {
+            isInitLayout: false,
+            masonry: false,
+            perRow: this.options.per_row,
+            transitionDuration: this.options.transition_duration,
+            isResizeBound: this.options.is_resize_bound,
+            adjustGutter: true,
+            removeVerticalGutters: false,
+            breakpoints: this.options.breakpoints
+        };
     };
 
     RevSlider.prototype.getAnimationDuration = function() {
