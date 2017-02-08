@@ -517,7 +517,8 @@ Author: michael@revcontent.com
         this.setHeadlineMarginTop();
         this.setHeadlineMaxHeight();
 
-        this.innerMargin = Math.max(0, ((this.grid.columnWidth * this.paddingMultiplier).toFixed(2) / 1));
+        var adInner = this.grid.element.querySelectorAll('.rev-ad-inner')[0];
+        this.innerMargin = Math.max(0, ((adInner.offsetWidth * this.paddingMultiplier).toFixed(2) / 1));
     };
 
     RevSlider.prototype.setSize = function(ad) {
@@ -563,14 +564,8 @@ Author: michael@revcontent.com
             this.preloaderHeight = this.getTextRightHeight();
             this.preloaderWidth = Math.round(this.preloaderHeight * (this.imageWidth / this.imageHeight));
         } else {
-            var ad = this.grid.element.querySelectorAll('.rev-ad')[0];
-            var adWidth = parseFloat(revUtils.getComputedStyle(ad, 'width'));
-            var adPaddingLeft = parseInt(revUtils.getComputedStyle(ad, 'padding-left'));
-            var adPaddingRight = parseInt(revUtils.getComputedStyle(ad, 'padding-right'));
-            var adBorderLeft = parseInt(revUtils.getComputedStyle(ad, 'border-left-width'));
-            var adBorderRight = parseInt(revUtils.getComputedStyle(ad, 'border-right-width'));
-
-            this.preloaderHeight = ((Math.round((adWidth - adPaddingLeft - adPaddingRight - adBorderLeft - adBorderRight) * 100) / 100) * (this.imageHeight / this.imageWidth));
+            var adInner = this.grid.element.querySelectorAll('.rev-ad-inner')[0];
+            this.preloaderHeight = adInner.offsetWidth * (this.imageHeight / this.imageWidth);
         }
     };
 
@@ -586,7 +581,8 @@ Author: michael@revcontent.com
             }
             this.headlineLineHeight = headlineHeight;
         } else {
-            this.headlineLineHeight = Math.max(17, Math.round(this.grid.columnWidth * this.lineHeightMultiplier));
+            var adInner = this.grid.element.querySelectorAll('.rev-ad-inner')[0];
+            this.headlineLineHeight = Math.max(17, Math.round(adInner.offsetWidth * this.lineHeightMultiplier));
         }
     };
 
@@ -608,17 +604,18 @@ Author: michael@revcontent.com
             var headlines = Math.floor(verticalSpace / this.headlineLineHeight);
             maxHeight = headlines * this.headlineLineHeight;
         } else {
-            var ads = this.grid.element.querySelectorAll('.rev-ad');
-            if (this.options.max_headline && ads.length) { // max_headline and we have some ads otherwise just use the headline_size
+            var adsInner = this.grid.element.querySelectorAll('.rev-ad-inner');
+            if (this.options.max_headline && this.displayedItems.length && adsInner.length) { // max_headline and we have some ads otherwise just use the headline_size
                 for (var i = 0; i < this.limit; i++) {
-                    var ad = ads[i];
+                    var adInner = adsInner[i];
                     var el = document.createElement('div');
                     revUtils.addClass(el, 'rev-headline-max-check');
                     el.style.position = 'absolute';
+                    el.style.textAlign = revUtils.getComputedStyle(adInner.querySelectorAll('.rev-headline')[0], 'text-align');
                     el.style.zIndex = '100';
                     el.style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
                     el.innerHTML = '<h3 style="font-size:'+ this.headlineFontSize + 'px;line-height:'+ this.headlineLineHeight +'px">'+ this.displayedItems[i].headline + '</h3>';
-                    revUtils.prepend(ad, el); // do it this way b/c changin the element height on the fly needs a repaint and requestAnimationFrame is not avail in IE9
+                    revUtils.prepend(adInner, el); // do it this way b/c changin the element height on the fly needs a repaint and requestAnimationFrame is not avail in IE9
                     maxHeight = Math.max(maxHeight, el.clientHeight);
                     revUtils.remove(el);
                 }
@@ -947,10 +944,8 @@ Author: michael@revcontent.com
     RevSlider.prototype.getCellHeight = function(ad) {
         var cellHeight = this.preloaderHeight;
 
-        cellHeight += parseInt(revUtils.getComputedStyle(ad, 'border-top-width')) +
-            parseInt(revUtils.getComputedStyle(ad, 'border-bottom-width')) +
-            parseInt(revUtils.getComputedStyle(ad, 'padding-top')) +
-            parseInt(revUtils.getComputedStyle(ad, 'padding-bottom'));
+        cellHeight += ad.offsetHeight - ad.children[0].offsetHeight; // padding ad - ad-container
+        cellHeight += ad.children[0].offsetHeight - ad.children[0].children[0].offsetHeight; // padding ad-container - ad-outer
 
         if (!this.options.text_overlay && !this.options.text_right) {
             cellHeight += this.headlineMaxHeight +
