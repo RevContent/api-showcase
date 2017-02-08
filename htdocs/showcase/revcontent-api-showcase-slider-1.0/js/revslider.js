@@ -520,16 +520,24 @@ Author: michael@revcontent.com
         this.innerMargin = Math.max(0, ((this.grid.columnWidth * this.paddingMultiplier).toFixed(2) / 1));
     };
 
-    RevSlider.prototype.setSize = function() {
-        var ads = this.grid.element.querySelectorAll('.rev-ad');
-        for (var i = 0; i < ads.length; i++) {
-            var ad = ads[i];
+    RevSlider.prototype.setSize = function(ad) {
 
-            ad.style.height = this.getCellHeight(ad) + 'px';
+        var that = this;
+        var setSize = function(ad) {
+            ad.style.height = that.getCellHeight(ad) + 'px';
 
-            this.resizeImage(ad.querySelectorAll('.rev-image')[0]);
-            this.resizeHeadline(ad.querySelectorAll('.rev-headline')[0]);
-            this.resizeProvider(ad.querySelectorAll('.rev-provider')[0]);
+            that.resizeImage(ad.querySelectorAll('.rev-image')[0]);
+            that.resizeHeadline(ad.querySelectorAll('.rev-headline')[0]);
+            that.resizeProvider(ad.querySelectorAll('.rev-provider')[0]);
+        }
+
+        if (ad) { // if ad is passed do that one
+            setSize(ad);
+        } else { // otherwise do them all
+            var ads = this.grid.element.querySelectorAll('.rev-ad');
+            for (var i = 0; i < ads.length; i++) {
+                setSize(ads[i]);
+            }
         }
     };
 
@@ -1284,9 +1292,7 @@ Author: michael@revcontent.com
             ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
             ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
 
-            this.resizeImage(ad.querySelectorAll('.rev-image')[0]);
-            this.resizeHeadline(ad.querySelectorAll('.rev-headline')[0]);
-            this.resizeProvider(ad.querySelectorAll('.rev-provider')[0]);
+            this.setSize(ad);
         }
 
         this.registerImpressions(viewed);
