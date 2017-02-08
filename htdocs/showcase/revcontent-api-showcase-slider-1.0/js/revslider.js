@@ -261,10 +261,57 @@ Author: michael@revcontent.com
         }
     };
 
-    RevSlider.prototype.getPadding = function() {
-        this.padding = ((this.grid.columnWidth * this.marginMultiplier).toFixed(2) / 1);
-        return this.padding;
+    RevSlider.prototype.getPadding = function(resetInline) {
+        var content = this.grid.element.querySelectorAll('.rev-content');
+
+        if (resetInline) {
+            for (var i = 0; i < content.length; i++) {
+                content[i].style.paddingTop = null;
+                content[i].style.paddingRight = null;
+                content[i].style.paddingBottom = null;
+                content[i].style.paddingLeft = null;
+
+                content[i].children[0].style.paddingTop = null;
+                content[i].children[0].style.paddingRight = null;
+                content[i].children[0].style.paddingBottom = null;
+                content[i].children[0].style.paddingLeft = null;
+            }
+            this.grid.layout();
+        }
+
+        var paddingTop = parseFloat(revUtils.getComputedStyle(content[0], 'padding-top'));
+        var paddingRight = parseFloat(revUtils.getComputedStyle(content[0], 'padding-right'));
+        var paddingBottom = parseFloat(revUtils.getComputedStyle(content[0], 'padding-bottom'));
+        var paddingLeft = parseFloat(revUtils.getComputedStyle(content[0], 'padding-left'));
+
+        var adInner = this.grid.element.querySelectorAll('.rev-ad-inner')[0];
+        var calculatedPadding = ((adInner.offsetWidth * this.marginMultiplier).toFixed(2) / 1);
+
+        this.padding = {
+            top: paddingTop ? false : calculatedPadding,
+            right: paddingRight ? false : calculatedPadding,
+            bottom: paddingBottom ? false : calculatedPadding,
+            left: paddingLeft ? false : calculatedPadding,
+        };
     };
+
+    RevSlider.prototype.setContentPadding = function() {
+        var content = this.grid.element.querySelectorAll('.rev-content');
+        for (var i = 0; i < content.length; i++) {
+            if (this.padding.top) {
+                content[i].style.paddingTop = this.padding.top + 'px';
+            }
+            if (this.padding.right) {
+                content[i].style.paddingRight = this.padding.right + 'px';
+            }
+            if (this.padding.bottom) {
+                content[i].style.paddingBottom = this.padding.bottom + 'px';
+            }
+            if (this.padding.left) {
+                content[i].style.paddingLeft = this.padding.left + 'px';
+            }
+        }
+    }
 
     RevSlider.prototype.setMultipliers = function() {
         this.lineHeightMultiplier = Math.round( (.06256 + Number((this.options.multipliers.line_height * .01).toFixed(2))) * 10000 ) / 10000;
@@ -340,27 +387,27 @@ Author: michael@revcontent.com
             var insert = 'append';
             if (this.options.vertical) { // up
                 var margin = 'marginBottom';
-                this.gridContainerTransform = 'translate3d(0, -'+ (containerHeight + (this.padding * 2)) +'px, 0)';
+                this.gridContainerTransform = 'translate3d(0, -'+ (containerHeight + (this.padding.left * 2)) +'px, 0)';
             } else { // left
                 var margin = 'marginRight';
-                this.gridContainerTransform = 'translate3d(-'+ (containerWidth + (this.padding * 2)) +'px, 0, 0)';
+                this.gridContainerTransform = 'translate3d(-'+ (containerWidth + (this.padding.left * 2)) +'px, 0, 0)';
             }
         } else { // Slide right or down
             var insert = 'prepend';
             if (this.options.vertical) { // down
                 var margin = 'marginTop';
-                revUtils.transformCss(this.gridContainerElement, 'translate3d(0, -'+ (containerHeight + (this.padding * 2)) +'px, 0)');
+                revUtils.transformCss(this.gridContainerElement, 'translate3d(0, -'+ (containerHeight + (this.padding.left * 2)) +'px, 0)');
                 this.gridContainerTransform = 'translate3d(0, 0, 0)';
             } else { // right
                 var margin = 'marginLeft';
-                revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ (containerWidth + (this.padding * 2)) +'px, 0, 0)');
+                revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ (containerWidth + (this.padding.left * 2)) +'px, 0, 0)');
                 this.gridContainerTransform = 'translate3d(0, 0, 0)';
             }
         }
 
         this.oldGrid = this.grid;
 
-        this.grid.element.style[margin] = (this.padding * 2) + 'px';
+        this.grid.element.style[margin] = (this.padding.left * 2) + 'px';
 
         var gridElement = document.createElement('div');//something up here
         gridElement.id = 'rev-slider-grid';
@@ -378,7 +425,7 @@ Author: michael@revcontent.com
             this.grid.element.style.width = containerWidth + 'px';
             this.grid.element.style.float = 'left';
 
-            this.gridContainerElement.style.width = ((containerWidth * 2) + (this.padding * 2)) + 'px';
+            this.gridContainerElement.style.width = (containerWidth * 2) + (this.padding.left * 2) + 'px';
         }
 
         this.createCells();
@@ -1360,7 +1407,7 @@ Author: michael@revcontent.com
             }
             that.made = true;
             revUtils.transitionDurationCss(that.gridContainerElement, (that.animationDuration / 1.5) + 's');
-            revUtils.transformCss(that.gridContainerElement, 'translate3d(-'+ (that.innerElement.offsetWidth + (that.padding * 2)) +'px, 0, 0)');
+            revUtils.transformCss(that.gridContainerElement, 'translate3d(-'+ (that.innerElement.offsetWidth + (that.padding.left * 2)) +'px, 0, 0)');
             setTimeout(function() {
                 that.updateGrids();
                 that.made = false;
@@ -1442,7 +1489,7 @@ Author: michael@revcontent.com
             if (direction == 'left') {
                 revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ this.movement +'px, 0, 0)');
             } else if (direction == 'right') {
-                revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.grid.containerWidth + (this.padding * 2)) - this.movement ) +'px, 0, 0)');
+                revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.grid.containerWidth + (this.padding.left * 2)) - this.movement ) +'px, 0, 0)');
             }
         }
     };
@@ -1453,7 +1500,7 @@ Author: michael@revcontent.com
         if (this.panDirection == 'left') {
             revUtils.transformCss(this.gridContainerElement, 'none');
         } else {
-            revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.grid.containerWidth + (this.padding * 2))) +'px, 0, 0)');
+            revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.grid.containerWidth + (this.padding.left * 2))) +'px, 0, 0)');
         }
 
         this.page = this.previousPage;
