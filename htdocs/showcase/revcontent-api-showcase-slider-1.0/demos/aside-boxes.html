@@ -100,7 +100,7 @@
         <br />
 
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-8 col-lg-9">
                 <div class="redacted-image redacted-image-66"></div>
 
                 <br />
@@ -173,7 +173,7 @@
                 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
                 proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 col-lg-3">
                 <div id="grid"></div>
             </div>
         </div>
@@ -194,6 +194,7 @@
     <script src="/build/revslider.min.js"></script>
 
     <script>
+
         var slider = new RevSlider({
             id: 'grid',
             api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
@@ -202,29 +203,58 @@
             domain : 'apiexamples.powr.com',
             per_row: {
                 xxs: 1,
-                xs: 1,
-                sm: 2,
-                md: 2,
-                lg: 2,
-                xl: 2,
-                xxl: 2
+                xs: 2,
+                sm: 3,
+                md: 3,
+                lg: 4,
+                xl: 4,
+                xxl: 5
             },
             rows: 10,
-            text_right: true,
+            breakpoints: {
+                xs: 330
+            },
             multipliers: {
                 margin: -2.4
             },
-            pagination_dots: false,
+            max_headline: false,
             rev_position: 'bottom_right',
             buttons: {
                 forward: false,
-                back: false
+                back: false,
             },
             image_ratio: 'square',
             hide_header: true,
-            css: '#rev-slider .rev-content:hover a {text-decoration: underline;}.rev-image, .rev-image img, #rev-slider .rev-content .rev-ad {border-radius: 0 !important;} .rev-slider-col-1 .rev-content:nth-child(even) {border-bottom: 1px solid #d7d7d7; border-top: 1px solid #d7d7d7; } .rev-slider-col-1 .rev-content:nth-child(even), .rev-slider-col-1 .rev-content:nth-child(even) .rev-ad {background: #eee !important; } .rev-slider-col-2 .rev-content:nth-child(4n), .rev-slider-col-2 .rev-content:nth-child(4n - 1) {border-bottom: 1px solid #d7d7d7; border-top: 1px solid #d7d7d7; } .rev-slider-col-2 .rev-content:nth-child(4n), .rev-slider-col-2 .rev-content:nth-child(4n - 1), .rev-content:nth-child(4n) .rev-ad, .rev-slider-col-2 .rev-content:nth-child(4n - 1) .rev-ad {background: #eee !important; }',
-            disable_pagination: true
+            disable_pagination: true,
+            text_overlay: true,
+            css: `
+            #rev-slider .rev-content:hover .rev-headline {
+                text-decoration: underline;
+            }
+            #rev-slider .rev-content .rev-ad img,
+            #rev-slider .rev-content .rev-ad,
+            #rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay,
+            #rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:after,
+            #rev-slider.rev-slider-text-overlay .rev-ad .rev-overlay:before {
+                border-radius: 0;
+            }
+
+            #rev-slider.rev-slider-text-overlay .rev-ad .rev-headline-brand .rev-provider {
+                display: block;
+            }
+
+            .rev-headline, .rev-provider {
+                text-align: center !important;
+            }
+
+            #rev-slider .rev-content {
+                padding: 0 !important;
+            }
+            #rev-slider.rev-slider-col-1 .rev-ad-container {
+                padding: 0 7.5%;
+            }`
         });
+
     </script>
 
 </body>

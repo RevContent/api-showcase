@@ -81,6 +81,7 @@
                         <li><a href="/showcase/revcontent-api-showcase-slider-1.0/demos/aside-text-right.html">Sidebar Text Right</a></li>
                         <li><a href="/showcase/revcontent-api-showcase-slider-1.0/demos/aside-circle-image.html">Sidebar Circle Image</a></li>
                         <li><a href="/showcase/revcontent-api-showcase-slider-1.0/demos/aside-half-moon-image.html">Sidebar Half Moon Image</a></li>
+                        <li><a href="/showcase/revcontent-api-showcase-slider-1.0/demos/aside-boxes.html">Sidebar Boxes</a></li>
                     </ul>
                 </div>
             </div>
@@ -193,6 +194,7 @@
     <script src="/build/revslider.min.js"></script>
 
     <script>
+
         var slider = new RevSlider({
             id: 'grid',
             api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
@@ -201,17 +203,21 @@
             domain : 'apiexamples.powr.com',
             per_row: {
                 xxs: 1,
-                xs: 1,
-                sm: 2,
-                md: 2,
-                lg: 2,
-                xl: 2,
-                xxl: 2
+                xs: 2,
+                sm: 3,
+                md: 3,
+                lg: 4,
+                xl: 4,
+                xxl: 5
             },
             rows: 10,
+            breakpoints: {
+                xs: 330
+            },
             multipliers: {
                 margin: -2.4
             },
+            max_headline: false,
             rev_position: 'bottom_right',
             buttons: {
                 forward: false,
@@ -219,11 +225,33 @@
             },
             image_ratio: 'square',
             hide_header: true,
-            css: '#rev-slider .rev-content:hover a {text-decoration: underline;} .rev-slider-col-1.rev-slider-has-data .rev-ad { height: auto !important; } .rev-ad { border: 1px solid rgb(238, 238, 238); padding-bottom: 5px !important; padding-top: 5px !important; padding-left: 30px !important; padding-right: 30px !important; } .rev-image, .rev-image img { border-radius: 50% !important; overflow: hidden !important;} .rev-headline, .rev-provider { text-align: center !important; }',
-            disable_pagination: true
+            disable_pagination: true,
+            css: `
+            #rev-slider .rev-content:hover .rev-headline {
+                text-decoration: underline;
+            }
+            .rev-image, .rev-image img {
+                border-radius: 50% !important;
+                overflow: hidden !important;
+            }
+            .rev-headline, .rev-provider {
+                text-align: center !important;
+            }
+            #rev-slider.rev-slider-col-3 .rev-content .rev-ad {
+                padding: 0 7%;
+            }
+            #rev-slider.rev-slider-col-2 .rev-ad {
+                padding: 0 5%;
+            }
+            #rev-slider.rev-slider-col-1 .rev-ad-container {
+                padding: 0 7.5%;
+            }
+            .rev-slider-col-1.rev-slider-has-data .rev-ad {
+                height: auto !important;
+            }`
         });
-    </script>
 
+    </script>
 
 </body>
 
