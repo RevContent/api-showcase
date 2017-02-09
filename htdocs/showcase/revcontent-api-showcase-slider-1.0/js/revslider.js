@@ -214,8 +214,6 @@ Author: michael@revcontent.com
             this.innerContainerElement.style.padding = (this.options.buttons.back ? (this.options.buttons.size + 'px') : '0') + ' 0 ' + (this.options.buttons.forward ? (this.options.buttons.size + 'px') : '0');
         }
 
-        this.initTouch();
-
         // manage views
         this.registerViewOnceVisible();
         if (this.options.register_views) { // widgets that use revSlider might need to do this on their own
@@ -223,8 +221,10 @@ Author: michael@revcontent.com
             revUtils.checkVisible.bind(this, this.containerElement, this.visible)();
         }
 
+        // pagination
         this.dataPromise.then(function() {
             if (that.options.disable_pagination === false) {
+                that.initTouch();
                 that.attachTouchEvents();
                 that.attachButtonEvents();
             }
@@ -642,7 +642,7 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.updatePagination = function(checkPage) {
 
-        if (!this.data.length) { // need data to determine max pages
+        if (!this.data.length || this.options.disable_pagination) { // need data to determine max pages
             return;
         }
 
