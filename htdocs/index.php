@@ -126,7 +126,7 @@
                         <span>© 2015, Revcontent All Rights Reserved.</span>
                         <div layout="row">
                             <md-button href="http://faq.revcontent.com/customer/en/portal/articles/2703838-revcontent-s-privacy-and-cookie-policy" target="_blank" title=""><strong>Privacy Policy</strong></md-button>
-                            <md-button href="http://faq.revcontent.com/support/home" target="_blank" title=""><strong>Terms and Conditions</strong></md-button>
+                            <md-button href="http://faq.revcontent.com/" target="_blank" title=""><strong>Terms and Conditions</strong></md-button>
                         </div>
                     </div>
 
