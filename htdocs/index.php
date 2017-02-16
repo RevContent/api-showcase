@@ -78,10 +78,10 @@
                                             <md-button ui-sref="docs">Docs</md-button>
                                         </md-menu-item>
                                         <md-menu-item>
-                                            <md-button target="_blank" ng-href="http://faq.revcontent.com/support/solutions/5000137293">Support</md-button>
+                                            <md-button target="_blank" ng-href="https://faq.revcontent.com/customer/en/portal/topics/1037906-revcontent-native-content-api/articles">Support</md-button>
                                         </md-menu-item>
                                         <md-menu-item>
-                                            <md-button target="_blank" ng-href="http://faq.revcontent.com/support/solutions/folders/5000219605">FAQ</md-button>
+                                            <md-button target="_blank" ng-href="http://faq.revcontent.com/">FAQ</md-button>
                                         </md-menu-item>
                                     </md-menu-content>
                                 </md-menu>
@@ -93,12 +93,12 @@
                                         <md-tooltip>Read Up!</md-tooltip>
                                     </a>
 
-                                    <a class="md-button" target="_blank" ng-href="http://faq.revcontent.com/support/solutions/5000137293" tabindex="0">
+                                    <a class="md-button" target="_blank" ng-href="https://faq.revcontent.com/customer/en/portal/topics/1037906-revcontent-native-content-api/articles" tabindex="0">
                                         <span>Support</span>
                                         <md-tooltip>How can we help?</md-tooltip>
                                     </a>
 
-                                    <a class="md-button" target="_blank" ng-href="http://faq.revcontent.com/support/solutions/folders/5000219605" tabindex="0">
+                                    <a class="md-button" target="_blank" ng-href="http://faq.revcontent.com/" tabindex="0">
                                         <span>FAQ</span>
                                         <md-tooltip>Common Questions</md-tooltip>
                                     </a>
