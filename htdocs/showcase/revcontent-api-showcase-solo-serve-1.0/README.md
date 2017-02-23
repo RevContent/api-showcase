@@ -3,7 +3,7 @@
 Solo Serve Native wraps a standard widget to show a button and engagement counter. Place the script and optional widget definition where the standard widget should appear.
 
 ```
-&lt;script&gt;var RevContentSolo = { button_text: 'Find Out More'}; &lt;/script&gt;
+&lt;script&gt;var RevContentSolo = { button_text: 'Find Out More'};&lt;/script&gt;
 &lt;script type="text/javascript" id="revsoloserve" src="https://labs.revcontent.com/build/revsoloserve.min.js?w=43583">&lt;/script&gt;
 ```
 

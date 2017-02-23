@@ -17,9 +17,9 @@ rcel.async = true;
 var rcds = document.getElementById("rcjsload_a122d7"); rcds.appendChild(rcel);
 
 })();
-&lt;script&gt;
+&lt;/script&gt;
 
-&lt;script src="http://labs-cdn.revcontent.com/build/revmore-standard.min.js">&lt;script&gt;
+&lt;script src="http://labs-cdn.revcontent.com/build/revmore-standard.min.js">&lt;/script&gt;
 
 &lt;script&gt;
     new RevMore({

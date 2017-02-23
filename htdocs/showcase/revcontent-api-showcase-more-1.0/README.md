@@ -7,7 +7,7 @@ RevMore locks the page to display a widget. It can optionally share impressions 
 
 &lt;div id="in-article"&gt;&lt;/div&gt;
 
-&lt;script src="http://labs-cdn.revcontent.com/build/revmore.min.js">&lt;script&gt;
+&lt;script src="http://labs-cdn.revcontent.com/build/revmore.min.js">&lt;/script&gt;
 
 &lt;script&gt;
     new RevMore({
