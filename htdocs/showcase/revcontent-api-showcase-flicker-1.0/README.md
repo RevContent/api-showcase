@@ -5,7 +5,7 @@ RevFlicker is a touch enabled content carousel. Use it by placing an element alo
 ```
 &lt;div id="rev-flicker"&gt;&lt;div&gt;
 
-&lt;script src="http://labs-cdn.revcontent.com/build/revflicker.min.js">&lt;script&gt;
+&lt;script src="http://labs-cdn.revcontent.com/build/revflicker.min.js">&lt;/script&gt;
 
 &lt;script&gt;
     new RevFlicker({

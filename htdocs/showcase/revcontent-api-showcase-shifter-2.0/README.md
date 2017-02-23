@@ -2,7 +2,7 @@
 RevShifter shows from the bottom or top of the page on scroll or pan. It's used by placing the script and ad code definition on the page.
 
 ```
-&lt;script src="http://labs-cdn.revcontent.com/build/revshifter.min.js">&lt;script&gt;
+&lt;script src="http://labs-cdn.revcontent.com/build/revshifter.min.js">&lt;/script&gt;
 
 &lt;script&gt;
     new RevShifter({
