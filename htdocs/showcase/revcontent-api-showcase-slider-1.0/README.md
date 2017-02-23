@@ -5,7 +5,7 @@ RevSlider is a touch enabled content slider. Use it by placing an element along 
 ```
 &lt;div id="rev-slider"&gt;&lt;div&gt;
 
-&lt;script src="http://labs-cdn.revcontent.com/build/revslider.min.js">&lt;script&gt;
+&lt;script src="http://labs-cdn.revcontent.com/build/revslider.min.js">&lt;/script&gt;
 
 &lt;script&gt;
     new RevSlider({

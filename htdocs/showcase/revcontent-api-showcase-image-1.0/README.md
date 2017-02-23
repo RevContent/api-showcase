@@ -5,7 +5,7 @@ RevImage displays from the bottom of an image. Use it by placing an id on your i
 ```
 &lt;img id="rev-image-demo" src="http://goo.gl/O5NR1C"&gt;
 
-&lt;script src="https://labs-cdn.revcontent.com/build/revimage.min.js">&lt;script&gt;
+&lt;script src="https://labs-cdn.revcontent.com/build/revimage.min.js">&lt;/script&gt;
 
 &lt;script&gt;
 var revImage = new RevImage({

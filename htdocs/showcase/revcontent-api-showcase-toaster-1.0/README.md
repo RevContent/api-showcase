@@ -3,7 +3,7 @@
 RevToaster displays as the user scrolls back to the top of the page. It's used by placing the script and ad code definition on the page.
 
 ```
-&lt;script src="http://labs-cdn.revcontent.com/build/revtoaster.min.js">&lt;script&gt;
+&lt;script src="http://labs-cdn.revcontent.com/build/revtoaster.min.js">&lt;/script&gt;
 
 &lt;script&gt;
     RevToaster({ 
