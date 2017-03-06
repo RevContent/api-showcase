@@ -61,7 +61,7 @@ var css = '<style>'+
     'border-radius: 3px;'+
     'max-width: 550px;'+
     'position: relative;'+
-    'margin: 0 auto;'+
+    'margin: 0 auto 20px;'+
     'cursor: pointer;'+
 '}'+
 
@@ -74,7 +74,6 @@ var css = '<style>'+
     'font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;'+
     'margin:0;'+
     'padding:0;'+
-    'position:relative;'+
 '}'+
 '#rc-solo .rc-w-'+solo_widget_id+' .rc-headline {'+
     'font-family: Hind, Arial, sans-serif!important;'+
@@ -97,6 +96,9 @@ var css = '<style>'+
 '}'+
 '#rc-solo .rc-branding {' +
     'width: auto;' +
+'}'+
+'#rc-solo .rc-branding div {' +
+    'font-size: 10px !important' +
 '}'+
 '#rc-solo .rc-branding.rc-text-center {' +
     'width: 100%;' +
@@ -156,7 +158,8 @@ var css = '<style>'+
     'left:0px;'+
 '}'+
 '#rc-solo .rc-hot-holder-icon {'+
-    'height:20px;'+
+    'height:20px !important;'+
+    'width:auto !important;'+
     'margin-right:3px;'+
     'vertical-align:baseline;'+
 '}'+
