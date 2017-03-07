@@ -4,7 +4,7 @@ Solo Serve Native wraps a standard widget to show a button and engagement counte
 
 ```
 &lt;script&gt;var RevContentSolo = { button_text: 'Find Out More'};&lt;/script&gt;
-&lt;script type="text/javascript" id="revsoloserve" src="https://labs.revcontent.com/build/revsoloserve.min.js?w=43583">&lt;/script&gt;
+&lt;script type="text/javascript" id="revsoloserve" src="http://labs-cdn.revcontent.com/build/revsoloserve.min.js?w=43583">&lt;/script&gt;
 ```
 
 ##Standard widget dependencies
