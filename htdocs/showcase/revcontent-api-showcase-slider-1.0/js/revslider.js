@@ -221,14 +221,13 @@ Author: michael@revcontent.com
             revUtils.checkVisible.bind(this, this.containerElement, this.visible)();
         }
 
-        // pagination
-        this.dataPromise.then(function() {
-            if (that.options.disable_pagination === false) {
-                that.initTouch();
+        if (that.options.disable_pagination === false) {
+            this.initTouch();
+            this.dataPromise.then(function() {
                 that.attachTouchEvents();
                 that.attachButtonEvents();
-            }
-        });
+            });
+        }
     };
 
     RevSlider.prototype.setGridClasses = function() {
