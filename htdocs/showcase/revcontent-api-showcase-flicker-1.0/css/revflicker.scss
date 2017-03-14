@@ -71,7 +71,7 @@ body {
     text-decoration: none;
 }
 
-#rev-flicker .rev-ad > a:hover .rev-headline {
+#rev-flicker .rev-ad:hover .rev-headline {
     text-decoration: underline;
 }
 
@@ -79,6 +79,11 @@ body {
     display: block;
     height: 100%;
     color: #222;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000000;
 }
 
 #rev-flicker .rev-image {
