@@ -423,8 +423,10 @@ RevFlicker({
             for (var i = 0; i < ads.length; i++) {
                 var ad = ads[i];
                 ad.style.height = this.preloaderHeight + 'px';
-                if (!ad.querySelectorAll('.rev-overlay').length) { // add rev-overlay if not already there
-                    ad.querySelectorAll('img')[0].insertAdjacentHTML('afterend', '<div class="rev-overlay"></div>');
+                if (!ad.querySelector('.rev-overlay')) { // add rev-overlay if not already there
+                    var overlay = document.createElement('div');
+                    overlay.className = 'rev-overlay';
+                    revUtils.append(ad.querySelector('.rev-image'), overlay);
                 }
             }
         } else {
