@@ -99,9 +99,11 @@ Author: michael@revcontent.com
             beacons: true,
             pagination_dots: false,
             touch_direction: Hammer.DIRECTION_HORIZONTAL, // don't prevent vertical scrolling
-            overlay: false, // pass key value object { content_type: icon }
             overlay_icons: false, // pass in custom icons or overrides
-            overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
+            image_overlay: false, // pass key value object { content_type: icon }
+            image_overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
+            ad_overlay: false, // pass key value object { content_type: icon }
+            ad_overlay_position: 'bottom_right', // center, top_left, top_right, bottom_right, bottom_left
             query_params: false,
             register_views: true, // manage views or false to let someone else do it
             user_ip: false,
@@ -111,7 +113,7 @@ Author: michael@revcontent.com
         };
 
         // merge options
-        this.options = revUtils.extend(defaults, opts);
+        this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
 
         if (revUtils.validateApiParams(this.options).length) {
             return;
@@ -214,6 +216,11 @@ Author: michael@revcontent.com
             this.innerContainerElement.style.padding = (this.options.buttons.back ? (this.options.buttons.size + 'px') : '0') + ' 0 ' + (this.options.buttons.forward ? (this.options.buttons.size + 'px') : '0');
         }
 
+        // custom icons passed? merge with default
+        if (this.options.overlay_icons !== false) {
+            revUtils.mergeOverlayIcons(this.options.overlay_icons);
+        }
+
         // manage views
         this.registerViewOnceVisible();
         if (this.options.register_views) { // widgets that use revSlider might need to do this on their own
@@ -236,6 +243,10 @@ Author: michael@revcontent.com
         revUtils.addClass(this.containerElement, 'rev-slider-buttons-' + (this.options.buttons.style));
 
         revUtils.addClass(this.containerElement, 'rev-slider-buttons-' + (this.options.buttons.style));
+
+        if (this.options.disable_pagination) {
+            revUtils.addClass(this.containerElement, 'rev-slider-pagination-disabled');
+        }
 
         revUtils.removeClass(this.containerElement, 'rev-slider-col', true);
         revUtils.removeClass(this.containerElement, 'rev-slider-row', true);
@@ -316,7 +327,7 @@ Author: michael@revcontent.com
                 content[i].style.paddingLeft = this.padding.left + 'px';
             }
         }
-    }
+    };
 
     RevSlider.prototype.setMultipliers = function() {
         this.lineHeightMultiplier = Math.round( (.06256 + Number((this.options.multipliers.line_height * .01).toFixed(2))) * 10000 ) / 10000;
@@ -543,7 +554,7 @@ Author: michael@revcontent.com
             that.resizeImage(ad.querySelectorAll('.rev-image')[0]);
             that.resizeHeadline(ad.querySelectorAll('.rev-headline')[0]);
             that.resizeProvider(ad.querySelectorAll('.rev-provider')[0]);
-        }
+        };
 
         if (ad) { // if ad is passed do that one
             setSize(ad);
@@ -1122,23 +1133,22 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.createNewCell = function() {
         var html = '<div class="rev-ad">' +
-            '<div class="rev-ad-container">' +
-            '<div class="rev-ad-outer">' +
-            '<div class="rev-ad-inner">' +
-            '<a href="" target="_blank">' +
-            '<div class="rev-image">' +
-            '<img src=""/>' +
-            '</div>' +
-            '<div class="rev-headline-brand">' +
-            '<div class="rev-headline">' +
-            '<h3></h3>' +
-            '</div>' +
-            '<div class="rev-provider"></div>' +
-            '</div>' +
-            '</div>' +
-            '</div>' +
-            '</div>' +
-            '</a>' +
+                '<div class="rev-ad-container">' +
+                    '<div class="rev-ad-outer">' +
+                        '<div class="rev-ad-inner">' +
+                            '<div class="rev-image">' +
+                                '<img src=""/>' +
+                            '</div>' +
+                            '<div class="rev-headline-brand">' +
+                                '<div class="rev-headline">' +
+                                    '<h3></h3>' +
+                                '</div>' +
+                                '<div class="rev-provider"></div>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<a href="" target="_blank"></a>' +
+                '</div>' +
             '</div>';
 
             var cell = document.createElement('div');
@@ -1295,8 +1305,12 @@ Author: michael@revcontent.com
 
             ad.style.height = this.getCellHeight(ad) + 'px';
 
-            if (this.options.overlay !== false) {
-                revUtils.imageOverlay(ad.querySelectorAll('.rev-image')[0], data.content_type, this.options.overlay, this.options.overlay_position, this.options.overlay_icons);
+            if (this.options.image_overlay !== false) {
+                revUtils.imageOverlay(ad.querySelector('.rev-image'), data.content_type, this.options.image_overlay, this.options.image_overlay_position);
+            }
+
+            if (this.options.ad_overlay !== false) {
+                revUtils.adOverlay(ad, data.content_type, this.options.ad_overlay, this.options.ad_overlay_position);
             }
 
             ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', '') + (this.viewed ? '&viewed=true' : ''));

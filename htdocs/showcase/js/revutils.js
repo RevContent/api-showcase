@@ -18,6 +18,22 @@
 
 var utils = {};
 
+utils.deprecateOptions = function(opts) {
+    if (opts.overlay) {
+        opts.image_overlay = opts.overlay;
+    }
+
+    if (opts.overlay_icons) {
+        opts.image_overlay_icons = opts.overlay_icons;
+    }
+
+    if (opts.overlay_position) {
+        opts.image_overlay_position = opts.overlay_position;
+    }
+
+    return opts;
+};
+
 utils.validateApiParams = function(params) {
     var errors = [];
     if (!params.api_key){
@@ -422,9 +438,16 @@ utils.setImage = function(wrapperElement, src) {
     this.append(wrapperElement, img);
 };
 
-utils.imageOverlay = function(image, content_type, overlay, position, icons) {
-    var icons = this.merge(revOverlay.icons, icons); // merge any passed icons
-    revOverlay.image(image, content_type, overlay, position, icons);
+utils.mergeOverlayIcons = function(icons) {
+    this.merge(revOverlay.icons, icons);
+};
+
+utils.imageOverlay = function(image, content_type, overlay, position) {
+    revOverlay.image(image, content_type, overlay, position);
+};
+
+utils.adOverlay = function(ad, content_type, overlay, position) {
+    revOverlay.ad(ad, content_type, overlay, position);
 };
 
 utils.checkVisible = function(element, callback, percentVisible) {

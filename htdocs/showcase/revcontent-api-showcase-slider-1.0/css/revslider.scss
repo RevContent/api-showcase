@@ -257,6 +257,11 @@
             display: block;
             height: 100%;
             color: #222;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1000000;
         }
 
         .rev-image {
@@ -373,6 +378,14 @@
     &.rev-slider-text-right .rev-image {
         float: left;
         margin-right: 5px;
+    }
+
+    &.rev-slider-pagination-disabled {
+        #rev-slider-container {
+            #rev-slider-inner {
+                cursor: default !important;
+            }
+        }
     }
 
     // &.rev-slider-text-right .rev-ad a .rev-headline {
