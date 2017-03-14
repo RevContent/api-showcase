@@ -159,6 +159,8 @@ Author: michael@revcontent.com
 
         revUtils.append(this.element, this.containerElement);
 
+        this.paginationDots();
+
         this.initButtons();
 
         revUtils.dispatchScrollbarResizeEvent();
@@ -201,8 +203,6 @@ Author: michael@revcontent.com
         this.offset = 0;
         this.page = 1;
         this.previousPage = 1;
-
-        this.paginationDots();
 
         this.appendElements();
 
