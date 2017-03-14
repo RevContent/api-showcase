@@ -196,6 +196,7 @@
 
     <script>
         var slider = new RevSlider({
+            // url: 'http://dv3.revcontent.com/api/v1',
             id: 'grid',
             api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
             pub_id : 945,
@@ -221,10 +222,22 @@
                 forward: false,
                 back: false
             },
-            image_ratio: 'square',
+            image_ratio: 'rectangle',
+            ad_border: false,
             hide_header: true,
-            css: '#rev-slider .rev-content:hover a {text-decoration: underline;}.rev-image, .rev-image img, #rev-slider .rev-content .rev-ad {border-radius: 0 !important;} .rev-slider-col-1 .rev-content:nth-child(even) {border-bottom: 1px solid #d7d7d7; border-top: 1px solid #d7d7d7; } .rev-slider-col-1 .rev-content:nth-child(even), .rev-slider-col-1 .rev-content:nth-child(even) .rev-ad {background: #eee !important; } .rev-slider-col-2 .rev-content:nth-child(4n), .rev-slider-col-2 .rev-content:nth-child(4n - 1) {border-bottom: 1px solid #d7d7d7; border-top: 1px solid #d7d7d7; } .rev-slider-col-2 .rev-content:nth-child(4n), .rev-slider-col-2 .rev-content:nth-child(4n - 1), .rev-content:nth-child(4n) .rev-ad, .rev-slider-col-2 .rev-content:nth-child(4n - 1) .rev-ad {background: #eee !important; }',
-            disable_pagination: true
+            css: '#rev-slider .rev-content:hover a {text-decoration: underline; } .rev-image, .rev-image img, #rev-slider .rev-content .rev-ad {border-radius: 0 !important; } .rev-slider-col-1 .rev-content:nth-child(even) {border-bottom: 1px solid #d7d7d7; border-top: 1px solid #d7d7d7; } .rev-slider-col-1 .rev-content:nth-child(even), .rev-slider-col-1 .rev-content:nth-child(even) .rev-ad {background: #eee !important; } .rev-slider-col-2 .rev-content:nth-child(4n), .rev-slider-col-2 .rev-content:nth-child(4n - 1) {border-bottom: 1px solid #d7d7d7; border-top: 1px solid #d7d7d7; } .rev-slider-col-2 .rev-content:nth-child(4n), .rev-slider-col-2 .rev-content:nth-child(4n - 1), .rev-content:nth-child(4n) .rev-ad, .rev-slider-col-2 .rev-content:nth-child(4n - 1) .rev-ad {background: #eee !important; } .rc-image-icon {width: 60% !important; transform: translate(-50%, -50%) scale(.5) !important; transition: all 500ms; opacity: 0 !important; } .rev-ad:hover .rc-image-icon {opacity: .8 !important; transform: translate(-50%, -50%) scale(1) !important; } .rc-image-icon .rc-icon-video {fill: #000 !important; }',
+            disable_pagination: true,
+            overlay_icons: {
+                video_camera: '<svg enable-background="new 0 0 1792 1792" id="Layer_1" version="1.1" viewBox="0 0 1792 1792" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M1792 352v1088q0 42-39 59-13 5-25 5-27 0-45-19l-403-403v166q0 119-84.5 203.5t-203.5 84.5h-704q-119 0-203.5-84.5t-84.5-203.5v-704q0-119 84.5-203.5t203.5-84.5h704q119 0 203.5 84.5t84.5 203.5v165l403-402q18-19 45-19 12 0 25 5 39 17 39 59z"/></svg>',
+            },
+            image_overlay: {
+                article: 'video_rectangle',
+                video: 'video_rectangle'
+            },
+            ad_overlay: {
+                article: 'video_camera',
+                video: 'video_camera'
+            }
         });
     </script>
 

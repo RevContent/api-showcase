@@ -82,6 +82,7 @@
                         <li><a href="/showcase/revcontent-api-showcase-slider-1.0/demos/aside-circle-image.html">Sidebar Circle Image</a></li>
                         <li><a href="/showcase/revcontent-api-showcase-slider-1.0/demos/aside-half-moon-image.html">Sidebar Half Moon Image</a></li>
                         <li><a href="/showcase/revcontent-api-showcase-slider-1.0/demos/aside-boxes.html">Sidebar Boxes</a></li>
+                        <li><a href="/showcase/revcontent-api-showcase-slider-1.0/demos/aside-text-right-overlay.html">Sidebar Text Right Video Overlay</a></li>
                     </ul>
                 </div>
             </div>
@@ -226,29 +227,7 @@
             image_ratio: 'square',
             hide_header: true,
             disable_pagination: true,
-            css: `
-            #rev-slider .rev-content:hover .rev-headline {
-                text-decoration: underline;
-            }
-            .rev-image, .rev-image img {
-                border-radius: 50% !important;
-                overflow: hidden !important;
-            }
-            .rev-headline, .rev-provider {
-                text-align: center !important;
-            }
-            #rev-slider.rev-slider-col-3 .rev-content .rev-ad {
-                padding: 0 7%;
-            }
-            #rev-slider.rev-slider-col-2 .rev-ad {
-                padding: 0 5%;
-            }
-            #rev-slider.rev-slider-col-1 .rev-ad-container {
-                padding: 0 7.5%;
-            }
-            .rev-slider-col-1.rev-slider-has-data .rev-ad {
-                height: auto !important;
-            }`
+            css: '#rev-slider .rev-content:hover .rev-headline {text-decoration: underline; } .rev-image, .rev-image img {border-radius: 50% !important; overflow: hidden !important; } .rev-headline, .rev-provider {text-align: center !important; } #rev-slider.rev-slider-col-3 .rev-content .rev-ad {padding: 0 7%; } #rev-slider.rev-slider-col-2 .rev-ad {padding: 0 5%; } #rev-slider.rev-slider-col-1 .rev-ad-container {padding: 0 7.5%; } .rev-slider-col-1.rev-slider-has-data .rev-ad {height: auto !important; }'
         });
 
     </script>
