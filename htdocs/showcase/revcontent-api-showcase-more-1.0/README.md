@@ -45,7 +45,7 @@ ad_overlay: false
 ###ad\_overlay\_position
 The position of the ad overlay icon. Available options include ```center```, ```top_left```, ```top_right```, ```bottom_right``` and ```bottom_left```.
 ```
-ad_overlay_position: 'center'
+ad_overlay_position: 'bottom_right'
 ```
 
 ###buttons
