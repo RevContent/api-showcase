@@ -14,3 +14,11 @@ htdocs/app/resources/vendor/material-design-icons
 !htdocs/vendor/flickity/css/flickity.css
 !htdocs/vendor/flickity/dist/flickity.pkgd.js
 !htdocs/vendor/eventEmitter/EventEmitter.min.js
+
+!htdocs/node_modules/es6-promise/dist/es6-promise.js
+!htdocs/node_modules/hammerjs/hammer.js
+!htdocs/node_modules/mobile-detect/mobile-detect.js
+!htdocs/node_modules/any-grid/dist/any-grid.js
+!htdocs/node_modules/flickity/css/flickity.css
+!htdocs/node_modules/flickity/dist/flickity.pkgd.js
+!htdocs/node_modules/wolfy87-eventemitter/EventEmitter.js

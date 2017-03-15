@@ -18,6 +18,22 @@
 
 var utils = {};
 
+utils.deprecateOptions = function(opts) {
+    if (opts.overlay) {
+        opts.image_overlay = opts.overlay;
+    }
+
+    if (opts.overlay_icons) {
+        opts.image_overlay_icons = opts.overlay_icons;
+    }
+
+    if (opts.overlay_position) {
+        opts.image_overlay_position = opts.overlay_position;
+    }
+
+    return opts;
+};
+
 utils.validateApiParams = function(params) {
     var errors = [];
     if (!params.api_key){
@@ -171,18 +187,26 @@ utils.hasClass = function(el, className) {
 
 utils.addClass = function(el, className) {
     if (!el) return false;
-    if (el.classList)
-      el.classList.add(className);
-    else
-      el.className += ' ' + className;
+
+    if (el.classList) {
+        el.classList.add(className);
+    } else {
+        this.removeClass(el, className); // make sure we don't double up
+        el.className += ' ' + className;
+    }
 };
 
-utils.removeClass = function(el, className) {
+utils.removeClass = function(el, className, prefix) {
     if (!el) return false;
-    if (el.classList)
-        el.classList.remove(className);
-    else
-        el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+
+    var classes = el.className.trim().split(" ").filter(function(c) {
+        if (prefix) {
+            return c.lastIndexOf(className, 0) !== 0;
+        }
+        return c !== className;
+    });
+
+    el.className = classes.join(" ").trim();
 };
 
 utils.dispatchScrollbarResizeEvent = function() {
@@ -414,9 +438,16 @@ utils.setImage = function(wrapperElement, src) {
     this.append(wrapperElement, img);
 };
 
-utils.imageOverlay = function(image, content_type, overlay, position, icons) {
-    var icons = this.merge(revOverlay.icons, icons); // merge any passed icons
-    revOverlay.image(image, content_type, overlay, position, icons);
+utils.mergeOverlayIcons = function(icons) {
+    this.merge(revOverlay.icons, icons);
+};
+
+utils.imageOverlay = function(image, content_type, overlay, position) {
+    revOverlay.image(image, content_type, overlay, position);
+};
+
+utils.adOverlay = function(ad, content_type, overlay, position) {
+    revOverlay.ad(ad, content_type, overlay, position);
 };
 
 utils.checkVisible = function(element, callback, percentVisible) {

@@ -81,6 +81,8 @@
                         <li><a href="/showcase/revcontent-api-showcase-slider-1.0/demos/aside-text-right.html">Sidebar Text Right</a></li>
                         <li><a href="/showcase/revcontent-api-showcase-slider-1.0/demos/aside-circle-image.html">Sidebar Circle Image</a></li>
                         <li><a href="/showcase/revcontent-api-showcase-slider-1.0/demos/aside-half-moon-image.html">Sidebar Half Moon Image</a></li>
+                        <li><a href="/showcase/revcontent-api-showcase-slider-1.0/demos/aside-boxes.html">Sidebar Boxes</a></li>
+                        <li><a href="/showcase/revcontent-api-showcase-slider-1.0/demos/aside-text-right-overlay.html">Sidebar Text Right Video Overlay</a></li>
                     </ul>
                 </div>
             </div>
@@ -199,7 +201,15 @@
             pub_id : 945,
             widget_id : 6181,
             domain : 'apiexamples.powr.com',
-            per_row: 1,
+            per_row: {
+                xxs: 1,
+                xs: 1,
+                sm: 2,
+                md: 2,
+                lg: 2,
+                xl: 2,
+                xxl: 2
+            },
             rows: 10,
             text_right: true,
             multipliers: {
@@ -212,9 +222,8 @@
                 back: false
             },
             image_ratio: 'square',
-            ad_border: false,
             hide_header: true,
-            css: '.rev-image, .rev-image img, #rev-slider .rev-content .rev-ad { border-radius: 0 !important;} .rev-content:nth-child(even) { border-bottom: 1px solid #d7d7d7; border-top: 1px solid #d7d7d7; } .rev-content:nth-child(even), .rev-content:nth-child(even) .rev-ad { background: #eee !important; }',
+            css: '#rev-slider .rev-content:hover a {text-decoration: underline;}.rev-image, .rev-image img, #rev-slider .rev-content .rev-ad {border-radius: 0 !important;} .rev-slider-col-1 .rev-content:nth-child(even) {border-bottom: 1px solid #d7d7d7; border-top: 1px solid #d7d7d7; } .rev-slider-col-1 .rev-content:nth-child(even), .rev-slider-col-1 .rev-content:nth-child(even) .rev-ad {background: #eee !important; } .rev-slider-col-2 .rev-content:nth-child(4n), .rev-slider-col-2 .rev-content:nth-child(4n - 1) {border-bottom: 1px solid #d7d7d7; border-top: 1px solid #d7d7d7; } .rev-slider-col-2 .rev-content:nth-child(4n), .rev-slider-col-2 .rev-content:nth-child(4n - 1), .rev-content:nth-child(4n) .rev-ad, .rev-slider-col-2 .rev-content:nth-child(4n - 1) .rev-ad {background: #eee !important; }',
             disable_pagination: true
         });
     </script>

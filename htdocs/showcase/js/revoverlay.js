@@ -26,7 +26,7 @@ overlay.iconTemplates = {
                                   'd="m 175,150 0,150 120,-75 z" ></path>' +
                             '<image width="100%" src="//serve.revcontent.com/assets/img/{{id}}-video-icon.png" xlink:href="">' +
                         '</svg>'
-}
+};
 
 overlay.icons = {
     video_rectangle: '<svg class="rc-icon-video" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg"' +
@@ -57,19 +57,32 @@ overlay.icons = {
                                   'd="m 100,50 0,250 220,-125 z" ></path>' +
                             '<image width="100%" src="//serve.revcontent.com/assets/img/tri-video-icon.png" xlink:href="">' +
                         '</svg>'
-}
+};
 
-overlay.image = function(image, content_type, overlay, position, icons) {
+overlay.image = function(image, content_type, overlay, position) {
     if (!overlay[content_type]) { // is there a config passed for this content_type?
         return;
     }
 
-    var icon = this.icons[content_type + '_' + overlay[content_type]];
+    var icon = this.icons[overlay[content_type]];
     if (!icon) { // does this icon exist
         return;
     }
 
-    image.insertAdjacentHTML('beforeend', '<div class="rc-icon rc-icon-'+ position +'">' + icon + '</div>');
+    image.insertAdjacentHTML('beforeend', '<div class="rc-icon rc-image-icon rc-icon-'+ position +'">' + icon + '</div>');
+};
+
+overlay.ad = function(container, content_type, overlay, position) {
+    if (!overlay[content_type]) { // is there a config passed for this content_type?
+        return;
+    }
+
+    var icon = this.icons[overlay[content_type]];
+    if (!icon) { // does this icon exist
+        return;
+    }
+
+  container.insertAdjacentHTML('beforeend', '<div class="rc-icon rc-ad-icon rc-icon-'+ position +'">' + icon + '</div>');
 };
 
 // -----  ----- //

@@ -26,5 +26,13 @@
     "pump": "latest",
     "gulp-notify": "~2",
     "gulp-sass": "~2.3.1"
+  },
+  "dependencies": {
+    "mobile-detect": "~1",
+    "flickity": "~1",
+    "any-grid": "~1",
+    "es6-promise": "~3",
+    "hammerjs": "~2",
+    "wolfy87-eventemitter": "~4"
   }
 }

@@ -120,6 +120,12 @@ body.rev-toaster-loaded #rev-toaster{
 
 #rev-toaster .rev-ad a {
     display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000000;
 }
 
 #rev-toaster .rev-image {

@@ -75,9 +75,11 @@ RevShifter({
         hide_footer: false,
         hide_provider: false,
         beacons: true,
-        overlay: false, // pass key value object { content_type: icon }
         overlay_icons: false, // pass in custom icons or overrides
-        overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
+        image_overlay: false, // pass key value object { content_type: icon }
+        image_overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
+        ad_overlay: false, // pass key value object { content_type: icon }
+        ad_overlay_position: 'bottom_right', // center, top_left, top_right, bottom_right, bottom_left
         query_params: false,
         user_ip: false,
         user_agent: false,
@@ -124,7 +126,7 @@ RevShifter({
         }
 
         // merge options
-        this.options = revUtils.extend(defaults, opts);
+        this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
 
         // param errors
         if (revUtils.validateApiParams(this.options).length) {
@@ -196,9 +198,11 @@ RevShifter({
                 },
                 beacons: this.options.beacons,
                 touch_direction: Hammer.DIRECTION_ALL, // prevent vertical scrolling
-                overlay: this.options.overlay, // video: rectangle, square, circle1, circle2, triangle
                 overlay_icons: this.options.overlay_icons, // pass in custom icons or overrides
-                overlay_position: this.options.overlay_position, // center, top_left, top_right, bottom_right, bottom_left
+                image_overlay: this.options.image_overlay, // pass key value object { content_type: icon }
+                image_overlay_position: this.options.image_overlay_position, // center, top_left, top_right, bottom_right, bottom_left
+                ad_overlay: this.options.ad_overlay, // pass key value object { content_type: icon }
+                ad_overlay_position: this.options.ad_overlay_position, // center, top_left, top_right, bottom_right, bottom_left
                 query_params: this.options.query_params,
                 register_views: false, // handle viewibility/prevent Slider from doing checks
                 user_ip: this.options.user_ip,

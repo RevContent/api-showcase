@@ -82,6 +82,8 @@
                         <li><a href="/showcase/revcontent-api-showcase-slider-1.0/demos/aside-text-right.html">Sidebar Text Right</a></li>
                         <li><a href="/showcase/revcontent-api-showcase-slider-1.0/demos/aside-circle-image.html">Sidebar Circle Image</a></li>
                         <li><a href="/showcase/revcontent-api-showcase-slider-1.0/demos/aside-half-moon-image.html">Sidebar Half Moon Image</a></li>
+                        <li><a href="/showcase/revcontent-api-showcase-slider-1.0/demos/aside-boxes.html">Sidebar Boxes</a></li>
+                        <li><a href="/showcase/revcontent-api-showcase-slider-1.0/demos/aside-text-right-overlay.html">Sidebar Text Right Video Overlay</a></li>
                     </ul>
                 </div>
             </div>
@@ -100,7 +102,7 @@
         <br />
 
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-8 col-lg-9">
                 <div class="redacted-image redacted-image-66"></div>
 
                 <br />
@@ -173,7 +175,7 @@
                 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
                 proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 col-lg-3">
                 <div id="grid"></div>
             </div>
         </div>
@@ -200,8 +202,19 @@
             pub_id : 945,
             widget_id : 6181,
             domain : 'apiexamples.powr.com',
-            per_row: 1,
+            per_row: {
+                xxs: 1,
+                xs: 2,
+                sm: 3,
+                md: 3,
+                lg: 4,
+                xl: 4,
+                xxl: 5
+            },
             rows: 10,
+            breakpoints: {
+                xs: 330
+            },
             multipliers: {
                 margin: -2.4
             },
@@ -211,10 +224,9 @@
                 back: false,
             },
             image_ratio: 'wide_rectangle',
-            ad_border: false,
             hide_header: true,
-            css: '.rev-image, .rev-image img {border-radius: 300px 300px 0 0 !important;overflow: hidden !important;}.rev-headline, .rev-provider { text-align: center !important; }',
-            disable_pagination: true
+            disable_pagination: true,
+            css: '#rev-slider .rev-content:hover .rev-headline {text-decoration: underline; } .rev-image, .rev-image img {border-radius: 300px 300px 0 0 !important; overflow: hidden !important; } .rev-headline, .rev-provider {text-align: center !important; } #rev-slider.rev-slider-col-3 .rev-content .rev-ad {padding: 0 7%; } #rev-slider.rev-slider-col-2 .rev-ad {padding: 0 5%; } #rev-slider.rev-slider-col-1 .rev-ad-container {padding: 0 7.5%; } .rev-slider-col-1.rev-slider-has-data .rev-ad {height: auto !important; }'
         });
     </script>
 

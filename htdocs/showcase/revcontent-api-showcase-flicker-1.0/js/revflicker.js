@@ -115,14 +115,16 @@ RevFlicker({
             user_agent: false,
             hide_header: false,
             hide_disclosure: false,
-            overlay: false, // pass key value object { content_type: icon }
             overlay_icons: false, // pass in custom icons or overrides
-            overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
+            image_overlay: false, // pass key value object { content_type: icon }
+            image_overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
+            ad_overlay: false, // pass key value object { content_type: icon }
+            ad_overlay_position: 'bottom_right', // center, top_left, top_right, bottom_right, bottom_left
             query_params: false
         };
 
         // merge options
-        this.options = revUtils.extend(defaults, opts);
+        this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
 
         // param errors
         if (revUtils.validateApiParams(this.options).length) {
@@ -172,6 +174,12 @@ RevFlicker({
 
         // wrapper class
         revUtils.addClass(this.flickity.element, 'rev-flicker');
+
+        // custom icons passed? merge with default
+        if (this.options.overlay_icons !== false) {
+            revUtils.mergeOverlayIcons(this.options.overlay_icons);
+        }
+
         // HACK for Chrome using emitter to wait for element container to be ready
         this.emitter = new EventEmitter();
         this.getContainerWidth();
@@ -423,8 +431,10 @@ RevFlicker({
             for (var i = 0; i < ads.length; i++) {
                 var ad = ads[i];
                 ad.style.height = this.preloaderHeight + 'px';
-                if (!ad.querySelectorAll('.rev-overlay').length) { // add rev-overlay if not already there
-                    ad.querySelectorAll('img')[0].insertAdjacentHTML('afterend', '<div class="rev-overlay"></div>');
+                if (!ad.querySelector('.rev-overlay')) { // add rev-overlay if not already there
+                    var overlay = document.createElement('div');
+                    overlay.className = 'rev-overlay';
+                    revUtils.append(ad.querySelector('.rev-image'), overlay);
                 }
             }
         } else {
@@ -471,11 +481,10 @@ RevFlicker({
 
         for (var j = index; j < count; j++) {
             var html = '<div class="rev-ad" style="height: '+ that.getCellHeight() +'px; border-width:' + (that.options.ad_border ? '1px' : '0') + '">' +
-                        '<a href="" rel="nofollow" target="_blank">' +
                             '<div class="rev-image" style="'+ imgWidth +'height:'+ that.preloaderHeight +'px"></div>' +
                             '<div class="rev-headline" style="max-height:'+ that.headlineHeight +'px; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>' +
                             ( that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'margin: ' + that.providerMarginTop + 'px '  + that.innerMargin + 'px '+ that.providerMarginBottom +'px;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;height:' + that.providerLineHeight + 'px;') : '') +
-                        '</a>' +
+                        '<a href="" rel="nofollow" target="_blank"></a>' +
                     '</div>';
             var cell = document.createElement('div');
 
@@ -635,7 +644,7 @@ RevFlicker({
             // register a view without impressions(empty)
             var url = this.generateUrl(0, this.perRow, true, true);
 
-            revApi.request(url, function() { return });
+            revApi.request(url, function() { return; });
 
             var that = this;
             // make sure we have some data
@@ -667,8 +676,12 @@ RevFlicker({
 
             revUtils.setImage(ad.querySelectorAll('.rev-image')[0], data.image);
 
-            if (this.options.overlay !== false) {
-                revUtils.imageOverlay(ad.querySelectorAll('.rev-image')[0], data.content_type, this.options.overlay, this.options.overlay_position, this.options.overlay_icons);
+            if (this.options.image_overlay !== false) {
+                revUtils.imageOverlay(ad.querySelector('.rev-image'), data.content_type, this.options.image_overlay, this.options.image_overlay_position);
+            }
+
+            if (this.options.ad_overlay !== false) {
+                revUtils.adOverlay(ad, data.content_type, this.options.ad_overlay, this.options.ad_overlay_position);
             }
 
             ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', ''));
@@ -721,7 +734,7 @@ RevFlicker({
         }
 
         return url;
-    }
+    };
 
     RevFlicker.prototype.getMaxHeadlineHeight = function() {
         var maxHeight = 0;

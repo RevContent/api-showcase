@@ -62,9 +62,11 @@ RevMore({
             'phone', 'tablet', 'desktop'
         ],
         beacons: true,
-        overlay: false, // pass key value object { content_type: icon }
         overlay_icons: false, // pass in custom icons or overrides
-        overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
+        image_overlay: false, // pass key value object { content_type: icon }
+        image_overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
+        ad_overlay: false, // pass key value object { content_type: icon }
+        ad_overlay_position: 'bottom_right', // center, top_left, top_right, bottom_right, bottom_left
         query_params: false,
         user_ip: false,
         user_agent: false,
@@ -87,7 +89,7 @@ RevMore({
         }
 
         // merge options
-        this.options = revUtils.extend(defaults, opts);
+        this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
 
         if (revUtils.validateApiParams(this.options).length) {
             return;
@@ -250,7 +252,12 @@ RevMore({
                         buttons:            that.options.buttons,
                         beacons:            that.options.beacons,
                         prevent_default_pan: false,
-                        disclosure_text: that.options.disclosure_text,
+                        disclosure_text:        that.options.disclosure_text,
+                        overlay_icons:          that.options.overlay_icons, // pass in custom icons or overrides
+                        image_overlay:          that.options.image_overlay, // pass key value object { content_type: icon }
+                        image_overlay_position: that.options.image_overlay_position, // center, top_left, top_right, bottom_right, bottom_left
+                        ad_overlay:             that.options.ad_overlay, // pass key value object { content_type: icon }
+                        ad_overlay_position:    that.options.ad_overlay_position, // center, top_left, top_right, bottom_right, bottom_left
                         multipliers: {
                             font_size: 3,
                             margin: -2.2,
@@ -286,9 +293,11 @@ RevMore({
                 beacons:      this.options.beacons,
                 prevent_default_pan: false,
                 disclosure_text: this.options.disclosure_text,
-                overlay: this.options.overlay, // video: rectangle, square, circle1, circle2, triangle
                 overlay_icons: this.options.overlay_icons, // pass in custom icons or overrides
-                overlay_position: this.options.overlay_position, // center, top_left, top_right, bottom_right, bottom_left
+                image_overlay: this.options.image_overlay, // pass key value object { content_type: icon }
+                image_overlay_position: this.options.image_overlay_position, // center, top_left, top_right, bottom_right, bottom_left
+                ad_overlay: this.options.ad_overlay, // pass key value object { content_type: icon }
+                ad_overlay_position: this.options.ad_overlay_position, // center, top_left, top_right, bottom_right, bottom_left
                 multipliers: {
                     line_height: 3,
                     margin: -2.2,
