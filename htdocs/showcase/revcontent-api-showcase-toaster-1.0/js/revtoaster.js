@@ -264,15 +264,19 @@ RevToaster({
 
         this.appendCell = function() {
             var html = '<div class="rev-ad">' +
-                            '<div class="rev-image">' +
-                                '<img src=""/>' +
+                        '<a href="" target="_blank">' +
+                            '<div class="rev-ad-inner">' +
+                                '<div class="rev-image">' +
+                                    '<img src=""/>' +
+                                '</div>' +
+                                '<div class="rev-headline">' +
+                                    '<h3></h3>' +
+                                '</div>' +
+                                (revDisclose.getProvider('rev-provider')) +
+                                '<div style="clear:both;"></div>' +
                             '</div>' +
-                            '<div class="rev-headline">' +
-                                '<h3></h3>' +
-                            '</div>' +
-                            (revDisclose.getProvider('rev-provider')) +
-                            '<a href="" target="_blank"></a>' +
-                        '</div>';
+                        '</a>' +
+                    '</div>';
             var cell = document.createElement('div');
 
             revUtils.addClass(cell, 'rev-content');
@@ -360,7 +364,7 @@ RevToaster({
                 }
 
                 if (this.options.ad_overlay !== false) {
-                    revUtils.adOverlay(ad, data.content_type, this.options.ad_overlay, this.options.ad_overlay_position);
+                    revUtils.adOverlay(ad.querySelector('a'), data.content_type, this.options.ad_overlay, this.options.ad_overlay_position);
                 }
 
                 ad.querySelectorAll('a')[0].setAttribute('href', data.url);

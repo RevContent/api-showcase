@@ -50,7 +50,8 @@
 
     &.rc-ad-icon {
         width: 20px !important;
-        min-width: initial;
+        height: 20px !important;
+        min-width: 0;
         &.rc-icon-bottom_right {
             bottom: 0;
         }
