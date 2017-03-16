@@ -1135,19 +1135,20 @@ Author: michael@revcontent.com
         var html = '<div class="rev-ad">' +
                 '<div class="rev-ad-container">' +
                     '<div class="rev-ad-outer">' +
-                        '<div class="rev-ad-inner">' +
-                            '<div class="rev-image">' +
-                                '<img src=""/>' +
-                            '</div>' +
-                            '<div class="rev-headline-brand">' +
-                                '<div class="rev-headline">' +
-                                    '<h3></h3>' +
+                        '<a href="" target="_blank">' +
+                            '<div class="rev-ad-inner">' +
+                                '<div class="rev-image">' +
+                                    '<img src=""/>' +
                                 '</div>' +
-                                '<div class="rev-provider"></div>' +
+                                '<div class="rev-headline-brand">' +
+                                    '<div class="rev-headline">' +
+                                        '<h3></h3>' +
+                                    '</div>' +
+                                    '<div class="rev-provider"></div>' +
+                                '</div>' +
                             '</div>' +
-                        '</div>' +
+                        '</a>' +
                     '</div>' +
-                    '<a href="" target="_blank"></a>' +
                 '</div>' +
             '</div>';
 
@@ -1310,7 +1311,7 @@ Author: michael@revcontent.com
             }
 
             if (this.options.ad_overlay !== false) {
-                revUtils.adOverlay(ad, data.content_type, this.options.ad_overlay, this.options.ad_overlay_position);
+                revUtils.adOverlay(ad.querySelector('.rev-ad-inner'), data.content_type, this.options.ad_overlay, this.options.ad_overlay_position);
             }
 
             ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', '') + (this.viewed ? '&viewed=true' : ''));

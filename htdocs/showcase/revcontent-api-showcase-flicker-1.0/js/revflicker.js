@@ -481,10 +481,11 @@ RevFlicker({
 
         for (var j = index; j < count; j++) {
             var html = '<div class="rev-ad" style="height: '+ that.getCellHeight() +'px; border-width:' + (that.options.ad_border ? '1px' : '0') + '">' +
+                        '<a href="" rel="nofollow" target="_blank">' +
                             '<div class="rev-image" style="'+ imgWidth +'height:'+ that.preloaderHeight +'px"></div>' +
                             '<div class="rev-headline" style="max-height:'+ that.headlineHeight +'px; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>' +
                             ( that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'margin: ' + that.providerMarginTop + 'px '  + that.innerMargin + 'px '+ that.providerMarginBottom +'px;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;height:' + that.providerLineHeight + 'px;') : '') +
-                        '<a href="" rel="nofollow" target="_blank"></a>' +
+                        '</a>' +
                     '</div>';
             var cell = document.createElement('div');
 
@@ -681,7 +682,7 @@ RevFlicker({
             }
 
             if (this.options.ad_overlay !== false) {
-                revUtils.adOverlay(ad, data.content_type, this.options.ad_overlay, this.options.ad_overlay_position);
+                revUtils.adOverlay(ad.querySelector('a'), data.content_type, this.options.ad_overlay, this.options.ad_overlay_position);
             }
 
             ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', ''));
