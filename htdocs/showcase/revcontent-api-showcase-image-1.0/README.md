@@ -206,7 +206,7 @@ image_ratio: (revDetect.mobile() ? 'wide_rectangle' : 'rectangle')
 ```
 
 ###overlay_icons
-Pass in custom icons where the key is the icon name and the value is the svg icon. For example ```{article_square: '&lt;svg>&lt;/svg>'}```
+Pass in custom icons where the key is the icon name and the value is the svg icon. For example ```{article_square: '&lt;svg>&lt;/svg>'}```. Default icons include ```video_rectangle```, ```video_square```, ```video_circle1```, ```video_circle2``` and ```video_triangle```.
 ```
 overlay_icons: false
 ```
