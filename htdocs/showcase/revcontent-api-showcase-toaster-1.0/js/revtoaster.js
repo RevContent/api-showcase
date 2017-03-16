@@ -55,9 +55,11 @@ RevToaster({
         disclosure_text: revDisclose.defaultDisclosureText,
         hide_provider: false,
         beacons: true,
-        overlay: false, // pass key value object { content_type: icon }
         overlay_icons: false, // pass in custom icons or overrides
-        overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
+        image_overlay: false, // pass key value object { content_type: icon }
+        image_overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
+        ad_overlay: false, // pass key value object { content_type: icon }
+        ad_overlay_position: 'bottom_right', // center, top_left, top_right, bottom_right, bottom_left
         query_params: false,
         show_visible_selector: false,
         css: '',
@@ -66,7 +68,7 @@ RevToaster({
     var lastScrollTop = 0;
     var scrollTimeout;
 
-    var RevToaster = function( opts ) {
+    RevToaster = function( opts ) {
         if (instance) {
             instance.update(opts, instance.options);
             return instance;
@@ -81,7 +83,7 @@ RevToaster({
         }
 
         // merge options
-        this.options = revUtils.extend(defaults, opts);
+        this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
         this.options.sponsored = (this.options.sponsored > 2) ? 2 : this.options.sponsored;
 
         // param errors
@@ -98,6 +100,11 @@ RevToaster({
         }
 
         revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-toaster', this.options.css);
+
+        // custom icons passed? merge with default
+        if (this.options.overlay_icons !== false) {
+            revUtils.mergeOverlayIcons(this.options.overlay_icons);
+        }
 
         this.emitter = new EventEmitter();
 
@@ -120,7 +127,7 @@ RevToaster({
 
             for (var i = 0; i < this.options.sponsored; i++) {
                 this.appendCell();
-            };
+            }
 
             this.bindClose();
 
@@ -228,7 +235,7 @@ RevToaster({
             this.sponsored.innerHTML = revDisclose.getDisclosure(this.options.disclosure_text, revDialog.showDialog, revDialog);
 
             if (this.options.rev_position == 'top_right') {
-                revUtils.addClass(this.sponsored, 'top-right')
+                revUtils.addClass(this.sponsored, 'top-right');
                 revUtils.prepend(this.revToaster, this.sponsored);
             } else if (this.options.rev_position == 'bottom_left' || this.options.rev_position == 'bottom_right') {
                 revUtils.addClass(this.sponsored, this.options.rev_position.replace('_', '-'));
@@ -258,13 +265,16 @@ RevToaster({
         this.appendCell = function() {
             var html = '<div class="rev-ad">' +
                         '<a href="" target="_blank">' +
-                            '<div class="rev-image">' +
-                                '<img src=""/>' +
+                            '<div class="rev-ad-inner">' +
+                                '<div class="rev-image">' +
+                                    '<img src=""/>' +
+                                '</div>' +
+                                '<div class="rev-headline">' +
+                                    '<h3></h3>' +
+                                '</div>' +
+                                (revDisclose.getProvider('rev-provider')) +
+                                '<div style="clear:both;"></div>' +
                             '</div>' +
-                            '<div class="rev-headline">' +
-                                '<h3></h3>' +
-                            '</div>' +
-                            (revDisclose.getProvider('rev-provider')) +
                         '</a>' +
                     '</div>';
             var cell = document.createElement('div');
@@ -320,7 +330,7 @@ RevToaster({
 
         this.getLimit = function() {
             return (this.options.internal ? this.options.internal : this.options.sponsored);
-        }
+        };
 
         this.getData = function(show) {
             if (this.dataPromise) {
@@ -349,8 +359,12 @@ RevToaster({
                 var ad = ads[i],
                     data = this.data[i];
 
-                if (this.options.overlay !== false) {
-                    revUtils.imageOverlay(ad.querySelectorAll('.rev-image')[0], data.content_type, this.options.overlay, this.options.overlay_position, this.options.overlay_icons);
+                if (this.options.image_overlay !== false) {
+                    revUtils.imageOverlay(ad.querySelector('.rev-image'), data.content_type, this.options.image_overlay, this.options.image_overlay_position);
+                }
+
+                if (this.options.ad_overlay !== false) {
+                    revUtils.adOverlay(ad.querySelector('a'), data.content_type, this.options.ad_overlay, this.options.ad_overlay_position);
                 }
 
                 ad.querySelectorAll('a')[0].setAttribute('href', data.url);
@@ -427,7 +441,7 @@ RevToaster({
                 // register a view without impressions(empty)
                 var url = this.generateUrl(0, this.limit, true, true);
 
-                revApi.request(url, function() { return });
+                revApi.request(url, function() { return; });
 
                 var that = this;
                 // make sure we have some data

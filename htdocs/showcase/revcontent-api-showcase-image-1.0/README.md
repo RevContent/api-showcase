@@ -61,6 +61,18 @@ Display a border around each ad
 ad_border: true
 ```
 
+###ad_overlay
+Key value ad overlay config object where the key is the content type and the value is the icon to use. For example to use the ```video_rectangle``` icon for video content use ```video: 'video_rectangle'```. The icon will be appended to the ```.rev-ad``` element.
+```
+ad_overlay: false
+```
+
+###ad\_overlay\_position
+The position of the ad overlay icon. Available options include ```center```, ```top_left```, ```top_right```, ```bottom_right``` and ```bottom_left```.
+```
+ad_overlay_position: 'bottom_right'
+```
+
 ###css
 Additional CSS to append.
 ```
@@ -83,13 +95,23 @@ Text displayed above ads. Wrapped inside ```&lt;h2 class="rev-header">```.
 header: 'Trending'
 ```
 
+###image_overlay
+Key value image overlay object config where the key is the content type and the value is the icon to use. For example to use the ```video_rectangle``` icon for video content use ```video: 'video_rectangle'```. The icon will be appended to the ```.rev-image``` element.
+```
+image_overlay: false
+```
+
+###image\_overlay\_position
+The position of the image overlay icon. Available options include ```center```, ```top_left```, ```top_right```, ```bottom_right``` and ```bottom_left```.
+```
+image_overlay_position: 'center'
+```
+
 ###max_headline
 Show all of the headline for all ads. No ellipsis. This option overrides ```headline_size```
 ```
 max_headline: false
 ```
-
-
 
 ###per_row
 Number of ads per row. Object or single value. Pass a single number to be used for every breakpoint or provide a value for each breakpoint.
@@ -131,7 +153,6 @@ text_right_height: {
 }
 ```
 
-
 ###url
 Use an alternate API url
 ```
@@ -146,8 +167,6 @@ Button config. Enable/disable forward/back, size, position(```dots```, ```inside
     back: true
 }
 ```
-
-
 
 ###disclosure_text
 Text to display for disclosure. This text triggers the disclosure/interests dialog on click.
@@ -186,22 +205,10 @@ Ratio of the images. Available options include ```wide_rectangle```, ```rectangl
 image_ratio: (revDetect.mobile() ? 'wide_rectangle' : 'rectangle')
 ```
 
-###overlay
-Key value object where the key is the content type and the value is the icon to use. This key value will be concatenated to make up the icon name string. For example ```video: 'circle'``` will use the ```video_circle``` icon
-```
-overlay: false
-```
-
 ###overlay_icons
-Pass in custom icons where the key is the icon name and the value is the svg icon. For example ```{article_square: '&lt;svg>&lt;/svg>'}```
+Pass in custom icons where the key is the icon name and the value is the svg icon. For example ```{article_square: '&lt;svg>&lt;/svg>'}```. Default icons include ```video_rectangle```, ```video_square```, ```video_circle1```, ```video_circle2``` and ```video_triangle```.
 ```
 overlay_icons: false
-```
-
-###overlay_position
-The position of the overlay icon. Available options include ```center```, ```top_left```, ```top_right```, ```bottom_right```, ```bottom_left```.
-```
-overlay_position: 'center'
 ```
 
 ###pagination_dots

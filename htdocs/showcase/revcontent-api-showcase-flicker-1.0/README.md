@@ -51,6 +51,18 @@ Display a border around each ad
 ad_border: true
 ```
 
+###ad_overlay
+Key value ad overlay config object where the key is the content type and the value is the icon to use. For example to use the ```video_rectangle``` icon for video content use ```video: 'video_rectangle'```. The icon will be appended to the ```.rev-ad``` element.
+```
+ad_overlay: false
+```
+
+###ad\_overlay\_position
+The position of the ad overlay icon. Available options include ```center```, ```top_left```, ```top_right```, ```bottom_right``` and ```bottom_left```.
+```
+ad_overlay_position: 'bottom_right'
+```
+
 ###css
 Additional CSS to append.
 ```
@@ -116,6 +128,18 @@ Set true to not display the headerl
 hide_header: false
 ```
 
+###image_overlay
+Key value image overlay object config where the key is the content type and the value is the icon to use. For example to use the ```video_rectangle``` icon for video content use ```video: 'video_rectangle'```. The icon will be appended to the ```.rev-image``` element.
+```
+image_overlay: false
+```
+
+###image\_overlay\_position
+The position of the image overlay icon. Available options include ```center```, ```top_left```, ```top_right```, ```bottom_right``` and ```bottom_left```.
+```
+image_overlay_position: 'center'
+```
+
 ###internal
 Number of internal ads to display. ```sponsored``` option is ignored and only internal ads are shown.
 ```
@@ -151,22 +175,10 @@ false
 next_width: false
 ```
 
-###overlay
-Key value object where the key is the content type and the value is the icon to use. This key value will be concatenated to make up the icon name string. For example ```video: 'circle'``` will use the ```video_circle``` icon
-```
-overlay: false
-```
-
 ###overlay_icons
-Pass in custom icons where the key is the icon name and the value is the svg icon. For example ```{article_square: '&lt;svg>&lt;/svg>'}```
+Pass in custom icons where the key is the icon name and the value is the svg icon. For example ```{article_square: '&lt;svg>&lt;/svg>'}```. Default icons include ```video_rectangle```, ```video_square```, ```video_circle1```, ```video_circle2``` and ```video_triangle```.
 ```
 overlay_icons: false
-```
-
-###overlay_position
-The position of the overlay icon. Available options include ```center```, ```top_left```, ```top_right```, ```bottom_right```, ```bottom_left```.
-```
-overlay_position: 'center'
 ```
 
 ###per_row

@@ -88,17 +88,17 @@ drwxr-xr-x   19 developer  rev2   646 Jun  6 13:01 htdocs
 
 ### Installing Dependencies
 
-You must have a healty build environment in order to begin development on showcase labs.
+You must have a healthy build environment in order to begin development on showcase labs.
 
 #### NPM
-Install node packages.
+Install node packages. Navigate to the htdocs directory to install widget ```node_modules```
 
 ```
 npm install
 ```
 
 #### Bower
-Install bower packages. There are 2 bower files, one in the project root for site dependencies and one in the htdocs folder for widget dependencies. Navigate to each folder and run ```bower install``` to get the necessary dependencies.
+Install bower packages. Navigate to the project root director to install labs.revcontent.com site dependencies.
 
 ```
 bower install

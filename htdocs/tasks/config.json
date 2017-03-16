@@ -11,10 +11,10 @@
         "./showcase/css/revdialog.css"
     ],
     "build": [
-      "./vendor/es6-promise/es6-promise.js",
-      "./vendor/hammerjs/hammer.js",
-      "./vendor/mobile-detect/mobile-detect.js",
-      "./vendor/any-grid/dist/any-grid.js",
+      "./node_modules/es6-promise/dist/es6-promise.js",
+      "./node_modules/hammerjs/hammer.js",
+      "./node_modules/mobile-detect/mobile-detect.js",
+      "./node_modules/any-grid/dist/any-grid.js",
       "./showcase/js/requestAnimationFrame.js",
       "./showcase/js/revoverlay.js",
       "./showcase/js/revutils.js",
@@ -28,9 +28,28 @@
     "watch": [
       "./showcase/js/*",
       "./showcase/css/*",
-      "./vendor/any-grid/dist/any-grid.js",
+      "./node_modules/any-grid/dist/any-grid.js",
       "./showcase/revcontent-api-showcase-slider-1.0/js/*",
       "./showcase/revcontent-api-showcase-slider-1.0/css/*"
+    ]
+  },
+  "scroller": {
+    "name": "rev-image",
+    "description": "Scroller",
+    "homepage": "http://labs.revcontent.com",
+    "version": "0.0.1",
+    "js": "./showcase/revcontent-api-showcase-scroller-1.0/js/revscroller.js",
+    "css": [
+      "./showcase/revcontent-api-showcase-scroller-1.0/css/revscroller.scss"
+    ],
+    "build": [
+      "./build/files/slider/revslider.pkgd.js",
+      "./build/files/scroller/revscroller.embed.js"
+    ],
+    "watch": [
+      "./build/files/slider/revslider.pkgd.js",
+      "./showcase/revcontent-api-showcase-scroller-1.0/js/*",
+      "./showcase/revcontent-api-showcase-scroller-1.0/css/*"
     ]
   },
   "image": {
@@ -102,8 +121,8 @@
     ],
     "build": [
       "./showcase/js/matches.js",
-      "./vendor/eventEmitter/EventEmitter.min.js",
-      "./vendor/mobile-detect/mobile-detect.js",
+      "./node_modules/wolfy87-eventemitter/EventEmitter.js",
+      "./node_modules/mobile-detect/mobile-detect.js",
       "./showcase/js/revutils.js",
       "./showcase/js/revdetect.js",
       "./build/files/more-standard/revmore-standard.embed.js"
@@ -121,14 +140,14 @@
     "version": "0.1.4",
     "js": "./showcase/revcontent-api-showcase-flicker-1.0/js/revflicker.js",
     "css": [
-      "./vendor/flickity/css/flickity.css",
+      "./node_modules/flickity/css/flickity.css",
       "./showcase/revcontent-api-showcase-flicker-1.0/css/revflicker.scss",
       "./showcase/css/revdialog.css"
     ],
     "build": [
-      "./vendor/flickity/dist/flickity.pkgd.js",
-      "./vendor/mobile-detect/mobile-detect.js",
-      "./vendor/es6-promise/es6-promise.js",
+      "./node_modules/flickity/dist/flickity.pkgd.js",
+      "./node_modules/mobile-detect/mobile-detect.js",
+      "./node_modules/es6-promise/dist/es6-promise.js",
       "./showcase/js/requestAnimationFrame.js",
       "./showcase/js/revoverlay.js",
       "./showcase/js/revutils.js",
@@ -144,7 +163,7 @@
       "./showcase/css/*",
       "./showcase/revcontent-api-showcase-flicker-1.0/js/*",
       "./showcase/revcontent-api-showcase-flicker-1.0/css/*",
-      "./vendor/flickity/dist/flickity.pkgd.js"
+      "./node_modules/flickity/dist/flickity.pkgd.js"
     ]
   },
   "toaster": {
@@ -158,9 +177,9 @@
       "./showcase/css/revdialog.css"
     ],
     "build": [
-      "./vendor/mobile-detect/mobile-detect.js",
-      "./vendor/es6-promise/es6-promise.js",
-      "./vendor/eventEmitter/EventEmitter.min.js",
+      "./node_modules/mobile-detect/mobile-detect.js",
+      "./node_modules/es6-promise/dist/es6-promise.js",
+      "./node_modules/wolfy87-eventemitter/EventEmitter.js",
       "./showcase/js/requestAnimationFrame.js",
       "./showcase/js/revoverlay.js",
       "./showcase/js/revutils.js",
