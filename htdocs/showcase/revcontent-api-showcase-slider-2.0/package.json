@@ -1,0 +1,12 @@
+{
+  "name": "rev-labs",
+  "description": "Showcase for Revcontent API",
+  "homepage": "http://labs.revcontent.com",
+  "version": "1.0.0",
+  "repository": {
+    "url": "git:///Revcontent/api-showcase.git"
+  },
+  "dependencies": {
+    "any-grid": "2.0.0-alpha.1"
+  }
+}
