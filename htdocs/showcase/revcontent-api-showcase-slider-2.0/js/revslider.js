@@ -75,6 +75,7 @@ Author: michael@revcontent.com
             wrap_reverse: true, //currently the only supported option
             show_padding: true,
             pages: 4,
+            row_pages: false, // use rows for page count, overrides pages option
             text_right: false,
             text_right_height: 100,
             transition_duration: 0,
@@ -109,7 +110,11 @@ Author: michael@revcontent.com
             user_ip: false,
             user_agent: false,
             css: '',
-            disable_pagination: false
+            disable_pagination: false,
+            register_impressions: true,
+            visible_rows: false,
+            column_spans: false,
+            pagination_dots_vertical: false
         };
 
         // merge options
@@ -142,6 +147,12 @@ Author: michael@revcontent.com
         this.innerElement = document.createElement('div');
         this.innerElement.id = 'rev-slider-inner';
 
+        this.gridTransitionContainer = document.createElement('div');
+        this.gridTransitionContainer.id = 'rev-slider-grid-transition-container';
+
+        this.gridTransitionElement = document.createElement('div');
+        this.gridTransitionElement.id = 'rev-slider-grid-transition';
+
         this.gridContainerElement = document.createElement('div');
         this.gridContainerElement.id = 'rev-slider-grid-container';
 
@@ -155,50 +166,59 @@ Author: michael@revcontent.com
 
         revUtils.append(this.innerContainerElement, this.innerElement);
 
-        revUtils.append(this.innerElement, this.gridContainerElement);
+        revUtils.append(this.innerElement, this.gridTransitionContainer);
+
+        revUtils.append(this.gridTransitionContainer, this.gridTransitionElement);
+
+        revUtils.append(this.gridTransitionElement, this.gridContainerElement);
 
         revUtils.append(this.gridContainerElement, gridElement);
 
+        this.nextGridTransitionElement = this.gridTransitionElement.cloneNode(true);
+        // this.nextGridTransitionElement.id = 'rev-slider-next-grid-transition';
+
+        this.nextGridElement = this.nextGridTransitionElement.children[0].children[0];
+        // this.nextGridElement = this.nextGridTransitionElement.querySelector('#rev-slider-grid');
+
+        revUtils.append(this.gridTransitionContainer, this.nextGridTransitionElement);
+
         revUtils.append(this.element, this.containerElement);
-
-        this.paginationDots();
-
-        this.initButtons();
 
         revUtils.dispatchScrollbarResizeEvent();
 
         this.grid = new AnyGrid(gridElement, this.gridOptions());
 
-        this.maxLimit = this.getMaxLimit();
+        this.paginationDots();
 
-        this.limit = this.getLimit();
+        this.initButtons();
 
         this.setGridClasses();
 
-        this.createCells();
-
-        this.grid.reloadItems();
-        this.grid.layout();
+        this.createCells(this.grid);
 
         this.setMultipliers();
 
         this.getPadding();
 
-        this.setContentPadding();
+        this.setContentPadding(this.grid);
 
-        this.grid.layout();
+        this.setUp(1);
 
-        this.setUp();
+        this.setSize(this.grid);
 
-        this.setSize();
+        this.grid.layout(9);
 
-        this.grid.option({removeVerticalGutters: true});
+        this.setUp(2);
 
-        this.grid.layout();
+        this.setSize(this.grid);
 
-        this.grid.on('resize', function() {
-            that.resize();
-        });
+        this.grid.layout(10);
+
+        // console.log(this.grid);
+
+        // this.grid.on('resize', function() {
+        //     that.resize();
+        // });
 
         this.getData();
 
@@ -222,15 +242,17 @@ Author: michael@revcontent.com
         }
 
         // manage views
-        this.registerViewOnceVisible();
         if (this.options.register_views) { // widgets that use revSlider might need to do this on their own
+            that.registerViewOnceVisible();
             that.attachVisibleListener();
             revUtils.checkVisible.bind(this, this.containerElement, this.visible)();
         }
 
+        // pagination
         if (that.options.disable_pagination === false) {
             this.initTouch();
             this.dataPromise.then(function() {
+                that.prepareNextGrid();
                 that.attachTouchEvents();
                 that.attachButtonEvents();
             });
@@ -247,6 +269,8 @@ Author: michael@revcontent.com
         if (this.options.disable_pagination) {
             revUtils.addClass(this.containerElement, 'rev-slider-pagination-disabled');
         }
+
+        revUtils[this.options.disable_pagination ? 'removeClass' : 'addClass'](this.containerElement, 'rev-slider-pagination');
 
         revUtils.removeClass(this.containerElement, 'rev-slider-col', true);
         revUtils.removeClass(this.containerElement, 'rev-slider-row', true);
@@ -271,10 +295,23 @@ Author: michael@revcontent.com
         revUtils.addEventListener(window, 'scroll', this.visibleListener);
     };
 
-    RevSlider.prototype.createCells = function() {
-        for (var i = 0; i < this.limit; i++) {
-            this.grid.element.appendChild(this.createNewCell());
+    RevSlider.prototype.createCells = function(grid) {
+
+        var i = 0; // just in case
+        this.limit = 0;
+        while ((grid.nextRow + 1) <= grid.rowCount && i < 1000) {
+            // console.log('hinnaaaa', this.grid.nextRow, this.grid.rowCount);
+            var cell = this.createNewCell();
+            grid.element.appendChild(cell);
+            // console.log(cell.matches("#rev-slider .rev-content:nth-child(4)"));
+            grid.appended([cell]);
+            this.limit++;
+            i++;
         }
+
+        // for (var i = 0; i < this.limit; i++) {
+        //     this.grid.element.appendChild(this.createNewCell());
+        // }
     };
 
     RevSlider.prototype.getPadding = function(resetInline) {
@@ -292,7 +329,7 @@ Author: michael@revcontent.com
                 content[i].children[0].style.paddingBottom = null;
                 content[i].children[0].style.paddingLeft = null;
             }
-            this.grid.layout();
+            this.grid.layout(11);
         }
 
         var paddingTop = parseFloat(revUtils.getComputedStyle(content[0], 'padding-top'));
@@ -311,20 +348,20 @@ Author: michael@revcontent.com
         };
     };
 
-    RevSlider.prototype.setContentPadding = function() {
-        var content = this.grid.element.querySelectorAll('.rev-content');
-        for (var i = 0; i < content.length; i++) {
+    RevSlider.prototype.setContentPadding = function(grid) {
+        // var content = this.grid.element.querySelectorAll('.rev-content');
+        for (var i = 0; i < grid.items.length; i++) {
             if (this.padding.top) {
-                content[i].style.paddingTop = this.padding.top + 'px';
+                grid.items[i].element.style.paddingTop = this.padding.top + 'px';
             }
             if (this.padding.right) {
-                content[i].style.paddingRight = this.padding.right + 'px';
+                grid.items[i].element.style.paddingRight = this.padding.right + 'px';
             }
             if (this.padding.bottom) {
-                content[i].style.paddingBottom = this.padding.bottom + 'px';
+                grid.items[i].element.style.paddingBottom = this.padding.bottom + 'px';
             }
             if (this.padding.left) {
-                content[i].style.paddingLeft = this.padding.left + 'px';
+                grid.items[i].element.style.paddingLeft = this.padding.left + 'px';
             }
         }
     };
@@ -343,8 +380,11 @@ Author: michael@revcontent.com
             transitionDuration: this.options.transition_duration,
             isResizeBound: this.options.is_resize_bound,
             adjustGutter: true,
-            removeVerticalGutters: false,
-            breakpoints: this.options.breakpoints
+            // removeVerticalGutters: false,
+            breakpoints: this.options.breakpoints,
+            column_spans: this.options.column_spans,
+            rows: this.options.rows,
+            removeVerticalGutters: true
         };
     };
 
@@ -391,75 +431,149 @@ Author: michael@revcontent.com
                     break;
             }
         }
-
+    this.animationDuration = this.animationDuration * 1;
         return this.animationDuration;
     };
 
+    RevSlider.prototype.prepareNextGrid = function() {
+        // return;
+        // var gridElement = document.createElement('div');//something up here
+        // gridElement.id = 'rev-slider-grid';
+        // gridElement.style.width = this.innerElement.offsetWidth + 'px';
+
+        // revUtils.append(this.gridContainerElement, gridElement);
+
+        this.nextGrid = new AnyGrid(this.nextGridElement, this.gridOptions());
+
+        this.createCells(this.nextGrid);
+
+        this.setContentPadding(this.nextGrid);
+
+        this.setSize(this.nextGrid);
+
+        this.nextGrid.layout();
+
+        this.nextGrid.bindResize();
+
+        var that = this;
+        this.nextGrid.on('resize', function() {
+            that.resize();
+        });
+    };
+
     RevSlider.prototype.createNextPageGrid = function() {
+        console.log('info', 'createNextPageGrid');
         var containerWidth = this.innerElement.offsetWidth;
         var containerHeight = this.innerElement.offsetHeight;
 
+        var prepend = false;
+        // var margin;
+
         if (this.direction == 'next') { // slide left or up
-            var insert = 'append';
+            this.nextGridZindex = 0;
+            // var insert = 'append';
             if (this.options.vertical) { // up
-                var margin = 'marginBottom';
+                // margin = 'marginBottom';
                 this.gridContainerTransform = 'translate3d(0, -'+ (containerHeight + (this.padding.left * 2)) +'px, 0)';
             } else { // left
-                var margin = 'marginRight';
-                this.gridContainerTransform = 'translate3d(-'+ (containerWidth + (this.padding.left * 2)) +'px, 0, 0)';
+                // margin = 'marginRight';
+                // this.gridContainerTransform = 'translate3d(-'+ (containerWidth + (this.padding.left * 2)) +'px, 0, 0)';
+                // this.gridContainerTransform = 'translate3d(-100%, 0, 0)';
+                this.nextGridTransform = 'translate3d(-100%, 0, 0)';
+                this.gridTransform = 'scale(.8)';
             }
         } else { // Slide right or down
-            var insert = 'prepend';
+            // var insert = 'prepend';
+            prepend = true;
+            this.nextGridZindex = 1000;
             if (this.options.vertical) { // down
-                var margin = 'marginTop';
+                // margin = 'marginTop';
                 revUtils.transformCss(this.gridContainerElement, 'translate3d(0, -'+ (containerHeight + (this.padding.left * 2)) +'px, 0)');
                 this.gridContainerTransform = 'translate3d(0, 0, 0)';
             } else { // right
-                var margin = 'marginLeft';
-                revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ (containerWidth + (this.padding.left * 2)) +'px, 0, 0)');
-                this.gridContainerTransform = 'translate3d(0, 0, 0)';
+                // margin = 'marginLeft';
+                revUtils.transformCss(this.gridTransitionContainer, 'translate3d(-100%, 0, 0)');
+                // revUtils.transformCss(this.gridContainerElement, 'translate3d(-100%, 0, 0)');
+                // this.gridContainerTransform = 'translate3d(0, 0, 0)';
+                this.nextGridTransform = 'translate3d(100%, 0, 0)';
+                this.gridTransform = 'scale(.8)';
             }
         }
 
-        this.oldGrid = this.grid;
+        // this.grid.element.style[margin] = (this.padding.left * 2) + 'px';
 
-        this.grid.element.style[margin] = (this.padding.left * 2) + 'px';
-
-        var gridElement = document.createElement('div');//something up here
-        gridElement.id = 'rev-slider-grid';
-
-        revUtils[insert](this.gridContainerElement, gridElement);
-
-        var options = this.gridOptions();
-        options.isResizeBound = false;
-        this.grid = new AnyGrid(gridElement, options);
-
-        if (!this.options.vertical) {
-            this.oldGrid.element.style.width = containerWidth + 'px';
-            this.oldGrid.element.style.float = 'left';
-
-            this.grid.element.style.width = containerWidth + 'px';
-            this.grid.element.style.float = 'left';
-
-            this.gridContainerElement.style.width = (containerWidth * 2) + (this.padding.left * 2) + 'px';
+        // already appended, should we prepend instead
+        if (prepend) {
+            revUtils.prepend(this.gridTransitionContainer, this.nextGridTransitionElement);
+            // revUtils.prepend(this.gridContainerElement, this.nextGrid.element);
         }
 
-        this.setGridClasses();
+        // revUtils[insert](this.gridContainerElement, this.nextGrid.element);
 
-        this.createCells();
+        // if (!this.options.vertical) {
+        //     this.grid.element.style.width = containerWidth + 'px';
+        //     this.grid.element.style.float = 'left';
 
-        this.grid.reloadItems();
-        this.grid.layout();
+        //     this.nextGrid.element.style.width = containerWidth + 'px';
+        //     this.nextGrid.element.style.float = 'left';
 
-        this.getPadding();
+        //     this.gridContainerElement.style.width = (containerWidth * 2) + (this.padding.left * 2) + 'px';
+        // }
 
-        this.setContentPadding();
+        this.oldGrid = this.grid;
 
-        this.grid.option({removeVerticalGutters: true});
+        var nextGrid = this.grid;
 
-        this.grid.layout();
+        this.grid = this.nextGrid;
+
+        this.nextGrid = nextGrid;
 
         this.updateDisplayedItems(true);
+
+        // this.prepareNextGrid();
+
+
+
+
+        // this.oldGrid = this.grid;
+
+        // this.grid.element.style[margin] = (this.padding.left * 2) + 'px';
+
+        // var gridElement = document.createElement('div');//something up here
+        // gridElement.id = 'rev-slider-grid';
+
+        // revUtils[insert](this.gridContainerElement, gridElement);
+
+        // var options = this.gridOptions();
+        // options.isResizeBound = false;
+        // this.grid = new AnyGrid(gridElement, options);
+
+        // if (!this.options.vertical) {
+        //     this.oldGrid.element.style.width = containerWidth + 'px';
+        //     this.oldGrid.element.style.float = 'left';
+
+        //     this.grid.element.style.width = containerWidth + 'px';
+        //     this.grid.element.style.float = 'left';
+
+        //     this.gridContainerElement.style.width = (containerWidth * 2) + (this.padding.left * 2) + 'px';
+        // }
+
+        // this.setGridClasses();
+
+        // this.createCells(this.grid);
+
+        // // this.grid.reloadItems();
+        // // this.grid.layout(1);
+
+        // // this.getPadding();
+
+        // this.setContentPadding(this.grid);
+
+        // // this.grid.option({removeVerticalGutters: true});
+
+        // // this.grid.layout(2);
+
+        // this.updateDisplayedItems(true);
     };
 
     RevSlider.prototype.transitionClass = function(transitioning) {
@@ -467,6 +581,34 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.animateGrid = function() {
+        console.log('info', 'animateGrid');
+        // return;
+        this.transitioning = true;
+        this.transitionClass(true);
+
+        this.nextGridTransitionElement.style.zIndex = this.nextGridZindex;
+
+        // console.log(this.gridContainerTransform);
+
+        // revUtils.transitionDurationCss(this.gridContainerElement, this.animationDuration + 's');
+        // revUtils.transformCss(this.gridContainerElement, this.gridContainerTransform);
+        // console.log('animate', this.gridTransitionElement, this.nextGridTransitionElement);
+
+        revUtils.transitionDurationCss(this.gridTransitionElement, this.animationDuration + 's');
+        revUtils.transitionDurationCss(this.nextGridTransitionElement, this.animationDuration + 's');
+
+        // revUtils.transformCss(this.oldGrid.element, this.gridTransform);
+        revUtils.transformCss(this.gridTransitionElement, this.gridTransform);
+        revUtils.transformCss(this.nextGridTransitionElement, this.nextGridTransform);
+
+        var that = this;
+        setTimeout(function() {
+            that.updateGrids();
+            that.transitioning = false;
+        }, this.animationDuration * 1000);
+
+        return;
+
         this.transitioning = true;
         this.transitionClass(true);
 
@@ -481,6 +623,42 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.updateGrids = function(revert) {
+        console.log('updateGrids');
+        // console.log(this.gridTransitionElement);
+        // console.log(this.nextGridTransitionElement);
+
+        revUtils.transitionDurationCss(this.gridTransitionElement,  '0s');
+        revUtils.transitionDurationCss(this.nextGridTransitionElement,  '0s');
+
+        revUtils.transformCss(this.gridTransitionElement, 'none');
+        revUtils.transformCss(this.nextGridTransitionElement, 'none');
+
+        // revUtils.transitionDurationCss(this.innerElement,  '0s');
+
+        revUtils.transformCss(this.gridTransitionContainer, 'none');
+
+        revUtils.append(this.gridTransitionContainer, this.gridTransitionElement);
+
+        var nextGridTransitionElement = this.gridTransitionElement;
+        this.gridTransitionElement = this.nextGridTransitionElement;
+        this.nextGridTransitionElement = nextGridTransitionElement;
+
+        this.gridTransitionElement.style.zIndex = 'auto';
+        // this.gridTransitionElement.style.transform = 'none';
+        // this.nextGridTransitionElement.style.transform = 'none';
+
+        this.updating = false;
+        // revUtils.transitionDurationCss(this.gridTransitionElement, '0s');
+        // revUtils.transitionDurationCss(this.nextGridTransitionElement, '0s');
+
+        // // revUtils.transformCss(this.oldGrid.element, this.gridTransform);
+        // revUtils.transformCss(this.gridTransitionElement, 'none');
+        // revUtils.transformCss(this.nextGridTransitionElement, 'none');
+
+
+
+        return;
+
         if (revert === true) {
             var removeGrid = this.grid;
             var transitionGrid = this.oldGrid;
@@ -525,43 +703,98 @@ Author: michael@revcontent.com
         this.updating = false;
     };
 
-    RevSlider.prototype.setUp = function() {
-        this.setImageSize();
 
-        this.setPreloaderHeight();
+
+
+
+
+
+
+
+
+    RevSlider.prototype.setUp = function(item) {
+
+        console.log('setup', item);
+
+        this.setImageSize(); // TODO: multiple image ratios
+
+        this.imageSizes = {};
+
+        this.preloaderHeights = {}; // DONE
+        this.preloaderWidths = {}; // DONE
+
+        this.headlineLineHeights = {};
+        this.headlineFontSizes = {};
+        this.headlineMarginTops = {};
+
+        this.headlineMaxHeights = {}; // DONE
+
+        this.innerMargins = {};
 
         // hard code provider
         this.providerFontSize = 11;
         this.providerLineHeight = 16;
         this.providerMarginTop = 2;
 
-        // headline calculation based on text_right_height or grid columnWidth and lineHeightMultiplier
-        this.setHeadlineLineHeight();
-        this.setHeadlineFontSize();
-        this.setHeadlineMarginTop();
-        this.setHeadlineMaxHeight();
-
-        var adInner = this.grid.element.querySelectorAll('.rev-ad-inner')[0];
-        this.innerMargin = Math.max(0, ((adInner.offsetWidth * this.paddingMultiplier).toFixed(2) / 1));
-    };
-
-    RevSlider.prototype.setSize = function(ad) {
-
         var that = this;
-        var setSize = function(ad) {
-            ad.style.height = that.getCellHeight(ad) + 'px';
+        var setUp = function(item) {
 
-            that.resizeImage(ad.querySelectorAll('.rev-image')[0]);
-            that.resizeHeadline(ad.querySelectorAll('.rev-headline')[0]);
-            that.resizeProvider(ad.querySelectorAll('.rev-provider')[0]);
+            var index = revUtils.siblingIndex(item.element);
+            var colSpan = 1;
+            if (index == 3) {
+                colSpan = 2;
+            }
+
+            // that.setImageSize(index, item.element);
+
+            var row = Math.floor( index / that.grid.perRow );
+
+            that.setInnerMargin(item.element, item.span);
+
+            that.setPreloaderHeight(item.element, item.span);
+
+            // headline calculation based on text_right_height or grid columnWidth and lineHeightMultiplier
+            that.setHeadlineLineHeight(item.element, item.span);
+            that.setHeadlineFontSize(item.span);
+            that.setHeadlineMarginTop(item.span);
+            that.setHeadlineMaxHeight(item.element, item.span, row, index, item.stacked);
         };
 
-        if (ad) { // if ad is passed do that one
-            setSize(ad);
+        // if (item) { // if ad is passed do that one
+        //     setUp(item);
+        // } else { // otherwise do them all
+            for (var i = 0; i < this.grid.items.length; i++) {
+                setUp(this.grid.items[i]);
+            }
+        // }
+    };
+
+    RevSlider.prototype.setSize = function(grid, item) {
+
+        var that = this;
+
+        var setSize = function(item) {
+
+            var index = revUtils.siblingIndex(item.element);
+            var colSpan = 1;
+            if (index == 3) {
+                colSpan = 2;
+            }
+
+            var row = Math.floor( index / grid.perRow );
+
+            that.resizeImage(item.element.querySelector('.rev-image'), item.span);
+            that.resizeHeadline(item.element.querySelector('.rev-headline'), item.span, row, index);
+            that.resizeProvider(item.element.querySelector('.rev-provider'), item.span);
+
+            item.element.children[0].style.height = that.getCellHeight(item.element, item.span, row, index) + 'px';
+        };
+
+        if (item) { // if ad is passed do that one
+            setSize(item);
         } else { // otherwise do them all
-            var ads = this.grid.element.querySelectorAll('.rev-ad');
-            for (var i = 0; i < ads.length; i++) {
-                setSize(ads[i]);
+            for (var i = 0; i < grid.items.length; i++) {
+                setSize(grid.items[i]);
             }
         }
     };
@@ -570,7 +803,33 @@ Author: michael@revcontent.com
         return this.options.text_right_height[this.grid.getBreakPoint()] ? this.options.text_right_height[this.grid.getBreakPoint()] : this.options.text_right_height;
     };
 
-    RevSlider.prototype.setImageSize = function() {
+    RevSlider.prototype.setImageSize = function(index, element) {
+        // var setImageSize = function(image_ratio) {
+        //     if (image_ratio == 'square') {
+        //         return {
+        //             imageHeight: 400,
+        //             imageWidth: 400
+        //         };
+        //     } else if (image_ratio == 'rectangle') {
+        //         return {
+        //             imageHeight: 300,
+        //             imageWidth: 400
+        //         };
+        //     } else if (image_ratio == 'wide_rectangle') {
+        //         return {
+        //             imageHeight: 450,
+        //             imageWidth: 800
+        //         };
+        //     }
+        // };
+
+        // if (element) {
+        //     for (var i = 0; i < this.options.image_ratios.length; i++) {
+        //         this.imageSizes[index] = setImageSize(element.matches(this.options.image_ratios[i].selector) ? this.options.image_ratios[i].ratio : this.options.image_ratio);
+        //     }
+        //     return;
+        // }
+
         if (this.options.image_ratio == 'square') {
             this.imageHeight = 400;
             this.imageWidth = 400;
@@ -583,17 +842,23 @@ Author: michael@revcontent.com
         }
     };
 
-    RevSlider.prototype.setPreloaderHeight = function() {
+    RevSlider.prototype.setPreloaderHeight = function(element, colSpan) {
         if (this.options.text_right) { // base off text_right_height
-            this.preloaderHeight = this.getTextRightHeight();
-            this.preloaderWidth = Math.round(this.preloaderHeight * (this.imageWidth / this.imageHeight));
+            var preloaderHeight = this.getTextRightHeight();
+            this.preloaderHeights[colSpan] = preloaderHeight;
+            this.preloaderWidths[colSpan] = Math.round(preloaderHeight * (this.imageWidth / this.imageHeight));
         } else {
-            var adInner = this.grid.element.querySelectorAll('.rev-ad-inner')[0];
-            this.preloaderHeight = adInner.offsetWidth * (this.imageHeight / this.imageWidth);
+            var adInner = element.querySelector('.rev-ad-inner');
+            this.preloaderHeights[colSpan] = adInner.offsetWidth * (this.imageHeight / this.imageWidth);
         }
     };
 
-    RevSlider.prototype.setHeadlineLineHeight = function() {
+    RevSlider.prototype.setInnerMargin = function(element, colSpan) {
+        var adInner = element.querySelector('.rev-ad-inner');
+        this.innerMargins[colSpan] = Math.max(0, ((adInner.offsetWidth * this.paddingMultiplier).toFixed(2) / 1));
+    };
+
+    RevSlider.prototype.setHeadlineLineHeight = function(element, colSpan) {
         if (this.options.text_right) {
             var headlineHeight = 0;
             var availableSpace = (this.getTextRightHeight() - this.providerLineHeight - this.providerMarginTop);
@@ -603,72 +868,95 @@ Author: michael@revcontent.com
                     break;
                 }
             }
-            this.headlineLineHeight = headlineHeight;
+            this.headlineLineHeights[colSpan] = headlineHeight;
         } else {
-            var adInner = this.grid.element.querySelectorAll('.rev-ad-inner')[0];
-            this.headlineLineHeight = Math.max(17, Math.round(adInner.offsetWidth * this.lineHeightMultiplier));
+            var adInner = element.querySelector('.rev-ad-inner');
+            this.headlineLineHeights[colSpan] = Math.max(17, Math.round(adInner.offsetWidth * this.lineHeightMultiplier));
         }
     };
 
-    RevSlider.prototype.setHeadlineFontSize = function() {
-        this.headlineFontSize = (this.headlineLineHeight * .8).toFixed(2) / 1;
+    RevSlider.prototype.setHeadlineFontSize = function(colSpan) {
+        this.headlineFontSizes[colSpan] = (this.headlineLineHeights[colSpan] * .8).toFixed(2) / 1;
     };
 
-    RevSlider.prototype.setHeadlineMarginTop = function() {
-        this.headlineMarginTop = 0;
+    RevSlider.prototype.setHeadlineMarginTop = function(colSpan) {
+        this.headlineMarginTops[colSpan] = 0;
         if (!this.options.text_right) { // give some space between bottom of image and headline
-            this.headlineMarginTop = ((this.headlineLineHeight * .4).toFixed(2) / 1);
+            this.headlineMarginTops[colSpan] = ((this.headlineLineHeights[colSpan] * .4).toFixed(2) / 1);
         }
     };
 
-    RevSlider.prototype.setHeadlineMaxHeight = function() {
+    RevSlider.prototype.setHeadlineMaxHeight = function(element, colSpan, row, index, stacked) {
         var maxHeight = 0;
+
+        if (!this.headlineMaxHeights[row]) {
+            this.headlineMaxHeights[row] = {};
+        }
+
+        if (!this.headlineMaxHeights[row][colSpan]) {
+            this.headlineMaxHeights[row][colSpan] = {};
+        }
+
         if (this.options.text_right) { // based on preloaderHeight/ ad height
-            var verticalSpace = this.preloaderHeight - this.providerLineHeight;
+            var verticalSpace = this.preloaderHeights[colSpan] - this.providerLineHeight;
             var headlines = Math.floor(verticalSpace / this.headlineLineHeight);
             maxHeight = headlines * this.headlineLineHeight;
+            this.headlineMaxHeights[row][colSpan] = maxHeight;
         } else {
-            var adsInner = this.grid.element.querySelectorAll('.rev-ad-inner');
-            if (this.options.max_headline && this.displayedItems.length && adsInner.length) { // max_headline and we have some ads otherwise just use the headline_size
-                for (var i = 0; i < this.limit; i++) {
-                    var adInner = adsInner[i];
-                    var el = document.createElement('div');
-                    revUtils.addClass(el, 'rev-headline-max-check');
-                    el.style.position = 'absolute';
-                    el.style.textAlign = revUtils.getComputedStyle(adInner.querySelectorAll('.rev-headline')[0], 'text-align');
-                    el.style.zIndex = '100';
-                    el.style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
-                    el.innerHTML = '<h3 style="font-size:'+ this.headlineFontSize + 'px;line-height:'+ this.headlineLineHeight +'px">'+ this.displayedItems[i].headline + '</h3>';
-                    revUtils.prepend(adInner, el); // do it this way b/c changin the element height on the fly needs a repaint and requestAnimationFrame is not avail in IE9
-                    maxHeight = Math.max(maxHeight, el.clientHeight);
-                    revUtils.remove(el);
+            // var adsInner = this.grid.element.querySelectorAll('.rev-ad-inner');
+            // if (this.options.max_headline && this.displayedItems.length && adsInner.length) { // max_headline and we have some ads otherwise just use the headline_size
+            if (this.displayedItems.length) { // max_headline and we have some ads otherwise just use the headline_size
+
+                var adInner = element.querySelector('.rev-ad-inner');
+                var el = document.createElement('div');
+                revUtils.addClass(el, 'rev-headline-max-check');
+                el.style.position = 'absolute';
+                el.style.textAlign = revUtils.getComputedStyle(adInner.querySelectorAll('.rev-headline')[0], 'text-align');
+                el.style.zIndex = '100';
+                el.style.margin = this.headlineMarginTops[colSpan] +'px ' + this.innerMargins[colSpan] + 'px 0';
+                el.innerHTML = '<h3 style="font-size:'+ this.headlineFontSizes[colSpan] + 'px;line-height:'+ this.headlineLineHeights[colSpan] +'px">'+ this.displayedItems[index].headline + '</h3>';
+                revUtils.prepend(adInner, el); // do it this way b/c changin the element height on the fly needs a repaint and requestAnimationFrame is not avail in IE9
+
+                var height = el.clientHeight;
+
+                revUtils.remove(el);
+
+                if (stacked) {
+                    this.headlineMaxHeights[row][colSpan][index] = { maxHeight: height };
+                } else {
+                    maxHeight = Math.max(this.headlineMaxHeights[row][colSpan].maxHeight ? this.headlineMaxHeights[row][colSpan].maxHeight : 0, height);
+                    this.headlineMaxHeights[row][colSpan] = { maxHeight: maxHeight };
                 }
             } else {
-                maxHeight = ((this.headlineLineHeight * this.options.headline_size).toFixed(2) / 1);
+                maxHeight = ((this.headlineLineHeights[colSpan] * this.options.headline_size).toFixed(2) / 1);
+
+                maxHeight = Math.max(this.headlineMaxHeights[row][colSpan].maxHeight ? this.headlineMaxHeights[row][colSpan].maxHeight : 0, maxHeight);
+                this.headlineMaxHeights[row][colSpan] = { maxHeight: maxHeight };
             }
         }
-        this.headlineMaxHeight = maxHeight;
     };
 
     RevSlider.prototype.updatePagination = function(checkPage) {
 
-        if (!this.data.length || this.options.disable_pagination) { // need data to determine max pages
+        if (!this.data.length || (this.options.disable_pagination && !this.options.row_pages)) { // need data to determine max pages
             return;
         }
 
-        if (this.maxPages() <= 1) {
-            this.backBtn.style.display = 'none';
-            this.forwardBtn.style.display = 'none';
-            this.mc.set({enable: false}); // disable touch events
-            if (this.options.pagination_dots) {
-                revUtils.remove(this.paginationDotsContainer); // remove the pagination dots all together
-            }
-        } else {
-            this.backBtn.style.display = 'block';
-            this.forwardBtn.style.display = 'block';
-            this.mc.set({enable: true});// make sure touch events are enabled
-            if (this.options.pagination_dots && !this.paginationDotsContainer.parentNode) { // add pagination dots if not there
-                revUtils.prepend(this.innerContainerElement, this.paginationDotsContainer);
+        if (this.options.disable_pagination === false) {
+            if (this.maxPages() <= 1) {
+                this.backBtn.style.display = 'none';
+                this.forwardBtn.style.display = 'none';
+                this.mc.set({enable: false}); // disable touch events
+                if (this.options.pagination_dots) {
+                    revUtils.remove(this.paginationDotsContainer); // remove the pagination dots all together
+                }
+            } else {
+                this.backBtn.style.display = 'block';
+                this.forwardBtn.style.display = 'block';
+                this.mc.set({enable: true});// make sure touch events are enabled
+                if (this.options.pagination_dots && !this.paginationDotsContainer.parentNode) { // add pagination dots if not there
+                    revUtils.prepend(this.innerContainerElement, this.paginationDotsContainer);
+                }
             }
         }
 
@@ -676,7 +964,7 @@ Author: michael@revcontent.com
             return;
         }
 
-        var children = this.paginationDots.childNodes
+        var children = this.paginationDots.childNodes;
 
         // make sure we don't have too many or too few dots
         var difference = (this.maxPages() - children.length);
@@ -685,7 +973,7 @@ Author: michael@revcontent.com
             var remove = [];
             for (var i = 0; i < this.options.pages; i++) {
                 if (i >= this.maxPages()) {
-                    remove.push(children[i])
+                    remove.push(children[i]);
                 }
             }
             for (var i = 0; i <= remove.length; i++) {
@@ -732,7 +1020,9 @@ Author: michael@revcontent.com
         this.paginationDots = document.createElement('div');
         revUtils.addClass(this.paginationDots, 'rev-pagination-dots');
 
-        for (var i = 0; i < this.options.pages; i++) {
+        var pages = this.options.row_pages ? this.grid.rowCount : this.options.pages;
+
+        for (var i = 0; i < pages; i++) {
             this.appendDot(i===0);
         }
 
@@ -742,6 +1032,10 @@ Author: michael@revcontent.com
             revUtils.addClass(this.paginationDotsWrapper, 'rev-pagination-dots-wrapper-buttons');
         }
 
+        if (this.options.pagination_dots_vertical) {
+            revUtils.addClass(this.paginationDotsWrapper, 'rev-pagination-dots-wrapper-vertical');
+        }
+
         this.paginationDotsContainer = document.createElement('div');
         revUtils.addClass(this.paginationDotsContainer, 'rev-pagination-dots-container');
 
@@ -749,7 +1043,7 @@ Author: michael@revcontent.com
 
         revUtils.append(this.paginationDotsContainer, this.paginationDots);
 
-        revUtils.prepend(this.containerElement, this.paginationDotsWrapper);
+        revUtils.prepend(this.innerContainerElement, this.paginationDotsWrapper);
     };
 
     //added to prevent default drag functionality in FF
@@ -929,51 +1223,17 @@ Author: michael@revcontent.com
         }
     };
 
+    RevSlider.prototype.getCellHeight = function(element, colSpan, row, index) {
+        var ad = element.children[0]; //TODO
 
-    RevSlider.prototype.update = function(newOpts, oldOpts) {
-        oldOpts = oldOpts ? oldOpts : this.options;
-
-        this.options = revUtils.extend(this.options, newOpts);
-
-        if ((this.options.size !== oldOpts.size) ||
-            (this.options.realSize !== oldOpts.realSize) ||
-            (this.options.per_row !== oldOpts.per_row) ||
-            (this.options.rows !== oldOpts.rows) ||
-            (this.options.headline_size !== oldOpts.headline_size) ||
-            (this.options.vertical !== oldOpts.vertical) ||
-            (this.options.show_padding !== oldOpts.show_padding)) {
-            this.options.perRow = this.options.per_row; // AnyGrid needs camels
-            this.resize();
-        }
-
-        if ((this.options.header !== oldOpts.header) || this.options.rev_position !== oldOpts.rev_position) {
-            this.appendElements();
-        }
-
-        if (this.options.text_overlay !== oldOpts.text_overlay) {
-            this.textOverlay();
-            this.grid.reloadItems();
-            this.grid.layout();
-        }
-        if (this.options.text_right !== oldOpts.text_right) {
-            this.grid.reloadItems();
-            this.grid.layout();
-        }
-
-        if (this.options.pages !== oldOpts.pages) {
-            this.getData();
-        }
-    };
-
-    RevSlider.prototype.getCellHeight = function(ad) {
-        var cellHeight = this.preloaderHeight;
+        var cellHeight = this.preloaderHeights[colSpan];
 
         cellHeight += ad.offsetHeight - ad.children[0].offsetHeight; // padding ad - ad-container
         cellHeight += ad.children[0].offsetHeight - ad.children[0].children[0].offsetHeight; // padding ad-container - ad-outer
 
         if (!this.options.text_overlay && !this.options.text_right) {
-            cellHeight += this.headlineMaxHeight +
-                this.headlineMarginTop +
+            cellHeight += (this.headlineMaxHeights[row][colSpan][index] ? this.headlineMaxHeights[row][colSpan][index].maxHeight : this.headlineMaxHeights[row][colSpan].maxHeight) +
+                this.headlineMarginTops[colSpan] +
                 this.providerLineHeight +
                 this.providerMarginTop;
         }
@@ -1022,15 +1282,15 @@ Author: michael@revcontent.com
 
         this.getPadding(true);
 
-        this.setContentPadding();
+        this.setContentPadding(this.grid);
 
-        this.grid.layout();
+        this.grid.layout(7);
 
-        this.setUp();
+        this.setUp(3);
 
-        this.setSize();
+        this.setSize(this.grid);
 
-        this.grid.layout();
+        this.grid.layout(8);
 
         this.textOverlay();
         this.checkEllipsis(true);
@@ -1039,32 +1299,32 @@ Author: michael@revcontent.com
         this.updatePagination(true);
     };
 
-    RevSlider.prototype.resizeImage = function(el) {
-        el.style.height = this.preloaderHeight + 'px';
-        el.style.width = this.getImageWidth();
+    RevSlider.prototype.resizeImage = function(el, colSpan) {
+        el.style.height = this.preloaderHeights[colSpan] + 'px';
+        el.style.width = this.getImageWidth(colSpan);
     };
 
-    RevSlider.prototype.resizeHeadline = function(el) {
-        el.style.maxHeight = this.headlineMaxHeight + 'px';
-        el.style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
-        el.firstChild.style.fontSize = this.headlineFontSize +'px';
-        el.firstChild.style.lineHeight = this.headlineLineHeight +'px';
+    RevSlider.prototype.resizeHeadline = function(el, colSpan, row, index) {
+        el.style.maxHeight = (this.headlineMaxHeights[row][colSpan][index] ? this.headlineMaxHeights[row][colSpan][index].maxHeight : this.headlineMaxHeights[row][colSpan].maxHeight) + 'px';
+        el.style.margin = this.headlineMarginTops[colSpan] +'px ' + this.innerMargins[colSpan] + 'px 0';
+        el.firstChild.style.fontSize = this.headlineFontSizes[colSpan] +'px';
+        el.firstChild.style.lineHeight = this.headlineLineHeights[colSpan] +'px';
     };
 
-    RevSlider.prototype.resizeProvider = function(el) {
+    RevSlider.prototype.resizeProvider = function(el, colSpan) {
         if(this.options.hide_provider) {
             return;
         }
-        el.style.margin = this.providerMarginTop + 'px ' + this.innerMargin + 'px 0';
+        el.style.margin = this.providerMarginTop + 'px ' + this.innerMargins[colSpan] + 'px 0';
         el.style.fontSize = this.providerFontSize + 'px';
         el.style.lineHeight = this.providerLineHeight + 'px';
         el.style.height = this.providerLineHeight + 'px';
     };
 
     RevSlider.prototype.checkEllipsis = function(reset) {
-        if (this.options.max_headline && !this.options.text_right) { // text_right should be limited, but don't waste for max_headline only
-            return;
-        }
+        // if (this.options.max_headline && !this.options.text_right) { // text_right should be limited, but don't waste for max_headline only
+        //     return;
+        // }
         // reset headlines
         if (reset) {
             var ads = this.element.querySelectorAll('.rev-ad');
@@ -1081,8 +1341,24 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.getLimit = function() {
+        // var spans = 0;
+        // var hits = 0;
+        // for (var i = 0; i < this.options.column_spans.length; i++) {
+        //     if (this.options.column_spans[i].columnss == this.grid.getPerRow()) {
+        //         for (var i = 0; i < this.options.column_spans[i].children.length; i++) {
+        //             hits++;
+        //             spans += (this.options.column_spans[i].children[i].spans);
+        //         }
+        //     }
+        // }
+
+        this.extra = 0;
+        // if ((this.grid.getPerRow() % spans) == 0) {
+        //     this.extra = spans - hits;
+        // }
+        // console.log('hii', this.extra);
         // can pass object for rows or just single value for all breakpoints
-        return this.grid.getPerRow() * (this.options.rows[this.grid.getBreakPoint()] ? this.options.rows[this.grid.getBreakPoint()] : this.options.rows);
+        return (this.grid.getPerRow() * (this.options.rows[this.grid.getBreakPoint()] ? this.options.rows[this.grid.getBreakPoint()] : this.options.rows)) - this.extra;
     };
 
     RevSlider.prototype.getMaxLimit = function() {
@@ -1127,11 +1403,37 @@ Author: michael@revcontent.com
         return maxLimit;
     };
 
-    RevSlider.prototype.getImageWidth = function() {
-         return typeof this.preloaderWidth === 'undefined' ? 'auto' : this.preloaderWidth + 'px';
+    RevSlider.prototype.getImageWidth = function(colSpan) {
+         return typeof this.preloaderWidths[colSpan] === 'undefined' ? 'auto' : this.preloaderWidths[colSpan] + 'px';
     };
 
     RevSlider.prototype.createNewCell = function() {
+        // var html = '<div class="rev-ad">' +
+        //         '<div class="rev-ad-container">' +
+        //             '<div class="rev-ad-outer">' +
+        //                 '<div class="rev-ad-inner">' +
+        //                     '<div class="rev-image">' +
+        //                         '<img src=""/>' +
+        //                     '</div>' +
+        //                     '<div class="rev-headline-brand">' +
+        //                         '<div class="rev-headline">' +
+        //                             '<h3></h3>' +
+        //                         '</div>' +
+        //                         '<div class="rev-provider"></div>' +
+        //                     '</div>' +
+        //                 '</div>' +
+        //             '</div>' +
+        //             '<a href="" target="_blank"></a>' +
+        //         '</div>' +
+        //     '</div>';
+
+        //     var cell = document.createElement('div');
+        //     cell.className = 'rev-content';
+        //     cell.innerHTML = html;
+
+        //     return cell;
+
+
         var html = '<div class="rev-ad">' +
                 '<div class="rev-ad-container">' +
                     '<div class="rev-ad-outer">' +
@@ -1198,7 +1500,7 @@ Author: michael@revcontent.com
         }
 
         return url;
-    }
+    };
 
     RevSlider.prototype.getData = function() {
         if (this.dataPromise) {
@@ -1213,8 +1515,14 @@ Author: michael@revcontent.com
 
             revApi.request(url, function(resp) {
                 that.data = resp;
+                // that.data[5].headline = that.data[5].headline + that.data[5].headline + that.data[5].headline;
+                // that.data[6].headline = that.data[6].headline + that.data[6].headline + that.data[6].headline;
 
                 revUtils.addClass(that.containerElement, 'rev-slider-has-data');
+
+                that.setDisplayedItems();
+
+                that.setUp(4);
 
                 that.updateDisplayedItems(false);
 
@@ -1224,12 +1532,15 @@ Author: michael@revcontent.com
                 revUtils.imagesLoaded(that.grid.element.querySelectorAll('img')).once('done', function() {
                     revUtils.addClass(that.containerElement, 'loaded');
                 });
+
                 resolve(resp);
             });
         });
     };
 
-    RevSlider.prototype.registerImpressions = function(viewed) {
+    RevSlider.prototype.registerImpressions = function(viewed, offset, limit) {
+
+        // console.log(this.viewed);
 
         if (!this.options.impression_tracker.length && this.options.beacons) {
             revApi.beacons.setPluginSource(this.options.api_source).attach();
@@ -1237,7 +1548,27 @@ Author: michael@revcontent.com
 
         // check to see if we have not already registered for the offset
         var register = [];
-        for (var i = this.offset; i < (this.offset + this.limit); i++) {
+
+        if (typeof offset === 'undefined') {
+            var offset = this.offset;
+            // var limit = this.limit;
+        } else {
+            offset = offset;
+        }
+        if (typeof limit === 'undefined') {
+            // var offset = this.offset;
+            var limit = this.limit;
+        } else {
+            limit = limit;
+        }
+        // if (false) {
+        //     console.log(this.grid.rows[row].perRow);
+        //     console.log('hinn');
+        //     var offset = this.offset;
+        //     var limit = this.limit;
+        // }
+
+        for (var i = offset; i < (offset + limit); i++) {
             if (!this.options.impression_tracker[i]) {
                 register.push(i);
             }
@@ -1252,18 +1583,27 @@ Author: michael@revcontent.com
             // register impression - not empty and viewed on pagination
             var url = this.generateUrl(offset, count, false, viewed);
 
-            revApi.request(url, function() { return });
+            revApi.request(url, function() { return; });
         }
     };
 
     RevSlider.prototype.registerView = function() {
         if (!this.viewed) {
             this.viewed = true;
+            var count;
+            if (this.options.visible_rows) {
+                count = 0;
+                for (var i = 0; i < this.options.visible_rows; i++) {
+                    count += this.grid.rows[i].perRow;
+                }
+            } else {
+                count = this.limit;
+            }
 
             // register a view without impressions(empty)
-            var url = this.generateUrl(0, this.limit, true, true);
+            var url = this.generateUrl(0, count, true, true);
 
-            revApi.request(url, function() { return });
+            revApi.request(url, function() { return; });
 
             var that = this;
             // make sure we have some data
@@ -1273,6 +1613,19 @@ Author: michael@revcontent.com
                     anchors[i].setAttribute('href', anchors[i].getAttribute('href') + '&viewed=true');
                 }
             });
+        }
+    };
+
+    RevSlider.prototype.setDisplayedItems = function() {
+        this.displayedItems = [];
+        var dataIndex = this.offset;
+
+        for (var i = 0; i < this.limit; i++) {
+            if (!this.data[dataIndex]) { // go back to the beginning if there are more ads than data
+                dataIndex = 0;
+            }
+            this.displayedItems.push(this.data[dataIndex]);
+            dataIndex++;
         }
     };
 
@@ -1286,57 +1639,54 @@ Author: michael@revcontent.com
 
         this.offset = ((this.page - 1) * this.limit);
 
-        this.displayedItems = [];
-        var dataIndex = this.offset;
-        for (var i = 0; i < this.limit; i++) {
-            if (!this.data[dataIndex]) { // go back to the beginning if there are more ads than data
-                dataIndex = 0;
-            }
-            this.displayedItems.push(this.data[dataIndex]);
-            dataIndex++;
-        }
+        this.setDisplayedItems();
 
-        this.setUp();
+        // this.setUp(4);
 
-        var ads = this.grid.element.querySelectorAll('.rev-ad');
-
+        // var ads = this.grid.element.querySelectorAll('.rev-content');
+        console.log('update', this.grid.element);
         for (var i = 0; i < this.displayedItems.length; i++) {
-            var ad = ads[i],
+            var item = this.grid.items[i],
                 data = this.displayedItems[i];
 
-            ad.style.height = this.getCellHeight(ad) + 'px';
+            // ad.style.height = this.getCellHeight(ad) + 'px';
 
-            if (this.options.image_overlay !== false) {
+            if (this.options.image_overlay !== false) { // TODO: ad does not exist
                 revUtils.imageOverlay(ad.querySelector('.rev-image'), data.content_type, this.options.image_overlay, this.options.image_overlay_position);
             }
 
-            if (this.options.ad_overlay !== false) {
+            if (this.options.ad_overlay !== false) { // TODO: ad does not exist
                 revUtils.adOverlay(ad.querySelector('.rev-ad-inner'), data.content_type, this.options.ad_overlay, this.options.ad_overlay_position);
             }
 
-            ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', '') + (this.viewed ? '&viewed=true' : ''));
-            ad.querySelectorAll('a')[0].title = data.headline;
-            ad.querySelectorAll('img')[0].setAttribute('src', data.image);
-            ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
-            ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
+            item.element.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', '') + (this.viewed ? '&viewed=true' : ''));
+            item.element.querySelectorAll('a')[0].title = data.headline;
+            item.element.querySelectorAll('img')[0].setAttribute('src', data.image);
+            item.element.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
+            item.element.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
 
-            this.setSize(ad);
+            this.setSize(this.grid, item);
         }
 
-        this.registerImpressions(viewed);
+        if (this.options.register_impressions) {
+            this.registerImpressions(viewed);
+        }
 
         this.grid.reloadItems();
-        this.grid.layout();
+        this.grid.layout(3);
         this.checkEllipsis();
         this.updatePagination();
     };
 
     RevSlider.prototype.getMaxCount = function() {
         // if pagination is disabled multiply maxLimit by 1 page otherwise by configed pages
-        return (this.options.disable_pagination ? 1 : this.options.pages) * this.maxLimit;
+        return (this.options.disable_pagination || this.options.row_pages ? 1 : this.options.pages) * this.limit;
     };
 
     RevSlider.prototype.maxPages = function() {
+        if (this.options.row_pages) {
+            return this.grid.rowCount;
+        }
         var maxPages = Math.ceil(this.data.length / this.limit);
         if (maxPages > this.options.pages) {
             maxPages = this.options.pages;
@@ -1407,11 +1757,26 @@ Author: michael@revcontent.com
 
         this.preventDefault(); // prevent default touch/click events
 
-        this.mc = new Hammer(this.element);
-        this.mc.add(new Hammer.Swipe({ threshold: 5, velocity: 0, direction: this.options.touch_direction }));
-        this.mc.add(new Hammer.Pan({ threshold: 0, direction: this.options.touch_direction })).recognizeWith(this.mc.get('swipe'));
+
+
+        this.mc = new Hammer(this.element, {
+            recognizers: [
+                [
+                    Hammer.Pan,
+                    {
+                        threshold: 2
+                    }
+                ]
+            ]
+        });
+
+        // this.mc = new Hammer(this.element);
+        // this.mc.add(new Hammer.Swipe({ threshold: 5, velocity: 0, direction: this.options.touch_direction }));
+        // this.mc.add(new Hammer.Pan({ threshold: 2, direction: this.options.touch_direction })).recognizeWith(this.mc.get('swipe'));
 
         this.movement = 0;
+        this.currentX = 0;
+        this.lastTranslateX = 0;
         this.made = false;
         this.panDirection = false;
         this.updown = false;
@@ -1420,63 +1785,97 @@ Author: michael@revcontent.com
     RevSlider.prototype.attachTouchEvents = function() {
         var that = this;
 
-        revUtils.addEventListener(this.element, 'click', function(e) {
-            if (that.made || that.movement) {
-                e.stopPropagation();
-                e.preventDefault();
-            }
-        }, {passive: false});
+        // revUtils.addEventListener(this.element, 'click', function(e) {
+        //     if (that.made || that.movement) {
+        //         e.stopPropagation();
+        //         e.preventDefault();
+        //     }
+        // }, {passive: false});
 
-        this.mc.on('pan swipe', function(e) {
-            // prevent default on pan by default, or atleast if the thing is moving
-            // Lock needs to pass false for example so the user can scroll the page
-            if (that.options.prevent_default_pan || that.made || that.transitioning || that.movement) {
-                e.preventDefault(); // don't go scrolling the page or any other funny business
-            }
-        });
+        // this.mc.on('pan swipe', function(e) {
+        //     // prevent default on pan by default, or atleast if the thing is moving
+        //     // Lock needs to pass false for example so the user can scroll the page
+        //     if (that.options.prevent_default_pan || that.made || that.transitioning || that.movement) {
+        //         e.preventDefault(); // don't go scrolling the page or any other funny business
+        //     }
+        // });
 
-        this.mc.on('swipeleft', function(ev) {
-            if (that.made || that.transitioning || !that.movement || that.panDirection == 'right') {
-                return;
-            }
-            that.made = true;
-            revUtils.transitionDurationCss(that.gridContainerElement, (that.animationDuration / 1.5) + 's');
-            revUtils.transformCss(that.gridContainerElement, 'translate3d(-'+ (that.innerElement.offsetWidth + (that.padding.left * 2)) +'px, 0, 0)');
-            setTimeout(function() {
-                that.updateGrids();
-                that.made = false;
-                that.panDirection = false;
-            }, (that.animationDuration / 1.5) * 1000);
-            that.movement = 0;
-        });
+        // this.mc.on('swipeleft', function(ev) {
+        //     return;
+        //     if (that.made || that.transitioning || !that.movement || that.panDirection == 'right') {
+        //         return;
+        //     }
+        //     that.made = true;
+        //     revUtils.transitionDurationCss(that.gridContainerElement, (that.animationDuration / 1.5) + 's');
+        //     revUtils.transformCss(that.gridContainerElement, 'translate3d(-'+ (that.innerElement.offsetWidth + (that.padding.left * 2)) +'px, 0, 0)');
+        //     setTimeout(function() {
+        //         that.updateGrids();
+        //         that.made = false;
+        //         that.panDirection = false;
+        //     }, (that.animationDuration / 1.5) * 1000);
+        //     that.movement = 0;
+        // });
 
-        this.mc.on('swiperight', function(e) {
-            if (that.made || that.transitioning || !that.movement || that.panDirection == 'left') {
-                return;
-            }
-            that.made = true;
-            revUtils.transitionDurationCss(that.gridContainerElement, (that.animationDuration / 1.5) + 's');
-            revUtils.transformCss(that.gridContainerElement, 'translate3d(0, 0, 0)');
-            setTimeout(function() {
-                that.updateGrids();
-                that.made = false;
-                that.panDirection = false;
-            }, (that.animationDuration / 1.5) * 1000);
-            that.movement = 0;
+        // this.mc.on('swiperight', function(e) {
+        //     if (that.made || that.transitioning || !that.movement || that.panDirection == 'left') {
+        //         return;
+        //     }
+        //     that.made = true;
+        //     revUtils.transitionDurationCss(that.gridContainerElement, (that.animationDuration / 1.5) + 's');
+        //     revUtils.transformCss(that.gridContainerElement, 'translate3d(0, 0, 0)');
+        //     setTimeout(function() {
+        //         that.updateGrids();
+        //         that.made = false;
+        //         that.panDirection = false;
+        //     }, (that.animationDuration / 1.5) * 1000);
+        //     that.movement = 0;
+        // });
+
+        this.mc.on('panstart', function(e) {
+
+            that.panStartTimeStamp = e.timeStamp;
+
+            // eventEmitter.trigger('dragstart', {
+            //     target: targetElement
+            // });
+
+            that.currentX = 0;
+            // currentY = 0;
+
+            that.isDraging = true;
+            // var that = this;
+
+            revUtils.transitionDurationCss(that.gridTransitionElement, '0s');
+            revUtils.transitionDurationCss(that.nextGridTransitionElement, '0s');
+
+            that.nextGridTransitionElement.style.zIndex = 1000; // TODO
+
+            (function animation () {
+                if (that.isDraging) {
+                    that.doMove();
+
+                    requestAnimationFrame(animation);
+                }
+            })();
         });
 
         this.mc.on('panleft', function(e) {
-            if (that.made || that.transitioning || that.panDirection == 'right') {
-                return;
-            }
-            that.pan('left', e.distance / 10);
+            that.showNextPage();
+            that.pann(e);
+            // console.log('pan', e.deltaX);
+            // if (that.made || that.transitioning || that.panDirection == 'right') {
+            //     return;
+            // }
+            // that.pan('left', e.deltaX);
         });
 
         this.mc.on('panright', function(e) {
-            if (that.made || that.transitioning || that.panDirection == 'left') {
-                return;
-            }
-            that.pan('right', e.distance / 10);
+            that.showPreviousPage();
+            that.pann(e);
+            // if (that.made || that.transitioning || that.panDirection == 'left') {
+            //     return;
+            // }
+            // that.pan('right', e.distance / 10);
         });
 
         this.mc.on('panup pandown', function(e) {
@@ -1484,14 +1883,155 @@ Author: michael@revcontent.com
         });
 
         this.mc.on('panend', function(e) {
-            if (that.made || that.transitioning || (that.updown && !that.movement)) {
-                return;
-            }
-            that.resetShowPage();
+            // console.log('checkk', e.distance / (e.timeStamp - that.panStartTimeStamp));
+
+            // console.log('check', e.distance / (e.timeStamp - that.panStartTimeStamp));
+
+            // console.log('check', e, e.velocityX, e.distance, e.timeStamp - that.panStartTimeStamp);
+            that.isDraging = false;
+            that.finish(e.distance / (e.timeStamp - that.panStartTimeStamp), e.deltaX, Math.abs(e.velocityX), that.nextGridTransitionElement.offsetWidth, 0);
+            that.currentX = 0;
+
+            // console.log('panend', Math.abs(e.velocityX), Math.abs(e.velocityX) > .2);
+
+            // console.log('check', e);
+            // if (Math.abs(e.velocityX) > .2) {
+            //     console.log('panend', 'oh yeah');
+            // }
+            // if (that.made || that.transitioning || (that.updown && !that.movement)) {
+            //     return;
+            // }
+            // that.resetShowPage();
         });
     };
 
+    RevSlider.prototype.pann = function(e) {
+        this.currentX = e.deltaX;
+        this.scale = Math.max((1 - (Math.abs(e.deltaX) / 1000)), .8);
+        // this.currentDirection = e.direction;
+    };
+
+    RevSlider.prototype.doMove = function(direction, movement, reset) {
+        // let r,
+        //     x,
+        //     y;
+
+        if (this.currentX === this.lastX) {
+            return;
+        }
+
+        this.lastX = this.currentX;
+
+        // var x = this.lastTranslateX + this.currentX;
+        // y = lastTranslate.y + currentY;
+        // r = config.rotation(x, y, targetElement, config.maxRotation);
+
+        // var scale = Math.max((1 - (Math.abs(this.currentX) / 1000)), .8);
+        // revUtils.transformCss(this.gridTransitionElement, 'scale(' + this.scale + ')');
+
+        console.log(this.nextGridTransitionElement);
+
+        revUtils.transformCss(this.nextGridTransitionElement, 'translate3d('+ this.currentX +'px, 0, 0)');
+
+
+
+
+        // eventEmitter.trigger('dragmove', {
+        //     target: targetElement,
+        //     throwOutConfidence: config.throwOutConfidence(x, targetElement),
+        //     throwDirection: x < 0 ? Card.DIRECTION_LEFT : Card.DIRECTION_RIGHT
+        // });
+    };
+
+    RevSlider.prototype.finish = function(pixelsPerMs, distance, velocity, containerWidth, counter) {
+
+        console.log('fin', velocity);
+        // console.log(pixelsPerMs, distance, containerWidth);
+
+        // console.log( (containerWidth - Math.abs(distance)), (containerWidth - Math.abs(distance)) / pixelsPerMs );
+
+        var duration = ((containerWidth - Math.abs(distance)) / velocity);
+
+        revUtils.transitionCss(this.nextGridTransitionElement, 'all ' + duration + 'ms cubic-bezier(.06, 1, .6, 1)');
+        revUtils.transformCss(this.nextGridTransitionElement, 'translate3d('+ (containerWidth * -1) +'px, 0, 0)');
+
+        // revUtils.transitionCss(this.gridTransitionElement, 'all ' + (duration * 2) + 'ms');
+        // revUtils.transformCss(this.gridTransitionElement, 'scale(0)');
+
+        var that = this;
+        setTimeout(function() {
+            that.updateGrids();
+        }, duration);
+
+        return;
+
+
+        var duration;
+        if (true || velocity > .1) {
+            duration = ((containerWidth - this.currentX) / pixelsPerMs);
+            // if (this.sent) {
+            //     duration *= 100;
+            // } else {
+            //     // duration *= 20;
+            // }
+            console.log('fin', this.scale, this.nextGridTransitionElement, this.gridTransitionElement);
+            // var bez = [0,1,.31,1];
+            // var bez = [.06,.92,.58,1];
+            var bez = [.06,1,.6,1];
+            // var bez = [0, 1, .06, 1];
+
+            // do this
+            Velocity(this.nextGridTransitionElement, { scale: [1, 1], translateZ: 0, translateX: [containerWidth * (this.currentX < 0 ? -1 : 1), this.currentX] }, {duration: duration, easing: bez});
+            Velocity(this.gridTransitionElement, { translateX: [0, 0], scale: [0, this.scale] }, {duration: duration} );
+        } else {
+            duration = ((containerWidth - this.currentX) / pixelsPerMs) / 2;
+            Velocity(this.nextGridTransitionElement, { translateZ: 0, translateX: [0, this.currentX] }, {duration: duration} );
+            Velocity(this.gridTransitionElement, { scale: [1, this.scale] }, {duration: duration} );
+        }
+
+        var that = this;
+        setTimeout(function() {
+            that.sent = true;
+            that.updateGrids();
+        }, duration);
+
+        // console.log('check', pixelsPerMs, containerWidth - this.currentX, (containerWidth - this.currentX) / pixelsPerMs);
+
+        // return;
+
+        // if (Math.abs(distance) < containerWidth) {
+        //     if (distance < 0) {
+        //         distance -= (pixelsPerMs + counter) * 15;
+        //         counter += velocity;
+        //     } else {
+        //         distance += (pixelsPerMs + counter) * 15;
+        //         counter += velocity;
+        //     }
+        //     var that = this;
+        //     // requestAnimationFrame(function() {
+        //         console.log(distance);
+        //         revUtils.transformCss(that.nextGridTransitionElement, 'translate3d('+ distance +'px, 0, 0)');
+        //         setTimeout(function() {
+        //             that.finish(pixelsPerMs, distance, velocity, containerWidth, counter);
+        //         }, 15);
+        //     // });
+
+        // }
+
+
+        // if (counter < 1000) {
+        //     counter++;
+        //     console.log('check', pixelsPerMs, distance, containerWidth, counter);
+        //     this.finish(pixelsPerMs, distance, containerWidth, counter);
+        // }
+
+        // this.currentX = e.deltaX;
+        // this.currentDirection = e.direction;
+    };
+
+    // get this to dod the same as animateGrid
     RevSlider.prototype.pan = function(direction, movement, reset) {
+        console.log('pan2', movement);
         this.updown = false;
 
         this.transitionClass(true);
@@ -1503,39 +2043,53 @@ Author: michael@revcontent.com
             this.showPreviousPage();
         }
 
-        this.movement = this.movement + movement;
+        // console.log('pan3', this.movement);
+        // this.movement = this.movement + movement;
+        this.movement = movement;
+        // console.log('pan34', this.movement);
 
         if (this.movement > this.grid.containerWidth) {
+            console.log('panupdate');
             this.updateGrids();
             this.panDirection = false;
             this.movement = 0;
         } else {
-            if (reset) { // used for touch simulation
-                revUtils.transitionDurationCss(this.gridContainerElement,  this.animationDuration + 's');
-                var that = this;
-                setTimeout(function() {
-                    that.resetShowPage(reset);
-                }, this.animationDuration * 1000);
-            } else {
-                revUtils.transitionDurationCss(this.gridContainerElement,  '0s');
-            }
+            // if (reset) { // used for touch simulation
+            //     revUtils.transitionDurationCss(this.gridContainerElement,  this.animationDuration + 's');
+            //     var that = this;
+            //     setTimeout(function() {
+            //         that.resetShowPage(reset);
+            //     }, this.animationDuration * 1000);
+            // } else {
+                // revUtils.transitionDurationCss(this.gridContainerElement,  '0s');
+                revUtils.transitionDurationCss(this.gridTransitionElement, '0s');
+                revUtils.transitionDurationCss(this.nextGridTransitionElement, '0s');
+            // }
 
-            if (direction == 'left') {
-                revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ this.movement +'px, 0, 0)');
-            } else if (direction == 'right') {
-                revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.grid.containerWidth + (this.padding.left * 2)) - this.movement ) +'px, 0, 0)');
-            }
+            this.nextGridTransitionElement.style.zIndex = 1000; // TODO
+
+            var scale = Math.max((1 - (Math.abs(this.movement) / 1000)), .8);
+            revUtils.transformCss(this.gridTransitionElement, 'scale(' + scale + ')');
+
+            // if (direction == 'left') {
+                console.log('movement', this.movement);
+                revUtils.transformCss(this.nextGridTransitionElement, 'translate3d('+ this.movement +'px, 0, 0)');
+                // revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ this.movement +'px, 0, 0)');
+            // } else if (direction == 'right') {
+            //     revUtils.transformCss(this.nextGridTransitionElement, 'translate3d('+ this.movement +'px, 0, 0)');
+            //     // revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.grid.containerWidth + (this.padding.left * 2)) - this.movement ) +'px, 0, 0)');
+            // }
         }
     };
 
     RevSlider.prototype.resetShowPage = function(ms) {
-        var ms = ms ? ms : 300;
-        revUtils.transitionDurationCss(this.gridContainerElement, ms + 'ms');
-        if (this.panDirection == 'left') {
-            revUtils.transformCss(this.gridContainerElement, 'none');
-        } else {
-            revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.grid.containerWidth + (this.padding.left * 2))) +'px, 0, 0)');
-        }
+        ms = ms ? ms : 300;
+        // revUtils.transitionDurationCss(this.gridContainerElement, ms + 'ms');
+        // if (this.panDirection == 'left') {
+        //     revUtils.transformCss(this.gridContainerElement, 'none');
+        // } else {
+        //     revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.grid.containerWidth + (this.padding.left * 2))) +'px, 0, 0)');
+        // }
 
         this.page = this.previousPage;
         this.direction = this.previousDirection;
@@ -1622,8 +2176,10 @@ Author: michael@revcontent.com
         this.grid.remove();
         this.grid.destroy();
         revUtils.remove(this.containerElement);
-        this.mc.set({enable: false});
-        this.mc.destroy();
+        if (this.mc) {
+            this.mc.set({enable: false});
+            this.mc.destroy();
+        }
     };
 
     return RevSlider;

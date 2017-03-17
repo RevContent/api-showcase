@@ -3,6 +3,17 @@
     width: 100%;
     clear: both;
     box-sizing: border-box;
+    position: relative;
+
+    &.rev-slider-has-data {
+        height: auto !important;
+    }
+
+    &.rev-slider-pagination {
+        #rev-slider-inner {
+            cursor: move;
+        }
+    }
 
     * {
         user-drag: none;
@@ -89,6 +100,28 @@
         &-buttons {
             padding: 0;
         }
+        &-vertical {
+            position: absolute;
+            width: auto;
+            right: 12px;
+            line-height: normal;
+            padding: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            .rev-pagination-dots-container {
+                .rev-pagination-dots {
+                    height: auto !important;
+                    .rev-pagination-dot {
+                        float: none !important;
+                        margin-right: 0 !important;
+                        margin-bottom: 12px;
+                        &:last-child {
+                            margin-bottom: 0;
+                        }
+                    }
+                }
+            }
+        }
         .rev-pagination-dots-container {
             display: inline-block;
 
@@ -104,6 +137,7 @@
                     float: left;
                     height: 100%;
                     width: 6px;
+                    height: 6px;
                     margin-right: 12px;
 
                     > div {
@@ -232,7 +266,20 @@
             clear: both;
             position: relative;
             overflow: hidden;
-            cursor: move;
+
+            #rev-slider-grid-transition-container {
+                white-space: nowrap;
+
+                #rev-slider-grid-transition,
+                #rev-slider-next-grid-transition {
+                    background: #fff;
+                    transition: transform;
+                    transition-timing-function: ease-in-out;
+                    white-space: normal;
+                    display: inline-block;
+                    width: 100%;
+                }
+            }
 
             #rev-slider-grid-container {
                 clear: both;
@@ -240,9 +287,14 @@
                 width: 100%;
                 transition: transform;
                 transition-timing-function: ease-in-out;
+                // white-space: nowrap;
 
                 #rev-slider-grid {
                     padding: 0;
+                    // display: inline-block;
+                    // width: 100%;
+                    // white-space: normal;
+                    // background: #fff;
                 }
             }
         }
@@ -323,8 +375,10 @@
         .rev-ad {
             border-radius: 5px;
             overflow: hidden;
-            background: #fff;
+            // background: red;
+            // background: #fff;
             z-index: 1;
+            // border: 1px solid #ccc;
 
             .rev-ad-container {
                 height: 100%;
