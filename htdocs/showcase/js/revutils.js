@@ -18,6 +18,22 @@
 
 var utils = {};
 
+utils.deprecateOptions = function(opts) {
+    if (opts.overlay) {
+        opts.image_overlay = opts.overlay;
+    }
+
+    if (opts.overlay_icons) {
+        opts.image_overlay_icons = opts.overlay_icons;
+    }
+
+    if (opts.overlay_position) {
+        opts.image_overlay_position = opts.overlay_position;
+    }
+
+    return opts;
+};
+
 utils.validateApiParams = function(params) {
     var errors = [];
     if (!params.api_key){
@@ -61,7 +77,7 @@ utils.serialize = function(obj, prefix) {
         }
     }
     return str.join("&");
-}
+};
 
 utils.appendStyle = function(style, namespace, extra) {
     var namespace = namespace + '-append-style';
@@ -102,7 +118,7 @@ utils.merge = function(a, b) {
         a[prop] = b[prop];
     }
     return a;
-}
+};
 
 utils.inArray = function(array, item) {
     for (var i = 0; i < array.length; i++) {
@@ -110,7 +126,7 @@ utils.inArray = function(array, item) {
       return i;
     }
     return -1;
-}
+};
 
 utils.setCookie = function(cname, cvalue, exdays) {
     var d = new Date();
@@ -133,24 +149,24 @@ utils.getCookie = function(cname) {
 
 utils.prepend = function(el, html) {
     el.insertBefore(html, el.firstChild);
-}
+};
 
 utils.append = function(el, html) {
     el.appendChild(html);
-}
+};
 
 utils.remove = function(el) {
     if (el && el.parentNode) {
         el.parentNode.removeChild(el);
     }
-}
+};
 
 utils.wrap = function(el, wrapper) {
     var parent = el.parentNode;
 
     wrapper.appendChild(el);
     parent.appendChild(wrapper);
-}
+};
 
 utils.next = function(el) {
     function nextElementSibling(el) {
@@ -167,22 +183,30 @@ utils.hasClass = function(el, className) {
       return el.classList.contains(className);
     else
       return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
-}
+};
 
 utils.addClass = function(el, className) {
     if (!el) return false;
-    if (el.classList)
-      el.classList.add(className);
-    else
-      el.className += ' ' + className;
+
+    if (el.classList) {
+        el.classList.add(className);
+    } else {
+        this.removeClass(el, className); // make sure we don't double up
+        el.className += ' ' + className;
+    }
 };
 
-utils.removeClass = function(el, className) {
+utils.removeClass = function(el, className, prefix) {
     if (!el) return false;
-    if (el.classList)
-        el.classList.remove(className);
-    else
-        el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+
+    var classes = el.className.trim().split(" ").filter(function(c) {
+        if (prefix) {
+            return c.lastIndexOf(className, 0) !== 0;
+        }
+        return c !== className;
+    });
+
+    el.className = classes.join(" ").trim();
 };
 
 utils.dispatchScrollbarResizeEvent = function() {
@@ -220,17 +244,43 @@ utils.dispatchScrollbarResizeEvent = function() {
     document.body.appendChild(iframe);
 }
 
-utils.addEventListener = function(el, eventName, handler) {
-  if (el.addEventListener) {
-    el.addEventListener(eventName, handler);
-  } else {
-    el.attachEvent('on' + eventName, function(){
-      handler.call(el);
-    });
-  }
+utils.addEventListener = function(el, eventName, handler, options) {
+    if (!handler) {
+        return;
+    }
+
+    var defaultOptions = false; // useCapture defaults to false
+    if (this.eventListenerPassiveSupported()) {
+        // passive by default
+        var defaultOptions = {
+          passive: (options && typeof options.passive !== 'undefined' ? options.passive : true)
+        };
+    }
+    if (el.addEventListener) {
+        el.addEventListener(eventName, handler, defaultOptions);
+    } else {
+        el.attachEvent('on' + eventName, function(){
+            handler.call(el);
+        });
+    }
+};
+
+// if event listener does not preventDefault it should be passive
+utils.eventListenerPassiveSupported = function() {
+    var supportsCaptureOption = false;
+    try {
+      addEventListener("test", null, Object.defineProperty({}, 'passive', {get: function () {
+        supportsCaptureOption = true;
+      }}));
+    } catch(e) {}
+
+    return supportsCaptureOption
 };
 
 utils.removeEventListener = function(el, eventName, handler) {
+    if (!handler) {
+        return;
+    }
     if (el.removeEventListener) {
         el.removeEventListener(eventName, handler);
     } else {
@@ -275,6 +325,11 @@ utils.ellipsisText = function(headlines) {
 };
 
 utils.imagesLoaded = function(images) {
+
+    if (!images.length) {
+        emitter.emitEvent('done');
+        return;
+    }
 
     var maxMilliseconds = 4000;
 
@@ -375,18 +430,99 @@ utils.getComputedStyle = function (el, prop) {
     } else {
         return el.currentStyle[prop];
     }
-}
+};
 
 utils.setImage = function(wrapperElement, src) {
     var img = document.createElement('img');
     img.src = src;
     this.append(wrapperElement, img);
-}
+};
 
-utils.imageOverlay = function(image, content_type, overlay, position, icons) {
-    var icons = this.merge(revOverlay.icons, icons); // merge any passed icons
-    revOverlay.image(image, content_type, overlay, position, icons);
-}
+utils.mergeOverlayIcons = function(icons) {
+    this.merge(revOverlay.icons, icons);
+};
+
+utils.imageOverlay = function(image, content_type, overlay, position) {
+    revOverlay.image(image, content_type, overlay, position);
+};
+
+utils.adOverlay = function(ad, content_type, overlay, position) {
+    revOverlay.ad(ad, content_type, overlay, position);
+};
+
+utils.checkVisible = function(element, callback, percentVisible) {
+    var that = this;
+    requestAnimationFrame(function() {
+        // what percentage of the element should be visible
+        var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
+
+        var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+        var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        var elementTop = element.getBoundingClientRect().top;
+        var elementBottom = element.getBoundingClientRect().bottom;
+        var elementVisibleHeight = element.offsetHeight * visibleHeightMultiplier;
+
+        if ((scroll + windowHeight >= (elementTop + scroll + elementVisibleHeight)) &&
+            elementBottom > elementVisibleHeight) {
+            callback.call(that);
+        }
+    });
+};
+
+utils.checkHidden = function(element, callback, percentHidden) {
+    var that = this;
+    requestAnimationFrame(function() {
+        // what percentage of the element should be hidden
+        var visibleHeightMultiplier = (typeof percentHidden === 'number') ? (parseInt(percentHidden) * .01) : 0;
+
+        var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+        var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+
+        if ((scroll + windowHeight < element.getBoundingClientRect().top + scroll ||
+            element.getBoundingClientRect().top + (element.offsetHeight * visibleHeightMultiplier) <= 0)) {
+            callback.call(that);
+        }
+    });
+};
+
+// get all images above an element
+utils.imagesAbove = function(element) {
+    // get all images
+    var images = document.querySelectorAll('img');
+    // top position of show visible element
+    var elementTop = element.getBoundingClientRect().top;
+    // if show visible element is below image add to imagesAboveElement array
+    var imagesAboveElement = [];
+    for (var i = 0; i < images.length; i++) {
+        if (images[i].getBoundingClientRect().top < elementTop) {
+            imagesAboveElement.push(images[i]);
+        }
+    }
+    return imagesAboveElement;
+};
+
+utils.throttle = function throttle(fn, threshhold, scope) {
+    threshhold || (threshhold = 250);
+    var last,
+        deferTimer;
+    return function () {
+        var context = scope || this;
+
+        var now = +new Date,
+            args = arguments;
+        if (last && now < last + threshhold) {
+            // hold on to it
+            clearTimeout(deferTimer);
+            deferTimer = setTimeout(function () {
+                last = now;
+                fn.apply(context, args);
+            }, threshhold);
+        } else {
+            last = now;
+            fn.apply(context, args);
+        }
+    };
+};
 
 // -----  ----- //
 return utils;

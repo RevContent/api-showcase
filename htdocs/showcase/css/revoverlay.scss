@@ -48,6 +48,15 @@
         left: 10px;
     }
 
+    &.rc-ad-icon {
+        width: 20px !important;
+        height: 20px !important;
+        min-width: 0;
+        &.rc-icon-bottom_right {
+            bottom: 0;
+        }
+    }
+
     img {
         border-width: 0px;
     }

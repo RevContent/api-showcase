@@ -54,9 +54,11 @@ Author: michael@revcontent.com
             ],
             disclosure_text: 'Ads by Revcontent',
             disclosure_text_small: 'Ads',
-            overlay: false, // pass key value object { content_type: icon }
             overlay_icons: false, // pass in custom icons or overrides
-            overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
+            image_overlay: false, // pass key value object { content_type: icon }
+            image_overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
+            ad_overlay: false, // pass key value object { content_type: icon }
+            ad_overlay_position: 'bottom_right', // center, top_left, top_right, bottom_right, bottom_left
             timeout: 1000, // timeout in ms for image ad
             show_transition: 600,
             multipliers: {
@@ -70,11 +72,14 @@ Author: michael@revcontent.com
             },
             theme: 'light',
             query_params: false,
-            selector: false
+            selector: false,
+            user_ip: false,
+            user_agent: false,
+            css: ''
         };
 
         // merge options
-        this.options = revUtils.extend(defaults, opts);
+        this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
 
         // param errors
         if (revUtils.validateApiParams(this.options).length) {
@@ -125,24 +130,20 @@ Author: michael@revcontent.com
             that.container();
             that.wrapper();
             that.wrapperWidth();
-            that.innerWidget();
-            that.bindResize();
             that.appendElements();
             that.checkSmall();
-            that.attachCloseButtonEvent();
             that.addCss();
+            that.bindResize();
+            that.attachCloseButtonEvent();
             that.attachScrollEvents();
+            that.createInnerWidget().dataPromise.then(function(data) {
+                if (!data.length) { // if we have data continue
+                    that.destroy();
+                }
+            });
             that.imageVisible();
-            that.registerImpressions(); // register on page load
         });
     }
-
-    Item.prototype.registerImpressions = function() {
-        var that = this;
-        this.innerWidget.dataPromise.then(function() {
-            that.innerWidget.registerImpressions();
-        });
-    };
 
     /*
     reset any styles that will cause issues and cache them to be placed on the element later
@@ -175,11 +176,10 @@ Author: michael@revcontent.com
         this.wrapper.style.maxWidth = this.element.offsetWidth + 'px';
     };
 
-    Item.prototype.innerWidget = function() {
+    Item.prototype.createInnerWidget = function() {
         this.innerWidget = new RevSlider({
             is_resize_bound: false, // need to listen to window resize so don't double bind
             api_source: 'image',
-            visible: false,
             element: [this.wrapper],
             url: this.options.url,
             api_key : this.options.api_key,
@@ -200,11 +200,18 @@ Author: michael@revcontent.com
             buttons: this.options.buttons,
             beacons: this.options.beacons,
             touch_direction: Hammer.DIRECTION_ALL, // prevent vertical scrolling
-            overlay: this.options.overlay, // video: rectangle, square, circle1, circle2, triangle
             overlay_icons: this.options.overlay_icons, // pass in custom icons or overrides
-            overlay_position: this.options.overlay_position, // center, top_left, top_right, bottom_right, bottom_left
-            query_params: this.options.query_params
+            image_overlay: this.options.image_overlay, // pass key value object { content_type: icon }
+            image_overlay_position: this.options.image_overlay_position, // center, top_left, top_right, bottom_right, bottom_left
+            ad_overlay: this.options.ad_overlay, // pass key value object { content_type: icon }
+            ad_overlay_position: this.options.ad_overlay_position, // center, top_left, top_right, bottom_right, bottom_left
+            query_params: this.options.query_params,
+            register_views: false, // handle viewibility/prevent Slider from doing checks
+            user_ip: this.options.user_ip,
+            user_agent: this.options.user_agent,
+            css: this.options.css
         });
+        return this.innerWidget;
     };
 
     Item.prototype.bindResize = function() {
@@ -278,17 +285,19 @@ Author: michael@revcontent.com
         revUtils.transitionCss(this.wrapper, 'transform ' + this.options.show_transition + 'ms');
     };
 
-    Item.prototype.imageVisible = function() {
-        // did the user scroll past the bottom of the element
-        if ((window.pageYOffset + window.innerHeight >= (this.container.getBoundingClientRect().top + document.body.scrollTop) + this.container.offsetHeight) &&
-            this.container.getBoundingClientRect().top > 0) {
-            this.emitter.emitEvent('visible');
-        }
+    Item.prototype.onVisible = function() {
+        this.emitter.emitEvent('visible');
+    };
 
-        if (window.pageYOffset + window.innerHeight < this.container.getBoundingClientRect().top + document.body.scrollTop ||
-            this.container.getBoundingClientRect().top + this.container.offsetHeight <= 0) {
-            this.emitter.emitEvent('hidden');
-        }
+    Item.prototype.onHidden = function() {
+        this.emitter.emitEvent('hidden');
+    };
+
+    Item.prototype.imageVisible = function() {
+        // image is 100 percent visible
+        revUtils.checkVisible.bind(this, this.container, this.onVisible, 100)();
+        // image is 100 percent hidden
+        revUtils.checkHidden.bind(this, this.container, this.onHidden, 100)();
     };
 
     Item.prototype.attachScrollEvents = function() {
@@ -304,11 +313,8 @@ Author: michael@revcontent.com
             revUtils.transformCss(that.wrapper, 'translateY(100%)');
         });
 
-        this.emitter.once('visible', function() {
-            that.innerWidget.registerView();
-        });
-
         this.emitter.on('visible', function() {
+            that.innerWidget.visible();
             that.showing = true;
             that.innerWidget.dataPromise.then(function() {
                 setTimeout(function() {

@@ -32,6 +32,7 @@ RevMore({
     var that;
     var defaults = {
         top_id: false,
+        watch_top_id_interval: 500, // time in ms to watch the top_id position change
         id: false,
         url: 'https://trends.revcontent.com/api/v1/',
         distance: 500,
@@ -61,10 +62,16 @@ RevMore({
             'phone', 'tablet', 'desktop'
         ],
         beacons: true,
-        overlay: false, // pass key value object { content_type: icon }
         overlay_icons: false, // pass in custom icons or overrides
-        overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
-        query_params: false
+        image_overlay: false, // pass key value object { content_type: icon }
+        image_overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
+        ad_overlay: false, // pass key value object { content_type: icon }
+        ad_overlay_position: 'bottom_right', // center, top_left, top_right, bottom_right, bottom_left
+        query_params: false,
+        user_ip: false,
+        user_agent: false,
+        hide_selectors: false,
+        css: ''
     };
 
     RevMore = function(opts) {
@@ -82,7 +89,7 @@ RevMore({
         }
 
         // merge options
-        this.options = revUtils.extend(defaults, opts);
+        this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
 
         if (revUtils.validateApiParams(this.options).length) {
             return;
@@ -105,11 +112,11 @@ RevMore({
 
             this.setPadding();
 
-            this.setTop();
-
             this.appendElements();
 
-            this.innerWidget();
+            this.createInnerWidget();
+
+            this.setTop();
 
             this.widget();
 
@@ -118,6 +125,16 @@ RevMore({
             this.attachButtonEvents();
 
             this.attachResizedEvents();
+
+            this.observeBodyChildList();
+
+            // destroy if no data
+            var that = this;
+            this.innerWidget.dataPromise.then(function(data) {
+                if (!data.length) {
+                    that.destroy();
+                }
+            });
         };
 
         // we don't want any padding on the body
@@ -169,11 +186,39 @@ RevMore({
 
         // get the top position using marker if it exists or distance option
         this.setTop = function() {
+            this.top = this.options.distance;
+
             var marker = document.getElementById(this.options.top_id);
 
-            this.top = marker ? marker.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop) : this.options.distance;
+            if (marker) {
+                var markerTop = marker.getBoundingClientRect().top;
+                this.top = markerTop + (window.pageYOffset || document.documentElement.scrollTop);
+                this.watchMarkerTop(marker, markerTop);
+            }
 
+            this.setElementTop();
+        };
+
+        // set the element top position
+        this.setElementTop = function() {
             this.element.style.top = this.top + this.options.gradient_height + 'px';
+        };
+
+        this.watchMarkerTop = function(marker, currentTop) {
+            var that = this;
+            var watchMarkerTopInterval = setInterval(function() {
+                var markerTop = marker.getBoundingClientRect().top;
+                if (currentTop !== markerTop) {
+                    that.top = markerTop + (window.pageYOffset || document.documentElement.scrollTop);
+                    that.setElementTop();
+                    that.wrapperHeight();
+                }
+                currentTop = markerTop;
+            }, this.options.watch_top_id_interval);
+
+            this.innerWidget.emitter.once('unlocked', function() {
+                clearInterval(watchMarkerTopInterval);
+            });
         };
 
         this.appendElements = function() {
@@ -187,7 +232,7 @@ RevMore({
         this.widget = function() {
             if (this.options.id) {
                 var that = this;
-                that.innerWidgetDataPromise.then(function() {
+                this.innerWidget.dataPromise.then(function() {
                     that.sameWidget = new RevSlider({
                         impression_tracker: that.impressionTracker,
                         api_source:         'more',
@@ -207,18 +252,26 @@ RevMore({
                         buttons:            that.options.buttons,
                         beacons:            that.options.beacons,
                         prevent_default_pan: false,
-                        disclosure_text: that.options.disclosure_text,
+                        disclosure_text:        that.options.disclosure_text,
+                        overlay_icons:          that.options.overlay_icons, // pass in custom icons or overrides
+                        image_overlay:          that.options.image_overlay, // pass key value object { content_type: icon }
+                        image_overlay_position: that.options.image_overlay_position, // center, top_left, top_right, bottom_right, bottom_left
+                        ad_overlay:             that.options.ad_overlay, // pass key value object { content_type: icon }
+                        ad_overlay_position:    that.options.ad_overlay_position, // center, top_left, top_right, bottom_right, bottom_left
                         multipliers: {
                             font_size: 3,
                             margin: -2.2,
                             padding: 2
-                        }
+                        },
+                        user_ip: that.options.user_ip,
+                        user_agent: that.options.user_agent,
+                        css: that.options.css
                     });
                 });
             }
         };
 
-        this.innerWidget = function() {
+        this.createInnerWidget = function() {
 
             this.innerWidget = new RevSlider({
                 impression_tracker: this.impressionTracker,
@@ -240,17 +293,21 @@ RevMore({
                 beacons:      this.options.beacons,
                 prevent_default_pan: false,
                 disclosure_text: this.options.disclosure_text,
-                overlay: this.options.overlay, // video: rectangle, square, circle1, circle2, triangle
                 overlay_icons: this.options.overlay_icons, // pass in custom icons or overrides
-                overlay_position: this.options.overlay_position, // center, top_left, top_right, bottom_right, bottom_left
+                image_overlay: this.options.image_overlay, // pass key value object { content_type: icon }
+                image_overlay_position: this.options.image_overlay_position, // center, top_left, top_right, bottom_right, bottom_left
+                ad_overlay: this.options.ad_overlay, // pass key value object { content_type: icon }
+                ad_overlay_position: this.options.ad_overlay_position, // center, top_left, top_right, bottom_right, bottom_left
                 multipliers: {
                     line_height: 3,
                     margin: -2.2,
                     padding: 2
                 },
-                query_params: this.options.query_params
+                query_params: this.options.query_params,
+                user_ip: this.options.user_ip,
+                user_agent: this.options.user_agent,
+                css: this.options.css
             });
-            this.innerWidgetDataPromise = this.innerWidget.dataPromise;
         };
 
         // set the wrapper equal to top + the element height
@@ -261,6 +318,7 @@ RevMore({
 
         // unlock button
         this.attachButtonEvents = function() {
+            var that = this;
             this.unlockBtn.addEventListener('click', function() {
                 that.wrapper.style.height = 'auto';
                 that.wrapper.style.marginBottom = '0'; // remove buffer margin
@@ -273,6 +331,8 @@ RevMore({
                 that.wrapper.style.marginTop = 0;
 
                 revUtils.addClass(that.element, 'unlocked');
+
+                that.innerWidget.emitter.emitEvent('unlocked');
 
                 setTimeout(function() {
                     that.destroy(false);
@@ -288,14 +348,79 @@ RevMore({
             });
         };
 
+        this.observeBodyChildList = function() {
+            // if we don't have any selectors return
+            if (typeof this.options.hide_selectors !== 'object' || !this.options.hide_selectors.length) {
+                return;
+            }
+
+            // store any hidden elements
+            var hidden = [];
+
+            // helper to see if the observed element matches any of the hide_selectors option
+            var that = this;
+            var matches = function(element) {
+                var matched = false;
+
+                try {
+                    for (var i = 0; i < that.options.hide_selectors.length; i++) {
+                        if (element.matches(that.options.hide_selectors[i])) {
+                            matched = true;
+                            break;
+                        }
+                    }
+                } catch(e) {}
+
+                return matched;
+            };
+
+            // mutation observer for any new body children
+            var observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    // if the added node matches hide_selectors option
+                    if (mutation.addedNodes[0] && matches(mutation.addedNodes[0])) {
+                        // another observer on the element in case the style changes at any point, set hidden
+                        var foundObserver = new MutationObserver(function(mutations) {
+                            mutation.addedNodes[0].style.display = 'none';
+                        });
+                        // cache the original display
+                        var display = revUtils.getComputedStyle(mutation.addedNodes[0], 'display');
+
+                        // push observer, element and original display into hidden
+                        hidden.push({
+                            observer: foundObserver,
+                            element: mutation.addedNodes[0],
+                            display: (display !== 'none' ? display : 'block')
+                        });
+                        // set element hidden
+                        mutation.addedNodes[0].style.display = 'none';
+                        // observe
+                        foundObserver.observe(mutation.addedNodes[0], {
+                            attributes:    true,
+                            attributeFilter: ["style"]
+                        });
+                    }
+                });
+            });
+            // observe
+            observer.observe(document.body, {
+                childList: true
+            });
+            // when unlocked disconnect all observers and show the elements that were hidden
+            this.innerWidget.emitter.once('unlocked', function() {
+                observer.disconnect();
+                for (var i = 0; i < hidden.length; i++) {
+                    hidden[i].observer.disconnect();
+                    hidden[i].element.style.display = hidden[i].display;
+                }
+            });
+        };
+
         this.destroy = function(destroySameWidget) {
             this.innerWidget.destroy();
 
             if (destroySameWidget !== false && this.sameWidget) {
-                this.sameWidget.grid.remove();
-                this.sameWidget.grid.destroy();
-                this.sameWidget.mc.set({enable: false});
-                this.sameWidget.mc.destroy();
+                this.sameWidget.destroy();
             }
 
             revUtils.remove(this.element);

@@ -7,7 +7,7 @@ RevMore locks the page to display a widget. It can optionally share impressions 
 
 &lt;div id="in-article"&gt;&lt;/div&gt;
 
-&lt;script src="http://labs-cdn.revcontent.com/build/revmore.min.js">&lt;script&gt;
+&lt;script src="http://labs-cdn.revcontent.com/build/revmore.min.js">&lt;/script&gt;
 
 &lt;script&gt;
     new RevMore({
@@ -36,6 +36,18 @@ your pub id
 ###widget_id(required)
 your widget id
 
+###ad_overlay
+Key value ad overlay config object where the key is the content type and the value is the icon to use. For example to use the ```video_rectangle``` icon for video content use ```video: 'video_rectangle'```. The icon will be appended to the ```.rev-ad``` element.
+```
+ad_overlay: false
+```
+
+###ad\_overlay\_position
+The position of the ad overlay icon. Available options include ```center```, ```top_left```, ```top_right```, ```bottom_right``` and ```bottom_left```.
+```
+ad_overlay_position: 'bottom_right'
+```
+
 ###buttons
 Button config. Enable/disable forward/back, size, position(```dots```, ```inside```, ```outside```, ```dual```), and style(```default```, ```fly-out```).
 ```
@@ -43,6 +55,12 @@ Button config. Enable/disable forward/back, size, position(```dots```, ```inside
     forward: true,
     back: true
 }
+```
+
+###css
+Additional CSS to append.
+```
+css: ''
 ```
 
 ###devices
@@ -85,6 +103,24 @@ Number of lines that the headline can take up. Ignored if ```max_headline``` is 
 headline_size: 3
 ```
 
+###hide_selectors
+Pass an array of query selectors to look for. If/when these elements become visible they will be set to display: none. When the screen is unlocked, they return to previous display state.
+```
+hide_selectors: false
+```
+
+###image_overlay
+Key value image overlay object config where the key is the content type and the value is the icon to use. For example to use the ```video_rectangle``` icon for video content use ```video: 'video_rectangle'```. The icon will be appended to the ```.rev-image``` element.
+```
+image_overlay: false
+```
+
+###image\_overlay\_position
+The position of the image overlay icon. Available options include ```center```, ```top_left```, ```top_right```, ```bottom_right``` and ```bottom_left```.
+```
+image_overlay_position: 'center'
+```
+
 ###id
 Id for in article/page widget to share impressions with.
 ```
@@ -97,22 +133,10 @@ Ratio of the images. Available options include ```wide_rectangle```, ```rectangl
 image_ratio: (revDetect.mobile() ? 'wide_rectangle' : 'rectangle')
 ```
 
-###overlay
-Key value object where the key is the content type and the value is the icon to use. This key value will be concatenated to make up the icon name string. For example ```video: 'circle'``` will use the ```video_circle``` icon
-```
-overlay: false
-```
-
 ###overlay_icons
-Pass in custom icons where the key is the icon name and the value is the svg icon. For example ```{article_square: '<svg></svg>'}```
+Pass in custom icons where the key is the icon name and the value is the svg icon. For example ```{article_square: '&lt;svg>&lt;/svg>'}```. Default icons include ```video_rectangle```, ```video_square```, ```video_circle1```, ```video_circle2``` and ```video_triangle```.
 ```
 overlay_icons: false
-```
-
-###overlay_position
-The position of the overlay icon. Available options include ```center```, ```top_left```, ```top_right```, ```bottom_right```, ```bottom_left```.
-```
-overlay_position: 'center'
 ```
 
 ###pagination_dots
@@ -169,4 +193,16 @@ unlock_text: 'Read More...'
 Use an alternate API url
 ```
 url: 'https://trends.revcontent.com/api/v1/'
+```
+
+###user_agent
+Pass user_agent param to API
+```
+user_agent: false
+```
+
+###user_ip
+Pass user_ip to API
+```
+user_ip: false
 ```

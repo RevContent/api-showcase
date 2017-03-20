@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>RevShifter Example</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.css" rel="stylesheet">
+
+    <link href="../css/style.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Start Alexa Certify Javascript -->
+    <script type="text/javascript">
+    _atrk_opts = { atrk_acct:"D7+Ll1aE+GW1/9", domain:"revcontent.com",dynamic: true};
+    (function() { var as = document.createElement('script'); as.type = 'text/javascript'; as.async = true; as.src = "https://d31qbv1cthcecs.cloudfront.net/atrk.js"; var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(as, s); })();
+    </script>
+    <noscript><img src="https://d5nxst8fruw4z.cloudfront.net/atrk.gif?account=D7+Ll1aE+GW1/9" style="display:none" height="1" width="1" alt="" /></noscript>
+    <!-- End Alexa Certify Javascript -->
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Showcase Example </a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#">Life</a>
+                    </li>
+                    <li>
+                        <a href="#">News</a>
+                    </li>
+                    <li>
+                        <a href="#">Style</a>
+                    </li>
+                    <li>
+                        <a href="#">Culture</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Fake Page Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">RevShifter
+                    <small>Revcontent Native API</small>
+                </h1>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Examples:</h3>
+                    <ul>
+                        <li><a href="/showcase/revcontent-api-showcase-shifter-2.0/index.html">Default</a></li>
+                        <li><a href="/showcase/revcontent-api-showcase-shifter-2.0/demos/height.html">Image Height</a> - Set the height of the Shifter images.</li>
+                        <li><a href="/showcase/revcontent-api-showcase-shifter-2.0/demos/load.html">On Load</a> - Displays the shifter on page load.</li>
+                        <li><a href="/showcase/revcontent-api-showcase-shifter-2.0/demos/scroll.html">Scroll Direction</a> - reverse the scroll direction, showing when scrolling up.</li>
+                        <li><a href="/showcase/revcontent-api-showcase-shifter-2.0/demos/scroll-disabled.html">Disable Scrolling</a> - manually show Shifter or use the show_on_load option. Disabling scrolling forces the page to shift down to prevent overlaying content.</li>
+                        <li><a href="/showcase/revcontent-api-showcase-shifter-2.0/demos/top.html">Top</a> - Show the shifter on the top of the page.</li>
+                        <li><a href="/showcase/revcontent-api-showcase-shifter-2.0/demos/top-scroll-disabled.html">Top Disable Scrolling</a> - Show the shifter on the top of the page and disable scrolling. Show with show_on_load: true</li>
+                        <li><a href="/showcase/revcontent-api-showcase-shifter-2.0/demos/hide-on-show-transition.html">Hide on Show Transition</a> - Setting this to false will prevent the Shifter from hiding while it is showing</li>
+                        <li><a href="/showcase/revcontent-api-showcase-shifter-2.0/demos/touch-simulation.html">Touch Simulation</a> - Simulate touch when the shifter shows to indicate touch support.</li>
+                        <li><a href="/showcase/revcontent-api-showcase-shifter-2.0/demos/visible-selector.html">Visible Selector</a> - Show when first element from provided selector is visible.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <br /><br />
+
+        <div class="row">
+            <div class="col-md-8">
+                <img alt="" src="http://placehold.it/750x500" class="img-responsive">
+            </div>
+            <div class="col-md-4">
+
+                <div id="test" class="text-info">
+                    <h3>Shifter will come into view when this elment becomes visible</h3>
+                </div>
+
+                <h3>This is just a testing title</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
+                <h3>Project Details</h3>
+                <ul>
+                    <li>Lorem Ipsum</li>
+                    <li>Dolor Sit Amet</li>
+                    <li>Consectetur</li>
+                    <li>Adipiscing Elit</li>
+                </ul>
+            </div>
+        </div>
+        <br /><hr /><br />
+        <div class="row">
+            <div class="col-md-8">
+                <img alt="" src="http://placehold.it/750x500" class="img-responsive">
+            </div>
+            <div class="col-md-4">
+                <h3>This is just a testing title</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
+                <h3>Project Details</h3>
+                <ul>
+                    <li>Lorem Ipsum</li>
+                    <li>Dolor Sit Amet</li>
+                    <li>Consectetur</li>
+                    <li>Adipiscing Elit</li>
+                </ul>
+            </div>
+        </div>
+        <br /><hr /><br />
+        <div class="row">
+            <div class="col-md-8">
+                <img alt="" src="http://placehold.it/750x500" class="img-responsive">
+            </div>
+            <div class="col-md-4">
+                <h3>This is just a testing title</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
+                <h3>Project Details</h3>
+                <ul>
+                    <li>Lorem Ipsum</li>
+                    <li>Dolor Sit Amet</li>
+                    <li>Consectetur</li>
+                    <li>Adipiscing Elit</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Copyright &copy; Your Website 2015</p>
+                </div>
+            </div>
+            <!-- /.row -->
+        </footer>
+
+    </div>
+   <!-- /. Fake Page Content -->
+
+    <script src="/build/revshifter.min.js"></script>
+
+    <script>
+        var shifter = new RevShifter({
+            api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+            show_visible_selector: '#test',
+            pub_id : 945,
+            widget_id : 6181,
+            domain : 'apiexamples.powr.com',
+            testing: true
+        });
+    </script>
+
+</body>
+
+
+</html>

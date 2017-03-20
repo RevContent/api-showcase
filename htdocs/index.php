@@ -52,6 +52,14 @@
         <link href="app/resources/css/v2-logo.css" rel="stylesheet" type="text/css" media="screen" />
         <link href="app/resources/css/app.css" rel="stylesheet" type="text/css" media="screen" />
 
+        <!-- Start Alexa Certify Javascript -->
+        <script type="text/javascript">
+        _atrk_opts = { atrk_acct:"D7+Ll1aE+GW1/9", domain:"revcontent.com",dynamic: true};
+        (function() { var as = document.createElement('script'); as.type = 'text/javascript'; as.async = true; as.src = "https://d31qbv1cthcecs.cloudfront.net/atrk.js"; var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(as, s); })();
+        </script>
+        <noscript><img src="https://d5nxst8fruw4z.cloudfront.net/atrk.gif?account=D7+Ll1aE+GW1/9" style="display:none" height="1" width="1" alt="" /></noscript>
+        <!-- End Alexa Certify Javascript -->
+
     </head>
     <body device-detector>
         <header>
@@ -78,10 +86,10 @@
                                             <md-button ui-sref="docs">Docs</md-button>
                                         </md-menu-item>
                                         <md-menu-item>
-                                            <md-button target="_blank" ng-href="http://faq.revcontent.com/support/solutions/5000137293">Support</md-button>
+                                            <md-button target="_blank" ng-href="https://faq.revcontent.com/customer/en/portal/topics/1037906-revcontent-native-content-api/articles">Support</md-button>
                                         </md-menu-item>
                                         <md-menu-item>
-                                            <md-button target="_blank" ng-href="http://faq.revcontent.com/support/solutions/folders/5000219605">FAQ</md-button>
+                                            <md-button target="_blank" ng-href="http://faq.revcontent.com/">FAQ</md-button>
                                         </md-menu-item>
                                     </md-menu-content>
                                 </md-menu>
@@ -93,12 +101,12 @@
                                         <md-tooltip>Read Up!</md-tooltip>
                                     </a>
 
-                                    <a class="md-button" target="_blank" ng-href="http://faq.revcontent.com/support/solutions/5000137293" tabindex="0">
+                                    <a class="md-button" target="_blank" ng-href="https://faq.revcontent.com/customer/en/portal/topics/1037906-revcontent-native-content-api/articles" tabindex="0">
                                         <span>Support</span>
                                         <md-tooltip>How can we help?</md-tooltip>
                                     </a>
 
-                                    <a class="md-button" target="_blank" ng-href="http://faq.revcontent.com/support/solutions/folders/5000219605" tabindex="0">
+                                    <a class="md-button" target="_blank" ng-href="http://faq.revcontent.com/" tabindex="0">
                                         <span>FAQ</span>
                                         <md-tooltip>Common Questions</md-tooltip>
                                     </a>
@@ -125,8 +133,8 @@
                     <div layout="column" layout-gt-md="row" layout-align="center center">
                         <span>© 2015, Revcontent All Rights Reserved.</span>
                         <div layout="row">
-                            <md-button href="http://faq.revcontent.com/support/solutions/articles/5000615200-revcontent-s-privacy-policy" target="_blank" title=""><strong>Privacy Policy</strong></md-button>
-                            <md-button href="http://faq.revcontent.com/support/home" target="_blank" title=""><strong>Terms and Conditions</strong></md-button>
+                            <md-button href="http://faq.revcontent.com/customer/en/portal/articles/2703838-revcontent-s-privacy-and-cookie-policy" target="_blank" title=""><strong>Privacy Policy</strong></md-button>
+                            <md-button href="http://faq.revcontent.com/" target="_blank" title=""><strong>Terms and Conditions</strong></md-button>
                         </div>
                     </div>
 

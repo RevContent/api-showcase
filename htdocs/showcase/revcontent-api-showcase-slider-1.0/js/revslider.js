@@ -26,8 +26,15 @@ Author: michael@revcontent.com
         var defaults = {
             impression_tracker: [],
             api_source: 'slide',
-            visible: true,
             element: false,
+            breakpoints: {
+                xs: 250,
+                sm: 500,
+                md: 750,
+                lg: 1000,
+                xl: 1250,
+                xxl: 1500
+            },
             rows: {
                 xxs: 2,
                 xs: 2,
@@ -59,7 +66,6 @@ Author: michael@revcontent.com
                 'phone', 'tablet', 'desktop'
             ],
             url: 'https://trends.revcontent.com/api/v1/',
-            ad_border: true,
             headline_size: 3,
             max_headline: false,
             min_headline_height: 17,
@@ -93,14 +99,21 @@ Author: michael@revcontent.com
             beacons: true,
             pagination_dots: false,
             touch_direction: Hammer.DIRECTION_HORIZONTAL, // don't prevent vertical scrolling
-            overlay: false, // pass key value object { content_type: icon }
             overlay_icons: false, // pass in custom icons or overrides
-            overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
-            query_params: false
+            image_overlay: false, // pass key value object { content_type: icon }
+            image_overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
+            ad_overlay: false, // pass key value object { content_type: icon }
+            ad_overlay_position: 'bottom_right', // center, top_left, top_right, bottom_right, bottom_left
+            query_params: false,
+            register_views: true, // manage views or false to let someone else do it
+            user_ip: false,
+            user_agent: false,
+            css: '',
+            disable_pagination: false
         };
 
         // merge options
-        this.options = revUtils.extend(defaults, opts);
+        this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
 
         if (revUtils.validateApiParams(this.options).length) {
             return;
@@ -115,16 +128,13 @@ Author: michael@revcontent.com
 
         this.emitter = new EventEmitter();
 
-        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-slider');
+        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-slider', this.options.css);
 
         this.data = [];
         this.displayedItems = [];
 
         this.containerElement = document.createElement('div');
         this.containerElement.id = 'rev-slider';
-        revUtils.addClass(this.containerElement, 'rev-slider-' + (this.options.vertical ? 'vertical' : 'horizontal'));
-        revUtils.addClass(this.containerElement, 'rev-slider-' + (this.options.text_right ? 'text-right' : 'text-bottom'));
-        revUtils.addClass(this.containerElement, 'rev-slider-buttons-' + (this.options.buttons.style));
 
         this.innerContainerElement = document.createElement('div');
         this.innerContainerElement.id = 'rev-slider-container';
@@ -151,42 +161,54 @@ Author: michael@revcontent.com
 
         revUtils.append(this.element, this.containerElement);
 
+        this.paginationDots();
+
+        this.initButtons();
+
+        revUtils.dispatchScrollbarResizeEvent();
+
         this.grid = new AnyGrid(gridElement, this.gridOptions());
+
+        this.maxLimit = this.getMaxLimit();
+
+        this.limit = this.getLimit();
+
+        this.setGridClasses();
+
+        this.createCells();
+
+        this.grid.reloadItems();
+        this.grid.layout();
+
+        this.setMultipliers();
+
+        this.getPadding();
+
+        this.setContentPadding();
+
+        this.grid.layout();
+
+        this.setUp();
+
+        this.setSize();
+
+        this.grid.option({removeVerticalGutters: true});
+
+        this.grid.layout();
 
         this.grid.on('resize', function() {
             that.resize();
         });
 
-        revUtils.dispatchScrollbarResizeEvent();
-
-        this.setMultipliers();
-
-        this.grid.option({gutter: this.getPadding()});
+        this.getData();
 
         this.offset = 0;
         this.page = 1;
         this.previousPage = 1;
 
-        this.paginationDots();
-
-        this.initButtons();
-
         this.appendElements();
 
-        this.grid.layout();
-
-        this.limit = this.getLimit();
-
-        this.setUp();
-
-        this.getData();
-
-        this.createCells();
-
         this.textOverlay();
-
-        this.grid.reloadItems();
-        this.grid.layout();
 
         this.getAnimationDuration();
 
@@ -194,12 +216,59 @@ Author: michael@revcontent.com
             this.innerContainerElement.style.padding = (this.options.buttons.back ? (this.options.buttons.size + 'px') : '0') + ' 0 ' + (this.options.buttons.forward ? (this.options.buttons.size + 'px') : '0');
         }
 
-        this.initTouch();
+        // custom icons passed? merge with default
+        if (this.options.overlay_icons !== false) {
+            revUtils.mergeOverlayIcons(this.options.overlay_icons);
+        }
 
-        this.dataPromise.then(function() {
-            that.attachTouchEvents();
-            that.attachButtonEvents();
+        // manage views
+        this.registerViewOnceVisible();
+        if (this.options.register_views) { // widgets that use revSlider might need to do this on their own
+            that.attachVisibleListener();
+            revUtils.checkVisible.bind(this, this.containerElement, this.visible)();
+        }
+
+        if (that.options.disable_pagination === false) {
+            this.initTouch();
+            this.dataPromise.then(function() {
+                that.attachTouchEvents();
+                that.attachButtonEvents();
+            });
+        }
+    };
+
+    RevSlider.prototype.setGridClasses = function() {
+        revUtils.addClass(this.containerElement, 'rev-slider-' + (this.options.vertical ? 'vertical' : 'horizontal'));
+        revUtils.addClass(this.containerElement, 'rev-slider-' + (this.options.text_right ? 'text-right' : 'text-bottom'));
+        revUtils.addClass(this.containerElement, 'rev-slider-buttons-' + (this.options.buttons.style));
+
+        revUtils.addClass(this.containerElement, 'rev-slider-buttons-' + (this.options.buttons.style));
+
+        if (this.options.disable_pagination) {
+            revUtils.addClass(this.containerElement, 'rev-slider-pagination-disabled');
+        }
+
+        revUtils.removeClass(this.containerElement, 'rev-slider-col', true);
+        revUtils.removeClass(this.containerElement, 'rev-slider-row', true);
+        revUtils.addClass(this.containerElement, 'rev-slider-col-' + (typeof this.options.per_row === 'object' ? this.options.per_row[this.grid.getBreakPoint()] : this.options.per_row));
+        revUtils.addClass(this.containerElement, 'rev-slider-row-' + (typeof this.options.rows === 'object' ? this.options.rows[this.grid.getBreakPoint()] : this.options.rows));
+    };
+
+    RevSlider.prototype.registerViewOnceVisible = function() {
+        var that = this;
+        this.emitter.once('visible', function() {
+            revUtils.removeEventListener(window, 'scroll', that.visibleListener);
+            that.registerView();
         });
+    };
+
+    RevSlider.prototype.visible = function() {
+        this.emitter.emitEvent('visible');
+    };
+
+    RevSlider.prototype.attachVisibleListener = function() {
+        this.visibleListener = revUtils.checkVisible.bind(this, this.containerElement, this.visible);
+        revUtils.addEventListener(window, 'scroll', this.visibleListener);
     };
 
     RevSlider.prototype.createCells = function() {
@@ -208,9 +277,56 @@ Author: michael@revcontent.com
         }
     };
 
-    RevSlider.prototype.getPadding = function() {
-        this.padding = ((this.grid.columnWidth * this.marginMultiplier).toFixed(2) / 1);
-        return this.padding;
+    RevSlider.prototype.getPadding = function(resetInline) {
+        var content = this.grid.element.querySelectorAll('.rev-content');
+
+        if (resetInline) {
+            for (var i = 0; i < content.length; i++) {
+                content[i].style.paddingTop = null;
+                content[i].style.paddingRight = null;
+                content[i].style.paddingBottom = null;
+                content[i].style.paddingLeft = null;
+
+                content[i].children[0].style.paddingTop = null;
+                content[i].children[0].style.paddingRight = null;
+                content[i].children[0].style.paddingBottom = null;
+                content[i].children[0].style.paddingLeft = null;
+            }
+            this.grid.layout();
+        }
+
+        var paddingTop = parseFloat(revUtils.getComputedStyle(content[0], 'padding-top'));
+        var paddingRight = parseFloat(revUtils.getComputedStyle(content[0], 'padding-right'));
+        var paddingBottom = parseFloat(revUtils.getComputedStyle(content[0], 'padding-bottom'));
+        var paddingLeft = parseFloat(revUtils.getComputedStyle(content[0], 'padding-left'));
+
+        var adInner = this.grid.element.querySelectorAll('.rev-ad-inner')[0];
+        var calculatedPadding = ((adInner.offsetWidth * this.marginMultiplier).toFixed(2) / 1);
+
+        this.padding = {
+            top: paddingTop ? false : calculatedPadding,
+            right: paddingRight ? false : calculatedPadding,
+            bottom: paddingBottom ? false : calculatedPadding,
+            left: paddingLeft ? false : calculatedPadding,
+        };
+    };
+
+    RevSlider.prototype.setContentPadding = function() {
+        var content = this.grid.element.querySelectorAll('.rev-content');
+        for (var i = 0; i < content.length; i++) {
+            if (this.padding.top) {
+                content[i].style.paddingTop = this.padding.top + 'px';
+            }
+            if (this.padding.right) {
+                content[i].style.paddingRight = this.padding.right + 'px';
+            }
+            if (this.padding.bottom) {
+                content[i].style.paddingBottom = this.padding.bottom + 'px';
+            }
+            if (this.padding.left) {
+                content[i].style.paddingLeft = this.padding.left + 'px';
+            }
+        }
     };
 
     RevSlider.prototype.setMultipliers = function() {
@@ -220,7 +336,16 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.gridOptions = function() {
-        return { masonry: false, perRow: this.options.per_row, transitionDuration: this.options.transition_duration, isResizeBound: this.options.is_resize_bound, adjustGutter:true, removeVerticalGutters: true, gutter: this.padding };
+        return {
+            isInitLayout: false,
+            masonry: false,
+            perRow: this.options.per_row,
+            transitionDuration: this.options.transition_duration,
+            isResizeBound: this.options.is_resize_bound,
+            adjustGutter: true,
+            removeVerticalGutters: false,
+            breakpoints: this.options.breakpoints
+        };
     };
 
     RevSlider.prototype.getAnimationDuration = function() {
@@ -278,27 +403,27 @@ Author: michael@revcontent.com
             var insert = 'append';
             if (this.options.vertical) { // up
                 var margin = 'marginBottom';
-                this.gridContainerTransform = 'translate3d(0, -'+ (containerHeight + (this.padding * 2)) +'px, 0)';
+                this.gridContainerTransform = 'translate3d(0, -'+ (containerHeight + (this.padding.left * 2)) +'px, 0)';
             } else { // left
                 var margin = 'marginRight';
-                this.gridContainerTransform = 'translate3d(-'+ (containerWidth + (this.padding * 2)) +'px, 0, 0)';
+                this.gridContainerTransform = 'translate3d(-'+ (containerWidth + (this.padding.left * 2)) +'px, 0, 0)';
             }
         } else { // Slide right or down
             var insert = 'prepend';
             if (this.options.vertical) { // down
                 var margin = 'marginTop';
-                revUtils.transformCss(this.gridContainerElement, 'translate3d(0, -'+ (containerHeight + (this.padding * 2)) +'px, 0)');
+                revUtils.transformCss(this.gridContainerElement, 'translate3d(0, -'+ (containerHeight + (this.padding.left * 2)) +'px, 0)');
                 this.gridContainerTransform = 'translate3d(0, 0, 0)';
             } else { // right
                 var margin = 'marginLeft';
-                revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ (containerWidth + (this.padding * 2)) +'px, 0, 0)');
+                revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ (containerWidth + (this.padding.left * 2)) +'px, 0, 0)');
                 this.gridContainerTransform = 'translate3d(0, 0, 0)';
             }
         }
 
         this.oldGrid = this.grid;
 
-        this.grid.element.style[margin] = (this.padding * 2) + 'px';
+        this.grid.element.style[margin] = (this.padding.left * 2) + 'px';
 
         var gridElement = document.createElement('div');//something up here
         gridElement.id = 'rev-slider-grid';
@@ -316,17 +441,25 @@ Author: michael@revcontent.com
             this.grid.element.style.width = containerWidth + 'px';
             this.grid.element.style.float = 'left';
 
-            this.gridContainerElement.style.width = ((containerWidth * 2) + (this.padding * 2)) + 'px';
+            this.gridContainerElement.style.width = (containerWidth * 2) + (this.padding.left * 2) + 'px';
         }
 
-        this.createCells();
+        this.setGridClasses();
 
-        this.textOverlay();
+        this.createCells();
 
         this.grid.reloadItems();
         this.grid.layout();
 
-        this.updateDisplayedItems(true, true);
+        this.getPadding();
+
+        this.setContentPadding();
+
+        this.grid.option({removeVerticalGutters: true});
+
+        this.grid.layout();
+
+        this.updateDisplayedItems(true);
     };
 
     RevSlider.prototype.transitionClass = function(transitioning) {
@@ -408,7 +541,29 @@ Author: michael@revcontent.com
         this.setHeadlineMarginTop();
         this.setHeadlineMaxHeight();
 
-        this.innerMargin = Math.max(0, ((this.grid.columnWidth * this.paddingMultiplier).toFixed(2) / 1));
+        var adInner = this.grid.element.querySelectorAll('.rev-ad-inner')[0];
+        this.innerMargin = Math.max(0, ((adInner.offsetWidth * this.paddingMultiplier).toFixed(2) / 1));
+    };
+
+    RevSlider.prototype.setSize = function(ad) {
+
+        var that = this;
+        var setSize = function(ad) {
+            ad.style.height = that.getCellHeight(ad) + 'px';
+
+            that.resizeImage(ad.querySelectorAll('.rev-image')[0]);
+            that.resizeHeadline(ad.querySelectorAll('.rev-headline')[0]);
+            that.resizeProvider(ad.querySelectorAll('.rev-provider')[0]);
+        };
+
+        if (ad) { // if ad is passed do that one
+            setSize(ad);
+        } else { // otherwise do them all
+            var ads = this.grid.element.querySelectorAll('.rev-ad');
+            for (var i = 0; i < ads.length; i++) {
+                setSize(ads[i]);
+            }
+        }
     };
 
     RevSlider.prototype.getTextRightHeight = function() {
@@ -433,7 +588,8 @@ Author: michael@revcontent.com
             this.preloaderHeight = this.getTextRightHeight();
             this.preloaderWidth = Math.round(this.preloaderHeight * (this.imageWidth / this.imageHeight));
         } else {
-            this.preloaderHeight = Math.round((this.grid.columnWidth - (this.padding * 2) - ( this.options.ad_border ? 2 : 0 )) * (this.imageHeight / this.imageWidth));
+            var adInner = this.grid.element.querySelectorAll('.rev-ad-inner')[0];
+            this.preloaderHeight = adInner.offsetWidth * (this.imageHeight / this.imageWidth);
         }
     };
 
@@ -449,7 +605,8 @@ Author: michael@revcontent.com
             }
             this.headlineLineHeight = headlineHeight;
         } else {
-            this.headlineLineHeight = Math.max(17, ((this.grid.columnWidth * this.lineHeightMultiplier).toFixed(2) / 1));
+            var adInner = this.grid.element.querySelectorAll('.rev-ad-inner')[0];
+            this.headlineLineHeight = Math.max(17, Math.round(adInner.offsetWidth * this.lineHeightMultiplier));
         }
     };
 
@@ -471,17 +628,18 @@ Author: michael@revcontent.com
             var headlines = Math.floor(verticalSpace / this.headlineLineHeight);
             maxHeight = headlines * this.headlineLineHeight;
         } else {
-            var ads = this.grid.element.querySelectorAll('.rev-ad');
-            if (this.options.max_headline && ads.length) { // max_headline and we have some ads otherwise just use the headline_size
+            var adsInner = this.grid.element.querySelectorAll('.rev-ad-inner');
+            if (this.options.max_headline && this.displayedItems.length && adsInner.length) { // max_headline and we have some ads otherwise just use the headline_size
                 for (var i = 0; i < this.limit; i++) {
-                    var ad = ads[i];
+                    var adInner = adsInner[i];
                     var el = document.createElement('div');
                     revUtils.addClass(el, 'rev-headline-max-check');
                     el.style.position = 'absolute';
+                    el.style.textAlign = revUtils.getComputedStyle(adInner.querySelectorAll('.rev-headline')[0], 'text-align');
                     el.style.zIndex = '100';
                     el.style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
                     el.innerHTML = '<h3 style="font-size:'+ this.headlineFontSize + 'px;line-height:'+ this.headlineLineHeight +'px">'+ this.displayedItems[i].headline + '</h3>';
-                    revUtils.prepend(ad, el); // do it this way b/c changin the element height on the fly needs a repaint and requestAnimationFrame is not avail in IE9
+                    revUtils.prepend(adInner, el); // do it this way b/c changin the element height on the fly needs a repaint and requestAnimationFrame is not avail in IE9
                     maxHeight = Math.max(maxHeight, el.clientHeight);
                     revUtils.remove(el);
                 }
@@ -494,7 +652,7 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.updatePagination = function(checkPage) {
 
-        if (!this.data.length) { // need data to determine max pages
+        if (!this.data.length || this.options.disable_pagination) { // need data to determine max pages
             return;
         }
 
@@ -598,11 +756,11 @@ Author: michael@revcontent.com
     RevSlider.prototype.preventDefault = function() {
         revUtils.addEventListener(this.element, 'mousedown', function(e) {
             e.preventDefault();
-        });
+        }, {passive: false});
 
         revUtils.addEventListener(this.element, 'dragstart', function(e) {
             e.preventDefault();
-        });
+        }, {passive: false});
     };
 
     RevSlider.prototype.initButtons = function() {
@@ -725,10 +883,7 @@ Author: michael@revcontent.com
             }
         } else {
             revUtils.removeClass(this.containerElement, 'rev-slider-text-overlay');
-            for (var i = 0; i < ads.length; i++) {
-                var ad = ads[i];
-                //ad.style.height = 'auto';
-            }
+            // TODO
         }
     };
 
@@ -810,13 +965,19 @@ Author: michael@revcontent.com
         }
     };
 
-    RevSlider.prototype.getCellHeight = function() {
+    RevSlider.prototype.getCellHeight = function(ad) {
         var cellHeight = this.preloaderHeight;
+
+        cellHeight += ad.offsetHeight - ad.children[0].offsetHeight; // padding ad - ad-container
+        cellHeight += ad.children[0].offsetHeight - ad.children[0].children[0].offsetHeight; // padding ad-container - ad-outer
+
         if (!this.options.text_overlay && !this.options.text_right) {
             cellHeight += this.headlineMaxHeight +
-            this.headlineMarginTop + this.providerLineHeight + this.providerMarginTop;
-            cellHeight += (this.options.ad_border) ? 2 : 0;
+                this.headlineMarginTop +
+                this.providerLineHeight +
+                this.providerMarginTop;
         }
+
         return cellHeight;
     };
 
@@ -852,33 +1013,27 @@ Author: michael@revcontent.com
                 }
                 this.page = 1;
                 this.previousPage = 1;
-                this.updateDisplayedItems(false, false);
+                this.updateDisplayedItems(false);
             }
+            this.grid.reloadItems();
         }
+
+        this.setGridClasses();
+
+        this.getPadding(true);
+
+        this.setContentPadding();
+
+        this.grid.layout();
 
         this.setUp();
 
-        var ads = this.element.querySelectorAll('.rev-ad');
+        this.setSize();
 
-        for (var i = 0; i < ads.length; i++) {
-            var ad = ads[i];
-
-            ad.style.height = this.getCellHeight() + 'px';
-
-            this.resizeImage(ad.querySelectorAll('.rev-image')[0]);
-            this.resizeHeadline(ad.querySelectorAll('.rev-headline')[0]);
-            this.resizeProvider(ad.querySelectorAll('.rev-provider')[0]);
-
-            if (this.displayedItems[i]) { // reset headlines for new ellipsis check
-                ad.querySelectorAll('.rev-headline h3')[0].innerHTML = this.displayedItems[i].headline;
-            }
-        }
-
-        this.grid.reloadItems();
         this.grid.layout();
 
         this.textOverlay();
-        this.checkEllipsis();
+        this.checkEllipsis(true);
 
         this.getAnimationDuration();
         this.updatePagination(true);
@@ -906,10 +1061,22 @@ Author: michael@revcontent.com
         el.style.height = this.providerLineHeight + 'px';
     };
 
-    RevSlider.prototype.checkEllipsis = function() {
+    RevSlider.prototype.checkEllipsis = function(reset) {
         if (this.options.max_headline && !this.options.text_right) { // text_right should be limited, but don't waste for max_headline only
             return;
         }
+        // reset headlines
+        if (reset) {
+            var ads = this.element.querySelectorAll('.rev-ad');
+            for (var i = 0; i < ads.length; i++) {
+                var ad = ads[i];
+
+                if (this.displayedItems[i]) { // reset headlines for new ellipsis check
+                    ad.querySelectorAll('.rev-headline h3')[0].innerHTML = this.displayedItems[i].headline;
+                }
+            }
+        }
+
         revUtils.ellipsisText(this.grid.element.querySelectorAll('.rev-content .rev-headline'));
     };
 
@@ -918,32 +1085,75 @@ Author: michael@revcontent.com
         return this.grid.getPerRow() * (this.options.rows[this.grid.getBreakPoint()] ? this.options.rows[this.grid.getBreakPoint()] : this.options.rows);
     };
 
+    RevSlider.prototype.getMaxLimit = function() {
+        var maxLimit = 0;
+        var iteratorMax = 0;
+
+        if (typeof this.options.rows === 'object') {
+            for (var rowKey in this.options.rows) {
+                iteratorMax = 0;
+                if (this.options.rows.hasOwnProperty(rowKey)) {
+                    if (typeof this.options.per_row === 'object') {
+                        iteratorMax = this.options.rows[rowKey] * this.options.per_row[rowKey];
+                        if (iteratorMax > maxLimit) {
+                            maxLimit = iteratorMax;
+                        }
+                    } else {
+                        iteratorMax = this.options.rows[rowKey] * this.options.per_row;
+                        if (iteratorMax > maxLimit) {
+                            maxLimit = iteratorMax;
+                        }
+                    }
+                }
+            }
+        } else {
+            if (typeof this.options.per_row === 'object') {
+                for (var perRowKey in this.options.per_row) {
+                    iteratorMax = 0;
+                    if (this.options.per_row.hasOwnProperty(perRowKey)) {
+                        iteratorMax = this.options.per_row[perRowKey] * this.options.rows;
+                        if (iteratorMax > maxLimit) {
+                            maxLimit = iteratorMax;
+                        }
+                    }
+                }
+            } else {
+                iteratorMax = this.options.rows * this.options.per_row;
+                if (iteratorMax > maxLimit) {
+                    maxLimit = iteratorMax;
+                }
+            }
+        }
+        return maxLimit;
+    };
+
     RevSlider.prototype.getImageWidth = function() {
          return typeof this.preloaderWidth === 'undefined' ? 'auto' : this.preloaderWidth + 'px';
     };
 
     RevSlider.prototype.createNewCell = function() {
-
-        var html = '<div class="rev-ad" style="height: '+ this.getCellHeight() + 'px;' + (this.options.ad_border ? 'border:1px solid #eee' : '') +'">' +
-            '<a href="" target="_blank">' +
-            '<div class="rev-image" style="width:'+ this.getImageWidth() +';height:'+ this.preloaderHeight +'px">' +
-            '<img src=""/>' +
-            '</div>' +
-            '<div class="rev-headline-brand">' +
-            '<div class="rev-headline" style="max-height:'+ this.headlineMaxHeight +'px; margin:'+ this.headlineMarginTop +'px ' + this.innerMargin + 'px' + ' 0;">' +
-            '<h3 style="font-size:'+ this.headlineFontSize +'px; line-height:'+ this.headlineLineHeight +'px;"></h3>' +
-            '</div>' +
-            '<div style="margin:0 '  + this.innerMargin + 'px 0;font-size:'+ this.providerFontSize +'px;line-height:'+ this.providerLineHeight +'px;height:'+ this.providerLineHeight +'px;" class="rev-provider"></div>' +
-            '</div>' +
-            '</a>' +
+        var html = '<div class="rev-ad">' +
+                '<div class="rev-ad-container">' +
+                    '<div class="rev-ad-outer">' +
+                        '<a href="" target="_blank">' +
+                            '<div class="rev-ad-inner">' +
+                                '<div class="rev-image">' +
+                                    '<img src=""/>' +
+                                '</div>' +
+                                '<div class="rev-headline-brand">' +
+                                    '<div class="rev-headline">' +
+                                        '<h3></h3>' +
+                                    '</div>' +
+                                    '<div class="rev-provider"></div>' +
+                                '</div>' +
+                            '</div>' +
+                        '</a>' +
+                    '</div>' +
+                '</div>' +
             '</div>';
 
             var cell = document.createElement('div');
-
-            cell.style.padding = this.padding + 'px';
-
-            revUtils.addClass(cell, 'rev-content');
-
+            cell.className = 'rev-content';
             cell.innerHTML = html;
 
             return cell;
@@ -976,6 +1186,9 @@ Author: michael@revcontent.com
         '&sponsored_offset=' + (this.options.internal ? 0 : offset) +
         '&internal_offset=' + (this.options.internal ? offset : 0);
 
+        url += this.options.user_ip ? ('&user_ip=' + this.options.user_ip) : '';
+        url += this.options.user_agent ? ('&user_agent=' + this.options.user_agent) : '';
+
         if (empty) {
             url += '&empty=true';
         }
@@ -996,12 +1209,14 @@ Author: michael@revcontent.com
 
         this.dataPromise = new Promise(function(resolve, reject) {
             // prime data - empty and not viewed
-            var url = that.generateUrl(0, (that.options.pages * that.limit), true, false);
+            var url = that.generateUrl(0, that.getMaxCount(), true, false);
 
             revApi.request(url, function(resp) {
                 that.data = resp;
 
-                that.updateDisplayedItems(that.options.visible, that.options.visible);
+                revUtils.addClass(that.containerElement, 'rev-slider-has-data');
+
+                that.updateDisplayedItems(false);
 
                 that.emitter.emitEvent('ready');
                 that.ready = true;
@@ -1009,7 +1224,7 @@ Author: michael@revcontent.com
                 revUtils.imagesLoaded(that.grid.element.querySelectorAll('img')).once('done', function() {
                     revUtils.addClass(that.containerElement, 'loaded');
                 });
-                resolve();
+                resolve(resp);
             });
         });
     };
@@ -1061,7 +1276,12 @@ Author: michael@revcontent.com
         }
     };
 
-    RevSlider.prototype.updateDisplayedItems = function(registerImpressions, viewed) {
+    RevSlider.prototype.updateDisplayedItems = function(viewed) {
+        if (!this.data.length) { // if no data remove the container and call it a day
+            this.destroy();
+            return;
+        }
+
         this.oldOffset = this.offset;
 
         this.offset = ((this.page - 1) * this.limit);
@@ -1084,10 +1304,14 @@ Author: michael@revcontent.com
             var ad = ads[i],
                 data = this.displayedItems[i];
 
-            ad.style.height = this.getCellHeight() + 'px';
+            ad.style.height = this.getCellHeight(ad) + 'px';
 
-            if (this.options.overlay !== false) {
-                revUtils.imageOverlay(ad.querySelectorAll('.rev-image')[0], data.content_type, this.options.overlay, this.options.overlay_position, this.options.overlay_icons);
+            if (this.options.image_overlay !== false) {
+                revUtils.imageOverlay(ad.querySelector('.rev-image'), data.content_type, this.options.image_overlay, this.options.image_overlay_position);
+            }
+
+            if (this.options.ad_overlay !== false) {
+                revUtils.adOverlay(ad.querySelector('.rev-ad-inner'), data.content_type, this.options.ad_overlay, this.options.ad_overlay_position);
             }
 
             ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', '') + (this.viewed ? '&viewed=true' : ''));
@@ -1096,19 +1320,20 @@ Author: michael@revcontent.com
             ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
             ad.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
 
-            this.resizeImage(ad.querySelectorAll('.rev-image')[0]);
-            this.resizeHeadline(ad.querySelectorAll('.rev-headline')[0]);
-            this.resizeProvider(ad.querySelectorAll('.rev-provider')[0]);
+            this.setSize(ad);
         }
 
-        if (registerImpressions) {
-            this.registerImpressions(viewed);
-        }
+        this.registerImpressions(viewed);
 
         this.grid.reloadItems();
         this.grid.layout();
         this.checkEllipsis();
         this.updatePagination();
+    };
+
+    RevSlider.prototype.getMaxCount = function() {
+        // if pagination is disabled multiply maxLimit by 1 page otherwise by configed pages
+        return (this.options.disable_pagination ? 1 : this.options.pages) * this.maxLimit;
     };
 
     RevSlider.prototype.maxPages = function() {
@@ -1195,12 +1420,12 @@ Author: michael@revcontent.com
     RevSlider.prototype.attachTouchEvents = function() {
         var that = this;
 
-        this.element.addEventListener('click', function(e) {
+        revUtils.addEventListener(this.element, 'click', function(e) {
             if (that.made || that.movement) {
                 e.stopPropagation();
                 e.preventDefault();
             }
-        });
+        }, {passive: false});
 
         this.mc.on('pan swipe', function(e) {
             // prevent default on pan by default, or atleast if the thing is moving
@@ -1216,7 +1441,7 @@ Author: michael@revcontent.com
             }
             that.made = true;
             revUtils.transitionDurationCss(that.gridContainerElement, (that.animationDuration / 1.5) + 's');
-            revUtils.transformCss(that.gridContainerElement, 'translate3d(-'+ (that.innerElement.offsetWidth + (that.padding * 2)) +'px, 0, 0)');
+            revUtils.transformCss(that.gridContainerElement, 'translate3d(-'+ (that.innerElement.offsetWidth + (that.padding.left * 2)) +'px, 0, 0)');
             setTimeout(function() {
                 that.updateGrids();
                 that.made = false;
@@ -1298,7 +1523,7 @@ Author: michael@revcontent.com
             if (direction == 'left') {
                 revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ this.movement +'px, 0, 0)');
             } else if (direction == 'right') {
-                revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.grid.containerWidth + (this.padding * 2)) - this.movement ) +'px, 0, 0)');
+                revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.grid.containerWidth + (this.padding.left * 2)) - this.movement ) +'px, 0, 0)');
             }
         }
     };
@@ -1309,7 +1534,7 @@ Author: michael@revcontent.com
         if (this.panDirection == 'left') {
             revUtils.transformCss(this.gridContainerElement, 'none');
         } else {
-            revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.grid.containerWidth + (this.padding * 2))) +'px, 0, 0)');
+            revUtils.transformCss(this.gridContainerElement, 'translate3d(-'+ ( (this.grid.containerWidth + (this.padding.left * 2))) +'px, 0, 0)');
         }
 
         this.page = this.previousPage;
@@ -1396,6 +1621,7 @@ Author: michael@revcontent.com
     RevSlider.prototype.destroy = function() {
         this.grid.remove();
         this.grid.destroy();
+        revUtils.remove(this.containerElement);
         this.mc.set({enable: false});
         this.mc.destroy();
     };
