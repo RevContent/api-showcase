@@ -22,7 +22,8 @@ Author: chris@revcontent.com
 
 var revcontentsolourl = document.getElementById('revsoloserve').src,
     revcontentsolovars = [], revcontentsolohash,
-    revcontentsolohashes = revcontentsolourl.slice(revcontentsolourl.indexOf('?') + 1).split('&');
+    revcontentsolohashes = revcontentsolourl.slice(revcontentsolourl.indexOf('?') + 1).split('&'),
+    solo_widget_id;
 
     for (var i = 0; i < revcontentsolohashes.length; i++) {
         revcontentsolohash = revcontentsolohashes[i].split('=');
@@ -30,13 +31,11 @@ var revcontentsolourl = document.getElementById('revsoloserve').src,
         revcontentsolovars[revcontentsolohash[0]] = revcontentsolohash[1];
     }
 
-if (revcontentsolovars.w === undefined || isNaN(revcontentsolovars.w)) {
-    console.log("soloserve requires a widget id to be passed in, ex. ?w=3023222 ")
-} else {
-    var solo_widget_id = revcontentsolovars.w;
-}
-
 if (typeof RevContentSolo != 'undefined') {
+
+    if (RevContentSolo.widget_id) {
+        solo_widget_id = RevContentSolo.widget_id;
+    }
 
     if (RevContentSolo.query_params) {
         RevContentSolo.serialized_query_params = window.revUtils.serialize(RevContentSolo.query_params)
@@ -53,6 +52,12 @@ if (typeof RevContentSolo != 'undefined') {
     if (RevContentSolo.url === undefined) {
         RevContentSolo.url = "trends.revcontent.com";
     }
+}
+
+if (!solo_widget_id && revcontentsolovars.w === undefined || isNaN(revcontentsolovars.w)) {
+    console.log("soloserve requires a widget id to be passed in, ex. ?w=3023222 ")
+} else if (!solo_widget_id) {
+    solo_widget_id = revcontentsolovars.w;
 }
 
 var css = '<style>'+
