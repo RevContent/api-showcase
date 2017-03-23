@@ -69,6 +69,15 @@ Key value object for query params to send to server. Can be multidimensional
 query_params: false
 ```
 
+The example below demonstrates how to pass subid values. The resulting query parameters will be ```?revsub[key]=value```
+```
+query_params: {
+    revsub: {
+        key: 'value'
+    }
+}
+```
+
 ###top_id
 Id for element where the top of the gradient should start. This will override the ```distance``` option.
 ```
