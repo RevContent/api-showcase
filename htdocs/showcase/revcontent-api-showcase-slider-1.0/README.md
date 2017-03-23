@@ -241,6 +241,15 @@ Key value object for query params to send to server. Can be multidimensional
 query_params: false
 ```
 
+The example below demonstrates how to pass subid values. The resulting query parameters will be ```?revsub[key]=value```
+```
+query_params: {
+    revsub: {
+        key: 'value'
+    }
+}
+```
+
 ###rev_position
 Position of the disclosure text if ```hide_disclosure``` is not enabled. Options include: ```'bottom_right'```, ```'top_right'``` and ```'bottom_left'```.
 ```
