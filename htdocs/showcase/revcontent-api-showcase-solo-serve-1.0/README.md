@@ -12,10 +12,12 @@ Solo Serve Native wraps a standard widget to show a button and engagement counte
 2. Widget must be a single ad
 
 ##Options
-Default values are shown. ```w``` option is passed as query param all other options are used in widget definition.
+Default values are shown.
 
-###w(required)
-widget id
+###widget_id(required)
+```
+var RevContentSolo = { widget_id: 123}
+```
 
 ###button_text
 ```
