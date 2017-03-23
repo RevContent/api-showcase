@@ -233,7 +233,15 @@ var js = '<script type="text/javascript">'+
         'var runtime = new Date().getTime().toString().substr(7,5);'+
         'var newruntime = runtime.indexOf("0") == 0 ? 1 + runtime.substr(1) : runtime;'+
 
-        'return newruntime.replace(/\\B(?=(\\d{3})+(?!\\d))/g, ",");'+
+
+        'var totalruntimes = document.querySelectorAll("#rc-solo .hotnum").length;' +
+
+        'if (totalruntimes > 1) {' +
+            'newruntime = Math.round(newruntime / (Math.random() * (totalruntimes - ((totalruntimes - 1) + .4)) + ((totalruntimes - 1) + .4))).toString();' +
+        '}' +
+
+        'return newruntime.replace(/\\B(?=(\\d{3})+(?!\\d))/g, ",");' +
+
     '}'+
 '</script>';
 
