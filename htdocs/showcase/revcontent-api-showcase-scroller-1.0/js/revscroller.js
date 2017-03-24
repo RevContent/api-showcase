@@ -476,6 +476,7 @@ Author: michael@revcontent.com
 
                 // console.log('info', Math.abs(transform), total, Math.abs(transform), that.innerWidget.grid.heights[0].maxHeight);
 
+                revUtils.transitionDurationCss(that.innerWidget.innerElement, '0ms');
                 revUtils.transformCss(that.innerWidget.innerElement, 'translateY(' + that.transform + 'px)');
 
 
