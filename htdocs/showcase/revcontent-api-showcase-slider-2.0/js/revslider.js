@@ -1563,6 +1563,8 @@ Author: michael@revcontent.com
         this.grid.layout(3);
         this.checkEllipsis();
         this.updatePagination();
+
+        this.emitter.emitEvent('resized');
     };
 
     RevSlider.prototype.getMaxCount = function() {
