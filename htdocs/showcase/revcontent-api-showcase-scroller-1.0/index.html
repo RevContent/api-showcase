@@ -485,14 +485,16 @@
             widget_id : 6181,
             domain : 'apiexamples.powr.com',
             max_headline: false,
-            headline_size: 2,
-            per_row: 3,
+            per_row: {
+                sm: 1,
+                md: 3
+            },
             rows: 3,
             rev_position: 'top_right',
             column_spans: [
                 {
                     spans: 2,
-                    selector: "#rev-slider .rev-content:nth-child(4)",
+                    selector: "#rev-slider.rev-slider-breakpoint-md .rev-content:nth-child(4)",
                 }
             ]
         });
