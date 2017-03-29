@@ -173,8 +173,6 @@ Author: michael@revcontent.com
             hovering = false;
         });
 
-        console.log(scrollTop);
-
         var that = this;
         var done = false;
 
@@ -375,7 +373,6 @@ Author: michael@revcontent.com
     };
 
     RevScroller.prototype.mouseWheel = function() {
-        console.log('hinn');
         var that = this;
         var total = this.innerWidget.grid.heights[this.currentRow].maxHeight;
         // var currentRow = 0;
@@ -387,7 +384,6 @@ Author: michael@revcontent.com
         // console.log('info', this.innerWidget.innerContainerElement);
 
         revUtils.addEventListener(this.innerWidget.innerContainerElement, 'mouseenter', function() {
-            console.log('info', 'enter', that.currentRow);
             // total = this.innerWidget.grid.heights[this.currentRow].maxHeight;
             total = 0;
             var i = 0;
@@ -400,7 +396,6 @@ Author: michael@revcontent.com
         });
 
         revUtils.addEventListener(this.innerWidget.innerContainerElement, 'mouseleave', function() {
-            console.log('info', 'over');
             hovering = false;
         });
 
@@ -414,7 +409,6 @@ Author: michael@revcontent.com
                     direction = 'down';
                     that.transform += event.deltaY;
 
-                    console.log('innn', that.transform, event.deltaY);
                     // console.log('info', event.deltaY);
                     // if (that.innerWidget.page < that.innerWidget.grid.rowCount) {
                     //     total += event.deltaFactor * event.deltaY;
@@ -427,7 +421,6 @@ Author: michael@revcontent.com
                     direction = 'up';
                     that.transform += event.deltaY;
 
-                    console.log('innn', that.transform, event.deltaY);
                     // if (that.innerWidget.page > 1) {
                     //     total += event.deltaFactor * event.deltaY;
                     //     event.preventDefault();
@@ -466,7 +459,6 @@ Author: michael@revcontent.com
                         that.innerWidget.page = 2;
                         that.innerWidget.updatePagination();
                         total = that.innerWidget.grid.heights[0].maxHeight + that.innerWidget.grid.heights[1].maxHeight;
-                        console.log('dot goes up', that.transform, total);
                     }
 
 
