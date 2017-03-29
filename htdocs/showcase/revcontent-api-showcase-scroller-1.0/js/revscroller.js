@@ -148,7 +148,7 @@ Author: michael@revcontent.com
         this.innerWidget.innerContainerElement.style.overflowY = 'hidden';
 
         var that = this;
-        this.innerWidget.grid.on('postLayout', function() {
+        this.innerWidget.emitter.on('resized', function() {
             var height = that.innerWidget.grid.heights[1].maxHeight;
             that.innerWidget.innerContainerElement.style.height = height + 'px';
         });
