@@ -58,14 +58,14 @@
       "./showcase/js/revdetect.js",
       "./showcase/js/revbeacon.js",
       "./showcase/js/revapi.js",
-      "./build/files/slider/revslider.embed.js"
+      "./build/files/slider2/revslider2.embed.js"
     ],
     "watch": [
       "./showcase/js/*",
       "./showcase/css/*",
       "./showcase/revcontent-api-showcase-slider-2.0/node_modules/any-grid/dist/any-grid.js",
-      "./showcase/revcontent-api-showcase-slider-1.0/js/*",
-      "./showcase/revcontent-api-showcase-slider-1.0/css/*"
+      "./showcase/revcontent-api-showcase-slider-2.0/js/*",
+      "./showcase/revcontent-api-showcase-slider-2.0/css/*"
     ]
   },
   "scroller": {
@@ -84,7 +84,7 @@
       "./build/files/scroller/revscroller.embed.js"
     ],
     "watch": [
-      "./build/files/slider/revslider.pkgd.js",
+      "./build/files/slider2/revslider2.pkgd.js",
       "./showcase/revcontent-api-showcase-scroller-1.0/js/*",
       "./showcase/revcontent-api-showcase-scroller-1.0/css/*"
     ]
