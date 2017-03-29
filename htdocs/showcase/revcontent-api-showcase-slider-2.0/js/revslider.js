@@ -1274,6 +1274,8 @@ Author: michael@revcontent.com
         this.getAnimationDuration();
 
         this.updatePagination(true);
+
+        this.emitter.emitEvent('resized');
     };
 
     RevSlider.prototype.resizeImage = function(el, colSpan) {
