@@ -303,15 +303,10 @@ Author: michael@revcontent.com
         while (grid.nextRow < grid.rowCount && i < 1000) {
             var cell = this.createNewCell();
             grid.element.appendChild(cell);
-            // console.log(cell.matches("#rev-slider .rev-content:nth-child(4)"));
             grid.appended([cell]);
             this.limit++;
             i++;
         }
-
-        // for (var i = 0; i < this.limit; i++) {
-        //     this.grid.element.appendChild(this.createNewCell());
-        // }
     };
 
     RevSlider.prototype.getPadding = function(resetInline) {
@@ -431,7 +426,6 @@ Author: michael@revcontent.com
                     break;
             }
         }
-    this.animationDuration = this.animationDuration * 1;
         return this.animationDuration;
     };
 
@@ -1334,100 +1328,11 @@ Author: michael@revcontent.com
         revUtils.ellipsisText(this.grid.element.querySelectorAll('.rev-content .rev-headline'));
     };
 
-    RevSlider.prototype.getLimit = function() {
-        // var spans = 0;
-        // var hits = 0;
-        // for (var i = 0; i < this.options.column_spans.length; i++) {
-        //     if (this.options.column_spans[i].columnss == this.grid.getPerRow()) {
-        //         for (var i = 0; i < this.options.column_spans[i].children.length; i++) {
-        //             hits++;
-        //             spans += (this.options.column_spans[i].children[i].spans);
-        //         }
-        //     }
-        // }
-
-        this.extra = 0;
-        // if ((this.grid.getPerRow() % spans) == 0) {
-        //     this.extra = spans - hits;
-        // }
-        // console.log('hii', this.extra);
-        // can pass object for rows or just single value for all breakpoints
-        return (this.grid.getPerRow() * (this.options.rows[this.grid.getBreakPoint()] ? this.options.rows[this.grid.getBreakPoint()] : this.options.rows)) - this.extra;
-    };
-
-    RevSlider.prototype.getMaxLimit = function() {
-        var maxLimit = 0;
-        var iteratorMax = 0;
-
-        if (typeof this.options.rows === 'object') {
-            for (var rowKey in this.options.rows) {
-                iteratorMax = 0;
-                if (this.options.rows.hasOwnProperty(rowKey)) {
-                    if (typeof this.options.per_row === 'object') {
-                        iteratorMax = this.options.rows[rowKey] * this.options.per_row[rowKey];
-                        if (iteratorMax > maxLimit) {
-                            maxLimit = iteratorMax;
-                        }
-                    } else {
-                        iteratorMax = this.options.rows[rowKey] * this.options.per_row;
-                        if (iteratorMax > maxLimit) {
-                            maxLimit = iteratorMax;
-                        }
-                    }
-                }
-            }
-        } else {
-            if (typeof this.options.per_row === 'object') {
-                for (var perRowKey in this.options.per_row) {
-                    iteratorMax = 0;
-                    if (this.options.per_row.hasOwnProperty(perRowKey)) {
-                        iteratorMax = this.options.per_row[perRowKey] * this.options.rows;
-                        if (iteratorMax > maxLimit) {
-                            maxLimit = iteratorMax;
-                        }
-                    }
-                }
-            } else {
-                iteratorMax = this.options.rows * this.options.per_row;
-                if (iteratorMax > maxLimit) {
-                    maxLimit = iteratorMax;
-                }
-            }
-        }
-        return maxLimit;
-    };
-
     RevSlider.prototype.getImageWidth = function(colSpan) {
          return typeof this.preloaderWidths[colSpan] === 'undefined' ? 'auto' : this.preloaderWidths[colSpan] + 'px';
     };
 
     RevSlider.prototype.createNewCell = function() {
-        // var html = '<div class="rev-ad">' +
-        //         '<div class="rev-ad-container">' +
-        //             '<div class="rev-ad-outer">' +
-        //                 '<div class="rev-ad-inner">' +
-        //                     '<div class="rev-image">' +
-        //                         '<img src=""/>' +
-        //                     '</div>' +
-        //                     '<div class="rev-headline-brand">' +
-        //                         '<div class="rev-headline">' +
-        //                             '<h3></h3>' +
-        //                         '</div>' +
-        //                         '<div class="rev-provider"></div>' +
-        //                     '</div>' +
-        //                 '</div>' +
-        //             '</div>' +
-        //             '<a href="" target="_blank"></a>' +
-        //         '</div>' +
-        //     '</div>';
-
-        //     var cell = document.createElement('div');
-        //     cell.className = 'rev-content';
-        //     cell.innerHTML = html;
-
-        //     return cell;
-
-
         var html = '<div class="rev-ad">' +
                 '<div class="rev-ad-container">' +
                     '<div class="rev-ad-outer">' +
@@ -1509,8 +1414,6 @@ Author: michael@revcontent.com
 
             revApi.request(url, function(resp) {
                 that.data = resp;
-                // that.data[5].headline = that.data[5].headline + that.data[5].headline + that.data[5].headline;
-                // that.data[6].headline = that.data[6].headline + that.data[6].headline + that.data[6].headline;
 
                 revUtils.addClass(that.containerElement, 'rev-slider-has-data');
 
