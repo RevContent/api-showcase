@@ -29,7 +29,7 @@ Author: michael@revcontent.com
             },
             rows: 5,
             visible: 1.5,
-            max_headline: true,
+            max_headline: false,
             ad_border: false,
             headline_size: 3,
             text_right: true,
@@ -127,6 +127,9 @@ Author: michael@revcontent.com
             register_views: false,
             row_pages: true,
             visible_rows: 1,
+            multipliers: {
+                margin: -3
+            },
         });
 
         var height = this.innerWidget.grid.heights[1].maxHeight;
