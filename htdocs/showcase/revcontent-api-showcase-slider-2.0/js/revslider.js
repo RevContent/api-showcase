@@ -903,10 +903,14 @@ Author: michael@revcontent.com
             maxHeight = headlines * this.headlineLineHeight;
             this.headlineMaxHeights[row][colSpan] = maxHeight;
         } else {
+
+            var getHeadlineSizeMax = function(lineHeight, headlineSize) {
+                return ((lineHeight * headlineSize).toFixed(2) / 1);
+            }
+
             // var adsInner = this.grid.element.querySelectorAll('.rev-ad-inner');
             // if (this.options.max_headline && this.displayedItems.length && adsInner.length) { // max_headline and we have some ads otherwise just use the headline_size
             if (this.displayedItems.length) { // max_headline and we have some ads otherwise just use the headline_size
-
                 var adInner = element.querySelector('.rev-ad-inner');
                 var el = document.createElement('div');
                 revUtils.addClass(el, 'rev-headline-max-check');
@@ -922,15 +926,23 @@ Author: michael@revcontent.com
                 revUtils.remove(el);
 
                 if (stacked) {
-                    this.headlineMaxHeights[row][colSpan][index] = { maxHeight: height };
+                    if (this.options.max_headline) {
+                        this.headlineMaxHeights[row][colSpan][index] = { maxHeight: height };
+                    } else {
+                        this.headlineMaxHeights[row][colSpan][index] = { maxHeight: Math.min(getHeadlineSizeMax(this.headlineLineHeights[colSpan], this.options.headline_size), height) };
+                    }
                 } else {
-                    maxHeight = Math.max(this.headlineMaxHeights[row][colSpan].maxHeight ? this.headlineMaxHeights[row][colSpan].maxHeight : 0, height);
-                    this.headlineMaxHeights[row][colSpan] = { maxHeight: maxHeight };
+                    if (this.options.max_headline) {
+                        maxHeight = Math.max(this.headlineMaxHeights[row][colSpan].maxHeight ? this.headlineMaxHeights[row][colSpan].maxHeight : 0, height);
+                        this.headlineMaxHeights[row][colSpan] = { maxHeight: maxHeight };
+                    } else {
+                        maxHeight = Math.min(getHeadlineSizeMax(this.headlineLineHeights[colSpan], this.options.headline_size), height);
+                        maxHeight = Math.max(this.headlineMaxHeights[row][colSpan].maxHeight ? this.headlineMaxHeights[row][colSpan].maxHeight : 0, maxHeight);
+                        this.headlineMaxHeights[row][colSpan] = { maxHeight: maxHeight };
+                    }
                 }
             } else {
-                maxHeight = ((this.headlineLineHeights[colSpan] * this.options.headline_size).toFixed(2) / 1);
-
-                maxHeight = Math.max(this.headlineMaxHeights[row][colSpan].maxHeight ? this.headlineMaxHeights[row][colSpan].maxHeight : 0, maxHeight);
+                maxHeight = Math.max(this.headlineMaxHeights[row][colSpan].maxHeight ? this.headlineMaxHeights[row][colSpan].maxHeight : 0, getHeadlineSizeMax(this.headlineLineHeights[colSpan], this.options.headline_size));
                 this.headlineMaxHeights[row][colSpan] = { maxHeight: maxHeight };
             }
         }
