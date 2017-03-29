@@ -214,11 +214,9 @@ Author: michael@revcontent.com
 
         this.grid.layout(10);
 
-        // console.log(this.grid);
-
-        // this.grid.on('resize', function() {
-        //     that.resize();
-        // });
+        this.grid.on('resize', function() {
+            that.resize();
+        });
 
         this.getData();
 
@@ -299,8 +297,7 @@ Author: michael@revcontent.com
 
         var i = 0; // just in case
         this.limit = 0;
-        while ((grid.nextRow + 1) <= grid.rowCount && i < 1000) {
-            // console.log('hinnaaaa', this.grid.nextRow, this.grid.rowCount);
+        while (grid.nextRow < grid.rowCount && i < 1000) {
             var cell = this.createNewCell();
             grid.element.appendChild(cell);
             // console.log(cell.matches("#rev-slider .rev-content:nth-child(4)"));
@@ -1242,60 +1239,42 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.resize = function() {
-        var that = this;
-        var oldLimit = this.limit;
-
-        // set transitionDuration to 0 and then reset it
-        this.grid.option({transitionDuration: 0});
-        this.grid.once('resized', function() {
-            that.grid.option({transitionDuration: that.options.transition_duration});
-        });
-
-        this.limit = this.getLimit();
-
-        var reconfig = 0;// how many to add or remove
-
-        if (oldLimit != this.limit) {
-            reconfig = (this.limit - oldLimit);
+        while (this.grid.element.firstChild) {
+            this.grid.element.removeChild(this.grid.element.firstChild);
         }
 
-        if (reconfig !== 0) {
-            var nodes = this.element.querySelectorAll('.rev-content');
-            if (reconfig < 0) {
-                for (var i = 0; i < nodes.length; i++) {
-                    if (i >= this.limit) {
-                        this.grid.remove(nodes[i]);
-                    }
-                }
-            } else {
-                for (var i = 0; i < (this.limit - nodes.length); i++) {
-                    this.grid.element.appendChild(this.createNewCell());
-                }
-                this.page = 1;
-                this.previousPage = 1;
-                this.updateDisplayedItems(false);
-            }
-            this.grid.reloadItems();
-        }
+        this.grid.reloadItems();
 
         this.setGridClasses();
+
+        this.createCells(this.grid);
+
+        this.setDisplayedItems();
 
         this.getPadding(true);
 
         this.setContentPadding(this.grid);
 
-        this.grid.layout(7);
-
-        this.setUp(3);
+        this.setUp();
 
         this.setSize(this.grid);
 
-        this.grid.layout(8);
+        this.grid.layout();
+
+        this.setUp();
+
+        this.setSize(this.grid);
+
+        this.grid.layout();
+
+        this.updateDisplayedItems(false);
 
         this.textOverlay();
+
         this.checkEllipsis(true);
 
         this.getAnimationDuration();
+
         this.updatePagination(true);
     };
 
