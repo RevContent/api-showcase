@@ -132,9 +132,7 @@ Author: michael@revcontent.com
             },
         });
 
-        var height = this.innerWidget.grid.heights[1].maxHeight;
-
-        var that = this;
+        // var that = this;
 
         // fully visible ads
         // for (var i = 0; i < this.innerWidget.grid.items.length; i++) {
@@ -144,13 +142,26 @@ Author: michael@revcontent.com
         //     // console.log(this.innerWidget.grid.items[i].element.offsetTop, this.innerWidget.grid.items[i].element.clientHeight);
         // }
 
-        this.innerWidget.innerContainerElement.style.height = height + 'px';
+        // var height = this.innerWidget.grid.heights[1].maxHeight;
+        // this.innerWidget.innerContainerElement.style.height = height + 'px';
         this.innerWidget.innerContainerElement.style.overflowY = 'hidden';
 
         var that = this;
-        this.innerWidget.emitter.on('resized', function() {
+        var getHeight = function() { // TODO: this could work on the fly
             var height = that.innerWidget.grid.heights[1].maxHeight;
-            that.innerWidget.innerContainerElement.style.height = height + 'px';
+            for(var prop in that.innerWidget.grid.heights) {
+                if (that.innerWidget.grid.heights.hasOwnProperty(prop)) {
+                    var maxHeight = that.innerWidget.grid.heights[prop].maxHeight;
+                    if (maxHeight > height) {
+                        height = maxHeight;
+                    }
+                }
+            }
+            return height;
+        };
+
+        this.innerWidget.emitter.on('resized', function() {
+            that.innerWidget.innerContainerElement.style.height = getHeight() + 'px';
         });
 
         var that = this;
