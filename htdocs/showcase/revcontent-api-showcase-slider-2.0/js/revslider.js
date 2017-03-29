@@ -697,18 +697,7 @@ Author: michael@revcontent.com
         this.updating = false;
     };
 
-
-
-
-
-
-
-
-
-
     RevSlider.prototype.setUp = function(item) {
-
-        console.log('setup', item);
 
         this.setImageSize(); // TODO: multiple image ratios
 
@@ -1541,7 +1530,6 @@ Author: michael@revcontent.com
         // this.setUp(4);
 
         // var ads = this.grid.element.querySelectorAll('.rev-content');
-        console.log('update', this.grid.element);
         for (var i = 0; i < this.displayedItems.length; i++) {
             var item = this.grid.items[i],
                 data = this.displayedItems[i];
