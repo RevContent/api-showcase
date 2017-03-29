@@ -270,6 +270,9 @@ Author: michael@revcontent.com
 
         revUtils[this.options.disable_pagination ? 'removeClass' : 'addClass'](this.containerElement, 'rev-slider-pagination');
 
+        revUtils.removeClass(this.containerElement, 'rev-slider-breakpoint', true);
+        revUtils.addClass(this.containerElement, 'rev-slider-breakpoint-' + this.grid.getBreakPoint());
+
         revUtils.removeClass(this.containerElement, 'rev-slider-col', true);
         revUtils.removeClass(this.containerElement, 'rev-slider-row', true);
         revUtils.addClass(this.containerElement, 'rev-slider-col-' + (typeof this.options.per_row === 'object' ? this.options.per_row[this.grid.getBreakPoint()] : this.options.per_row));
