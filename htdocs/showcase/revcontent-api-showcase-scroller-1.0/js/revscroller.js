@@ -87,12 +87,14 @@ Author: michael@revcontent.com
     };
 
     RevScroller.prototype.init = function() {
+        this.emitter = new EventEmitter();
         this.currentRow = 0;
         this.transform = 0;
         this.offset = 0;
         this.createInnerWidget();
         this.scroll();
         this.mouseWheel();
+        this.viewability();
     };
 
     RevScroller.prototype.createInnerWidget = function() {
@@ -217,6 +219,7 @@ Author: michael@revcontent.com
 
             revUtils.transitionDurationCss(that.innerWidget.innerElement, duration + 'ms');
             revUtils.transformCss(that.innerWidget.innerElement, 'translate3d(0, ' + that.transform + 'px, 0)');
+            that.registerImpressions(true);
         };
 
         var doItBottom = function(page) {
@@ -245,6 +248,7 @@ Author: michael@revcontent.com
             that.currentRow--;
             that.innerWidget.page = (page + 1);
             that.innerWidget.updatePagination();
+            that.registerImpressions(true);
         };
 
         revUtils.addEventListener(window, 'scroll', function() {
@@ -457,18 +461,21 @@ Author: michael@revcontent.com
                     total += that.innerWidget.grid.heights[that.currentRow].maxHeight;
                     that.innerWidget.page++;
                     that.innerWidget.updatePagination();
+                    that.registerImpressions(true);
                 } else if( direction == 'up' ) {
 
                     if (that.transform == 0 && that.currentRow > 0) {
                         that.currentRow = 0;
                         that.innerWidget.page = 1;
                         that.innerWidget.updatePagination();
+                        that.registerImpressions(true);
                         total = that.innerWidget.grid.heights[that.currentRow].maxHeight;
                     } else if (Math.abs(that.transform) < that.innerWidget.grid.heights[0].maxHeight && that.currentRow == 2) {
                         // console.log(transform, that.innerWidget.grid.heights[0].maxHeight);
                         that.currentRow = 1;
                         that.innerWidget.page = 2;
                         that.innerWidget.updatePagination();
+                        that.registerImpressions(true);
                         total = that.innerWidget.grid.heights[0].maxHeight + that.innerWidget.grid.heights[1].maxHeight;
                     }
 
@@ -492,6 +499,13 @@ Author: michael@revcontent.com
                 }
             }
         });
+    };
+
+    RevScroller.prototype.viewability = function() {
+        this.registerViewOnceVisible();
+        this.attachVisibleListener();
+        revUtils.checkVisible.bind(this, this.containerElement, this.visible)();
+    };
 
         // $('#rev-slider-container').mousewheel(function(event) {
 
@@ -555,11 +569,53 @@ Author: michael@revcontent.com
         //         }, duration);
         //     }
         // });
+    RevScroller.prototype.registerViewOnceVisible = function() {
+        var that = this;
+        this.emitter.once('visible', function() {
+            revUtils.removeEventListener(window, 'scroll', that.visibleListener);
+            that.registerView();
+        });
+    };
+
+    RevScroller.prototype.registerView = function() {
+        if (!this.viewed) {
+            this.viewed = true;
+            var count = this.innerWidget.grid.rows[this.currentRow].perRow;
+
+            // register a view without impressions(empty)
+            var url = this.innerWidget.generateUrl(0, count, true, true);
+
+            revApi.request(url, function() { return; });
+
+            var that = this;
+            // make sure we have some data
+            this.innerWidget.dataPromise.then(function() {
+                var anchors = that.innerWidget.element.querySelectorAll('.rev-ad a');
+                for (var i = 0; i < anchors.length; i++) {
+                    anchors[i].setAttribute('href', anchors[i].getAttribute('href') + '&viewed=true');
+                }
+            });
+        }
+    };
+
+    RevScroller.prototype.attachVisibleListener = function() {
+        this.visibleListener = revUtils.checkVisible.bind(this, this.containerElement, this.visible);
+        revUtils.addEventListener(window, 'scroll', this.visibleListener);
+    };
+
+    RevScroller.prototype.visible = function() {
+        this.emitter.emitEvent('visible');
     };
 
     RevScroller.prototype.registerImpressions = function(viewed) {
+
         var count = this.innerWidget.grid.rows[this.currentRow].perRow;
-        this.innerWidget.registerImpressions(viewed, this.offset, count);
+        var offset = 0;
+        for (var i = 0; i < this.currentRow; i++) {
+            offset += this.innerWidget.grid.rows[i].perRow;
+        }
+
+        this.innerWidget.registerImpressions(viewed, offset, count);
     };
 
     return RevScroller;
