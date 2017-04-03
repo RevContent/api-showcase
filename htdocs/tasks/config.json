@@ -206,7 +206,9 @@
     "css": [
     ],
     "build": [
+      "./node_modules/mobile-detect/mobile-detect.js",
       "./showcase/js/revutils.js",
+      "./showcase/js/revdetect.js",
       "./build/files/soloserve/revsoloserve.embed.js"
     ],
     "watch": [
