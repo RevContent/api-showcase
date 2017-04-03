@@ -17,56 +17,44 @@ Author: michael@revcontent.com
 
         var defaults = {
             url: 'https://trends.revcontent.com/api/v1/',
-            header: 'Trending',
-            per_row: {
-                xxs: 1,
-                xs: 1,
-                sm: 2,
-                md: 3,
-                lg: 3,
-                xl: 4,
-                xxl: 5
-            },
-            rows: 5,
-            visible: 1.5,
-            max_headline: false,
-            ad_border: false,
-            headline_size: 3,
-            text_right: true,
-            text_right_height: {
-                xxs: 70,
-                xs: 70,
-                sm: 80,
-                md: 80,
-                lg: 100,
-                xl: 100,
-                xxl: 120
-            },
             devices: [
                 'phone', 'tablet', 'desktop'
             ],
-            disclosure_text: 'Ads by Revcontent',
-            disclosure_text_small: 'Ads',
-            overlay: false, // pass key value object { content_type: icon }
             overlay_icons: false, // pass in custom icons or overrides
-            overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
-            timeout: 1000, // timeout in ms for image ad
-            show_transition: 600,
-            multipliers: {
-                margin: -3
+            image_overlay: false, // pass key value object { content_type: icon }
+            image_overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
+            ad_overlay: false, // pass key value object { content_type: icon }
+            ad_overlay_position: 'bottom_right', // center, top_left, top_right, bottom_right, bottom_left
+            header: 'Trending',
+            per_row: {
+                sm: 2,
+                md: 3
             },
+            rows: 3,
             buttons: {
                 forward: false,
                 back: false
             },
-            theme: 'light',
+            multipliers: {
+                margin: -3
+            },
+            css: '',
+            column_spans: [
+                {
+                    spans: 2,
+                    selector: "#rev-slider.rev-slider-breakpoint-md .rev-content:nth-child(4)",
+                },
+                {
+                    spans: 2,
+                    selector: "#rev-slider.rev-slider-breakpoint-sm .rev-content:nth-child(3)",
+                }
+            ],
+            headline_size: 3,
+            max_headline: false,
+            disclosure_text: 'Ads by Revcontent',
             query_params: false,
-            selector: false,
             user_ip: false,
             user_agent: false,
-            css: '',
-            column_spans: false,
-            pagination_dots: true
         };
 
         // merge options
@@ -106,46 +94,40 @@ Author: michael@revcontent.com
         revUtils.append(this.element, this.containerElement);
 
         this.innerWidget = new RevSlider({
-            api_source:   'more',
+            api_source:   'scrol',
             element:      [this.containerElement],
-            pagination_dots: this.options.pagination_dots,
             url:          this.options.url,
             api_key:      this.options.api_key,
             pub_id:       this.options.pub_id,
             widget_id:    this.options.widget_id,
             domain:       this.options.domain,
+            overlay_icons: this.options.overlay_icons, // pass in custom icons or overrides
+            image_overlay: this.options.image_overlay, // pass key value object { content_type: icon }
+            image_overlay_position: this.options.image_overlay_position, // center, top_left, top_right, bottom_right, bottom_left
+            ad_overlay: this.options.ad_overlay, // pass key value object { content_type: icon }
+            ad_overlay_position: this.options.ad_overlay_position, // center, top_left, top_right, bottom_right, bottom_left
             rev_position: this.options.rev_position,
             header:       this.options.header,
             per_row:      this.options.per_row,
             rows:         this.options.rows,
             buttons:      this.options.buttons,
+            multipliers:  this.options.multipliers,
             css:          this.options.css,
             column_spans: this.options.column_spans,
             headline_size: this.options.headline_size,
             max_headline: this.options.max_headline,
+            disclosure_text: this.options.disclosure_text,
+            query_params: this.options.query_params,
+            user_ip:      this.options.user_ip,
+            user_agent:   this.options.user_agent,
+            pagination_dots: true,
             pagination_dots_vertical: true,
-            disable_pagination: true,
             register_impressions: false,
             register_views: false,
             row_pages: true,
-            visible_rows: 1,
-            multipliers: {
-                margin: -3
-            },
+            visible_rows: 1
         });
 
-        // var that = this;
-
-        // fully visible ads
-        // for (var i = 0; i < this.innerWidget.grid.items.length; i++) {
-        //     if (this.innerWidget.grid.items[i].element.offsetTop + this.innerWidget.grid.items[i].element.clientHeight < height) {
-        //         // console.log(i, this.innerWidget.grid.items[i].element);
-        //     }
-        //     // console.log(this.innerWidget.grid.items[i].element.offsetTop, this.innerWidget.grid.items[i].element.clientHeight);
-        // }
-
-        // var height = this.innerWidget.grid.heights[1].maxHeight;
-        // this.innerWidget.innerContainerElement.style.height = height + 'px';
         this.innerWidget.innerContainerElement.style.overflowY = 'hidden';
 
         var that = this;
