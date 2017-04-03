@@ -102,6 +102,14 @@ app.service('widgets', function() {
             link: 'revcontent-api-showcase-solo-serve-1.0/index.html',
             docs: 'revcontent-api-showcase-solo-serve-1.0/README.md',
             bg: '#d6031d'
+        },
+        'scroller': {
+            title: 'RevScroller',
+            img: 'scroller.jpg',
+            description: 'Our content is on fire! This single ad widget is sure to get your audience\'s attention. With a customizable call to action and popularity meter, increase viewer engagement and your returns with Solo Serve Native today.',
+            link: 'revcontent-api-showcase-scroller-1.0/index.html',
+            docs: 'revcontent-api-showcase-scroller-1.0/README.md',
+            bg: '#faf5ee'
         }
         //'scrolling-exp': {
           //  title: 'Scrolling Experience',
