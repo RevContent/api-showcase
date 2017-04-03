@@ -155,7 +155,6 @@ Author: michael@revcontent.com
     };
 
     RevScroller.prototype.scroll = function() {
-        // var transform = 0;
         var hovering = false;
 
         var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
@@ -172,9 +171,6 @@ Author: michael@revcontent.com
         var done = false;
 
         var doIt = function(page) {
-
-            // var maxHeight = that.innerWidget.grid.heights[that.currentRow].maxHeight;
-            // transform -= maxHeight;
             that.transform = 0;
             var i = 0;
             while (i < page) {
@@ -182,11 +178,8 @@ Author: michael@revcontent.com
                 i++;
             }
 
-            // console.log(page, transform);
-
             var bottom = Math.ceil(that.innerWidget.grid.heights[0].maxHeight + that.innerWidget.grid.heights[2].maxHeight);
             if (page == 2 && Math.abs(that.transform) > bottom) {
-                // holdIt = true;
                 that.transform = bottom;
             }
 
@@ -212,14 +205,6 @@ Author: michael@revcontent.com
                 i++;
             }
 
-            // if (transform > 0) {
-            //     transform = 0;
-            // }
-
-
-            // console.log('bottom', page, transform);
-            // transform += that.innerWidget.grid.heights[(that.currentRow - 1)].maxHeight;
-
             var duration = that.innerWidget.grid.heights[(that.currentRow - 1)].maxHeight * 4;
 
             that.transform = (that.transform * -1);
@@ -240,131 +225,36 @@ Author: michael@revcontent.com
                     return;
                 }
 
-                // console.log(that.innerWidget.innerContainerElement.offsetHeight);
-                // what percentage of the element should be visible
-                // var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
-
                 var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
                 var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
-                // if (scroll > scrollTop) {
-                //     console.log('up');
-                // } else {
-                //     console.log('down');
-                // }
-
-
                 var elementTop = that.containerElement.getBoundingClientRect().top;
                 var elementBottom = that.containerElement.getBoundingClientRect().bottom;
-                // var elementVisibleHeight = element.offsetHeight * visibleHeightMultiplier;
                 var elementVisibleHeight = that.containerElement.offsetHeight;
 
                 var center = (windowHeight - elementVisibleHeight) / 2;
 
-                // console.log(windowHeight / 3);
-
-                // var scrollBottom = (scroll + windowHeight) - (elementTop + scroll + elementVisibleHeight);
                 var scrollBottom = (scroll + windowHeight) - (elementTop + scroll);
 
                 var regionHeight = (windowHeight / 2)
 
-                // console.log(scroll, scrollTop);
-
                 if (scroll > scrollTop) { // scrolling down
 
-                    // if (scrollBottom > (regionHeight * 3) && that.currentRow == 2) { // third region
-                    //     console.log('page 3');
-                    // } else
                     if (scrollBottom > (regionHeight * 2) && that.currentRow == 1) { // second region
-                        doIt(2);
-                        // console.log('page 2');
+                        doIt(2); // page 2
                     } else if (scrollBottom > (regionHeight) && that.currentRow == 0) { // first region
-                        doIt(1);
-                        // console.log('page 1');
+                        doIt(1); // page 1
                     }
-
-                    // console.log(scrollBottom, regionHeight * 3);
-                    // if (scrollBottom > windowHeight / 3) {
-                    //     console.log('first');
-                    // } else if (scrollBottom > windowHeight / 2){
-                    //     console.log('second');
-                    // }
 
                 } else { // scrolling up
                     if (scrollBottom < (regionHeight * 1) && that.currentRow > 0) {
-                        // console.log('do it bottom', that.currentRow);
                         doItBottom(0);
                     } else if (scrollBottom < (regionHeight * 2) && that.currentRow > 1) {
-                        // console.log('do it', that.currentRow);
                         doItBottom(1);
                     }
-                    // console.log(scrollBottom, regionHeight * 2);
-                    // if (scrollBottom > (regionHeight * 2)) { // first region
-                    //     // doIt();
-                    //     console.log('page 2');
-                    // } else if (scrollBottom > (regionHeight * 1)) {
-                    //     console.log('page 1');
-                    // }
-                    // if (scrollBottom > (regionHeight * 2) && that.currentRow == 1) { // second region
-                    //     doIt();
-                    //     console.log('page 2');
-                    // } else if (scrollBottom > (regionHeight) && that.currentRow == 0) { // first region
-                    //     doIt();
-                    //     console.log('page 1');
-                    // }
                 }
 
                 scrollTop = scroll;
-                return;
-
-
-
-
-
-                // // element is in the middle and scrolling up and in the first row
-                // if (scrollBottom > center && scroll > scrollTop && that.currentRow == 0) {
-                //     var maxHeight = that.innerWidget.grid.heights[that.currentRow].maxHeight;
-                //     transform -= maxHeight;
-                //     // that.offset += that.innerWidget.grid.rows[that.currentRow].perRow;
-                //     that.innerWidget.page++;
-                //     that.innerWidget.updatePagination();
-
-                //     var duration = that.innerWidget.grid.heights[that.currentRow].maxHeight * 4;
-
-                //     that.currentRow++;
-
-                //     revUtils.transitionDurationCss(that.innerWidget.innerElement, duration + 'ms');
-                //     revUtils.transformCss(that.innerWidget.innerElement, 'translate3d(0, ' + transform + 'px, 0)');
-
-                // } else if (scrollBottom < center && scroll < scrollTop && that.currentRow == 1) {
-                //     // var maxHeight = that.innerWidget.grid.heights[that.currentRow].maxHeight;
-                //     transform += that.innerWidget.grid.heights[(that.currentRow - 1)].maxHeight;
-
-                //     var duration = that.innerWidget.grid.heights[(that.currentRow - 1)].maxHeight * 4;
-
-                //     revUtils.transitionDurationCss(that.innerWidget.innerElement, duration + 'ms');
-                //     revUtils.transformCss(that.innerWidget.innerElement, 'translate3d(0, ' + transform + 'px, 0)');
-                //     // that.offset -= that.innerWidget.grid.rows[that.currentRow].perRow;
-                //     that.currentRow--;
-                //     that.innerWidget.page--;
-                //     that.innerWidget.updatePagination();
-                // }
-                // scrollTop = scroll;
-
-
-
-
-
-                // if (scrollBottom > center) {
-                //     console.log('do it');
-                // } else {
-                //     console.log('other way');
-                // }
-
-                // if ((scroll + windowHeight >= (elementTop + scroll + elementVisibleHeight)) &&
-                //     elementBottom > elementVisibleHeight) {
-                //     console.log(elementBottom);
-                // }
             });
         });
     };
@@ -372,21 +262,15 @@ Author: michael@revcontent.com
     RevScroller.prototype.mouseWheel = function() {
         var that = this;
         var total = this.innerWidget.grid.heights[this.currentRow].maxHeight;
-        // var currentRow = 0;
         var direction;
-        // var transform = 0;
 
         var hovering = false;
 
-        // console.log('info', this.innerWidget.innerContainerElement);
-
         revUtils.addEventListener(this.innerWidget.innerContainerElement, 'mouseenter', function() {
-            // total = this.innerWidget.grid.heights[this.currentRow].maxHeight;
             total = 0;
             var i = 0;
             while (i <= that.currentRow) {
                 total += that.innerWidget.grid.heights[i].maxHeight;
-                // transform += that.innerWidget.grid.heights[i].maxHeight;
                 i++;
             }
             hovering = true;
@@ -400,28 +284,11 @@ Author: michael@revcontent.com
             if (hovering) {
 
                 if (event.deltaY < 0) {
-                    // if (direction == 'up') {
-                    //     total = 0;
-                    // }
                     direction = 'down';
                     that.transform += event.deltaY;
-
-                    // console.log('info', event.deltaY);
-                    // if (that.innerWidget.page < that.innerWidget.grid.rowCount) {
-                    //     total += event.deltaFactor * event.deltaY;
-                    //     event.preventDefault();
-                    // }
                 } else {
-                    // if (direction == 'down') {
-                    //     total = 0;
-                    // }
                     direction = 'up';
                     that.transform += event.deltaY;
-
-                    // if (that.innerWidget.page > 1) {
-                    //     total += event.deltaFactor * event.deltaY;
-                    //     event.preventDefault();
-                    // }
                 }
 
                 if (that.transform > 0) {
@@ -433,10 +300,7 @@ Author: michael@revcontent.com
                 if (Math.abs(that.transform) > bottom) {
                     holdIt = true;
                     that.transform = bottom * -1;
-                    // console.log('info', 'bottom', that.innerWidget.grid.heights[0].maxHeight + that.innerWidget.grid.heights[2].maxHeight);
                 }
-
-                // console.log('info', 'here', bottom, (holdIt && (that.currentRow + 1) < that.innerWidget.grid.rowCount));
 
                 if (Math.abs(that.transform) > total || (holdIt && (that.currentRow + 1) < that.innerWidget.grid.rowCount)) {
                     that.currentRow++;
@@ -445,7 +309,6 @@ Author: michael@revcontent.com
                     that.innerWidget.updatePagination();
                     that.registerImpressions(true);
                 } else if( direction == 'up' ) {
-
                     if (that.transform == 0 && that.currentRow > 0) {
                         that.currentRow = 0;
                         that.innerWidget.page = 1;
@@ -453,28 +316,16 @@ Author: michael@revcontent.com
                         that.registerImpressions(true);
                         total = that.innerWidget.grid.heights[that.currentRow].maxHeight;
                     } else if (Math.abs(that.transform) < that.innerWidget.grid.heights[0].maxHeight && that.currentRow == 2) {
-                        // console.log(transform, that.innerWidget.grid.heights[0].maxHeight);
                         that.currentRow = 1;
                         that.innerWidget.page = 2;
                         that.innerWidget.updatePagination();
                         that.registerImpressions(true);
                         total = that.innerWidget.grid.heights[0].maxHeight + that.innerWidget.grid.heights[1].maxHeight;
                     }
-
-
-
-                    // console.log('info', 'else');
-                    // that.currentRow--;
-                    // that.innerWidget.page--;
-                    // that.innerWidget.updatePagination();
                 }
-
-                // console.log('info', Math.abs(transform), total, Math.abs(transform), that.innerWidget.grid.heights[0].maxHeight);
 
                 revUtils.transitionDurationCss(that.innerWidget.innerElement, '0ms');
                 revUtils.transformCss(that.innerWidget.innerElement, 'translateY(' + that.transform + 'px)');
-
-
 
                 if (that.transform !== 0 && !holdIt) {
                     event.preventDefault();
@@ -489,68 +340,6 @@ Author: michael@revcontent.com
         revUtils.checkVisible.bind(this, this.containerElement, this.visible)();
     };
 
-        // $('#rev-slider-container').mousewheel(function(event) {
-
-        //     if (event.currentTarget.getBoundingClientRect().bottom > (window.innerHeight || document.documentElement.clientHeight)) {
-        //         return;
-        //     }
-
-        //     if (!that.transitioning) {
-        //         if (event.deltaY < 0) {
-        //             if (direction == 'up') {
-        //                 total = 0;
-        //             }
-        //             direction = 'down';
-        //             if (that.innerWidget.page < that.innerWidget.grid.rowCount) {
-        //                 total += event.deltaFactor * event.deltaY;
-        //                 event.preventDefault();
-        //             }
-        //         } else {
-        //             if (direction == 'down') {
-        //                 total = 0;
-        //             }
-        //             direction = 'up';
-        //             if (that.innerWidget.page > 1) {
-        //                 total += event.deltaFactor * event.deltaY;
-        //                 event.preventDefault();
-        //             }
-        //         }
-        //     } else {
-        //         event.preventDefault();
-        //     }
-
-        //     var maxHeight = that.innerWidget.grid.heights[that.currentRow].maxHeight;
-
-        //     if (Math.abs(total) > (maxHeight * 3)) {
-        //         that.transitioning = true;
-        //         total = 0;
-
-        //         if (direction == 'down') {
-        //             transform -= maxHeight;
-        //             that.offset += that.innerWidget.grid.rows[that.currentRow].perRow;
-        //             that.currentRow++;
-        //             that.innerWidget.page++;
-        //         } else if (direction == 'up') {
-        //             transform += that.innerWidget.grid.heights[(that.currentRow - 1)].maxHeight;
-        //             that.currentRow--;
-        //             that.offset -= that.innerWidget.grid.rows[that.currentRow].perRow;
-        //             that.innerWidget.page--;
-        //         }
-
-        //         that.innerWidget.updatePagination();
-
-        //         that.registerImpressions(true);
-
-        //         var duration = maxHeight * 2;
-
-        //         revUtils.transitionDurationCss(that.innerWidget.innerElement, duration + 'ms');
-        //         revUtils.transformCss(that.innerWidget.innerElement, 'translateY(' + transform + 'px)');
-
-        //         setTimeout(function() {
-        //             that.transitioning = false;
-        //         }, duration);
-        //     }
-        // });
     RevScroller.prototype.registerViewOnceVisible = function() {
         var that = this;
         this.emitter.once('visible', function() {
