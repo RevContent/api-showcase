@@ -59,13 +59,16 @@ if (typeof RevContentSolo != 'undefined') {
     }
 }
 
-if (typeof hideSoloServe === 'undefined') {
+if (!solo_widget_id) {
+    solo_widget_id = revcontentsolovars.w;
+}
 
-    if (!solo_widget_id && revcontentsolovars.w === undefined || isNaN(revcontentsolovars.w)) {
-        console.log("soloserve requires a widget id to be passed in, ex. ?w=3023222 ")
-    } else if (!solo_widget_id) {
-        solo_widget_id = revcontentsolovars.w;
-    }
+if (!solo_widget_id) {
+    hideSoloServe = true;
+    console.log("soloserve requires a widget id to be passed in. Either as widget_id param or w query param");
+}
+
+if (typeof hideSoloServe === 'undefined') {
 
     var css = '<style>'+
     '#rc-solo {' +
