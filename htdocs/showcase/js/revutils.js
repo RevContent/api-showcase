@@ -424,9 +424,9 @@ utils.imagesLoaded = function(images) {
     return emitter;
 }
 
-utils.getComputedStyle = function (el, prop) {
+utils.getComputedStyle = function (el, prop, pseudoElt) {
     if (getComputedStyle !== 'undefined') {
-        return getComputedStyle(el, null).getPropertyValue(prop);
+        return getComputedStyle(el, pseudoElt).getPropertyValue(prop);
     } else {
         return el.currentStyle[prop];
     }
@@ -523,6 +523,17 @@ utils.throttle = function throttle(fn, threshhold, scope) {
         }
     };
 };
+
+utils.siblingIndex = function(el) {
+    if (!el) {
+        return false;
+    }
+    var i = 0;
+    while( (el = el.previousSibling) != null ) {
+      i++;
+    }
+    return i;
+}
 
 // -----  ----- //
 return utils;
