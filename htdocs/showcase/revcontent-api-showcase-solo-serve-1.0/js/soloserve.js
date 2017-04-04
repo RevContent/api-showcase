@@ -38,6 +38,10 @@ if (typeof RevContentSolo != 'undefined') {
         var hideSoloServe = true;
     }
 
+    if (RevContentSolo.widget_id) {
+        solo_widget_id = RevContentSolo.widget_id;
+    }
+
     if (RevContentSolo.query_params) {
         RevContentSolo.serialized_query_params = window.revUtils.serialize(RevContentSolo.query_params)
     }
