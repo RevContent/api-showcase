@@ -533,7 +533,21 @@ utils.siblingIndex = function(el) {
       i++;
     }
     return i;
-}
+};
+
+utils.getUserIp = function(){
+
+};
+
+utils.storeUserOptions = function(options){
+    var that = this;
+    that.userOptions = options;
+};
+
+utils.retrieveUserOptions = function(){
+    var that = this;
+    return that.userOptions;
+};
 
 // -----  ----- //
 return utils;

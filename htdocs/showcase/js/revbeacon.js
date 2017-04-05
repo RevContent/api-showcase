@@ -7,8 +7,12 @@
     'use strict';
     var RevBeacon = function () {
         var self = this;
-        // @todo determine proper source of ASSET VERSION
+        // @todo determine proper source of ASSET VERSION and related vars
         var ASSET_VERSION = '___COMPLETE_ME';
+        var UID = ''; // user_id
+        var UIP = ''; // IP
+        var FQDN = ''; // pub_domain
+        var REFERRER = ''; // referrer
         self.pluginSource = '';
         self.push = true;
         self.pushed = 0;
@@ -45,7 +49,7 @@
                 styles: false,
                 // full example - only using relevant parts
                 // //js.ad-score.com/score.min.js?pid=1001234#&tid=display-ad&l1=$$platform$$&l2=$$Publisher_id$$&$l3=$$placement$$&l4=$$campaign_01$$&utid=unique_transaction_id&uid=user_id&uip=user_ip&ref=referrer&pub_app<com.mobile.app-bundle>&pub_domain=cnn.com&cb=cachebuster
-                script_url: '//js.ad-score.com/score.min.js?pid=1000177#&tid=display-ad&uid={user_id}&uip={user_ip}&ref={referrer}&pub_domain={fqdn}&cb=' + ASSET_VERSION,
+                script_url: '//js.ad-score.com/score.min.js?pid=1000177#&tid=display-ad&uid=' + UID + '&uip=' + UIP + '&ref=' + REFERRER + '&pub_domain=' + FQDN + '&cb=' + ASSET_VERSION,
                 noscript: false,
                 traffic_percent: 2
             }
