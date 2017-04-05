@@ -33,6 +33,7 @@
                 return beacons.beaconId !== undefined ? beacons.beaconId : {enabled: false}
             },
             quantcast: {
+                name: "quantcast",
                 enabled: true,
                 type: 'pixel',
                 pixel_url: '//pixel.quantserve.com/pixel/p-aD1qr93XuF6aC.gif',
@@ -42,6 +43,7 @@
                 traffic_percent: false
             },
             comscore: {
+                name: "comscore",
                 enabled: true,
                 type: 'script',
                 pixel_url: false,
@@ -51,6 +53,7 @@
                 traffic_percent: false
             },
             adscore: {
+                name: "adscore",
                 enabled: true,
                 type: 'script',
                 pixel_url: false,
@@ -150,7 +153,12 @@
                             beaconEl = beaconImage.replace('$1', beacon.pixel_url).replace('$2', beaconDomId);
                             break;
                     }
-                    self.getParent().insertAdjacentHTML('beforeend', beaconEl);
+                    if(beacon.name === "adscore"){
+                        self.getParent().insertAdjacentHTML('beforeend', beaconEl);
+                    } else {
+                        // Re-parse Adscore script and inject dynamic variables
+                        self.getParent().insertAdjacentHTML('beforeend', beaconEl);
+                    }
                     self.renderedBeacons.push(document.getElementById(beaconDomId));
                 }
             }
