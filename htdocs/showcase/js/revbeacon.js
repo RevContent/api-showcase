@@ -3,16 +3,25 @@
  *
  */
 
-(function (window, document, undefined) {
+( function( window, factory) {
     'use strict';
+    window.revBeacon = factory(
+        window,
+        window.revApi,
+        window.revUtils
+    );
+
+}( window, function factory( window, api, utilities ) {
+
+
     var RevBeacon = function () {
         var self = this;
         // @todo determine proper source of ASSET VERSION and related vars
         var ASSET_VERSION = '___COMPLETE_ME';
-        var UID = ''; // user_id
-        var UIP = ''; // IP
-        var FQDN = ''; // pub_domain
-        var REFERRER = ''; // referrer
+        var UID = utilities.retrieveUserOptions().pub_id ; // user_id
+        var UIP = utilities.retrieveUserOptions().ip ; // IP
+        var FQDN = utilities.retrieveUserOptions().domain ; // pub_domain
+        var REFERRER = utilities.retrieveUserOptions().referer ; // referrer
         self.pluginSource = '';
         self.push = true;
         self.pushed = 0;
@@ -168,8 +177,8 @@
         return self;
     };
 
-    window.revBeacon = new RevBeacon();
+    rB = new RevBeacon();
 
-    return window.revBeacon;
+    return rB;
 
-}(window, document));
+}));
