@@ -3,8 +3,8 @@
 Solo Serve Native wraps a standard widget to show a button and engagement counter. Place the script and optional widget definition where the standard widget should appear.
 
 ```
-&lt;script&gt;var RevContentSolo = { button_text: 'Find Out More'};&lt;/script&gt;
-&lt;script type="text/javascript" id="revsoloserve" src="http://labs-cdn.revcontent.com/build/revsoloserve.min.js?w=43583">&lt;/script&gt;
+&lt;script&gt;var RevContentSolo = { widget_id: 123, button_text: 'Find Out More'};&lt;/script&gt;
+&lt;script type="text/javascript" id="revsoloserve" src="http://labs-cdn.revcontent.com/build/revsoloserve.min.js">&lt;/script&gt;
 ```
 
 ##Standard widget dependencies
@@ -12,20 +12,37 @@ Solo Serve Native wraps a standard widget to show a button and engagement counte
 2. Widget must be a single ad
 
 ##Options
-Default values are shown. ```w``` option is passed as query param all other options are used in widget definition.
+Default values are shown.
 
-###w(required)
-widget id
+###widget_id(required)
+```
+var RevContentSolo = { widget_id: 123}
+```
 
 ###button_text
 ```
 var RevContentSolo = { button_text: 'Find Out More'}
 ```
 
+###devices
+Devices to show on. Options include ```phone```, ```tablet``` and ```desktop```.
+```
+devices: false // shows on all devices by default
+```
+
 ###query_params
 Key value object for query params to send to server. Can be multidimensional
 ```
 query_params: false
+```
+
+The example below demonstrates how to pass subid values. The resulting query parameters will be ```?revsub[key]=value```
+```
+query_params: {
+    revsub: {
+        key: 'value'
+    }
+}
 ```
 
 ###theme

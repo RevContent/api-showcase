@@ -191,6 +191,15 @@ Key value object for query params to send to server. Can be multidimensional
 query_params: false
 ```
 
+The example below demonstrates how to pass subid values. The resulting query parameters will be ```?revsub[key]=value```
+```
+query_params: {
+    revsub: {
+        key: 'value'
+    }
+}
+```
+
 ###rows
 Number of rows to display. Object or single value. Pass a single number to be used for every breakpoint or provide a value for each breakpoint.
 ```
