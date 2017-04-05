@@ -120,6 +120,7 @@ Author: michael@revcontent.com
             query_params: this.options.query_params,
             user_ip:      this.options.user_ip,
             user_agent:   this.options.user_agent,
+            disable_pagination: true,
             pagination_dots: true,
             pagination_dots_vertical: true,
             register_impressions: false,
