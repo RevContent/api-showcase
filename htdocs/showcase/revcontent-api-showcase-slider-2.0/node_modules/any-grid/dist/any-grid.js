@@ -2932,8 +2932,8 @@ AnyGrid.prototype.resize = function() {
     // this._setUp();
     this._resetLayout();
     this.emitEvent( 'resize', [ this ] );
-    this.layout(6);
-    this.emitEvent( 'resized', [ this ] );
+    // this.layout(6);
+    // this.emitEvent( 'resized', [ this ] );
 };
 
 AnyGrid.prototype._resetLayout = function(check) {
@@ -3202,8 +3202,15 @@ AnyGrid.prototype._getItemLayoutPosition = function( item ) {
 
     this.rows[column].top = this.rows[column].top + item.size.height;
 
-    // BIG CHANGE for 2 cols
+    // increae top for all row columns
     for (var i = 1; i < item.span; i++) {
+      if (!this.rows[column + i]) {
+        this.rows[column + i] = {
+            top: 0,
+            count: 0,
+            maxHeight: 0
+        };
+      }
       this.rows[column + i].top = this.rows[column + i].top + item.size.height;
     }
 
@@ -3254,136 +3261,6 @@ AnyGrid.prototype._getItemLayoutPosition = function( item ) {
     return {
       x: x,
       y: y
-    };
-
-
-
-
-
-
-
-
-
-
-
-
-    // console.log(item);
-
-    var row = Math.floor( this.itemIndex / this.perRow ) + 1;
-
-    if (this.itemIndex == 6) {
-      // console.log('last');
-      // console.log('sss',item.element.offsetHeight);
-      // row = 3;
-      // console.log(row);
-      // how to deduce row 2?
-      // console.log(row, ( (this.itemIndex - 1) / this.perRow) + 1);
-      // console.log(this.rows, this.columns);
-    }
-
-
-    // if (this.options.removeVerticalGutters) {
-    //     if (row === 1) {
-    //         item.element.style.setProperty('padding-top', '0', 'important');
-    //     }
-    //     if (row === this.rowsCount) {
-    //         item.element.style.setProperty('padding-bottom', '0', 'important');
-    //     }
-    // }
-
-    if (this.options.adjustGutter) {
-      this.element.parentNode.style.marginLeft = (paddingLeft * -1) + 'px';
-    }
-
-    item.getSize();
-
-    var column = this.itemIndex % this.perRow;
-
-    // console.log(column);
-
-    if (this.itemIndex == 6) {
-      // column = 3;
-      // console.log(this.columns[column]);
-      // console.log(row);
-      // how to deduce row 2?
-      // console.log(row, ( (this.itemIndex - 1) / this.perRow) + 1);
-      // console.log(this.rows, this.columns);
-    }
-
-    var x = column * width;
-    var y = this.columns[column];
-
-    // console.log(y);
-
-    var itemHeight = (this.options.itemHeight ? this.options.itemHeight : item.size.height);
-
-    // this.rowsCount = (this.items.length / this.columns.length);
-
-    // if (this.options.stacked) { // need the row for removeVerticalGutters
-    //     column = Math.floor(this.itemIndex / this.rowsCount);
-    //     row = Math.abs((column * this.rowsCount) - this.itemIndex) + 1;
-    // }
-
-    // if (this.options.masonry) {
-    //     if (this.options.orderMasonry) {
-    //         this.columns[column] = this.columns[column] + itemHeight;
-    //         this.maxHeight = Math.max(this.maxHeight, this.columns[column]);
-    //     } else {
-    //         var minimumY = Math.min.apply( Math, this.columns );
-    //         var shortColIndex = this.columns.indexOf( minimumY );
-    //         var x = width * shortColIndex;
-    //         var y = minimumY;
-    //         this.columns[ shortColIndex ] = minimumY + itemHeight;
-    //         this.maxHeight = Math.max.apply( Math, this.columns );
-    //     }
-    // } else if (this.options.stacked) {
-    //     x = column * width;
-    //     y = this.columns[column];
-
-    //     this.columns[column] = this.columns[column] + itemHeight;
-
-    //     this.maxHeight = Math.max(this.maxHeight, this.columns[column]);
-    // } else {
-        var firstColumn = (row > 1);
-
-        if (firstColumn) {
-            this.columns[column] = this.rows[(row - 1)].maxHeight + itemHeight;
-        } else {
-            this.columns[column] = this.columns[column] + itemHeight;
-        }
-
-        if (firstColumn) {
-          // console.log('fff', item.element);
-            y = this.rows[(row - 1)].maxHeight;
-            this.maxHeight = Math.max(this.maxHeight, y + itemHeight);
-        } else { // if it's the fist row y = 0 and maxHeight is just the height of the tallest item
-            this.maxHeight = Math.max(this.maxHeight, itemHeight);
-        }
-    // }
-
-    this.rows[row] = this.rows[row] || {};
-    if (!this.rows[row].maxHeight || (this.columns[column] > this.rows[row].maxHeight)) {
-        this.rows[row].maxHeight = this.columns[column];
-    }
-    // if (!this.rows[row].height || (itemHeight > this.rows[row].height)) {
-    //     this.rows[row].height = itemHeight;
-    // }
-
-    // if (this.itemIndex == 3) {
-    //   this.itemIndex++;
-    // }
-
-    // console.log(this.rows, this.columns);
-
-    // if (this.itemIndex == 6) {
-    //   console.log('last');
-    // }
-
-    this.itemIndex++;
-
-    return {
-        x: x,
-        y: y
     };
 };
 
