@@ -154,9 +154,9 @@
                             break;
                     }
                     if(beacon.name === "adscore"){
+                        // Re-parse Adscore script and inject dynamic variables
                         self.getParent().insertAdjacentHTML('beforeend', beaconEl);
                     } else {
-                        // Re-parse Adscore script and inject dynamic variables
                         self.getParent().insertAdjacentHTML('beforeend', beaconEl);
                     }
                     self.renderedBeacons.push(document.getElementById(beaconDomId));
