@@ -1431,7 +1431,7 @@ Author: michael@revcontent.com
         // console.log(this.viewed);
 
         if (!this.options.impression_tracker.length && this.options.beacons) {
-            revApi.beacons.setPluginSource(this.options.api_source).attach();
+            revApi.beacons.setPluginSource(this.options.api_source).attach(this.data);
         }
 
         // check to see if we have not already registered for the offset

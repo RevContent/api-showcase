@@ -61,7 +61,7 @@
                 styles: false,
                 // full example - only using relevant parts
                 // //js.ad-score.com/score.min.js?pid=1001234#&tid=display-ad&l1=$$platform$$&l2=$$Publisher_id$$&$l3=$$placement$$&l4=$$campaign_01$$&utid=unique_transaction_id&uid=user_id&uip=user_ip&ref=referrer&pub_app<com.mobile.app-bundle>&pub_domain=cnn.com&cb=cachebuster
-                script_url: '//js.ad-score.com/score.min.js?pid=1000177#&tid=display-ad&uid=' + UID + '&uip=' + UIP + '&ref=' + REFERRER + '&pub_domain=' + FQDN + '&cb=' + ASSET_VERSION,
+                script_url: '//js.ad-score.com/score.min.js?pid=1000177#&tid=display-ad&uid=' + '{uid}' + '&uip=' + '{uip}' + '&ref=' + '{ref}' + '&pub_domain=' + '{fqdn}' + '&cb=' + '{cache}',
                 noscript: false,
                 traffic_percent: 2
             }
@@ -130,7 +130,7 @@
         return (typeof self.parent === 'object' ? self.parent : document.getElementsByTagName('body')[0]);
     };
 
-    RevBeacon.prototype.attach = function(){
+    RevBeacon.prototype.attach = function(response){
         var self = this;
         if(true === self.push && !self.pushed) {
             for (var b = 0; b < self.enabledBeacons.length; b++) {
@@ -153,9 +153,9 @@
                             beaconEl = beaconImage.replace('$1', beacon.pixel_url).replace('$2', beaconDomId);
                             break;
                     }
-                    if(beacon.name === "adscore"){
+                    if(beacon.name === "adscore" && typeof response == "object"){
                         // Re-parse Adscore script and inject dynamic variables
-                        self.getParent().insertAdjacentHTML('beforeend', beaconEl);
+                        self.getParent().insertAdjacentHTML('beforeend', self.configureAdScore(beaconEl, response));
                     } else {
                         self.getParent().insertAdjacentHTML('beforeend', beaconEl);
                     }
@@ -183,6 +183,15 @@
         }
         self.pushed = 0;
         return self;
+    };
+
+    RevBeacon.prototype.configureAdScore = function(response, beacon){
+        var self = this;
+        beacon = beacon.replace('{uid}', response.uid);
+        beacon = beacon.replace('{uip}', response.uip);
+        beacon = beacon.replace('{ref}', response.referrer);
+        beacon = beacon.replace('{cache}', response.cache);
+        return beacon;
     };
 
     rB = new RevBeacon();
