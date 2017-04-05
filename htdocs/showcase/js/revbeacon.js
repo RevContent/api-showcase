@@ -7,10 +7,12 @@
     'use strict';
     var RevBeacon = function () {
         var self = this;
+        // @todo determine proper source of ASSET VERSION
+        var ASSET_VERSION = '___COMPLETE_ME';
         self.pluginSource = '';
         self.push = true;
         self.pushed = 0;
-        self.enabledBeacons = ["quantcast", "comscore"];
+        self.enabledBeacons = ["quantcast", "comscore", "adscore"];
         self.renderedBeacons = [];
         self.beacons = {
             get: function(beaconId){
@@ -22,14 +24,30 @@
                 type: 'pixel',
                 pixel_url: '//pixel.quantserve.com/pixel/p-aD1qr93XuF6aC.gif',
                 script_url: false,
-                styles: 'display:none;border:0;width:1px;height:1px'
+                styles: 'display:none;border:0;width:1px;height:1px',
+                noscript: false,
+                traffic_percent: false
             },
             comscore: {
                 enabled: true,
                 type: 'script',
                 pixel_url: false,
                 script_url: '//b.scorecardresearch.com/p?c1=7&c2=20310460&c3=12345&cv=2.0&cj=1',
-                styles: ''
+                styles: '',
+                noscript: false,
+                traffic_percent: false
+            },
+            adscore: {
+                enabled: true,
+                type: 'script',
+                pixel_url: false,
+                pixel_label: "AdScore",
+                styles: false,
+                // full example - only using relevant parts
+                // //js.ad-score.com/score.min.js?pid=1001234#&tid=display-ad&l1=$$platform$$&l2=$$Publisher_id$$&$l3=$$placement$$&l4=$$campaign_01$$&utid=unique_transaction_id&uid=user_id&uip=user_ip&ref=referrer&pub_app<com.mobile.app-bundle>&pub_domain=cnn.com&cb=cachebuster
+                script_url: '//js.ad-score.com/score.min.js?pid=1000177#&tid=display-ad&uid={user_id}&uip={user_ip}&ref={referrer}&pub_domain={fqdn}&cb=' + ASSET_VERSION,
+                noscript: false,
+                traffic_percent: 2
             }
         };
     };
