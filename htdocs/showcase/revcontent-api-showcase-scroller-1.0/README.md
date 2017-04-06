@@ -3,7 +3,7 @@
 RevScroller is a scroll activated widget. As the user scrolls the page the widget will automatically paginate. Use it by placing an element along with the script and ad code definition on the page
 
 ```
-&lt;div id="rev-scroller"&gt;&lt;div&gt;
+&lt;div id="rev-scroller"&gt;&lt;/div&gt;
 
 &lt;script src="http://labs-cdn.revcontent.com/build/revscroller.min.js">&lt;/script&gt;
 
@@ -61,6 +61,12 @@ ad_overlay_position: 'bottom_right'
 api_source used for tracking.
 ```
 api_source: 'scrol'
+```
+
+###auto_scroll
+Paginate the widget as the page scrolls.
+```
+auto_scroll: true
 ```
 
 ###css
@@ -156,6 +162,12 @@ rows: {
     xl: 2,
     xxl: 2
 }
+```
+
+###transition_duration_multiplier
+Allows the transition duration to be modified. The distance of the transition will be multiplied by the ```transition_duration_multiplier``` to arrive at a value in milliseconds. For example, if the transition is 100 pixels the transition will take 300ms.
+```
+transition_duration_multiplier: 3
 ```
 
 ###url

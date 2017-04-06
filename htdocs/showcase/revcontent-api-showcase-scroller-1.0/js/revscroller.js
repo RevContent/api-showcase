@@ -55,7 +55,8 @@ Author: michael@revcontent.com
             query_params: false,
             user_ip: false,
             user_agent: false,
-            transition_duration_multiplier: 3
+            transition_duration_multiplier: 3,
+            auto_scroll: true
         };
 
         // merge options
@@ -158,6 +159,9 @@ Author: michael@revcontent.com
     };
 
     RevScroller.prototype.scroll = function() {
+        if (this.options.auto_scroll === false) {
+            return;
+        }
         var hovering = false;
 
         var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
@@ -243,7 +247,7 @@ Author: michael@revcontent.com
 
                 var scrollBottom = (scroll + windowHeight) - (elementTop + scroll);
 
-                var regionHeight = (windowHeight / 2)
+                var regionHeight = (windowHeight / 2);
 
                 if (scroll > scrollTop) { // scrolling down
 
