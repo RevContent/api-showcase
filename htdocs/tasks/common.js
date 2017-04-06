@@ -77,7 +77,7 @@ gulp.task('build', ['minifycss', 'embedcss'], function(cb) {
             concat('rev'+ widget +'.pkgd.js'),
             gulp.dest('./build/files/' + widget),
             uglify({
-                mangle: false
+                mangle: true
             }).on('error', function (err) {
                 var fileArr = err.fileName.split('/');
                 var messageArr = err.message.split(': ');

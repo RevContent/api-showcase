@@ -90,6 +90,16 @@ column_spans: [
 ]
 ```
 
+###devices
+Devices to show on. Options include ```phone```, ```tablet``` and ```desktop```.
+```
+devices: [
+    'phone', 
+    'tablet', 
+    'desktop'
+]
+```
+
 ###disclosure_text
 Text to display for disclosure. This text triggers the disclosure/interests dialog on click.
 ```
