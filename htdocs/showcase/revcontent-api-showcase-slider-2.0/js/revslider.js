@@ -99,7 +99,7 @@ Author: michael@revcontent.com
             hide_footer: false,
             beacons: true,
             pagination_dots: false,
-            touch_direction: Hammer.DIRECTION_HORIZONTAL, // don't prevent vertical scrolling
+            touch_direction: typeof Hammer !== 'undefined' ? Hammer.DIRECTION_HORIZONTAL : false, // don't prevent vertical scrolling
             overlay_icons: false, // pass in custom icons or overrides
             image_overlay: false, // pass key value object { content_type: icon }
             image_overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
