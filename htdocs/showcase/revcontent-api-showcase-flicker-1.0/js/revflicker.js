@@ -126,9 +126,6 @@ RevFlicker({
         // merge options
         this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
 
-        // store user opts for shared usage
-        // revUtils.storeUserOptions(opts);
-
         // param errors
         if (revUtils.validateApiParams(this.options).length) {
             return;
