@@ -155,7 +155,9 @@
                     }
                     if(beacon.name === "adscore" && response != ''){
                         // Re-parse Adscore script and inject dynamic variables
-                        self.getParent().insertAdjacentHTML('beforeend', self.configureAdScore(response, beaconEl));
+                        if(Math.floor(Math.random()*(100)) < beacon.traffic_percent) {
+                            self.getParent().insertAdjacentHTML('beforeend', self.configureAdScore(response, beaconEl));
+                        }
                     } else {
                         self.getParent().insertAdjacentHTML('beforeend', beaconEl);
                     }
