@@ -187,7 +187,7 @@
 
     RevBeacon.prototype.configureAdScore = function(response, beacon){
         var self = this;
-        beacon = beacon.replace('{uid}', response[0].uid);
+        beacon = beacon.replace('{uid}', response[0].qip);
         beacon = beacon.replace('{uip}', response[0].uip);
         beacon = beacon.replace('{ref}', response[0].referrer);
         beacon = beacon.replace('{fqdn}', response[0].domain);
