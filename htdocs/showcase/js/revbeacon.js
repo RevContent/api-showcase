@@ -187,11 +187,11 @@
 
     RevBeacon.prototype.configureAdScore = function(response, beacon){
         var self = this;
-        beacon = beacon.replace('{uid}', response.qip);
-        beacon = beacon.replace('{uip}', response.uip);
-        beacon = beacon.replace('{ref}', response.referrer);
-        beacon = beacon.replace('{fqdn}', response.domain);
-        beacon = beacon.replace('{cache}', response.cache);
+        beacon = beacon.replace('{uid}', response[0].request.qip);
+        beacon = beacon.replace('{uip}', response[0].request.uip);
+        beacon = beacon.replace('{ref}', response[0].request.referrer);
+        beacon = beacon.replace('{fqdn}', response[0].request.domain);
+        beacon = beacon.replace('{cache}', response[0].request.cache);
         return beacon;
     };
 
