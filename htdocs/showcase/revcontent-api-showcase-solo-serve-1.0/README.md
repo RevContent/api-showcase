@@ -16,42 +16,44 @@ Default values are shown.
 
 ###widget_id(required)
 ```
-var RevContentSolo = { widget_id: 123}
+var RevContentSolo = { widget_id: 123 };
 ```
 
 ###button_text
 ```
-var RevContentSolo = { button_text: 'Find Out More'}
+var RevContentSolo = { button_text: 'Find Out More' };
 ```
 
 ###devices
 Devices to show on. Options include ```phone```, ```tablet``` and ```desktop```.
 ```
-devices: false // shows on all devices by default
+var RevContentSolo = { devices: false }; // shows on all devices by default
 ```
 
 ###query_params
 Key value object for query params to send to server. Can be multidimensional
 ```
-query_params: false
+var RevContentSolo = { query_params: false };
 ```
 
 The example below demonstrates how to pass subid values. The resulting query parameters will be ```?revsub[key]=value```
 ```
-query_params: {
-    revsub: {
-        key: 'value'
+var RevContentSolo = { 
+    query_params: {
+        revsub: {
+            key: 'value'
+        }
     }
-}
+};
 ```
 
 ###theme
 Theme available values ```default```, ```social```
 ```
-var RevContentSolo = { theme: 'default'}
+var RevContentSolo = { theme: 'default'};
 ```
 
 ###url
 ```
-var RevContentSolo = { url: 'trends.revcontent.com'}
+var RevContentSolo = { url: 'trends.revcontent.com'};
 ```
