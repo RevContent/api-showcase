@@ -106,7 +106,7 @@ app.service('widgets', function() {
         'scroller': {
             title: 'RevScroller',
             img: 'scroller.jpg',
-            description: 'Our content is on fire! This single ad widget is sure to get your audience\'s attention. With a customizable call to action and popularity meter, increase viewer engagement and your returns with Solo Serve Native today.',
+            description: 'Increase overall ad real estate with the RevScroller widget. As the user scrolls the page RevScroller will scroll with them to show the next row of ads. RevScroller also features a customizable layout that allows larger ads to be mixed in.',
             link: 'revcontent-api-showcase-scroller-1.0/index.html',
             docs: 'revcontent-api-showcase-scroller-1.0/README.md',
             bg: '#faf5ee'
