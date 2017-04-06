@@ -63,6 +63,12 @@ api_source used for tracking.
 api_source: 'scrol'
 ```
 
+###auto_scroll
+Paginate the widget as the page scrolls.
+```
+auto_scroll: true
+```
+
 ###css
 Additional CSS to append.
 ```
