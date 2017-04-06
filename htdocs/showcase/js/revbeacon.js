@@ -195,7 +195,7 @@
         return beacon;
     };
 
-    rB = new RevBeacon();
+    var rB = new RevBeacon();
 
     return rB;
 
