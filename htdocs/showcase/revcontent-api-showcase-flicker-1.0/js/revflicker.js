@@ -62,11 +62,11 @@ RevFlicker({
             per_row: {
                 xxs: 1,
                 xs: 1,
-                sm: 3,
-                md: 4,
-                lg: 5,
-                xl: 6,
-                xxl: 7
+                sm: 2,
+                md: 3,
+                lg: 4,
+                xl: 5,
+                xxl: 6
             },
             image_ratio: (revDetect.mobile() ? 'wide_rectangle' : 'rectangle'),
             header: 'Trending Now',
@@ -76,6 +76,7 @@ RevFlicker({
                 mobile: false,
                 desktop: true
             },
+            arrow_style: 'circle', // circle or square
             sponsored: 10,
             internal: false,
             dots: false,
@@ -106,6 +107,7 @@ RevFlicker({
                 provider_margin_bottom: false,
                 inner_margin: false
             },
+            text_top: false,
             text_right: false,
             text_right_height: 100,
             next_width: false,
@@ -145,7 +147,8 @@ RevFlicker({
         this.containerElement = document.createElement('div');
         this.containerElement.id = 'rev-flicker';
         this.containerElement.setAttribute('class', 'rev-flicker');
-        revUtils.addClass(this.containerElement, 'rev-flicker-' + (this.options.text_right ? 'text-right' : 'text-bottom'));
+        var textPosition = (this.options.text_right ? 'text-right' : this.options.text_top ? 'text-top' : 'text-bottom');
+        revUtils.addClass(this.containerElement, 'rev-flicker-' + textPosition);
 
         if (this.options.transition_content) {
             revUtils.addClass(this.containerElement, 'transition-content');
@@ -167,7 +170,8 @@ RevFlicker({
             pageDots: this.options.dots,
             cellAlign: 'left',
             percentPosition: false,
-            wrapAround: true
+            wrapAround: true,
+            arrow_style: this.options.arrow_style
         });
 
         this.setMultipliers();
@@ -223,7 +227,7 @@ RevFlicker({
 
             ad.style.width = this.columnWidth + 'px';
             ad.style.marginRight = this.margin + 'px';
-            ad.querySelectorAll('.rev-ad')[0].style.height = this.getCellHeight() + 'px';
+            //ad.querySelectorAll('.rev-ad')[0].style.height = this.getCellHeight() + 'px';
 
             ad.querySelectorAll('.rev-image')[0].style.height = this.preloaderHeight + 'px';
             ad.querySelectorAll('.rev-headline')[0].style.maxHeight = this.headlineHeight + 'px';
@@ -341,11 +345,11 @@ RevFlicker({
             this.imageHeight = this.options.size.image_height * 2;
             this.imageWidth = this.columnWidth * 2;
         } else if (this.options.image_ratio == 'square') {
-            this.imageHeight = 400;
-            this.imageWidth = 400;
+            this.imageHeight = 450;
+            this.imageWidth = 450;
         } else if (this.options.image_ratio == 'rectangle') {
-            this.imageHeight = 300;
-            this.imageWidth = 400;
+            this.imageHeight = 450;
+            this.imageWidth = 600;
         } else if (this.options.image_ratio == 'wide_rectangle') {
             this.imageHeight = 450;
             this.imageWidth = 800;
@@ -441,7 +445,7 @@ RevFlicker({
             revUtils.removeClass(this.containerElement, 'rev-flicker-text-overlay');
             for (var i = 0; i < ads.length; i++) {
                 var ad = ads[i];
-                ad.style.height = this.getCellHeight() + 'px';
+                //ad.style.height = this.getCellHeight() + 'px';
             }
         }
     };
@@ -480,12 +484,20 @@ RevFlicker({
         var imgWidth = typeof this.preloaderWidth === 'undefined' ? 'width:auto;' : 'width:' + this.preloaderWidth + 'px;';
 
         for (var j = index; j < count; j++) {
-            var html = '<div class="rev-ad" style="height: '+ that.getCellHeight() +'px; border-width:' + (that.options.ad_border ? '1px' : '0') + '">' +
-                        '<a href="" rel="nofollow" target="_blank">' +
-                            '<div class="rev-image" style="'+ imgWidth +'height:'+ that.preloaderHeight +'px"></div>' +
-                            '<div class="rev-headline" style="max-height:'+ that.headlineHeight +'px; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>' +
-                            ( that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'margin: ' + that.providerMarginTop + 'px '  + that.innerMargin + 'px '+ that.providerMarginBottom +'px;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;height:' + that.providerLineHeight + 'px;') : '') +
-                        '</a>' +
+            var html = '<div class="rev-ad" style="border-width:' + (that.options.ad_border ? '1px' : '0') + '">' +
+                        '<a href="" rel="nofollow" target="_blank">';
+
+            if (!this.options.text_top) {
+                html += '<div class="rev-image" style="'+ imgWidth +'height:'+ that.preloaderHeight +'px"></div>';
+            }
+
+            html += '<div class="rev-headline" style="max-height:'+ that.headlineHeight +'px; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>' +
+                    ( that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'margin: ' + that.providerMarginTop + 'px '  + that.innerMargin + 'px '+ that.providerMarginBottom +'px;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;height:' + that.providerLineHeight + 'px;') : '');
+
+            if (this.options.text_top) {
+                html += '<div class="rev-image" style="'+ imgWidth +'height:'+ that.preloaderHeight +'px"></div>';
+            }
+            html += '</a>' +
                     '</div>';
             var cell = document.createElement('div');
 
@@ -713,9 +725,9 @@ RevFlicker({
         '&domain=' + this.options.domain +
         '&api_source=' + this.options.api_source;
 
-        url +=
-        '&img_h=' + this.imageHeight +
-        '&img_w=' + this.imageWidth;
+        //url +=
+        //'&img_h=' + this.imageHeight +
+        //'&img_w=' + this.imageWidth;
 
         url +=
         '&sponsored_count=' + (this.options.internal ? 0 : count) +

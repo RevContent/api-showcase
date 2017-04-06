@@ -80,7 +80,6 @@ body {
     height: 100%;
     color: #222;
     width: 100%;
-    position: absolute;
     top: 0;
     left: 0;
     z-index: 1000000;
@@ -127,6 +126,14 @@ body {
     margin-top: 0 !important;
 }
 
+#rev-flicker.rev-flicker-text-top .rev-image img {
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+
 #rev-flicker .rev-image img {
     display: block;
     max-width: 100%;
@@ -155,6 +162,7 @@ body {
 
 #rev-flicker .rev-provider {
     color: #999;
+    margin-bottom: 5px;
 }
 
 #rev-flicker .rev-ad {
@@ -188,9 +196,17 @@ body {
 }
 
 #rev-flicker.rev-flicker-text-overlay .rev-ad .rev-headline {
+     position: absolute;
+     bottom: 24px;
+     color: #fff;
+     text-shadow: 1px 1px rgba(0,0,0,0.8);
+     height: auto !important;
+ }
+
+#rev-flicker.rev-flicker-text-overlay .rev-ad .rev-provider {
     position: absolute;
     bottom: 4px;
-    color: #fff;
+    color: #dedede;
     text-shadow: 1px 1px rgba(0,0,0,0.8);
     height: auto !important;
 }
