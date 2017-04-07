@@ -56,7 +56,8 @@ Author: michael@revcontent.com
             user_ip: false,
             user_agent: false,
             transition_duration_multiplier: 3,
-            auto_scroll: true
+            auto_scroll: true,
+            rev_position: 'top_right'
         };
 
         // merge options
