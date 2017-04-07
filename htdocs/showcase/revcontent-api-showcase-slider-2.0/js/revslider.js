@@ -732,14 +732,16 @@ Author: michael@revcontent.com
 
             var row = Math.floor( index / that.grid.perRow );
 
+            that.setItemClasses(item.element, item.span);
+
             that.setInnerMargin(item.element, item.span);
 
             that.setPreloaderHeight(item.element, item.span);
 
             // headline calculation based on text_right_height or grid columnWidth and lineHeightMultiplier
             that.setHeadlineLineHeight(item.element, item.span);
-            that.setHeadlineFontSize(item.span);
-            that.setHeadlineMarginTop(item.span);
+            that.setHeadlineFontSize(item.element, item.span);
+            that.setHeadlineMarginTop(item.element, item.span);
             that.setHeadlineMaxHeight(item.element, item.span, row, index, item.stacked);
         };
 
@@ -836,33 +838,57 @@ Author: michael@revcontent.com
         }
     };
 
+    RevSlider.prototype.setItemClasses = function(element, colSpan) {
+        revUtils.removeClass(element, 'rev-colspan', true);
+        revUtils.addClass(element, 'rev-colspan-' + colSpan);
+    };
+
     RevSlider.prototype.setInnerMargin = function(element, colSpan) {
+        var computedInnerMargin = parseInt(revUtils.getComputedStyle(element.querySelector('.rev-headline'), 'margin-left'));
+
+        if (computedInnerMargin > -1) {
+            this.innerMargins[colSpan] = computedInnerMargin;
+            return;
+        }
+
         var adInner = element.querySelector('.rev-ad-inner');
         this.innerMargins[colSpan] = Math.max(0, ((adInner.offsetWidth * this.paddingMultiplier).toFixed(2) / 1));
     };
 
     RevSlider.prototype.setHeadlineLineHeight = function(element, colSpan) {
-        if (this.options.text_right) {
-            var headlineHeight = 0;
-            var availableSpace = (this.getTextRightHeight() - this.providerLineHeight - this.providerMarginTop);
-            for (var i = 6; i > 0; i--) {
-                headlineHeight = ((availableSpace) / i).toFixed(2) / 1;
-                if (headlineHeight > this.options.min_headline_height) {
-                    break;
-                }
-            }
-            this.headlineLineHeights[colSpan] = headlineHeight;
-        } else {
-            var adInner = element.querySelector('.rev-ad-inner');
-            this.headlineLineHeights[colSpan] = Math.max(17, Math.round(adInner.offsetWidth * this.lineHeightMultiplier));
+        var computedLineHeight = parseInt(revUtils.getComputedStyle(element.querySelector('.rev-headline h3'), 'line-height'));
+
+        if (computedLineHeight) {
+            this.headlineLineHeights[colSpan] = computedLineHeight;
+            return;
         }
+
+        var calculateWidth = element.querySelector('.rev-ad-inner').offsetWidth;
+        if (this.options.text_right) {
+            calculateWidth -= (this.preloaderWidth + parseInt(revUtils.getComputedStyle(element.querySelector('.rev-image'), 'margin-right')));
+        }
+        this.headlineLineHeights[colSpan] = Math.max(17, Math.round(calculateWidth * this.lineHeightMultiplier));
     };
 
-    RevSlider.prototype.setHeadlineFontSize = function(colSpan) {
+    RevSlider.prototype.setHeadlineFontSize = function(element, colSpan) {
+        var computedFontSize = parseInt(revUtils.getComputedStyle(element.querySelector('.rev-headline h3'), 'font-size'));
+
+        if (computedFontSize) {
+            this.headlineFontSizes[colSpan] = computedFontSize;
+            return;
+        }
+
         this.headlineFontSizes[colSpan] = (this.headlineLineHeights[colSpan] * .8).toFixed(2) / 1;
     };
 
-    RevSlider.prototype.setHeadlineMarginTop = function(colSpan) {
+    RevSlider.prototype.setHeadlineMarginTop = function(element, colSpan) {
+        var computedMarginTop = parseInt(revUtils.getComputedStyle(element.querySelector('.rev-headline'), 'margin-top'));
+
+        if (computedMarginTop > -1) {
+            this.headlineMarginTops[colSpan] = computedMarginTop;
+            return;
+        }
+
         this.headlineMarginTops[colSpan] = 0;
         if (!this.options.text_right) { // give some space between bottom of image and headline
             this.headlineMarginTops[colSpan] = ((this.headlineLineHeights[colSpan] * .4).toFixed(2) / 1);
