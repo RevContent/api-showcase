@@ -83,15 +83,26 @@ utils.appendStyle = function(style, namespace, extra) {
     var namespace = namespace + '-append-style';
 
     if (!document.getElementById(namespace)) {
-        if (typeof extra === 'string') {
-            style += extra;
-        }
-
         var el = document.createElement('style');
         el.type = 'text/css';
         el.id = namespace;
         el.innerHTML = style;
         document.getElementsByTagName('head')[0].appendChild(el);
+    }
+
+    if (extra && typeof extra === 'string') {
+        var namespaceExtra = namespace + '-extra'
+        var extraStyleElement = document.getElementById(namespaceExtra);
+
+        if (extraStyleElement) {
+            extraStyleElement.innerHTML += extra;
+        } else {
+            var el = document.createElement('style');
+            el.type = 'text/css';
+            el.id = namespaceExtra;
+            el.innerHTML = extra;
+            document.getElementsByTagName('head')[0].appendChild(el);
+        }
     }
 };
 
