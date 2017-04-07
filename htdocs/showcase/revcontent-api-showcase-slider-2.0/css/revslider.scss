@@ -344,6 +344,11 @@
         }
 
         .rev-headline,
+        .rev-provider {
+            margin: -1px -1px 0 -1px;
+        }
+
+        .rev-headline,
         .rev-headline-max-check,
         .rev-provider {
             text-align: left;
@@ -356,10 +361,10 @@
 
         .rev-headline h3,
         .rev-headline-max-check h3 {
-            font-size: 16px;
+            font-size: 0px;
             font-weight: 500;
             letter-spacing: .2px;
-            line-height: 20px;
+            line-height: 0px;
             overflow: hidden;
             margin: 0;
             text-transform: none;
