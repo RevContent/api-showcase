@@ -102,6 +102,14 @@ app.service('widgets', function() {
             link: 'revcontent-api-showcase-solo-serve-1.0/index.html',
             docs: 'revcontent-api-showcase-solo-serve-1.0/README.md',
             bg: '#d6031d'
+        },
+        'scroller': {
+            title: 'RevScroller',
+            img: 'scroller.jpg',
+            description: 'Increase overall ad real estate with the RevScroller widget. As the user scrolls the page RevScroller will scroll with them to show the next row of ads. RevScroller also features a customizable layout that allows larger ads to be mixed in.',
+            link: 'revcontent-api-showcase-scroller-1.0/index.html',
+            docs: 'revcontent-api-showcase-scroller-1.0/README.md',
+            bg: '#faf5ee'
         }
         //'scrolling-exp': {
           //  title: 'Scrolling Experience',

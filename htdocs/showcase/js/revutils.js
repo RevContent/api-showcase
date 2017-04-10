@@ -83,15 +83,26 @@ utils.appendStyle = function(style, namespace, extra) {
     var namespace = namespace + '-append-style';
 
     if (!document.getElementById(namespace)) {
-        if (typeof extra === 'string') {
-            style += extra;
-        }
-
         var el = document.createElement('style');
         el.type = 'text/css';
         el.id = namespace;
         el.innerHTML = style;
         document.getElementsByTagName('head')[0].appendChild(el);
+    }
+
+    if (extra && typeof extra === 'string') {
+        var namespaceExtra = namespace + '-extra'
+        var extraStyleElement = document.getElementById(namespaceExtra);
+
+        if (extraStyleElement) {
+            extraStyleElement.innerHTML += extra;
+        } else {
+            var el = document.createElement('style');
+            el.type = 'text/css';
+            el.id = namespaceExtra;
+            el.innerHTML = extra;
+            document.getElementsByTagName('head')[0].appendChild(el);
+        }
     }
 };
 
@@ -424,9 +435,9 @@ utils.imagesLoaded = function(images) {
     return emitter;
 }
 
-utils.getComputedStyle = function (el, prop) {
+utils.getComputedStyle = function (el, prop, pseudoElt) {
     if (getComputedStyle !== 'undefined') {
-        return getComputedStyle(el, null).getPropertyValue(prop);
+        return getComputedStyle(el, pseudoElt).getPropertyValue(prop);
     } else {
         return el.currentStyle[prop];
     }
@@ -523,6 +534,17 @@ utils.throttle = function throttle(fn, threshhold, scope) {
         }
     };
 };
+
+utils.siblingIndex = function(el) {
+    if (!el) {
+        return false;
+    }
+    var i = 0;
+    while( (el = el.previousSibling) != null ) {
+      i++;
+    }
+    return i;
+}
 
 // -----  ----- //
 return utils;

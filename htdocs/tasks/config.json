@@ -33,6 +33,39 @@
       "./showcase/revcontent-api-showcase-slider-1.0/css/*"
     ]
   },
+  "slider2": {
+    "name": "rev-slider2",
+    "description": "Content Gallery",
+    "homepage": "http://labs.revcontent.com",
+    "version": "1.0.0",
+    "pkg": "./showcase/revcontent-api-showcase-slider-2.0/package.json",
+    "js": "./showcase/revcontent-api-showcase-slider-2.0/js/revslider.js",
+    "css": [
+        "./showcase/revcontent-api-showcase-slider-2.0/css/revslider.scss",
+        "./showcase/css/revdialog.css"
+    ],
+    "build": [
+      "./node_modules/es6-promise/dist/es6-promise.js",
+      "./node_modules/mobile-detect/mobile-detect.js",
+      "./showcase/revcontent-api-showcase-slider-2.0/node_modules/any-grid/dist/any-grid.js",
+      "./showcase/js/requestAnimationFrame.js",
+      "./showcase/js/revoverlay.js",
+      "./showcase/js/revutils.js",
+      "./showcase/js/revdialog.js",
+      "./showcase/js/revdisclose.js",
+      "./showcase/js/revdetect.js",
+      "./showcase/js/revbeacon.js",
+      "./showcase/js/revapi.js",
+      "./build/files/slider2/revslider2.embed.js"
+    ],
+    "watch": [
+      "./showcase/js/*",
+      "./showcase/css/*",
+      "./showcase/revcontent-api-showcase-slider-2.0/node_modules/any-grid/dist/any-grid.js",
+      "./showcase/revcontent-api-showcase-slider-2.0/js/*",
+      "./showcase/revcontent-api-showcase-slider-2.0/css/*"
+    ]
+  },
   "scroller": {
     "name": "rev-image",
     "description": "Scroller",
@@ -43,11 +76,13 @@
       "./showcase/revcontent-api-showcase-scroller-1.0/css/revscroller.scss"
     ],
     "build": [
-      "./build/files/slider/revslider.pkgd.js",
+      "./node_modules/jquery/dist/jquery.js",
+      "./node_modules/jquery-mousewheel/jquery.mousewheel.js",
+      "./build/files/slider2/revslider2.pkgd.js",
       "./build/files/scroller/revscroller.embed.js"
     ],
     "watch": [
-      "./build/files/slider/revslider.pkgd.js",
+      "./build/files/slider2/revslider2.pkgd.js",
       "./showcase/revcontent-api-showcase-scroller-1.0/js/*",
       "./showcase/revcontent-api-showcase-scroller-1.0/css/*"
     ]
@@ -206,7 +241,9 @@
     "css": [
     ],
     "build": [
+      "./node_modules/mobile-detect/mobile-detect.js",
       "./showcase/js/revutils.js",
+      "./showcase/js/revdetect.js",
       "./build/files/soloserve/revsoloserve.embed.js"
     ],
     "watch": [

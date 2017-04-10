@@ -1,15 +1,15 @@
-#RevFlicker
+#RevSlider
 
-RevFlicker is a touch enabled content carousel. Use it by placing an element along with the script and ad code definition on the page.
+RevSlider is a touch enabled content slider. Use it by placing an element along with the script and ad code definition on the page
 
 ```
-&lt;div id="rev-flicker"&gt;&lt;/div&gt;
+&lt;div id="rev-slider"&gt;&lt;div&gt;
 
-&lt;script src="http://labs-cdn.revcontent.com/build/revflicker.min.js">&lt;/script&gt;
+&lt;script src="http://labs-cdn.revcontent.com/build/revslider.min.js">&lt;/script&gt;
 
 &lt;script&gt;
-    new RevFlicker({
-        id: 'rev-flicker',
+    new RevSlider({
+        id: 'rev-slider',
         api_key: 'api_key',
         pub_id: 123,
         widget_id: 456,
@@ -34,9 +34,9 @@ your pub id
 your widget id
 
 ###id(required if element is not used)
-matches a div id on the page. For example to target ```&lt;div id="my-flicker">&lt;/div>```
+matches a div id on the page. For example to target ```&lt;div id="my-slider">&lt;/div>```
 ```
-id: 'my-flicker'
+id: 'my-slider'
 ```
 
 ###element(required if id is not used)
@@ -63,12 +63,35 @@ The position of the ad overlay icon. Available options include ```center```, ```
 ad_overlay_position: 'bottom_right'
 ```
 
+###api_source
+api_source used for tracking.
+```
+api_source: 'slide'
+```
+
+###buttons
+Button config. Enable/disable forward/back, size, position(```dots```, ```inside```, ```outside```, ```dual```), and style(```default```, ```fly-out```).
+```
+{
+    forward: true,
+    back: true,
+    size: 40,
+    position: 'inside',
+    style: 'default'
+}
+```
+
 ###css
 Additional CSS to append.
 ```
 css: ''
 ```
 
+###disable_pagination
+click and touch pagination events will be disabled
+```
+disable_pagination: false
+```
 
 ###devices
 Devices to show on. Options include ```phone```, ```tablet``` and ```desktop```.
@@ -86,12 +109,6 @@ Text to display for disclosure. This text triggers the disclosure/interests dial
 disclosure_text: 'Sponsored by Revcontent'
 ```
 
-###dots
-To show the pagination dots
-```
-dots: false
-```
-
 ###header
 Text displayed above ads. Wrapped inside ```&lt;h2 class="rev-header">```.
 ```
@@ -101,7 +118,7 @@ header: 'Trending Now'
 ###headline_size
 Number of lines that the headline can take up. Ignored if ```max_headline``` is set to true.
 ```
-headline_size: 2
+headline_size: 3
 ```
 
 ###hide_provider
@@ -110,22 +127,16 @@ Display the provider in the ads.
 hide_provider: false
 ```
 
-###image_ratio
-Ratio of the images. Available options include ```wide_rectangle```, ```rectangle```, ```square```.
-```
-image_ratio: (revDetect.mobile() ? 'wide_rectangle' : 'rectangle')
-```
-
-###hide_disclosure
-Set true to not display the disclosure text.
-```
-hide_disclosure: false
-```
-
 ###hide_header
 Set true to not display the headerl
 ```
 hide_header: false
+```
+
+###hide_footer
+Set true to not display the disclosure text.
+```
+hide_footer: false
 ```
 
 ###image_overlay
@@ -140,39 +151,28 @@ The position of the image overlay icon. Available options include ```center```, 
 image_overlay_position: 'center'
 ```
 
+###image_ratio
+Ratio of the images. Available options include ```wide_rectangle```, ```rectangle```, ```square```.
+```
+image_ratio: (revDetect.mobile() ? 'wide_rectangle' : 'rectangle')
+```
+
+###impression_tracker
+Pass in a variable array reference to use as the impression tracker. Allows for 2 widgets to share the same impressions.
+```
+impression_tracker: []
+```
+
 ###internal
 Number of internal ads to display. ```sponsored``` option is ignored and only internal ads are shown.
 ```
 internal: false
 ```
 
-###max_headline
-Show all of the headline for all ads. No ellipsis. This option overrides ```headline_size```
+###is\_resize\_bound
+Determines if the inner grid will update on resize.
 ```
-max_headline: false
-```
-
-###multipliers
-Tweak sizing relative to the ad size. Can be negative values.
-```
-{
-    line_height: 0,
-    font_size: 0,
-    margin: 0,
-    padding: 0
-}
-```
-
-###next_effect
-Allows the next/halved ad to have a slight transition.
-```
-next_effect: true
-```
-
-###next_width
-false
-```
-next_width: false
+is_resize_bound: true
 ```
 
 ###overlay_icons
@@ -181,8 +181,42 @@ Pass in custom icons where the key is the icon name and the value is the svg ico
 overlay_icons: false
 ```
 
+###max_headline
+Show all of the headline for all ads. No ellipsis. This option overrides ```headline_size```
+```
+max_headline: false
+```
+
+###min\_headline\_height
+Headline line height can not be less than this value in pixels
+```
+min_headline_height: 17
+```
+
+###multipliers
+Tweak sizing relative to the ad size. Can be negative values.
+```
+{
+    line_height: 0,
+    margin: 0,
+    padding: 0
+}
+```
+
+###pages
+Number of pages available to paginate.
+```
+pages: 4
+```
+
+###pagination_dots
+To show the pagination dots
+```
+pagination_dots: false
+```
+
 ###per_row
-Object or single value. Pass a single number to be used for every breakpoint or provide a value for each breakpoint.
+Number of ads per row. Object or single value. Pass a single number to be used for every breakpoint or provide a value for each breakpoint.
 ```
 per_row: {
     xxs: 1,
@@ -195,55 +229,45 @@ per_row: {
 }
 ```
 
+###prevent\_default\_pan
+If the user is paning over the ad prevent the default browser behavior.
+```
+prevent_default_pan: true
+```
+
 ###query_params
 Key value object for query params to send to server. Can be multidimensional
 ```
 query_params: false
 ```
 
-The example below demonstrates how to pass subid values. The resulting query parameters will be ```?revsub[key]=value```
-```
-query_params: {
-    revsub: {
-        key: 'value'
-    }
-}
-```
-
 ###rev_position
-Position of the disclosure text if ```hide_disclosure``` is not enabled. Options include: ```'bottom_right'```, ```'top_right'```, ```'bottom_left'```.
+Position of the disclosure text if ```hide_disclosure``` is not enabled. Options include: ```'bottom_right'```, ```'top_right'``` and ```'bottom_left'```.
 ```
 rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right')
+```
+
+###rows
+Number of rows to display. Object or single value. Pass a single number to be used for every breakpoint or provide a value for each breakpoint.
+```
+rows: {
+    xxs: 2,
+    xs: 2,
+    sm: 2,
+    md: 2,
+    lg: 2,
+    xl: 2,
+    xxl: 2
+}
 ```
 
 ###show_arrows
 Show paging arrows for mobile devices or desktop.
 ```
 {
-    mobile: false,
+    mobile: true,
     desktop: true
 }
-```
-
-###size
-Set fixed size for various measurements.
-```
-{
-    margin: false,
-    image_height: false,
-    headline_line_height: false,
-    headline_margin_top: false,
-    provider_line_height: false,
-    provider_margin_top: false,
-    provider_margin_bottom: false,
-    inner_margin: false
-}
-```
-
-###sponsored
-Number of sponsored ads to show. ```internal``` option overrides this value to only show internal.
-```
-sponsored: 10
 ```
 
 ###text_overlay
@@ -264,6 +288,18 @@ Value in pixels of the ad image if ```text_right``` is enabled
 text_right_height: 100
 ```
 
+###touch_direction
+Touch direction to listen to for pagination.
+```
+touch_direction: Hammer.DIRECTION_HORIZONTAL
+```
+
+###transition_duration
+duration of transition when ads are rearranged on resize.
+```
+transition_duration: 0
+```
+
 ###url
 Use an alternate API url
 ```
@@ -281,3 +317,48 @@ Pass user_ip to API
 ```
 user_ip: false
 ```
+
+###vertical
+Slide vertical rather than horizontal
+```
+vertical: false
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
