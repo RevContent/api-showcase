@@ -88,7 +88,7 @@
         <br /><br />
 
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <div class="redacted-image redacted-image-66"></div>
 
                 <br />
@@ -120,15 +120,7 @@
                 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
                 proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 
-                <br />
-
-                <br />
-
-                <div id="grid"></div>
-
-                <br />
-
-                <br />
+                <div style="background: inherit;" id="grid"></div>
 
                 <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                 tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
@@ -148,7 +140,7 @@
                 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
                 proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <h3 class="redacted">This is just a testing title</h3>
                 <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
 
@@ -274,19 +266,12 @@
             </div>
         </div>
         <!-- Footer -->
-        <footer>
-            <div class="row">
-                <div class="col-lg-12">
-                    <p>Copyright &copy; Your Website 2015</p>
-                </div>
-            </div>
-            <!-- /.row -->
-        </footer>
+
 
     </div>
 
    <!-- /. Fake Page Content -->
-
+    <!-- <script src="/build/files/scroller/revscroller.pkgd.js"></script> -->
     <script src="/build/revscroller.min.js"></script>
 
     <script>
@@ -297,16 +282,18 @@
             pub_id : 945,
             widget_id : 6181,
             domain : 'apiexamples.powr.com',
-            max_headline: false,
-            per_row: 4,
-            rows: 3,
+            auto_scroll: true,
+            css: '#rev-slider .rev-content { padding: 4px 3px } #rev-slider .rev-content .rev-headline h3 { line-height: 20px; } #rev-slider .rev-content.rev-colspan-2 .rev-headline h3 { line-height: 30px; } #rev-slider .rev-content.rev-colspan-2 .rev-headline { margin: 2px 4px 0; } #rev-slider .rev-content.rev-colspan-1 .rev-headline { margin-top: 2px; }',
             column_spans: [
                 {
                     spans: 2,
-                    selector: "#rev-slider .rev-content:nth-child(5)",
+                    selector: "#rev-slider.rev-slider-breakpoint-md .rev-content:nth-child(1)",
+                },
+                {
+                    spans: 2,
+                    selector: "#rev-slider.rev-slider-breakpoint-sm .rev-content:nth-child(3)",
                 }
             ],
-            css: '#rev-slider .rev-content { padding: 4px 2px } #rev-slider .rev-content.rev-colspan-1 .rev-headline h3 { line-height: 18px; } #rev-slider .rev-content.rev-colspan-2 .rev-headline { margin: 2px 4px 0; } #rev-slider .rev-content.rev-colspan-1 .rev-headline { margin-top: 2px; }'
         });
     </script>
 
