@@ -326,8 +326,8 @@ Author: michael@revcontent.com
             }
             this.grid.layout(11);
         }
-
-        var paddingTop = parseFloat(revUtils.getComputedStyle(content[0], 'padding-top'));
+        // use last element for padding-top
+        var paddingTop = parseFloat(revUtils.getComputedStyle(content[(content.length - 1)], 'padding-top'));
         var paddingRight = parseFloat(revUtils.getComputedStyle(content[0], 'padding-right'));
         var paddingBottom = parseFloat(revUtils.getComputedStyle(content[0], 'padding-bottom'));
         var paddingLeft = parseFloat(revUtils.getComputedStyle(content[0], 'padding-left'));

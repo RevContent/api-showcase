@@ -12,9 +12,9 @@
     <title>RevScroller Example</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="../css/bootstrap.css" rel="stylesheet">
 
-    <link href="css/style.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -279,7 +279,7 @@
     </div>
 
    <!-- /. Fake Page Content -->
-
+    <!-- <script src="/build/files/scroller/revscroller.pkgd.js"></script> -->
     <script src="/build/revscroller.min.js"></script>
 
     <script>
@@ -290,7 +290,17 @@
             pub_id : 945,
             widget_id : 6181,
             domain : 'apiexamples.powr.com',
-            css: '#rev-slider .rev-content { padding: 4px 3px } #rev-slider .rev-content .rev-headline h3 { line-height: 20px; } #rev-slider .rev-content.rev-colspan-2 .rev-headline h3 { line-height: 30px; } #rev-slider .rev-content.rev-colspan-2 .rev-headline { margin: 2px 4px 0; } #rev-slider .rev-content.rev-colspan-1 .rev-headline { margin-top: 2px; }'
+            css: '#rev-slider .rev-content { padding: 4px 3px } #rev-slider .rev-content .rev-headline h3 { line-height: 20px; } #rev-slider .rev-content.rev-colspan-2 .rev-headline h3 { line-height: 30px; } #rev-slider .rev-content.rev-colspan-2 .rev-headline { margin: 2px 4px 0; } #rev-slider .rev-content.rev-colspan-1 .rev-headline { margin-top: 2px; }',
+            column_spans: [
+                {
+                    spans: 2,
+                    selector: "#rev-slider.rev-slider-breakpoint-md .rev-content:nth-child(1)",
+                },
+                {
+                    spans: 2,
+                    selector: "#rev-slider.rev-slider-breakpoint-sm .rev-content:nth-child(3)",
+                }
+            ],
         });
     </script>
 

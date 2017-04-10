@@ -137,20 +137,20 @@ Author: michael@revcontent.com
 
         var that = this;
         var getHeight = function() {
-            var height = that.innerWidget.grid.heights[1].maxHeight;
+            that.heights = [];
             for(var prop in that.innerWidget.grid.heights) {
                 if (that.innerWidget.grid.heights.hasOwnProperty(prop)) {
-                    var maxHeight = that.innerWidget.grid.heights[prop].maxHeight;
-                    if (maxHeight > height) {
-                        height = maxHeight;
-                    }
+                    that.heights.push(that.innerWidget.grid.heights[prop].maxHeight);
                 }
             }
-            return height;
+            // sort ascending
+            that.heights.sort(function(a, b){return a - b});
         };
 
         this.innerWidget.emitter.on('resized', function() {
-            that.innerWidget.innerContainerElement.style.height = getHeight() + 'px';
+            getHeight(); // get heights
+            // set height to largest
+            that.innerWidget.innerContainerElement.style.height = that.heights[(that.heights.length - 1)] + 'px';
         });
 
         var that = this;
@@ -187,8 +187,8 @@ Author: michael@revcontent.com
                 i++;
             }
 
-            var bottom = Math.ceil(that.innerWidget.grid.heights[0].maxHeight + that.innerWidget.grid.heights[2].maxHeight);
-            if (page == 2 && Math.abs(that.transform) > bottom) {
+            var bottom = that.heights[0] + that.heights[1];
+            if (Math.abs(that.transform) > bottom) {
                 that.transform = bottom;
             }
 
@@ -312,7 +312,7 @@ Author: michael@revcontent.com
                 }
 
                 var holdIt = false;
-                var bottom = Math.ceil(that.innerWidget.grid.heights[0].maxHeight + that.innerWidget.grid.heights[2].maxHeight);
+                var bottom = that.heights[0] + that.heights[1];
                 if (Math.abs(that.transform) > bottom) {
                     holdIt = true;
                     that.transform = bottom * -1;
