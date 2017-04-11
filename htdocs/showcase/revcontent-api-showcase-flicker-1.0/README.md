@@ -252,6 +252,12 @@ Text will overlay the image rather than be position below it
 text_overlay: false
 ```
 
+###text_top
+Text will be positioned above the image
+```
+text_top: false
+```
+
 ###text_right
 Text will be positioned to the right of the image
 ```
@@ -280,4 +286,22 @@ user_agent: false
 Pass user_ip to API
 ```
 user_ip: false
+```
+
+###arrow_style
+Next/Previous arrow style. Can be circle or square.
+```
+arrow_style: 'circle'
+```
+
+###hotnum
+Show hot number count. 
+```
+hotnum: false
+```
+
+###hotnum_theme
+Theme for the hotnum. Can be default or social.
+```
+hotnum_theme: 'default'
 ```

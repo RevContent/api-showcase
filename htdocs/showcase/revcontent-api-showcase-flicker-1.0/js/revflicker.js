@@ -124,7 +124,7 @@ RevFlicker({
             ad_overlay_position: 'bottom_right', // center, top_left, top_right, bottom_right, bottom_left
             query_params: false,
             hotnum: false,
-            theme: 'default'
+            hotnum_theme: 'default'
         };
 
         // merge options
@@ -498,7 +498,7 @@ RevFlicker({
             html += '<div class="">'+
                     ( that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'margin: ' + that.providerMarginTop + 'px '  + that.innerMargin + 'px '+ that.providerMarginBottom +'px;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;height:' + that.providerLineHeight + 'px;') : '');
             if (that.options.hotnum === true) {
-                var theme = (that.options.theme === "social") ? 'rev-hot-social' : 'rev-hot-flame';
+                var theme = (that.options.hotnum_theme === "social") ? 'rev-hot-social' : 'rev-hot-flame';
                 html += '<div class="rev-hotnum ' + theme + '"><div class="rev-hot-img"></div>' + that.rcruntimec() + '</div>';
             }
 
