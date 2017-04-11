@@ -535,6 +535,16 @@ utils.siblingIndex = function(el) {
     return i;
 };
 
+utils.storeUserOptions = function(options){
+    var that = this;
+    that.userOptions = options;
+};
+
+utils.retrieveUserOptions = function(){
+    var that = this;
+    return that.userOptions;
+};
+
 // -----  ----- //
 return utils;
 

@@ -156,7 +156,21 @@
                     if(beacon.name === "adscore" && response != ''){
                         // Re-parse Adscore script and inject dynamic variables
                         if(Math.floor(Math.random()*(100)) < beacon.traffic_percent) {
-                            self.getParent().insertAdjacentHTML('beforeend', self.configureAdScore(response, beaconEl));
+                            // Retrieve shared options for api call
+                            var user_options = utilities.retrieveUserOptions();
+
+                            // XHR to Delivery for Info Payload (endpoint = /v1/request-info)
+                            // @todo Build an environment-friendly URL here...
+                            var payload_url = 'https://trends.revcontent.com/api/v1/request-info' +
+                                '?api_key=' + user_options.api_key +
+                                '&pub_id=' + user_options.pub_id +
+                                '&widget_id=' + user_options.widget_id +
+                                '&domain=' + user_options.domain +
+                                '&api_source=' + user_options.api_source;
+
+                            utilities.request(payload_url, function(response){
+                                self.getParent().insertAdjacentHTML('beforeend', self.configureAdScore(response, beaconEl));
+                            });
                         }
                     } else {
                         self.getParent().insertAdjacentHTML('beforeend', beaconEl);
@@ -189,11 +203,11 @@
 
     RevBeacon.prototype.configureAdScore = function(response, beacon){
         var self = this;
-        beacon = beacon.replace('{uid}', response[0].request.qip);
-        beacon = beacon.replace('{uip}', response[0].request.uip);
-        beacon = beacon.replace('{ref}', response[0].request.referrer);
-        beacon = beacon.replace('{fqdn}', response[0].request.domain);
-        beacon = beacon.replace('{cache}', response[0].request.cache);
+        beacon = beacon.replace('{uid}', response.qip);
+        beacon = beacon.replace('{uip}', response.uip);
+        beacon = beacon.replace('{ref}', response.referrer);
+        beacon = beacon.replace('{fqdn}', response.domain);
+        beacon = beacon.replace('{cache}', response.cache);
         return beacon;
     };
 
