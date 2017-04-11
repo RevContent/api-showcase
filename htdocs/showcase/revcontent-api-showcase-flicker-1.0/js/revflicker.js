@@ -535,7 +535,7 @@ RevFlicker({
         var runtime = new Date().getTime().toString().substr(7,5);
         var newruntime = runtime.indexOf("0") == 0 ? 1 + runtime.substr(1) : runtime;
 
-        newruntime = Math.round(newruntime / (Math.random() * 10)).toString();
+        newruntime = Math.round(newruntime / (Math.random() * 10)).toLocaleString();
 
         return newruntime.replace(/\\B(?=(\\d{3})+(?!\\d))/g, ",");
     }
