@@ -122,7 +122,9 @@ RevFlicker({
             image_overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
             ad_overlay: false, // pass key value object { content_type: icon }
             ad_overlay_position: 'bottom_right', // center, top_left, top_right, bottom_right, bottom_left
-            query_params: false
+            query_params: false,
+            hotnum: false,
+            theme: 'default'
         };
 
         // merge options
@@ -491,9 +493,16 @@ RevFlicker({
                 html += '<div class="rev-image" style="'+ imgWidth +'height:'+ that.preloaderHeight +'px"></div>';
             }
 
-            html += '<div class="rev-headline" style="max-height:'+ that.headlineHeight +'px; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>' +
+            html += '<div class="rev-headline-container">';
+            html += '<div class="rev-headline" style="max-height:'+ that.headlineHeight +'px; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>';
+            html += '<div class="">'+
                     ( that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'margin: ' + that.providerMarginTop + 'px '  + that.innerMargin + 'px '+ that.providerMarginBottom +'px;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;height:' + that.providerLineHeight + 'px;') : '');
+            if (that.options.hotnum === true) {
+                var theme = (that.options.theme === "social") ? 'rev-hot-social' : 'rev-hot-flame';
+                html += '<div class="rev-hotnum ' + theme + '"><div class="rev-hot-img"></div>' + that.rcruntimec() + '</div>';
+            }
 
+            html += '</div></div>';
             if (this.options.text_top) {
                 html += '<div class="rev-image" style="'+ imgWidth +'height:'+ that.preloaderHeight +'px"></div>';
             }
@@ -520,6 +529,16 @@ RevFlicker({
             that.attachNextEffect();
         }
     };
+
+    RevFlicker.prototype.rcruntimec = function()
+    {
+        var runtime = new Date().getTime().toString().substr(7,5);
+        var newruntime = runtime.indexOf("0") == 0 ? 1 + runtime.substr(1) : runtime;
+
+        newruntime = Math.round(newruntime / (Math.random() * 10)).toString();
+
+        return newruntime.replace(/\\B(?=(\\d{3})+(?!\\d))/g, ",");
+    }
 
     RevFlicker.prototype.getSerializedQueryParams = function() {
          if (!this.serializedQueryParams) {
