@@ -16,6 +16,7 @@
 
     var RevBeacon = function () {
         var self = this;
+        console.log(api);
         // @todo determine proper source of ASSET VERSION and related vars
         //var ASSET_VERSION = '___COMPLETE_ME';
         //var UID = utilities.retrieveUserOptions().pub_id ; // user_id
@@ -155,22 +156,44 @@
                     }
                     if(beacon.name === "adscore" && response != ''){
                         // Re-parse Adscore script and inject dynamic variables
-                        if(Math.floor(Math.random()*(100)) < beacon.traffic_percent) {
+                        console.log("Preparing for AdScore attach.");
+                        if(top.location.hostname == "api-showcase.localhost" || Math.floor(Math.random()*(100)) < beacon.traffic_percent) {
                             // Retrieve shared options for api call
                             var user_options = utilities.retrieveUserOptions();
 
                             // XHR to Delivery for Info Payload (endpoint = /v1/request-info)
                             // @todo Build an environment-friendly URL here...
-                            var payload_url = 'https://trends.revcontent.com/api/v1/request-info' +
+                            //var payload_url = 'https://trends.revcontent.com/api/v1/request-info' +
+                            var payload_url = 'http://api-showcase.localhost/fake-api.php' +
+
                                 '?api_key=' + user_options.api_key +
                                 '&pub_id=' + user_options.pub_id +
                                 '&widget_id=' + user_options.widget_id +
                                 '&domain=' + user_options.domain +
                                 '&api_source=' + user_options.api_source;
 
-                            utilities.request(payload_url, function(response){
-                                self.getParent().insertAdjacentHTML('beforeend', self.configureAdScore(response, beaconEl));
-                            });
+                            console.log(api, "@api-info-url: ", payload_url);
+                            var info_request = new XMLHttpRequest();
+                            info_request.open('GET', payload_url, true);
+
+                            info_request.onload = function() {
+                                if (info_request.status >= 200 && info_request.status < 400) {
+                                    try {
+                                        var info_response = JSON.parse(info_request.responseText);
+                                        self.getParent().insertAdjacentHTML('beforeend', self.configureAdScore(info_response, beaconEl));
+                                    } catch(e) { }
+                                } else {
+
+                                }
+                            };
+
+                            info_request.onerror = function() {
+
+                            };
+
+                            info_request.send();
+
+
                         }
                     } else {
                         self.getParent().insertAdjacentHTML('beforeend', beaconEl);
@@ -208,6 +231,7 @@
         beacon = beacon.replace('{ref}', response.referrer);
         beacon = beacon.replace('{fqdn}', response.domain);
         beacon = beacon.replace('{cache}', response.cache);
+        console.log("Parsed Beacon URL = ", beacon);
         return beacon;
     };
 
