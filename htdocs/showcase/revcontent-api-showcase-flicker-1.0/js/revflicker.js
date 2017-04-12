@@ -123,8 +123,8 @@ RevFlicker({
             ad_overlay: false, // pass key value object { content_type: icon }
             ad_overlay_position: 'bottom_right', // center, top_left, top_right, bottom_right, bottom_left
             query_params: false,
-            hotnum: false,
-            hotnum_theme: 'default'
+            trending: false,
+            trending_theme: 'default'
         };
 
         // merge options
@@ -497,9 +497,9 @@ RevFlicker({
             html += '<div class="rev-headline" style="max-height:'+ that.headlineHeight +'px; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>';
             html += '<div class="">'+
                     ( that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'margin: ' + that.providerMarginTop + 'px '  + that.innerMargin + 'px '+ that.providerMarginBottom +'px;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;height:' + that.providerLineHeight + 'px;') : '');
-            if (that.options.hotnum === true) {
-                var theme = (that.options.hotnum_theme === "social") ? 'rev-hot-social' : 'rev-hot-flame';
-                html += '<div class="rev-hotnum ' + theme + '"><div class="rev-hot-img"></div>' + that.rcruntimec() + '</div>';
+            if (that.options.trending === true) {
+                var theme = (that.options.trending_theme === "social") ? 'rev-hot-social' : 'rev-hot-flame';
+                html += '<div class="rev-trending ' + theme + '"><div class="rev-hot-img"></div>' + that.rcruntimec() + '</div>';
             }
 
             html += '</div></div>';

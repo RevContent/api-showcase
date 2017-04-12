@@ -294,14 +294,14 @@ Next/Previous arrow style. Can be circle or square.
 arrow_style: 'circle'
 ```
 
-###hotnum
-Show hot number count. 
+###trending
+Show trending number count. 
 ```
-hotnum: false
+trending: false
 ```
 
-###hotnum_theme
-Theme for the hotnum. Can be default or social.
+###trending_theme
+Theme for trending. Can be default or social.
 ```
-hotnum_theme: 'default'
+trending_theme: 'default'
 ```
