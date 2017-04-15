@@ -90,6 +90,9 @@ RevShifter({
         //a hack to make up for revUtils shortcomings
         this.options.inner_widget_options = revUtils.extend(defaults.inner_widget_options, opts.inner_widget_options);
 
+        // store options
+        revUtils.storeUserOptions(this.options);
+
         // param errors
         if (revUtils.validateApiParams(this.options).length) {
             return;

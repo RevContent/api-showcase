@@ -86,6 +86,9 @@ RevToaster({
         this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
         this.options.sponsored = (this.options.sponsored > 2) ? 2 : this.options.sponsored;
 
+        // store options
+        revUtils.storeUserOptions(this.options);
+
         // param errors
         if (revUtils.validateApiParams(this.options).length) {
             return;
