@@ -432,7 +432,7 @@ RevToaster({
                     if (that.showVisibleElement) {
                         document.body.style.marginBottom = that.getSize() + 'px';
                     }
-                    if(true === that.options.beacons) { revApi.beacons.setPluginSource('toaster').attach(that.data); }
+                    if(true === that.options.beacons) { revApi.beacons.setPluginSource('toaster').attach(); }
                 });
             });
         };

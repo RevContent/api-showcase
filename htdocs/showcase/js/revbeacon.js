@@ -131,7 +131,7 @@
         return (typeof self.parent === 'object' ? self.parent : document.getElementsByTagName('body')[0]);
     };
 
-    RevBeacon.prototype.attach = function(response){
+    RevBeacon.prototype.attach = function(){
         var self = this;
         if(true === self.push && !self.pushed) {
             for (var b = 0; b < self.enabledBeacons.length; b++) {

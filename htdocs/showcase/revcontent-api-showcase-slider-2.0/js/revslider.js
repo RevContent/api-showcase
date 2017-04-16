@@ -120,6 +120,9 @@ Author: michael@revcontent.com
         // merge options
         this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
 
+        // store options
+        revUtils.storeUserOptions(this.options);
+
         if (revUtils.validateApiParams(this.options).length) {
             return;
         }
@@ -1431,7 +1434,7 @@ Author: michael@revcontent.com
         // console.log(this.viewed);
 
         if (!this.options.impression_tracker.length && this.options.beacons) {
-            revApi.beacons.setPluginSource(this.options.api_source).attach(this.data);
+            revApi.beacons.setPluginSource(this.options.api_source).attach();
         }
 
         // check to see if we have not already registered for the offset
