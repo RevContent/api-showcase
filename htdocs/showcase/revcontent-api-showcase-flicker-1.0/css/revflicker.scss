@@ -61,6 +61,10 @@ body {
     opacity: 0;
 }
 
+#rev-flicker .flickity-prev-next-button.square {
+    border-radius: 0;
+}
+
 #rev-flicker .rev-sponsored a {
     color: #999;
 }

@@ -62,11 +62,11 @@ RevFlicker({
             per_row: {
                 xxs: 1,
                 xs: 1,
-                sm: 2,
-                md: 3,
-                lg: 4,
-                xl: 5,
-                xxl: 6
+                sm: 3,
+                md: 4,
+                lg: 5,
+                xl: 6,
+                xxl: 7
             },
             image_ratio: (revDetect.mobile() ? 'wide_rectangle' : 'rectangle'),
             header: 'Trending Now',
@@ -172,9 +172,14 @@ RevFlicker({
             pageDots: this.options.dots,
             cellAlign: 'left',
             percentPosition: false,
-            wrapAround: true,
-            arrow_style: this.options.arrow_style
+            wrapAround: true
         });
+
+        var buttons = this.flickity.element.querySelectorAll('.flickity-prev-next-button');
+        for (var i = 0; i < buttons.length; i++) {
+            var button = buttons[i];
+            revUtils.addClass(button, this.options.arrow_style);
+        }
 
         this.setMultipliers();
 
@@ -229,7 +234,6 @@ RevFlicker({
 
             ad.style.width = this.columnWidth + 'px';
             ad.style.marginRight = this.margin + 'px';
-            //ad.querySelectorAll('.rev-ad')[0].style.height = this.getCellHeight() + 'px';
 
             ad.querySelectorAll('.rev-image')[0].style.height = this.preloaderHeight + 'px';
             ad.querySelectorAll('.rev-headline')[0].style.maxHeight = this.headlineHeight + 'px';
@@ -445,10 +449,6 @@ RevFlicker({
             }
         } else {
             revUtils.removeClass(this.containerElement, 'rev-flicker-text-overlay');
-            for (var i = 0; i < ads.length; i++) {
-                var ad = ads[i];
-                //ad.style.height = this.getCellHeight() + 'px';
-            }
         }
     };
 
@@ -743,10 +743,6 @@ RevFlicker({
         '&widget_id=' + this.options.widget_id +
         '&domain=' + this.options.domain +
         '&api_source=' + this.options.api_source;
-
-        //url +=
-        //'&img_h=' + this.imageHeight +
-        //'&img_w=' + this.imageWidth;
 
         url +=
         '&sponsored_count=' + (this.options.internal ? 0 : count) +
