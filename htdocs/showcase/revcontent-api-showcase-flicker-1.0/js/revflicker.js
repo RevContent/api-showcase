@@ -242,7 +242,7 @@ RevFlicker({
             ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
             ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
             if(that.options.hide_provider === false) {
-                ad.querySelectorAll('.rev-provider')[0].style.margin = this.providerMarginTop + 'px '  + this.innerMargin + 'px '+ this.providerMarginBottom +'px';
+                ad.querySelectorAll('.rev-provider')[0].style.padding = this.providerMarginTop + 'px '  + this.innerMargin + 'px '+ this.providerMarginBottom +'px';
                 ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize + 'px';
                 ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
                 ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight + 'px';
