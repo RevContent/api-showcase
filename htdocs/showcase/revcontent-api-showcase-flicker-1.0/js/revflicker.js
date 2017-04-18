@@ -237,7 +237,7 @@ RevFlicker({
 
             ad.querySelectorAll('.rev-image')[0].style.height = this.preloaderHeight + 'px';
             ad.querySelectorAll('.rev-headline')[0].style.maxHeight = this.headlineHeight + 'px';
-            ad.querySelectorAll('.rev-headline')[0].style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
+            ad.querySelectorAll('.rev-headline')[0].style.padding = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
 
             ad.querySelectorAll('.rev-headline h3')[0].style.fontSize = this.headlineFontSize +'px';
             ad.querySelectorAll('.rev-headline h3')[0].style.lineHeight = this.headlineLineHeight +'px';
@@ -367,9 +367,10 @@ RevFlicker({
         }
         this.headlineFontSize = Math.min(this.headlineLineHeight, (this.headlineLineHeight * this.fontSizeMultiplier).toFixed(2) / 1);
 
-        this.headlineHeight = ((this.headlineLineHeight * this.options.headline_size).toFixed(2) / 1);
-
         this.headlineMarginTop = this.options.size.headline_margin_top ? this.options.size.headline_margin_top : ((this.headlineLineHeight * .4).toFixed(2) / 1);
+
+        this.headlineHeight = ((this.headlineLineHeight * this.options.headline_size).toFixed(2) / 1) + this.headlineMarginTop;
+
         this.innerMargin = this.options.size.inner_margin ? this.options.size.inner_margin : Math.max(0, ((this.columnWidth * this.paddingMultiplier).toFixed(2) / 1));
 
         this.providerLineHeight = this.options.size.provider_line_height ? this.options.size.provider_line_height : (this.headlineLineHeight * .75).toFixed(2) / 1;
@@ -494,7 +495,7 @@ RevFlicker({
             }
 
             html += '<div class="rev-headline-container">';
-            html += '<div class="rev-headline" style="max-height:'+ that.headlineHeight +'px; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>';
+            html += '<div class="rev-headline" style="max-height:'+ that.headlineHeight +'px; padding:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>';
             html += '<div class="rev-provider-container">'+
                     ( that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'padding: ' + that.providerMarginTop + 'px '  + that.innerMargin + 'px '+ that.providerMarginBottom +'px;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;height:' + that.providerLineHeight + 'px;') : '');
             if (that.options.trending === true) {
@@ -785,14 +786,14 @@ RevFlicker({
                 var el = document.createElement('div');
                 el.style.position = 'absolute';
                 el.style.zIndex = '100';
-                el.style.margin = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
+                el.style.padding = this.headlineMarginTop +'px ' + this.innerMargin + 'px 0';
                 el.innerHTML = '<h3 style="font-size:'+ this.headlineFontSize + 'px;line-height:'+ this.headlineLineHeight +'px">'+ this.data[i].headline + '</h3>';
                 revUtils.prepend(ad, el); // do it this way b/c changin the element height on the fly needs a repaint and requestAnimationFrame is not avail in IE9
                 maxHeight = Math.max(maxHeight, el.clientHeight);
                 revUtils.remove(el);
             }
         }
-        return maxHeight;
+        return maxHeight + this.headlineMarginTop;
     };
 
     return RevFlicker;
