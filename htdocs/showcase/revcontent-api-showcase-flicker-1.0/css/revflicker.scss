@@ -117,8 +117,7 @@ body {
 }
 
 #rev-flicker.rev-flicker-text-right .rev-image {
-    float: left;
-    margin-right: 5px;
+    display: table-cell;
 }
 
 #rev-flicker.rev-flicker-text-right .rev-image img {
@@ -126,8 +125,17 @@ body {
     border-bottom-left-radius: 5px;
 }
 
+#rev-flicker.rev-flicker-text-right .rev-ad {
+    display: table;
+}
+
 #rev-flicker.rev-flicker-text-right .rev-ad a .rev-headline {
     margin-top: 0 !important;
+}
+
+#rev-flicker.rev-flicker-text-right .rev-ad a .rev-headline-container{
+    display: table-cell;
+    vertical-align: top;
 }
 
 #rev-flicker.rev-flicker-text-top .rev-image img {
