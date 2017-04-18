@@ -350,15 +350,15 @@ RevFlicker({
         if (!this.options.text_right && this.options.size.image_height) {
             this.imageHeight = this.options.size.image_height * 2;
             this.imageWidth = this.columnWidth * 2;
-        } else if (this.options.image_ratio == 'square') {
-            this.imageHeight = 450;
-            this.imageWidth = 450;
-        } else if (this.options.image_ratio == 'rectangle') {
-            this.imageHeight = 450;
-            this.imageWidth = 600;
-        } else if (this.options.image_ratio == 'wide_rectangle') {
-            this.imageHeight = 450;
-            this.imageWidth = 800;
+        } else if (this.options.image_ratio == 'square') { // 1:1
+            this.imageHeight = 300;
+            this.imageWidth = 300;
+        } else if (this.options.image_ratio == 'rectangle') { // 4:3
+            this.imageHeight = 300;
+            this.imageWidth = 400;
+        } else if (this.options.image_ratio == 'wide_rectangle') { // 16:9
+            this.imageHeight = 300;
+            this.imageWidth = 533;
         }
 
         this.headlineLineHeight = this.options.size.headline_line_height ? this.options.size.headline_line_height : (this.columnWidth * this.lineHeightMultiplier).toFixed(2) / 1;
@@ -495,14 +495,15 @@ RevFlicker({
 
             html += '<div class="rev-headline-container">';
             html += '<div class="rev-headline" style="max-height:'+ that.headlineHeight +'px; margin:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>';
-            html += '<div class="">'+
-                    ( that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'margin: ' + that.providerMarginTop + 'px '  + that.innerMargin + 'px '+ that.providerMarginBottom +'px;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;height:' + that.providerLineHeight + 'px;') : '');
+            html += '<div class="rev-provider-container">'+
+                    ( that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'padding: ' + that.providerMarginTop + 'px '  + that.innerMargin + 'px '+ that.providerMarginBottom +'px;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;height:' + that.providerLineHeight + 'px;') : '');
             if (that.options.trending === true) {
                 var theme = (that.options.trending_theme === "social") ? 'rev-hot-social' : 'rev-hot-flame';
                 html += '<div class="rev-trending ' + theme + '"><div class="rev-hot-img"></div>' + that.rcruntimec() + '</div>';
             }
 
-            html += '</div></div>';
+            html += '</div>';
+            html += '</div>';
             if (this.options.text_top) {
                 html += '<div class="rev-image" style="'+ imgWidth +'height:'+ that.preloaderHeight +'px"></div>';
             }
@@ -743,6 +744,10 @@ RevFlicker({
         '&widget_id=' + this.options.widget_id +
         '&domain=' + this.options.domain +
         '&api_source=' + this.options.api_source;
+
+        url +=
+            '&img_h=' + this.imageHeight +
+            '&img_w=' + this.imageWidth;
 
         url +=
         '&sponsored_count=' + (this.options.internal ? 0 : count) +

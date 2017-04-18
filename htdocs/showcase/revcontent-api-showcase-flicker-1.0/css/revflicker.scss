@@ -168,10 +168,15 @@ body {
     overflow: hidden !important;
 }
 
+#rev-flicker .rev-provider-container {
+    display: table;
+    width: 100%;
+}
+
 #rev-flicker .rev-provider {
+    display: table-cell;
     color: #999;
     margin-bottom: 5px;
-    float: left;
 }
 
 #rev-flicker .rev-ad {
@@ -268,9 +273,10 @@ body {
 }
 
 #rev-flicker .rev-trending {
-    float: right;
+    display: table-cell;
+    text-align: right;
     color: #e63e3e;
-    margin-right:4px;
+    padding-right:4px;
 }
 
 #rev-flicker .rev-trending.rev-hot-social {
