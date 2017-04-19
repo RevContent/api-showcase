@@ -145,6 +145,10 @@ body {
     border-bottom-right-radius: 5px;
 }
 
+#rev-flicker.rev-flicker-square-border * {
+    border-radius: 0px !important;
+}
+
 
 #rev-flicker .rev-image img {
     display: block;

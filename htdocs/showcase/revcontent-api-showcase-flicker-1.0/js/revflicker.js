@@ -88,6 +88,7 @@ RevFlicker({
             max_headline: false,
             text_overlay: false,
             ad_border: true,
+            square_border: false,
             disclosure_text: revDisclose.defaultDisclosureText,
             hide_provider: false,
             beacons: true,
@@ -154,6 +155,9 @@ RevFlicker({
 
         if (this.options.transition_content) {
             revUtils.addClass(this.containerElement, 'transition-content');
+        }
+        if (this.options.square_border) {
+            revUtils.addClass(this.containerElement, 'rev-flicker-square-border');
         }
 
         this.flickerElement = document.createElement('div');
