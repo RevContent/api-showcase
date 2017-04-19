@@ -51,6 +51,12 @@ Display a border around each ad
 ad_border: true
 ```
 
+###square_border
+Display square borders.
+```
+square_border: true
+```
+
 ###ad_overlay
 Key value ad overlay config object where the key is the content type and the value is the icon to use. For example to use the ```video_rectangle``` icon for video content use ```video: 'video_rectangle'```. The icon will be appended to the ```.rev-ad``` element.
 ```
