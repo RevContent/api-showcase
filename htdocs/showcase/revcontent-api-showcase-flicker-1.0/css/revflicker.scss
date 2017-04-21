@@ -119,7 +119,6 @@ body {
 #rev-flicker.rev-flicker-text-right .rev-image {
     float: left;
     width: 50%;
-    //margin-right: 5px;
 }
 
 #rev-flicker.rev-flicker-text-right .rev-image img {
@@ -190,11 +189,6 @@ body {
     overflow: hidden !important;
 }
 
-/*#rev-flicker .rev-provider-container {
-    //display: table;
-    //width: 100%;
-}*/
-
 #rev-flicker .rev-provider-container:before, #rev-flicker .rev-provider-container:after {
   content: " ";
   display: table;
@@ -205,11 +199,8 @@ body {
 
 
 #rev-flicker .rev-provider {
-    //display: table-cell;
     float: left;
-    //width: 50%;
     color: #999;
-    //margin-bottom: 5px;
 }
 
 #rev-flicker .rev-ad {
@@ -306,7 +297,6 @@ body {
 }
 
 #rev-flicker .rev-trending {
-    //display: table-cell;
     float: left;
     width: 50%;
     text-align: right;
