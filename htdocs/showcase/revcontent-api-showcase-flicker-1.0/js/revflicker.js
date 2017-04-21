@@ -68,7 +68,7 @@ RevFlicker({
                 xl: 6,
                 xxl: 7
             },
-            image_ratio: (revDetect.mobile() ? 'wide_rectangle' : 'rectangle'),
+            image_ratio: 'rectangle', //(revDetect.mobile() ? 'wide_rectangle' : 'rectangle'),
             header: 'Trending Now',
             rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right'),
             next_effect: true,
@@ -249,7 +249,6 @@ RevFlicker({
                 ad.querySelectorAll('.rev-provider')[0].style.padding = this.providerMarginTop + 'px '  + this.innerMargin + 'px '+ this.providerMarginBottom +'px';
                 ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize + 'px';
                 ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
-                ad.querySelectorAll('.rev-provider')[0].style.height = this.providerLineHeight + 'px';
             }
         }
 
@@ -389,8 +388,8 @@ RevFlicker({
         this.preloaderHeight = this.options.size.image_height ? this.options.size.image_height : Math.round((this.columnWidth - (this.options.ad_border ? 2 : 0)) * (this.imageHeight / this.imageWidth));
 
         if (this.options.text_right) {
-            this.preloaderHeight = this.options.text_right_height;
-            this.preloaderWidth = Math.round(this.preloaderHeight * (this.imageWidth / this.imageHeight) * 100) / 100;
+            this.preloaderHeight = 'auto';
+            this.preloaderWidth = '50%';
         }
     };
 
@@ -490,6 +489,11 @@ RevFlicker({
 
         var imgWidth = typeof this.preloaderWidth === 'undefined' ? 'width:auto;' : 'width:' + this.preloaderWidth + 'px;';
 
+        var proWidth =  'width: 50%;';
+        if (this.options.text_right && !this.options.trending) {
+            proWidth = 'width: 100%;';
+        }
+
         for (var j = index; j < count; j++) {
             var html = '<div class="rev-ad" style="border-width:' + (that.options.ad_border ? '1px' : '0') + '">' +
                         '<a href="" rel="nofollow" target="_blank">';
@@ -501,8 +505,8 @@ RevFlicker({
             html += '<div class="rev-headline-container">';
             html += '<div class="rev-headline" style="max-height:'+ that.headlineHeight +'px; padding:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>';
             html += '<div class="rev-provider-container">'+
-                    ( that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'padding: ' + that.providerMarginTop + 'px '  + that.innerMargin + 'px '+ that.providerMarginBottom +'px;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;height:' + that.providerLineHeight + 'px;') : '');
-            if (that.options.trending === true) {
+                    ( that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'padding: ' + that.providerMarginTop + 'px '  + that.innerMargin + 'px '+ that.providerMarginBottom +'px;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;' + proWidth) : '');
+            if (this.options.trending === true) {
                 var theme = (that.options.trending_theme === "social") ? 'rev-hot-social' : 'rev-hot-flame';
                 html += '<div class="rev-trending ' + theme + '"><div class="rev-hot-img"></div>' + that.rcruntimec() + '</div>';
             }
