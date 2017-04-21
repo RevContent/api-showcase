@@ -68,7 +68,7 @@ RevFlicker({
                 xl: 6,
                 xxl: 7
             },
-            image_ratio: 'rectangle', //(revDetect.mobile() ? 'wide_rectangle' : 'rectangle'),
+            image_ratio: 'rectangle',
             header: 'Trending Now',
             rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right'),
             next_effect: true,
