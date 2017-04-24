@@ -54,7 +54,7 @@ ad_border: true
 ###square_border
 Display square borders.
 ```
-square_border: true
+square_border: false
 ```
 
 ###ad_overlay

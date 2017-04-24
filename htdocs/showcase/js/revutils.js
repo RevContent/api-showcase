@@ -435,7 +435,6 @@ utils.getComputedStyle = function (el, prop) {
 utils.setImage = function(wrapperElement, src) {
     var img = document.createElement('img');
     img.src = src;
-    img.style.width = '100%';
     this.append(wrapperElement, img);
 };
 
