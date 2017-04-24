@@ -490,7 +490,7 @@ RevFlicker({
         var imgWidth = typeof this.preloaderWidth === 'undefined' ? 'width:auto;' : 'width:' + this.preloaderWidth + 'px;';
 
         var proWidth =  'width: 50%;';
-        if (this.options.text_right && !this.options.trending) {
+        if (!this.options.trending) {
             proWidth = 'width: 100%;';
         }
 
