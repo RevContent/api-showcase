@@ -159,6 +159,9 @@ RevFlicker({
         if (this.options.square_border) {
             revUtils.addClass(this.containerElement, 'rev-flicker-square-border');
         }
+        if (this.options.arrow_style === 'square') {
+            revUtils.addClass(this.containerElement, 'rev-flicker-square-arrows');
+        }
 
         this.flickerElement = document.createElement('div');
 
@@ -178,12 +181,6 @@ RevFlicker({
             percentPosition: false,
             wrapAround: true
         });
-
-        var buttons = this.flickity.element.querySelectorAll('.flickity-prev-next-button');
-        for (var i = 0; i < buttons.length; i++) {
-            var button = buttons[i];
-            revUtils.addClass(button, this.options.arrow_style);
-        }
 
         this.setMultipliers();
 
