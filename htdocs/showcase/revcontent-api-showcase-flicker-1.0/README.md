@@ -51,6 +51,12 @@ Display a border around each ad
 ad_border: true
 ```
 
+###square_border
+Display square borders.
+```
+square_border: false
+```
+
 ###ad_overlay
 Key value ad overlay config object where the key is the content type and the value is the icon to use. For example to use the ```video_rectangle``` icon for video content use ```video: 'video_rectangle'```. The icon will be appended to the ```.rev-ad``` element.
 ```
@@ -252,6 +258,12 @@ Text will overlay the image rather than be position below it
 text_overlay: false
 ```
 
+###text_top
+Text will be positioned above the image
+```
+text_top: false
+```
+
 ###text_right
 Text will be positioned to the right of the image
 ```
@@ -280,4 +292,22 @@ user_agent: false
 Pass user_ip to API
 ```
 user_ip: false
+```
+
+###arrow_style
+Next/Previous arrow style. Can be circle or square.
+```
+arrow_style: 'circle'
+```
+
+###trending
+Show trending number count. 
+```
+trending: false
+```
+
+###trending_theme
+Theme for trending. Can be default or social.
+```
+trending_theme: 'default'
 ```
