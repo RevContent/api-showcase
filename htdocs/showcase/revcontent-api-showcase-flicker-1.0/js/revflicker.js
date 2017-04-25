@@ -367,7 +367,7 @@ RevFlicker({
         }
         this.headlineFontSize = Math.min(this.headlineLineHeight, (this.headlineLineHeight * this.fontSizeMultiplier).toFixed(2) / 1);
 
-        this.headlineMarginTop = this.options.size.headline_margin_top ? this.options.size.headline_margin_top : ((this.headlineLineHeight * .4).toFixed(2) / 1);
+        this.headlineMarginTop = this.options.size.headline_margin_top ? this.options.size.headline_margin_top : ((this.headlineLineHeight * .2).toFixed(2) / 1);
 
         this.headlineHeight = ((this.headlineLineHeight * this.options.headline_size).toFixed(2) / 1) + this.headlineMarginTop;
 
