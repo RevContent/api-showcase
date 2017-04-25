@@ -70,7 +70,8 @@
             },
             cssOverrides: (self.data.css !== undefined && self.data.css.length > 0) ? self.data.css.toString().trim() : '',
             amp: {
-                useAmpImage: ((self.data.ampcreative !== undefined && self.data.ampcreative != "true") ? false : true)
+                // useAmpImage: ((self.data.ampcreative !== undefined && self.data.ampcreative != "true") ? false : true)
+                useAmpImage: false
             }
         };
         self.timeouts = {
@@ -647,9 +648,9 @@
      */
     RevAMP.prototype.createAMPDocument = function () {
         var self = this;
-        if(self.api.amp.useAmpImage){
+        // if(self.api.amp.useAmpImage){
             self.createAMPStyles();
-        }
+        // }
         return self;
     };
 
