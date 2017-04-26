@@ -118,6 +118,18 @@ Number of lines that the headline can take up. Ignored if ```max_headline``` is 
 headline_size: 3
 ```
 
+###image_overlay
+Key value image overlay object config where the key is the content type and the value is the icon to use. For example to use the ```video_rectangle``` icon for video content use ```video: 'video_rectangle'```. The icon will be appended to the ```.rev-image``` element.
+```
+image_overlay: false
+```
+
+###image\_overlay\_position
+The position of the image overlay icon. Available options include ```center```, ```top_left```, ```top_right```, ```bottom_right``` and ```bottom_left```.
+```
+image_overlay_position: 'center'
+```
+
 ###max_headline
 Show all of the headline for all ads. No ellipsis. This option overrides ```headline_size```
 ```
@@ -132,6 +144,12 @@ Tweak sizing relative to the ad size. Can be negative values.
     margin: 0,
     padding: 0
 }
+```
+
+###overlay_icons
+Pass in custom icons where the key is the icon name and the value is the svg icon. For example ```{article_square: '&lt;svg>&lt;/svg>'}```. Default icons include ```video_rectangle```, ```video_square```, ```video_circle1```, ```video_circle2``` and ```video_triangle```.
+```
+overlay_icons: false
 ```
 
 ###per_row
