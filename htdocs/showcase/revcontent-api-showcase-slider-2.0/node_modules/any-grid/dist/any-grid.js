@@ -2859,6 +2859,7 @@ var AnyGrid = Outlayer.create( 'anyGrid', {
         xxl: 6
     },
     breakpoints: {
+        xxs: 0,
         xs: 250,
         sm: 500,
         md: 750,
@@ -2877,6 +2878,28 @@ var AnyGrid = Outlayer.create( 'anyGrid', {
     removeVerticalGutters: false,
     column_spans: false
 });
+
+AnyGrid.prototype.getGreaterLessThanBreakPoints = function() {
+  var breakpoints = [];
+  var index = 0;
+  var indexed = false;
+  for (var key in this.options.breakpoints) {
+    if (this.options.breakpoints.hasOwnProperty(key)) {
+      breakpoints.push(key);
+      if (this.getBreakPoint() == key) {
+        indexed = true;
+      }
+      if (!indexed) {
+        index++;
+      }
+    }
+  }
+
+  return {
+    gt: breakpoints.slice(0, index),
+    lt: breakpoints.slice(index + 1)
+  }
+};
 
 AnyGrid.prototype.getBreakPoint = function() {
     return this.breakPoint;
@@ -2905,7 +2928,7 @@ AnyGrid.prototype._itemize = function( elems ) {
     for (var j = 0; j < this.options.column_spans.length; j++) {
       if (matchesSelector(elem, this.options.column_spans[j].selector)) {
         item.span = this.options.column_spans[j].spans;
-        break;
+        // break;
       }
       // console.log(this.options.column_spans[i].selector);
     }
@@ -2942,6 +2965,7 @@ AnyGrid.prototype._resetLayout = function(check) {
     this.rows = {};
     this.nextRow = 0;
     this.rowCounter = 0;
+    this.spanCounter = 0;
     this.nextColumn = 0;
     this.heights = {};
     this.maxHeight = 0;
@@ -3097,6 +3121,12 @@ AnyGrid.prototype._getItemLayoutPosition = function( item ) {
       this.element.parentNode.style.marginLeft = (paddingLeft * -1) + 'px';
     }
 
+    if (this.stacking) {
+      var stacking = true;
+    } else {
+      var stacking = false;
+    }
+
     var row = this.nextRow;
 
     var column = this.nextColumn;
@@ -3142,16 +3172,24 @@ AnyGrid.prototype._getItemLayoutPosition = function( item ) {
 
     if (item.span > 1) {
       this.rows[row].perRow = ((this.rows[row].perRow - item.span) * 2) + 1;
+
+      if ((this.spanCounter + item.span) == this.perRow) {
+        this.rows[row].perRow = (this.rowCounter + 1);
+      }
+
+      this.rows[row].perRow = ((this.rows[row].perRow - item.span) * 2) + 1;
       this.rows[row].spans = { //TODO
         leftReset: width,
         span: item.span
       };
     }
 
+    this.spanCounter += item.span;
     this.rowCounter++;
 
     if (this.rowCounter == this.rows[row].perRow) {
         this.rowCounter = 0;
+        this.spanCounter = 0;
         this.nextRow++;
     }
 
@@ -3172,6 +3210,7 @@ AnyGrid.prototype._getItemLayoutPosition = function( item ) {
     if (this.nextColumn >= this.perRow || this.nextStacked) {
         this.nextColumn = this.rows[row].spans.span;
         this.rows[row].spans.span = this.rows[row].spans.span + item.span;
+        this.stacking = false;
 
         if (this.rows[row].count >= this.rows[row].perRow) {
           this.nextStacked = false;
@@ -3183,7 +3222,7 @@ AnyGrid.prototype._getItemLayoutPosition = function( item ) {
       this.nextStacked = false;
     }
 
-    if (this.options.removeVerticalGutters && !this.nextStacked && (row + 1) == this.rowCount) {
+    if (this.options.removeVerticalGutters && (row + 1) == this.rowCount && !stacking) {
       item.element.style.setProperty('padding-bottom', '0', 'important');
     }
 
