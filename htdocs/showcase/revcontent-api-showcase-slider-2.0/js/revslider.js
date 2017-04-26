@@ -306,7 +306,7 @@ Author: michael@revcontent.com
 
         var i = 0; // just in case
         this.limit = 0;
-        while (grid.nextRow < grid.rowCount && i < 1000) {
+        while (grid.nextRow < grid.rowCount && i < 100) {
             var cell = this.createNewCell();
             grid.element.appendChild(cell);
             grid.appended([cell]);
