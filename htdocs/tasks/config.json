@@ -183,6 +183,7 @@
       "./node_modules/flickity/dist/flickity.pkgd.js",
       "./node_modules/mobile-detect/mobile-detect.js",
       "./node_modules/es6-promise/dist/es6-promise.js",
+      "./node_modules/wolfy87-eventemitter/EventEmitter.min.js",
       "./showcase/js/requestAnimationFrame.js",
       "./showcase/js/revoverlay.js",
       "./showcase/js/revutils.js",
