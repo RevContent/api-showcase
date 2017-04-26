@@ -110,6 +110,14 @@ app.service('widgets', function() {
             link: 'revcontent-api-showcase-scroller-1.0/index.html',
             docs: 'revcontent-api-showcase-scroller-1.0/README.md',
             bg: '#faf5ee'
+        },
+        'interstitial': {
+            title: 'RevInterstitial',
+            img: 'interstitial.jpg',
+            description: '',
+            link: 'revcontent-api-showcase-interstitial-1.0/index.html',
+            docs: 'revcontent-api-showcase-interstitial-1.0/README.md',
+            bg: '#ffffff'
         }
         //'scrolling-exp': {
           //  title: 'Scrolling Experience',
