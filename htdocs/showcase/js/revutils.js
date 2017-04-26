@@ -541,6 +541,10 @@ utils.siblingIndex = function(el) {
     return i;
 }
 
+utils.isArray = function(param) {
+    return Object.prototype.toString.call(param) === '[object Array]';
+}
+
 // -----  ----- //
 return utils;
 
