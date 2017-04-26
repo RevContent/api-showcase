@@ -3,7 +3,7 @@
 RevFlicker is a touch enabled content carousel. Use it by placing an element along with the script and ad code definition on the page.
 
 ```
-&lt;div id="rev-flicker"&gt;&lt;div&gt;
+&lt;div id="rev-flicker"&gt;&lt;/div&gt;
 
 &lt;script src="http://labs-cdn.revcontent.com/build/revflicker.min.js">&lt;/script&gt;
 
@@ -49,6 +49,12 @@ element: false
 Display a border around each ad
 ```
 ad_border: true
+```
+
+###square_border
+Display square borders.
+```
+square_border: false
 ```
 
 ###ad_overlay
@@ -201,6 +207,15 @@ Key value object for query params to send to server. Can be multidimensional
 query_params: false
 ```
 
+The example below demonstrates how to pass subid values. The resulting query parameters will be ```?revsub[key]=value```
+```
+query_params: {
+    revsub: {
+        key: 'value'
+    }
+}
+```
+
 ###rev_position
 Position of the disclosure text if ```hide_disclosure``` is not enabled. Options include: ```'bottom_right'```, ```'top_right'```, ```'bottom_left'```.
 ```
@@ -243,6 +258,12 @@ Text will overlay the image rather than be position below it
 text_overlay: false
 ```
 
+###text_top
+Text will be positioned above the image
+```
+text_top: false
+```
+
 ###text_right
 Text will be positioned to the right of the image
 ```
@@ -271,4 +292,22 @@ user_agent: false
 Pass user_ip to API
 ```
 user_ip: false
+```
+
+###arrow_style
+Next/Previous arrow style. Can be circle or square.
+```
+arrow_style: 'circle'
+```
+
+###trending
+Show trending number count. 
+```
+trending: false
+```
+
+###trending_theme
+Theme for trending. Can be default or social.
+```
+trending_theme: 'default'
 ```

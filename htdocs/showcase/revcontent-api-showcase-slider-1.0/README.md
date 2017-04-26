@@ -3,7 +3,7 @@
 RevSlider is a touch enabled content slider. Use it by placing an element along with the script and ad code definition on the page
 
 ```
-&lt;div id="rev-slider"&gt;&lt;div&gt;
+&lt;div id="rev-slider"&gt;&lt;/div&gt;
 
 &lt;script src="http://labs-cdn.revcontent.com/build/revslider.min.js">&lt;/script&gt;
 
@@ -239,6 +239,15 @@ prevent_default_pan: true
 Key value object for query params to send to server. Can be multidimensional
 ```
 query_params: false
+```
+
+The example below demonstrates how to pass subid values. The resulting query parameters will be ```?revsub[key]=value```
+```
+query_params: {
+    revsub: {
+        key: 'value'
+    }
+}
 ```
 
 ###rev_position
