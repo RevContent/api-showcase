@@ -128,10 +128,6 @@ Author: michael@revcontent.com
         this.headerContainerElement = document.createElement('div');
         revUtils.addClass(this.headerContainerElement, 'rev-interstitial-header-container');
 
-        this.headerImageContainerElement = document.createElement('div');
-        revUtils.addClass(this.headerImageContainerElement, 'rev-interstitial-header-image-container');
-        this.headerImageContainerElement.style.background = this.options.logo_color;
-
         this.headerCloseLink = document.createElement('a');
         revUtils.addClass(this.headerCloseLink, 'rev-interstitial-header-close');
         this.headerCloseLink.textContent = this.options.close_link_text;
@@ -141,13 +137,17 @@ Author: michael@revcontent.com
         }
 
         if (this.options.logo) {
+            this.headerImageContainerElement = document.createElement('div');
+            revUtils.addClass(this.headerImageContainerElement, 'rev-interstitial-header-image-container');
+            this.headerImageContainerElement.style.background = this.options.logo_color;
+
             this.headerImage = document.createElement('img');
             this.headerImage.src = this.options.logo;
 
             revUtils.append(this.headerImageContainerElement, this.headerImage);
+            revUtils.append(this.headerContainerElement, this.headerImageContainerElement);
         }
 
-        revUtils.append(this.headerContainerElement, this.headerImageContainerElement);
         revUtils.append(this.headerContainerElement, this.headerCloseLink);
 
         revUtils.append(this.fullPageContainer, this.headerContainerElement);
