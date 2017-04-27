@@ -35,6 +35,7 @@ Author: michael@revcontent.com
                 xl: 4,
                 xxl: 4
             },
+            internal: false,
             rows: 3,
             multipliers: {
                 margin: -3
@@ -51,6 +52,7 @@ Author: michael@revcontent.com
             close_link_text: 'Continue to site →',
             logo_color: '#000',
             logo: false,
+            stacked: false,
             text_right: [
                 {
                     selector: '.rev-slider-breakpoint-gt-sm .rev-content:nth-child(n+6), .rev-slider-breakpoint-lt-md .rev-content:nth-child(n+3), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(n+2)'
@@ -186,6 +188,8 @@ Author: michael@revcontent.com
             text_right: this.options.text_right,
             text_overlay: this.options.text_overlay,
             image_ratio: this.options.image_ratio,
+            stacked: this.options.stacked,
+            internal: this.options.internal,
             buttons:      false,
             disable_pagination: true,
             pagination_dots_vertical: true,
