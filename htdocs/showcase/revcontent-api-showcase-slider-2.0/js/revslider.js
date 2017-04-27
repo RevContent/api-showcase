@@ -115,7 +115,8 @@ Author: michael@revcontent.com
             register_impressions: true,
             visible_rows: false,
             column_spans: false,
-            pagination_dots_vertical: false
+            pagination_dots_vertical: false,
+            stacked: false
         };
 
         // merge options
@@ -385,6 +386,7 @@ Author: michael@revcontent.com
             breakpoints: this.options.breakpoints,
             column_spans: this.options.column_spans,
             rows: this.options.rows,
+            stacked: this.options.stacked,
             removeVerticalGutters: true
         };
     };
