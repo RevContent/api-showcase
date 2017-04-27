@@ -48,6 +48,12 @@ api_source used for tracking.
 api_source: 'inter'
 ```
 
+###closed_hours
+Number of hours to keep closed
+```
+closed_hours: 24
+```
+
 ###close\_link\_text
 Text used for the upper right corner close link text
 ```
@@ -199,6 +205,18 @@ rev_position: 'top_right'
 Number of rows to display. Object or single value. Pass a single number to be used for every breakpoint or provide a value for each breakpoint.
 ```
 rows: 3
+```
+
+###stacked
+If true the each column will stack on top of each other without considering the max height for the row above. The default will provide a level top for each item in the row.
+```
+stacked: false
+```
+
+###testing
+Ignores ```closed_hours``` if true
+```
+testing: false
 ```
 
 ###text_overlay
