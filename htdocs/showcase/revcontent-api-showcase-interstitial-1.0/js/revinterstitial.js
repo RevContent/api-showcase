@@ -50,6 +50,8 @@ Author: michael@revcontent.com
             transition_duration_multiplier: 2,
             rev_position: 'top_right',
             close_link_text: 'Continue to site →',
+            closed_hours: 24,
+            testing: false,
             logo_color: '#000',
             logo: false,
             stacked: false,
@@ -90,6 +92,10 @@ Author: michael@revcontent.com
         }
         // don't show for this device
         if (!revDetect.show(this.options.devices)) {
+            return;
+        }
+
+        if (revUtils.getCookie('rev-interstitial-closed') && !this.options.testing) {
             return;
         }
 
@@ -216,6 +222,8 @@ Author: michael@revcontent.com
     RevInterstitial.prototype.close = function() {
         var that = this;
         revUtils.addEventListener(this.headerCloseLink, 'click', function() {
+            revUtils.setCookie('rev-interstitial-closed', 1, (that.options.closed_hours / 24));
+
             revUtils.transitionDurationCss(that.fullPageContainer, (that.fullPageContainer.offsetWidth * that.options.transition_duration_multiplier) + 'ms');
             revUtils.transformCss(that.fullPageContainer, 'translateX(100%)');
 
