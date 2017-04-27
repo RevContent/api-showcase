@@ -7,6 +7,6 @@
     "url": "git:///Revcontent/api-showcase.git"
   },
   "dependencies": {
-    "any-grid": "2.0.0-alpha.5"
+    "any-grid": "2.0.0-alpha.6"
   }
 }

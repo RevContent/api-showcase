@@ -3271,9 +3271,11 @@ AnyGrid.prototype._getItemLayoutPosition = function( item ) {
           }
         }
 
-        for (var key in this.rows) {
-          if (this.rows.hasOwnProperty(key)) {
-            this.rows[key].top = max;
+        if (this.options.stacked === false) {
+          for (var key in this.rows) {
+            if (this.rows.hasOwnProperty(key)) {
+              this.rows[key].top = max;
+            }
           }
         }
       }
