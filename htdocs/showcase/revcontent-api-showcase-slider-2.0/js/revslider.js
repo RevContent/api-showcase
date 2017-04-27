@@ -872,6 +872,9 @@ Author: michael@revcontent.com
 
         revUtils.removeClass(item.element, 'rev-colspan', true);
         revUtils.addClass(item.element, 'rev-colspan-' + item.span);
+
+        revUtils.removeClass(item.element, 'rev-row', true);
+        revUtils.addClass(item.element, 'rev-row-' + (item.row + 1));
     };
 
     RevSlider.prototype.setInnerMargin = function(item) {
