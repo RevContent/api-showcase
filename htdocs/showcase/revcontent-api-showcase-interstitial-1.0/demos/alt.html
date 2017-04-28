@@ -12,9 +12,9 @@
     <title>RevInterstitial Example</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="../css/bootstrap.css" rel="stylesheet">
 
-    <link href="css/style.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
 
     <style>
 /*    .rev-content:nth-child(n+6) {
@@ -284,9 +284,52 @@
             widget_id : 6181,
             domain : 'apiexamples.powr.com',
             css: '.rev-content { padding: 12px !important; } #rev-slider.rev-slider-breakpoint-gt-sm .rev-content { padding: 16px !important; } #rev-slider.rev-slider-breakpoint-gt-lg .rev-content { padding: 20px !important; }',
-            logo: 'img/washington-times-logo.png',
+            logo: '../img/washington-times-logo.png',
             logo_color: '#a9091f',
-            testing: true
+            testing: true,
+            per_row: 6,
+            column_spans: [
+                {
+                    selector: '.rev-content:nth-child(1), .rev-content:nth-child(2)',
+                    spans: 3
+                },
+                {
+                    selector: '.rev-content:nth-child(n+3)',
+                    spans: 2
+                },
+                {
+                    selector: '#rev-slider.rev-slider-breakpoint-lt-sm .rev-content:nth-child(n+3)',
+                    spans: 6
+                }
+            ],
+            image_ratio: [
+                {
+                    selector: '.rev-content:nth-child(-n+2), #rev-slider.rev-slider-breakpoint-lt-md .rev-content, .rev-content:nth-child(2)',
+                    ratio: 'wide_rectangle'
+                },
+                {
+                    selector: '#rev-slider.rev-slider-breakpoint-lt-md .rev-content:nth-child(-n+2)',
+                    ratio: 'square'
+                },
+                {
+                    selector: '#rev-slider.rev-slider-breakpoint-lt-sm .rev-content:nth-child(n+3)',
+                    ratio: 'rectangle'
+                }
+            ],
+            text_overlay: [
+                {
+                    selector: '.rev-content:nth-child(1), .rev-content:nth-child(2)'
+                }
+            ],
+            text_right: [
+                {
+                    selector: '#rev-slider.rev-slider-breakpoint-gt-md .rev-content:nth-child(n+3)',
+                },
+                {
+                    selector: '#rev-slider.rev-slider-breakpoint-lt-sm .rev-content:nth-child(n+3)'
+                }
+            ]
+
         });
     </script>
 
