@@ -192,7 +192,7 @@ rows: {
 }
 ```
 
-###transition_duration_multiplier
+###transition\_duration\_multiplier
 Allows the transition duration to be modified. The distance of the transition will be multiplied by the ```transition_duration_multiplier``` to arrive at a value in milliseconds. For example, if the transition is 100 pixels the transition will take 300ms.
 ```
 transition_duration_multiplier: 3
