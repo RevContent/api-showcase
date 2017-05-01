@@ -1445,6 +1445,11 @@ Author: michael@revcontent.com
             var url = that.generateUrl(0, that.getMaxCount(), true, false);
 
             revApi.request(url, function(resp) {
+                if (!resp.length) {
+                    resolve(resp);
+                    return;
+                }
+
                 that.data = resp;
 
                 revUtils.addClass(that.containerElement, 'rev-slider-has-data');
