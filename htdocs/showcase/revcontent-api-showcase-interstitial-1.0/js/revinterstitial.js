@@ -214,6 +214,14 @@ Author: michael@revcontent.com
             visible_rows: 1,
             pagination_dots: false
         });
+
+        // destroy if no data
+        var that = this;
+        this.innerWidget.dataPromise.then(function(data) {
+            if (!data.length) {
+                that.destroy();
+            }
+        });
     };
 
     RevInterstitial.prototype.transition = function() {
@@ -228,6 +236,17 @@ Author: michael@revcontent.com
         });
     };
 
+    RevInterstitial.prototype.resetDocument = function() {
+        this.fullPageContainer.style.display = 'none';
+        document.body.style.position = this.bodyPosition;
+        document.body.style.overflow = this.bodyOverflow;
+        document.body.style.height = this.bodyHeight;
+
+        document.documentElement.style.position = null;
+        document.documentElement.style.overflow = null;
+        document.documentElement.style.height = null;
+    }
+
     RevInterstitial.prototype.close = function() {
         var that = this;
         revUtils.addEventListener(this.headerCloseLink, 'click', function() {
@@ -237,15 +256,7 @@ Author: michael@revcontent.com
             revUtils.transformCss(that.fullPageContainer, 'translateX(100%)');
 
             setTimeout(function(){
-                that.fullPageContainer.style.display = 'none';
-                document.body.style.position = that.bodyPosition;
-                document.body.style.overflow = that.bodyOverflow;
-                document.body.style.height = that.bodyHeight;
-
-                document.documentElement.style.position = null;
-                document.documentElement.style.overflow = null;
-                document.documentElement.style.height = null;
-
+                that.resetDocument();
             }, (that.fullPageContainer.offsetWidth * that.options.transition_duration_multiplier));
 
             return false;
@@ -262,11 +273,11 @@ Author: michael@revcontent.com
                 i++
             }
         });
+    };
 
-        // console.log(that.innerWidget.grid.items.length);
-        // revUtils.addEventListener(window, 'resize', revUtils.throttle(function() {
-        //     that.fullPageContainer.style.height = window.innerHeight + 'px';
-        // }, 60));
+    RevInterstitial.prototype.destroy = function() {
+        this.resetDocument();
+        revUtils.remove(this.fullPageContainer);
     };
 
     return RevInterstitial;
