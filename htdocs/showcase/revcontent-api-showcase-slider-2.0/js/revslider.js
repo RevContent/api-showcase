@@ -804,7 +804,8 @@ Author: michael@revcontent.com
 
         if (revUtils.isArray(this.options.image_ratio)) {
             for (var i = 0; i < this.options.image_ratio.length; i++) {
-                if (matchesSelector(item.element, this.options.image_ratio[i].selector)) {
+                if ((!this.options.image_ratio[i].media || window.matchMedia(this.options.image_ratio[i].media).matches)
+                    && (!this.options.image_ratio[i].selector || matchesSelector(item.element, this.options.image_ratio[i].selector))) {
                     setImageSize(this.options.image_ratio[i].ratio);
                 }
             }
@@ -832,7 +833,8 @@ Author: michael@revcontent.com
                 item.textRight = true;
             } else {
                 for (var i = 0; i < this.options.text_right.length; i++) {
-                    if (matchesSelector(item.element, this.options.text_right[i].selector)) {
+                    if ((!this.options.text_right[i].media || window.matchMedia(this.options.text_right[i].media).matches)
+                        && (!this.options.text_right[i].selector || matchesSelector(item.element, this.options.text_right[i].selector))) {
                         item.textRight = true;
                     }
                 }
@@ -847,7 +849,8 @@ Author: michael@revcontent.com
                 item.textOverlay = true;
             } else {
                 for (var i = 0; i < this.options.text_overlay.length; i++) {
-                    if (matchesSelector(item.element, this.options.text_overlay[i].selector)) {
+                    if ((!this.options.text_overlay[i].media || window.matchMedia(this.options.text_overlay[i].media).matches)
+                        && (!this.options.text_overlay[i].selector || matchesSelector(item.element, this.options.text_overlay[i].selector))) {
                         item.textOverlay = true;
                     }
                 }

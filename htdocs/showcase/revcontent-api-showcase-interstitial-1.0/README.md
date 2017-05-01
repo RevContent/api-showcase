@@ -67,7 +67,7 @@ css: ''
 ```
 
 ###column_spans
-Array of objects that contain a ```spans``` and ```selector``` key value pairs. Where selector is the item to target and the spans is the number of spans. Can be boolean for all ads or an array of selectors to target sepecific ads.
+Array of objects that contain a ```spans``` and ```selector``` key value pairs. Where selector is the item to target and the spans is the number of spans. Can be boolean for all ads or an array of selectors with optional media to target sepecific ads. Define the spans on a per item basis using the spans key.
 ```
 column_spans: [
     {
@@ -131,12 +131,17 @@ image_overlay_position: 'center'
 ```
 
 ###image_ratio
-Ratio of the images. Available options include ```wide_rectangle```, ```rectangle```, ```square``` and ```tall_rectangle```. Can be boolean for all ads or an array of selectors to target sepecific ads. 
+Ratio of the images. Available options include ```wide_rectangle```, ```rectangle```, ```square``` and ```tall_rectangle```. Can be boolean for all ads or an array of selectors with optional media to target sepecific ads. Define image_ratio on a per item basis using the ratio key.
 ```
 image_ratio: [
     {
         selector: '.rev-slider-breakpoint-gt-sm .rev-content:nth-child(n+6), .rev-slider-breakpoint-lt-md .rev-content:nth-child(n+3), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(n+2)',
         ratio: 'tall_rectangle'
+    },
+    {
+        media: '(orientation: landscape)',
+        selector: '#rev-slider.rev-slider-breakpoint-lt-md .rev-content',
+        ratio: 'rectangle'
     }
 ]
 ```
@@ -220,17 +225,21 @@ testing: false
 ```
 
 ###text_overlay
-Text will overlay the image rather than be position below it. Can be boolean for all ads or an array of selectors to target sepecific ads.
+Text will overlay the image rather than be position below it. Can be boolean for all ads or an array of selectors with optional media to target sepecific ads.
 ```
 text_overlay: [
     {
         selector: '.rev-slider-breakpoint-gt-sm .rev-content:nth-child(-n+5)'
+    },
+    {
+        media: '(orientation: landscape)',
+        selector: '#rev-slider.rev-slider-breakpoint-lt-md .rev-content'
     }
 ]
 ```
 
 ###text_right
-Text will be positioned to the right of the image. Can be boolean for all ads or an array of selectors to target sepecific ads.
+Text will be positioned to the right of the image. Can be boolean for all ads or an array of selectors with optional media to target sepecific ads.
 ```
 text_right: [
     {
