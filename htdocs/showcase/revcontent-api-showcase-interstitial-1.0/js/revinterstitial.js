@@ -73,12 +73,21 @@ Author: michael@revcontent.com
             text_overlay: [
                 {
                     selector: '.rev-slider-breakpoint-gt-sm .rev-content:nth-child(-n+5)'
+                },
+                {
+                    media: '(orientation: landscape)',
+                    selector: '#rev-slider.rev-slider-breakpoint-lt-md .rev-content'
                 }
             ],
             image_ratio: [
                 {
                     selector: '.rev-slider-breakpoint-gt-sm .rev-content:nth-child(n+6), .rev-slider-breakpoint-lt-md .rev-content:nth-child(n+3), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(n+2)',
                     ratio: 'tall_rectangle'
+                },
+                {
+                    media: '(orientation: landscape)',
+                    selector: '#rev-slider.rev-slider-breakpoint-lt-md .rev-content',
+                    ratio: 'rectangle'
                 }
             ]
         };
