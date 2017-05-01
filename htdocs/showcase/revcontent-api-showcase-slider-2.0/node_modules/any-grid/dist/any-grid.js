@@ -2926,22 +2926,11 @@ AnyGrid.prototype._itemize = function( elems ) {
     var item = new Item( elem, this );
     item.span = 1;
     for (var j = 0; j < this.options.column_spans.length; j++) {
-      if (matchesSelector(elem, this.options.column_spans[j].selector)) {
+      if ((!this.options.column_spans[j].media || window.matchMedia(this.options.column_spans[j].media).matches)
+        && (!this.options.column_spans[j].selector || matchesSelector(item.element, this.options.column_spans[j].selector))) {
         item.span = this.options.column_spans[j].spans;
-        // break;
       }
-      // console.log(this.options.column_spans[i].selector);
     }
-    // use columnSpans
-    // if (elem.matches("#rev-slider .rev-content:nth-child(4)")) {
-    //   // console.log('hinnnaaa', elem.matches("#rev-slider .rev-content:nth-child(4)"));
-    //   // item.setSpaner(2);
-    //   console.log(this.options.column_spans);
-    //   item.span = 2;
-    // } else {
-    //   // item.setSpaner(1);
-    //   item.span = 1;
-    // }
     items.push( item );
   }
 
