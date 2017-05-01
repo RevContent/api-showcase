@@ -87,7 +87,7 @@ Author: michael@revcontent.com
                 {
                     media: '(orientation: landscape)',
                     selector: '#rev-slider.rev-slider-breakpoint-lt-md .rev-content',
-                    ratio: 'rectangle'
+                    ratio: 'wide_rectangle'
                 }
             ]
         };
