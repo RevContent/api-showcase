@@ -1543,12 +1543,14 @@ Author: michael@revcontent.com
 
             var that = this;
             // make sure we have some data
-            this.dataPromise.then(function() {
-                var anchors = that.element.querySelectorAll('.rev-ad a');
-                for (var i = 0; i < anchors.length; i++) {
-                    anchors[i].setAttribute('href', anchors[i].getAttribute('href') + '&viewed=true');
-                }
-            });
+            if (!this.options.internal) {
+                this.dataPromise.then(function() {
+                    var anchors = that.element.querySelectorAll('.rev-ad a');
+                    for (var i = 0; i < anchors.length; i++) {
+                        anchors[i].setAttribute('href', anchors[i].getAttribute('href') + '&viewed=true');
+                    }
+                });
+            }
         }
     };
 
@@ -1594,7 +1596,7 @@ Author: michael@revcontent.com
                 revUtils.adOverlay(ad.querySelector('.rev-ad-inner'), data.content_type, this.options.ad_overlay, this.options.ad_overlay_position);
             }
 
-            item.element.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', '') + (this.viewed ? '&viewed=true' : ''));
+            item.element.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', '') + (this.viewed && !this.options.internal ? '&viewed=true' : ''));
             item.element.querySelectorAll('a')[0].title = data.headline;
 
             var image = data.image.replace('h=315', 'h=' + item.preloaderHeight).replace('w=420', 'w=' + item.preloaderWidth) + '&h=' + item.preloaderHeight + '&w=' + item.preloaderWidth;
