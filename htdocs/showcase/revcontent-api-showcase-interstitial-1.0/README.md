@@ -1,15 +1,12 @@
-#RevScroller
+#RevInterstial
 
-RevScroller is a scroll activated widget. As the user scrolls the page the widget will automatically paginate. Use it by placing an element along with the script and ad code definition on the page
+RevInterstial overlays the entire page on load. It's used by placing the script and ad code definition on the page.
 
 ```
-&lt;div id="rev-scroller"&gt;&lt;/div&gt;
-
-&lt;script src="http://labs-cdn.revcontent.com/build/revscroller.min.js">&lt;/script&gt;
+&lt;script src="http://labs-cdn.revcontent.com/build/revinterstitial.min.js">&lt;/script&gt;
 
 &lt;script&gt;
-    new RevScroller({
-        id: 'rev-scroller',
+    new RevInterstitial({
         api_key: 'api_key',
         pub_id: 123,
         widget_id: 456,
@@ -33,18 +30,6 @@ your pub id
 ###widget_id(required)
 your widget id
 
-###id(required if element is not used)
-matches a div id on the page. For example to target ```&lt;div id="my-slider">&lt;/div>```
-```
-id: 'my-slider'
-```
-
-###element(required if id is not used)
-A jQuery wrapped element, will be used instead of ```id``` option
-```
-element: false
-```
-
 ###ad_overlay
 Key value ad overlay config object where the key is the content type and the value is the icon to use. For example to use the ```video_rectangle``` icon for video content use ```video: 'video_rectangle'```. The icon will be appended to the ```.rev-ad``` element.
 ```
@@ -60,13 +45,19 @@ ad_overlay_position: 'bottom_right'
 ###api_source
 api_source used for tracking.
 ```
-api_source: 'scrol'
+api_source: 'inter'
 ```
 
-###auto_scroll
-Paginate the widget as the page scrolls.
+###closed_hours
+Number of hours to keep closed
 ```
-auto_scroll: true
+closed_hours: 24
+```
+
+###close\_link\_text
+Text used for the upper right corner close link text
+```
+close_link_text: 'Continue to site →'
 ```
 
 ###css
@@ -76,9 +67,18 @@ css: ''
 ```
 
 ###column_spans
-Array of objects that contain a ```spans``` and ```selector``` key value pairs. Where selector is the item to target and the spans is the number of spans. 
+Array of objects that contain a ```spans``` and ```selector``` key value pairs. Where selector is the item to target and the spans is the number of spans. Can be boolean for all ads or an array of selectors with optional media to target sepecific ads. Define the spans on a per item basis using the spans key.
 ```
-column_spans: false
+column_spans: [
+    {
+        selector: '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(1), .rev-slider-breakpoint-gt-sm .rev-content:nth-child(n+6), .rev-slider-breakpoint-sm .rev-content',
+        spans: 2
+    },
+    {
+        selector: '.rev-slider-breakpoint-gt-md .rev-content:nth-child(n+6)',
+        spans: 1
+    }
+]
 ```
 For example to have the 4th child of the md layout to be 2 spans use the following:
 ```
@@ -109,7 +109,7 @@ disclosure_text: 'Sponsored by Revcontent'
 ###header
 Text displayed above ads. Wrapped inside ```<h2 class="rev-header">```.
 ```
-header: 'Trending Now'
+header: 'Trending'
 ```
 
 ###headline_size
@@ -128,6 +128,34 @@ image_overlay: false
 The position of the image overlay icon. Available options include ```center```, ```top_left```, ```top_right```, ```bottom_right``` and ```bottom_left```.
 ```
 image_overlay_position: 'center'
+```
+
+###image_ratio
+Ratio of the images. Available options include ```wide_rectangle```, ```rectangle```, ```square``` and ```tall_rectangle```. Can be boolean for all ads or an array of selectors with optional media to target sepecific ads. Define image_ratio on a per item basis using the ratio key.
+```
+image_ratio: [
+    {
+        selector: '.rev-slider-breakpoint-gt-sm .rev-content:nth-child(n+6), .rev-slider-breakpoint-lt-md .rev-content:nth-child(n+3), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(n+2)',
+        ratio: 'tall_rectangle'
+    },
+    {
+        media: '(orientation: landscape)',
+        selector: '#rev-slider.rev-slider-breakpoint-lt-md .rev-content',
+        ratio: 'rectangle'
+    }
+]
+```
+
+###logo
+Logo image use for the header logo
+```
+logo: false
+```
+
+###logo_color
+Background color used for the header logo
+```
+logo_color: '#000',
 ```
 
 ###max_headline
@@ -158,11 +186,11 @@ Number of ads per row. Object or single value. Pass a single number to be used f
 per_row: {
     xxs: 1,
     xs: 1,
-    sm: 2,
-    md: 2,
-    lg: 3,
+    sm: 4,
+    md: 4,
+    lg: 4,
     xl: 4,
-    xxl: 5
+    xxl: 4
 }
 ```
 
@@ -175,27 +203,55 @@ query_params: false
 ###rev_position
 Position of the disclosure text if ```hide_disclosure``` is not enabled. Options include: ```'bottom_right'```, ```'top_right'``` and ```'bottom_left'```.
 ```
-rev_position: (revDetect.mobile() ? 'bottom_right' : 'top_right')
+rev_position: 'top_right'
 ```
 
 ###rows
 Number of rows to display. Object or single value. Pass a single number to be used for every breakpoint or provide a value for each breakpoint.
 ```
-rows: {
-    xxs: 2,
-    xs: 2,
-    sm: 2,
-    md: 2,
-    lg: 2,
-    xl: 2,
-    xxl: 2
-}
+rows: 3
+```
+
+###stacked
+If true each column will stack on top of each other without considering the max height for the row above. The default will provide a level top for each item in the row.
+```
+stacked: false
+```
+
+###testing
+Ignores ```closed_hours``` if true
+```
+testing: false
+```
+
+###text_overlay
+Text will overlay the image rather than be position below it. Can be boolean for all ads or an array of selectors with optional media to target sepecific ads.
+```
+text_overlay: [
+    {
+        selector: '.rev-slider-breakpoint-gt-sm .rev-content:nth-child(-n+5)'
+    },
+    {
+        media: '(orientation: landscape)',
+        selector: '#rev-slider.rev-slider-breakpoint-lt-md .rev-content'
+    }
+]
+```
+
+###text_right
+Text will be positioned to the right of the image. Can be boolean for all ads or an array of selectors with optional media to target sepecific ads.
+```
+text_right: [
+    {
+        selector: '.rev-slider-breakpoint-gt-sm .rev-content:nth-child(n+6), .rev-slider-breakpoint-lt-md .rev-content:nth-child(n+3), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(n+2)'
+    }
+]
 ```
 
 ###transition\_duration\_multiplier
 Allows the transition duration to be modified. The distance of the transition will be multiplied by the ```transition_duration_multiplier``` to arrive at a value in milliseconds. For example, if the transition is 100 pixels the transition will take 300ms.
 ```
-transition_duration_multiplier: 3
+transition_duration_multiplier: 2
 ```
 
 ###url

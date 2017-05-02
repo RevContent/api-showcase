@@ -87,6 +87,25 @@
       "./showcase/revcontent-api-showcase-scroller-1.0/css/*"
     ]
   },
+  "interstitial": {
+    "name": "rev-interstitial",
+    "description": "Interstitial",
+    "homepage": "http://labs.revcontent.com",
+    "version": "0.0.1",
+    "js": "./showcase/revcontent-api-showcase-interstitial-1.0/js/revinterstitial.js",
+    "css": [
+      "./showcase/revcontent-api-showcase-interstitial-1.0/css/revinterstitial.scss"
+    ],
+    "build": [
+      "./build/files/slider2/revslider2.pkgd.js",
+      "./build/files/interstitial/revinterstitial.embed.js"
+    ],
+    "watch": [
+      "./build/files/slider2/revslider2.pkgd.js",
+      "./showcase/revcontent-api-showcase-interstitial-1.0/js/*",
+      "./showcase/revcontent-api-showcase-interstitial-1.0/css/*"
+    ]
+  },
   "image": {
     "name": "rev-image",
     "description": "Image ads",
