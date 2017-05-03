@@ -1270,14 +1270,12 @@ Author: michael@revcontent.com
 
             var that = this;
             // make sure we have some data
-            if (!this.options.internal) {
-                this.dataPromise.then(function() {
-                    var anchors = that.element.querySelectorAll('.rev-ad a');
-                    for (var i = 0; i < anchors.length; i++) {
-                        anchors[i].setAttribute('href', anchors[i].getAttribute('href') + '&viewed=true');
-                    }
-                });
-            }
+            this.dataPromise.then(function() {
+                var anchors = that.element.querySelectorAll('.rev-ad a');
+                for (var i = 0; i < anchors.length; i++) {
+                    anchors[i].setAttribute('href', anchors[i].getAttribute('href') + '&viewed=true');
+                }
+            });
         }
     };
 
@@ -1319,7 +1317,7 @@ Author: michael@revcontent.com
                 revUtils.adOverlay(ad.querySelector('.rev-ad-inner'), data.content_type, this.options.ad_overlay, this.options.ad_overlay_position);
             }
 
-            ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', '') + (this.viewed && !this.options.internal ? '&viewed=true' : ''));
+            ad.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', '') + (this.viewed ? '&viewed=true' : ''));
             ad.querySelectorAll('a')[0].title = data.headline;
             ad.querySelectorAll('img')[0].setAttribute('src', data.image);
             ad.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
