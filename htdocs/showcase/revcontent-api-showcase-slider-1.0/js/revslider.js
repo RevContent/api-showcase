@@ -1221,9 +1221,12 @@ Author: michael@revcontent.com
                 that.emitter.emitEvent('ready');
                 that.ready = true;
 
-                revUtils.imagesLoaded(that.grid.element.querySelectorAll('img')).once('done', function() {
+                that.emitter.once('imagesLoaded', function() {
                     revUtils.addClass(that.containerElement, 'loaded');
                 });
+
+                revUtils.imagesLoaded(that.grid.element.querySelectorAll('img'), that.emitter);
+
                 resolve(resp);
             });
         });
