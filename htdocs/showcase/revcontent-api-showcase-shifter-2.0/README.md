@@ -117,6 +117,12 @@ The position of the image overlay icon. Available options include ```center```, 
 image_overlay_position: 'center'
 ```
 
+###internal
+Display internal ads. The ```sponsored``` option is ignored and only internal ads are shown.
+```
+internal: false
+```
+
 ###max_headline
 Show all of the headline for all ads. No ellipsis. This option overrides ```headline_size```
 ```
