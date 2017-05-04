@@ -139,7 +139,7 @@
                     </div>
 
                     <div id="signup" layout layout-align="center center">
-                        Don't have an account? <md-button class="md-primary" target="_blank" href="https://v2.revcontent.com/signup">Join the native revolution</md-button>
+                        Don't have an account? <md-button class="md-primary" target="_blank" href="//www.revcontent.com/signup">Join the native revolution</md-button>
                     </div>
                 </div>
             </div>
