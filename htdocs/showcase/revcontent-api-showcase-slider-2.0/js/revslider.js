@@ -135,13 +135,13 @@ Author: michael@revcontent.com
 
         this.emitter = new EventEmitter();
 
-        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-slider', this.options.css);
+        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-slider2', this.options.css);
 
         this.data = [];
         this.displayedItems = [];
 
         this.containerElement = document.createElement('div');
-        this.containerElement.id = 'rev-slider';
+        this.containerElement.id = 'rev-slider2';
 
         this.innerContainerElement = document.createElement('div');
         this.innerContainerElement.id = 'rev-slider-container';
