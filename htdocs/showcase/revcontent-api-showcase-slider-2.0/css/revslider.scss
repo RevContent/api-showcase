@@ -328,9 +328,11 @@
         &.rev-text-overlay .rev-ad .rev-headline-brand {
             position: absolute;
             bottom: 4px;
-            color: #fff;
-            text-shadow: 1px 1px rgba(0,0,0,0.8);
             z-index: 100;
+            h3, .rev-provider {
+                color: #fff;
+                text-shadow: 1px 1px rgba(0,0,0,0.8);
+            }
         }
 
         &.rev-text-overlay .rev-ad .rev-headline-brand .rev-provider {
