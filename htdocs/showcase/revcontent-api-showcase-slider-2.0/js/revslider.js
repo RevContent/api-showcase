@@ -259,7 +259,6 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.setGridClasses = function() {
         revUtils.addClass(this.containerElement, 'rev-slider-' + (this.options.vertical ? 'vertical' : 'horizontal'));
-        revUtils.addClass(this.containerElement, 'rev-slider-' + (this.options.text_right ? 'text-right' : 'text-bottom'));
         revUtils.addClass(this.containerElement, 'rev-slider-buttons-' + (this.options.buttons.style));
 
         revUtils.addClass(this.containerElement, 'rev-slider-buttons-' + (this.options.buttons.style));
