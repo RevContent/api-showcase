@@ -135,13 +135,13 @@ Author: michael@revcontent.com
 
         this.emitter = new EventEmitter();
 
-        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-slider', this.options.css);
+        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-slider2', this.options.css);
 
         this.data = [];
         this.displayedItems = [];
 
         this.containerElement = document.createElement('div');
-        this.containerElement.id = 'rev-slider';
+        this.containerElement.id = 'rev-slider2';
 
         this.innerContainerElement = document.createElement('div');
         this.innerContainerElement.id = 'rev-slider-container';
@@ -259,7 +259,6 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.setGridClasses = function() {
         revUtils.addClass(this.containerElement, 'rev-slider-' + (this.options.vertical ? 'vertical' : 'horizontal'));
-        revUtils.addClass(this.containerElement, 'rev-slider-' + (this.options.text_right ? 'text-right' : 'text-bottom'));
         revUtils.addClass(this.containerElement, 'rev-slider-buttons-' + (this.options.buttons.style));
 
         revUtils.addClass(this.containerElement, 'rev-slider-buttons-' + (this.options.buttons.style));
@@ -1594,13 +1593,20 @@ Author: michael@revcontent.com
                 revUtils.adOverlay(ad.querySelector('.rev-ad-inner'), data.content_type, this.options.ad_overlay, this.options.ad_overlay_position);
             }
 
-            item.element.querySelectorAll('a')[0].setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', '') + (this.viewed ? '&viewed=true' : ''));
-            item.element.querySelectorAll('a')[0].title = data.headline;
+            var anchor = item.element.querySelector('a');
+            anchor.setAttribute('href', data.url.replace('&uitm=1', '').replace('uitm=1', '') + (this.viewed ? '&viewed=true' : ''));
+            anchor.title = data.headline;
 
             var image = data.image.replace('h=315', 'h=' + item.preloaderHeight).replace('w=420', 'w=' + item.preloaderWidth) + '&h=' + item.preloaderHeight + '&w=' + item.preloaderWidth;
-            item.element.querySelectorAll('img')[0].setAttribute('src', image);
-            item.element.querySelectorAll('.rev-headline h3')[0].innerHTML = data.headline;
-            item.element.querySelectorAll('.rev-provider')[0].innerHTML = data.brand;
+            item.element.querySelector('img').setAttribute('src', image);
+
+            var headline = item.element.querySelector('.rev-headline h3');
+            headline.innerHTML = data.headline;
+
+            item.element.querySelector('.rev-provider').innerHTML = data.brand;
+
+            // make sure the text-decoration is the same as the headline
+            anchor.style.color = revUtils.getComputedStyle(headline, 'color');
 
             this.setSize(this.grid, item);
         }
