@@ -77,6 +77,7 @@ RevFlicker({
                 desktop: true
             },
             arrow_style: 'circle', // circle or square
+            arrow_opacity: 1,
             sponsored: 10,
             internal: false,
             dots: false,
@@ -192,6 +193,12 @@ RevFlicker({
             revUtils.mergeOverlayIcons(this.options.overlay_icons);
         }
 
+        if (this.options.arrow_opacity !== 1) {
+            if (this.options.arrow_opacity > 0 && this.options.arrow_opacity < 1) {
+                this.buttonOpacity();
+            }
+        }
+
         // HACK for Chrome using emitter to wait for element container to be ready
         this.emitter = new EventEmitter();
         this.getContainerWidth();
@@ -246,6 +253,11 @@ RevFlicker({
                 ad.querySelectorAll('.rev-provider')[0].style.padding = this.providerMarginTop + 'px '  + this.innerMargin + 'px '+ this.providerMarginBottom +'px';
                 ad.querySelectorAll('.rev-provider')[0].style.fontSize = this.providerFontSize + 'px';
                 ad.querySelectorAll('.rev-provider')[0].style.lineHeight = this.providerLineHeight + 'px';
+            }
+            if(that.options.trending === true) {
+                ad.querySelectorAll('.rev-trending')[0].style.padding = this.providerMarginTop + 'px '  + this.innerMargin + 'px '+ this.providerMarginBottom +'px';
+                ad.querySelectorAll('.rev-trending')[0].style.fontSize = this.providerFontSize + 'px';
+                ad.querySelectorAll('.rev-trending')[0].style.lineHeight = this.providerLineHeight + 'px';
             }
         }
 
@@ -427,6 +439,14 @@ RevFlicker({
         }
     };
 
+    RevFlicker.prototype.buttonOpacity = function() {
+        var buttons = this.containerElement.querySelectorAll('.flickity-prev-next-button');
+        for (var i = 0; i < buttons.length; i++) {
+            var button = buttons[i];
+            button.style.opacity = this.options.arrow_opacity;
+        }
+    };
+
     RevFlicker.prototype.adBorder = function() {
         var ads = this.containerElement.querySelectorAll('.rev-ad');
         for (var i = 0; i < ads.length; i++) {
@@ -505,7 +525,7 @@ RevFlicker({
                     ( that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'padding: ' + that.providerMarginTop + 'px '  + that.innerMargin + 'px '+ that.providerMarginBottom +'px;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;' + proWidth) : '');
             if (this.options.trending === true) {
                 var theme = (that.options.trending_theme === "social") ? 'rev-hot-social' : 'rev-hot-flame';
-                html += '<div class="rev-trending ' + theme + '"><div class="rev-hot-img"></div>' + that.rcruntimec() + '</div>';
+                html += '<div class="rev-trending ' + theme + '" style="font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;"><div class="rev-hot-img"></div>' + that.rcruntimec() + '</div>';
             }
 
             html += '</div>';
