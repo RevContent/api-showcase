@@ -53,6 +53,14 @@ body {
 }
 
 #rev-flicker .flickity-prev-next-button {
+    //background: hsla(0, 0%, 100%, 0.5);
+}
+
+#rev-flicker .flickity-prev-next-button:hover {
+    background: white;
+}
+
+#rev-flicker .flickity-prev-next-button {
     transition: opacity .5s ease-in-out;
     opacity: 1;
 }
