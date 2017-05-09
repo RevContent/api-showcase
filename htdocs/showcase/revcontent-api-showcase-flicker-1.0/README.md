@@ -300,6 +300,12 @@ Next/Previous arrow style. Can be circle or square.
 arrow_style: 'circle'
 ```
 
+###arrow_opacity
+Next/Previous arrow opacity. Can be 0.1 - 1.
+```
+arrow_style: 1
+```
+
 ###trending
 Show trending number count. 
 ```
