@@ -14,6 +14,11 @@ app.controller('GridCtrl', function($stateParams, $mdToast, $rootScope, $scope, 
             return;
         }
 
+        if (widget.animating) {
+            $timeout.cancel(widget.animatingTimeout);
+            return;
+        }
+
         widget.animating = + new Date();
     }
 
@@ -27,7 +32,7 @@ app.controller('GridCtrl', function($stateParams, $mdToast, $rootScope, $scope, 
         var iterations = Math.ceil(diff / widget.image_animation_duration)
         var duration = (widget.image_animation_duration * iterations) - diff;
 
-        $timeout(function() {
+        widget.animatingTimeout = $timeout(function() {
             widget.animating = false;
         }, duration);
     }
