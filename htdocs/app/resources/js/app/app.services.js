@@ -6,7 +6,9 @@ app.service('widgets', function() {
             description: 'RevExit is an API implementation that pops up on a user\'s first impression every 24 hours for non-touch enabled devices (e.g. desktops). When the user mouses off the page they are usually trying to close the window or navigate away from the page. RevExit is a great way to give these users one more chance to view your Revcontent API widget.',
             link: 'revcontent-api-showcase-exitpop-1.0/index.html',
             docs: 'revcontent-api-showcase-exitpop-1.0/README.md',
-            bg: '#767ae1'
+            bg: '#767ae1',
+            img_animated: true,
+            image_animation_duration: 3600,
         },
         flicker: {
             title: 'RevFlicker',
@@ -15,6 +17,8 @@ app.service('widgets', function() {
             link: 'revcontent-api-showcase-flicker-1.0/index.html',
             docs: 'revcontent-api-showcase-flicker-1.0/README.md',
             bg: '#88ec97',
+            img_animated: true,
+            image_animation_duration: 3300,
             // preview: true,
             // demo: true
         },
@@ -25,6 +29,8 @@ app.service('widgets', function() {
             link: 'revcontent-api-showcase-toaster-1.0/index.html',
             docs: 'revcontent-api-showcase-toaster-1.0/README.md',
             bg: '#dd8b47',
+            img_animated: true,
+            image_animation_duration: 2900,
             // preview: true,
             // demo: true
         },
@@ -35,6 +41,8 @@ app.service('widgets', function() {
             link: 'revcontent-api-showcase-slider-1.0/index.html',
             docs: 'revcontent-api-showcase-slider-1.0/README.md',
             bg: '#f771f3',
+            img_animated: true,
+            image_animation_duration: 12000,
             //preview: true,
             //demo: true
         },
@@ -87,7 +95,9 @@ app.service('widgets', function() {
             description: 'Rev up your valuable image real estate with the RevImage widget! As your image makes its way into view RevImage transitions from the bottom drawing attention where the eyes are already focused. Add a timeout to delay the ad from showing. Optimized for all devices and screen sizes, RevImage is a sure fire way to increase RPMs and monetize in a new and exciting way!',
             link: 'revcontent-api-showcase-image-1.0/index.html',
             docs: 'revcontent-api-showcase-image-1.0/README.md',
-            bg: '#c967df'
+            bg: '#c967df',
+            img_animated: true,
+            image_animation_duration: 15000,
         },
         'amp': {
             title: 'AMP HTML',
@@ -103,7 +113,9 @@ app.service('widgets', function() {
             description: 'Our content is on fire! This single ad widget is sure to get your audience\'s attention. With a customizable call to action and popularity meter, increase viewer engagement and your returns with Solo Serve Native today.',
             link: 'revcontent-api-showcase-solo-serve-1.0/index.html',
             docs: 'revcontent-api-showcase-solo-serve-1.0/README.md',
-            bg: '#637cd4'
+            bg: '#637cd4',
+            img_animated: true,
+            image_animation_duration: 5000,
         },
         'scroller': {
             title: 'RevScroller',
@@ -119,7 +131,9 @@ app.service('widgets', function() {
             description: '',
             link: 'revcontent-api-showcase-interstitial-1.0/index.html',
             docs: 'revcontent-api-showcase-interstitial-1.0/README.md',
-            bg: '#34dab9'
+            bg: '#34dab9',
+            img_animated: true,
+            image_animation_duration: 10000,
         }
         //'scrolling-exp': {
           //  title: 'Scrolling Experience',
