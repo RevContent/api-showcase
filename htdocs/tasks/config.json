@@ -144,6 +144,27 @@
       "./showcase/revcontent-api-showcase-shifter-2.0/css/*"
     ]
   },
+  "side-shifter": {
+    "name": "rev-side-shifter",
+    "description": "Content Side Shifter",
+    "homepage": "http://labs.revcontent.com",
+    "version": "0.1.0",
+    "js": "./showcase/revcontent-api-showcase-side-shifter-1.0/js/revsideshifter.js",
+    "css": [
+      "./node_modules/node-waves/dist/waves.css",
+      "./showcase/revcontent-api-showcase-side-shifter-1.0/css/revsideshifter.css"
+    ],
+    "build": [
+      "./node_modules/node-waves/dist/waves.js",
+      "./build/files/slider2/revslider2.pkgd.js",
+      "./build/files/side-shifter/revside-shifter.embed.js"
+    ],
+    "watch": [
+      "./build/files/slider2/revslider2.pkgd.js",
+      "./showcase/revcontent-api-showcase-side-shifter-1.0/js/*",
+      "./showcase/revcontent-api-showcase-side-shifter-1.0/css/*"
+    ]
+  },
   "more": {
     "name": "rev-more",
     "description": "Content Lock",

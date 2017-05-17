@@ -1291,6 +1291,8 @@ Author: michael@revcontent.com
             this.grid.element.removeChild(this.grid.element.firstChild);
         }
 
+        this.grid._resetLayout();
+
         this.grid.reloadItems();
 
         this.setGridClasses();
