@@ -150,7 +150,7 @@ app.service('widgets', function() {
             image_animation_duration: 10000,
         },
         'in-feed-video': {
-            title: 'In-Feed in-feed-video',
+            title: 'In-Feed Video',
             img: 'infeedvideo.gif',
             preview_img: 'preview-infeedvideo.jpg',
             description: '',
