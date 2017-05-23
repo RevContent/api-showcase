@@ -164,7 +164,7 @@ impression_tracker: []
 ```
 
 ###internal
-Number of internal ads to display. ```sponsored``` option is ignored and only internal ads are shown.
+Display internal ads. The ```sponsored``` option is ignored and only internal ads are shown.
 ```
 internal: false
 ```

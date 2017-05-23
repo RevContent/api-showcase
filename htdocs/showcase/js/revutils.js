@@ -335,11 +335,11 @@ utils.ellipsisText = function(headlines) {
     }
 };
 
-utils.imagesLoaded = function(images) {
+utils.imagesLoaded = function(images, emitter) {
+    // emit done event when all images have finished loading
 
     if (!images.length) {
-        emitter.emitEvent('done');
-        return;
+        emitter.emitEvent('imagesLoaded');
     }
 
     var maxMilliseconds = 4000;
@@ -411,9 +411,6 @@ utils.imagesLoaded = function(images) {
         utils.removeEventListener(this.img, 'error', this);
     };
 
-    // emit done event when all images have finished loading
-    var emitter = new EventEmitter();
-
     var progressedCount = 0;
 
     for (var i=0; i < images.length; i++ ) {
@@ -421,7 +418,7 @@ utils.imagesLoaded = function(images) {
         loadingImage.once( 'progress', function() {
             progressedCount++;
             if (progressedCount == images.length) {
-                emitter.emitEvent('done');
+                emitter.emitEvent('imagesLoaded');
             }
         });
         loadingImage.check();
@@ -429,10 +426,8 @@ utils.imagesLoaded = function(images) {
 
     // don't wait longer than maxMilliseconds, this is a safety for network slowness or other issues
     setTimeout(function() {
-        emitter.emitEvent('done');
+        emitter.emitEvent('imagesLoaded');
     }, maxMilliseconds);
-
-    return emitter;
 }
 
 utils.getComputedStyle = function (el, prop, pseudoElt) {
@@ -544,6 +539,23 @@ utils.siblingIndex = function(el) {
       i++;
     }
     return i;
+}
+
+utils.isArray = function(param) {
+    return Object.prototype.toString.call(param) === '[object Array]';
+}
+
+utils.docReady = function(fn) {
+    if (document.readyState != 'loading'){
+        fn();
+    } else if (document.addEventListener) {
+        document.addEventListener('DOMContentLoaded', fn);
+    } else {
+        document.attachEvent('onreadystatechange', function() {
+        if (document.readyState != 'loading')
+            fn();
+        });
+    }
 }
 
 // -----  ----- //

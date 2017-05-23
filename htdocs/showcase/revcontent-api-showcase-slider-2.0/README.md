@@ -152,7 +152,7 @@ image_overlay_position: 'center'
 ```
 
 ###image_ratio
-Ratio of the images. Available options include ```wide_rectangle```, ```rectangle```, ```square```.
+Ratio of the images. Available options include ```wide_rectangle```, ```rectangle```, ```square``` and ```tall_rectangle```. Can be boolean for all ads or an array of selectors to target sepecific ads.
 ```
 image_ratio: (revDetect.mobile() ? 'wide_rectangle' : 'rectangle')
 ```
