@@ -2,77 +2,96 @@ app.service('widgets', function() {
     this.data = {
         'exit-pop': {
             title: 'RevExit',
-            img: 'exitpop.jpg',
+            img: 'exit.gif',
+            preview_img: 'preview-exitpop.jpg',
             description: 'RevExit is an API implementation that pops up on a user\'s first impression every 24 hours for non-touch enabled devices (e.g. desktops). When the user mouses off the page they are usually trying to close the window or navigate away from the page. RevExit is a great way to give these users one more chance to view your Revcontent API widget.',
             link: 'revcontent-api-showcase-exitpop-1.0/index.html',
             docs: 'revcontent-api-showcase-exitpop-1.0/README.md',
-            bg: '#00A650'
+            bg: '#767ae1',
+            img_animated: false,
+            image_animation_duration: 3600,
         },
         flicker: {
             title: 'RevFlicker',
-            img: 'flicker.jpg',
+            img: 'flicker.gif',
+            preview_img: 'preview-flicker.jpg',
             description: 'With responsive styling and touch enabled gestures RevFlicker puts the fun into your content slider. You can configure the RevFlicker widget to show on phone, tablet and desktop and you can even decide how many units to display at various breakpoints. Include RevFlicker on your page and let the engagement begin!',
             link: 'revcontent-api-showcase-flicker-1.0/index.html',
             docs: 'revcontent-api-showcase-flicker-1.0/README.md',
-            bg: '#F7F9F8',
+            bg: '#88ec97',
+            img_animated: false,
+            image_animation_duration: 3300,
             // preview: true,
             // demo: true
         },
         toaster: {
             title: 'Mobile RevToaster',
-            img: 'toaster.jpg',
+            img: 'toaster.gif',
+            preview_img: 'preview-toaster.jpg',
             description: 'Pop! content toasters are an engaging way to interact with your readers. The Mobile RevToaster will appear as the user pans back to the top of the page and disapear as they scroll back down. Show your reader what\'s trending and get great results with the Mobile RevToaster.',
             link: 'revcontent-api-showcase-toaster-1.0/index.html',
             docs: 'revcontent-api-showcase-toaster-1.0/README.md',
-            bg: '#CFC28E',
+            bg: '#dd8b47',
+            img_animated: false,
+            image_animation_duration: 2900,
             // preview: true,
             // demo: true
         },
         slider: {
             title: 'RevSlider',
-            img: 'slider.jpg',
+            img: 'slider.gif',
+            preview_img: 'preview-slider.jpg',
             description: 'RevSlider is an engaging carousel and a great way to showcase Revcontent ads on your site! Give your readers the ability to navigate through all of the ads availible to your widget. Fully responsive and configurable to display as many rows and columns as you like at various breakpoints. RevSlider is a great choice for any site!',
             link: 'revcontent-api-showcase-slider-1.0/index.html',
             docs: 'revcontent-api-showcase-slider-1.0/README.md',
-            bg: '#2E4E5D',
+            bg: '#f771f3',
+            img_animated: false,
+            image_animation_duration: 12000,
             //preview: true,
             //demo: true
         },
         shifter: {
             title: 'RevShifter',
-            img: 'shifter.jpg',
+            img: 'shifter.gif',
+            preview_img: 'preview-shifter.jpg',
+            img_animated: false,
+            image_animation_duration: 3300,
             description: 'Monetize valuable site real estate on the top or bottom of the page, show RevShifter on demand or as the user scrolls. Great for engaging users on high bounce rate experiences with pagination and touch support. RevShifter is sure to increase revenue, customize one to fit your site today!',
             link: 'revcontent-api-showcase-shifter-2.0/index.html',
             docs: 'revcontent-api-showcase-shifter-2.0/README.md',
-            bg: '#EEBF77'
+            bg: '#eb7859'
             // preview: true,
             // demo: true
         },
         instream: {
             title: 'In-stream',
-            img: 'instream.jpg',
+            img: 'instream.gif',
+            preview_img: 'preview-instream.jpg',
             description: 'In-stream native sponsored content can look, feel, and function seamlessly across mobile, desktop, or tablet. With the API you\'re in full control of the integration on your web property, inject targeted content in-stream on your homepage, mobile view, or where it fits best for your users.',
             link: 'revcontent-api-showcase-instream-1.0/index.php',
-            bg: '#70BDA9'
+            bg: '#0a3f6a'
         },
         'end-of-gallery': {
             title: 'End of Gallery',
-            img: 'eog.jpg',
+            img: 'end-of-gallery.jpg',
+            preview_img: 'preview-eog.jpg',
             description: 'Keep the engagement going long after the last page of your gallery. Using our API on the last page of your photo galleries, top 10 lists, or quizes is a great way to guide your users to their next destination.',
             link: 'revcontent-api-showcase-endofgallery-1.0/index.html',
-            bg: '#847F6C'
+            bg: '#7d1854'
         },
         'revmore': {
             title: 'Mobile RevMore',
-            img: 'revmore.jpg',
+            img: 'more.gif',
+            preview_img: 'preview-revmore.jpg',
             description: 'Studies show that Facebook-referred mobile users never reach the bottom of the article. By truncating the page, RevMore increase the visibility of content recommendations from standard Revcontent widgets.',
             link: 'revcontent-api-showcase-more-1.0/index.html',
             docs: 'revcontent-api-showcase-more-1.0/README.md',
-            bg: '#5B7D89'
+            bg: '#28869a'
         },
         'revmore-standard': {
             title: 'Mobile RevMore Standard',
-            img: 'revmore.jpg',
+            img: 'more.gif',
+            preview_img: 'preview-revmore.jpg',
             description: 'Studies show that Facebook-referred mobile users never reach the bottom of the article. By truncating the page, RevMore increase the visibility of content recommendations from standard Revcontent widgets.',
             link: 'revcontent-api-showcase-more-1.0/standard.html',
             docs: 'revcontent-api-showcase-more-1.0/README_Standard.md',
@@ -82,42 +101,64 @@ app.service('widgets', function() {
         'revimage': {
             title: 'RevImage',
             img: 'revimage.jpg',
+            preview_img: 'preview-revimage.jpg',
             description: 'Rev up your valuable image real estate with the RevImage widget! As your image makes its way into view RevImage transitions from the bottom drawing attention where the eyes are already focused. Add a timeout to delay the ad from showing. Optimized for all devices and screen sizes, RevImage is a sure fire way to increase RPMs and monetize in a new and exciting way!',
             link: 'revcontent-api-showcase-image-1.0/index.html',
             docs: 'revcontent-api-showcase-image-1.0/README.md',
-            bg: '#434f5e'
+            bg: '#c967df',
+            img_animated: false,
+            image_animation_duration: 15000,
         },
         'amp': {
             title: 'AMP HTML',
             img: 'amp.jpg',
+            preview_img: 'preview-amp.jpg',
             description: 'AMP is a way to build web pages for static content that render fast. AMP HTML is HTML with some restrictions for reliable performance and some extensions for building rich content beyond basic HTML. The AMP JS library ensures the fast rendering of AMP HTML pages. The Google AMP Cache can be used to serve cached AMP HTML pages. So go ahead, amplify the web! Learn more about the Revcontent AMP partnership <a href="http://blog.revcontent.com/revcontent-partners-with-google-for-better-user-experience-on-mobile/">here</a>.',
             link: 'revcontent-api-showcase-amp-1.0/index.html',
             docs: 'revcontent-api-showcase-amp-1.0/README.md',
-            bg: '#000'
+            bg: '#b5486b'
         },
         'soloserve': {
             title: 'Solo Serve Native',
-            img: 'soloserve.jpg',
+            img: 'soloserve.gif',
+            preview_img: 'preview-soloserve.jpg',
             description: 'Our content is on fire! This single ad widget is sure to get your audience\'s attention. With a customizable call to action and popularity meter, increase viewer engagement and your returns with Solo Serve Native today.',
             link: 'revcontent-api-showcase-solo-serve-1.0/index.html',
             docs: 'revcontent-api-showcase-solo-serve-1.0/README.md',
-            bg: '#d6031d'
+            bg: '#637cd4',
+            img_animated: false,
+            image_animation_duration: 5000,
         },
         'scroller': {
             title: 'RevScroller',
-            img: 'scroller.jpg',
+            img: 'scroller.gif',
+            preview_img: 'preview-scroller.jpg',
             description: 'Increase overall ad real estate with the RevScroller widget. As the user scrolls the page RevScroller will scroll with them to show the next row of ads. RevScroller also features a customizable layout that allows larger ads to be mixed in.',
             link: 'revcontent-api-showcase-scroller-1.0/index.html',
             docs: 'revcontent-api-showcase-scroller-1.0/README.md',
-            bg: '#faf5ee'
+            bg: '#bad92e'
         },
         'interstitial': {
             title: 'RevInterstitial',
             img: 'interstitial.jpg',
-            description: '',
+            preview_img: 'preview-interstitial.jpg',
+            description: 'The RevInterstial overlays the page with RevContents most contextually relevant ads. A smooth transition from the side of the page is gentle on the users experience and the unit can easily be dismissed. Frequency capping controls how often your visitors will see the widget. Add your logo for a truly custom native look!' ,
             link: 'revcontent-api-showcase-interstitial-1.0/index.html',
             docs: 'revcontent-api-showcase-interstitial-1.0/README.md',
-            bg: '#ffffff'
+            bg: '#34dab9',
+            img_animated: false,
+            image_animation_duration: 10000,
+        },
+        'in-feed-video': {
+            title: 'In-Feed Video',
+            img: 'infeedvideo.gif',
+            preview_img: 'preview-infeedvideo.jpg',
+            description: 'Revcontent\'s native In-Feed Video widget will give your site the video content it deserves in a fun and engaging way. Match your sites look and feel with our light, powerful and safe muted auto-play video widget. Give In-Feed Video a try and watch your profits soar to new levels!',
+            link: 'revcontent-api-showcase-in-feed-video-1.0/index.html',
+            // docs: 'revcontent-api-showcase-in-feed-video-1.0/README.md',
+            bg: '#34dab9',
+            img_animated: false,
+            image_animation_duration: 10000,
         }
         //'scrolling-exp': {
           //  title: 'Scrolling Experience',
