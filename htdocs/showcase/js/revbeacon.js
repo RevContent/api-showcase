@@ -16,13 +16,6 @@
 
     var RevBeacon = function () {
         var self = this;
-        console.log(api);
-        // @todo determine proper source of ASSET VERSION and related vars
-        //var ASSET_VERSION = '___COMPLETE_ME';
-        //var UID = utilities.retrieveUserOptions().pub_id ; // user_id
-        //var UIP = utilities.retrieveUserOptions().ip ; // IP
-        //var FQDN = utilities.retrieveUserOptions().domain ; // pub_domain
-        //var REFERRER = utilities.retrieveUserOptions().referer ; // referrer
         self.pluginSource = '';
         self.push = true;
         self.pushed = 0;
@@ -60,8 +53,6 @@
                 pixel_url: false,
                 pixel_label: "AdScore",
                 styles: false,
-                // full example - only using relevant parts
-                // //js.ad-score.com/score.min.js?pid=1001234#&tid=display-ad&l1=$$platform$$&l2=$$Publisher_id$$&$l3=$$placement$$&l4=$$campaign_01$$&utid=unique_transaction_id&uid=user_id&uip=user_ip&ref=referrer&pub_app<com.mobile.app-bundle>&pub_domain=cnn.com&cb=cachebuster
                 script_url: '//js.ad-score.com/score.min.js?pid=1000177#&tid=display-ad&uid=' + '{uid}' + '&uip=' + '{uip}' + '&ref=' + '{ref}' + '&pub_domain=' + '{fqdn}' + '&cb=' + '{cache}',
                 noscript: false,
                 traffic_percent: 2
@@ -155,16 +146,11 @@
                             break;
                     }
                     if(beacon.name === "adscore" && response != ''){
-                        // Re-parse Adscore script and inject dynamic variables
-                        console.log("Preparing for AdScore attach.");
-                        if(top.location.hostname == "api-showcase.localhost" || Math.floor(Math.random()*(100)) < beacon.traffic_percent) {
-                            // Retrieve shared options for api call
-                            var user_options = utilities.retrieveUserOptions();
-
+                        var user_options = utilities.retrieveUserOptions();
+                        if((user_options.developer !== undefined && user_options.developer === true) || Math.floor(Math.random()*(100)) < beacon.traffic_percent) {
                             // XHR to Delivery for Info Payload (endpoint = /v1/request-info)
-                            // @todo Build an environment-friendly URL here...
-                            //var payload_url = 'https://trends.revcontent.com/api/v1/request-info' +
-                            var payload_url = 'http://api-showcase.localhost/fake-api.php' +
+                            //var payload_url = 'http://api-showcase.localhost/fake-api.php' +
+                            var payload_url = user_options.url + '/request-info' +
 
                                 '?api_key=' + user_options.api_key +
                                 '&pub_id=' + user_options.pub_id +
@@ -172,8 +158,8 @@
                                 '&domain=' + user_options.domain +
                                 '&api_source=' + user_options.api_source;
 
-                            console.log(api, "@api-info-url: ", payload_url);
                             var info_request = new XMLHttpRequest();
+                            //console.log(api, "@api-info-url: ", payload_url);
                             info_request.open('GET', payload_url, true);
 
                             info_request.onload = function() {
