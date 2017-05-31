@@ -12,9 +12,9 @@
     <title>In-Feed Video Example</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="../css/bootstrap.css" rel="stylesheet">
 
-    <link href="css/style.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
 
     <style>
 /*    .rev-content:nth-child(n+6) {
@@ -147,6 +147,26 @@
 
                <script async type='text/javascript' src='https://cdn.connatix.com/min/connatix.renderer.infeed.min.js' data-connatix-token='eee195bf-f05a-4282-a2c1-78c24ec64311' pcp1="30" pcp2="5142"
                 customlogo='https://i.connatix.com/s3/connatix-uploads/player_assets/RC_Logo_White_No_NR.png?mode=pad&height=18' ></script>
+
+                <br /><br />
+
+                <div id="rev-flicker"></div>
+
+                <br /><br />
+
+                <script src="/build/revflicker.min.js"></script>
+
+                <script>
+
+                    new RevFlicker({
+                        id: 'rev-flicker',
+                        api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+                        pub_id : 945,
+                        widget_id : 6181,
+                        domain : 'apiexamples.powr.com'
+                    });
+
+                </script>
 
             </div>
             <div class="col-md-4">
