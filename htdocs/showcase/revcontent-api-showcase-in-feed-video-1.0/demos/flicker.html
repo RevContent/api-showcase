@@ -157,7 +157,7 @@
 
                 <script>
 
-                    new RevFlicker({
+                    var flicker = new RevFlicker({
                         id: 'rev-flicker',
                         api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
                         pub_id : 945,
@@ -168,6 +168,12 @@
                         ad_border: false,
                         css: '#rev-flicker .rev-image img, #rev-flicker .rev-ad { border-radius: 0 !important; }'
                     });
+
+                    flicker.emitter.once('ready', function() {
+                        flicker.containerElement.style.marginTop = flicker.margin + 'px';
+                    });
+
+
 
                 </script>
 
