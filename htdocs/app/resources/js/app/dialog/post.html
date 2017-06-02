@@ -16,16 +16,16 @@
         <div class="item-detail" hide-gt-md>
 
             <md-content layout="row" layout-wrap>
-                <div flex="50" layout layout-align="center center">
-                    <md-button flex style="margin:8px;" ng-show="post.docs" ui-sref="docs_widget({widget: id})" class="md-accent md-raised md-hue-2">Docs</md-button>
+                <div flex="{{ post.docs ? '50' : '33' }}" layout layout-align="center center" ng-show="post.docs">
+                    <md-button flex style="margin:8px;" ui-sref="docs_widget({widget: id})" class="md-accent md-raised md-hue-2">Docs</md-button>
                 </div>
-                <div flex="50" layout layout-align="center center">
+                <div flex="{{ post.docs ? '50' : '33' }}" layout layout-align="center center">
                     <md-button flex style="margin:8px;" ng-click="preview(id, post.preview)" class="md-accent md-raised md-hue-2">Live Preview</md-button>
                 </div>
-                <div flex="50" layout layout-align="center center">
+                <div flex="{{ post.docs ? '50' : '33' }}" layout layout-align="center center">
                     <md-button flex style="margin:8px;" href="https://github.com/Revcontent/api-showcase" class="md-raised md-primary md-hue-1" target="_blank">Github</md-button>
                 </div>
-                <div flex="50" layout layout-align="center center">
+                <div flex="{{ post.docs ? '50' : '33' }}" layout layout-align="center center">
                     <md-button flex style="margin:8px;" href="https://github.com/Revcontent/api-showcase/archive/master.zip" class="md-raised md-primary md-hue-1">Download</md-button>
                 </div>
             </md-content>
@@ -34,7 +34,7 @@
 
             <md-content>
                 <h3 style="margin-top:0;" class="md-title">Preview Image:</h3>
-                <img class="img-responsive" ng-src="/app/resources/img/preview-{{post.img}}" alt="{{ post.title }}">
+                <img class="img-responsive" ng-src="/app/resources/img/{{post.preview_img}}" alt="{{ post.title }}">
             </md-content>
 
             <br />
@@ -48,7 +48,7 @@
         <div hide show-gt-md layout>
 
             <div flex-gt-md="70" style="padding-right:16px;">
-                <img class="img-responsive preview" ng-src="/app/resources/img/preview-{{post.img}}" alt="{{ post.title }}">
+                <img class="img-responsive preview" ng-src="/app/resources/img/{{post.preview_img}}" alt="{{ post.title }}">
             </div>
 
             <div flex-gt-md="30">
