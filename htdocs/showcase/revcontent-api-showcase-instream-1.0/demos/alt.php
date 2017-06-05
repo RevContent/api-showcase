@@ -325,7 +325,22 @@
 
     <script src="/build/revinstream.min.js"></script>
 
-    <style>
+    <script>
+        var slider = new RevInstream({
+            id: 'grid',
+            api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+            pub_id : 945,
+            widget_id : 6181,
+            domain : 'apiexamples.powr.com',
+            headline_size: 2,
+            multipliers: {
+                padding: 2
+            },
+            ad_overlay: {
+                article: 'video_rectangle'
+            },
+            ad_overlay_position: 'top_left',
+            css: `
     .rev-headline {
         margin-top: 3% !important;
     }
@@ -367,26 +382,7 @@
         position: absolute;
         fill: #fff;
     }
-    </style>
-
-    <script>
-        var slider = new RevInstream({
-            id: 'grid',
-            url: 'http://trends-s1.revcontent.com/api/v1/',
-            // url: 'http://delivery.powr.mosterhout.dev2.dev.internal/api/v1/',
-            api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
-            pub_id : 945,
-            widget_id : 6181,
-            domain : 'apiexamples.powr.com',
-            headline_size: 2,
-            multipliers: {
-                padding: 2
-            },
-            ad_overlay: {
-                article: 'video_rectangle'
-            },
-            ad_overlay_position: 'top_left',
-            css: ``
+            `
         });
     </script>
 

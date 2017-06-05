@@ -339,7 +339,6 @@
             multipliers: {
                 padding: 5
             },
-            image_ratio: 'square',
             css: `
     .rev-ad {
         border: 1px solid #ccc;

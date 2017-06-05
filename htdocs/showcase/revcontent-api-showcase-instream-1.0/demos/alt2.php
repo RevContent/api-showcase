@@ -328,8 +328,6 @@
     <script>
         var slider = new RevInstream({
             id: 'grid',
-            url: 'http://trends-s1.revcontent.com/api/v1/',
-            // url: 'http://delivery.powr.mosterhout.dev2.dev.internal/api/v1/',
             api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
             pub_id : 945,
             widget_id : 6181,
