@@ -12,9 +12,9 @@
     <title>RevInStream Example</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="../css/bootstrap.css" rel="stylesheet">
 
-    <link href="css/style.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -98,7 +98,6 @@
 
         <div class="row">
             <div class="col-md-9">
-
                 <div class="redacted-image redacted-image-50"></div>
 
                 <br />
@@ -326,6 +325,19 @@
     <script src="/build/files/instream/revinstream.pkgd.js"></script>
     <!-- <script src="/build/revinstream.min.js"></script> -->
 
+    <style>
+        .rev-headline-brand {
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 8px -4px black;
+            padding: 16px 8px !important;
+            margin-top: -14px !important;
+            background: #fff;
+            margin-left: 14px !important;
+            margin-right: 14px !important;
+            /*padding-bottom: 20px !important;*/
+        }
+    </style>
+
     <script>
         var slider = new RevInstream({
             id: 'grid',
@@ -335,27 +347,23 @@
             pub_id : 945,
             widget_id : 6181,
             domain : 'apiexamples.powr.com',
-            // headline_size: 3,
-            // max_headline: true,
-            multipliers: {
-                padding: 5
-            },
-            image_ratio: 'square',
-            css: `
-    .rev-ad {
-        border: 1px solid #ccc;
-        box-shadow: 0 2px 8px -4px black;
-        padding-bottom: 20px !important;
-    }
+            // multipliers: {
+            //     padding: 5
+            // },
+    //         css: `
+    // .rev-headline {
+    //     margin-top: 4% !important;
+    // }
 
-    .rev-headline {
-        margin-top: 4% !important;
-    }
+    // .rev-headline h3 {
+    //     line-height: 26px !important;
+    //     font-size: 18px !important;
+    // }
 
-    .rev-provider {
-        margin-top: 5px !important;
-    }
-            `
+    // .rev-provider {
+    //     margin-top: 10px !important;
+    // }
+    //         `
         });
     </script>
 
