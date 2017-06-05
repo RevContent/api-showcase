@@ -322,8 +322,7 @@
 
    <!-- /. Fake Page Content -->
 
-    <script src="/build/files/instream/revinstream.pkgd.js"></script>
-    <!-- <script src="/build/revinstream.min.js"></script> -->
+    <script src="/build/revinstream.min.js"></script>
 
     <style>
         .rev-headline-brand {
