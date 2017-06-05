@@ -865,8 +865,6 @@ Author: michael@revcontent.com
 
                 that.data = resp;
 
-                that.data[0].headline = that.data[0].headline + ' ' + that.data[0].headline + ' ' + that.data[0].headline;
-
                 revUtils.addClass(that.containerElement, 'rev-slider-has-data');
 
                 that.updateDisplayedItems();
