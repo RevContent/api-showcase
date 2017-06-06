@@ -326,7 +326,7 @@
     <script src="/build/revinstream.min.js"></script>
 
     <script>
-        var slider = new RevInstream({
+        var instream = new RevInstream({
             id: 'grid',
             url: 'http://trends-s1.revcontent.com/api/v1/',
             // url: 'http://delivery.powr.mosterhout.dev2.dev.internal/api/v1/',
@@ -341,6 +341,9 @@
             },
             css: `
     .rev-ad {
+        padding-bottom: 4px !important;
+    }
+    .rev-ad-container {
         border: 1px solid #ccc;
         box-shadow: 0 2px 8px -4px black;
         padding-bottom: 20px !important;
