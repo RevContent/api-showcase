@@ -90,7 +90,10 @@ Author: michael@revcontent.com
             column_spans: false,
             stacked: false,
             link_button: false,
-            link_button_text: 'Visit Site'
+            link_button_text: 'Visit Site',
+            window_width_devices: [
+                'phone'
+            ]
         };
 
         // merge options
@@ -138,6 +141,13 @@ Author: michael@revcontent.com
         this.element = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
         this.element.style.width = '100%';
 
+        if (this.options.window_width_devices && revDetect.show(this.options.window_width_devices)) { // handle windowWidth
+            this.appendElement = document.body;
+            this.windowWidth();
+        } else {
+            this.appendElement = this.element;
+        }
+
         revUtils.append(this.containerElement, this.innerContainerElement);
 
         revUtils.append(this.innerContainerElement, this.innerElement);
@@ -150,7 +160,7 @@ Author: michael@revcontent.com
 
         revUtils.append(this.gridContainerElement, gridElement);
 
-        revUtils.append(this.element, this.containerElement);
+        revUtils.append(this.appendElement, this.containerElement);
 
         this.setMultipliers();
 
@@ -205,7 +215,27 @@ Author: michael@revcontent.com
         }
     };
 
+    RevInstream.prototype.windowWidth = function() {
+        this.windowWidth = true;
+        var that = this;
+        this.emitter.on('ready', function() {
+            document.body.style.position = 'relative';
+
+            that.element.style.height = that.containerElement.offsetHeight + 'px';
+
+            that.containerElement.style.position = 'absolute';
+            that.containerElement.style.top = (that.element.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop)) + 'px';
+
+        })
+    };
+
     RevInstream.prototype.setGridClasses = function() {
+        revUtils.addClass(this.containerElement, 'rev-slider-device-' + revDetect.device());
+
+        if (this.windowWidth) {
+            revUtils.addClass(this.containerElement, 'rev-slider-window-width');
+        }
+
         revUtils.removeClass(this.containerElement, 'rev-slider-breakpoint', true);
         revUtils.addClass(this.containerElement, 'rev-slider-breakpoint-' + this.grid.getBreakPoint());
 
@@ -766,7 +796,7 @@ Author: michael@revcontent.com
         }
         // reset headlines
         if (reset) {
-            var ads = this.element.querySelectorAll('.rev-ad');
+            var ads = this.grid.element.querySelectorAll('.rev-ad');
             for (var i = 0; i < ads.length; i++) {
                 var ad = ads[i];
 
@@ -902,7 +932,7 @@ Author: michael@revcontent.com
             var that = this;
             // make sure we have some data
             this.dataPromise.then(function() {
-                var anchors = that.element.querySelectorAll('.rev-ad a');
+                var anchors = that.grid.element.querySelectorAll('.rev-ad a');
                 for (var i = 0; i < anchors.length; i++) {
                     anchors[i].setAttribute('href', anchors[i].getAttribute('href') + '&viewed=true');
                 }

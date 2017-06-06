@@ -9,6 +9,18 @@
         height: auto !important;
     }
 
+    &.rev-slider-window-width {
+        .rev-head {
+            margin-left: 3px;
+        }
+        .rev-sponsored.bottom-right {
+            margin-right: 3px;
+        }
+        .rev-link-button {
+            margin-right: 3px;
+        }
+    }
+
     &:not(.rev-slider-has-data) {
         .rev-content {
             .rev-headline h3 {
@@ -110,7 +122,8 @@
         }
 
         &.bottom-right{
-            float: right;
+            text-align: right;
+            margin-top: 8px;
         }
 
         a {
