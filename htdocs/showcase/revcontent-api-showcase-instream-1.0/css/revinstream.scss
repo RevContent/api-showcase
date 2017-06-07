@@ -234,6 +234,11 @@
                 right: 0;
                 font-size: 18px;
                 font-weight: bold;
+                margin-top: -1px;
+                &:hover {
+                    text-decoration: underline;
+                    color: #1168b1;
+                }
             }
         }
 
