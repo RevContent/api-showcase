@@ -81,7 +81,7 @@ Author: michael@revcontent.com
             query_params: false,
             register_views: true, // manage views or false to let someone else do it
             lazy_load_images: true,
-            lazy_load_images_buffer: 200, // top buffer in pixels
+            lazy_load_images_buffer: 500, // top buffer in pixels
             user_ip: false,
             user_agent: false,
             css: '',
