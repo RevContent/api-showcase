@@ -141,12 +141,7 @@ Author: michael@revcontent.com
         this.element = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
         this.element.style.width = '100%';
 
-        if (this.options.window_width_devices && revDetect.show(this.options.window_width_devices)) { // handle windowWidth
-            this.windowWidthEnabled = true;
-            this.appendElement = document.body;
-        } else {
-            this.appendElement = this.element;
-        }
+        this.windowWidth();
 
         revUtils.append(this.containerElement, this.innerContainerElement);
 
@@ -160,7 +155,7 @@ Author: michael@revcontent.com
 
         revUtils.append(this.gridContainerElement, gridElement);
 
-        revUtils.append(this.appendElement, this.containerElement);
+        revUtils.append(this.element, this.containerElement);
 
         this.setMultipliers();
 
@@ -216,33 +211,26 @@ Author: michael@revcontent.com
                 revUtils.checkVisible.bind(that, that.containerElement, that.near, false, that.options.lazy_load_images_buffer)();
             });
         }
-
-        if (this.windowWidthEnabled) {
-            this.windowWidth();
-        }
     };
 
     RevInstream.prototype.windowWidth = function() {
-        var that = this;
-        var appendToElement = function() {
-            that.element.style.height = that.containerElement.offsetHeight + 'px';
-            that.element.style.width = that.containerElement.offsetWidth + 'px';
 
-            revUtils.transformCss(that.element, 'translateX(-' + that.element.getBoundingClientRect().left + 'px)');
+        if (this.options.window_width_devices && revDetect.show(this.options.window_width_devices)) {
+            this.windowWidthEnabled = true;
 
-            revUtils.append(that.element, that.containerElement);
-        };
+            var that = this;
 
-        this.emitter.on('ready', appendToElement);
-        this.emitter.on('resized', appendToElement);
+            revUtils.addEventListener(window, 'resize', function() {
+                setElementWindowWidth();
+            });
 
-        revUtils.addEventListener(window, 'resize', function() {
-            revUtils.append(document.body, that.containerElement);
-            that.element.style.height = that.containerElement.offsetHeight + 'px';
-            that.element.style.width = that.containerElement.offsetWidth + 'px';
+            var setElementWindowWidth = function() {
+                that.element.style.width = document.body.offsetWidth + 'px';
+                revUtils.transformCss(that.element, 'translateX(-' + that.element.getBoundingClientRect().left + 'px)');
+            };
 
-            revUtils.transformCss(that.element, 'none');
-        });
+            setElementWindowWidth();
+        }
     };
 
     RevInstream.prototype.setGridClasses = function() {
