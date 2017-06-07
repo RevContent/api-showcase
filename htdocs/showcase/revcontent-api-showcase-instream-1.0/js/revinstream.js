@@ -142,8 +142,8 @@ Author: michael@revcontent.com
         this.element.style.width = '100%';
 
         if (this.options.window_width_devices && revDetect.show(this.options.window_width_devices)) { // handle windowWidth
+            this.windowWidthEnabled = true;
             this.appendElement = document.body;
-            this.windowWidth();
         } else {
             this.appendElement = this.element;
         }
@@ -211,28 +211,33 @@ Author: michael@revcontent.com
         if (this.options.lazy_load_images) {
             that.loadImagesOnceNear();
             that.attachNearListener();
-            revUtils.checkVisible.bind(this, this.containerElement, this.near, false, this.options.lazy_load_images_buffer)();
+            var that = this;
+            this.emitter.on('ready', function() {
+                revUtils.checkVisible.bind(that, that.containerElement, that.near, false, that.options.lazy_load_images_buffer)();
+            });
+        }
+
+        if (this.windowWidthEnabled) {
+            this.windowWidth();
         }
     };
 
     RevInstream.prototype.windowWidth = function() {
-        this.windowWidth = true;
         var that = this;
         this.emitter.on('ready', function() {
-            document.body.style.position = 'relative';
-
             that.element.style.height = that.containerElement.offsetHeight + 'px';
+            that.element.style.width = that.containerElement.offsetWidth + 'px';
 
-            that.containerElement.style.position = 'absolute';
-            that.containerElement.style.top = (that.element.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop)) + 'px';
+            revUtils.transformCss(that.element, 'translateX(-' + that.element.getBoundingClientRect().left + 'px)');
 
-        })
+            revUtils.append(that.element, that.containerElement);
+        });
     };
 
     RevInstream.prototype.setGridClasses = function() {
         revUtils.addClass(this.containerElement, 'rev-slider-device-' + revDetect.device());
 
-        if (this.windowWidth) {
+        if (this.windowWidthEnabled) {
             revUtils.addClass(this.containerElement, 'rev-slider-window-width');
         }
 
