@@ -1,15 +1,15 @@
-#rev-slider2 {
+#rev-instream {
     padding: 0;
     width: 100%;
     clear: both;
     box-sizing: border-box;
     position: relative;
 
-    &.rev-slider-has-data {
+    &.rev-instream-has-data {
         height: auto !important;
     }
 
-    &.rev-slider-window-width {
+    &.rev-instream-window-width {
         .rev-head {
             margin-left: 3px;
         }
@@ -21,7 +21,7 @@
         }
     }
 
-    &:not(.rev-slider-has-data) {
+    &:not(.rev-instream-has-data) {
         .rev-content {
             .rev-headline h3 {
               width: 100%;
@@ -131,20 +131,20 @@
         }
     }
 
-    #rev-slider-container {
+    #rev-instream-container {
         width: 100%;
         clear: both;
         position: relative;
         line-height: 0;
 
-        #rev-slider-inner {
+        #rev-instream-inner {
             width: 100%;
             clear: both;
             position: relative;
             // overflow: hidden;
             overflow: hidden;
 
-            #rev-slider-grid-transition-container {
+            #rev-instream-grid-transition-container {
                 // white-space: nowrap;
 
                 // #rev-slider-grid-transition,
@@ -158,7 +158,7 @@
                 // }
             }
 
-            #rev-slider-grid-container {
+            #rev-instream-grid-container {
                 clear: both;
                 position: relative;
                 width: 100%;
@@ -166,7 +166,7 @@
                 // transition-timing-function: ease-in-out;
                 // white-space: nowrap;
 
-                #rev-slider-grid {
+                #rev-instream-grid {
                     padding: 0;
                     // display: inline-block;
                     // width: 100%;
@@ -327,7 +327,7 @@
         }
     }
 
-    &.rev-slider-has-image .rev-content .rev-image {
+    &.rev-instream-has-image .rev-content .rev-image {
         background: transparent !important;
         img {
             opacity: 1;
@@ -336,6 +336,6 @@
     }
 }
 
-#rev-slider2 {
+#rev-instream {
     @import '../../css/revoverlay';
 }
