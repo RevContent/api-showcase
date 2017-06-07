@@ -225,6 +225,7 @@ Author: michael@revcontent.com
             });
 
             var setElementWindowWidth = function() {
+                revUtils.transformCss(that.element, 'none');
                 that.element.style.width = document.body.offsetWidth + 'px';
                 revUtils.transformCss(that.element, 'translateX(-' + that.element.getBoundingClientRect().left + 'px)');
             };
