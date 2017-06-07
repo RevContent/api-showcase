@@ -326,13 +326,13 @@
     <script src="/build/revinstream.min.js"></script>
 
     <script>
-        var slider = new RevInstream({
+        var instream = new RevInstream({
             id: 'grid',
+            url: 'http://trends-s1.revcontent.com/api/v1/',
             api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
             pub_id : 945,
             widget_id : 6181,
             domain : 'apiexamples.powr.com',
-            headline_size: 2,
             multipliers: {
                 padding: 2
             },
@@ -341,44 +341,44 @@
             },
             ad_overlay_position: 'top_left',
             css: `
-    .rev-headline {
+    #rev-instream .rev-headline {
         margin-top: 3% !important;
     }
 
-    .rev-headline h3 {
+    #rev-instream .rev-headline h3 {
         font-weight: 400 !important;
         line-height: 30px !important;
         font-size: 18px !important;
         letter-spacing: 1px !important;
     }
 
-    .rev-provider {
+    #rev-instream .rev-provider {
         font-weight: 200;
         font-size: 16px !important;
         line-height: 18px !important;
         color: inherit !important;
     }
-    #rev-slider2 .rc-icon.rc-ad-icon {
+    #rev-instream .rc-icon.rc-ad-icon {
         top: 0;
         left: 0;
     }
 
-    #rev-slider2 .rc-icon.rc-ad-icon {
+    #rev-instream .rc-icon.rc-ad-icon {
         background: #cc232f;
         width: 50px !important;
         height: 37px !important;
         /*padding: 10px;*/
     }
 
-    #rev-slider2 .rc-icon {
+    #rev-instream .rc-icon {
         padding: 8px 10px 0px;
     }
 
-    #rev-slider2 .rc-icon .rc-icon-video .rc-icon-video-arrow {
+    #rev-instream .rc-icon .rc-icon-video .rc-icon-video-arrow {
         fill: #cc232f;
     }
 
-    #rev-slider2 .rc-icon .rc-icon-video {
+    #rev-instream .rc-icon .rc-icon-video {
         position: absolute;
         fill: #fff;
     }

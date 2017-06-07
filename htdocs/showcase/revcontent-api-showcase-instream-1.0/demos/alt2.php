@@ -326,7 +326,7 @@
     <script src="/build/revinstream.min.js"></script>
 
     <script>
-        var slider = new RevInstream({
+        var instream = new RevInstream({
             id: 'grid',
             api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
             pub_id : 945,
@@ -337,16 +337,16 @@
             },
             link_button: true,
             css: `
-    .rev-headline {
+    #rev-instream .rev-headline {
         margin-top: 4% !important;
     }
 
-    .rev-headline h3 {
+    #rev-instream .rev-headline h3 {
         line-height: 26px !important;
         font-size: 18px !important;
     }
 
-    .rev-provider {
+    #rev-instream .rev-provider {
         margin-top: 10px !important;
     }
             `

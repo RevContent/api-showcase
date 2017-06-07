@@ -325,14 +325,14 @@
     <script src="/build/revinstream.min.js"></script>
 
     <script>
-        var slider = new RevInstream({
+        var instream = new RevInstream({
             id: 'grid',
             api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
             pub_id : 945,
             widget_id : 6181,
             domain : 'apiexamples.powr.com',
             css: `
-        .rev-headline-brand {
+        #rev-instream .rev-headline-brand {
             border: 1px solid #ccc;
             box-shadow: 0 2px 8px -4px black;
             padding: 16px 8px !important;
