@@ -224,13 +224,24 @@ Author: michael@revcontent.com
 
     RevInstream.prototype.windowWidth = function() {
         var that = this;
-        this.emitter.on('ready', function() {
+        var appendToElement = function() {
             that.element.style.height = that.containerElement.offsetHeight + 'px';
             that.element.style.width = that.containerElement.offsetWidth + 'px';
 
             revUtils.transformCss(that.element, 'translateX(-' + that.element.getBoundingClientRect().left + 'px)');
 
             revUtils.append(that.element, that.containerElement);
+        };
+
+        this.emitter.on('ready', appendToElement);
+        this.emitter.on('resized', appendToElement);
+
+        revUtils.addEventListener(window, 'resize', function() {
+            revUtils.append(document.body, that.containerElement);
+            that.element.style.height = that.containerElement.offsetHeight + 'px';
+            that.element.style.width = that.containerElement.offsetWidth + 'px';
+
+            revUtils.transformCss(that.element, 'none');
         });
     };
 
@@ -1006,8 +1017,6 @@ Author: michael@revcontent.com
         this.grid.layout();
 
         this.checkEllipsis(resized);
-
-        this.emitter.emitEvent('resized');
     };
 
     RevInstream.prototype.destroy = function() {
