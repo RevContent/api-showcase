@@ -12,9 +12,9 @@
     <title>RevInStream Example</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="../css/bootstrap.css" rel="stylesheet">
 
-    <link href="css/style.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -327,24 +327,46 @@
 
     <!--
     RAW CSS
-    #rev-instream .rev-ad {
-        padding-bottom: 8px !important;
-    }
-    #rev-instream .rev-sponsored.bottom-right {
-        margin-top: 0px !important;
-    }
-    #rev-instream .rev-ad-container {
-        border: 1px solid #ccc;
-        box-shadow: 0 2px 8px -4px black;
-        padding-bottom: 20px !important;
+    #rev-instream .rev-headline {
+        margin-top: 3% !important;
     }
 
-    #rev-instream .rev-headline {
-        margin-top: 4% !important;
+    #rev-instream .rev-headline h3 {
+        font-weight: 400 !important;
+        line-height: 30px !important;
+        font-size: 18px !important;
+        letter-spacing: 1px !important;
     }
 
     #rev-instream .rev-provider {
-        margin-top: 5px !important;
+        font-weight: 200;
+        font-size: 16px !important;
+        line-height: 18px !important;
+        color: inherit !important;
+    }
+    #rev-instream .rc-icon.rc-ad-icon {
+        top: 0;
+        left: 0;
+    }
+
+    #rev-instream .rc-icon.rc-ad-icon {
+        background: #cc232f;
+        width: 50px !important;
+        height: 37px !important;
+        /*padding: 10px;*/
+    }
+
+    #rev-instream .rc-icon {
+        padding: 8px 10px 0px;
+    }
+
+    #rev-instream .rc-icon .rc-icon-video .rc-icon-video-arrow {
+        fill: #cc232f;
+    }
+
+    #rev-instream .rc-icon .rc-icon-video {
+        position: absolute;
+        fill: #fff;
     }
     -->
 
@@ -356,9 +378,13 @@
             widget_id : 6181,
             domain : 'apiexamples.powr.com',
             multipliers: {
-                padding: 5
+                padding: 2
             },
-            css: '#rev-instream .rev-ad {padding-bottom: 8px !important; } #rev-instream .rev-sponsored.bottom-right {margin-top: 0px !important; } #rev-instream .rev-ad-container {border: 1px solid #ccc; box-shadow: 0 2px 8px -4px black; padding-bottom: 20px !important; } #rev-instream .rev-headline {margin-top: 4% !important; } #rev-instream .rev-provider {margin-top: 5px !important; }'
+            ad_overlay: {
+                article: 'video_rectangle'
+            },
+            ad_overlay_position: 'top_left',
+            css: '#rev-instream .rev-headline {margin-top: 3% !important; } #rev-instream .rev-headline h3 {font-weight: 400 !important; line-height: 30px !important; font-size: 18px !important; letter-spacing: 1px !important; } #rev-instream .rev-provider {font-weight: 200; font-size: 16px !important; line-height: 18px !important; color: inherit !important; } #rev-instream .rc-icon.rc-ad-icon {top: 0; left: 0; } #rev-instream .rc-icon.rc-ad-icon {background: #cc232f; width: 50px !important; height: 37px !important; /*padding: 10px;*/ } #rev-instream .rc-icon {padding: 8px 10px 0px; } #rev-instream .rc-icon .rc-icon-video .rc-icon-video-arrow {fill: #cc232f; } #rev-instream .rc-icon .rc-icon-video {position: absolute; fill: #fff; }'
         });
     </script>
 

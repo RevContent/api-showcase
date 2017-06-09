@@ -12,9 +12,9 @@
     <title>RevInStream Example</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="../css/bootstrap.css" rel="stylesheet">
 
-    <link href="css/style.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -98,7 +98,6 @@
 
         <div class="row">
             <div class="col-md-9">
-
                 <div class="redacted-image redacted-image-50"></div>
 
                 <br />
@@ -327,24 +326,14 @@
 
     <!--
     RAW CSS
-    #rev-instream .rev-ad {
-        padding-bottom: 8px !important;
-    }
-    #rev-instream .rev-sponsored.bottom-right {
-        margin-top: 0px !important;
-    }
-    #rev-instream .rev-ad-container {
+    #rev-instream .rev-headline-brand {
         border: 1px solid #ccc;
         box-shadow: 0 2px 8px -4px black;
-        padding-bottom: 20px !important;
-    }
-
-    #rev-instream .rev-headline {
-        margin-top: 4% !important;
-    }
-
-    #rev-instream .rev-provider {
-        margin-top: 5px !important;
+        padding: 16px 8px !important;
+        margin-top: -14px !important;
+        background: #fff;
+        margin-left: 14px !important;
+        margin-right: 14px !important;
     }
     -->
 
@@ -355,10 +344,7 @@
             pub_id : 945,
             widget_id : 6181,
             domain : 'apiexamples.powr.com',
-            multipliers: {
-                padding: 5
-            },
-            css: '#rev-instream .rev-ad {padding-bottom: 8px !important; } #rev-instream .rev-sponsored.bottom-right {margin-top: 0px !important; } #rev-instream .rev-ad-container {border: 1px solid #ccc; box-shadow: 0 2px 8px -4px black; padding-bottom: 20px !important; } #rev-instream .rev-headline {margin-top: 4% !important; } #rev-instream .rev-provider {margin-top: 5px !important; }'
+            css: '#rev-instream .rev-headline-brand {border: 1px solid #ccc; box-shadow: 0 2px 8px -4px black; padding: 16px 8px !important; margin-top: -14px !important; background: #fff; margin-left: 14px !important; margin-right: 14px !important; }'
         });
     </script>
 

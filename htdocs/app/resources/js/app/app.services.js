@@ -65,8 +65,8 @@ app.service('widgets', function() {
         },
         instream: {
             title: 'In-stream',
-            img: 'instream.gif?v=2',
-            preview_img: 'preview-instream.jpg?v=2',
+            img: 'instream.jpg?v=3',
+            preview_img: 'preview-instream.jpg?v=3',
             description: 'In-stream native sponsored content can look, feel, and function seamlessly across mobile, desktop, or tablet. With the API you\'re in full control of the integration on your web property, inject targeted content in-stream on your homepage, mobile view, or where it fits best for your users.',
             link: 'revcontent-api-showcase-instream-1.0/index.php',
             bg: '#0a3f6a'

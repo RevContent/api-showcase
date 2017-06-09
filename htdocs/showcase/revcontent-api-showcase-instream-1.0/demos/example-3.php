@@ -12,9 +12,9 @@
     <title>RevInStream Example</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="../css/bootstrap.css" rel="stylesheet">
 
-    <link href="css/style.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -327,24 +327,17 @@
 
     <!--
     RAW CSS
-    #rev-instream .rev-ad {
-        padding-bottom: 8px !important;
-    }
-    #rev-instream .rev-sponsored.bottom-right {
-        margin-top: 0px !important;
-    }
-    #rev-instream .rev-ad-container {
-        border: 1px solid #ccc;
-        box-shadow: 0 2px 8px -4px black;
-        padding-bottom: 20px !important;
-    }
-
     #rev-instream .rev-headline {
         margin-top: 4% !important;
     }
 
+    #rev-instream .rev-headline h3 {
+        line-height: 26px !important;
+        font-size: 18px !important;
+    }
+
     #rev-instream .rev-provider {
-        margin-top: 5px !important;
+        margin-top: 10px !important;
     }
     -->
 
@@ -358,7 +351,8 @@
             multipliers: {
                 padding: 5
             },
-            css: '#rev-instream .rev-ad {padding-bottom: 8px !important; } #rev-instream .rev-sponsored.bottom-right {margin-top: 0px !important; } #rev-instream .rev-ad-container {border: 1px solid #ccc; box-shadow: 0 2px 8px -4px black; padding-bottom: 20px !important; } #rev-instream .rev-headline {margin-top: 4% !important; } #rev-instream .rev-provider {margin-top: 5px !important; }'
+            link_button: true,
+            css: '#rev-instream .rev-headline {margin-top: 4% !important; } #rev-instream .rev-headline h3 {line-height: 26px !important; font-size: 18px !important; } #rev-instream .rev-provider {margin-top: 10px !important; }'
         });
     </script>
 
