@@ -85,10 +85,10 @@
                 <div class="col-md-12">
                     <h3>Examples:</h3>
                     <ul>
-                        <li><a href="/showcase/revcontent-api-showcase-instream-1.0/index.php">Default</a></li>
-                        <li><a href="/showcase/revcontent-api-showcase-instream-1.0/demos/alt.php">Alt</a></li>
-                        <li><a href="/showcase/revcontent-api-showcase-instream-1.0/demos/alt2.php">Alt 2</a></li>
-                        <li><a href="/showcase/revcontent-api-showcase-instream-1.0/demos/alt3.php">Alt 3</a></li>
+                        <li>Example 1: <a href="/showcase/revcontent-api-showcase-instream-1.0/index.php">Border and box shadow</a></li>
+                        <li>Example 2: <a href="/showcase/revcontent-api-showcase-instream-1.0/demos/example-2.php">Video icon overlay with thin font</a></li>
+                        <li>Example 3: <a href="/showcase/revcontent-api-showcase-instream-1.0/demos/example-3.php">Link button</a></li>
+                        <li>Example 4: <a href="/showcase/revcontent-api-showcase-instream-1.0/demos/example-4.php">Headline/provider border and margin</a></li>
                     </ul>
                 </div>
             </div>
@@ -325,64 +325,34 @@
 
     <script src="/build/revinstream.min.js"></script>
 
+    <!--
+    RAW CSS
+    #rev-instream .rev-headline {
+        margin-top: 4% !important;
+    }
+
+    #rev-instream .rev-headline h3 {
+        line-height: 26px !important;
+        font-size: 18px !important;
+    }
+
+    #rev-instream .rev-provider {
+        margin-top: 10px !important;
+    }
+    -->
+
     <script>
         var instream = new RevInstream({
             id: 'grid',
-            url: 'http://trends-s1.revcontent.com/api/v1/',
             api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
             pub_id : 945,
             widget_id : 6181,
             domain : 'apiexamples.powr.com',
             multipliers: {
-                padding: 2
+                padding: 5
             },
-            ad_overlay: {
-                article: 'video_rectangle'
-            },
-            ad_overlay_position: 'top_left',
-            css: `
-    #rev-instream .rev-headline {
-        margin-top: 3% !important;
-    }
-
-    #rev-instream .rev-headline h3 {
-        font-weight: 400 !important;
-        line-height: 30px !important;
-        font-size: 18px !important;
-        letter-spacing: 1px !important;
-    }
-
-    #rev-instream .rev-provider {
-        font-weight: 200;
-        font-size: 16px !important;
-        line-height: 18px !important;
-        color: inherit !important;
-    }
-    #rev-instream .rc-icon.rc-ad-icon {
-        top: 0;
-        left: 0;
-    }
-
-    #rev-instream .rc-icon.rc-ad-icon {
-        background: #cc232f;
-        width: 50px !important;
-        height: 37px !important;
-        /*padding: 10px;*/
-    }
-
-    #rev-instream .rc-icon {
-        padding: 8px 10px 0px;
-    }
-
-    #rev-instream .rc-icon .rc-icon-video .rc-icon-video-arrow {
-        fill: #cc232f;
-    }
-
-    #rev-instream .rc-icon .rc-icon-video {
-        position: absolute;
-        fill: #fff;
-    }
-            `
+            link_button: true,
+            css: '#rev-instream .rev-headline {margin-top: 4% !important; } #rev-instream .rev-headline h3 {line-height: 26px !important; font-size: 18px !important; } #rev-instream .rev-provider {margin-top: 10px !important; }'
         });
     </script>
 

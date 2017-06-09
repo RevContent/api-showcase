@@ -85,10 +85,10 @@
                 <div class="col-md-12">
                     <h3>Examples:</h3>
                     <ul>
-                        <li><a href="/showcase/revcontent-api-showcase-instream-1.0/index.php">Default</a></li>
-                        <li><a href="/showcase/revcontent-api-showcase-instream-1.0/demos/alt.php">Alt</a></li>
-                        <li><a href="/showcase/revcontent-api-showcase-instream-1.0/demos/alt2.php">Alt 2</a></li>
-                        <li><a href="/showcase/revcontent-api-showcase-instream-1.0/demos/alt3.php">Alt 3</a></li>
+                        <li>Example 1: <a href="/showcase/revcontent-api-showcase-instream-1.0/index.php">Border and box shadow</a></li>
+                        <li>Example 2: <a href="/showcase/revcontent-api-showcase-instream-1.0/demos/example-2.php">Video icon overlay with thin font</a></li>
+                        <li>Example 3: <a href="/showcase/revcontent-api-showcase-instream-1.0/demos/example-3.php">Link button</a></li>
+                        <li>Example 4: <a href="/showcase/revcontent-api-showcase-instream-1.0/demos/example-4.php">Headline/provider border and margin</a></li>
                     </ul>
                 </div>
             </div>
@@ -98,7 +98,6 @@
 
         <div class="row">
             <div class="col-md-9">
-
                 <div class="redacted-image redacted-image-50"></div>
 
                 <br />
@@ -325,6 +324,19 @@
 
     <script src="/build/revinstream.min.js"></script>
 
+    <!--
+    RAW CSS
+    #rev-instream .rev-headline-brand {
+        border: 1px solid #ccc;
+        box-shadow: 0 2px 8px -4px black;
+        padding: 16px 8px !important;
+        margin-top: -14px !important;
+        background: #fff;
+        margin-left: 14px !important;
+        margin-right: 14px !important;
+    }
+    -->
+
     <script>
         var instream = new RevInstream({
             id: 'grid',
@@ -332,24 +344,7 @@
             pub_id : 945,
             widget_id : 6181,
             domain : 'apiexamples.powr.com',
-            multipliers: {
-                padding: 5
-            },
-            link_button: true,
-            css: `
-    #rev-instream .rev-headline {
-        margin-top: 4% !important;
-    }
-
-    #rev-instream .rev-headline h3 {
-        line-height: 26px !important;
-        font-size: 18px !important;
-    }
-
-    #rev-instream .rev-provider {
-        margin-top: 10px !important;
-    }
-            `
+            css: '#rev-instream .rev-headline-brand {border: 1px solid #ccc; box-shadow: 0 2px 8px -4px black; padding: 16px 8px !important; margin-top: -14px !important; background: #fff; margin-left: 14px !important; margin-right: 14px !important; }'
         });
     </script>
 
