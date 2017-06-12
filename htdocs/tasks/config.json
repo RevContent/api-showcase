@@ -269,5 +269,38 @@
     "watch": [
       "./showcase/revcontent-api-showcase-solo-serve-1.0/js/*"
     ]
+  },
+  "instream": {
+    "name": "rev-instream",
+    "description": "Instream",
+    "homepage": "http://labs.revcontent.com",
+    "version": "1.0.0",
+    "pkg": "./showcase/revcontent-api-showcase-instream-1.0/package.json",
+    "js": "./showcase/revcontent-api-showcase-instream-1.0/js/revinstream.js",
+    "css": [
+        "./showcase/revcontent-api-showcase-instream-1.0/css/revinstream.scss",
+        "./showcase/css/revdialog.css"
+    ],
+    "build": [
+      "./node_modules/es6-promise/dist/es6-promise.js",
+      "./showcase/revcontent-api-showcase-slider-2.0/node_modules/any-grid/dist/any-grid.js",
+      "./showcase/js/requestAnimationFrame.js",
+      "./showcase/js/revoverlay.js",
+      "./showcase/js/revutils.js",
+      "./showcase/js/revdialog.js",
+      "./showcase/js/revdisclose.js",
+      "./showcase/js/revdetect-standalone.js",
+      "./showcase/js/revbeacon.js",
+      "./showcase/js/revapi.js",
+      "./build/files/instream/revinstream.embed.js"
+    ],
+    "watch": [
+      "./showcase/js/*",
+      "./showcase/css/*",
+      "./build/files/slider2/revslider2.pkgd.js",
+      "./showcase/revcontent-api-showcase-slider-2.0/node_modules/any-grid/dist/any-grid.js",
+      "./showcase/revcontent-api-showcase-instream-1.0/js/*",
+      "./showcase/revcontent-api-showcase-instream-1.0/css/*"
+    ]
   }
 }
