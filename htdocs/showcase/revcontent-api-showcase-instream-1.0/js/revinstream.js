@@ -109,6 +109,13 @@ Author: michael@revcontent.com
         }
 
         var that = this;
+        revUtils.docReady(function() {
+            that.init();
+        });
+    };
+
+    RevInstream.prototype.init = function() {
+        var that = this;
 
         this.emitter = new EventEmitter();
 
