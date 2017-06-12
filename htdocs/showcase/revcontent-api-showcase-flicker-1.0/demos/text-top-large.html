@@ -416,8 +416,9 @@
             per_row: {sm: 1, md: 2,lg: 2,xl: 3, xxl: 3},
             size: {margin: 8},
             arrow_style: 'square',
-            image_ratio: 'rectangle',
-            square_border: true
+            image_ratio: 'wide_rectangle',
+            square_border: true,
+            next_width: revDetect.show(['phone']) ? 30 : false,
         });
 
     </script>

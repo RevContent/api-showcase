@@ -163,6 +163,12 @@ impl.prepareDetectionCache = function (cache, userAgent, maxPhoneWidth) {
     }
 };
 
+impl.getDeviceSmallerSide = function () {
+    return window.screen.width < window.screen.height ?
+        window.screen.width :
+        window.screen.height;
+};
+
 function MobileDetect(userAgent, maxPhoneWidth) {
     this.ua = userAgent || '';
     this._cache = {};
@@ -184,8 +190,23 @@ MobileDetect.prototype = {
     tablet: function () {
         impl.prepareDetectionCache(this._cache, this.ua, this.maxPhoneWidth);
         return this._cache.tablet;
+    },
+    isPhoneSized: function (maxPhoneWidth) {
+        return MobileDetect.isPhoneSized(maxPhoneWidth || this.maxPhoneWidth);
     }
 };
+
+// environment-dependent
+if (typeof window !== 'undefined' && window.screen) {
+    MobileDetect.isPhoneSized = function (maxPhoneWidth) {
+        return maxPhoneWidth < 0 ? undefined : impl.getDeviceSmallerSide() <= maxPhoneWidth;
+    };
+} else {
+    MobileDetect.isPhoneSized = function () {};
+}
+
+// should not be replaced by a completely new object - just overwrite existing methods
+MobileDetect._impl = impl;
 
 var detect = new MobileDetect(window.navigator.userAgent);
 
