@@ -344,6 +344,9 @@
             pub_id : 945,
             widget_id : 6181,
             domain : 'apiexamples.powr.com',
+            multipliers: {
+                margin: -2
+            },
             css: '#rev-instream .rev-headline-brand {border: 1px solid #ccc; box-shadow: 0 2px 8px -4px black; padding: 16px 8px !important; margin-top: -14px !important; background: #fff; margin-left: 14px !important; margin-right: 14px !important; }'
         });
     </script>
