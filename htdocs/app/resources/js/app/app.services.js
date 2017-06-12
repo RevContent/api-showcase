@@ -10,6 +10,7 @@ app.service('widgets', function() {
             bg: '#34dab9',
             img_animated: false,
             image_animation_duration: 10000,
+            new: true
         },
         'exit-pop': {
             title: 'RevExit',
