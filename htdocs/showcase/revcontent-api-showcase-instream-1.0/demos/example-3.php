@@ -349,7 +349,8 @@
             widget_id : 6181,
             domain : 'apiexamples.powr.com',
             multipliers: {
-                padding: 5
+                padding: 5,
+                margin: -2
             },
             link_button: true,
             css: '#rev-instream .rev-headline {margin-top: 4% !important; } #rev-instream .rev-headline h3 {line-height: 26px !important; font-size: 18px !important; } #rev-instream .rev-provider {margin-top: 10px !important; }'
