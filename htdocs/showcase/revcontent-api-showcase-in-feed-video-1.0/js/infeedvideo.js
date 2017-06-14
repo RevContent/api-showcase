@@ -52,7 +52,7 @@ Author: michael@revcontent.com
         connatixScript.setAttribute('src', 'https://cdn.connatix.com/min/connatix.renderer.infeed.min.js');
         connatixScript.setAttribute('async', true);
         connatixScript.setAttribute('type', 'text/javascript');
-        connatixScript.setAttribute('data-connatix-token', 'eee195bf-f05a-4282-a2c1-78c24ec64311');
+        connatixScript.setAttribute('data-connatix-token', this.config.token);
         connatixScript.setAttribute('ext-interface-callback', this.config.id + '_callback');
         connatixScript.setAttribute('pcp1', this.config.widget_id);
         connatixScript.setAttribute('pcp2', this.config.pub_id);
