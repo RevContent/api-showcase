@@ -1,5 +1,17 @@
 app.service('widgets', function() {
     this.data = {
+        'in-feed-video': {
+            title: 'In-Feed Video',
+            img: 'infeedvideo.gif?v=2',
+            preview_img: 'preview-infeedvideo.jpg?v=2',
+            description: 'Revcontent\'s native In-Feed Video widget will give your site the video content it deserves in a fun and engaging way. Match your sites look and feel with our light, powerful and safe muted auto-play video widget. Give In-Feed Video a try and watch your profits soar to new levels!',
+            link: 'revcontent-api-showcase-in-feed-video-1.0/index.html',
+            // docs: 'revcontent-api-showcase-in-feed-video-1.0/README.md',
+            bg: '#34dab9',
+            img_animated: false,
+            image_animation_duration: 10000,
+            new: true
+        },
         'exit-pop': {
             title: 'RevExit',
             img: 'exit.gif?v=2',
@@ -65,10 +77,11 @@ app.service('widgets', function() {
         },
         instream: {
             title: 'In-stream',
-            img: 'instream.gif?v=2',
-            preview_img: 'preview-instream.jpg?v=2',
+            img: 'instream.jpg?v=3',
+            preview_img: 'preview-instream.jpg?v=3',
             description: 'In-stream native sponsored content can look, feel, and function seamlessly across mobile, desktop, or tablet. With the API you\'re in full control of the integration on your web property, inject targeted content in-stream on your homepage, mobile view, or where it fits best for your users.',
             link: 'revcontent-api-showcase-instream-1.0/index.php',
+            docs: 'revcontent-api-showcase-instream-1.0/README.md',
             bg: '#0a3f6a'
         },
         'end-of-gallery': {
@@ -145,17 +158,6 @@ app.service('widgets', function() {
             description: 'The RevInterstial overlays the page with RevContents most contextually relevant ads. A smooth transition from the side of the page is gentle on the users experience and the unit can easily be dismissed. Frequency capping controls how often your visitors will see the widget. Add your logo for a truly custom native look!' ,
             link: 'revcontent-api-showcase-interstitial-1.0/index.html',
             docs: 'revcontent-api-showcase-interstitial-1.0/README.md',
-            bg: '#34dab9',
-            img_animated: false,
-            image_animation_duration: 10000,
-        },
-        'in-feed-video': {
-            title: 'In-Feed Video',
-            img: 'infeedvideo.gif?v=2',
-            preview_img: 'preview-infeedvideo.jpg?v=2',
-            description: 'Revcontent\'s native In-Feed Video widget will give your site the video content it deserves in a fun and engaging way. Match your sites look and feel with our light, powerful and safe muted auto-play video widget. Give In-Feed Video a try and watch your profits soar to new levels!',
-            link: 'revcontent-api-showcase-in-feed-video-1.0/index.html',
-            // docs: 'revcontent-api-showcase-in-feed-video-1.0/README.md',
             bg: '#34dab9',
             img_animated: false,
             image_animation_duration: 10000,

@@ -9,19 +9,12 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>In-Feed Video Example</title>
+    <title>RevInStream Example</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../css/bootstrap.css" rel="stylesheet">
 
     <link href="../css/style.css" rel="stylesheet">
-
-    <style>
-        .cnxpl-in-ad #gradient {
-            background-image: none!important;
-            background-color: #333!important;
-        }
-    </style>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -29,6 +22,14 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <!-- Start Alexa Certify Javascript -->
+    <script type="text/javascript">
+    _atrk_opts = { atrk_acct:"D7+Ll1aE+GW1/9", domain:"revcontent.com",dynamic: true};
+    (function() { var as = document.createElement('script'); as.type = 'text/javascript'; as.async = true; as.src = "https://d31qbv1cthcecs.cloudfront.net/atrk.js"; var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(as, s); })();
+    </script>
+    <noscript><img src="https://d5nxst8fruw4z.cloudfront.net/atrk.gif?account=D7+Ll1aE+GW1/9" style="display:none" height="1" width="1" alt="" /></noscript>
+    <!-- End Alexa Certify Javascript -->
 
 </head>
 
@@ -73,7 +74,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">In-Feed Video
+                <h1 class="page-header">RevInstream
                     <small>Revcontent Native API</small>
                 </h1>
             </div>
@@ -84,10 +85,10 @@
                 <div class="col-md-12">
                     <h3>Examples:</h3>
                     <ul>
-                        <li><a href="/showcase/revcontent-api-showcase-in-feed-video-1.0/index.html">Default</a></li>
-                        <li><a href="/showcase/revcontent-api-showcase-in-feed-video-1.0/demos/flicker.html">With Flicker</a></li>
-                        <li><a href="/showcase/revcontent-api-showcase-in-feed-video-1.0/demos/width.html">Fixed Width</a></li>
-                        <li><a href="/showcase/revcontent-api-showcase-in-feed-video-1.0/demos/sidebar.html">Sidebar with in article</a></li>
+                        <li>Example 1: <a href="/showcase/revcontent-api-showcase-instream-1.0/index.php">Border and box shadow</a></li>
+                        <li>Example 2: <a href="/showcase/revcontent-api-showcase-instream-1.0/demos/example-2.php">Video icon overlay with thin font</a></li>
+                        <li>Example 3: <a href="/showcase/revcontent-api-showcase-instream-1.0/demos/example-3.php">Link button</a></li>
+                        <li>Example 4: <a href="/showcase/revcontent-api-showcase-instream-1.0/demos/example-4.php">Headline/provider border and margin</a></li>
                     </ul>
                 </div>
             </div>
@@ -96,9 +97,10 @@
         <br /><br />
 
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-9">
+                <div class="redacted-image redacted-image-50"></div>
 
-                <h2 class="redacted single-line">This is just a testing title it shoudl be a bit longer though</h2>
+                <br />
 
                 <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                 tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
@@ -109,76 +111,28 @@
                 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
                 proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit</p>
+                <div class="redacted-image redacted-image-50"></div>
+
+                <br />
 
                 <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                 tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
                 quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
                 consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
                 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                proident, sunt in culpa qui officia deserunt mollit anim id est laborum. in voluptate velit esse
                 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
                 proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit</p>
-
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-               <script async type='text/javascript' src='https://video.revcontent.com/min/connatix.renderer.infeed.min.js' data-connatix-token='eee195bf-f05a-4282-a2c1-78c24ec64311' pcp1="30" pcp2="5142"
-                customlogo='https://i.connatix.com/s3/connatix-uploads/player_assets/RC_Logo_White_No_NR.png?mode=pad&height=18' ></script>
-
-                <div id="rev-flicker"></div>
 
                 <br /><br />
 
-                <script src="/build/revflicker.min.js"></script>
+                <div id="grid"></div>
 
-                <script>
-
-                    var flicker = new RevFlicker({
-                        id: 'rev-flicker',
-                        api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
-                        pub_id : 945,
-                        widget_id : 6181,
-                        domain : 'apiexamples.powr.com',
-                        hide_header: true,
-                        rev_position: 'bottom_right',
-                        ad_border: false,
-                        css: '#rev-flicker .rev-image img, #rev-flicker .rev-ad { border-radius: 0 !important; }'
-                    });
-
-                    flicker.emitter.once('ready', function() {
-                        flicker.containerElement.style.marginTop = flicker.margin + 'px';
-                    });
-
-
-
-                </script>
+                <br /><br />
 
             </div>
-            <div class="col-md-4">
-                <h3 class="redacted">This is just a testing title</h3>
+            <div class="col-md-3">
+                <h3 class="redacted" style="margin-top: 0;">This is just a testing title</h3>
                 <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
 
                 <h3 class="redacted">This is just a testing title</h3>
@@ -193,14 +147,26 @@
 
                 <div class="redacted-image redacted-image-66"></div>
 
+                <br / >
+
+                <div class="redacted-image redacted-image-66"></div>
+
+                <br / >
+
+                <div class="redacted-image redacted-image-66"></div>
+
+                <h3 class="redacted">This is just a testing title</h3>
+                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
+
                 <h3 class="redacted">This is just a testing title</h3>
                 <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
             </div>
         </div>
 
+        <br /><br /><br /><br /><br /><br />
 
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <div class="redacted-image redacted-image-66"></div>
 
                 <br />
@@ -232,8 +198,6 @@
                 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
                 proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 
-                <!-- another grid -->
-
                 <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                 tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
                 quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
@@ -251,9 +215,66 @@
                 quis consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
                 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
                 proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                quis consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                quis consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                quis consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                quis consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                quis consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                quis consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             </div>
-            <div class="col-md-4">
-                <h3 class="redacted">This is just a testing title</h3>
+            <div class="col-md-3">
+                <h3 class="redacted" style="margin-top: 0;">This is just a testing title</h3>
                 <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
 
                 <h3 class="redacted">This is just a testing title</h3>
@@ -281,18 +302,54 @@
 
                 <h3 class="redacted">This is just a testing title</h3>
                 <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
-
-                <h3 class="redacted">Project Details</h3>
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem,
-                adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
             </div>
         </div>
-        <!-- Footer -->
 
+        <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p class="redacted pull-left">Copyright &copy; Your Website 2015</p>
+                    <p style="margin-left: 30px;" class="redacted pull-left">Copyright &copy; Your Website 2015</p>
+                    <p class="redacted pull-right">Copyright &copy; Your Website 2015</p>
+                </div>
+            </div>
+            <!-- /.row -->
+        </footer>
+        <!-- Footer -->
 
     </div>
 
    <!-- /. Fake Page Content -->
+
+    <script src="/build/revinstream.min.js"></script>
+
+    <!--
+    RAW CSS
+    #rev-instream .rev-headline-brand {
+        border: 1px solid #ccc;
+        box-shadow: 0 2px 8px -4px black;
+        padding: 16px 8px !important;
+        margin-top: -14px !important;
+        background: #fff;
+        margin-left: 14px !important;
+        margin-right: 14px !important;
+    }
+    -->
+
+    <script>
+        var instream = new RevInstream({
+            id: 'grid',
+            api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+            pub_id : 945,
+            widget_id : 6181,
+            domain : 'apiexamples.powr.com',
+            multipliers: {
+                margin: -2
+            },
+            css: '#rev-instream .rev-headline-brand {border: 1px solid #ccc; box-shadow: 0 2px 8px -4px black; padding: 16px 8px !important; margin-top: -14px !important; background: #fff; margin-left: 14px !important; margin-right: 14px !important; }'
+        });
+    </script>
 
 </body>
 
