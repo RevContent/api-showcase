@@ -56,7 +56,7 @@ Author: michael@revcontent.com
         connatixScript.setAttribute('ext-interface-callback', this.config.id + '_callback');
         connatixScript.setAttribute('pcp1', this.config.widget_id);
         connatixScript.setAttribute('pcp2', this.config.pub_id);
-        connatixScript.setAttribute('customlogo', 'https://i.connatix.com/s3/connatix-uploads/player_assets/RC_Logo_White_No_NR.png?mode=pad&height=18');
+        connatixScript.setAttribute('customlogo', 'http://i.connatix.com/s3/connatix-uploads/assets/RCIcon3.png?mode=pad&height=18');
 
         revUtils.append(this.element, connatixScript);
     }
