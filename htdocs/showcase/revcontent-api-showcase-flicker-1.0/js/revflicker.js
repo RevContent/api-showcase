@@ -112,6 +112,7 @@ RevFlicker({
             text_top: false,
             text_right: false,
             text_right_height: 100,
+            next_width_percentage: 20,
             next_width: false,
             transition_content: false,
             css: '',
@@ -126,7 +127,10 @@ RevFlicker({
             ad_overlay_position: 'bottom_right', // center, top_left, top_right, bottom_right, bottom_left
             query_params: false,
             trending: false,
-            trending_theme: 'default'
+            trending_theme: 'default',
+            window_width_devices: [
+                'phone'
+            ]
         };
 
         // merge options
@@ -141,6 +145,13 @@ RevFlicker({
             return;
         }
 
+        var that = this;
+        revUtils.docReady(function() {
+            that.init();
+        });
+    };
+
+    RevFlicker.prototype.init = function() {
         this.impressionTracker = {};
 
         var that = this;
@@ -171,6 +182,8 @@ RevFlicker({
 
         this.source = 'flick';
 
+        this.windowWidth();
+
         revUtils.append(this.containerElement, this.flickerElement);
         revUtils.append(this.innerElement, this.containerElement);
 
@@ -199,20 +212,17 @@ RevFlicker({
             }
         }
 
-        // HACK for Chrome using emitter to wait for element container to be ready
         this.emitter = new EventEmitter();
         this.getContainerWidth();
-        this.emitter.on('containerReady', function() {
-            that.setUp();
-            that.appendElements();
-            that.preData();
-            that.textOverlay();
-            that.getData();
-            that.registerViewOnceVisible();
-            that.attachVisibleListener();
-            revUtils.checkVisible.bind(that, that.containerElement, that.visible)();
-            that.attachRegisterImpressions();
-        });
+        this.setUp();
+        this.appendElements();
+        this.preData();
+        this.textOverlay();
+        this.getData();
+        this.registerViewOnceVisible();
+        this.attachVisibleListener();
+        revUtils.checkVisible.bind(this, this.containerElement, this.visible)();
+        this.attachRegisterImpressions();
 
         revUtils.addEventListener(window, 'resize', function() {
             that.resize();
@@ -225,9 +235,31 @@ RevFlicker({
         });
     };
 
+    RevFlicker.prototype.windowWidth = function() {
+
+        if (this.options.window_width_devices && revDetect.show(this.options.window_width_devices)) {
+
+            this.windowWidthEnabled = true;
+
+            var that = this;
+
+            revUtils.addEventListener(window, 'resize', function() {
+                setElementWindowWidth();
+            });
+
+            var setElementWindowWidth = function() {
+                revUtils.transformCss(that.innerElement, 'none');
+                that.innerElement.style.width = document.body.offsetWidth + 'px';
+                revUtils.transformCss(that.innerElement, 'translateX(-' + that.innerElement.getBoundingClientRect().left + 'px)');
+            };
+
+            setElementWindowWidth();
+        }
+    };
+
     RevFlicker.prototype.resize = function() {
         var that = this;
-        this.getContainerWidth(true);
+        this.getContainerWidth();
 
         this.setUp();
 
@@ -261,6 +293,8 @@ RevFlicker({
             }
         }
 
+        this.resizeHeadlineBrand();
+
         this.textOverlay();
 
         this.flickity.resize();
@@ -271,6 +305,29 @@ RevFlicker({
         }
         revUtils.ellipsisText(this.flickity.element.querySelectorAll('.rev-content .rev-headline'));
     };
+
+    RevFlicker.prototype.resizeHeadlineBrand = function(item) {
+        if (this.data.length) {
+
+            var ads = this.flickity.element.querySelectorAll('.rev-content');
+
+            // var rowItems = this.grid.rows[item.row].items;
+            var maxHeight = 0;
+
+            for (var i = 0; i < ads.length; i++) {
+                var headlineBrand = ads[i].querySelector('.rev-headline-container');
+                headlineBrand.style.height = 'auto';
+                var height = headlineBrand.offsetHeight;
+                if (height > maxHeight) {
+                    maxHeight = height;
+                }
+            }
+
+            for (var i = 0; i < ads.length; i++) {
+                ads[i].querySelector('.rev-headline-container').style.height = maxHeight + 'px';
+            }
+        }
+    }
 
     RevFlicker.prototype.appendElements = function() {
         if (!this.options.hide_header) {
@@ -300,25 +357,8 @@ RevFlicker({
         }
     };
 
-    RevFlicker.prototype.getContainerWidth = function(ready) {
-        if (ready) {
-            this.containerWidth = this.flickity.element.parentNode.offsetWidth;
-            return;
-        }
-        // HACK for Chrome - sometimes the width will be 0
-        var that = this;
-        function check() {
-            var containerWidth = that.flickity.element.parentNode.offsetWidth;
-            if(containerWidth > 0) {
-                that.containerWidth = containerWidth;
-                // emit event so we can continue
-                that.emitter.emit('containerReady');
-            }else {
-                setTimeout(check, 0);
-            }
-        }
-        // start the check
-        setTimeout(check, 0);
+    RevFlicker.prototype.getContainerWidth = function() {
+        this.containerWidth = this.flickity.element.parentNode.offsetWidth;
     };
 
     RevFlicker.prototype.setMultipliers = function() {
@@ -352,10 +392,13 @@ RevFlicker({
 
         this.margin = this.options.size.margin ? this.options.size.margin : ((width * this.marginMultiplier).toFixed(2) / 1);
 
-        if (this.options.next_width) {
+        if (this.options.next_width) { // percentage of the columnWidth
             this.columnWidth = (((this.containerWidth - (this.margin * this.perRow)) / (this.perRow)).toFixed(2) / 1);
             this.columnWidth = this.columnWidth - (this.options.next_width / this.perRow);
-        } else {
+        } else if (this.options.next_width_percentage) { // fixed
+            this.columnWidth = (((this.containerWidth - (this.margin * this.perRow)) / (this.perRow)).toFixed(2) / 1);
+            this.columnWidth = this.columnWidth - (((this.options.next_width_percentage * .01) * this.columnWidth) / this.perRow);
+        } else { // half
             this.columnWidth = (((this.containerWidth - (this.margin * this.perRow)) / (this.perRow + (1/2))).toFixed(2) / 1);
         }
 
@@ -397,8 +440,8 @@ RevFlicker({
         this.preloaderHeight = this.options.size.image_height ? this.options.size.image_height : Math.round((this.columnWidth - (this.options.ad_border ? 2 : 0)) * (this.imageHeight / this.imageWidth));
 
         if (this.options.text_right) {
-            this.preloaderHeight = 'auto';
-            this.preloaderWidth = '50%';
+            this.preloaderHeight = this.options.text_right_height;
+            this.preloaderWidth = Math.round(this.preloaderHeight * (this.imageWidth / this.imageHeight) * 100) / 100;
         }
     };
 
@@ -671,9 +714,12 @@ RevFlicker({
 
                 var images = Array.prototype.slice.call(that.flickity.element.querySelectorAll('img')).slice(0, (that.perRow + 1));
 
-                revUtils.imagesLoaded(images).once('done', function() {
+                that.emitter.once('imagesLoaded', function() {
                     revUtils.addClass(that.containerElement, 'loaded');
                 });
+
+                revUtils.imagesLoaded(images, that.emitter);
+
                 resolve();
             });
         });

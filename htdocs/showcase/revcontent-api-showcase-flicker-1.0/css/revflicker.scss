@@ -125,7 +125,6 @@ body {
 #rev-flicker.rev-flicker-text-right .rev-image img {
     border-top-right-radius: 0;
     border-bottom-left-radius: 5px;
-    min-height: 100px;
 }
 
 #rev-flicker.rev-flicker-text-right .rev-ad a:before, #rev-flicker.rev-flicker-text-right .rev-ad a:after {
@@ -224,6 +223,7 @@ body {
 
 #rev-flicker .rev-flicker {
     clear: both;
+    overflow: hidden;
 }
 
 #rev-flicker.rev-flicker-text-overlay .rev-ad {
