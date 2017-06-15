@@ -307,7 +307,7 @@ RevFlicker({
     };
 
     RevFlicker.prototype.resizeHeadlineBrand = function(item) {
-        if (this.data.length) {
+        if (this.data && this.data.length) {
 
             var ads = this.flickity.element.querySelectorAll('.rev-content');
 
