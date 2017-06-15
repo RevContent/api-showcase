@@ -392,12 +392,12 @@ RevFlicker({
 
         this.margin = this.options.size.margin ? this.options.size.margin : ((width * this.marginMultiplier).toFixed(2) / 1);
 
-        if (this.options.next_width_percentage) { // percentage of the columnWidth
-            this.columnWidth = (((this.containerWidth - (this.margin * this.perRow)) / (this.perRow)).toFixed(2) / 1);
-            this.columnWidth = this.columnWidth - (((this.options.next_width_percentage * .01) * this.columnWidth) / this.perRow);
-        } else if (this.options.next_width) { // fixed
+        if (this.options.next_width) { // percentage of the columnWidth
             this.columnWidth = (((this.containerWidth - (this.margin * this.perRow)) / (this.perRow)).toFixed(2) / 1);
             this.columnWidth = this.columnWidth - (this.options.next_width / this.perRow);
+        } else if (this.options.next_width_percentage) { // fixed
+            this.columnWidth = (((this.containerWidth - (this.margin * this.perRow)) / (this.perRow)).toFixed(2) / 1);
+            this.columnWidth = this.columnWidth - (((this.options.next_width_percentage * .01) * this.columnWidth) / this.perRow);
         } else { // half
             this.columnWidth = (((this.containerWidth - (this.margin * this.perRow)) / (this.perRow + (1/2))).toFixed(2) / 1);
         }
