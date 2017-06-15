@@ -142,6 +142,13 @@ RevFlicker({
             return;
         }
 
+        var that = this;
+        revUtils.docReady(function() {
+            that.init();
+        });
+    };
+
+    RevFlicker.prototype.init = function() {
         this.impressionTracker = {};
 
         var that = this;
@@ -200,20 +207,17 @@ RevFlicker({
             }
         }
 
-        // HACK for Chrome using emitter to wait for element container to be ready
         this.emitter = new EventEmitter();
         this.getContainerWidth();
-        this.emitter.on('containerReady', function() {
-            that.setUp();
-            that.appendElements();
-            that.preData();
-            that.textOverlay();
-            that.getData();
-            that.registerViewOnceVisible();
-            that.attachVisibleListener();
-            revUtils.checkVisible.bind(that, that.containerElement, that.visible)();
-            that.attachRegisterImpressions();
-        });
+        this.setUp();
+        this.appendElements();
+        this.preData();
+        this.textOverlay();
+        this.getData();
+        this.registerViewOnceVisible();
+        this.attachVisibleListener();
+        revUtils.checkVisible.bind(this, this.containerElement, this.visible)();
+        this.attachRegisterImpressions();
 
         revUtils.addEventListener(window, 'resize', function() {
             that.resize();
@@ -228,7 +232,7 @@ RevFlicker({
 
     RevFlicker.prototype.resize = function() {
         var that = this;
-        this.getContainerWidth(true);
+        this.getContainerWidth();
 
         this.setUp();
 
@@ -301,25 +305,8 @@ RevFlicker({
         }
     };
 
-    RevFlicker.prototype.getContainerWidth = function(ready) {
-        if (ready) {
-            this.containerWidth = this.flickity.element.parentNode.offsetWidth;
-            return;
-        }
-        // HACK for Chrome - sometimes the width will be 0
-        var that = this;
-        function check() {
-            var containerWidth = that.flickity.element.parentNode.offsetWidth;
-            if(containerWidth > 0) {
-                that.containerWidth = containerWidth;
-                // emit event so we can continue
-                that.emitter.emit('containerReady');
-            }else {
-                setTimeout(check, 0);
-            }
-        }
-        // start the check
-        setTimeout(check, 0);
+    RevFlicker.prototype.getContainerWidth = function() {
+        this.containerWidth = this.flickity.element.parentNode.offsetWidth;
     };
 
     RevFlicker.prototype.setMultipliers = function() {
