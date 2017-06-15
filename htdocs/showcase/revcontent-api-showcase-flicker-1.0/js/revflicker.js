@@ -401,8 +401,8 @@ RevFlicker({
         this.preloaderHeight = this.options.size.image_height ? this.options.size.image_height : Math.round((this.columnWidth - (this.options.ad_border ? 2 : 0)) * (this.imageHeight / this.imageWidth));
 
         if (this.options.text_right) {
-            this.preloaderHeight = 'auto';
-            this.preloaderWidth = '50%';
+            this.preloaderHeight = this.options.text_right_height;
+            this.preloaderWidth = Math.round(this.preloaderHeight * (this.imageWidth / this.imageHeight) * 100) / 100;
         }
     };
 
