@@ -266,6 +266,8 @@ RevFlicker({
             }
         }
 
+        this.resizeHeadlineBrand();
+
         this.textOverlay();
 
         this.flickity.resize();
@@ -276,6 +278,29 @@ RevFlicker({
         }
         revUtils.ellipsisText(this.flickity.element.querySelectorAll('.rev-content .rev-headline'));
     };
+
+    RevFlicker.prototype.resizeHeadlineBrand = function(item) {
+        if (this.data.length) {
+
+            var ads = this.flickity.element.querySelectorAll('.rev-content');
+
+            // var rowItems = this.grid.rows[item.row].items;
+            var maxHeight = 0;
+
+            for (var i = 0; i < ads.length; i++) {
+                var headlineBrand = ads[i].querySelector('.rev-headline-container');
+                headlineBrand.style.height = 'auto';
+                var height = headlineBrand.offsetHeight;
+                if (height > maxHeight) {
+                    maxHeight = height;
+                }
+            }
+
+            for (var i = 0; i < ads.length; i++) {
+                ads[i].querySelector('.rev-headline-container').style.height = maxHeight + 'px';
+            }
+        }
+    }
 
     RevFlicker.prototype.appendElements = function() {
         if (!this.options.hide_header) {
