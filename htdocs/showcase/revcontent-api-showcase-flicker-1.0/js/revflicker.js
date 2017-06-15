@@ -127,7 +127,10 @@ RevFlicker({
             ad_overlay_position: 'bottom_right', // center, top_left, top_right, bottom_right, bottom_left
             query_params: false,
             trending: false,
-            trending_theme: 'default'
+            trending_theme: 'default',
+            window_width_devices: [
+                'phone'
+            ]
         };
 
         // merge options
@@ -179,6 +182,8 @@ RevFlicker({
 
         this.source = 'flick';
 
+        this.windowWidth();
+
         revUtils.append(this.containerElement, this.flickerElement);
         revUtils.append(this.innerElement, this.containerElement);
 
@@ -228,6 +233,28 @@ RevFlicker({
         this.flickity.on( 'cellSelect', function() {
             that.emitter.emit('cellSelect');
         });
+    };
+
+    RevFlicker.prototype.windowWidth = function() {
+
+        if (this.options.window_width_devices && revDetect.show(this.options.window_width_devices)) {
+
+            this.windowWidthEnabled = true;
+
+            var that = this;
+
+            revUtils.addEventListener(window, 'resize', function() {
+                setElementWindowWidth();
+            });
+
+            var setElementWindowWidth = function() {
+                revUtils.transformCss(that.innerElement, 'none');
+                that.innerElement.style.width = document.body.offsetWidth + 'px';
+                revUtils.transformCss(that.innerElement, 'translateX(-' + that.innerElement.getBoundingClientRect().left + 'px)');
+            };
+
+            setElementWindowWidth();
+        }
     };
 
     RevFlicker.prototype.resize = function() {
