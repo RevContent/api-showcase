@@ -675,9 +675,12 @@ RevFlicker({
 
                 var images = Array.prototype.slice.call(that.flickity.element.querySelectorAll('img')).slice(0, (that.perRow + 1));
 
-                revUtils.imagesLoaded(images).once('done', function() {
+                that.emitter.once('imagesLoaded', function() {
                     revUtils.addClass(that.containerElement, 'loaded');
                 });
+
+                revUtils.imagesLoaded(images, that.emitter);
+
                 resolve();
             });
         });
