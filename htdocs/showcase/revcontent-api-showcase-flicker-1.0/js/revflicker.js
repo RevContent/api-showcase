@@ -112,6 +112,7 @@ RevFlicker({
             text_top: false,
             text_right: false,
             text_right_height: 100,
+            next_width_percentage: 20,
             next_width: false,
             transition_content: false,
             css: '',
@@ -352,10 +353,13 @@ RevFlicker({
 
         this.margin = this.options.size.margin ? this.options.size.margin : ((width * this.marginMultiplier).toFixed(2) / 1);
 
-        if (this.options.next_width) {
+        if (this.options.next_width_percentage) { // percentage of the columnWidth
+            this.columnWidth = (((this.containerWidth - (this.margin * this.perRow)) / (this.perRow)).toFixed(2) / 1);
+            this.columnWidth = this.columnWidth - (((this.options.next_width_percentage * .01) * this.columnWidth) / this.perRow);
+        } else if (this.options.next_width) { // fixed
             this.columnWidth = (((this.containerWidth - (this.margin * this.perRow)) / (this.perRow)).toFixed(2) / 1);
             this.columnWidth = this.columnWidth - (this.options.next_width / this.perRow);
-        } else {
+        } else { // half
             this.columnWidth = (((this.containerWidth - (this.margin * this.perRow)) / (this.perRow + (1/2))).toFixed(2) / 1);
         }
 
