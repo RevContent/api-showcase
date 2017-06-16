@@ -32,7 +32,7 @@ Author: michael@revcontent.com
 
                 var branding = document.createElement('div');
                 branding.className = 'rc-text-bottom rc-text-center rc-branding rc-bl-ads-by-revcontent';
-                branding.innerHTML = '<div class=\"rc-branding-label rc-brand-content\">Ads by Revcontent</div><div class=\"rc-brand-content\"><img src=\"//serve.revcontent.com/assets/img/adchoices_icon.png\" id=\"rc-adchoices\" class=\"rc-adchoices\"/></div>';
+                branding.innerHTML = '<div class=\"rc-branding-label\">Ads by Revcontent</div><div class=\"rc-brand-content\"><img src=\"//serve.revcontent.com/assets/img/adchoices_icon.png\" id=\"rc-adchoices\" class=\"rc-adchoices\"/></div>';
 
                 revUtils.append(brandingContainer, branding);
                 revUtils.append(that.element, brandingContainer);
