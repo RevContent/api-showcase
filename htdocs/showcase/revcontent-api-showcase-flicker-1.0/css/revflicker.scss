@@ -295,9 +295,12 @@ body {
     display: inline-block;
 }
 
-#rev-flicker .rev-trending {
+#rev-flicker.rev-flicker-trending .rev-provider {
     float: left;
-    width: 50%;
+}
+
+#rev-flicker.rev-flicker-trending .rev-trending {
+    float: right;
     text-align: right;
     color: #e63e3e;
     padding-right:4px;
