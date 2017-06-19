@@ -176,9 +176,15 @@ next_effect: true
 ```
 
 ###next_width
-false
+A fixed number of pixels for the next/halved ad. If set will override ```next_width_percentage```
 ```
 next_width: false
+```
+
+###next\_width_percentage
+By default the next/halved ad will be 20% of the regular ad width. All ads will be resized after setting the next/halved ad width.
+```
+next_width_percentage: 20
 ```
 
 ###overlay_icons
@@ -316,4 +322,12 @@ trending: false
 Theme for trending. Can be default or social.
 ```
 trending_theme: 'default'
+```
+
+###window\_width_devices
+Devices to enable the full viewport/window width feature where the widget will stretch the entire viewport width.
+```
+window_width_devices: [
+    'phone'
+]
 ```

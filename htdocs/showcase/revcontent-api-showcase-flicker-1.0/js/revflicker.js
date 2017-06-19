@@ -112,6 +112,7 @@ RevFlicker({
             text_top: false,
             text_right: false,
             text_right_height: 100,
+            next_width_percentage: 20,
             next_width: false,
             transition_content: false,
             css: '',
@@ -126,7 +127,10 @@ RevFlicker({
             ad_overlay_position: 'bottom_right', // center, top_left, top_right, bottom_right, bottom_left
             query_params: false,
             trending: false,
-            trending_theme: 'default'
+            trending_theme: 'default',
+            window_width_devices: [
+                'phone'
+            ]
         };
 
         // merge options
@@ -141,6 +145,13 @@ RevFlicker({
             return;
         }
 
+        var that = this;
+        revUtils.docReady(function() {
+            that.init();
+        });
+    };
+
+    RevFlicker.prototype.init = function() {
         this.impressionTracker = {};
 
         var that = this;
@@ -153,6 +164,10 @@ RevFlicker({
         this.containerElement.setAttribute('class', 'rev-flicker');
         var textPosition = (this.options.text_right ? 'text-right' : this.options.text_top ? 'text-top' : 'text-bottom');
         revUtils.addClass(this.containerElement, 'rev-flicker-' + textPosition);
+
+        if (this.options.trending) {
+            revUtils.addClass(this.containerElement, 'rev-flicker-trending');
+        }
 
         if (this.options.transition_content) {
             revUtils.addClass(this.containerElement, 'transition-content');
@@ -171,6 +186,8 @@ RevFlicker({
 
         this.source = 'flick';
 
+        this.windowWidth();
+
         revUtils.append(this.containerElement, this.flickerElement);
         revUtils.append(this.innerElement, this.containerElement);
 
@@ -188,6 +205,15 @@ RevFlicker({
         // wrapper class
         revUtils.addClass(this.flickity.element, 'rev-flicker');
 
+        if (this.windowWidthEnabled) {
+            revUtils.addClass(this.containerElement, 'rev-flicker-window-width');
+            this.innerElement.style.paddingLeft = '0px';
+            this.innerElement.style.paddingRight = '0px';
+            this.innerElement.style.marginLeft = '0px';
+            this.innerElement.style.marginRight = '0px';
+            this.innerElement.style.maxWidth = 'none';
+        }
+
         // custom icons passed? merge with default
         if (this.options.overlay_icons !== false) {
             revUtils.mergeOverlayIcons(this.options.overlay_icons);
@@ -199,24 +225,17 @@ RevFlicker({
             }
         }
 
-        // HACK for Chrome using emitter to wait for element container to be ready
         this.emitter = new EventEmitter();
         this.getContainerWidth();
-        this.emitter.on('containerReady', function() {
-            that.setUp();
-            that.appendElements();
-            that.preData();
-            that.textOverlay();
-            that.getData();
-            that.registerViewOnceVisible();
-            that.attachVisibleListener();
-            revUtils.checkVisible.bind(that, that.containerElement, that.visible)();
-            that.attachRegisterImpressions();
-        });
-
-        revUtils.addEventListener(window, 'resize', function() {
-            that.resize();
-        });
+        this.setUp();
+        this.appendElements();
+        this.preData();
+        this.textOverlay();
+        this.getData();
+        this.registerViewOnceVisible();
+        this.attachVisibleListener();
+        revUtils.checkVisible.bind(this, this.containerElement, this.visible)();
+        this.attachRegisterImpressions();
 
         revUtils.dispatchScrollbarResizeEvent();
 
@@ -225,9 +244,31 @@ RevFlicker({
         });
     };
 
+    RevFlicker.prototype.windowWidth = function() {
+
+        if (this.options.window_width_devices && revDetect.show(this.options.window_width_devices)) {
+
+            this.windowWidthEnabled = true;
+
+            var that = this;
+
+            revUtils.addEventListener(window, 'resize', function() {
+                setElementWindowWidth();
+            });
+
+            var setElementWindowWidth = function() {
+                revUtils.transformCss(that.innerElement, 'none');
+                that.innerElement.style.width = document.body.offsetWidth + 'px';
+                revUtils.transformCss(that.innerElement, 'translateX(-' + that.innerElement.getBoundingClientRect().left + 'px)');
+            };
+
+            setElementWindowWidth();
+        }
+    };
+
     RevFlicker.prototype.resize = function() {
         var that = this;
-        this.getContainerWidth(true);
+        this.getContainerWidth();
 
         this.setUp();
 
@@ -261,6 +302,8 @@ RevFlicker({
             }
         }
 
+        this.resizeHeadlineBrand();
+
         this.textOverlay();
 
         this.flickity.resize();
@@ -271,6 +314,29 @@ RevFlicker({
         }
         revUtils.ellipsisText(this.flickity.element.querySelectorAll('.rev-content .rev-headline'));
     };
+
+    RevFlicker.prototype.resizeHeadlineBrand = function(item) {
+        if (this.data && this.data.length) {
+
+            var ads = this.flickity.element.querySelectorAll('.rev-content');
+
+            // var rowItems = this.grid.rows[item.row].items;
+            var maxHeight = 0;
+
+            for (var i = 0; i < ads.length; i++) {
+                var headlineBrand = ads[i].querySelector('.rev-headline-container');
+                headlineBrand.style.height = 'auto';
+                var height = headlineBrand.offsetHeight;
+                if (height > maxHeight) {
+                    maxHeight = height;
+                }
+            }
+
+            for (var i = 0; i < ads.length; i++) {
+                ads[i].querySelector('.rev-headline-container').style.height = maxHeight + 'px';
+            }
+        }
+    }
 
     RevFlicker.prototype.appendElements = function() {
         if (!this.options.hide_header) {
@@ -300,30 +366,13 @@ RevFlicker({
         }
     };
 
-    RevFlicker.prototype.getContainerWidth = function(ready) {
-        if (ready) {
-            this.containerWidth = this.flickity.element.parentNode.offsetWidth;
-            return;
-        }
-        // HACK for Chrome - sometimes the width will be 0
-        var that = this;
-        function check() {
-            var containerWidth = that.flickity.element.parentNode.offsetWidth;
-            if(containerWidth > 0) {
-                that.containerWidth = containerWidth;
-                // emit event so we can continue
-                that.emitter.emit('containerReady');
-            }else {
-                setTimeout(check, 0);
-            }
-        }
-        // start the check
-        setTimeout(check, 0);
+    RevFlicker.prototype.getContainerWidth = function() {
+        this.containerWidth = this.flickity.element.parentNode.offsetWidth;
     };
 
     RevFlicker.prototype.setMultipliers = function() {
         this.lineHeightMultiplier = Math.round( (0.057 + Number((this.options.multipliers.line_height * .01).toFixed(2))) * 1000 ) / 1000;
-        this.fontSizeMultiplier = Math.round( (.83 + Number((this.options.multipliers.font_size * .01).toFixed(2))) * 1000 ) / 1000;
+        this.fontSizeMultiplier = Math.round( (.8 + Number((this.options.multipliers.font_size * .01).toFixed(2))) * 1000 ) / 1000;
         this.marginMultiplier = Math.round( (.05 + Number((this.options.multipliers.margin * .01).toFixed(2))) * 1000 ) / 1000;
         this.paddingMultiplier = Math.round( (.01 + Number((this.options.multipliers.padding * .01).toFixed(2))) * 1000 ) / 1000;
     };
@@ -352,10 +401,13 @@ RevFlicker({
 
         this.margin = this.options.size.margin ? this.options.size.margin : ((width * this.marginMultiplier).toFixed(2) / 1);
 
-        if (this.options.next_width) {
+        if (this.options.next_width) { // percentage of the columnWidth
             this.columnWidth = (((this.containerWidth - (this.margin * this.perRow)) / (this.perRow)).toFixed(2) / 1);
             this.columnWidth = this.columnWidth - (this.options.next_width / this.perRow);
-        } else {
+        } else if (this.options.next_width_percentage) { // fixed
+            this.columnWidth = (((this.containerWidth - (this.margin * this.perRow)) / (this.perRow)).toFixed(2) / 1);
+            this.columnWidth = this.columnWidth - (((this.options.next_width_percentage * .01) * this.columnWidth) / this.perRow);
+        } else { // half
             this.columnWidth = (((this.containerWidth - (this.margin * this.perRow)) / (this.perRow + (1/2))).toFixed(2) / 1);
         }
 
@@ -373,10 +425,19 @@ RevFlicker({
             this.imageWidth = 533;
         }
 
-        this.headlineLineHeight = this.options.size.headline_line_height ? this.options.size.headline_line_height : (this.columnWidth * this.lineHeightMultiplier).toFixed(2) / 1;
-        if (!this.options.size.headline_line_height && this.headlineLineHeight < 16) {
-            this.headlineLineHeight = 16;
+        this.preloaderHeight = this.options.size.image_height ? this.options.size.image_height : Math.round((this.columnWidth - (this.options.ad_border ? 2 : 0)) * (this.imageHeight / this.imageWidth));
+
+        if (this.options.text_right) {
+            this.preloaderHeight = this.options.text_right_height;
+            this.preloaderWidth = Math.round(this.preloaderHeight * (this.imageWidth / this.imageHeight) * 100) / 100;
         }
+
+        this.headlineLineHeight = this.options.size.headline_line_height ? this.options.size.headline_line_height : ((this.columnWidth - (this.preloaderWidth ? this.preloaderWidth : 0)) * this.lineHeightMultiplier).toFixed(2) / 1;
+
+        if (!this.options.size.headline_line_height && this.headlineLineHeight < 20) {
+            this.headlineLineHeight = 20;
+        }
+
         this.headlineFontSize = Math.min(this.headlineLineHeight, (this.headlineLineHeight * this.fontSizeMultiplier).toFixed(2) / 1);
 
         this.headlineMarginTop = this.options.size.headline_margin_top ? this.options.size.headline_margin_top : ((this.headlineLineHeight * .2).toFixed(2) / 1);
@@ -393,13 +454,6 @@ RevFlicker({
 
         this.providerMarginTop = this.options.size.provider_margin_top ? this.options.size.provider_margin_top : 0;
         this.providerMarginBottom = this.options.size.provider_margin_bottom ? this.options.size.provider_margin_bottom : 0;
-
-        this.preloaderHeight = this.options.size.image_height ? this.options.size.image_height : Math.round((this.columnWidth - (this.options.ad_border ? 2 : 0)) * (this.imageHeight / this.imageWidth));
-
-        if (this.options.text_right) {
-            this.preloaderHeight = 'auto';
-            this.preloaderWidth = '50%';
-        }
     };
 
     RevFlicker.prototype.update = function(newOpts, oldOpts) {
@@ -506,11 +560,6 @@ RevFlicker({
 
         var imgWidth = typeof this.preloaderWidth === 'undefined' ? 'width:auto;' : 'width:' + this.preloaderWidth + 'px;';
 
-        var proWidth =  'width: 50%;';
-        if (!this.options.trending) {
-            proWidth = 'width: 100%;';
-        }
-
         for (var j = index; j < count; j++) {
             var html = '<div class="rev-ad" style="border-width:' + (that.options.ad_border ? '1px' : '0') + '">' +
                         '<a href="" rel="nofollow" target="_blank">';
@@ -522,7 +571,7 @@ RevFlicker({
             html += '<div class="rev-headline-container">';
             html += '<div class="rev-headline" style="max-height:'+ that.headlineHeight +'px; padding:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>';
             html += '<div class="rev-provider-container">'+
-                    ( that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'padding: ' + that.providerMarginTop + 'px '  + that.innerMargin + 'px '+ that.providerMarginBottom +'px;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;' + proWidth) : '');
+                    ( that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'padding: ' + that.providerMarginTop + 'px '  + that.innerMargin + 'px '+ that.providerMarginBottom +'px;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;') : '');
             if (this.options.trending === true) {
                 var theme = (that.options.trending_theme === "social") ? 'rev-hot-social' : 'rev-hot-flame';
                 html += '<div class="rev-trending ' + theme + '" style="font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;"><div class="rev-hot-img"></div>' + that.rcruntimec() + '</div>';
@@ -671,9 +720,16 @@ RevFlicker({
 
                 var images = Array.prototype.slice.call(that.flickity.element.querySelectorAll('img')).slice(0, (that.perRow + 1));
 
-                revUtils.imagesLoaded(images).once('done', function() {
+                that.emitter.once('imagesLoaded', function() {
                     revUtils.addClass(that.containerElement, 'loaded');
                 });
+
+                revUtils.imagesLoaded(images, that.emitter);
+
+                revUtils.addEventListener(window, 'resize', revUtils.throttle(function() {
+                    that.resize();
+                }, 60));
+
                 resolve();
             });
         });
