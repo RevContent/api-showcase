@@ -224,10 +224,6 @@ RevFlicker({
         revUtils.checkVisible.bind(this, this.containerElement, this.visible)();
         this.attachRegisterImpressions();
 
-        revUtils.addEventListener(window, 'resize', function() {
-            that.resize();
-        });
-
         revUtils.dispatchScrollbarResizeEvent();
 
         this.flickity.on( 'cellSelect', function() {
@@ -721,6 +717,10 @@ RevFlicker({
                 });
 
                 revUtils.imagesLoaded(images, that.emitter);
+
+                revUtils.addEventListener(window, 'resize', revUtils.throttle(function() {
+                    that.resize();
+                }, 60));
 
                 resolve();
             });
