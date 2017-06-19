@@ -165,6 +165,10 @@ RevFlicker({
         var textPosition = (this.options.text_right ? 'text-right' : this.options.text_top ? 'text-top' : 'text-bottom');
         revUtils.addClass(this.containerElement, 'rev-flicker-' + textPosition);
 
+        if (this.options.trending) {
+            revUtils.addClass(this.containerElement, 'rev-flicker-trending');
+        }
+
         if (this.options.transition_content) {
             revUtils.addClass(this.containerElement, 'transition-content');
         }
@@ -547,11 +551,6 @@ RevFlicker({
 
         var imgWidth = typeof this.preloaderWidth === 'undefined' ? 'width:auto;' : 'width:' + this.preloaderWidth + 'px;';
 
-        var proWidth =  'width: 50%;';
-        if (!this.options.trending) {
-            proWidth = 'width: 100%;';
-        }
-
         for (var j = index; j < count; j++) {
             var html = '<div class="rev-ad" style="border-width:' + (that.options.ad_border ? '1px' : '0') + '">' +
                         '<a href="" rel="nofollow" target="_blank">';
@@ -563,7 +562,7 @@ RevFlicker({
             html += '<div class="rev-headline-container">';
             html += '<div class="rev-headline" style="max-height:'+ that.headlineHeight +'px; padding:'+ that.headlineMarginTop +'px ' + that.innerMargin + 'px' + ' 0;"><h3 style="font-size:'+ that.headlineFontSize +'px; line-height:'+ that.headlineLineHeight +'px;"></h3></div>';
             html += '<div class="rev-provider-container">'+
-                    ( that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'padding: ' + that.providerMarginTop + 'px '  + that.innerMargin + 'px '+ that.providerMarginBottom +'px;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;' + proWidth) : '');
+                    ( that.options.hide_provider === false ? revDisclose.getProvider("rev-provider", 'padding: ' + that.providerMarginTop + 'px '  + that.innerMargin + 'px '+ that.providerMarginBottom +'px;font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;') : '');
             if (this.options.trending === true) {
                 var theme = (that.options.trending_theme === "social") ? 'rev-hot-social' : 'rev-hot-flame';
                 html += '<div class="rev-trending ' + theme + '" style="font-size:' + that.providerFontSize + 'px;line-height:' + that.providerLineHeight + 'px;"><div class="rev-hot-img"></div>' + that.rcruntimec() + '</div>';
