@@ -312,5 +312,16 @@ body {
 
 
 #rev-flicker {
+    &.rev-flicker-window-width {
+        .rev-header {
+            margin-left: 3px;
+        }
+        .rev-sponsored.bottom-right {
+            margin-right: 3px;
+        }
+    }
+}
+
+#rev-flicker {
     @import '../../css/revoverlay';
 }

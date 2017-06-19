@@ -157,7 +157,7 @@ Pass in custom icons where the key is the icon name and the value is the svg ico
 overlay_icons: false
 ```
 
-###lazy_load_images
+###lazy\_load_images
 Load images when the widget gets close to entering the viewport. Uses the ```lazy_load_images_buffer``` to determine when the images should load.
 ```
 lazy_load_images: true
@@ -282,7 +282,7 @@ Pass user_ip to API
 user_ip: false
 ```
 
-###window_width_devices
+###window\_width_devices
 Devices to enable the full viewport/window width feature where the widget will stretch the entire viewport width.
 ```
 window_width_devices: [

@@ -205,6 +205,10 @@ RevFlicker({
         // wrapper class
         revUtils.addClass(this.flickity.element, 'rev-flicker');
 
+        if (this.windowWidthEnabled) {
+            revUtils.addClass(this.containerElement, 'rev-flicker-window-width');
+        }
+
         // custom icons passed? merge with default
         if (this.options.overlay_icons !== false) {
             revUtils.mergeOverlayIcons(this.options.overlay_icons);
@@ -425,7 +429,7 @@ RevFlicker({
 
         this.headlineLineHeight = this.options.size.headline_line_height ? this.options.size.headline_line_height : ((this.columnWidth - (this.preloaderWidth ? this.preloaderWidth : 0)) * this.lineHeightMultiplier).toFixed(2) / 1;
 
-        if (!this.options.size.headline_line_height && this.headlineLineHeight < 18) {
+        if (!this.options.size.headline_line_height && this.headlineLineHeight < 20) {
             this.headlineLineHeight = 20;
         }
 
