@@ -207,6 +207,11 @@ RevFlicker({
 
         if (this.windowWidthEnabled) {
             revUtils.addClass(this.containerElement, 'rev-flicker-window-width');
+            this.innerElement.style.paddingLeft = '0px';
+            this.innerElement.style.paddingRight = '0px';
+            this.innerElement.style.marginLeft = '0px';
+            this.innerElement.style.marginRight = '0px';
+            this.innerElement.style.maxWidth = 'none';
         }
 
         // custom icons passed? merge with default
