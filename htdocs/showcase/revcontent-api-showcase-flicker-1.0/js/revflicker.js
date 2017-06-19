@@ -363,7 +363,7 @@ RevFlicker({
 
     RevFlicker.prototype.setMultipliers = function() {
         this.lineHeightMultiplier = Math.round( (0.057 + Number((this.options.multipliers.line_height * .01).toFixed(2))) * 1000 ) / 1000;
-        this.fontSizeMultiplier = Math.round( (.83 + Number((this.options.multipliers.font_size * .01).toFixed(2))) * 1000 ) / 1000;
+        this.fontSizeMultiplier = Math.round( (.8 + Number((this.options.multipliers.font_size * .01).toFixed(2))) * 1000 ) / 1000;
         this.marginMultiplier = Math.round( (.05 + Number((this.options.multipliers.margin * .01).toFixed(2))) * 1000 ) / 1000;
         this.paddingMultiplier = Math.round( (.01 + Number((this.options.multipliers.padding * .01).toFixed(2))) * 1000 ) / 1000;
     };
@@ -416,10 +416,19 @@ RevFlicker({
             this.imageWidth = 533;
         }
 
-        this.headlineLineHeight = this.options.size.headline_line_height ? this.options.size.headline_line_height : (this.columnWidth * this.lineHeightMultiplier).toFixed(2) / 1;
-        if (!this.options.size.headline_line_height && this.headlineLineHeight < 16) {
-            this.headlineLineHeight = 16;
+        this.preloaderHeight = this.options.size.image_height ? this.options.size.image_height : Math.round((this.columnWidth - (this.options.ad_border ? 2 : 0)) * (this.imageHeight / this.imageWidth));
+
+        if (this.options.text_right) {
+            this.preloaderHeight = this.options.text_right_height;
+            this.preloaderWidth = Math.round(this.preloaderHeight * (this.imageWidth / this.imageHeight) * 100) / 100;
         }
+
+        this.headlineLineHeight = this.options.size.headline_line_height ? this.options.size.headline_line_height : ((this.columnWidth - (this.preloaderWidth ? this.preloaderWidth : 0)) * this.lineHeightMultiplier).toFixed(2) / 1;
+
+        if (!this.options.size.headline_line_height && this.headlineLineHeight < 18) {
+            this.headlineLineHeight = 20;
+        }
+
         this.headlineFontSize = Math.min(this.headlineLineHeight, (this.headlineLineHeight * this.fontSizeMultiplier).toFixed(2) / 1);
 
         this.headlineMarginTop = this.options.size.headline_margin_top ? this.options.size.headline_margin_top : ((this.headlineLineHeight * .2).toFixed(2) / 1);
@@ -436,13 +445,6 @@ RevFlicker({
 
         this.providerMarginTop = this.options.size.provider_margin_top ? this.options.size.provider_margin_top : 0;
         this.providerMarginBottom = this.options.size.provider_margin_bottom ? this.options.size.provider_margin_bottom : 0;
-
-        this.preloaderHeight = this.options.size.image_height ? this.options.size.image_height : Math.round((this.columnWidth - (this.options.ad_border ? 2 : 0)) * (this.imageHeight / this.imageWidth));
-
-        if (this.options.text_right) {
-            this.preloaderHeight = this.options.text_right_height;
-            this.preloaderWidth = Math.round(this.preloaderHeight * (this.imageWidth / this.imageHeight) * 100) / 100;
-        }
     };
 
     RevFlicker.prototype.update = function(newOpts, oldOpts) {
