@@ -323,3 +323,11 @@ Theme for trending. Can be default or social.
 ```
 trending_theme: 'default'
 ```
+
+###window_width_devices
+Devices to enable the full viewport/window width feature where the widget will stretch the entire viewport width.
+```
+window_width_devices: [
+    'phone'
+]
+```
