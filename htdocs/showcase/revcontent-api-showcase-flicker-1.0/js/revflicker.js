@@ -205,6 +205,10 @@ RevFlicker({
         // wrapper class
         revUtils.addClass(this.flickity.element, 'rev-flicker');
 
+        if (this.windowWidthEnabled) {
+            revUtils.addClass(this.containerElement, 'rev-flicker-window-width');
+        }
+
         // custom icons passed? merge with default
         if (this.options.overlay_icons !== false) {
             revUtils.mergeOverlayIcons(this.options.overlay_icons);
