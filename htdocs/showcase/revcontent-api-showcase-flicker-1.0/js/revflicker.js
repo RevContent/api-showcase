@@ -425,7 +425,7 @@ RevFlicker({
 
         this.headlineLineHeight = this.options.size.headline_line_height ? this.options.size.headline_line_height : ((this.columnWidth - (this.preloaderWidth ? this.preloaderWidth : 0)) * this.lineHeightMultiplier).toFixed(2) / 1;
 
-        if (!this.options.size.headline_line_height && this.headlineLineHeight < 18) {
+        if (!this.options.size.headline_line_height && this.headlineLineHeight < 20) {
             this.headlineLineHeight = 20;
         }
 
