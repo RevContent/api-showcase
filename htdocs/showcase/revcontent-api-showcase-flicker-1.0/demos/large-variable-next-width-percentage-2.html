@@ -402,11 +402,17 @@
    <!-- /. Fake Page Content -->
 
 
-    <script src="/build/revflicker.min.js"></script>
+    <script src="/build/files/flicker/revflicker.pkgd.js"></script>
 
 
 
     <script>
+        var next_width_percentage = 20;
+        if (revDetect.show(['tablet'])) {
+            next_width_percentage = 15;
+        } else if (revDetect.show(['phone'])) {
+            next_width_percentage = 5;
+        }
 
         new RevFlicker({
             id: 'rev-flicker',
@@ -414,12 +420,13 @@
             pub_id : 945,
             widget_id : 6181,
             domain : 'apiexamples.powr.com',
-            text_overlay: true,
-            per_row: {sm: 1, md: 2,lg: 2,xl: 3, xxl: 3},
+            per_row: {sm: 2, md: 2,lg: 2,xl: 3, xxl: 3},
             size: {margin: 8},
             headline_size: 3,
             arrow_style: 'square',
-            image_ratio: 'rectangle',
+            arrow_opacity: 0.6,
+            image_ratio: 'wide_rectangle',
+            next_width_percentage: next_width_percentage,
             square_border: true
         });
 
