@@ -328,6 +328,6 @@ trending_theme: 'default'
 Devices to enable the full viewport/window width feature where the widget will stretch the entire viewport width.
 ```
 window_width_devices: [
-    'phone'
+    'phone', 'tablet'
 ]
 ```
