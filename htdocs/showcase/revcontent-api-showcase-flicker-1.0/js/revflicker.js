@@ -112,7 +112,7 @@ RevFlicker({
             text_top: false,
             text_right: false,
             text_right_height: 100,
-            next_width_percentage: 20,
+            next_width_percentage: 5,
             next_width: false,
             transition_content: false,
             css: '',
