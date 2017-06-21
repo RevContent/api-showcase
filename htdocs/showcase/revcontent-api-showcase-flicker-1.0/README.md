@@ -184,7 +184,7 @@ next_width: false
 ###next\_width_percentage
 By default the next/halved ad will be 20% of the regular ad width. All ads will be resized after setting the next/halved ad width.
 ```
-next_width_percentage: 20
+next_width_percentage: 5
 ```
 
 ###overlay_icons
@@ -328,6 +328,6 @@ trending_theme: 'default'
 Devices to enable the full viewport/window width feature where the widget will stretch the entire viewport width.
 ```
 window_width_devices: [
-    'phone'
+    'phone', 'tablet'
 ]
 ```
