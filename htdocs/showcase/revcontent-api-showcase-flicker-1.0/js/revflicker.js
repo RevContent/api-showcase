@@ -129,7 +129,7 @@ RevFlicker({
             trending: false,
             trending_theme: 'default',
             window_width_devices: [
-                'phone'
+                'phone', 'tablet'
             ]
         };
 
