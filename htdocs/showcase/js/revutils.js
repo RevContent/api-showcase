@@ -456,11 +456,13 @@ utils.adOverlay = function(ad, content_type, overlay, position) {
     revOverlay.ad(ad, content_type, overlay, position);
 };
 
-utils.checkVisible = function(element, callback, percentVisible) {
+utils.checkVisible = function(element, callback, percentVisible, buffer) {
     var that = this;
     requestAnimationFrame(function() {
         // what percentage of the element should be visible
         var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
+        // fire if within buffer
+        var bufferPixels = (typeof buffer === 'number') ? buffer : 0;
 
         var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
         var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
@@ -468,7 +470,7 @@ utils.checkVisible = function(element, callback, percentVisible) {
         var elementBottom = element.getBoundingClientRect().bottom;
         var elementVisibleHeight = element.offsetHeight * visibleHeightMultiplier;
 
-        if ((scroll + windowHeight >= (elementTop + scroll + elementVisibleHeight)) &&
+        if ((scroll + windowHeight >= (elementTop + scroll + elementVisibleHeight - bufferPixels)) &&
             elementBottom > elementVisibleHeight) {
             callback.call(that);
         }

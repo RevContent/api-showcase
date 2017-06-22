@@ -119,13 +119,12 @@ body {
 
 #rev-flicker.rev-flicker-text-right .rev-image {
     float: left;
-    width: 50%;
+    margin-right: 5px;
 }
 
 #rev-flicker.rev-flicker-text-right .rev-image img {
     border-top-right-radius: 0;
     border-bottom-left-radius: 5px;
-    min-height: 100px;
 }
 
 #rev-flicker.rev-flicker-text-right .rev-ad a:before, #rev-flicker.rev-flicker-text-right .rev-ad a:after {
@@ -142,8 +141,6 @@ body {
 }
 
 #rev-flicker.rev-flicker-text-right .rev-ad a .rev-headline-container{
-    float: left;
-    width: 50%;
     margin-bottom: 0px;
     vertical-align: top;
 }
@@ -178,7 +175,6 @@ body {
 
 #rev-flicker .rev-headline {
     margin: 0;
-    overflow: hidden;
 }
 
 #rev-flicker .rev-headline h3 {
@@ -200,8 +196,9 @@ body {
 
 
 #rev-flicker .rev-provider {
-    float: left;
     color: #999;
+    word-wrap: break-word;
+    white-space: nowrap;
 }
 
 #rev-flicker .rev-ad {
@@ -224,6 +221,7 @@ body {
 
 #rev-flicker .rev-flicker {
     clear: both;
+    overflow: hidden;
 }
 
 #rev-flicker.rev-flicker-text-overlay .rev-ad {
@@ -297,9 +295,12 @@ body {
     display: inline-block;
 }
 
-#rev-flicker .rev-trending {
+#rev-flicker.rev-flicker-trending .rev-provider {
     float: left;
-    width: 50%;
+}
+
+#rev-flicker.rev-flicker-trending .rev-trending {
+    float: right;
     text-align: right;
     color: #e63e3e;
     padding-right:4px;
@@ -309,6 +310,17 @@ body {
     color: #898F9C;
 }
 
+
+#rev-flicker {
+    &.rev-flicker-window-width {
+        .rev-header {
+            margin-left: 3px;
+        }
+        .rev-sponsored.bottom-right {
+            margin-right: 3px;
+        }
+    }
+}
 
 #rev-flicker {
     @import '../../css/revoverlay';
