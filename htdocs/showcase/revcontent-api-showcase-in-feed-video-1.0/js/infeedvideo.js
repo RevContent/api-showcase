@@ -58,7 +58,7 @@ Author: michael@revcontent.com
         connatixScript.setAttribute('pcp2', this.config.pub_id);
         connatixScript.setAttribute('customlogo', 'https://i.connatix.com/s3/connatix-uploads/assets/RCIcon3.png?mode=pad&height=18');
         if ('video_id' in this.config && this.config.video_id > 0) {
-            connatixScript.setAttribute('cnx-video-id="', this.config.video_id);
+            connatixScript.setAttribute('cnx-video-id', this.config.video_id);
         }
         revUtils.append(this.element, connatixScript);
     }
