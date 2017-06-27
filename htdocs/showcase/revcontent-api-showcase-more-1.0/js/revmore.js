@@ -433,7 +433,10 @@ RevMore({
             that = null;
         };
 
-        this.init();
+        var that = this;
+        revUtils.docReady(function() {
+            that.init();
+        });
     };
 
     return RevMore;

@@ -83,15 +83,26 @@ utils.appendStyle = function(style, namespace, extra) {
     var namespace = namespace + '-append-style';
 
     if (!document.getElementById(namespace)) {
-        if (typeof extra === 'string') {
-            style += extra;
-        }
-
         var el = document.createElement('style');
         el.type = 'text/css';
         el.id = namespace;
         el.innerHTML = style;
         document.getElementsByTagName('head')[0].appendChild(el);
+    }
+
+    if (extra && typeof extra === 'string') {
+        var namespaceExtra = namespace + '-extra'
+        var extraStyleElement = document.getElementById(namespaceExtra);
+
+        if (extraStyleElement) {
+            extraStyleElement.innerHTML += extra;
+        } else {
+            var el = document.createElement('style');
+            el.type = 'text/css';
+            el.id = namespaceExtra;
+            el.innerHTML = extra;
+            document.getElementsByTagName('head')[0].appendChild(el);
+        }
     }
 };
 
@@ -324,11 +335,11 @@ utils.ellipsisText = function(headlines) {
     }
 };
 
-utils.imagesLoaded = function(images) {
+utils.imagesLoaded = function(images, emitter) {
+    // emit done event when all images have finished loading
 
     if (!images.length) {
-        emitter.emitEvent('done');
-        return;
+        emitter.emitEvent('imagesLoaded');
     }
 
     var maxMilliseconds = 4000;
@@ -400,9 +411,6 @@ utils.imagesLoaded = function(images) {
         utils.removeEventListener(this.img, 'error', this);
     };
 
-    // emit done event when all images have finished loading
-    var emitter = new EventEmitter();
-
     var progressedCount = 0;
 
     for (var i=0; i < images.length; i++ ) {
@@ -410,7 +418,7 @@ utils.imagesLoaded = function(images) {
         loadingImage.once( 'progress', function() {
             progressedCount++;
             if (progressedCount == images.length) {
-                emitter.emitEvent('done');
+                emitter.emitEvent('imagesLoaded');
             }
         });
         loadingImage.check();
@@ -418,10 +426,8 @@ utils.imagesLoaded = function(images) {
 
     // don't wait longer than maxMilliseconds, this is a safety for network slowness or other issues
     setTimeout(function() {
-        emitter.emitEvent('done');
+        emitter.emitEvent('imagesLoaded');
     }, maxMilliseconds);
-
-    return emitter;
 }
 
 utils.getComputedStyle = function (el, prop, pseudoElt) {
@@ -450,11 +456,13 @@ utils.adOverlay = function(ad, content_type, overlay, position) {
     revOverlay.ad(ad, content_type, overlay, position);
 };
 
-utils.checkVisible = function(element, callback, percentVisible) {
+utils.checkVisible = function(element, callback, percentVisible, buffer) {
     var that = this;
     requestAnimationFrame(function() {
         // what percentage of the element should be visible
         var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
+        // fire if within buffer
+        var bufferPixels = (typeof buffer === 'number') ? buffer : 0;
 
         var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
         var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
@@ -462,7 +470,7 @@ utils.checkVisible = function(element, callback, percentVisible) {
         var elementBottom = element.getBoundingClientRect().bottom;
         var elementVisibleHeight = element.offsetHeight * visibleHeightMultiplier;
 
-        if ((scroll + windowHeight >= (elementTop + scroll + elementVisibleHeight)) &&
+        if ((scroll + windowHeight >= (elementTop + scroll + elementVisibleHeight - bufferPixels)) &&
             elementBottom > elementVisibleHeight) {
             callback.call(that);
         }
@@ -544,6 +552,23 @@ utils.retrieveUserOptions = function(){
     var that = this;
     return that.userOptions;
 };
+
+utils.isArray = function(param) {
+    return Object.prototype.toString.call(param) === '[object Array]';
+}
+
+utils.docReady = function(fn) {
+    if (document.readyState != 'loading'){
+        fn();
+    } else if (document.addEventListener) {
+        document.addEventListener('DOMContentLoaded', fn);
+    } else {
+        document.attachEvent('onreadystatechange', function() {
+        if (document.readyState != 'loading')
+            fn();
+        });
+    }
+}
 
 // -----  ----- //
 return utils;

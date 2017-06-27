@@ -1,0 +1,37 @@
+.cnxpl-button-right img { margin-top: 9px; }
+.cnxpl-in-ad #gradient {
+    background-image: none!important;
+    background-color: #333!important;
+}
+
+.rc-branding-container {
+    text-align: right;
+    .rc-branding {
+        color: #999;
+        line-height: 13px;
+        visibility: visible!important;
+        display: inline-block!important;
+        text-decoration: none;
+        z-index: 99;
+        line-height: 13px;
+        position: relative;
+        text-align: right;
+
+        &.rc-text-right {
+            float: right;
+            right: 10px;
+        }
+
+        div {
+            font-size: 10px;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .rc-adchoices {
+            position: relative!important;
+            max-width: 12px!important;
+            margin: 0 0 0 4px!important;
+        }
+    }
+}

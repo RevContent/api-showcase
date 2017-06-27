@@ -6,15 +6,19 @@
     <div class="grid" layout layout-wrap preload-images>
 
         <div flex="50" ng-repeat="(key, widget) in ctrl.widgets">
-            <md-card ui-sref="post({id: key})">
+            <md-card ui-sref="post({id: key})" ng-mouseover="animate(key)" ng-mouseleave="static(key)">
                 <div>
                     <div class="preloader" ng-style="{backgroundColor: widget.bg}">
-                        <img class="img-responsive preview" ng-src="/app/resources/img/{{key}}.jpg" alt="{{widget.title}}">
+                        <img class="img-responsive preview" ng-src="/app/resources/img/{{ widget.animating ? '-animated' : '' }}{{widget.img}}" alt="{{widget.title}}">
+                        <img style="display:none;" ng-if="widget.img_animated" class="img-responsive preview" ng-src="/app/resources/img/animated-{{widget.img}}" alt="{{widget.title}}">
                     </div>
                 </div>
                 <md-card-content>
                     <h2 class="md-title ellipsis" ng-bind="widget.title"></h2>
                 </md-card-content>
+                <div ng-if="widget.new" class="ribbon-wrapper" title="To be able to use our exclusive Widgets, your account will need to be approved by your widget rep. Please get in contact with (RC Publisher Support) at widgets@revcontent.com">
+                    <div class="ribbon ribbon-marketplace-powr">New!</div>
+                </div>
             </md-card>
         </div>
 

@@ -79,6 +79,7 @@
                     <ul>
                         <li><a href="/showcase/revcontent-api-showcase-scroller-1.0/index.html">Default</a></li>
                         <li><a href="/showcase/revcontent-api-showcase-scroller-1.0/demos/columns.html">4 Columns</a> - 4 columns</li>
+                        <li><a href="/showcase/revcontent-api-showcase-scroller-1.0/demos/column_spans.html">Column Spans</a> - md breakpoint shows first ad with 2 column spans</li>
                     </ul>
                 </div>
             </div>
@@ -304,7 +305,8 @@
                     spans: 2,
                     selector: "#rev-slider .rev-content:nth-child(5)",
                 }
-            ]
+            ],
+            css: '#rev-slider .rev-content { padding: 4px 2px } #rev-slider .rev-content.rev-colspan-1 .rev-headline h3 { line-height: 18px; } #rev-slider .rev-content.rev-colspan-2 .rev-headline { margin: 2px 4px 0; } #rev-slider .rev-content.rev-colspan-1 .rev-headline { margin-top: 2px; }'
         });
     </script>
 

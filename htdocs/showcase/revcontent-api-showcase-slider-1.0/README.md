@@ -3,7 +3,7 @@
 RevSlider is a touch enabled content slider. Use it by placing an element along with the script and ad code definition on the page
 
 ```
-&lt;div id="rev-slider"&gt;&lt;div&gt;
+&lt;div id="rev-slider"&gt;&lt;/div&gt;
 
 &lt;script src="http://labs-cdn.revcontent.com/build/revslider.min.js">&lt;/script&gt;
 
@@ -164,7 +164,7 @@ impression_tracker: []
 ```
 
 ###internal
-Number of internal ads to display. ```sponsored``` option is ignored and only internal ads are shown.
+Display internal ads. The ```sponsored``` option is ignored and only internal ads are shown.
 ```
 internal: false
 ```

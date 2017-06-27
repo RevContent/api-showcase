@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "mobile-detect": "~1",
-    "flickity": "~1",
+    "flickity": "~2",
     "any-grid": "~1",
     "es6-promise": "~3",
     "hammerjs": "~2",

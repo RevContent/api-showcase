@@ -3,6 +3,14 @@
         #rev-slider-container {
             padding-right: 30px;
             position: relative;
+
+            .rev-pagination-dots-wrapper {
+                .rev-pagination-dot {
+                    div:hover {
+                        cursor: pointer;
+                    }
+                }
+            }
         }
         .rev-sponsored.top-right {
             right: 30px !important;

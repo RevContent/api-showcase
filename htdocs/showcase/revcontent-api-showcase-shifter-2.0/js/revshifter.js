@@ -83,7 +83,8 @@ RevShifter({
         query_params: false,
         user_ip: false,
         user_agent: false,
-        css: ''
+        css: '',
+        internal: false
     };
 
     RevShifter = function(opts) {
@@ -210,7 +211,8 @@ RevShifter({
                 register_views: false, // handle viewibility/prevent Slider from doing checks
                 user_ip: this.options.user_ip,
                 user_agent: this.options.user_agent,
-                css: this.options.css
+                css: this.options.css,
+                internal: this.options.internal
             });
 
             this.closeButton();

@@ -55,6 +55,9 @@ Author: michael@revcontent.com
             query_params: false,
             user_ip: false,
             user_agent: false,
+            transition_duration_multiplier: 3,
+            auto_scroll: true,
+            rev_position: 'top_right'
         };
 
         // merge options
@@ -85,6 +88,7 @@ Author: michael@revcontent.com
         this.createInnerWidget();
         this.scroll();
         this.mouseWheel();
+        this.buttons();
         this.viewability();
     };
 
@@ -135,21 +139,21 @@ Author: michael@revcontent.com
         this.innerWidget.innerContainerElement.style.overflowY = 'hidden';
 
         var that = this;
-        var getHeight = function() { // TODO: this could work on the fly
-            var height = that.innerWidget.grid.heights[1].maxHeight;
+        var getHeight = function() {
+            that.heights = [];
             for(var prop in that.innerWidget.grid.heights) {
                 if (that.innerWidget.grid.heights.hasOwnProperty(prop)) {
-                    var maxHeight = that.innerWidget.grid.heights[prop].maxHeight;
-                    if (maxHeight > height) {
-                        height = maxHeight;
-                    }
+                    that.heights.push(that.innerWidget.grid.heights[prop].maxHeight);
                 }
             }
-            return height;
+            // sort ascending
+            that.heights.sort(function(a, b){return a - b});
         };
 
         this.innerWidget.emitter.on('resized', function() {
-            that.innerWidget.innerContainerElement.style.height = getHeight() + 'px';
+            getHeight(); // get heights
+            // set height to largest
+            that.innerWidget.innerContainerElement.style.height = that.heights[(that.heights.length - 1)] + 'px';
         });
 
         var that = this;
@@ -159,6 +163,9 @@ Author: michael@revcontent.com
     };
 
     RevScroller.prototype.scroll = function() {
+        if (this.options.auto_scroll === false) {
+            return;
+        }
         var hovering = false;
 
         var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
@@ -175,6 +182,7 @@ Author: michael@revcontent.com
         var done = false;
 
         var doIt = function(page) {
+            var oldTransform = that.transform;
             that.transform = 0;
             var i = 0;
             while (i < page) {
@@ -182,15 +190,16 @@ Author: michael@revcontent.com
                 i++;
             }
 
-            var bottom = Math.ceil(that.innerWidget.grid.heights[0].maxHeight + that.innerWidget.grid.heights[2].maxHeight);
-            if (page == 2 && Math.abs(that.transform) > bottom) {
+            var bottom = that.heights[0] + that.heights[1];
+            if (Math.abs(that.transform) > bottom) {
                 that.transform = bottom;
             }
 
             that.innerWidget.page = (page + 1);
             that.innerWidget.updatePagination();
 
-            var duration = that.innerWidget.grid.heights[that.currentRow].maxHeight * 4;
+            var distance = Math.abs(Math.abs(oldTransform) - Math.abs(that.transform));
+            var duration = distance * that.options.transition_duration_multiplier;
 
             that.currentRow++;
 
@@ -202,6 +211,7 @@ Author: michael@revcontent.com
         };
 
         var doItBottom = function(page) {
+            var oldTransform = that.transform;
             that.transform = 0;
             var i = 0;
             while (i < page) {
@@ -209,7 +219,8 @@ Author: michael@revcontent.com
                 i++;
             }
 
-            var duration = that.innerWidget.grid.heights[(that.currentRow - 1)].maxHeight * 4;
+            var distance = Math.abs(Math.abs(oldTransform) - Math.abs(that.transform));
+            var duration = distance * that.options.transition_duration_multiplier;
 
             that.transform = (that.transform * -1);
 
@@ -240,7 +251,7 @@ Author: michael@revcontent.com
 
                 var scrollBottom = (scroll + windowHeight) - (elementTop + scroll);
 
-                var regionHeight = (windowHeight / 2)
+                var regionHeight = (windowHeight / 2);
 
                 if (scroll > scrollTop) { // scrolling down
 
@@ -270,7 +281,7 @@ Author: michael@revcontent.com
 
         var hovering = false;
 
-        revUtils.addEventListener(this.innerWidget.innerContainerElement, 'mouseenter', function() {
+        var updateTotal = function() {
             total = 0;
             var i = 0;
             while (i <= that.currentRow) {
@@ -278,7 +289,11 @@ Author: michael@revcontent.com
                 i++;
             }
             hovering = true;
-        });
+        };
+
+        revUtils.addEventListener(this.innerWidget.innerContainerElement, 'mouseenter', updateTotal);
+
+        this.emitter.on('button', updateTotal);
 
         revUtils.addEventListener(this.innerWidget.innerContainerElement, 'mouseleave', function() {
             hovering = false;
@@ -300,7 +315,7 @@ Author: michael@revcontent.com
                 }
 
                 var holdIt = false;
-                var bottom = Math.ceil(that.innerWidget.grid.heights[0].maxHeight + that.innerWidget.grid.heights[2].maxHeight);
+                var bottom = that.heights[0] + that.heights[1];
                 if (Math.abs(that.transform) > bottom) {
                     holdIt = true;
                     that.transform = bottom * -1;
@@ -336,6 +351,52 @@ Author: michael@revcontent.com
                 }
             }
         });
+    };
+
+    RevScroller.prototype.buttons = function() {
+        var that = this;
+        var doIt = function(page) {
+            var oldTransform = that.transform;
+            that.transform = 0;
+            var i = 0;
+            while (i < page) {
+                that.transform += that.innerWidget.grid.heights[i].maxHeight;
+                i++;
+            }
+
+            var bottom = Math.ceil(that.innerWidget.grid.heights[0].maxHeight + that.innerWidget.grid.heights[2].maxHeight);
+            if (page == 2 && Math.abs(that.transform) > bottom) {
+                that.transform = bottom;
+            }
+
+            that.innerWidget.page = (page + 1);
+            that.innerWidget.updatePagination();
+
+            that.transform = (that.transform * -1);
+
+            var distance = Math.abs(Math.abs(oldTransform) - Math.abs(that.transform));
+            var duration = distance * that.options.transition_duration_multiplier;
+
+            revUtils.transitionDurationCss(that.innerWidget.innerElement, duration + 'ms');
+            revUtils.transformCss(that.innerWidget.innerElement, 'translate3d(0, ' + that.transform + 'px, 0)');
+        };
+
+        var buttons = this.innerWidget.element.querySelectorAll('.rev-pagination-dot div');
+
+        var clickIt = function(index) {
+            revUtils.addEventListener(buttons[index], 'click', function() {
+                doIt(index);
+                for (var i = that.currentRow; i <= index; i++) {
+                    that.currentRow = i;
+                    that.registerImpressions(true);
+                }
+                that.emitter.emitEvent('button');
+            });
+        }
+
+        for (var i = 0; i < buttons.length; i++) {
+            clickIt(i);
+        }
     };
 
     RevScroller.prototype.viewability = function() {

@@ -3,7 +3,7 @@
 RevFlicker is a touch enabled content carousel. Use it by placing an element along with the script and ad code definition on the page.
 
 ```
-&lt;div id="rev-flicker"&gt;&lt;div&gt;
+&lt;div id="rev-flicker"&gt;&lt;/div&gt;
 
 &lt;script src="http://labs-cdn.revcontent.com/build/revflicker.min.js">&lt;/script&gt;
 
@@ -49,6 +49,12 @@ element: false
 Display a border around each ad
 ```
 ad_border: true
+```
+
+###square_border
+Display square borders.
+```
+square_border: false
 ```
 
 ###ad_overlay
@@ -170,9 +176,15 @@ next_effect: true
 ```
 
 ###next_width
-false
+A fixed number of pixels for the next/halved ad. If set will override ```next_width_percentage```
 ```
 next_width: false
+```
+
+###next\_width_percentage
+By default the next/halved ad will be 20% of the regular ad width. All ads will be resized after setting the next/halved ad width.
+```
+next_width_percentage: 5
 ```
 
 ###overlay_icons
@@ -252,6 +264,12 @@ Text will overlay the image rather than be position below it
 text_overlay: false
 ```
 
+###text_top
+Text will be positioned above the image
+```
+text_top: false
+```
+
 ###text_right
 Text will be positioned to the right of the image
 ```
@@ -280,4 +298,36 @@ user_agent: false
 Pass user_ip to API
 ```
 user_ip: false
+```
+
+###arrow_style
+Next/Previous arrow style. Can be circle or square.
+```
+arrow_style: 'circle'
+```
+
+###arrow_opacity
+Next/Previous arrow opacity. Can be 0.1 - 1.
+```
+arrow_style: 1
+```
+
+###trending
+Show trending number count. 
+```
+trending: false
+```
+
+###trending_theme
+Theme for trending. Can be default or social.
+```
+trending_theme: 'default'
+```
+
+###window\_width_devices
+Devices to enable the full viewport/window width feature where the widget will stretch the entire viewport width.
+```
+window_width_devices: [
+    'phone', 'tablet'
+]
 ```

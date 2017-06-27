@@ -17,6 +17,20 @@
 
 var detect = new MobileDetect(window.navigator.userAgent);
 
+detect.device = function() {
+    var device = 'desktop';
+
+    if (detect.phone() !== null) {
+        device = 'phone';
+    }
+
+    if (detect.tablet() !== null) {
+        device = 'tablet'
+    }
+
+    return device;
+}
+
 detect.show = function(devices){
 
     // don't bother
