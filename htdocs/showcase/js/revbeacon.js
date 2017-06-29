@@ -39,9 +39,9 @@
             comscore: {
                 name: "comscore",
                 enabled: true,
-                type: 'script',
-                pixel_url: false,
-                script_url: '//b.scorecardresearch.com/p?c1=7&c2=20310460&c3=12345&cv=2.0&cj=1',
+                type: 'pixel',
+                pixel_url: '//b.scorecardresearch.com/p?c1=7&c2=20310460&c3=12345&cv=2.0&cj=1',
+                script_url: false,
                 styles: '',
                 noscript: false,
                 traffic_percent: false
