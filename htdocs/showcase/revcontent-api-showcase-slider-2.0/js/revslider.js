@@ -353,30 +353,28 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.getPadding = function(resetInline) {
-        var content = this.grid.element.querySelectorAll('.rev-content');
-
         if (resetInline) {
-            for (var i = 0; i < content.length; i++) {
-                content[i].style.paddingTop = null;
-                content[i].style.paddingRight = null;
-                content[i].style.paddingBottom = null;
-                content[i].style.paddingLeft = null;
+            for (var i = 0; i < this.grid.items; i++) {
+                this.grid.items[i].element.style.paddingTop = null;
+                this.grid.items[i].element.style.paddingRight = null;
+                this.grid.items[i].element.style.paddingBottom = null;
+                this.grid.items[i].element.style.paddingLeft = null;
 
-                content[i].children[0].style.paddingTop = null;
-                content[i].children[0].style.paddingRight = null;
-                content[i].children[0].style.paddingBottom = null;
-                content[i].children[0].style.paddingLeft = null;
+                this.grid.items[i].element.children[0].style.paddingTop = null;
+                this.grid.items[i].element.children[0].style.paddingRight = null;
+                this.grid.items[i].element.children[0].style.paddingBottom = null;
+                this.grid.items[i].element.children[0].style.paddingLeft = null;
             }
             this.grid.layout(11);
         }
         // use last element for padding-top
-        var paddingTop = parseFloat(revUtils.getComputedStyle(content[(content.length - 1)], 'padding-top'));
-        var paddingRight = parseFloat(revUtils.getComputedStyle(content[0], 'padding-right'));
-        var paddingBottom = parseFloat(revUtils.getComputedStyle(content[0], 'padding-bottom'));
-        var paddingLeft = parseFloat(revUtils.getComputedStyle(content[0], 'padding-left'));
+        var paddingTop = parseFloat(revUtils.getComputedStyle(this.grid.items[(this.grid.items.length - 1)].element, 'padding-top'));
+        var paddingRight = parseFloat(revUtils.getComputedStyle(this.grid.items[0].element, 'padding-right'));
+        var paddingBottom = parseFloat(revUtils.getComputedStyle(this.grid.items[0].element, 'padding-bottom'));
+        var paddingLeft = parseFloat(revUtils.getComputedStyle(this.grid.items[0].element, 'padding-left'));
 
         var adInner = this.grid.element.querySelectorAll('.rev-ad-inner')[0];
-        var calculatedPadding = ((adInner.offsetWidth * this.marginMultiplier).toFixed(2) / 1);
+        var calculatedPadding = Math.round((adInner.offsetWidth * this.marginMultiplier).toFixed(2) / 1);
 
         this.padding = {
             top: paddingTop ? false : calculatedPadding,
