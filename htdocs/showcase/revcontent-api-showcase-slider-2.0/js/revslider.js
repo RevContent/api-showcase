@@ -116,7 +116,9 @@ Author: michael@revcontent.com
             visible_rows: false,
             column_spans: false,
             pagination_dots_vertical: false,
-            stacked: false
+            stacked: false,
+            fit_height: false,
+            destroy: false
         };
 
         // merge options
@@ -196,9 +198,14 @@ Author: michael@revcontent.com
 
         this.setGridClasses();
 
+        this.setMultipliers();
+
         this.createCells(this.grid);
 
-        this.setMultipliers();
+        if (this.limit == 0) {
+            this.destroy();
+            return;
+        }
 
         this.getPadding();
 
@@ -306,12 +313,42 @@ Author: michael@revcontent.com
 
         var i = 0; // just in case
         this.limit = 0;
-        while (grid.nextRow < grid.rowCount && i < 100) {
-            var cell = this.createNewCell();
-            grid.element.appendChild(cell);
-            grid.appended([cell]);
-            this.limit++;
-            i++;
+
+        if (this.options.fit_height) {
+            while (this.containerElement.offsetHeight < this.element.offsetHeight && i < 100) {
+                var cell = this.createNewCell();
+                grid.element.appendChild(cell);
+                grid.appended([cell]);
+
+                if (i == 0) {
+                    this.getPadding();
+                }
+
+                this.setContentPadding(grid);
+
+                this.setUp(1);
+
+                this.setSize(grid);
+
+                grid.layout(9);
+
+                this.limit++;
+                i++;
+            }
+
+            if (this.containerElement.offsetHeight > this.element.offsetHeight) {
+                grid.remove(cell);
+                grid.layout();
+                this.limit--;
+            }
+        } else {
+            while (grid.nextRow < grid.rowCount && i < 100) {
+                var cell = this.createNewCell();
+                grid.element.appendChild(cell);
+                grid.appended([cell]);
+                this.limit++;
+                i++;
+            }
         }
     };
 
@@ -1294,7 +1331,11 @@ Author: michael@revcontent.com
 
         this.grid.reloadItems();
 
+        this.grid.layout();
+
         this.setGridClasses();
+
+        this.displayedItems = [];
 
         this.createCells(this.grid);
 
@@ -1465,8 +1506,10 @@ Author: michael@revcontent.com
             var url = that.generateUrl(0, that.getMaxCount(), true, false);
 
             revApi.request(url, function(resp) {
+
                 if (!resp.length) {
                     resolve(resp);
+                    that.destroy();
                     return;
                 }
 
@@ -1492,6 +1535,8 @@ Author: michael@revcontent.com
                 resolve(resp);
             });
         });
+
+        return this.dataPromise;
     };
 
     RevSlider.prototype.registerImpressions = function(viewed, offset, limit) {
@@ -1640,8 +1685,20 @@ Author: michael@revcontent.com
         this.grid.layout(3);
         this.checkEllipsis();
         this.updatePagination();
+        this.fitHeight();
+    };
 
-        this.emitter.emitEvent('resized');
+    RevSlider.prototype.fitHeight = function() {
+        if (!this.options.fit_height) {
+            return;
+        }
+        var i = 0;
+        while (this.containerElement.offsetHeight > this.element.offsetHeight && this.grid.items.length && i < 100) {
+            this.grid.remove(this.grid.items[this.grid.items.length - 1].element);
+            this.grid.layout();
+            this.limit--;
+            i++
+        }
     };
 
     RevSlider.prototype.getMaxCount = function() {
@@ -2145,6 +2202,10 @@ Author: michael@revcontent.com
         if (this.mc) {
             this.mc.set({enable: false});
             this.mc.destroy();
+        }
+
+        if (typeof this.options.destroy === 'function') {
+            this.options.destroy();
         }
     };
 
