@@ -761,8 +761,7 @@ Author: michael@revcontent.com
             that.resizeImage(item.element.querySelector('.rev-image'), item);
             that.resizeHeadline(item.element.querySelector('.rev-headline'), row, index, item);
             that.resizeProvider(item.element.querySelector('.rev-provider'), item);
-
-            item.element.children[0].style.height = that.getCellHeight(row, index, item) + 'px';
+            that.resizeHeadlineBrand(item);
         };
 
         if (item) { // if ad is passed do that one
@@ -1349,6 +1348,26 @@ Author: michael@revcontent.com
         el.style.lineHeight = this.providerLineHeight + 'px';
         el.style.height = this.providerLineHeight + 'px';
     };
+
+    RevSlider.prototype.resizeHeadlineBrand = function(item) {
+        if (this.displayedItems.length) {
+            var rowItems = this.grid.rows[item.row].items;
+            var maxHeight = 0;
+
+            for (var i = 0; i < rowItems.length; i++) {
+                var headlineBrand = rowItems[i].element.querySelector('.rev-headline-brand');
+                headlineBrand.style.height = 'auto';
+                var height = headlineBrand.offsetHeight;
+                if (height > maxHeight) {
+                    maxHeight = height;
+                }
+            }
+
+            for (var i = 0; i < rowItems.length; i++) {
+                rowItems[i].element.querySelector('.rev-headline-brand').style.height = maxHeight + 'px';
+            }
+        }
+    }
 
     RevSlider.prototype.checkEllipsis = function(reset) {
         // if (this.options.max_headline && !this.options.text_right) { // text_right should be limited, but don't waste for max_headline only
