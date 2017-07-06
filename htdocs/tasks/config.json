@@ -178,15 +178,17 @@
     "js": "./showcase/revcontent-api-showcase-side-shifter-1.0/js/revsideshifter.js",
     "css": [
       "./node_modules/node-waves/dist/waves.css",
-      "./showcase/revcontent-api-showcase-side-shifter-1.0/css/revsideshifter.css"
+      "./showcase/revcontent-api-showcase-side-shifter-1.0/css/revsideshifter.scss"
     ],
     "build": [
       "./node_modules/node-waves/dist/waves.js",
+      "./showcase/js/hammer.custom.js",
       "./build/files/slider2/revslider2.pkgd.js",
       "./build/files/side-shifter/revside-shifter.embed.js"
     ],
     "watch": [
       "./build/files/slider2/revslider2.pkgd.js",
+      "./showcase/revcontent-api-showcase-slider-2.0/node_modules/any-grid/dist/any-grid.js",
       "./showcase/revcontent-api-showcase-side-shifter-1.0/js/*",
       "./showcase/revcontent-api-showcase-side-shifter-1.0/css/*"
     ]

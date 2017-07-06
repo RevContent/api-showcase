@@ -61,7 +61,15 @@ Author: michael@revcontent.com
             show_visible_selector: false,
             height_percentage: false,
             min_height: 300,
-            button_icon: 'plus' // flame, bell
+            button_icon: 'plus', // flame, bell
+            side: 'right',
+            fit_height: true,
+            button_devices: [ // only show the button on desktop by default, don't enable touch for
+                'desktop'
+            ],
+            touch_devices: [
+                'phone', 'tablet'
+            ]
         };
 
         // merge options
@@ -82,13 +90,19 @@ Author: michael@revcontent.com
     };
 
     RevSideShifter.prototype.init = function() {
-        this.opened = revUtils.getCookie('rev-side-shifter-opened') || false;
+        this.opened = revUtils.getCookie('rev-side-shifter-opened');
+        this.open = false;
         this.createContainer();
+        this.positionContainer();
         this.sizeCheck();
         this.createInnerWidget();
-        this.continue();
+        this.buttonCountText();
+        this.initTouch();
         this.resize();
+        this.initShowVisibleElement();
+    };
 
+    RevSideShifter.prototype.initShowVisibleElement = function() {
         if (this.setShowVisibleElement()) {
             // show once visible
             this.showOnceVisible();
@@ -181,10 +195,6 @@ Author: michael@revcontent.com
     };
 
     RevSideShifter.prototype.createContainer = function() {
-        this.bodyOverflow = revUtils.getComputedStyle(document.body, 'overflow');
-        this.bodyPosition = revUtils.getComputedStyle(document.body, 'position');
-        this.bodyHeight = revUtils.getComputedStyle(document.body, 'height');
-
         this.fullPageContainer = document.createElement('div');
 
         this.fullPageContainer.id = 'rev-side-shifter';
@@ -192,34 +202,28 @@ Author: michael@revcontent.com
         this.containerElement = document.createElement('div');
         revUtils.addClass(this.containerElement, 'rev-side-shifter-container');
 
-        this.headerContainerElement = document.createElement('div');
-        revUtils.addClass(this.headerContainerElement, 'rev-side-shifter-header-container');
-
-        this.headerCloseLink = document.createElement('a');
-        revUtils.addClass(this.headerCloseLink, 'rev-side-shifter-header-close');
-        this.headerCloseLink.textContent = this.options.close_link_text;
-        this.headerCloseLink.href = window.location.href;
-        this.headerCloseLink.onclick = function() {
-            return false;
-        }
-
-        if (this.options.logo) {
-            this.headerImageContainerElement = document.createElement('div');
-            revUtils.addClass(this.headerImageContainerElement, 'rev-side-shifter-header-image-container');
-            this.headerImageContainerElement.style.background = this.options.logo_color;
-
-            this.headerImage = document.createElement('img');
-            this.headerImage.src = this.options.logo;
-
-            revUtils.append(this.headerImageContainerElement, this.headerImage);
-            revUtils.append(this.headerContainerElement, this.headerImageContainerElement);
-        }
-
-        revUtils.append(this.headerContainerElement, this.headerCloseLink);
-
-        revUtils.append(this.fullPageContainer, this.headerContainerElement);
         revUtils.append(this.fullPageContainer, this.containerElement);
 
+        if (revDetect.show(this.options.button_devices)) {
+            this.initButtonContainerElement();
+        }
+
+        revUtils.prepend(document.body, this.fullPageContainer);
+    };
+
+    RevSideShifter.prototype.positionContainer = function() {
+        if (this.options.side == 'left') {
+            revUtils.transformCss(this.fullPageContainer, 'translateX(-100%)');
+            revUtils.addClass(this.fullPageContainer, 'rev-side-shifter-left');
+            this.fullPageContainer.style.left = '0';
+        } else {
+            revUtils.transformCss(this.fullPageContainer, 'translateX(100%)');
+            revUtils.addClass(this.fullPageContainer, 'rev-side-shifter-right');
+            this.fullPageContainer.style.right = '0';
+        }
+    };
+
+    RevSideShifter.prototype.initButtonContainerElement = function() {
         this.buttonContainerElement = document.createElement('div');
         this.buttonContainerElement.id = 'rev-side-shifter-button-container';
 
@@ -291,18 +295,24 @@ Author: michael@revcontent.com
 
         revUtils.append(this.buttonContainerElement, this.buttonElement);
 
+        Waves.attach(this.buttonElement);
+        Waves.init();
+
         var that = this;
         revUtils.addEventListener(this.buttonElement, 'click', function() {
             that.transition(true);
             that.emptyBell();
         });
 
-        revUtils.append(this.fullPageContainer, this.buttonContainerElement);
-
-        revUtils.prepend(document.body, this.fullPageContainer);
-
-        Waves.attach(this.buttonElement);
-        Waves.init();
+        if (this.options.side == 'left') {
+            this.buttonContainerElement.style.right = '-15px';
+            revUtils.transformCss(this.buttonContainerElement, 'translateX(100%)');
+            revUtils.append(this.fullPageContainer, this.buttonContainerElement);
+        } else {
+            this.buttonContainerElement.style.left = '-15px';
+            revUtils.transformCss(this.buttonContainerElement, 'translateX(-100%)');
+            revUtils.prepend(this.fullPageContainer, this.buttonContainerElement);
+        }
     };
 
     RevSideShifter.prototype.emptyBell = function() {
@@ -327,7 +337,18 @@ Author: michael@revcontent.com
             this.fullPageContainer.style.height = height + 'px';
         }
 
-        this.fullPageContainer.style.maxWidth = revUtils.windowWidth() - ( 5 + parseInt(revUtils.getComputedStyle(this.buttonContainerElement, 'width')) + Math.abs(parseInt(revUtils.getComputedStyle(this.buttonContainerElement, 'right')))) + 'px';
+        if (revDetect.show(this.options.button_devices)) { // if there is a button make sure there is space for it
+            var maximumWidth = revUtils.windowWidth() -
+                ( 5 + parseInt(revUtils.getComputedStyle(this.buttonContainerElement, 'width')) +
+                    Math.abs(parseInt(revUtils.getComputedStyle(this.buttonContainerElement, (this.options.side == 'left' ? 'right' : 'left')))));
+            var computedMaxWidth = parseInt(revUtils.getComputedStyle(this.fullPageContainer, 'max-width'));
+
+            if (computedMaxWidth > maximumWidth) {
+                this.fullPageContainer.style.maxWidth = maximumWidth + 'px';
+            }
+        } else {
+            this.fullPageContainer.style.maxWidth = 'none';
+        }
     }
 
     RevSideShifter.prototype.createInnerWidget = function() {
@@ -362,6 +383,8 @@ Author: michael@revcontent.com
             image_ratio: this.options.image_ratio,
             stacked: this.options.stacked,
             internal: this.options.internal,
+            fit_height: this.options.fit_height,
+            destroy: this.destroy.bind(this),
             buttons:      false,
             disable_pagination: true,
             pagination_dots_vertical: true,
@@ -371,27 +394,31 @@ Author: michael@revcontent.com
             visible_rows: 1,
             pagination_dots: false
         });
-
-        // destroy if no data
-        var that = this;
-        this.innerWidget.dataPromise.then(function(data) {
-            if (!data.length) {
-                that.destroy();
-            }
-        });
     };
 
     RevSideShifter.prototype.transition = function(button) {
-        // var that = this;
         this.transitionDuration = this.fullPageContainer.offsetWidth * this.options.transition_duration_multiplier
-        revUtils.transitionDurationCss(this.fullPageContainer, this.transitionDuration + 'ms');
+
+        this.transitionTransformShadow(this.transitionDuration);
+
         revUtils.transitionDurationCss(this.buttonElement.children[0], (this.transitionDuration / 4) + 'ms');
 
         if (this.visible) {
-            revUtils.transformCss(this.fullPageContainer, 'translateX(-100%)');
+            if (this.options.side == 'left') {
+                revUtils.transformCss(this.fullPageContainer, 'translateX(-100%)');
+            } else {
+                revUtils.transformCss(this.fullPageContainer, 'translateX(100%)');
+            }
             this.visible = false;
             revUtils.removeClass(this.buttonElement, 'rev-close');
+
+            var that = this;
+            setTimeout(function() {
+                revUtils.removeClass(that.fullPageContainer, 'rev-side-shifter-animating');
+            }, Math.max(0, this.transitionDuration - 300));
         } else {
+            revUtils.addClass(this.fullPageContainer, 'rev-side-shifter-animating');
+
             revUtils.transformCss(this.fullPageContainer, 'translateX(0%)');
             this.visible = true;
             revUtils.addClass(this.buttonElement, 'rev-close');
@@ -400,6 +427,7 @@ Author: michael@revcontent.com
                 this.removeHiddenListener();
                 this.removeVisibleListener();
             }
+            this.registerOnceOpened();
         }
         this.transitioning = true;
 
@@ -409,45 +437,203 @@ Author: michael@revcontent.com
         }, this.transitionDuration);
     };
 
-    RevSideShifter.prototype.resetDocument = function() {
-        this.fullPageContainer.style.display = 'none';
-        document.body.style.position = this.bodyPosition;
-        document.body.style.overflow = this.bodyOverflow;
-        document.body.style.height = this.bodyHeight;
+    RevSideShifter.prototype.buttonCountText = function() {
+        var that = this;
+        var setbuttonCountText = function() {
+            if (!that.opened && revDetect.show(that.options.button_devices)) {
+                that.buttonCounterCount.textContent = that.innerWidget.grid.items.length;
+            }
+        }
 
-        document.documentElement.style.position = null;
-        document.documentElement.style.overflow = null;
-        document.documentElement.style.height = null;
+        this.innerWidget.emitter.once('ready', setbuttonCountText);
+
+        this.innerWidget.emitter.on('resize', setbuttonCountText);
     };
 
-    RevSideShifter.prototype.continue = function() {
+    RevSideShifter.prototype.transitionTransformShadow = function(duration) {
+        revUtils.transitionCss(this.fullPageContainer, 'transform ' + duration + 'ms cubic-bezier(.06, 1, .6, 1), box-shadow 300ms');
+    }
+
+    RevSideShifter.prototype.registerOnceOpened = function() {
+        if (this.registered) {
+            return;
+        }
+        this.registered = true;
+        var url = this.innerWidget.generateUrl(0, this.innerWidget.limit, false, true);
+        revApi.request(url, function() { return; });
+    }
+
+    RevSideShifter.prototype.initTouchVars = function() {
+        // if the button is active don't enable touch
+        if (!revDetect.show(this.options.touch_devices)) {
+            return;
+        }
+
+        this.width = document.documentElement.offsetWidth;
+
+        if (this.options.side == 'left') {
+            this.closeDirection = Hammer.DIRECTION_LEFT;
+            this.openDirection = Hammer.DIRECTION_RIGHT;
+            this.closePosition = this.width * -1;
+        } else {
+            this.closeDirection = Hammer.DIRECTION_RIGHT;
+            this.openDirection = Hammer.DIRECTION_LEFT;;
+            this.closePosition = this.width;
+        }
+
+        this.currentX = this.open ? 0 : this.closePosition;
+    }
+
+    RevSideShifter.prototype.initTouch = function() {
+        // if the button is active don't enable touch
+        if (!revDetect.show(this.options.touch_devices)) {
+            return;
+        }
+
+        this.initTouchVars();
+
+        this.openThreshold = 50;
+        this.closeThreshold = 10;
+
+        this.thresholdActive = this.openThreshold;
+
+        this.lastDeltaX = 0;
+
+        this.mc = new Hammer(document.documentElement);
+
+        this.panRecognizer = new Hammer.Pan({
+            threshold: this.thresholdActive,
+            direction: this.openDirection
+        })
+
+        this.mc.add(this.panRecognizer);
+
         var that = this;
-        revUtils.addEventListener(this.headerCloseLink, 'click', function() {
-            that.fullPageContainer.style.width = '100%';
-            setTimeout(function() {
-                that.innerWidget.resize();
-            }, that.transitionDuration);
+
+        this.mc.on('panstart', function(e) {
+            clearTimeout(that.animatingClassTimeout);
+            revUtils.addClass(that.fullPageContainer, 'rev-side-shifter-animating');
+
+            that.panStartTimeStamp = e.timeStamp;
+            that.isDraging = true;
+
+            (function animation () {
+                if (that.isDraging) {
+                    that.fullPageContainer.style.transform = 'translate3d('+ that.currentX +'px, 0, 0)';
+                    that.animationFrameId = requestAnimationFrame(animation);
+                }
+            })();
+        });
+
+        this.mc.on('panleft panright', function(e) {
+            that.lastDirection = e.direction;
+
+            if (that.options.side == 'left') {
+                var amount = (e.deltaX - that.thresholdActive);
+            } else {
+                if (e.direction == that.openDirection) {
+                    var amount = (that.thresholdActive + e.deltaX);
+                } else if (e.direction == that.closeDirection) {
+                    var amount = (e.deltaX + that.thresholdActive);
+                }
+            }
+
+            that.currentX = that.currentX + (amount - that.lastDeltaX);
+            that.lastDeltaX = amount;
+        });
+
+        this.mc.on('panend', function(e) {
+            that.isDraging = false;
+            cancelAnimationFrame(that.animationFrameId);
+
+            var velocity = Math.abs(e.velocityX);
+
+            var duration;
+
+            if (that.open) {
+                var distance = Math.abs(that.currentX);
+            } else {
+                var distance = that.width - Math.abs(that.currentX);
+            }
+
+            // reset if low velocity and not over 70% or swiped back to close direction
+            if (velocity < .025 && (distance / that.width) < .7 ||
+                (that.open && that.lastDirection == that.openDirection) || (!that.open && that.lastDirection == that.closeDirection)) {
+
+                duration = distance * 3.5;
+
+                if (that.open) {
+                    that.currentX = 0;
+                    that.open = true;
+                } else {
+                    that.currentX = that.closePosition;
+                    that.open = false;
+                }
+
+            } else { //otherwise do it
+
+                if (velocity < .025) { // over 70% but low velocity use 2.5
+                    duration = (that.width - distance) * 3.5;
+                } else { // use the velocity
+                    duration = (that.width - distance) / velocity;
+                }
+
+                if (that.open) {
+                    that.thresholdActive = that.openThreshold;
+
+                    that.panRecognizer.set({
+                        threshold: that.thresholdActive,
+                        direction: that.openDirection
+                    });
+
+                    that.currentX = that.closePosition;
+                    that.open = false;
+                } else {
+                    that.thresholdActive = that.closeThreshold;
+
+                    that.panRecognizer.set({
+                        threshold: that.thresholdActive,
+                        direction: that.closeDirection | Hammer.DIRECTION_VERTICAL
+                    });
+
+                    that.currentX = 0;
+                    that.open = true;
+                    that.registerOnceOpened();
+                }
+            }
+
+            // don't let it take longer that 1800 ms or less than 150
+            duration = Math.min(1800, duration < 150 ? 150 : duration);
+
+            that.lastDeltaX = 0;
+
+            that.transitionTransformShadow(duration);
+
+            revUtils.transformCss(that.fullPageContainer, 'translate3d('+ that.currentX + 'px, 0, 0)');
+
+            that.animatingClassTimeout = setTimeout(function() {
+                revUtils.removeClass(that.fullPageContainer, 'rev-side-shifter-animating');
+            }, Math.max(0, duration - 300));
+
         });
     };
 
     RevSideShifter.prototype.resize = function() {
         var that = this;
         this.innerWidget.emitter.on('resized', function() {
-            var i = 0;
-            while (that.innerWidget.containerElement.offsetHeight > that.containerElement.offsetHeight && that.innerWidget.grid.items.length && i < 100) {
-                that.innerWidget.grid.remove(that.innerWidget.grid.items[that.innerWidget.grid.items.length - 1].element);
-                that.innerWidget.grid.layout();
-                i++
-            }
-            if (!that.opened) {
-                that.buttonCounterCount.textContent = that.innerWidget.grid.items.length;
+            that.initTouchVars();
+            if (!that.open) {
+                that.positionContainer();
             }
         });
     };
 
     RevSideShifter.prototype.destroy = function() {
-        this.resetDocument();
         revUtils.remove(this.fullPageContainer);
+        if (this.mc) {
+            this.mc.set({enable: false});
+            this.mc.destroy();
+        }
     };
 
     return RevSideShifter;
