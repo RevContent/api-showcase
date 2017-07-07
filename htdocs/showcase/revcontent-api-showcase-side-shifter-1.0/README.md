@@ -1,11 +1,12 @@
-#RevShifter
-RevShifter shows from the bottom or top of the page on scroll or pan. It's used by placing the script and ad code definition on the page.
+#RevSideShifter
+
+RevSideShifter overlays the page when triggered with a swipe or button press. It's used by placing the script and ad code definition on the page.
 
 ```
-&lt;script src="http://labs-cdn.revcontent.com/build/revshifter.min.js">&lt;/script&gt;
+&lt;script src="http://labs-cdn.revcontent.com/build/revsideshifter.min.js">&lt;/script&gt;
 
 &lt;script&gt;
-    new RevShifter({
+    new RevSideShifter({
         api_key: 'api_key',
         pub_id: 123,
         widget_id: 456,
@@ -29,12 +30,6 @@ your pub id
 ###widget_id(required)
 your widget id
 
-###ad_border
-Display a border around each ad
-```
-ad_border: false
-```
-
 ###ad_overlay
 Key value ad overlay config object where the key is the content type and the value is the icon to use. For example to use the ```video_rectangle``` icon for video content use ```video: 'video_rectangle'```. The icon will be appended to the ```.rev-ad``` element.
 ```
@@ -47,16 +42,58 @@ The position of the ad overlay icon. Available options include ```center```, ```
 ad_overlay_position: 'bottom_right'
 ```
 
-###closed_hours
-Number of hours to keep closed
+###api_source
+api_source used for tracking.
 ```
-closed_hours: 24
+api_source: 'side'
+```
+
+###button_devices
+By default the button will only show on desktop. This option works and accepts the same array as ```devices``` option. Add ```tablet``` or ```phone``` to show the button on these devices as well.
+```
+button_devices: ['desktop']
+```
+
+###button_icon
+By default the button icon will be a plus sign that transitions to a X when clicked. Other options include ```flame``` and ```bell```.
+```
+button_icon: 'plus'
+```
+
+###opened_hours
+Number of hours to show 0 and empty bell after SideShifter is opened. (only used for bell icon)
+```
+opened_hours: 8
 ```
 
 ###css
 Additional CSS to append.
 ```
 css: ''
+```
+
+###column_spans
+Array of objects that contain a ```spans``` and ```selector``` key value pairs. Where selector is the item to target and the spans is the number of spans. Can be boolean for all ads or an array of selectors with optional media to target sepecific ads. Define the spans on a per item basis using the spans key.
+```
+column_spans: [
+    {
+        selector: '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(1), .rev-slider-breakpoint-gt-sm .rev-content:nth-child(n+6), .rev-slider-breakpoint-sm .rev-content',
+        spans: 2
+    },
+    {
+        selector: '.rev-slider-breakpoint-gt-md .rev-content:nth-child(n+6)',
+        spans: 1
+    }
+]
+```
+For example to have the 4th child of the md layout to be 2 spans use the following:
+```
+column_spans: [
+    {
+        spans: 2,
+        selector: "#rev-slider.rev-slider-breakpoint-md .rev-content:nth-child(4)",
+    }
+]
 ```
 
 ###devices
@@ -75,34 +112,28 @@ Text to display for disclosure. This text triggers the disclosure/interests dial
 disclosure_text: 'Sponsored by Revcontent'
 ```
 
+###fit_height
+By default the ads will continue until the entire height of the container is filled. Disable this functionality by setting this ```false```
+```
+fit_height: true
+```
+
 ###header
 Text displayed above ads. Wrapped inside ```<h2 class="rev-header">```.
 ```
-header: 'Trending Now'
+header: 'Trending'
 ```
 
-###hide_footer
-Set true to not display the disclosure text.
+###headline_size
+Number of lines that the headline can take up. Ignored if ```max_headline``` is set to true.
 ```
-hide_footer: false
-```
-
-###hide_header
-Set true to not display the headerl
-```
-hide_header: true
+headline_size: 3
 ```
 
-###hide\_on\_show\_transition
-Set false to prevent RevShifter from hiding while it is still in a show transition.
+###height_percentage
+Use a percentage of the window height rather than the full height.
 ```
-hide_on_show_transition: true
-```
-
-###hide_provider
-Display the provider in the ads.
-```
-hide_provider: false
+height_percentage: false
 ```
 
 ###image_overlay
@@ -117,16 +148,42 @@ The position of the image overlay icon. Available options include ```center```, 
 image_overlay_position: 'center'
 ```
 
-###internal
-Display internal ads. The ```sponsored``` option is ignored and only internal ads are shown.
+###image_ratio
+Ratio of the images. Available options include ```wide_rectangle```, ```rectangle```, ```square``` and ```tall_rectangle```. Can be boolean for all ads or an array of selectors with optional media to target sepecific ads. Define image_ratio on a per item basis using the ratio key.
 ```
-internal: false
+image_ratio: [
+    {
+        selector: '.rev-slider-breakpoint-gt-sm .rev-content:nth-child(n+6), .rev-slider-breakpoint-lt-md .rev-content:nth-child(n+3), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(n+2)',
+        ratio: 'tall_rectangle'
+    },
+    {
+        media: '(orientation: landscape)',
+        selector: '#rev-slider.rev-slider-breakpoint-lt-md .rev-content',
+        ratio: 'rectangle'
+    }
+]
 ```
 
 ###max_headline
 Show all of the headline for all ads. No ellipsis. This option overrides ```headline_size```
 ```
-max_headline: true
+max_headline: false
+```
+
+###min_height
+Don't allow the unit to be less than this value in pixels when using the ```height_percentage ``` option.
+```
+min_height: false
+```
+
+###multipliers
+Tweak sizing relative to the ad size. Can be negative values.
+```
+{
+    line_height: 0,
+    margin: 0,
+    padding: 0
+}
 ```
 
 ###overlay_icons
@@ -135,60 +192,18 @@ Pass in custom icons where the key is the icon name and the value is the svg ico
 overlay_icons: false
 ```
 
-###pagination_dots
-To show the pagination dots
-```
-pagination_dots: false
-```
-
 ###per_row
 Number of ads per row. Object or single value. Pass a single number to be used for every breakpoint or provide a value for each breakpoint.
 ```
 per_row: {
     xxs: 1,
     xs: 1,
-    sm: 2,
-    md: 2,
-    lg: 3,
+    sm: 4,
+    md: 4,
+    lg: 4,
     xl: 4,
-    xxl: 5
+    xxl: 4
 }
-```
-
-###side
-Show from the top or bottom of the page
-```
-side: 'bottom'
-```
-
-###show\_on\_load
-Show right away on page load without waiting for a user scroll.
-```
-show_on_load: false
-```
-
-###show\_on\_scroll
-Show on vertical scroll event
-```
-show_on_scroll: true
-```
-
-###show\_on\_touch
-Show on vertical pan touch gesture
-```
-show_on_touch: true
-```
-
-###show\_visible\_selector
-query selector for element that will trigger widget to show once visible
-```
-show_visible_selector: false
-```
-
-###scroll_natural
-By default scrolling up will hide and scrolling down will show. Set to false for the opposite behavior.
-```
-scroll_natural: true
 ```
 
 ###query_params
@@ -197,49 +212,70 @@ Key value object for query params to send to server. Can be multidimensional
 query_params: false
 ```
 
-The example below demonstrates how to pass subid values. The resulting query parameters will be ```?revsub[key]=value```
+###rev_position
+Position of the disclosure text if ```hide_disclosure``` is not enabled. Options include: ```'bottom_right'```, ```'top_right'``` and ```'bottom_left'```.
 ```
-query_params: {
-    revsub: {
-        key: 'value'
-    }
-}
+rev_position: 'top_right'
 ```
 
 ###rows
 Number of rows to display. Object or single value. Pass a single number to be used for every breakpoint or provide a value for each breakpoint.
 ```
-rows: 1
+rows: 3
 ```
 
-###touch_simulation
-Shows an animation with a finger icon showing that the grid can be paginated.
+###show_visible_selector
+Selector passed to ```document.querySelectorAll```. The first found element will be used to show the unit once it's reached and hide the unit when scrolling back the other way.
 ```
-touch_simulation: false
+show_visible_selector: false
 ```
 
-###testing
-Ignores ```closed_hours``` if true
+###side
+By default the button position and transition will be from the right side. Change this to ```left``` to show from the other side.
 ```
-testing: false
+side: 'right'
+```
+
+###stacked
+If true each column will stack on top of each other without considering the max height for the row above. The default will provide a level top for each item in the row.
+```
+stacked: false
+```
+
+###text_overlay
+Text will overlay the image rather than be position below it. Can be boolean for all ads or an array of selectors with optional media to target sepecific ads.
+```
+text_overlay: [
+    {
+        selector: '.rev-slider-breakpoint-gt-sm .rev-content:nth-child(-n+5)'
+    },
+    {
+        media: '(orientation: landscape)',
+        selector: '#rev-slider.rev-slider-breakpoint-lt-md .rev-content'
+    }
+]
 ```
 
 ###text_right
-Text will be positioned to the right of the image
+Text will be positioned to the right of the image. Can be boolean for all ads or an array of selectors with optional media to target sepecific ads.
 ```
-text_right: true
-```
-
-###text\_right\_height
-Value in pixels of the ad image if ```text_right``` is enabled
-```
-text_right_height: 100
+text_right: [
+    {
+        selector: '.rev-slider-breakpoint-gt-sm .rev-content:nth-child(n+6), .rev-slider-breakpoint-lt-md .rev-content:nth-child(n+3), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(n+2)'
+    }
+]
 ```
 
-###transition_duration
-Duration in milliseconds that it takes for RevShifter to show from the bottom/top of the page.
+###touch_devices
+By default the touch gestures are enabled on ```phone``` and ```tablet```. This option works and accepts the same array as ```devices``` option. Add ```desktop``` to show the button on these devices as well.
 ```
-transition_duration: 1200
+button_devices: ['phone', 'tablet']
+```
+
+###transition\_duration\_multiplier
+Allows the transition duration to be modified. The distance of the transition will be multiplied by the ```transition_duration_multiplier``` to arrive at a value in milliseconds. For example, if the transition is 100 pixels the transition will take 200ms.
+```
+transition_duration_multiplier: 2
 ```
 
 ###url

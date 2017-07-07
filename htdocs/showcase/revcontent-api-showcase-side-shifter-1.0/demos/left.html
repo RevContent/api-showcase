@@ -12,9 +12,9 @@
     <title>RevSideShifter Example</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="../css/bootstrap.css" rel="stylesheet">
 
-    <link href="css/style.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -70,7 +70,7 @@
         <!-- /.container -->
     </nav>
 
-    <!-- Fake Page Content -->
+<!-- Fake Page Content -->
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
@@ -403,11 +403,31 @@
 
     <script>
         var shifter = new RevSideShifter({
-            url: 'http://dv3-s2.revcontent.com/api/v1/',
             api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
             pub_id : 945,
             widget_id : 6181,
             domain : 'apiexamples.powr.com',
+            per_row: {
+                xs: 2
+            },
+            column_spans: [
+                {
+                    selector: '.rev-slider-breakpoint-xs .rev-content:nth-child(1), .rev-slider-breakpoint-xs .rev-content:nth-child(n+4)',
+                    spans: 2
+                }
+            ],
+            image_ratio: [
+                {
+                    selector: '.rev-slider-breakpoint-xs .rev-content:nth-child(1)',
+                    ratio: 'wide_rectangle'
+                }
+            ],
+            text_right: [
+                {
+                    selector: '.rev-slider-breakpoint-xs .rev-content:nth-child(n+4)',
+                }
+            ],
+            side: 'left',
         });
     </script>
 

@@ -16,8 +16,6 @@
 
     <link href="../css/style.css" rel="stylesheet">
 
-    <link href="../css/style.css" rel="stylesheet">
-
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -88,11 +86,13 @@
                     <h3>Examples:</h3>
                     <ul>
                         <li><a href="/showcase/revcontent-api-showcase-side-shifter-1.0/index.html">Default</a></li>
-                        <li><a href="/showcase/revcontent-api-showcase-side-shifter-1.0/demos/alt.html">Alternate layout</a> - iOS News app inspired alternate layout</li>
-                        <li><a href="/showcase/revcontent-api-showcase-side-shifter-1.0/demos/scroll.html">Scroll element</a> - show the SideShifter when the element is reached, hide when scrolling back up.</li>
+                        <li><a href="/showcase/revcontent-api-showcase-side-shifter-1.0/demos/alt.html">Alternate layout</a></li>
+                        <li><a href="/showcase/revcontent-api-showcase-side-shifter-1.0/demos/left.html">Left side</a> - button and open from the left hand side</li>
+                        <li><a href="/showcase/revcontent-api-showcase-side-shifter-1.0/demos/scroll.html">Scroll element</a> - show when the element is reached, hide when scrolling back up.</li>
                         <li><a href="/showcase/revcontent-api-showcase-side-shifter-1.0/demos/height.html">Height</a> - unit height set to a percentage of the window height</li>
                         <li><a href="/showcase/revcontent-api-showcase-side-shifter-1.0/demos/flame.html">Flame button</a> - button_icon option set to "flame"</li>
-                        <li><a href="/showcase/revcontent-api-showcase-side-shifter-1.0/demos/bell.html">Bell button</a> - button_icon options set to "bell". Comes with ring animation</li>
+                        <li><a href="/showcase/revcontent-api-showcase-side-shifter-1.0/demos/bell.html">Bell button</a> - button_icon options set to "bell". Features a ring animation and zeros the count when opened.</li>
+                        <li><a href="/showcase/revcontent-api-showcase-side-shifter-1.0/demos/button-all-devices.html">Button for all devices</a> - show the button on all devices</li>
                     </ul>
                 </div>
             </div>
@@ -399,21 +399,17 @@
 
    <!-- /. Fake Page Content -->
 
-    <!-- <script src="/build/files/side-shifter/revside-shifter.pkgd.js"></script> -->
     <script src="/build/revside-shifter.min.js"></script>
 
     <script>
         var shifter = new RevSideShifter({
-            url: 'http://dv3-s2.revcontent.com/api/v1/',
             api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
             pub_id : 945,
             widget_id : 6181,
             domain : 'apiexamples.powr.com',
-            css: '#rev-side-shifter { width: 400px; }',
             per_row: {
                 xs: 2
             },
-            rows: 4,
             column_spans: [
                 {
                     selector: '.rev-slider-breakpoint-xs .rev-content:nth-child(1), .rev-slider-breakpoint-xs .rev-content:nth-child(n+4)',

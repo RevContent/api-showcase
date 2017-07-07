@@ -12,6 +12,18 @@ app.service('widgets', function() {
             image_animation_duration: 10000,
             new: true
         },
+        'side-shifter': {
+            title: 'RevSideShifter',
+            img: 'infeedvideo.gif?v=2',
+            preview_img: 'preview-infeedvideo.jpg?v=2',
+            description: 'Revcontent\'s native In-Feed Video widget will give your site the video content it deserves in a fun and engaging way. Match your sites look and feel with our light, powerful and safe muted auto-play video widget. Give In-Feed Video a try and watch your profits soar to new levels!',
+            link: 'revcontent-api-showcase-side-shifter-1.0/index.html',
+            docs: 'revcontent-api-showcase-side-shifter-1.0/README.md',
+            bg: '#34dab9',
+            img_animated: false,
+            image_animation_duration: 10000,
+            new: true
+        },
         'exit-pop': {
             title: 'RevExit',
             img: 'exit.gif?v=2',
