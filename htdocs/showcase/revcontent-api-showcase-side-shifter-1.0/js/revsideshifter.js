@@ -49,6 +49,7 @@ Author: michael@revcontent.com
             user_agent: false,
             transition_duration_multiplier: 2,
             rev_position: 'top_right',
+            opened_hours: 8,
             logo_color: '#000',
             logo: false,
             stacked: false,
@@ -316,7 +317,7 @@ Author: michael@revcontent.com
         var that = this;
         if (that.options.button_icon == 'bell') {
             setTimeout(function() {
-                revUtils.setCookie('rev-side-shifter-opened', 1, (that.options.closed_hours / 24));
+                revUtils.setCookie('rev-side-shifter-opened', 1, (that.options.opened_hours / 24));
                 revUtils.addClass(that.buttonElement, 'rev-side-shifter-button-bell-empty');
                 revUtils.removeClass(that.buttonElement, 'rev-side-shifter-button-bell-ring');
                 that.buttonCounterCount.textContent = 0;
