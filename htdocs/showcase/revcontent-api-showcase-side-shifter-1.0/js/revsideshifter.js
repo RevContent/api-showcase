@@ -399,7 +399,9 @@ Author: michael@revcontent.com
 
         this.transitionTransformShadow(this.transitionDuration);
 
-        revUtils.transitionDurationCss(this.buttonElement.children[0], (this.transitionDuration / 4) + 'ms');
+        if (this.buttonElement) {
+            revUtils.transitionDurationCss(this.buttonElement.children[0], (this.transitionDuration / 4) + 'ms');
+        }
 
         if (this.visible) {
             if (this.options.side == 'left') {
