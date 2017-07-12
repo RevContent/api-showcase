@@ -427,6 +427,11 @@ Author: michael@revcontent.com
                 this.removeHiddenListener();
                 this.removeVisibleListener();
             }
+
+            if (revDetect.show(this.options.touch_devices)) {
+                this.setTouchOpen();
+            }
+
             this.registerOnceOpened();
         }
         this.transitioning = true;
@@ -482,7 +487,21 @@ Author: michael@revcontent.com
         }
 
         this.currentX = this.open ? 0 : this.closePosition;
-    }
+    };
+
+    RevSideShifter.prototype.setTouchOpen = function() {
+        this.thresholdActive = this.closeThreshold;
+
+        this.panRecognizer.set({
+            threshold: this.thresholdActive,
+            direction: this.closeDirection | Hammer.DIRECTION_VERTICAL
+        });
+
+        this.currentX = 0;
+        this.open = true;
+
+        this.lastDeltaX = 0;
+    };
 
     RevSideShifter.prototype.initTouch = function() {
         // if the button is active don't enable touch
@@ -504,7 +523,7 @@ Author: michael@revcontent.com
         this.panRecognizer = new Hammer.Pan({
             threshold: this.thresholdActive,
             direction: this.openDirection
-        })
+        });
 
         this.mc.add(this.panRecognizer);
 
@@ -589,15 +608,7 @@ Author: michael@revcontent.com
                     that.currentX = that.closePosition;
                     that.open = false;
                 } else {
-                    that.thresholdActive = that.closeThreshold;
-
-                    that.panRecognizer.set({
-                        threshold: that.thresholdActive,
-                        direction: that.closeDirection | Hammer.DIRECTION_VERTICAL
-                    });
-
-                    that.currentX = 0;
-                    that.open = true;
+                    that.setTouchOpen();
                     that.registerOnceOpened();
                 }
             }
