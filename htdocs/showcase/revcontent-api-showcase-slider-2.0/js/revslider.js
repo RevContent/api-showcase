@@ -116,7 +116,9 @@ Author: michael@revcontent.com
             visible_rows: false,
             column_spans: false,
             pagination_dots_vertical: false,
-            stacked: false
+            stacked: false,
+            fit_height: false,
+            destroy: false
         };
 
         // merge options
@@ -196,9 +198,14 @@ Author: michael@revcontent.com
 
         this.setGridClasses();
 
+        this.setMultipliers();
+
         this.createCells(this.grid);
 
-        this.setMultipliers();
+        if (this.limit == 0) {
+            this.destroy();
+            return;
+        }
 
         this.getPadding();
 
@@ -306,40 +313,68 @@ Author: michael@revcontent.com
 
         var i = 0; // just in case
         this.limit = 0;
-        while (grid.nextRow < grid.rowCount && i < 100) {
-            var cell = this.createNewCell();
-            grid.element.appendChild(cell);
-            grid.appended([cell]);
-            this.limit++;
-            i++;
+
+        if (this.options.fit_height) {
+            while (this.containerElement.offsetHeight < this.element.offsetHeight && i < 100) {
+                var cell = this.createNewCell();
+                grid.element.appendChild(cell);
+                grid.appended([cell]);
+
+                if (i == 0) {
+                    this.getPadding();
+                }
+
+                this.setContentPadding(grid);
+
+                this.setUp(1);
+
+                this.setSize(grid);
+
+                grid.layout(9);
+
+                this.limit++;
+                i++;
+            }
+
+            if (this.containerElement.offsetHeight > this.element.offsetHeight) {
+                grid.remove(cell);
+                grid.layout();
+                this.limit--;
+            }
+        } else {
+            while (grid.nextRow < grid.rowCount && i < 100) {
+                var cell = this.createNewCell();
+                grid.element.appendChild(cell);
+                grid.appended([cell]);
+                this.limit++;
+                i++;
+            }
         }
     };
 
     RevSlider.prototype.getPadding = function(resetInline) {
-        var content = this.grid.element.querySelectorAll('.rev-content');
-
         if (resetInline) {
-            for (var i = 0; i < content.length; i++) {
-                content[i].style.paddingTop = null;
-                content[i].style.paddingRight = null;
-                content[i].style.paddingBottom = null;
-                content[i].style.paddingLeft = null;
+            for (var i = 0; i < this.grid.items; i++) {
+                this.grid.items[i].element.style.paddingTop = null;
+                this.grid.items[i].element.style.paddingRight = null;
+                this.grid.items[i].element.style.paddingBottom = null;
+                this.grid.items[i].element.style.paddingLeft = null;
 
-                content[i].children[0].style.paddingTop = null;
-                content[i].children[0].style.paddingRight = null;
-                content[i].children[0].style.paddingBottom = null;
-                content[i].children[0].style.paddingLeft = null;
+                this.grid.items[i].element.children[0].style.paddingTop = null;
+                this.grid.items[i].element.children[0].style.paddingRight = null;
+                this.grid.items[i].element.children[0].style.paddingBottom = null;
+                this.grid.items[i].element.children[0].style.paddingLeft = null;
             }
             this.grid.layout(11);
         }
         // use last element for padding-top
-        var paddingTop = parseFloat(revUtils.getComputedStyle(content[(content.length - 1)], 'padding-top'));
-        var paddingRight = parseFloat(revUtils.getComputedStyle(content[0], 'padding-right'));
-        var paddingBottom = parseFloat(revUtils.getComputedStyle(content[0], 'padding-bottom'));
-        var paddingLeft = parseFloat(revUtils.getComputedStyle(content[0], 'padding-left'));
+        var paddingTop = parseFloat(revUtils.getComputedStyle(this.grid.items[(this.grid.items.length - 1)].element, 'padding-top'));
+        var paddingRight = parseFloat(revUtils.getComputedStyle(this.grid.items[0].element, 'padding-right'));
+        var paddingBottom = parseFloat(revUtils.getComputedStyle(this.grid.items[0].element, 'padding-bottom'));
+        var paddingLeft = parseFloat(revUtils.getComputedStyle(this.grid.items[0].element, 'padding-left'));
 
         var adInner = this.grid.element.querySelectorAll('.rev-ad-inner')[0];
-        var calculatedPadding = ((adInner.offsetWidth * this.marginMultiplier).toFixed(2) / 1);
+        var calculatedPadding = Math.round((adInner.offsetWidth * this.marginMultiplier).toFixed(2) / 1);
 
         this.padding = {
             top: paddingTop ? false : calculatedPadding,
@@ -761,8 +796,7 @@ Author: michael@revcontent.com
             that.resizeImage(item.element.querySelector('.rev-image'), item);
             that.resizeHeadline(item.element.querySelector('.rev-headline'), row, index, item);
             that.resizeProvider(item.element.querySelector('.rev-provider'), item);
-
-            item.element.children[0].style.height = that.getCellHeight(row, index, item) + 'px';
+            that.resizeHeadlineBrand(item);
         };
 
         if (item) { // if ad is passed do that one
@@ -1291,9 +1325,15 @@ Author: michael@revcontent.com
             this.grid.element.removeChild(this.grid.element.firstChild);
         }
 
+        this.grid._resetLayout();
+
         this.grid.reloadItems();
 
+        this.grid.layout();
+
         this.setGridClasses();
+
+        this.displayedItems = [];
 
         this.createCells(this.grid);
 
@@ -1347,6 +1387,26 @@ Author: michael@revcontent.com
         el.style.lineHeight = this.providerLineHeight + 'px';
         el.style.height = this.providerLineHeight + 'px';
     };
+
+    RevSlider.prototype.resizeHeadlineBrand = function(item) {
+        if (this.displayedItems.length) {
+            var rowItems = this.grid.rows[item.row].items;
+            var maxHeight = 0;
+
+            for (var i = 0; i < rowItems.length; i++) {
+                var headlineBrand = rowItems[i].element.querySelector('.rev-headline-brand');
+                headlineBrand.style.height = 'auto';
+                var height = headlineBrand.offsetHeight;
+                if (height > maxHeight) {
+                    maxHeight = height;
+                }
+            }
+
+            for (var i = 0; i < rowItems.length; i++) {
+                rowItems[i].element.querySelector('.rev-headline-brand').style.height = maxHeight + 'px';
+            }
+        }
+    }
 
     RevSlider.prototype.checkEllipsis = function(reset) {
         // if (this.options.max_headline && !this.options.text_right) { // text_right should be limited, but don't waste for max_headline only
@@ -1444,8 +1504,10 @@ Author: michael@revcontent.com
             var url = that.generateUrl(0, that.getMaxCount(), true, false);
 
             revApi.request(url, function(resp) {
+
                 if (!resp.length) {
                     resolve(resp);
+                    that.destroy();
                     return;
                 }
 
@@ -1471,6 +1533,8 @@ Author: michael@revcontent.com
                 resolve(resp);
             });
         });
+
+        return this.dataPromise;
     };
 
     RevSlider.prototype.registerImpressions = function(viewed, offset, limit) {
@@ -1619,8 +1683,20 @@ Author: michael@revcontent.com
         this.grid.layout(3);
         this.checkEllipsis();
         this.updatePagination();
+        this.fitHeight();
+    };
 
-        this.emitter.emitEvent('resized');
+    RevSlider.prototype.fitHeight = function() {
+        if (!this.options.fit_height) {
+            return;
+        }
+        var i = 0;
+        while (this.containerElement.offsetHeight > this.element.offsetHeight && this.grid.items.length && i < 100) {
+            this.grid.remove(this.grid.items[this.grid.items.length - 1].element);
+            this.grid.layout();
+            this.limit--;
+            i++
+        }
     };
 
     RevSlider.prototype.getMaxCount = function() {
@@ -2124,6 +2200,10 @@ Author: michael@revcontent.com
         if (this.mc) {
             this.mc.set({enable: false});
             this.mc.destroy();
+        }
+
+        if (typeof this.options.destroy === 'function') {
+            this.options.destroy();
         }
     };
 
