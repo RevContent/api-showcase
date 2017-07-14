@@ -60,6 +60,8 @@ Author: michael@revcontent.com
             height_percentage: false,
             min_height: 300,
             button_icon: 'plus', // flame, bell
+            bell_animation: true,
+            bell_zero: true,
             side: 'right',
             fit_height: true,
             button_devices: [ // only show the button on desktop by default, don't enable touch for
@@ -88,7 +90,7 @@ Author: michael@revcontent.com
     };
 
     RevSideShifter.prototype.init = function() {
-        this.opened = revUtils.getCookie('rev-side-shifter-opened');
+        this.opened = revUtils.getCookie('rev-side-shifter-opened-' + this.options.widget_id);
         this.open = false;
         this.createContainer();
         this.positionContainer();
@@ -263,6 +265,10 @@ Author: michael@revcontent.com
                     revUtils.addClass(this.buttonElement, 'rev-side-shifter-button-bell-empty');
                     break;
                 }
+                // don't animate the bell?
+                if (!this.options.bell_animation) {
+                    break;
+                }
 
                 this.bellRings = 0;
                 this.bellTimeout = setTimeout(function() {
@@ -317,10 +323,13 @@ Author: michael@revcontent.com
         var that = this;
         if (that.options.button_icon == 'bell') {
             setTimeout(function() {
-                revUtils.setCookie('rev-side-shifter-opened', 1, (that.options.opened_hours / 24));
+                revUtils.setCookie('rev-side-shifter-opened-' + that.options.widget_id, 1, (that.options.opened_hours / 24));
                 revUtils.addClass(that.buttonElement, 'rev-side-shifter-button-bell-empty');
                 revUtils.removeClass(that.buttonElement, 'rev-side-shifter-button-bell-ring');
-                that.buttonCounterCount.textContent = 0;
+                // zero out the text if bell_zero option is true
+                if (that.options.bell_zero) {
+                    that.buttonCounterCount.textContent = 0;
+                }
             }, that.transitionDuration);
             clearTimeout(that.bellTimeout);
         }
@@ -443,11 +452,18 @@ Author: michael@revcontent.com
     };
 
     RevSideShifter.prototype.buttonCountText = function() {
+        // if no button, get outta here
+        if (!revDetect.show(this.options.button_devices)) {
+            return;
+        }
+
         var that = this;
         var setbuttonCountText = function() {
-            if (!that.opened && revDetect.show(that.options.button_devices)) {
-                that.buttonCounterCount.textContent = that.innerWidget.grid.items.length;
+            // leave it at zero if opened, bell icon and bell_zero option is true
+            if (that.opened && that.options.button_icon == 'bell' && that.options.bell_zero) {
+                return;
             }
+            that.buttonCounterCount.textContent = that.innerWidget.grid.items.length;
         }
 
         this.innerWidget.emitter.once('ready', setbuttonCountText);
