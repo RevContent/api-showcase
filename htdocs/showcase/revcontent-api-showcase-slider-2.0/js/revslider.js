@@ -850,12 +850,13 @@ Author: michael@revcontent.com
         item.preloaderWidth = false;
         if (item.textRight) { // base off text_right_height
             var preloaderHeight = this.getTextRightHeight();
-            item.preloaderHeight = Math.round(preloaderHeight);
-            item.preloaderWidth = Math.round(preloaderHeight * (item.imageWidth / item.imageHeight));
+            item.preloaderHeight = Math.floor(preloaderHeight);
+            item.preloaderWidth = Math.floor(preloaderHeight * (item.imageWidth / item.imageHeight));
         } else {
             var adInner = item.element.querySelector('.rev-ad-inner');
-            item.preloaderHeight = Math.round(adInner.offsetWidth * (item.imageHeight / item.imageWidth));
-            item.preloaderWidth = Math.round(item.preloaderHeight * (item.imageWidth / item.imageHeight));
+
+            item.preloaderHeight = Math.floor(adInner.offsetWidth * (item.imageHeight / item.imageWidth));
+            item.preloaderWidth = Math.floor(item.preloaderHeight * (item.imageWidth / item.imageHeight));
         }
     };
 
