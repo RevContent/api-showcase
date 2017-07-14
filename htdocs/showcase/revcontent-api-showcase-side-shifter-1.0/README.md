@@ -48,6 +48,18 @@ api_source used for tracking.
 api_source: 'side'
 ```
 
+###bell_animation
+By default the bell will animate/ring 3 times after 5 seconds. Set to false to disable this.
+```
+bell_animation: true
+```
+
+###bell_zero
+By default the bell will zero out for the duration of ```opened_hours``` after SideShifter is opened. Set to false to disable this.
+```
+bell_zero: true
+```
+
 ###button_devices
 By default the button will only show on desktop. This option works and accepts the same array as ```devices``` option. Add ```tablet``` or ```phone``` to show the button on these devices as well.
 ```
