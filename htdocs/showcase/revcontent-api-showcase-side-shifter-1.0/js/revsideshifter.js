@@ -149,7 +149,7 @@ Author: michael@revcontent.com
     RevSideShifter.prototype.showOnceVisible = function() {
         var that = this;
         this.innerWidget.emitter.on('visible', function() {
-            if (!that.transitioning && !that.visible) {
+            if (!that.transitioning && !that.open) {
                 that.removeVisibleListener();
                 that.attachShowElementHiddenListener();
                 that.transition();
@@ -161,7 +161,7 @@ Author: michael@revcontent.com
     RevSideShifter.prototype.hideOnceHidden = function() {
         var that = this;
         this.innerWidget.emitter.on('hidden', function() {
-            if (!that.transitioning && that.visible) {
+            if (!that.transitioning && that.open) {
                 that.removeHiddenListener();
                 that.attachShowElementVisibleListener();
                 that.transition();
@@ -228,7 +228,7 @@ Author: michael@revcontent.com
         this.buttonContainerElement.id = 'rev-side-shifter-button-container';
 
         this.buttonCounter = document.createElement('div');
-        this.buttonCounter.classList = 'rev-button-count';
+        this.buttonCounter.classList.add('rev-button-count');
         this.buttonCounterCount = document.createElement('div');
         this.buttonCounterCount.textContent = '0';
         revUtils.append(this.buttonCounter, this.buttonCounterCount);
@@ -245,7 +245,7 @@ Author: michael@revcontent.com
                             '<path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/>' +
                             '<path d="M0 0h24v24H0z" fill="none"/>' +
                             '</svg>';
-                this.buttonElement.classList = 'rev-side-shifter-button-flame';
+                this.buttonElement.classList.add('rev-side-shifter-button-flame');
                 break;
             case 'bell':
                 svg = '<svg class="rev-bell-empty" fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">' +
@@ -259,7 +259,7 @@ Author: michael@revcontent.com
                           '<path d="M0 0h24v24H0z" fill="none"/>' +
                           '<path d="M7.58 4.08L6.15 2.65C3.75 4.48 2.17 7.3 2.03 10.5h2c.15-2.65 1.51-4.97 3.55-6.42zm12.39 6.42h2c-.15-3.2-1.73-6.02-4.12-7.85l-1.42 1.43c2.02 1.45 3.39 3.77 3.54 6.42zM18 11c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2v-5zm-6 11c.14 0 .27-.01.4-.04.65-.14 1.18-.58 1.44-1.18.1-.24.15-.5.15-.78h-4c.01 1.1.9 2 2.01 2z"/>' +
                       '</svg>'
-                this.buttonElement.classList = 'rev-side-shifter-button-bell';
+                this.buttonElement.classList.add('rev-side-shifter-button-bell');
 
                 if (this.opened) {
                     revUtils.addClass(this.buttonElement, 'rev-side-shifter-button-bell-empty');
@@ -292,14 +292,14 @@ Author: michael@revcontent.com
                 break;
             default:
                 svg = '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'
-                this.buttonElement.classList = 'rev-side-shifter-button-plus';
+                this.buttonElement.classList.add('rev-side-shifter-button-plus');
         }
 
         this.buttonElement.innerHTML = svg;
 
         revUtils.append(this.buttonContainerElement, this.buttonElement);
 
-        Waves.attach(this.buttonElement);
+        Waves.attach(this.buttonElement, ['waves-circle', 'waves-float']);
         Waves.init();
 
         var that = this;
@@ -412,14 +412,18 @@ Author: michael@revcontent.com
             revUtils.transitionDurationCss(this.buttonElement.children[0], (this.transitionDuration / 4) + 'ms');
         }
 
-        if (this.visible) {
+        if (this.open) {
             if (this.options.side == 'left') {
                 revUtils.transformCss(this.fullPageContainer, 'translateX(-100%)');
             } else {
                 revUtils.transformCss(this.fullPageContainer, 'translateX(100%)');
             }
-            this.visible = false;
+            this.open = false;
             revUtils.removeClass(this.buttonElement, 'rev-close');
+
+            if (revDetect.show(this.options.touch_devices)) {
+                this.setTouchClose();
+            }
 
             var that = this;
             setTimeout(function() {
@@ -429,7 +433,7 @@ Author: michael@revcontent.com
             revUtils.addClass(this.fullPageContainer, 'rev-side-shifter-animating');
 
             revUtils.transformCss(this.fullPageContainer, 'translateX(0%)');
-            this.visible = true;
+            this.open = true;
             revUtils.addClass(this.buttonElement, 'rev-close');
             if (button && this.showVisibleElement) { // if they clicked the button disable showVisibleElement behavior
                 this.buttonClicked = true;
@@ -490,7 +494,7 @@ Author: michael@revcontent.com
             return;
         }
 
-        this.width = document.documentElement.offsetWidth;
+        this.width = this.fullPageContainer.offsetWidth;
 
         if (this.options.side == 'left') {
             this.closeDirection = Hammer.DIRECTION_LEFT;
@@ -503,6 +507,18 @@ Author: michael@revcontent.com
         }
 
         this.currentX = this.open ? 0 : this.closePosition;
+    };
+
+    RevSideShifter.prototype.setTouchClose = function() {
+        this.thresholdActive = this.openThreshold;
+
+        this.panRecognizer.set({
+            threshold: this.thresholdActive,
+            direction: this.openDirection
+        });
+
+        this.currentX = this.closePosition;
+        this.open = false;
     };
 
     RevSideShifter.prototype.setTouchOpen = function() {
@@ -614,16 +630,10 @@ Author: michael@revcontent.com
                 }
 
                 if (that.open) {
-                    that.thresholdActive = that.openThreshold;
-
-                    that.panRecognizer.set({
-                        threshold: that.thresholdActive,
-                        direction: that.openDirection
-                    });
-
-                    that.currentX = that.closePosition;
-                    that.open = false;
+                    revUtils.removeClass(that.buttonElement, 'rev-close');
+                    that.setTouchClose();
                 } else {
+                    revUtils.addClass(that.buttonElement, 'rev-close');
                     that.setTouchOpen();
                     that.registerOnceOpened();
                 }
@@ -638,10 +648,11 @@ Author: michael@revcontent.com
 
             revUtils.transformCss(that.fullPageContainer, 'translate3d('+ that.currentX + 'px, 0, 0)');
 
-            that.animatingClassTimeout = setTimeout(function() {
-                revUtils.removeClass(that.fullPageContainer, 'rev-side-shifter-animating');
-            }, Math.max(0, duration - 300));
-
+            if (!revDetect.show(that.options.button_devices) || !that.open) {
+                that.animatingClassTimeout = setTimeout(function() {
+                    revUtils.removeClass(that.fullPageContainer, 'rev-side-shifter-animating');
+                }, Math.max(0, duration - 300));
+            }
         });
     };
 
