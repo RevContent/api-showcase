@@ -149,7 +149,7 @@ Author: michael@revcontent.com
     RevSideShifter.prototype.showOnceVisible = function() {
         var that = this;
         this.innerWidget.emitter.on('visible', function() {
-            if (!that.transitioning && !that.visible) {
+            if (!that.transitioning && !that.open) {
                 that.removeVisibleListener();
                 that.attachShowElementHiddenListener();
                 that.transition();
@@ -161,7 +161,7 @@ Author: michael@revcontent.com
     RevSideShifter.prototype.hideOnceHidden = function() {
         var that = this;
         this.innerWidget.emitter.on('hidden', function() {
-            if (!that.transitioning && that.visible) {
+            if (!that.transitioning && that.open) {
                 that.removeHiddenListener();
                 that.attachShowElementVisibleListener();
                 that.transition();
@@ -412,14 +412,18 @@ Author: michael@revcontent.com
             revUtils.transitionDurationCss(this.buttonElement.children[0], (this.transitionDuration / 4) + 'ms');
         }
 
-        if (this.visible) {
+        if (this.open) {
             if (this.options.side == 'left') {
                 revUtils.transformCss(this.fullPageContainer, 'translateX(-100%)');
             } else {
                 revUtils.transformCss(this.fullPageContainer, 'translateX(100%)');
             }
-            this.visible = false;
+            this.open = false;
             revUtils.removeClass(this.buttonElement, 'rev-close');
+
+            if (revDetect.show(this.options.touch_devices)) {
+                this.setTouchClose();
+            }
 
             var that = this;
             setTimeout(function() {
@@ -429,7 +433,7 @@ Author: michael@revcontent.com
             revUtils.addClass(this.fullPageContainer, 'rev-side-shifter-animating');
 
             revUtils.transformCss(this.fullPageContainer, 'translateX(0%)');
-            this.visible = true;
+            this.open = true;
             revUtils.addClass(this.buttonElement, 'rev-close');
             if (button && this.showVisibleElement) { // if they clicked the button disable showVisibleElement behavior
                 this.buttonClicked = true;
@@ -490,7 +494,7 @@ Author: michael@revcontent.com
             return;
         }
 
-        this.width = document.documentElement.offsetWidth;
+        this.width = this.fullPageContainer.offsetWidth;
 
         if (this.options.side == 'left') {
             this.closeDirection = Hammer.DIRECTION_LEFT;
@@ -503,6 +507,18 @@ Author: michael@revcontent.com
         }
 
         this.currentX = this.open ? 0 : this.closePosition;
+    };
+
+    RevSideShifter.prototype.setTouchClose = function() {
+        this.thresholdActive = this.openThreshold;
+
+        this.panRecognizer.set({
+            threshold: this.thresholdActive,
+            direction: this.openDirection
+        });
+
+        this.currentX = this.closePosition;
+        this.open = false;
     };
 
     RevSideShifter.prototype.setTouchOpen = function() {
@@ -614,16 +630,10 @@ Author: michael@revcontent.com
                 }
 
                 if (that.open) {
-                    that.thresholdActive = that.openThreshold;
-
-                    that.panRecognizer.set({
-                        threshold: that.thresholdActive,
-                        direction: that.openDirection
-                    });
-
-                    that.currentX = that.closePosition;
-                    that.open = false;
+                    revUtils.removeClass(that.buttonElement, 'rev-close');
+                    that.setTouchClose();
                 } else {
+                    revUtils.addClass(that.buttonElement, 'rev-close');
                     that.setTouchOpen();
                     that.registerOnceOpened();
                 }
@@ -638,10 +648,11 @@ Author: michael@revcontent.com
 
             revUtils.transformCss(that.fullPageContainer, 'translate3d('+ that.currentX + 'px, 0, 0)');
 
-            that.animatingClassTimeout = setTimeout(function() {
-                revUtils.removeClass(that.fullPageContainer, 'rev-side-shifter-animating');
-            }, Math.max(0, duration - 300));
-
+            if (!revDetect.show(that.options.button_devices) || !that.open) {
+                that.animatingClassTimeout = setTimeout(function() {
+                    revUtils.removeClass(that.fullPageContainer, 'rev-side-shifter-animating');
+                }, Math.max(0, duration - 300));
+            }
         });
     };
 

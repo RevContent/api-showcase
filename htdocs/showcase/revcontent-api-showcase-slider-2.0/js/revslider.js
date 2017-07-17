@@ -851,12 +851,12 @@ Author: michael@revcontent.com
         if (item.textRight) { // base off text_right_height
             var preloaderHeight = this.getTextRightHeight();
             item.preloaderHeight = Math.floor(preloaderHeight);
-            item.preloaderWidth = Math.floor(preloaderHeight * (item.imageWidth / item.imageHeight));
+            item.preloaderWidth = Math.ceil(preloaderHeight * (item.imageWidth / item.imageHeight));
         } else {
             var adInner = item.element.querySelector('.rev-ad-inner');
 
             item.preloaderHeight = Math.floor(adInner.offsetWidth * (item.imageHeight / item.imageWidth));
-            item.preloaderWidth = Math.floor(item.preloaderHeight * (item.imageWidth / item.imageHeight));
+            item.preloaderWidth = Math.ceil(item.preloaderHeight * (item.imageWidth / item.imageHeight));
         }
     };
 
