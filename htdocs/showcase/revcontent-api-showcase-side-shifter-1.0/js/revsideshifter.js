@@ -299,7 +299,7 @@ Author: michael@revcontent.com
 
         revUtils.append(this.buttonContainerElement, this.buttonElement);
 
-        Waves.attach(this.buttonElement);
+        Waves.attach(this.buttonElement, ['waves-circle', 'waves-float']);
         Waves.init();
 
         var that = this;
