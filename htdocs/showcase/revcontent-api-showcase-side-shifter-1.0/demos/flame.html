@@ -414,8 +414,16 @@
             },
             column_spans: [
                 {
-                    selector: '.rev-slider-breakpoint-xs .rev-content:nth-child(1), .rev-slider-breakpoint-xs .rev-content:nth-child(n+4)',
+                    selector: '#rev-side-shifter .rev-slider-breakpoint-xs .rev-content:nth-child(1), #rev-side-shifter .rev-slider-breakpoint-xs .rev-content:nth-child(n+4)',
                     spans: 2
+                },
+                {
+                    selector: '#rev-side-shifter .rev-slider-breakpoint-gt-xs .rev-content:nth-child(-n+4)',
+                    spans: 2
+                },
+                {
+                    selector: '#rev-side-shifter .rev-slider-breakpoint-gt-xs .rev-content:nth-child(n+5)',
+                    spans: 4
                 }
             ],
             image_ratio: [
@@ -426,7 +434,7 @@
             ],
             text_right: [
                 {
-                    selector: '.rev-slider-breakpoint-xs .rev-content:nth-child(n+4)',
+                    selector: '#rev-side-shifter .rev-content:nth-child(n+5), #rev-side-shifter .rev-slider-breakpoint-xs .rev-content:nth-child(n+4)',
                 }
             ],
             button_icon: 'flame'
