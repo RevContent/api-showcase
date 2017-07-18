@@ -145,7 +145,7 @@
                             beaconEl = beaconImage.replace('$1', beacon.pixel_url).replace('$2', beaconDomId);
                             break;
                     }
-                    if(beacon.name === "adscore" && response != ''){
+                    if(beacon.name === "adscore"){
                         var user_options = utilities.retrieveUserOptions();
                         if((user_options.developer !== undefined && user_options.developer === true) || Math.floor(Math.random()*(100)) < beacon.traffic_percent) {
                             // XHR to Delivery for Info Payload (endpoint = /v1/request-info)
@@ -159,9 +159,7 @@
                                 '&api_source=' + user_options.api_source;
 
                             var info_request = new XMLHttpRequest();
-                            //console.log(api, "@api-info-url: ", payload_url);
                             info_request.open('GET', payload_url, true);
-
                             info_request.onload = function() {
                                 if (info_request.status >= 200 && info_request.status < 400) {
                                     try {
