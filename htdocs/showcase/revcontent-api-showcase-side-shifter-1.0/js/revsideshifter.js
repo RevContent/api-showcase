@@ -53,7 +53,6 @@ Author: michael@revcontent.com
             logo_color: '#000',
             logo: false,
             stacked: false,
-            column_spans: false,
             text_right: false,
             text_overlay: false,
             show_visible_selector: false,
@@ -69,7 +68,33 @@ Author: michael@revcontent.com
             ],
             touch_devices: [
                 'phone', 'tablet'
-            ]
+            ],
+            column_spans: [
+                {
+                    selector: '#rev-side-shifter .rev-slider-breakpoint-gt-xs .rev-content:nth-child(-n+4)',
+                    spans: 2
+                },
+                {
+                    selector: '#rev-side-shifter .rev-slider-breakpoint-gt-xs .rev-content:nth-child(n+5)',
+                    spans: 4
+                }
+            ],
+            text_right: [
+                {
+                    selector: '#rev-side-shifter .rev-slider-breakpoint-gt-xs .rev-content:nth-child(n+5)',
+                },
+                {
+                    selector: '#rev-side-shifter .rev-slider-breakpoint-lt-sm .rev-content:nth-child(n+4)',
+                }
+            ],
+            text_right_height: {
+                xs: 100,
+                sm: 204,
+                md: 204,
+                lg: 204,
+                xl: 204,
+                xxl: 204
+            }
         };
 
         // merge options
@@ -386,6 +411,7 @@ Author: michael@revcontent.com
             user_ip:      this.options.user_ip,
             user_agent:   this.options.user_agent,
             text_right: this.options.text_right,
+            text_right_height:   this.options.text_right_height,
             text_overlay: this.options.text_overlay,
             image_ratio: this.options.image_ratio,
             stacked: this.options.stacked,
