@@ -268,7 +268,7 @@ Author: michael@revcontent.com
         revUtils.addClass(this.containerElement, 'rev-slider-' + (this.options.vertical ? 'vertical' : 'horizontal'));
         revUtils.addClass(this.containerElement, 'rev-slider-buttons-' + (this.options.buttons.style));
 
-        revUtils.addClass(this.containerElement, 'rev-slider-buttons-' + (this.options.buttons.style));
+        revUtils.addClass(this.containerElement, 'rev-slider-buttons-' + (this.options.buttons ? (this.options.buttons.style ? this.options.buttons.style : 'none') : 'none'));
 
         if (this.options.disable_pagination) {
             revUtils.addClass(this.containerElement, 'rev-slider-pagination-disabled');
@@ -288,8 +288,8 @@ Author: michael@revcontent.com
 
         revUtils.removeClass(this.containerElement, 'rev-slider-col', true);
         revUtils.removeClass(this.containerElement, 'rev-slider-row', true);
-        revUtils.addClass(this.containerElement, 'rev-slider-col-' + (typeof this.options.per_row === 'object' ? this.options.per_row[this.grid.getBreakPoint()] : this.options.per_row));
-        revUtils.addClass(this.containerElement, 'rev-slider-row-' + (typeof this.options.rows === 'object' ? this.options.rows[this.grid.getBreakPoint()] : this.options.rows));
+        revUtils.addClass(this.containerElement, 'rev-slider-col-' + this.grid.perRow);
+        revUtils.addClass(this.containerElement, 'rev-slider-row-' + this.grid.nextRow);
     };
 
     RevSlider.prototype.registerViewOnceVisible = function() {
@@ -1698,6 +1698,8 @@ Author: michael@revcontent.com
             this.limit--;
             i++
         }
+
+        this.setGridClasses();
     };
 
     RevSlider.prototype.getMaxCount = function() {
