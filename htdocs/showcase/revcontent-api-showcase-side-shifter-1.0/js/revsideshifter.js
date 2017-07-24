@@ -53,7 +53,6 @@ Author: michael@revcontent.com
             logo_color: '#000',
             logo: false,
             stacked: false,
-            text_right: false,
             text_overlay: false,
             show_visible_selector: false,
             height_percentage: false,
