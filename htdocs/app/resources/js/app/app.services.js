@@ -22,7 +22,7 @@ app.service('widgets', function() {
             bg: '#1674d2',
             img_animated: false,
             image_animation_duration: 10000,
-            // new: true
+            new: true
         },
         'exit-pop': {
             title: 'RevExit',
