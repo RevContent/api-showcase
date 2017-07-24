@@ -3261,7 +3261,7 @@ AnyGrid.prototype._getItemLayoutPosition = function( item ) {
       // increase the left
       this.columns[row].left = this.columns[row].left + width;
       // all done for this row? make sure things are maxed out
-      if ((column + 1) == this.perRow) {
+      if ((column + 1) == this.perRow || this.nextColumn == 0) {
         var max = 0;
         for (var key in this.rows) { // get max
           if (this.rows.hasOwnProperty(key) && this.rows[key].top > max) {

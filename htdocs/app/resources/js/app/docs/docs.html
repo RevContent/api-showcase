@@ -6,7 +6,7 @@
 
             <md-list class="widget-docs-list">
                 <md-list-item ng-repeat="(key, widget) in ctrl.widgets" aria-label="{{widget.title}} Docs" ui-sref="docs_widget({widget: key})" class="noright">
-                    <img class="md-avatar" ng-src="/app/resources/img/{{key}}.jpg" alt="{{widget.title}}">
+                    <img class="md-avatar" ng-src="/app/resources/img/{{widget.img}}" alt="{{widget.title}}">
                     <p ng-bind="widget.title"></p>
                 </md-list-item>
             </md-list>

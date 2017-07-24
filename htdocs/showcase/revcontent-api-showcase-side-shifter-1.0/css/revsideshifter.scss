@@ -1,0 +1,215 @@
+$break-small: 500px;
+
+@keyframes ring {
+    0% { transform: rotate(0); }
+    15% { transform: rotate(30deg); }
+    19% { transform: rotate(-28deg); }
+    23% { transform: rotate(34deg); }
+    27% { transform: rotate(-32deg); }
+    31% { transform: rotate(30deg); }
+    35% { transform: rotate(-28deg); }
+    39% { transform: rotate(26deg); }
+    43% { transform: rotate(-24deg); }
+    47% { transform: rotate(22deg); }
+    51% { transform: rotate(-20deg); }
+    55% { transform: rotate(18deg); }
+    59% { transform: rotate(-16deg); }
+    63% { transform: rotate(14deg); }
+    67% { transform: rotate(-12deg); }
+    71% { transform: rotate(10deg); }
+    75% { transform: rotate(-8deg); }
+    79% { transform: rotate(6deg); }
+    83% { transform: rotate(-4deg); }
+    87% { transform: rotate(2deg); }
+    89% { transform: rotate(-1deg); }
+    95% { transform: rotate(1deg); }
+    99% { transform: rotate(0); }
+    100% { transform: rotate(0); }
+}
+
+#rev-side-shifter {
+    background: #fff;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    clear: both;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    bottom: 0;
+    z-index: 2147483640;
+    box-shadow: none;
+    max-width: 400px;
+
+    &.rev-side-shifter-animating {
+        &.rev-side-shifter-right {
+            box-shadow: -5px 0px 10px -5px #888;
+        }
+
+        &.rev-side-shifter-left {
+            box-shadow: 5px 0px 10px -5px #888;
+        }
+    }
+
+    * {
+        user-drag: none;
+        -webkit-user-drag: none;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        font-size:inherit;
+        line-height:inherit;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        /*margin:0; does not work with waves*/
+        padding:0;
+        position:relative;
+    }
+
+    #rev-side-shifter-button-container {
+        position: absolute;
+        bottom: 15px;
+        width: 56px;
+        height: 56px;
+
+        #rev-side-shifter-button {
+            /*overflow: visible;*/
+            user-select: none;
+            cursor: pointer;
+            outline: 0;
+            border: none;
+            display: inline-block;
+            white-space: nowrap;
+            text-decoration: none;
+            vertical-align: baseline;
+            font-weight: 500;
+            text-align: center;
+            margin: 0;
+            min-width: 88px;
+            line-height: 36px;
+            box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+            min-width: 0;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            padding: 0;
+            transition: background .4s cubic-bezier(.25,.8,.25,1),box-shadow 280ms cubic-bezier(.4,0,.2,1);
+            background: #F44336;
+            cursor: pointer;
+            &.rev-side-shifter-button-plus {
+                &.rev-close {
+                    svg {
+                        transform: rotate(45deg);
+                    }
+                }
+            }
+
+            &.rev-side-shifter-button-bell {
+                .rev-bell-empty, .rev-bell-active {
+                    display: none;
+                }
+                &.rev-side-shifter-button-bell-ring {
+                    .rev-bell-active {
+                        display: block;
+                        animation: ring 6s 0s ease-in-out 3;
+                        transform-origin: 50% 4px;
+                    }
+                    .rev-bell-static {
+                        display: none;
+                    }
+                }
+                &.rev-side-shifter-button-bell-empty {
+                    .rev-bell-empty {
+                        display: block;
+                    }
+                    .rev-bell-static {
+                        display: none;
+                    }
+                }
+            }
+
+            svg {
+                fill: #fff;
+                position: absolute;
+                text-align: center;
+                width: 36px;
+                height: 36px;
+                left: 50%;
+                top: 50%;
+                margin-left: -18px;
+                margin-top: -18px;
+            }
+        }
+        .rev-button-count {
+            z-index: 100;
+            position: absolute;
+            bottom: -6px;
+            right: -6px;
+            background: rgba(224, 224, 224, 0.85);
+            border: 1px solid rgb(208, 208, 208);
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            text-align: center;
+        }
+
+        .rev-button-count div {
+            position:absolute;
+            font-size: 16px;
+            width: 100%;
+            height: 25px;
+            line-height: 25px;
+            vertical-align: middle;
+            text-align: center;
+        }
+    }
+
+    .rev-side-shifter-container {
+        margin: 0 auto;
+        padding: 0px 16px;
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+
+        #rev-slider {
+            padding: 10px 0 0;
+        }
+
+        @media screen and (max-width: $break-small) {
+            padding: 0;
+
+            .rev-head {
+                margin-left: 3px;
+                margin-right: 3px;
+            }
+        }
+    }
+
+    .rev-side-shifter-header-container {
+        background: #000;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        border-bottom: 8px #ccc solid;
+
+        .rev-side-shifter-header-image-container {
+            height: 100%;
+            max-width: 50%;
+            align-items: center;
+            display: flex;
+            padding: 0 10px;
+            img {
+                max-width: 100%;
+                max-height: 26px;
+            }
+        }
+
+        a {
+            color: #fff;
+            margin-left: auto;
+            margin-right: 16px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+    }
+}
