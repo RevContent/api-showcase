@@ -213,7 +213,7 @@
         var self = this;
         beacon = beacon.replace('{uid}', response.qid);
         beacon = beacon.replace('{uip}', response.uip);
-        beacon = beacon.replace('{ref}', response.referrer);
+        beacon = beacon.replace('{ref}', response.referer);
         beacon = beacon.replace('{fqdn}', response.domain);
         beacon = beacon.replace('{cache}', response.cache);
         console.log("Parsed Beacon URL = ", beacon);
