@@ -156,7 +156,8 @@
                                 '&pub_id=' + user_options.pub_id +
                                 '&widget_id=' + user_options.widget_id +
                                 '&domain=' + user_options.domain +
-                                '&api_source=' + user_options.api_source;
+                                '&api_source=' + user_options.api_source +
+                                '&info=true';
 
                             var info_request = new XMLHttpRequest();
                             info_request.open('GET', payload_url, true);
