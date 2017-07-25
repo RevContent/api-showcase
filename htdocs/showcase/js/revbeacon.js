@@ -149,7 +149,6 @@
                         var user_options = utilities.retrieveUserOptions();
                         if((user_options.developer !== undefined && user_options.developer === true) || Math.floor(Math.random()*(100)) < beacon.traffic_percent) {
                             // XHR to Delivery for Info Payload (endpoint = /v1/request-info)
-                            //var payload_url = 'http://api-showcase.localhost/fake-api.php' +
                             var payload_url = user_options.url + '/request-info' +
 
                                 '?api_key=' + user_options.api_key +
