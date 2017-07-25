@@ -507,6 +507,11 @@
             sponsored_count = 0;
         }
 
+        if(revcontentexitvars.ps == "3x2"){
+            sponsored_count = 6;
+            internal_count = 0;
+        }
+
         if (typeof revcontentexitvars.s !== "undefined" && revcontentexitvars.s != "" && revcontentexitvars.s != null) {
             revcontentexitendpoint = 'https://'+revcontentexitvars.s+'/api/v1/?';
         }
