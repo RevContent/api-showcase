@@ -125,8 +125,9 @@ Author: michael@revcontent.com
         this.options = manager.options;
 
         this.emitter = new EventEmitter();
+
         var that = this;
-        revUtils.imagesLoaded([this.element]).once('done', function() {
+        this.emitter.once('imagesLoaded', function() {
             that.resetElementStyle();
             that.container();
             that.wrapper();
@@ -144,6 +145,8 @@ Author: michael@revcontent.com
             });
             that.imageVisible();
         });
+
+        revUtils.imagesLoaded([this.element], this.emitter);
     }
 
     /*
