@@ -22,7 +22,7 @@ Author: michael@revcontent.com
     RevVideo.prototype.init = function() {
         this.emitter = new EvEmitter();
 
-        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-util');
+        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-in-feed-video');
 
         var that = this;
         window[this.config.id + '_callback'] = function(unit) {
