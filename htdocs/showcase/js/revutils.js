@@ -173,10 +173,13 @@ utils.remove = function(el) {
 };
 
 utils.wrap = function(el, wrapper) {
-    var parent = el.parentNode;
+    if (el.nextSibling) {
+        el.parentNode.insertBefore(wrapper, el.nextSibling);
+    } else {
+        el.parentNode.appendChild(wrapper);
+    }
 
     wrapper.appendChild(el);
-    parent.appendChild(wrapper);
 };
 
 utils.next = function(el) {

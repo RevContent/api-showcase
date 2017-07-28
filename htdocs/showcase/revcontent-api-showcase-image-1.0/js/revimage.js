@@ -75,7 +75,8 @@ Author: michael@revcontent.com
             selector: false,
             user_ip: false,
             user_agent: false,
-            css: ''
+            css: '',
+            internal: false
         };
 
         // merge options
@@ -124,8 +125,9 @@ Author: michael@revcontent.com
         this.options = manager.options;
 
         this.emitter = new EventEmitter();
+
         var that = this;
-        revUtils.imagesLoaded([this.element]).once('done', function() {
+        this.emitter.once('imagesLoaded', function() {
             that.resetElementStyle();
             that.container();
             that.wrapper();
@@ -143,6 +145,8 @@ Author: michael@revcontent.com
             });
             that.imageVisible();
         });
+
+        revUtils.imagesLoaded([this.element], this.emitter);
     }
 
     /*
@@ -209,7 +213,8 @@ Author: michael@revcontent.com
             register_views: false, // handle viewibility/prevent Slider from doing checks
             user_ip: this.options.user_ip,
             user_agent: this.options.user_agent,
-            css: this.options.css
+            css: this.options.css,
+            internal: this.options.internal
         });
         return this.innerWidget;
     };
