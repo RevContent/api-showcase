@@ -59,7 +59,7 @@ Author: michael@revcontent.com
         if ('custom_logo' in this.config && this.config.custom_logo != '') {
             connatixScript.setAttribute('customlogo', this.config.custom_logo);
         } else {
-            connatixScript.setAttribute('customlogo', 'https://i.connatix.com/s3/connatix-uploads/assets/RCIcon3.png?w=72&h=20&q=100&mode=clip');
+            connatixScript.setAttribute('customlogo', 'https://i.connatix.com/s3/connatix-uploads/assets/RCIcon3.png?w=72&h=20&q=100&mode=crop');
         }
         if ('video_id' in this.config && this.config.video_id > 0) {
             connatixScript.setAttribute('cnx-video-id', this.config.video_id);
