@@ -158,6 +158,15 @@
                                 '&api_source=' + user_options.api_source +
                                 '&info=true';
 
+                            revApi.request(payload_url, function(info_response){
+                                self.getParent().insertAdjacentHTML('beforeend', self.configureAdScore(info_response, beaconEl));
+                            });
+
+                            /**
+                             * DISABLE IN FAVOR OF JSONP! (handled by revAPI Class)
+                             * -- CORS Requests are being blocked by browsers
+                             * @type {XMLHttpRequest}
+                             *\/
                             var info_request = new XMLHttpRequest();
                             info_request.open('GET', payload_url, true);
                             info_request.onload = function() {
@@ -176,7 +185,7 @@
                             };
 
                             info_request.send();
-
+                            */
 
                         }
                     } else {
@@ -215,7 +224,7 @@
         beacon = beacon.replace('{ref}', response.referer);
         beacon = beacon.replace('{fqdn}', response.domain);
         beacon = beacon.replace('{cache}', response.cache);
-        console.log("Parsed Beacon URL = ", beacon);
+        //console.log("Parsed Beacon URL = ", beacon);
         return beacon;
     };
 
