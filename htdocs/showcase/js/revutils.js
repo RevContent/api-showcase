@@ -173,10 +173,13 @@ utils.remove = function(el) {
 };
 
 utils.wrap = function(el, wrapper) {
-    var parent = el.parentNode;
+    if (el.nextSibling) {
+        el.parentNode.insertBefore(wrapper, el.nextSibling);
+    } else {
+        el.parentNode.appendChild(wrapper);
+    }
 
     wrapper.appendChild(el);
-    parent.appendChild(wrapper);
 };
 
 utils.next = function(el) {
@@ -477,7 +480,15 @@ utils.checkVisible = function(element, callback, percentVisible, buffer) {
     });
 };
 
-utils.checkHidden = function(element, callback, percentHidden) {
+utils.windowHeight = function() {
+    return window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+}
+
+utils.windowWidth = function() {
+    return document.documentElement.clientWidth || document.body.clientWidth;
+}
+
+utils.checkHidden = function(element, callback, percentHidden, checkBottom) {
     var that = this;
     requestAnimationFrame(function() {
         // what percentage of the element should be hidden
@@ -487,7 +498,7 @@ utils.checkHidden = function(element, callback, percentHidden) {
         var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
         if ((scroll + windowHeight < element.getBoundingClientRect().top + scroll ||
-            element.getBoundingClientRect().top + (element.offsetHeight * visibleHeightMultiplier) <= 0)) {
+            (checkBottom !== false && element.getBoundingClientRect().top + (element.offsetHeight * visibleHeightMultiplier) <= 0))) {
             callback.call(that);
         }
     });

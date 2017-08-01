@@ -22,7 +22,7 @@ Author: michael@revcontent.com
     RevVideo.prototype.init = function() {
         this.emitter = new EvEmitter();
 
-        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-util');
+        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-in-feed-video');
 
         var that = this;
         window[this.config.id + '_callback'] = function(unit) {
@@ -56,7 +56,11 @@ Author: michael@revcontent.com
         connatixScript.setAttribute('ext-interface-callback', this.config.id + '_callback');
         connatixScript.setAttribute('pcp1', this.config.widget_id);
         connatixScript.setAttribute('pcp2', this.config.pub_id);
-        connatixScript.setAttribute('customlogo', 'https://i.connatix.com/s3/connatix-uploads/assets/RCIcon3.png?mode=pad&height=18');
+        if ('custom_logo' in this.config && this.config.custom_logo != '') {
+            connatixScript.setAttribute('customlogo', this.config.custom_logo);
+        } else {
+            connatixScript.setAttribute('customlogo', 'https://i.connatix.com/s3/connatix-uploads/assets/RCIcon3.png?w=72&h=20&q=100&mode=crop');
+        }
         if ('video_id' in this.config && this.config.video_id > 0) {
             connatixScript.setAttribute('cnx-video-id', this.config.video_id);
         }
