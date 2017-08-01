@@ -3,14 +3,23 @@
  *
  */
 
-(function (window, document, undefined) {
+( function( window, factory) {
     'use strict';
+    window.revBeacon = factory(
+        window,
+        window.revApi,
+        window.revUtils
+    );
+
+}( window, function factory( window, api, utilities ) {
+
+
     var RevBeacon = function () {
         var self = this;
         self.pluginSource = '';
         self.push = true;
         self.pushed = 0;
-        self.enabledBeacons = ["quantcast", "comscore"];
+        self.enabledBeacons = ["quantcast", "comscore", "adscore"];
         self.renderedBeacons = [];
         self.beacons = {
             get: function(beaconId){
@@ -18,18 +27,35 @@
                 return beacons.beaconId !== undefined ? beacons.beaconId : {enabled: false}
             },
             quantcast: {
+                name: "quantcast",
                 enabled: true,
                 type: 'pixel',
                 pixel_url: '//pixel.quantserve.com/pixel/p-aD1qr93XuF6aC.gif',
                 script_url: false,
-                styles: 'display:none;border:0;width:1px;height:1px'
+                styles: 'display:none;border:0;width:1px;height:1px',
+                noscript: false,
+                traffic_percent: false
             },
             comscore: {
+                name: "comscore",
+                enabled: true,
+                type: 'pixel',
+                pixel_url: '//b.scorecardresearch.com/p?c1=7&c2=20310460&c3=12345&cv=2.0&cj=1',
+                script_url: false,
+                styles: '',
+                noscript: false,
+                traffic_percent: false
+            },
+            adscore: {
+                name: "adscore",
                 enabled: true,
                 type: 'script',
                 pixel_url: false,
-                script_url: '//b.scorecardresearch.com/p?c1=7&c2=20310460&c3=12345&cv=2.0&cj=1',
-                styles: ''
+                pixel_label: "AdScore",
+                styles: false,
+                script_url: '//js.ad-score.com/score.min.js?pid=1000177#&tid=display-ad&adid=rc-row-container&uid=' + '{uid}' + '&uip=' + '{uip}' + '&ref=' + '{ref}' + '&pub_domain=' + '{fqdn}' + '&cb=' + '{cache}',
+                noscript: false,
+                traffic_percent: 2
             }
         };
     };
@@ -119,7 +145,43 @@
                             beaconEl = beaconImage.replace('$1', beacon.pixel_url).replace('$2', beaconDomId);
                             break;
                     }
-                    self.getParent().insertAdjacentHTML('beforeend', beaconEl);
+                    if(beacon.name === "adscore"){
+                        var user_options = utilities.retrieveUserOptions();
+                        if((user_options.developer !== undefined && user_options.developer === true) || Math.floor(Math.random()*(100)) < beacon.traffic_percent) {
+                            // XHR to Delivery for Info Payload (endpoint = /v1/request-info)
+                            var payload_url = user_options.url + '/request-info' +
+
+                                '?api_key=' + user_options.api_key +
+                                '&pub_id=' + user_options.pub_id +
+                                '&widget_id=' + user_options.widget_id +
+                                '&domain=' + user_options.domain +
+                                '&api_source=' + user_options.api_source +
+                                '&info=true';
+
+                            var info_request = new XMLHttpRequest();
+                            info_request.open('GET', payload_url, true);
+                            info_request.onload = function() {
+                                if (info_request.status >= 200 && info_request.status < 400) {
+                                    try {
+                                        var info_response = JSON.parse(info_request.responseText);
+                                        self.getParent().insertAdjacentHTML('beforeend', self.configureAdScore(info_response, beaconEl));
+                                    } catch(e) { }
+                                } else {
+
+                                }
+                            };
+
+                            info_request.onerror = function() {
+
+                            };
+
+                            info_request.send();
+
+
+                        }
+                    } else {
+                        self.getParent().insertAdjacentHTML('beforeend', beaconEl);
+                    }
                     self.renderedBeacons.push(document.getElementById(beaconDomId));
                 }
             }
@@ -146,11 +208,22 @@
         return self;
     };
 
-    window.revBeacon = new RevBeacon();
+    RevBeacon.prototype.configureAdScore = function(response, beacon){
+        var self = this;
+        beacon = beacon.replace('{uid}', response.qid);
+        beacon = beacon.replace('{uip}', response.uip);
+        beacon = beacon.replace('{ref}', response.referer);
+        beacon = beacon.replace('{fqdn}', response.domain);
+        beacon = beacon.replace('{cache}', response.cache);
+        console.log("Parsed Beacon URL = ", beacon);
+        return beacon;
+    };
 
-    return window.revBeacon;
+    var rB = new RevBeacon();
 
-}(window, document));
+    return rB;
+
+}));
 /**
  * Revcontent detect
  */
@@ -408,10 +481,13 @@ utils.remove = function(el) {
 };
 
 utils.wrap = function(el, wrapper) {
-    var parent = el.parentNode;
+    if (el.nextSibling) {
+        el.parentNode.insertBefore(wrapper, el.nextSibling);
+    } else {
+        el.parentNode.appendChild(wrapper);
+    }
 
     wrapper.appendChild(el);
-    parent.appendChild(wrapper);
 };
 
 utils.next = function(el) {
@@ -784,7 +860,17 @@ utils.siblingIndex = function(el) {
       i++;
     }
     return i;
-}
+};
+
+utils.storeUserOptions = function(options){
+    var that = this;
+    that.userOptions = options;
+};
+
+utils.retrieveUserOptions = function(){
+    var that = this;
+    return that.userOptions;
+};
 
 utils.isArray = function(param) {
     return Object.prototype.toString.call(param) === '[object Array]';
