@@ -61,6 +61,9 @@ RevMore({
         // merge options
         this.options = revUtils.extend(defaults, opts);
 
+        // store options
+        revUtils.storeUserOptions(this.options);
+
         // don't show for this device
         if (!revDetect.show(this.options.devices)) {
             return;

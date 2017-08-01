@@ -91,6 +91,9 @@ RevMore({
         // merge options
         this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
 
+        // store options
+        revUtils.storeUserOptions(this.options);
+
         if (revUtils.validateApiParams(this.options).length) {
             return;
         }

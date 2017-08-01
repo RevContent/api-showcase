@@ -63,6 +63,9 @@ Author: michael@revcontent.com
         // merge options
         this.options = revUtils.extend(defaults, opts);
 
+        // store options
+        revUtils.storeUserOptions(this.options);
+
         // param errors
         if (revUtils.validateApiParams(this.options).length) {
             return;
