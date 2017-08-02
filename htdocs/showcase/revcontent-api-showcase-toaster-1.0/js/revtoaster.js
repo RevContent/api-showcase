@@ -63,6 +63,7 @@ RevToaster({
         query_params: false,
         show_visible_selector: false,
         css: '',
+        developer: false
     };
     // var options;
     var lastScrollTop = 0;

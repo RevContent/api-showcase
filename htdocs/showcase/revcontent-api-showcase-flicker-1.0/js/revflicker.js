@@ -130,7 +130,8 @@ RevFlicker({
             trending_theme: 'default',
             window_width_devices: [
                 'phone'
-            ]
+            ],
+            developer: false
         };
 
         // merge options

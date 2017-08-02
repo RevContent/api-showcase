@@ -57,7 +57,8 @@ Author: michael@revcontent.com
             user_agent: false,
             transition_duration_multiplier: 3,
             auto_scroll: true,
-            rev_position: 'top_right'
+            rev_position: 'top_right',
+            developer: false
         };
 
         // merge options
@@ -133,7 +134,8 @@ Author: michael@revcontent.com
             register_impressions: false,
             register_views: false,
             row_pages: true,
-            visible_rows: 1
+            visible_rows: 1,
+            developer: this.options.developer
         });
 
         this.innerWidget.innerContainerElement.style.overflowY = 'hidden';
@@ -159,7 +161,7 @@ Author: michael@revcontent.com
         var that = this;
         this.innerWidget.dataPromise.then(function() {
             that.registerImpressions(false);
-            revApi.beacons.setPluginSource(this.options.api_source).attach();
+            revApi.beacons.setPluginSource(this.innerWidget.options.api_source).attach();
         });
     };
 

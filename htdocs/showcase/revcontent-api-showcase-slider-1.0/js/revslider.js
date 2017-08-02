@@ -109,7 +109,8 @@ Author: michael@revcontent.com
             user_ip: false,
             user_agent: false,
             css: '',
-            disable_pagination: false
+            disable_pagination: false,
+            developer: false
         };
 
         // merge options
