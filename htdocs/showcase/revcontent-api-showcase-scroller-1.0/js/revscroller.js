@@ -441,6 +441,7 @@ Author: michael@revcontent.com
 
     RevScroller.prototype.visible = function() {
         this.emitter.emitEvent('visible');
+        revApi.beacons.setPluginSource(this.options.api_source).attach();
     };
 
     RevScroller.prototype.registerImpressions = function(viewed) {
