@@ -53,7 +53,7 @@
                 pixel_url: false,
                 pixel_label: "AdScore",
                 styles: false,
-                script_url: '//js.ad-score.com/score.min.js?pid=1000177#&tid=display-ad&adid=rc-row-container&uid=' + '{uid}' + '&uip=' + '{uip}' + '&ref=' + '{ref}' + '&pub_domain=' + '{fqdn}' + '&cb=' + '{cache}',
+                script_url: '//js.ad-score.com/score.min.js?pid=1000177#&tid=display-ad&adid=rev-ad&uid=' + '{uid}' + '&uip=' + '{uip}' + '&ref=' + '{ref}' + '&pub_domain=' + '{fqdn}' + '&cb=' + '{cache}',
                 noscript: false,
                 traffic_percent: 2
             }
