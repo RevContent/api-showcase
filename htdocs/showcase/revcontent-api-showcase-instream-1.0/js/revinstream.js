@@ -93,7 +93,8 @@ Author: michael@revcontent.com
             link_button_text: 'Visit Site',
             window_width_devices: [
                 'phone'
-            ]
+            ],
+            developer: false
         };
 
         // merge options

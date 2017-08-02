@@ -118,7 +118,8 @@ Author: michael@revcontent.com
             pagination_dots_vertical: false,
             stacked: false,
             fit_height: false,
-            destroy: false
+            destroy: false,
+            developer: false
         };
 
         // merge options

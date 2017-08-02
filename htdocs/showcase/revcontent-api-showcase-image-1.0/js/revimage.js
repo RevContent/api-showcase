@@ -76,7 +76,8 @@ Author: michael@revcontent.com
             user_ip: false,
             user_agent: false,
             css: '',
-            internal: false
+            internal: false,
+            developer: false
         };
 
         // merge options
@@ -217,7 +218,8 @@ Author: michael@revcontent.com
             user_ip: this.options.user_ip,
             user_agent: this.options.user_agent,
             css: this.options.css,
-            internal: this.options.internal
+            internal: this.options.internal,
+            developer: this.options.developer
         });
         return this.innerWidget;
     };

@@ -93,7 +93,8 @@ Author: michael@revcontent.com
                 lg: 204,
                 xl: 204,
                 xxl: 204
-            }
+            },
+            developer: false
         };
 
         // merge options
@@ -424,7 +425,8 @@ Author: michael@revcontent.com
             register_views: false,
             row_pages: true,
             visible_rows: 1,
-            pagination_dots: false
+            pagination_dots: false,
+            developer: this.options.developer
         });
     };
 
@@ -511,7 +513,7 @@ Author: michael@revcontent.com
         this.registered = true;
         var url = this.innerWidget.generateUrl(0, this.innerWidget.limit, false, true);
         revApi.request(url, function() { return; });
-        revApi.beacons.setPluginSource(this.options.api_source).attach();
+        revApi.beacons.setPluginSource(this.innerWidget.options.api_source).attach();
     };
 
     RevSideShifter.prototype.initTouchVars = function() {
