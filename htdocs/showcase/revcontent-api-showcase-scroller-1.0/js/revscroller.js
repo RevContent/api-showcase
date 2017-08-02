@@ -159,6 +159,7 @@ Author: michael@revcontent.com
         var that = this;
         this.innerWidget.dataPromise.then(function() {
             that.registerImpressions(false);
+            revApi.beacons.setPluginSource(this.options.api_source).attach();
         });
     };
 
@@ -441,7 +442,6 @@ Author: michael@revcontent.com
 
     RevScroller.prototype.visible = function() {
         this.emitter.emitEvent('visible');
-        revApi.beacons.setPluginSource(this.options.api_source).attach();
     };
 
     RevScroller.prototype.registerImpressions = function(viewed) {
