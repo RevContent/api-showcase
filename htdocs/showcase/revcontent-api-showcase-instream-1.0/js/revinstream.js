@@ -899,10 +899,9 @@ Author: michael@revcontent.com
             // TODO: determin if in view
             var url = that.generateUrl(0, that.limit, false, false);
 
-
             revApi.request(url, function(resp) {
                 if (!resp.length) {
-                    resolve(resp)
+                    resolve(resp);
                     return;
                 }
 
