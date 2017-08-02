@@ -899,9 +899,10 @@ Author: michael@revcontent.com
             // TODO: determin if in view
             var url = that.generateUrl(0, that.limit, false, false);
 
+
             revApi.request(url, function(resp) {
                 if (!resp.length) {
-                    resolve(resp);
+                    resolve(resp)
                     return;
                 }
 
@@ -910,6 +911,7 @@ Author: michael@revcontent.com
                 revUtils.addClass(that.containerElement, 'rev-instream-has-data');
 
                 that.updateDisplayedItems();
+                revApi.beacons.setPluginSource(this.options.api_source).attach();
 
                 if (that.options.lazy_load_images === false) {
                     revUtils.addClass(that.containerElement, 'rev-instream-has-image');
