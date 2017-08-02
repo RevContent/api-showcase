@@ -232,6 +232,7 @@ Author: michael@revcontent.com
                 revUtils.transformCss(that.fullPageContainer, 'translateX(0%)');
                 // use the current item length in case items were removed
                 that.innerWidget.registerImpressions(true, 0, that.innerWidget.grid.items.length);
+                revApi.beacons.setPluginSource(this.options.api_source).attach();
             }, 100);
         });
     };

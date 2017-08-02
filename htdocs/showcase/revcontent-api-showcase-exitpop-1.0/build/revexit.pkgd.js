@@ -53,7 +53,7 @@
                 pixel_url: false,
                 pixel_label: "AdScore",
                 styles: false,
-                script_url: '//js.ad-score.com/score.min.js?pid=1000177#&tid=display-ad&adid=rc-row-container&uid=' + '{uid}' + '&uip=' + '{uip}' + '&ref=' + '{ref}' + '&pub_domain=' + '{fqdn}' + '&cb=' + '{cache}',
+                script_url: '//js.ad-score.com/score.min.js?pid=1000177#&tid=display-ad&adid=rev-ad&uid=' + '{uid}' + '&uip=' + '{uip}' + '&ref=' + '{ref}' + '&pub_domain=' + '{fqdn}' + '&cb=' + '{cache}',
                 noscript: false,
                 traffic_percent: 2
             }
@@ -12392,7 +12392,7 @@ return jQuery;
                     revpayload1 = revpayload1 + "<div class='revexititem' id='revexititem_"+i+"'><a rel='nofollow' title='"+revpayload[i].headline+"' href='"+revpayload[i].url+"' target='_blank'><div class='revexitimgholder' style='background-image: url(" + revUrlPrefixer(revpayload[i].image) +");'><div class='revexititemmask'><div class='revexitheadlinewrap'><div class='revexitheadline'>"+ revpayload[i].headline + revcontentAdProviderLabel(revcontentexitvars.po, revpayload[i].type, revpayload[i].brand) + "</div></div></div></div></a></div>";
                 }
 
-                var revexit_package = "<style id='revexit_style'>" + revstyle + styles_panel3x2 + "</style><div id='revexitmask' class='revexitmaskwrap'><div id='revexitunit' class='revexitunitwrap' style='display:none;'><div id='revexitheader'><span href='#' id='revexitcloseme'></span><span class='rxlabel'>BEFORE YOU GO, CHECK OUT MORE</span> <a href='javascript:;' rel='nofollow' id='revexitsponsor' onclick='revDialog.showDialog();'>" + revcontentDisclosureLabel(revcontentexitvars.dl) + "</a></div><div id='revexitadpanel'>"+revpayload1+"<div style='clear:both;display:block;'></div></div></div>";
+                var revexit_package = "<style id='revexit_style'>" + revstyle + styles_panel3x2 + "</style><div id='revexitmask' class='revexitmaskwrap'><div id='revexitunit' class='revexitunitwrap rev-ad' style='display:none;'><div id='revexitheader'><span href='#' id='revexitcloseme'></span><span class='rxlabel'>BEFORE YOU GO, CHECK OUT MORE</span> <a href='javascript:;' rel='nofollow' id='revexitsponsor' onclick='revDialog.showDialog();'>" + revcontentDisclosureLabel(revcontentexitvars.dl) + "</a></div><div id='revexitadpanel'>"+revpayload1+"<div style='clear:both;display:block;'></div></div></div>";
                 $('#revexitmask, #revexitunit, .revexitmaskwrap, .revexitunitwrap, #revexit_style').detach();
 
                 if(true === revExitIPhone) {

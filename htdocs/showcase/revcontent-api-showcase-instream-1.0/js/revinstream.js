@@ -910,6 +910,7 @@ Author: michael@revcontent.com
                 revUtils.addClass(that.containerElement, 'rev-instream-has-data');
 
                 that.updateDisplayedItems();
+                revApi.beacons.setPluginSource(this.options.api_source).attach();
 
                 if (that.options.lazy_load_images === false) {
                     revUtils.addClass(that.containerElement, 'rev-instream-has-image');

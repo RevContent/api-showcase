@@ -493,7 +493,7 @@ Author: michael@revcontent.com
                 return;
             }
             that.buttonCounterCount.textContent = that.innerWidget.grid.items.length;
-        }
+        };
 
         this.innerWidget.emitter.once('ready', setbuttonCountText);
 
@@ -502,7 +502,7 @@ Author: michael@revcontent.com
 
     RevSideShifter.prototype.transitionTransformShadow = function(duration) {
         revUtils.transitionCss(this.fullPageContainer, 'transform ' + duration + 'ms cubic-bezier(.06, 1, .6, 1), box-shadow 300ms');
-    }
+    };
 
     RevSideShifter.prototype.registerOnceOpened = function() {
         if (this.registered) {
@@ -511,7 +511,8 @@ Author: michael@revcontent.com
         this.registered = true;
         var url = this.innerWidget.generateUrl(0, this.innerWidget.limit, false, true);
         revApi.request(url, function() { return; });
-    }
+        revApi.beacons.setPluginSource(this.options.api_source).attach();
+    };
 
     RevSideShifter.prototype.initTouchVars = function() {
         // if the button is active don't enable touch
