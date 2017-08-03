@@ -5,7 +5,6 @@ gulp build --widget=flicker
 gulp build --widget=shifter
 gulp build --widget=scroller
 gulp build --widget=image
-gulp build --widget=lock
 gulp build --widget=more
 gulp build --widget=soloserve
 gulp build --widget=toaster
