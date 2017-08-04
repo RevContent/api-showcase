@@ -150,9 +150,11 @@ RevToaster({
                 this.attachShowElementVisibleListener();
 
                 // wait for all images above show visible elemnt to load before checking visibility
-                revUtils.imagesLoaded(revUtils.imagesAbove(this.showVisibleElement)).once('done', function() {
+                this.emitter.once('imagesLoaded', function() {
                     revUtils.checkVisible.bind(that, that.showVisibleElement, that.emitVisibleEvent)();
                 });
+
+                revUtils.imagesLoaded(revUtils.imagesAbove(this.showVisibleElement), this.emitter);
             } else {
                 // wait a tick or two before attaching to scroll/touch b/c of auto scroll feature in some browsers
                 setTimeout(function() {
@@ -426,7 +428,7 @@ RevToaster({
         this.show = function() {
             var that = this;
             this.dataPromise.then(function() {
-                revUtils.imagesLoaded(that.containerElement.querySelectorAll('img')).once('done', function() {
+                that.emitter.once('imagesLoaded', function() {
                     that.visible = true;
                     revUtils.addClass(document.body, 'rev-toaster-loaded');
                     that.registerView();
@@ -435,6 +437,8 @@ RevToaster({
                     }
                     if(true === that.options.beacons) { revApi.beacons.setPluginSource('toaster').attach(); }
                 });
+
+                revUtils.imagesLoaded(that.containerElement.querySelectorAll('img'), that.emitter);
             });
         };
 
