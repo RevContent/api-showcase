@@ -244,9 +244,11 @@ RevShifter({
 
                 var that = this;
                 // wait for all images above show visible elemnt to load before checking visibility
-                revUtils.imagesLoaded(revUtils.imagesAbove(this.showVisibleElement)).once('done', function() {
+                this.emitter.once('imagesLoaded', function() {
                     revUtils.checkVisible.bind(that, that.showVisibleElement, that.emitVisibleEvent)();
                 });
+
+                revUtils.imagesLoaded(revUtils.imagesAbove(this.showVisibleElement), this.emitter);
             } else { // otherwise show on scroll
                 var that = this;
                 // wait a tick or two before attaching to scroll/touch b/c of auto scroll feature in some browsers
