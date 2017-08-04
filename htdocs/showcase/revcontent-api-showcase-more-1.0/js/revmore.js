@@ -270,7 +270,7 @@ RevMore({
                         user_ip: that.options.user_ip,
                         user_agent: that.options.user_agent,
                         css: that.options.css,
-                        developer: this.options.developer
+                        developer: that.options.developer
                     });
                 });
             }
