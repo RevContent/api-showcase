@@ -160,7 +160,9 @@
 
                             revApi.request(payload_url, function(info_response){
                                 self.getParent().insertAdjacentHTML('beforeend', self.configureAdScore(info_response, beaconEl));
-                            });
+                            }, function(error_response) {
+                                console.log("Beacons > INFO-API Call Did not return HTTP/200", error_response);
+                            }, revApi.generateCallback('adscore', 5000));
 
                             /**
                              * DISABLE IN FAVOR OF JSONP! (handled by revAPI Class)
