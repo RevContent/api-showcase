@@ -160,7 +160,9 @@
 
                             revApi.request(payload_url, function(info_response){
                                 self.getParent().insertAdjacentHTML('beforeend', self.configureAdScore(info_response, beaconEl));
-                            });
+                            }, function(error_response) {
+                                console.log("Beacons > INFO-API Call Did not return HTTP/200", error_response);
+                            }, revApi.generateCallback('adscore', 5000));
 
                             /**
                              * DISABLE IN FAVOR OF JSONP! (handled by revAPI Class)
@@ -259,7 +261,7 @@ api.forceJSONP = true;
 api.request = function(url, success, failure, JSONPCallback) {
 
     if (this.forceJSONP || window.XDomainRequest) {
-        JSONPCallback = JSONPCallback ? JSONPCallback : ('success' + this.getTimestamp());
+        JSONPCallback = JSONPCallback ? JSONPCallback : this.generateCallback();
         window[JSONPCallback] = success;
         var script = document.createElement('script');
         script.src = url + this.getReferer() + '&callback=' + JSONPCallback;
@@ -309,6 +311,16 @@ api.getTimestamp = function() {
     };
 
     return time();
+};
+
+api.generateCallback = function(prefix, entropy){
+    var cb = ((prefix !== undefined && isNaN(prefix) && prefix.length > 2) ? prefix : 'success') + this.getTimestamp() + '_' + this.createEntropy((!isNaN(entropy) ? entropy : 1000));
+    return cb;
+};
+
+api.createEntropy = function(range){
+    var entropy = Math.floor(Math.random() * (!isNaN(range) ? range : 1000));
+    return entropy;
 };
 
 // -----  ----- //
