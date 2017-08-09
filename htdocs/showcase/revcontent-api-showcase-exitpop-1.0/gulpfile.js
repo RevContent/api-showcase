@@ -79,7 +79,7 @@ gulp.task('revexit-inject', ['revexit-css'], function () {
 
 gulp.task('build-rx', ['revexit-css', 'revchimp-css', 'revchimp-inject', 'revexit-inject', 'revexit-jquery'], function(cb) {
 
-    var src = ['../js/revbeacon.js', '../js/revapi.js', '../js/revutils.js', '../js/revdialog.js', './js/jquery-1.11.3.js', './build/revchimp.js', './build/revexit.js'];
+    var src = ['../js/revutils.js', '../js/revbeacon.js', '../js/revapi.js', '../js/revdialog.js', './js/jquery-1.11.3.js', './build/revchimp.js', './build/revexit.js'];
 
     var missingFiles = [];
     src.forEach(function(file) {
