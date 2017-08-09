@@ -52,6 +52,7 @@ Author: michael@revcontent.com
             devices: [
                 'phone', 'tablet', 'desktop'
             ],
+            beacons: true,
             disclosure_text: 'Ads by Revcontent',
             disclosure_text_small: 'Ads',
             overlay_icons: false, // pass in custom icons or overrides
