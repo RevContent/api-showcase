@@ -85,6 +85,7 @@ Author: michael@revcontent.com
         this.emitter = new EventEmitter();
         this.currentRow = 0;
         this.transform = 0;
+        this.heights = [];
         this.offset = 0;
         this.createInnerWidget();
         this.scroll();
@@ -161,7 +162,7 @@ Author: michael@revcontent.com
         var that = this;
         this.innerWidget.dataPromise.then(function() {
             that.registerImpressions(false);
-            revApi.beacons.setPluginSource(this.innerWidget.options.api_source).attach();
+            revApi.beacons.setPluginSource(that.innerWidget.options.api_source).attach();
         });
     };
 
@@ -193,7 +194,7 @@ Author: michael@revcontent.com
                 i++;
             }
 
-            var bottom = that.heights[0] + that.heights[1];
+            var bottom = (that.heights.length >= 2 ? that.heights[0] + that.heights[1] : 0);
             if (Math.abs(that.transform) > bottom) {
                 that.transform = bottom;
             }
