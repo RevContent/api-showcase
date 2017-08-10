@@ -36,13 +36,41 @@
    'use strict';
      window.revExit = factory(
        window,
+       window.revApi,
+       window.revUtils,
        jQuery.noConflict(true)
      );
- }( window, function factory( window, $ ) {
+ }( window, function factory( window, api, utilities, $ ) {
 
  'use strict';
 
+     // setup default user options
+     utilities.storeUserOptions({
+         beacons: true,
+         mode: "both",
+         domain: '',
+         widget_id: '',
+         pub_id: '',
+         api_key: '',
+         testing: false,
+         internal: 'none',
+         server: 'trends.revcontent.com',
+         url: revUrlPrefixer('trends.revcontent.com') + '/api/v1/',
+         closed_hours: 24,
+         inactivity: 6,
+         background: 'default',
+         regions: 'all',
+         disclosure: '',
+         provider: "internal",
+         query: '',
+         subscriptions: false,
+         panel: '',
+         developer: false
+     });
+
     $(document).ready(function() {
+
+
 
         revcontentInit({"fastclick":{enabled: true}});
 
@@ -477,17 +505,44 @@
             revcontentDetachChimpanzee();
         }
 
-        if(window.revApi !== undefined && typeof window.revApi.beacons === "object") {
-            window.revApi.beacons.setPluginSource('exitpop').attach();
+        if(api !== undefined && typeof api.beacons === "object") {
+            api.beacons.setPluginSource('exitpop').attach();
         }
     }
 
     function revcontentExecute(revcontentexitvars, revExitMobile, revExitIPhone, revExitIPad, enableSubscriptions) {
+
+        // store user options
+        utilities.storeUserOptions({
+            beacons: true,
+            mode: revcontentexitvars.x,
+            domain: revcontentexitvars.d,
+            widget_id: revcontentexitvars.w,
+            pub_id: revcontentexitvars.p,
+            api_key: revcontentexitvars.k,
+            testing: revcontentexitvars.t || false,
+            internal: revcontentexitvars.i || 'none',
+            server: revcontentexitvars.s,
+            url: revUrlPrefixer(revcontentexitvars.s) + '/api/v1/',
+            closed_hours: revcontentexitvars.ch || 24,
+            inactivity: revcontentexitvars.z || 6,
+            background: revcontentexitvars.j || "default",
+            regions: revcontentexitvars.r !== undefined ? revcontentexitvars.r.split(",") : 'all',
+            disclosure: revcontentexitvars.dl || '',
+            provider: revcontentexitvars.po || '',
+            query: revcontentexitvars.q || '',
+            subscriptions: revcontentexitvars.ml !== undefined ? true : false,
+            panel: revcontentexitvars.ps || '',
+            developer: (revcontentexitvars.dv !== undefined ? true : false)
+        });
+
         if($('body').hasClass('revexit-open')){ return; }
         if(!revExitMobile){ revExitMobile = false; }
         if(!revExitIPhone){ revExitIPhone = false; }
         if(!revExitIPad){ revExitIPad = false; }
         if(!enableSubscriptions){ enableSubscriptions = false; }
+
+        var user_options = utilities.retrieveUserOptions();
 
         // exit on expired exit (except for test mode) ...
         var exit_expired = $('body').attr('data-revexit') == 'expired' ? true : false;
@@ -513,7 +568,7 @@
         }
 
         if (typeof revcontentexitvars.s !== "undefined" && revcontentexitvars.s != "" && revcontentexitvars.s != null) {
-            revcontentexitendpoint = 'https://'+revcontentexitvars.s+'/api/v1/?';
+            revcontentexitendpoint = (user_options && user_options.developer == true ? 'http://' : 'https://') +revcontentexitvars.s+'/api/v1/?';
         }
 
         if (typeof revcontentexitvars.q !== "undefined") {
