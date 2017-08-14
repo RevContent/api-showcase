@@ -109,11 +109,16 @@ Author: michael@revcontent.com
             user_ip: false,
             user_agent: false,
             css: '',
-            disable_pagination: false
+            disable_pagination: false,
+            developer: false
         };
 
         // merge options
         this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
+
+        // store options
+        revUtils.storeUserOptions(this.options);
+
 
         if (revUtils.validateApiParams(this.options).length) {
             return;

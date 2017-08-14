@@ -93,11 +93,15 @@ Author: michael@revcontent.com
             link_button_text: 'Visit Site',
             window_width_devices: [
                 'phone'
-            ]
+            ],
+            developer: false
         };
 
         // merge options
         this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
+
+        // store options
+        revUtils.storeUserOptions(this.options);
 
         if (revUtils.validateApiParams(this.options).length) {
             return;
@@ -910,6 +914,7 @@ Author: michael@revcontent.com
                 revUtils.addClass(that.containerElement, 'rev-instream-has-data');
 
                 that.updateDisplayedItems();
+                revApi.beacons.setPluginSource(that.options.api_source).attach();
 
                 if (that.options.lazy_load_images === false) {
                     revUtils.addClass(that.containerElement, 'rev-instream-has-image');

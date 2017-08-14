@@ -41,7 +41,8 @@ RevMore({
         top_id: false,
         unlock_text: 'Read More...',
         url: 'trends.revcontent.com',
-        watch_top_id_interval: 500 // time in ms to watch the top_id position change
+        watch_top_id_interval: 500 // time in ms to watch the top_id position change,
+        developer: false
     };
 
     RevMore = function(opts) {
@@ -60,6 +61,9 @@ RevMore({
 
         // merge options
         this.options = revUtils.extend(defaults, opts);
+
+        // store options
+        revUtils.storeUserOptions(this.options);
 
         // don't show for this device
         if (!revDetect.show(this.options.devices)) {

@@ -118,11 +118,15 @@ Author: michael@revcontent.com
             pagination_dots_vertical: false,
             stacked: false,
             fit_height: false,
-            destroy: false
+            destroy: false,
+            developer: false
         };
 
         // merge options
         this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
+
+        // store options
+        revUtils.storeUserOptions(this.options);
 
         if (revUtils.validateApiParams(this.options).length) {
             return;

@@ -552,7 +552,17 @@ utils.siblingIndex = function(el) {
       i++;
     }
     return i;
-}
+};
+
+utils.storeUserOptions = function(options){
+    var that = this;
+    that.userOptions = options;
+};
+
+utils.retrieveUserOptions = function(){
+    var that = this;
+    return that.userOptions;
+};
 
 utils.isArray = function(param) {
     return Object.prototype.toString.call(param) === '[object Array]';

@@ -89,7 +89,8 @@ Author: michael@revcontent.com
                     selector: '#rev-slider.rev-slider-breakpoint-lt-md .rev-content',
                     ratio: 'wide_rectangle'
                 }
-            ]
+            ],
+            developer: false
         };
 
         // merge options
@@ -212,7 +213,8 @@ Author: michael@revcontent.com
             register_views: false,
             row_pages: true,
             visible_rows: 1,
-            pagination_dots: false
+            pagination_dots: false,
+            developer: this.options.developer
         });
 
         // destroy if no data
@@ -232,6 +234,7 @@ Author: michael@revcontent.com
                 revUtils.transformCss(that.fullPageContainer, 'translateX(0%)');
                 // use the current item length in case items were removed
                 that.innerWidget.registerImpressions(true, 0, that.innerWidget.grid.items.length);
+                revApi.beacons.setPluginSource(this.innerWidget.options.api_source).attach();
             }, 100);
         });
     };

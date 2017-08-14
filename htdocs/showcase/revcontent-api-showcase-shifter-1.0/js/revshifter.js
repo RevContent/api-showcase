@@ -68,7 +68,8 @@ RevShifter({
         url: 'https://trends.revcontent.com/api/v1/',
         disclosure_text: revDisclose.defaultDisclosureText,
         hide_provider: false,
-        beacons: true
+        beacons: true,
+        developer: false
     };
 
     RevShifter = function(opts) {
@@ -89,6 +90,9 @@ RevShifter({
         this.options = revUtils.extend(defaults, opts);
         //a hack to make up for revUtils shortcomings
         this.options.inner_widget_options = revUtils.extend(defaults.inner_widget_options, opts.inner_widget_options);
+
+        // store options
+        revUtils.storeUserOptions(this.options);
 
         // param errors
         if (revUtils.validateApiParams(this.options).length) {
@@ -153,7 +157,8 @@ RevShifter({
                 is_layout_instant: true,
                 disclosure_text: this.options.disclosure_text,
                 hide_provider: this.options.hide_provider,
-                beacons: this.options.beacons
+                beacons: this.options.beacons,
+                developer: this.options.developer
             });
 
             this.size = this.element.clientHeight;

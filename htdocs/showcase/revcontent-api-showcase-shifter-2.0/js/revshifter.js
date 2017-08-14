@@ -84,7 +84,8 @@ RevShifter({
         user_ip: false,
         user_agent: false,
         css: '',
-        internal: false
+        internal: false,
+        developer: false
     };
 
     RevShifter = function(opts) {
@@ -128,6 +129,9 @@ RevShifter({
 
         // merge options
         this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
+
+        // store options
+        revUtils.storeUserOptions(this.options);
 
         // param errors
         if (revUtils.validateApiParams(this.options).length) {
@@ -209,7 +213,8 @@ RevShifter({
                 user_ip: this.options.user_ip,
                 user_agent: this.options.user_agent,
                 css: this.options.css,
-                internal: this.options.internal
+                internal: this.options.internal,
+                developer: this.options.developer
             });
 
             this.closeButton();
@@ -239,9 +244,11 @@ RevShifter({
 
                 var that = this;
                 // wait for all images above show visible elemnt to load before checking visibility
-                revUtils.imagesLoaded(revUtils.imagesAbove(this.showVisibleElement)).once('done', function() {
+                this.emitter.once('imagesLoaded', function() {
                     revUtils.checkVisible.bind(that, that.showVisibleElement, that.emitVisibleEvent)();
                 });
+
+                revUtils.imagesLoaded(revUtils.imagesAbove(this.showVisibleElement), this.emitter);
             } else { // otherwise show on scroll
                 var that = this;
                 // wait a tick or two before attaching to scroll/touch b/c of auto scroll feature in some browsers

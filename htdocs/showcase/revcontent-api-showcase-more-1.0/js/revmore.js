@@ -71,7 +71,8 @@ RevMore({
         user_ip: false,
         user_agent: false,
         hide_selectors: false,
-        css: ''
+        css: '',
+        developer: false
     };
 
     RevMore = function(opts) {
@@ -90,6 +91,9 @@ RevMore({
 
         // merge options
         this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
+
+        // store options
+        revUtils.storeUserOptions(this.options);
 
         if (revUtils.validateApiParams(this.options).length) {
             return;
@@ -265,7 +269,8 @@ RevMore({
                         },
                         user_ip: that.options.user_ip,
                         user_agent: that.options.user_agent,
-                        css: that.options.css
+                        css: that.options.css,
+                        developer: that.options.developer
                     });
                 });
             }
@@ -306,7 +311,8 @@ RevMore({
                 query_params: this.options.query_params,
                 user_ip: this.options.user_ip,
                 user_agent: this.options.user_agent,
-                css: this.options.css
+                css: this.options.css,
+                developer: this.options.developer
             });
         };
 

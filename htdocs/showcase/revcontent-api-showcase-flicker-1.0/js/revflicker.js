@@ -130,11 +130,15 @@ RevFlicker({
             trending_theme: 'default',
             window_width_devices: [
                 'phone'
-            ]
+            ],
+            developer: false
         };
 
         // merge options
         this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
+
+        // store options
+        revUtils.storeUserOptions(this.options);
 
         // param errors
         if (revUtils.validateApiParams(this.options).length) {
@@ -643,8 +647,8 @@ RevFlicker({
             var url = this.generateUrl((register[0]), register.length, false, viewed);
 
             var that = this;
-            revApi.request(url, function() {
-                if(offset === 0 && true === that.options.beacons) { revApi.beacons.setPluginSource('flicker').attach(); }
+            revApi.request(url, function(response) {
+                if(offset === 0 && true === that.options.beacons) { revApi.beacons.setPluginSource('flicker').attach(response); }
             }, function() {
                 //TODO: retry the call or log to db for later attempt
                 for (var i = 0; i < register.length; i++) {
