@@ -16,7 +16,7 @@ Author: michael@revcontent.com
     var RevFeed = function(opts) {
 
         var defaults = {
-            api_source: 'feed',
+            api_source: 'rcfeed',
             url: 'https://trends.revcontent.com/api/v1/',
             host: 'https://trends.revcontent.com',
             devices: [
@@ -252,7 +252,7 @@ Author: michael@revcontent.com
                 var urls = [];
 
                 if (rowData.internalLimit > 0) {
-                    var internalURL = self.innerWidget.generateUrl(self.internalOffset, rowData.internalLimit, true, false, true);
+                    var internalURL = self.innerWidget.generateUrl(self.internalOffset, rowData.internalLimit, false, false, true);
                     self.internalOffset += rowData.internalLimit;
                     urls.push({
                         url: internalURL,
@@ -261,7 +261,7 @@ Author: michael@revcontent.com
                 }
 
                 if (rowData.sponsoredLimit > 0) {
-                    var sponsoredURL = self.innerWidget.generateUrl(self.sponsoredOffset, rowData.sponsoredLimit, true, false, false);
+                    var sponsoredURL = self.innerWidget.generateUrl(self.sponsoredOffset, rowData.sponsoredLimit, false, false, false);
                     self.sponsoredOffset += rowData.sponsoredLimit;
                     urls.push({
                         url: sponsoredURL,
@@ -338,17 +338,17 @@ Author: michael@revcontent.com
             return;
         }
 
-        var params = 'api_source=' + (viewed[0].initial ? 'ba_' : '') + this.options.api_source;
+        // var params = 'api_source=' + (viewed[0].initial ? 'ba_' : '') + this.options.api_source;
 
         // params += 'id=' + encodeURIComponent(this.options.id); // debug/test
 
-        params += '&view=' + view;
+        var params = 'view=' + view;
 
         for (var i = 0; i < viewed.length; i++) {
             params += '&' + encodeURIComponent('p[]') + '=' + viewed[i].index;
         }
 
-        revApi.xhr(this.options.host + '/view.php?' + params, function() {
+        revApi.request(this.options.host + '/view.php?' + params, function() {
 
         });
     };

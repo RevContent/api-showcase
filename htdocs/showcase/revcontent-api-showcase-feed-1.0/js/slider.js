@@ -1882,14 +1882,14 @@ Author: michael@revcontent.com
          return this.serializedQueryParams;
     };
 
-    RevSlider.prototype.generateUrl = function(offset, count, empty, viewed, internal, initial) {
+    RevSlider.prototype.generateUrl = function(offset, count, empty, viewed, internal, below_article) {
         var url = (this.options.host ? this.options.host + '/api/v1' : this.options.url) +
         '?api_key=' + this.options.api_key +
         this.getSerializedQueryParams() +
         '&pub_id=' + this.options.pub_id +
         '&widget_id=' + this.options.widget_id +
         '&domain=' + this.options.domain +
-        '&api_source=' + (initial ? 'ba_' : '') + this.options.api_source;
+        '&api_source=' + this.options.api_source + (below_article ? 'ba' : '');
 
         url +=
         '&sponsored_count=' + (internal ? 0 : count) +
@@ -1919,7 +1919,7 @@ Author: michael@revcontent.com
         var urls = [];
 
         if (this.internalLimit > 0) {
-            var internalURL = this.generateUrl(0, this.internalLimit, false, false, true, true);
+            var internalURL = this.generateUrl(0, this.internalLimit, false, false, true);
             urls.push({
                 url: internalURL,
                 type: 'internal'
@@ -1927,7 +1927,9 @@ Author: michael@revcontent.com
         }
 
         if (this.sponsoredLimit > 0) {
-            var sponsoredURL = this.generateUrl(0, this.sponsoredLimit, false, false, false, true);
+            // if the first internal is greater than 0 there is a ba
+            var firstInternal = revUtils.siblingIndex(this.grid.element.querySelector(this.options.internal_selector));
+            var sponsoredURL = this.generateUrl(0, this.sponsoredLimit, false, false, false, (firstInternal > 0));
             urls.push({
                 url: sponsoredURL,
                 type: 'sponsored'
