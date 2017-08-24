@@ -475,7 +475,7 @@ Author: michael@revcontent.com
                 // meta
                 meta.innerHTML = '<div class="rev-meta-inner">' +
                                 '<div class="rev-provider"></div>' +
-                                '<div class="rev-date">15 hrs</div>' +
+                                '<div class="rev-date"></div>' +
                                 '</div>';
 
                 items[0].element.querySelector('.rev-before-image').appendChild(meta);
@@ -2157,6 +2157,16 @@ Author: michael@revcontent.com
                         revUtils.remove(description);
                     }
                 }
+
+                var date = item.element.querySelector('.rev-date');
+                if (date) {
+                    if (itemData.date) {
+                        date.innerHTML = itemData.date;
+                    } else {
+                        date.innerHTML = (Math.floor(Math.random() * (24 - 1 + 1)) + 1) + ' hrs';
+                    }
+                }
+
 
                 var favicon = item.element.querySelector('.rev-headline-icon');
                 if (favicon) {
