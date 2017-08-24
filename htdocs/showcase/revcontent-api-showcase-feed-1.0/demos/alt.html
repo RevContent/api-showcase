@@ -12,9 +12,9 @@
     <title>RevFeed Example</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="../css/bootstrap.css" rel="stylesheet">
 
-    <link href="css/style.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -85,14 +85,9 @@
                 <div class="col-md-12">
                     <h3>Examples:</h3>
                     <ul>
-<!--                         <li><a href="/showcase/revcontent-api-showcase-side-shifter-1.0/index.html">Default</a></li>
-                        <li><a href="/showcase/revcontent-api-showcase-side-shifter-1.0/demos/alt.html">Alternate layout</a></li>
-                        <li><a href="/showcase/revcontent-api-showcase-side-shifter-1.0/demos/left.html">Left side</a> - button and open from the left hand side</li>
-                        <li><a href="/showcase/revcontent-api-showcase-side-shifter-1.0/demos/scroll.html">Scroll element</a> - show when the element is reached, hide when scrolling back up.</li>
-                        <li><a href="/showcase/revcontent-api-showcase-side-shifter-1.0/demos/height.html">Height</a> - unit height set to a percentage of the window height</li>
-                        <li><a href="/showcase/revcontent-api-showcase-side-shifter-1.0/demos/flame.html">Flame button</a> - button_icon option set to "flame"</li>
-                        <li><a href="/showcase/revcontent-api-showcase-side-shifter-1.0/demos/bell.html">Bell button</a> - button_icon options set to "bell". Features a ring animation and zeros the count when opened.</li>
-                        <li><a href="/showcase/revcontent-api-showcase-side-shifter-1.0/demos/button-all-devices.html">Button for all devices</a> - show the button on all devices</li> -->
+                        <li><a href="/showcase/revcontent-api-showcase-feed-1.0/index.html">Default Layout</a> - 3x3 followed by 2 internal then 1 sponsored repeating</li>
+                        <li><a href="/showcase/revcontent-api-showcase-feed-1.0/demos/alt.html">Layout 2</a> - 3x3 followed by 2 internal then 2x1 sponsored repeating</li>
+                        <li><a href="/showcase/revcontent-api-showcase-feed-1.0/demos/alt2.html">Layout 3</a> - 2 internal then 1 sponsored repeating</li>
                     </ul>
                 </div>
             </div>
@@ -408,30 +403,34 @@
     <script>
         var shifter = new RevFeed({
             url: 'https://dv3-s4.revcontent.com/api/v1',
-            // url: 'http://localhost:8081/api/v1/index.php',
-            // url: 'http://trends.revcontent.com/api/v1',
             id: 'grid',
             api_key : '42f22b7844639cb477b5cbec0df3a3de763c5bbc',
             pub_id : 698,
             widget_id : 6491,
             domain : 'conservativetribune.com',
-            per_row: 6,
-            rows: 4,
             column_spans: [
                 {
-                    selector: '.rev-content-header, .rev-content',
+                    selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-content-header, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(5n+10), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(5n+11)',
                     spans: 6
                 },
+                {
+                    selector: '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(-n+9)',
+                    spans: 2
+                },
+                {
+                    selector: '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(5n+13), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(5n+14)',
+                    spans: 3
+                }
             ],
             image_ratio: [
                 {
-                    selector: '.rev-content',
-                    ratio: '12:6'
+                    selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-content:nth-child(5n+10), .rev-content:nth-child(5n+11)',
+                    ratio: '6:3'
                 }
             ],
-            header_selector: '.rev-content:nth-child(4n + 2)',
-            internal_selector: '.rev-content:nth-child(4n+1), .rev-content:nth-child(4n+2)',
-            // headline_icon_selector: '.rev-content:nth-child(4n+1), .rev-content:nth-child(4n+2)',
+            header_selector: '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(4n + 5), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(5n+11)',
+            internal_selector: '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(4n + 4), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(4n + 5), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(5n+10),.rev-slider-breakpoint-gt-xs .rev-content:nth-child(5n+11)',
+            // headline_icon_selector: '.rev-content:nth-child(5n+10), .rev-content:nth-child(5n+11)',
         });
     </script>
 
