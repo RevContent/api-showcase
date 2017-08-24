@@ -3,8 +3,8 @@ app.service('widgets', function() {
         'feed': {
             title: 'RevFeed',
             img: 'feed.gif?v=2',
-            preview_img: 'preview-sideshifter.jpg?v=2',
-            description: 'Revfeed is awesome',
+            preview_img: 'preview-feed.jpg?v=2',
+            description: 'A feed-inspired experience that engages users with your content, and keeps them coming back for more, or in this case scrolling!',
             link: 'revcontent-api-showcase-feed-1.0/index.html',
             // docs: 'revcontent-api-showcase-feed-1.0/README.md',
             bg: '#29599a',
