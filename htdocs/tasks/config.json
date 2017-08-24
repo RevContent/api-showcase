@@ -177,7 +177,8 @@
     "version": "0.1.0",
     "js": "./showcase/revcontent-api-showcase-feed-1.0/js/revfeed.js",
     "css": [
-      "./showcase/revcontent-api-showcase-feed-1.0/css/revfeed.scss"
+      "./showcase/revcontent-api-showcase-feed-1.0/css/revfeed.scss",
+      "./showcase/css/revdialog.css"
     ],
     "build": [
       "./node_modules/es6-promise/dist/es6-promise.js",
