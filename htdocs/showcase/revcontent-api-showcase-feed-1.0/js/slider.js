@@ -579,7 +579,7 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.setMultipliers = function() {
-        this.lineHeightMultiplier = Math.round( (.06256 + Number((this.options.multipliers.line_height * .01).toFixed(2))) * 10000 ) / 10000;
+        this.lineHeightMultiplier = Math.round( (.05856 + Number((this.options.multipliers.line_height * .01).toFixed(2))) * 10000 ) / 10000;
         // used for padding around elements
         this.marginMultiplier = Math.round( (.05 + Number((this.options.multipliers.margin * .01).toFixed(2))) * 1000 ) / 1000;
         // used for margins on headlines inside
@@ -1138,7 +1138,9 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.setInnerMargin = function(item) {
-        var computedInnerMargin = parseInt(revUtils.getComputedStyle(item.element.querySelector('.rev-headline h3'), 'margin-left'));
+        var headline = item.element.querySelector('.rev-headline h3');
+        headline.removeAttribute('style');
+        var computedInnerMargin = parseInt(revUtils.getComputedStyle(headline, 'margin-left'));
 
         if (computedInnerMargin > -1) {
             item.innerMargin = computedInnerMargin;
@@ -1154,7 +1156,12 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.setDescriptionLineHeight = function(item) {
-        var computedLineHeight = parseInt(revUtils.getComputedStyle(item.element.querySelector('.rev-description h4'), 'line-height'));
+        var description = item.element.querySelector('.rev-description h4');
+        description.removeAttribute('style');
+        if (!description) {
+            return;
+        }
+        var computedLineHeight = parseInt(revUtils.getComputedStyle(description, 'line-height'));
 
         if (computedLineHeight) {
             item.descriptionLineHeight = computedLineHeight;
@@ -1165,7 +1172,12 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.setDescriptionFontSize = function(item) {
-        var computedFontSize = parseInt(revUtils.getComputedStyle(item.element.querySelector('.rev-description h4'), 'font-size'));
+        var description = item.element.querySelector('.rev-description h4');
+        description.removeAttribute('style');
+        if (!description) {
+            return;
+        }
+        var computedFontSize = parseInt(revUtils.getComputedStyle(description, 'font-size'));
 
         if (computedFontSize) {
             item.descriptionFontSize = computedFontSize;
@@ -1181,19 +1193,22 @@ Author: michael@revcontent.com
         item.providerLineHeight = 16;
         item.providerMarginTop = 2;
 
-        var computedFontSize = parseInt(revUtils.getComputedStyle(item.element.querySelector('.rev-provider'), 'font-size'));
+        var provider = item.element.querySelector('.rev-provider');
+        provider.removeAttribute('style');
+
+        var computedFontSize = parseInt(revUtils.getComputedStyle(provider, 'font-size'));
 
         if (computedFontSize) {
             item.providerFontSize = computedFontSize;
         }
 
-        var computedLineHeight = parseInt(revUtils.getComputedStyle(item.element.querySelector('.rev-provider'), 'line-height'));
+        var computedLineHeight = parseInt(revUtils.getComputedStyle(provider, 'line-height'));
 
         if (computedLineHeight) {
             item.providerLineHeight = computedLineHeight;
         }
 
-        var computedMarginTop = parseInt(revUtils.getComputedStyle(item.element.querySelector('.rev-provider'), 'margin-top'));
+        var computedMarginTop = parseInt(revUtils.getComputedStyle(provider, 'margin-top'));
 
         if (computedMarginTop > -1) {
             item.providerMarginTop = computedMarginTop;
@@ -1201,7 +1216,10 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.setHeadlineLineHeight = function(item) {
-        var computedLineHeight = parseInt(revUtils.getComputedStyle(item.element.querySelector('.rev-headline h3'), 'line-height'));
+        var headline = item.element.querySelector('.rev-headline h3');
+        headline.style.lineHeight = null;
+
+        var computedLineHeight = parseInt(revUtils.getComputedStyle(headline, 'line-height'));
 
         if (computedLineHeight) {
             item.headlineLineHeight = computedLineHeight;
@@ -1209,28 +1227,33 @@ Author: michael@revcontent.com
         }
 
         var calculateWidth = item.element.querySelector('.rev-ad-inner').offsetWidth;
-        if (item.textRight) {
-            calculateWidth -= (item.preloaderWidth + parseInt(revUtils.getComputedStyle(item.element.querySelector('.rev-image'), 'margin-right')));
-        }
+        // if (item.textRight) {
+        //     calculateWidth -= (item.preloaderWidth + parseInt(revUtils.getComputedStyle(item.element.querySelector('.rev-image'), 'margin-right')));
+        // }
+        // something between 18 and 28 for headlineHeight
         item.headlineLineHeight = Math.max(18, Math.round(calculateWidth * this.lineHeightMultiplier));
-        if (item.headlineLineHeight > 34) {
-            item.headlineLineHeight = 34;
+        if (item.headlineLineHeight > 28) {
+            item.headlineLineHeight = 28;
         }
     };
 
     RevSlider.prototype.setHeadlineFontSize = function(item) {
-        var computedFontSize = parseInt(revUtils.getComputedStyle(item.element.querySelector('.rev-headline h3'), 'font-size'));
+        var headline = item.element.querySelector('.rev-headline h3');
+        headline.style.fontSize = null;
+        var computedFontSize = parseInt(revUtils.getComputedStyle(headline, 'font-size'));
 
         if (computedFontSize) {
             item.headlineFontSize = computedFontSize;
             return;
         }
 
-        item.headlineFontSize = (item.headlineLineHeight * .8).toFixed(2) / 1;
+        item.headlineFontSize = (item.headlineLineHeight * .75).toFixed(2) / 1;
     };
 
     RevSlider.prototype.setHeadlineMarginTop = function(item) {
-        var computedMarginTop = parseInt(revUtils.getComputedStyle(item.element.querySelector('.rev-headline h3'), 'margin-top'));
+        var headline = item.element.querySelector('.rev-headline h3');
+        headline.style.marginTop = null;
+        var computedMarginTop = parseInt(revUtils.getComputedStyle(headline, 'margin-top'));
 
         if (computedMarginTop > -1) {
             item.headlineMarginTop = computedMarginTop;
@@ -1255,7 +1278,12 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.setDescriptionMarginTop = function(item) {
-        var computedMarginTop = parseInt(revUtils.getComputedStyle(item.element.querySelector('.rev-description h4'), 'margin-top'));
+        var description = item.element.querySelector('.rev-description h4');
+        if (!description) {
+            return;
+        }
+        description.style.marginTop = null;
+        var computedMarginTop = parseInt(revUtils.getComputedStyle(description, 'margin-top'));
 
         // console.log('sup', computedMarginTop);
 
@@ -1686,8 +1714,11 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.resizeDescription = function(el, row, index, item) {
+        if (!el) {
+            return;
+        }
         // el.style.maxHeight = (this.headlineMaxHeights[row][item.span][index] ? this.headlineMaxHeights[row][item.span][index].maxHeight : this.headlineMaxHeights[row][item.span].maxHeight) + 'px';
-        el.querySelector('h4').style.margin = item.descriptionMarginTop +'px ' + item.innerMargin + 'px ' + item.descriptionMarginTop + 'px';
+        el.querySelector('h4').style.margin = item.descriptionMarginTop +'px ' + item.innerMargin + 'px 0';
         el.querySelector('h4').style.fontSize = item.descriptionFontSize + 'px';
         el.querySelector('h4').style.lineHeight = item.descriptionLineHeight + 'px';
     };
@@ -2117,9 +2148,14 @@ Author: michael@revcontent.com
                 var headline = item.element.querySelector('.rev-headline h3');
                 headline.innerHTML = itemData.headline;
 
-                var description = item.element.querySelector('.rev-description h4');
+                var description = item.element.querySelector('.rev-description');
                 if (description) {
-                    description.innerHTML = itemData.description ? itemData.description : 'This is a nice description';
+                    if (itemData.description) {
+                        description.children[0].innerHTML = itemData.description;
+                    } else {
+                        // description.children[0].innerHTML = 'Lorem';
+                        revUtils.remove(description);
+                    }
                 }
 
                 var favicon = item.element.querySelector('.rev-headline-icon');
