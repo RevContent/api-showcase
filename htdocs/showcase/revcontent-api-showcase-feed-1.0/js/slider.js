@@ -1725,7 +1725,8 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.resizeImage = function(el, item) {
         el.style.height = item.preloaderHeight + 'px';
-        el.style.width = typeof item.preloaderWidth === false ? 'auto' : item.preloaderWidth + 'px';
+        el.style.width = 'auto';
+        // el.style.width = typeof item.preloaderWidth === false ? 'auto' : item.preloaderWidth + 'px';
     };
 
     RevSlider.prototype.resizeHeadline = function(el, row, index, item) {

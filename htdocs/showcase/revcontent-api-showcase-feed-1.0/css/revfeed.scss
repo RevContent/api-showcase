@@ -344,6 +344,11 @@
     padding-top: 1.7%;
 }
 
+#rev-feed .rev-content.rev-headline-top .rev-headline h3 {
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
 #rev-feed .rev-content .rev-after-image {
     padding-bottom: 1.7%;
 }
@@ -354,22 +359,23 @@
 }
 
 #rev-feed .rev-content:not(.rev-colspan-2) .rev-after-image {
-    border-color: #ddd;
-    border: 1px solid #ddd;
-    border-width: 0 1px 1px;
     box-shadow: 0 2px 8px -4px black;
 }
 
 #rev-feed .rev-content.rev-content-internal:not(.rev-colspan-2) .rev-before-image {
-    border-color: #ddd;
-    border: 1px solid #ddd;
-    border-width: 1px 1px 0;
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
 }
 
+#rev-feed .rev-content:not(.rev-colspan-2) .rev-ad-inner,
+#rev-feed .rev-content.rev-content-internal:not(.rev-colspan-2) .rev-ad-inner {
+    border-color: #ddd;
+    border: 1px solid #ddd;
+    border-width: 1px;
+}
+
 #rev-feed .rev-content .rev-meta {
-    padding: 3px 0 7px 3px;
+    padding: 4px 0 7px 4px;
     .rev-provider {
         margin-top: 0 !important;
         margin-left: 0 !important;
