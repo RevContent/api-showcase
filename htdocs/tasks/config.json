@@ -196,6 +196,8 @@
       "./build/files/feed/revfeed.embed.js"
     ],
     "watch": [
+      "./showcase/js/*",
+      "./showcase/css/*",
       "./showcase/revcontent-api-showcase-slider-2.0/node_modules/any-grid/dist/any-grid.js",
       "./showcase/revcontent-api-showcase-feed-1.0/js/*",
       "./showcase/revcontent-api-showcase-feed-1.0/css/*"

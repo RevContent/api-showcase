@@ -65,10 +65,17 @@
         return self.plainText ? self.disclosureText : self.disclosureHtml;
     };
 
+    RevDisclose.prototype.setGrid = function (grid) {
+        this.grid = grid;
+    };
+
     RevDisclose.prototype.getDisclosure = function (disclosureText) {
         var self = this;
         self.setDisclosureText(disclosureText);
         if(typeof self.dialog === "object") {
+            if (this.grid) {
+                self.dialog.grid = this.grid;
+            }
             self.setOnClickHandler(self.dialog.showDialog, self.dialog);
         } else {
             self.setOnClickHandler(self.defaultOnClick);

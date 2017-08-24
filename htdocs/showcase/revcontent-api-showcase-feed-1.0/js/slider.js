@@ -1647,6 +1647,7 @@ Author: michael@revcontent.com
             this.sponsored = document.createElement('div');
 
             revUtils.addClass(this.sponsored, 'rev-sponsored');
+            revDisclose.setGrid(this.grid);
             this.sponsored.innerHTML = revDisclose.getDisclosure(this.options.disclosure_text);
 
             if (this.options.rev_position == 'top_right') {
