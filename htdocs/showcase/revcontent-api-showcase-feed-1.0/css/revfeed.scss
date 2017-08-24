@@ -126,6 +126,7 @@
         .rev-content-header-inner {
             // margin-top: 8px;
             .rev-icon {
+                line-height: 0;
                 float: left;
                 margin: 1px 5px 0 0;
                 svg {
@@ -322,17 +323,19 @@
 
 #rev-feed .rev-content,
 #rev-feed .rev-content-header {
-    padding: 8px 4px;
+    padding: 2px 4px 14px;
 }
 
-#rev-feed .rev-content.rev-colspan-2 {
-    // padding: 0 4px 16px;
-    // padding-top: 16px;
-    // padding-bottom: 16px;
-    // padding-bottom: 10px;
+#rev-feed .rev-content.rev-colspan-3, #rev-feed .rev-content.rev-colspan-6 {
+    padding-bottom: 22px;
 }
 
-#rev-feed .rev-content.rev-colspan-6 {
+.rev-slider-breakpoint-lt-sm #rev-feed .rev-content,
+.rev-slider-breakpoint-lt-sm #rev-feed .rev-content-header {
+    padding: 2px 4px 10px;
+}
+
+.rev-slider-breakpoint-lt-sm #rev-feed .rev-content.rev-colspan-3, .rev-slider-breakpoint-lt-sm #rev-feed .rev-content.rev-colspan-6 {
     padding-bottom: 16px;
 }
 
@@ -358,7 +361,7 @@
 
 }
 
-#rev-feed .rev-content:not(.rev-colspan-2) .rev-after-image {
+#rev-feed .rev-content:not(.rev-colspan-2) .rev-ad-container {
     box-shadow: 0 2px 8px -4px black;
 }
 
@@ -367,8 +370,8 @@
     border-top-right-radius: 2px;
 }
 
-#rev-feed .rev-content:not(.rev-colspan-2) .rev-ad-inner,
-#rev-feed .rev-content.rev-content-internal:not(.rev-colspan-2) .rev-ad-inner {
+#rev-feed .rev-content:not(.rev-colspan-2) .rev-ad-container,
+#rev-feed .rev-content.rev-content-internal:not(.rev-colspan-2) .rev-ad-container {
     border-color: #ddd;
     border: 1px solid #ddd;
     border-width: 1px;
