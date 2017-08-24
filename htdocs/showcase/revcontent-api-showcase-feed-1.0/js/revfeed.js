@@ -16,6 +16,7 @@ Author: michael@revcontent.com
     var RevFeed = function(opts) {
 
         var defaults = {
+            api_source: 'feed',
             url: 'https://trends.revcontent.com/api/v1/',
             host: 'https://trends.revcontent.com',
             devices: [
@@ -137,7 +138,7 @@ Author: michael@revcontent.com
         revUtils.append(this.element, this.containerElement);
 
         this.innerWidget = new RevSlider({
-            api_source:   'feed',
+            api_source:   this.options.api_source,
             element:      [this.containerElement],
             url:          this.options.url,
             host:          this.options.host,
@@ -180,35 +181,30 @@ Author: michael@revcontent.com
     };
 
     RevFeed.prototype.viewability = function() {
-        this.viewable = [];
         this.viewed = [];
 
         var self = this;
 
         return new Promise(function(resolve, reject) {
-            var total = self.innerWidget.grid.items.length;
+            var total = self.innerWidget.viewableItems.length;
             var count = 0;
-            for (var i = 0; i < self.innerWidget.grid.items.length; i++) {
-                revUtils.checkVisibleItem(self.innerWidget.grid.items[i], function(viewed, item) {
+            for (var i = 0; i < self.innerWidget.viewableItems.length; i++) {
+                revUtils.checkVisibleItem(self.innerWidget.viewableItems[i], function(viewed, item) {
                     count++;
                     if (count == total) {
                         resolve();
                     }
                     if (viewed) {
+                        var index = self.innerWidget.viewableItems.indexOf(item);
+                        if(index != -1) {
+                            self.innerWidget.viewableItems.splice(index, 1);
+                        }
                         self.viewed.push(item);
-                    } else {
-                        self.addViewableItem(item);
                     }
                 }, self.options.viewable_percentage);
             }
         });
     };
-
-    RevFeed.prototype.addViewableItem = function(item) {
-        if (item.type == 'sponsored' || item.type == 'internal') {
-            this.viewable.push(item);
-        }
-    }
 
     RevFeed.prototype.infinite = function() {
         var self = this;
@@ -289,6 +285,7 @@ Author: michael@revcontent.com
 
                 Promise.all(this.promises).then(function(data) {
                     self.innerWidget.updateDisplayedItems(rowData.items, data);
+                    self.innerWidget.viewableItems = self.innerWidget.viewableItems.concat(rowData.items);
                     self.doing = false; // TODO should this be moved up and out
                 });
             }
@@ -297,6 +294,7 @@ Author: michael@revcontent.com
         }
 
         this.innerWidget.emitter.on('removedItems', function(items) {
+            revUtils.removeEventListener(window, 'scroll', self.visibleListener);
             revUtils.removeEventListener(window, 'scroll', self.scrollListener);
 
             var el = items[0].element;
@@ -314,14 +312,14 @@ Author: michael@revcontent.com
     };
 
     RevFeed.prototype.checkVisible = function() {
-        // console.log(this.viewable);
         var self = this;
-        for (var i = 0; i < this.viewable.length; i++) {
-            revUtils.checkVisibleItem(this.viewable[i], function(viewed, item) {
+        for (var i = 0; i < this.innerWidget.viewableItems.length; i++) {
+            revUtils.checkVisibleItem(this.innerWidget.viewableItems[i], function(viewed, item) {
                 if (viewed) {
-                    var index = self.viewable.indexOf(item);
+                    var index = self.innerWidget.viewableItems.indexOf(item);
                     if(index != -1) {
-                        self.viewable.splice(index, 1);
+                        self.innerWidget.viewableItems.splice(index, 1);
+
                         // if (!self.viewable.length) {
                         //     revUtils.removeEventListener(window, 'scroll', self.visibleListener);
                         // }
@@ -333,14 +331,18 @@ Author: michael@revcontent.com
     };
 
     RevFeed.prototype.registerView = function(viewed) {
-        return;
-        // var view = this.element.getAttribute('data-view');
 
-        var params = '';
+        var view = viewed[0].view;
+
+        if (!view) { // safety first, if the first one doesn't have data none should
+            return;
+        }
+
+        var params = 'api_source=' + (viewed[0].initial ? 'ba_' : '') + this.options.api_source;
 
         // params += 'id=' + encodeURIComponent(this.options.id); // debug/test
 
-        params += 'view=' + encodeURIComponent(viewed[0].view);
+        params += '&view=' + view;
 
         for (var i = 0; i < viewed.length; i++) {
             params += '&' + encodeURIComponent('p[]') + '=' + viewed[i].index;

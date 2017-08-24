@@ -439,14 +439,15 @@ Author: michael@revcontent.com
             // }
         } else {
 
-            var rowData = this.createRows(grid, this.options.rows);
+            var rowData = this.createRows(grid, this.options.rows, true);
+            this.viewableItems = rowData.items;
             this.limit = rowData.limit;
             this.internalLimit = rowData.internalLimit;
             this.sponsoredLimit = rowData.sponsoredLimit;
         }
     };
 
-    RevSlider.prototype.createRows = function(grid, rows) {
+    RevSlider.prototype.createRows = function(grid, rows, initial) {
         var i = 0; // just in case
         var limit = 0;
         var internalLimit = 0;
@@ -461,7 +462,7 @@ Author: michael@revcontent.com
             grid.layoutItems(items, true);
             grid.reveal(items);
             // var items = grid.appended([cell]);
-
+            items[0].initial = initial;
             itemsArr.push(items[0]);
 
             if (this.options.internal_selector && items[0].element.matches(this.options.internal_selector)) {
@@ -1850,14 +1851,14 @@ Author: michael@revcontent.com
          return this.serializedQueryParams;
     };
 
-    RevSlider.prototype.generateUrl = function(offset, count, empty, viewed, internal) {
+    RevSlider.prototype.generateUrl = function(offset, count, empty, viewed, internal, initial) {
         var url = (this.options.host ? this.options.host + '/api/v1' : this.options.url) +
         '?api_key=' + this.options.api_key +
         this.getSerializedQueryParams() +
         '&pub_id=' + this.options.pub_id +
         '&widget_id=' + this.options.widget_id +
         '&domain=' + this.options.domain +
-        '&api_source=' + this.options.api_source;
+        '&api_source=' + (initial ? 'ba_' : '') + this.options.api_source;
 
         url +=
         '&sponsored_count=' + (internal ? 0 : count) +
@@ -1887,7 +1888,7 @@ Author: michael@revcontent.com
         var urls = [];
 
         if (this.internalLimit > 0) {
-            var internalURL = this.generateUrl(0, this.internalLimit, true, false, true);
+            var internalURL = this.generateUrl(0, this.internalLimit, false, false, true, true);
             urls.push({
                 url: internalURL,
                 type: 'internal'
@@ -1895,7 +1896,7 @@ Author: michael@revcontent.com
         }
 
         if (this.sponsoredLimit > 0) {
-            var sponsoredURL = this.generateUrl(0, this.sponsoredLimit, true, false, false);
+            var sponsoredURL = this.generateUrl(0, this.sponsoredLimit, false, false, false, true);
             urls.push({
                 url: sponsoredURL,
                 type: 'sponsored'
@@ -2080,12 +2081,12 @@ Author: michael@revcontent.com
                 var item = itemTypes[dataType][j];
                 var itemData = dataData[j];
 
-                item.view = itemData.view; // this is different for trending and sponsored so set for each item
-
                 if (!itemData) {
                     this.removeItems.push(item);
                     continue;
                 }
+
+                item.view = itemData.view; // this is different for trending and sponsored so set for each item
 
                 // if (this.options.image_overlay !== false) { // TODO: ad does not exist
                 //     revUtils.imageOverlay(ad.querySelector('.rev-image'), itemData.content_type, this.options.image_overlay, this.options.image_overlay_position);
