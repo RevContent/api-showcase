@@ -479,9 +479,9 @@ Author: michael@revcontent.com
 
                 items[0].element.querySelector('.rev-before-image').appendChild(meta);
 
-                if (this.options.headline_icon_selector && items[0].element.matches(this.options.headline_icon_selector)) {
+                // if (this.options.headline_icon_selector && items[0].element.matches(this.options.headline_icon_selector)) {
                     meta.querySelector('.rev-meta-inner').insertAdjacentHTML('afterbegin', '<div class="rev-headline-icon-container"><div class="rev-headline-icon"></div></div>');
-                }
+                // }
 
                 var description = '<div class="rev-description">' +
                                     '<h4></h4>' +

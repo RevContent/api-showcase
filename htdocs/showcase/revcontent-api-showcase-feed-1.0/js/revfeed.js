@@ -61,20 +61,20 @@ Author: michael@revcontent.com
                     spans: 6
                 },
                 {
-                    selector: '.rev-content:nth-child(-n+9)',
+                    selector: '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(-n+9)',
                     spans: 2
                 },
             ],
             image_ratio: [
                 {
-                    selector: '.rev-content:nth-child(n+10)',
-                    ratio: '12:6'
+                    selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-content:nth-child(n+10)',
+                    ratio: '6:3'
                 }
             ],
-            header_selector: '.rev-content:nth-child(4n+11)',
-            internal_selector: '.rev-content:nth-child(4n+10), .rev-content:nth-child(4n+11)',
+            header_selector: '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(4n + 5), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+11)', // goes after this selector
+            internal_selector: '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(4n + 4), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(4n + 5), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+10), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+11)',
             // headline_icon_selector: '.rev-content:nth-child(4n+10), .rev-content:nth-child(4n+11)',
-            headline_icon_selector: '.rev-content',
+            // headline_icon_selector: '.rev-content',
             viewable_percentage: 50,
             buffer: 500
         };
