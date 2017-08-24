@@ -6,7 +6,7 @@ app.service('widgets', function() {
             preview_img: 'preview-sideshifter.jpg?v=2',
             description: 'Revfeed is awesome',
             link: 'revcontent-api-showcase-feed-1.0/index.html',
-            docs: 'revcontent-api-showcase-feed-1.0/README.md',
+            // docs: 'revcontent-api-showcase-feed-1.0/README.md',
             bg: '#29599a',
             img_animated: false,
             image_animation_duration: 10000,
