@@ -43,6 +43,11 @@
             text-align: left;
             width: auto;
         }
+            .rev-header-logo {
+                float: left;
+                background-size: contain;
+                margin-right: 6px;
+            }
     }
 
     .rev-sponsored {
@@ -241,7 +246,8 @@
         }
 
         .rev-headline,
-        .rev-headline-max-check {
+        .rev-headline-max-check,
+        .rev-description {
             overflow: hidden;
         }
 
@@ -252,7 +258,7 @@
             font-size: 0px;
             line-height: 0px;
             font-weight: normal;
-            overflow: hidden;
+            // overflow: hidden;
             // margin: 0;
             text-transform: none;
         }
@@ -334,6 +340,10 @@
     padding-top: 1px;
 }
 
+#rev-feed .rev-content.rev-headline-top .rev-after-image {
+    padding-top: 1.7%;
+}
+
 #rev-feed .rev-content .rev-after-image {
     padding-bottom: 1.7%;
 }
@@ -359,7 +369,7 @@
 }
 
 #rev-feed .rev-content .rev-meta {
-    padding-bottom: 7px;
+    padding: 3px 0 7px 3px;
     .rev-provider {
         margin-top: 0 !important;
         margin-left: 0 !important;
@@ -370,6 +380,11 @@
         font-weight: 900;
         color: #333;
     }
+}
+
+#rev-feed .rev-content.rev-headline-top .rev-headline h3 {
+    margin-top: 0;
+    padding-bottom: .5%;
 }
 
 #rev-feed ul.rc-reaction-bar {

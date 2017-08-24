@@ -74,10 +74,13 @@ Author: michael@revcontent.com
             ],
             header_selector: '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(4n + 5), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+11)', // goes after this selector
             internal_selector: '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(4n + 4), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(4n + 5), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+10), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+11)',
+            reactions_selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(n+10)',
+            headline_top_selector: false,
             // headline_icon_selector: '.rev-content:nth-child(4n+10), .rev-content:nth-child(4n+11)',
             // headline_icon_selector: '.rev-content',
             viewable_percentage: 50,
-            buffer: 500
+            buffer: 500,
+            header_logo: false
         };
 
         // merge options
@@ -177,9 +180,12 @@ Author: michael@revcontent.com
             register_views: false,
             row_pages: true,
             visible_rows: 1,
+            header_logo: this.options.header_logo,
             developer: this.options.developer,
             internal_selector: this.options.internal_selector,
-            header_selector: this.options.header_selector
+            header_selector: this.options.header_selector,
+            reactions_selector: this.options.reactions_selector,
+            headline_top_selector: this.options.headline_top_selector
         });
     };
 
