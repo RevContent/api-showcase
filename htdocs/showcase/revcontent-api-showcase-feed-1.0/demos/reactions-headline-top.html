@@ -31,6 +31,17 @@
     <noscript><img src="https://d5nxst8fruw4z.cloudfront.net/atrk.gif?account=D7+Ll1aE+GW1/9" style="display:none" height="1" width="1" alt="" /></noscript>
     <!-- End Alexa Certify Javascript -->
 
+    <style type="text/css">
+        #rev-slider2 .rev-content .rev-reactions {
+            position: absolute;
+            top: 3px;
+            right: 16px;
+        }
+        #rev-slider2 .rev-content.rev-content-sponsored .rev-reactions {
+            top: -46px;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -412,29 +423,8 @@
             pub_id : 3887,
             widget_id : 27826,
             domain : 'newsweek.com',
-            column_spans: [
-                {
-                    selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-content-header, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(5n+10), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(5n+11)',
-                    spans: 6
-                },
-                {
-                    selector: '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(-n+9)',
-                    spans: 2
-                },
-                {
-                    selector: '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(5n+13), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(5n+14)',
-                    spans: 3
-                }
-            ],
-            image_ratio: [
-                {
-                    selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-content:nth-child(5n+10), .rev-content:nth-child(5n+11)',
-                    ratio: '6:3'
-                }
-            ],
-            header_selector: '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(4n + 5), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(5n+11)',
-            internal_selector: '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(4n + 4), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(4n + 5), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(5n+10),.rev-slider-breakpoint-gt-xs .rev-content:nth-child(5n+11)',
-            // headline_icon_selector: '.rev-content:nth-child(5n+10), .rev-content:nth-child(5n+11)',
+            reactions_selector: '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(n+4), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(n+10)',
+            headline_top_selector: '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(4n + 4), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(4n + 5), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+10), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+11)'
         });
     </script>
 
