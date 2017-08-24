@@ -126,7 +126,10 @@ Author: michael@revcontent.com
             }, function() {
                 console.log('someething went wrong');
             });
-        })
+        }, function() {
+        }).catch(function(e) {
+            console.log(e);
+        });
     };
 
     RevFeed.prototype.createInnerWidget = function() {

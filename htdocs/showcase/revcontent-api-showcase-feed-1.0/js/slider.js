@@ -239,17 +239,11 @@ Author: michael@revcontent.com
         var that = this;
 
         this.dataPromise.then(function(data){
-            if (!data.length) {
-                that.destroy();
-            }
-
             that.updateDisplayedItems(that.grid.items, data);
-
-            // that.emitter.once('imagesLoaded', function() {
-            //     revUtils.addClass(that.containerElement, 'loaded');
-            // });
-
-            // revUtils.imagesLoaded(that.grid.element.querySelectorAll('img'), that.emitter);
+        }, function() {
+            that.destroy();
+        }).catch(function(e) {
+            console.log(e);
         });
 
         this.offset = 0;
@@ -1937,11 +1931,14 @@ Author: michael@revcontent.com
         }
 
         this.promises = [];
-
         for (var i = 0; i < urls.length; i++) {
             this.promises.push(new Promise(function(resolve, reject) {
                 var url = urls[i];
                 revApi.request(url.url, function(resp) {
+                    if (!resp.length) {
+                        reject();
+                        return;
+                    }
                     resolve({
                         type: url.type,
                         data: resp
