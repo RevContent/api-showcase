@@ -245,6 +245,7 @@ Author: michael@revcontent.com
 
         this.dataPromise.then(function(data){
             that.updateDisplayedItems(that.grid.items, data);
+            revApi.beacons.setPluginSource(this.options.api_source).attach();
         }, function() {
             that.destroy();
         }).catch(function(e) {
@@ -2211,9 +2212,9 @@ Author: michael@revcontent.com
             }
         }
 
-        if (this.options.register_impressions) {
-            this.registerImpressions(viewed);
-        }
+        // if (this.options.register_impressions) {
+        //     this.registerImpressions(viewed);
+        // }
 
         // console.log('remove', this.removeItems); // HERE. REMOVE THESE and HALT THIS THING
 

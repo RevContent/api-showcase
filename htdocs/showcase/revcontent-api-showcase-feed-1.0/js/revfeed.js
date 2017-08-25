@@ -15,6 +15,8 @@ Author: michael@revcontent.com
 
     var RevFeed = function(opts) {
 
+        var below_article = (typeof opts.below_article !== 'undefined') ? opts.below_article : true;
+
         var defaults = {
             api_source: 'rcfeed',
             url: 'https://trends.revcontent.com/api/v1/',
@@ -54,9 +56,9 @@ Author: michael@revcontent.com
             rev_position: 'top_right',
             developer: false,
             per_row: 6,
-            rows: 5,
+            rows: below_article ? 5 : 4,
             infinite: true,
-            column_spans: [
+            column_spans: below_article ? [
                 {
                     selector: '.rev-content-header, .rev-content',
                     spans: 6
@@ -65,15 +67,27 @@ Author: michael@revcontent.com
                     selector: '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(-n+9)',
                     spans: 2
                 },
+            ] : [
+                {
+                    selector: '.rev-content-header, .rev-content',
+                    spans: 6
+                },
             ],
-            image_ratio: [
+            image_ratio: below_article ? [
                 {
                     selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-content:nth-child(n+10)',
                     ratio: '6:3'
                 }
+            ] : [
+                {
+                    selector: '.rev-content',
+                    ratio: '12:6'
+                }
             ],
-            header_selector: '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(4n + 5), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+11)', // goes after this selector
-            internal_selector: '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(4n + 4), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(4n + 5), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+10), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+11)',
+            header_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(4n + 5), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+11)' :
+                '.rev-content:nth-child(4n + 2)', // goes after this selector
+            internal_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(4n + 4), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(4n + 5), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+10), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+11)' :
+                '.rev-content:nth-child(4n+1), .rev-content:nth-child(4n+2)',
             reactions_selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(n+10)',
             headline_top_selector: false,
             // headline_icon_selector: '.rev-content:nth-child(4n+10), .rev-content:nth-child(4n+11)',
