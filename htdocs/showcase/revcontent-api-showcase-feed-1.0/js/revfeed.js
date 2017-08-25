@@ -368,7 +368,7 @@ Author: michael@revcontent.com
         var params = 'view=' + view;
 
         for (var i = 0; i < viewed.length; i++) {
-            params += '&' + encodeURIComponent('p[]') + '=' + viewed[i].index;
+            params += '&' + encodeURIComponent('p[]') + '=' + viewed[i].viewIndex;
         }
 
         revApi.request(this.options.host + '/view.php?' + params, function() {

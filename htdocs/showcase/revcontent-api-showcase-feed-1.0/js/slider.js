@@ -2150,6 +2150,7 @@ Author: michael@revcontent.com
                     continue;
                 }
 
+                item.viewIndex = j;
                 item.view = itemData.view; // this is different for trending and sponsored so set for each item
 
                 // if (this.options.image_overlay !== false) { // TODO: ad does not exist
