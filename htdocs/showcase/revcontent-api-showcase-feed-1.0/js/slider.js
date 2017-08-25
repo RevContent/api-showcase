@@ -245,7 +245,9 @@ Author: michael@revcontent.com
 
         this.dataPromise.then(function(data){
             that.updateDisplayedItems(that.grid.items, data);
-            revApi.beacons.setPluginSource(this.options.api_source).attach();
+            if (that.options.beacons) {
+                revApi.beacons.setPluginSource(that.options.api_source).attach();
+            }
         }, function() {
             that.destroy();
         }).catch(function(e) {
