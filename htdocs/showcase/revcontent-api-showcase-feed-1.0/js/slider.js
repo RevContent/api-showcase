@@ -1910,7 +1910,7 @@ Author: michael@revcontent.com
          return this.serializedQueryParams;
     };
 
-    RevSlider.prototype.generateUrl = function(offset, count, empty, viewed, internal, below_article) {
+    RevSlider.prototype.generateUrl = function(offset, count, empty, viewed, internal, below_article, fill) {
         var url = (this.options.host ? this.options.host + '/api/v1' : this.options.url) +
         '?api_key=' + this.options.api_key +
         this.getSerializedQueryParams() +
@@ -1924,6 +1924,8 @@ Author: michael@revcontent.com
         '&internal_count=' + (internal ? count : 0) +
         '&sponsored_offset=' + (internal ? 0 : offset) +
         '&internal_offset=' + (internal ? offset : 0);
+
+        url += fill ? '&fill=true' : '';
 
         url += this.options.user_ip ? ('&user_ip=' + this.options.user_ip) : '';
         url += this.options.user_agent ? ('&user_agent=' + this.options.user_agent) : '';
@@ -1957,7 +1959,9 @@ Author: michael@revcontent.com
         if (this.sponsoredLimit > 0) {
             // if the first internal is greater than 0 there is a ba
             var firstInternal = revUtils.siblingIndex(this.grid.element.querySelector(this.options.internal_selector));
-            var sponsoredURL = this.generateUrl(0, this.sponsoredLimit, false, false, false, (firstInternal > 0));
+            // don't register multiple widget impressions
+            var fill = urls.length > 0;
+            var sponsoredURL = this.generateUrl(0, this.sponsoredLimit, false, false, false, (firstInternal > 0), fill);
             urls.push({
                 url: sponsoredURL,
                 type: 'sponsored'
