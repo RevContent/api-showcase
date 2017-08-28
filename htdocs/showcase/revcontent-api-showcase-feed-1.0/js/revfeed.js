@@ -355,7 +355,7 @@ Author: michael@revcontent.com
 
     RevFeed.prototype.registerView = function(viewed) {
 
-        var view = viewed[0].view;
+        var view = viewed[0].data.view;
 
         if (!view) { // safety first, if the first one doesn't have data none should
             return;

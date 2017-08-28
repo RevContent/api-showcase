@@ -1752,17 +1752,13 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.resizeHeadlineIcon = function(el, row, index, item) {
-        if (el) {
-            var height = item.element.querySelector('.rev-meta-inner').offsetHeight;
-
-            el.style.height = height + 'px';
-            el.style.width = height + 'px';
-
-            // var icon = el.children[0];
-            // icon.style.height = item.headlineFontSize + 'px'
-            // icon.style.width = item.headlineFontSize + 'px';
-            // icon.style.marginTop = ((item.headlineLineHeight - item.headlineFontSize) / 2) + 'px';
+        if (!el) {
+            return;
         }
+        var height = item.element.querySelector('.rev-meta-inner').offsetHeight;
+
+        el.style.height = height + 'px';
+        el.style.width = height + 'px';
     };
 
     RevSlider.prototype.resizeProvider = function(el, item) {
@@ -2155,7 +2151,7 @@ Author: michael@revcontent.com
                 }
 
                 item.viewIndex = j;
-                item.view = itemData.view; // this is different for trending and sponsored so set for each item
+                item.data = itemData;
 
                 // if (this.options.image_overlay !== false) { // TODO: ad does not exist
                 //     revUtils.imageOverlay(ad.querySelector('.rev-image'), itemData.content_type, this.options.image_overlay, this.options.image_overlay_position);
@@ -2191,20 +2187,21 @@ Author: michael@revcontent.com
                     description.children[0].innerHTML = itemData.description ? itemData.description : 'Read More';
                 }
 
-                var date = item.element.querySelector('.rev-date');
-                if (date) {
-                    date.innerHTML = this.timeAgo(itemData.date);
-                }
-
                 var favicon = item.element.querySelector('.rev-headline-icon');
-                if (favicon) {
-                    var url = itemData.favicon_url ? 'url("' + itemData.favicon_url + '")' : 'url('+ this.logoURI +')';
-                    favicon.style.backgroundImage = url;
+                if (favicon && itemData.favicon_url) {
+                    favicon.style.backgroundImage = 'url("' + itemData.favicon_url + '")';
+
+                    var date = item.element.querySelector('.rev-date');
+                    if (date && itemData.date) {
+                        date.innerHTML = this.timeAgo(itemData.date);
+                    }
+                } else { // no meta
+                    revUtils.remove(item.element.querySelector('.rev-meta'))
                 }
 
                 var provider = item.element.querySelector('.rev-provider');
                 if (provider) {
-                    provider.innerHTML = itemData.brand ? itemData.brand : this.options.domain;
+                    provider.innerHTML = itemData.brand ? itemData.brand : this.extractRootDomain(itemData.target_url);
                 }
 
                 // make sure the text-decoration is the same as the headline
@@ -2337,6 +2334,35 @@ Author: michael@revcontent.com
         // this.updatePagination();
         // this.fitHeight();
     };
+
+    RevSlider.prototype.extractRootDomain = function(url) {
+        if (!url) {
+            return '';
+        }
+        var domain;
+        //find & remove protocol (http, ftp, etc.) and get hostname
+
+        if (url.indexOf("://") > -1) {
+            domain = url.split('/')[2];
+        }
+        else {
+            domain = url.split('/')[0];
+        }
+
+        //find & remove port number
+        domain = domain.split(':')[0];
+        //find & remove "?"
+        domain = domain.split('?')[0];
+
+        var splitArr = domain.split('.'),
+            arrLen = splitArr.length;
+
+        //extracting the root domain here
+        if (arrLen > 2) {
+            domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1];
+        }
+        return domain;
+    }
 
     RevSlider.prototype.timeAgo = function(time) {
         var templates = {
