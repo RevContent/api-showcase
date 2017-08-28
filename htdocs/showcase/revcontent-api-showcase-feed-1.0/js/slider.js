@@ -2360,7 +2360,7 @@ Author: michael@revcontent.com
 
         // random hrs
         if (!time)
-            return (Math.floor(Math.random() * (24 - 1 + 1)) + 1) + ' hrs';
+            return '';
         time = time.replace(/\.\d+/, ""); // remove milliseconds
         time = time.replace(/-/, "/").replace(/-/, "/");
         time = time.replace(/T/, " ").replace(/Z/, " UTC");
