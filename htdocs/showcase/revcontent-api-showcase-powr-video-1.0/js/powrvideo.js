@@ -7,9 +7,9 @@
 // universal module definition
 ( function( window, factory ) {
     // browser global
-    window.PowrVideo = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDisclose);
+    window.PowrVideo = factory(window, window.revUtils, window.revApi);
 
-}( window, function factory(window, revUtils, revDetect, revApi, revDisclose) {
+}( window, function factory(window, revUtils, revApi) {
 
     var PowrInitialized = false;
 
@@ -22,6 +22,7 @@
         if (config.playerId) {
             this.playerId = config.playerId;
         }
+        this.viewed = false;
         this.playerWidth = this.element.clientWidth;
         this.playerHeight = 0.5625 * this.playerWidth;
 
@@ -32,8 +33,6 @@
             var height = parseInt(0.5625 * width);
             elem.setAttribute("style", "width : 100%; height : " + height + "px; background-color : #EFEFEF");
         });
-
-        this.attachVisibleListener();
 
         this.videos = config.videos;
         this.currentContent = 0;
@@ -87,7 +86,10 @@
 
     PowrVideo.prototype.setup = function () {
         this.container = document.createElement("div");
+        this.container.className = 'powr_player';
         this.element.appendChild(this.container);
+
+        this.attachVisibleListener();
 
         var dumbPlayer = document.createElement('video');
         dumbPlayer.id = this.playerId;
@@ -106,6 +108,8 @@
         this.container.appendChild(dumbPlayer);
 
         this.player = videojs(this.playerId);
+
+        GlobalPlayer = this.player;
 
         this.currentContent = 0;
 
@@ -132,7 +136,7 @@
                 }]
             });
             me.player.overlays_[0].show();
-
+            me.player.on('timeupdate', me.onUpdate.bind(me));
 
             if (navigator.userAgent.match(/iPhone/i) ||
                 navigator.userAgent.match(/iPad/i) ||
@@ -150,6 +154,25 @@
             }
         });
     };
+
+    PowrVideo.prototype.onUpdate = function() {
+        var video = this.videos[this.currentContent];
+        var d = this.player.currentTime();
+        d = (d * 1.0) / video.duration;
+        if (video.tracking['start'] && (d > 0)) {
+            revApi.request(this.config.tracking_url + video.tracking['start'], function () { return ; });
+            video.tracking['start'] = null;
+        } else if (video.tracking['q_1'] && (d > 0.25)) {
+            revApi.request(this.config.tracking_url + video.tracking['q_1'], function () { return ; });
+            video.tracking['q_1'] = null;
+        } else if (video.tracking['q_2'] && (d > 0.5)) {
+            revApi.request(this.config.tracking_url + video.tracking['q_2'], function () { return ; });
+            video.tracking['q_2'] = null;
+        } else if (video.tracking['q_3'] && (d > 0.75)) {
+            revApi.request(this.config.tracking_url + video.tracking['q_3'], function () { return ; });
+            video.tracking['q_3'] = null;
+        }
+    };
     
     PowrVideo.prototype.start = function(playOnLoad) {
         this.player.ima(this.options, this.bind(this, this.adsManagerLoadedCallback));
@@ -166,6 +189,11 @@
     };
 
     PowrVideo.prototype.loadNextVideo = function() {
+        var video = this.videos[this.currentContent];
+        if (video.tracking['end']) {
+            revApi.request(this.config.tracking_url + video.tracking['end'], function () { return ; });
+            video.tracking['end'] = null;
+        }
         this.currentContent++;
         if (this.currentContent < this.videos.length) {
             this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), true);
@@ -179,21 +207,17 @@
         }
     };
 
-    PowrVideo.prototype.visible = function(percentage) {
-        // console.log("WE ARE VISIBLE " + percentage);
-    };
-
     PowrVideo.prototype.attachVisibleListener = function() {
-        // this.visibleListener = revUtils.throttle(this.checkVisible.bind(this, this.element, this.visible), 60);
         revUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
+        this.checkVisible();
     };
 
     PowrVideo.prototype.floatPlayer = function() {
-        this.container.className = "rc-float-video";
+        this.container.className = "rc-float-video powr_player";
     };
 
     PowrVideo.prototype.unfloatPlayer = function() {
-        this.container.className = '';
+        this.container.className = 'powr_player';
     };
 
     PowrVideo.prototype.checkVisible = function() {
@@ -209,8 +233,12 @@
             var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
             var elementTop = that.element.getBoundingClientRect().top;
             var elementBottom = that.element.getBoundingClientRect().bottom;
+            var elementVisibleHeight = that.element.offsetHeight * 0.50;
 
-            console.log(scroll + "," + elementTop + "," + elementBottom);
+            if ((elementTop + elementVisibleHeight) < windowHeight) {
+                that.registerView();
+            }
+
             if (elementTop < 0 && (-1 * elementTop) > 0.2 * that.playerHeight) {
                 that.floatPlayer();
             } else {
@@ -219,14 +247,6 @@
         });
     };
 
-
-    PowrVideo.prototype.registerViewOnceVisible = function() {
-        var that = this;
-        this.emitter.once('visible', function() {
-            revUtils.removeEventListener(window, 'scroll', that.visibleListener);
-            that.registerView();
-        });
-    };
 
     PowrVideo.prototype.adsManagerLoadedCallback = function() {
         var me = this;
@@ -239,7 +259,7 @@
     PowrVideo.prototype.registerView = function() {
         if (!this.viewed) {
             this.viewed = true;
-            revApi.request(this.config.view_url + '?view=' + this.config.view + '&p[]=0', function() { return; });
+            revApi.request(this.config.tracking_url + this.config.view_tracker, function() { return; });
         }
     };
 

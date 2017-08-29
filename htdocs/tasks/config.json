@@ -22,7 +22,6 @@
       "./node_modules/videojs-ima/src/videojs.ima.js",
       "./showcase/js/requestAnimationFrame.js",
       "./showcase/js/revutils.js",
-      "./showcase/js/revdialog.js",
       "./showcase/js/revapi.js",
       "./build/files/powrvideo/revpowrvideo.embed.js"
     ],

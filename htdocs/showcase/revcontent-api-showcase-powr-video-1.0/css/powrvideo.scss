@@ -1,22 +1,22 @@
-h2.powr-video-player {
+.powr_player h2.powr-video-player {
     font-family: Arial;
     font-size: 20px;
 }
 
-.video-js .vjs-control-bar {
+.powr_player .video-js .vjs-control-bar {
     height: 4em;
 }
 
-.video-js .vjs-control {
+.powr_player .video-js .vjs-control {
     font-size : 1.3em;
 }
 
-.video-js .vjs-custom-logo {
+.powr_player .video-js .vjs-custom-logo {
     width : auto;
     padding : 4px;
 }
 
-body .video-js .rc-video-overlay {
+body .powr_player .video-js .rc-video-overlay {
     margin-left : 0px;
     left : 0px;
     top : 0px;
@@ -36,16 +36,16 @@ body .video-js .rc-video-overlay {
     transition: visibility 1.5s, opacity 1.5s;
 }
 
-.rc-video-overlay > small {
+.powr_player .rc-video-overlay > small {
     float : right;
     text-align: center;
 }
 
-.rc-video-overlay > small small {
+.powr_player .rc-video-overlay > small small {
     font-size : 12px;
 }
 
-.rc-float-video {
+.powr_player .rc-float-video {
     position : fixed;
     right : 12px;
     bottom : 12px;
@@ -54,7 +54,7 @@ body .video-js .rc-video-overlay {
 }
 
 @media (orientation: portrait) {
-    .rc-float-video {
+    .powr_player .rc-float-video {
         position : fixed;
         top : 12px;
         left : 12px;

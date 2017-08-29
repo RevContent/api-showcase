@@ -87,7 +87,7 @@
                         rcel.id = "rc_" + Math.floor(Math.random() * 1000);
                         rcel.type = "text/javascript";
                         rcel.src = "http://trends.revcontent.com.hjain.revcontent.rcdev/video.js.php?uid=673&t="
-                            +rcel.id+"&c="+(new Date()).getTime()+"&k=" + encodeURI(k) +"&su=" + encodeURI(window.location.href);
+                            +rcel.id+"&a=true&c="+(new Date()).getTime()+"&k=" + encodeURI(k) +"&su=" + encodeURI(window.location.href);
                         rcel.async = true;
                         var rcds = document.getElementById("rcjsload_3a208e"); rcds.appendChild(rcel);
                     })();
