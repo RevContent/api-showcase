@@ -2165,7 +2165,7 @@ Author: michael@revcontent.com
                 if (reactions) {
                     var js = document.createElement('script');
                     js.type = 'text/javascript';
-                    js.src = this.options.host + '/reactions.js.php?r=199&url=' + itemData.url;
+                    js.src = this.options.host + '/reactions.js.php?t=thumb&r=199&url=' + itemData.url;
                     js.id = 'rc-react';
                     reactions.appendChild(js);
                 }
