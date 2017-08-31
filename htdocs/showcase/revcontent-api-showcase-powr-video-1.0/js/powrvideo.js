@@ -15,6 +15,14 @@
 
     var PowrVideo = function(config) {
         this.config = config;
+        if (!this.config.floatSettings) {
+            this.config.floatSettings = {
+                style : "bottom-right",
+                margin : 12,
+                header : 0,
+                width : 400
+            };
+        }
 
         this.element = document.getElementById(this.config.id);
 
@@ -27,12 +35,6 @@
         this.playerHeight = 0.5625 * this.playerWidth;
 
         this.element.setAttribute("style", "width: 100%; height : " + parseInt(this.playerHeight) + "px; background-color : #EFEFEF;");
-        var elem = this.element;
-        revUtils.addEventListener(window, 'resize', function () {
-            var width = elem.clientWidth;
-            var height = parseInt(0.5625 * width);
-            elem.setAttribute("style", "width : 100%; height : " + height + "px; background-color : #EFEFEF");
-        });
 
         this.videos = config.videos;
         this.currentContent = 0;
@@ -67,6 +69,9 @@
 
         var that = this;
 
+        this.floated = false;
+        this.neverFloat = false;
+
         var imaCss = document.createElement("link");
         imaCss.setAttribute("href", "//alpha.powr.com/css/videojs.ima.css");
         imaCss.setAttribute("type", "text/css");
@@ -84,12 +89,34 @@
         revUtils.append(this.element, imaScript);
     };
 
+    PowrVideo.prototype.onResize = function() {
+        var width = this.element.clientWidth;
+        var height = parseInt(0.5625 * width);
+        this.element.setAttribute("style", "width : 100%; height : " + height + "px; background-color : #EFEFEF");
+
+        var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+        var windowWidth = window.innerWidth|| document.documentElement.clientWidth || document.body.clientWidth;
+        var newOrientation = '';
+        if (windowWidth < windowHeight) {
+            newOrientation = 'portrait';
+        } else if (windowWidth > windowHeight && this.orientation == 'portrait') {
+            newOrientation = 'landscape';
+        }
+        if (newOrientation != this.orientation) {
+            this.orientation = newOrientation;
+            this.orientationChanged();
+        }
+    }
+
     PowrVideo.prototype.setup = function () {
         this.container = document.createElement("div");
         this.container.className = 'powr_player';
         this.element.appendChild(this.container);
 
         this.attachVisibleListener();
+        revUtils.addEventListener(window, 'resize', this.onResize.bind(this));
+        this.orientation = 'none';
+        this.onResize();
 
         var dumbPlayer = document.createElement('video');
         dumbPlayer.id = this.playerId;
@@ -108,21 +135,19 @@
         this.container.appendChild(dumbPlayer);
 
         this.player = videojs(this.playerId);
-
-        GlobalPlayer = this.player;
-
         this.currentContent = 0;
-
-        this.player.logobrand({
-            image : this.config.custom_logo,
-            destination : "http://alpha.powr.com/"
-        });
+        //
+        //this.player.logobrand({
+          //  image : this.config.custom_logo,
+          //  destination : "http://alpha.powr.com/"
+        //});
 
         var me = this;
         this.player.ready(function () {
             var titleContent = me.videos[0].title;
-            if (me.videos[0].total_views) {
-                titleContent = titleContent + "<small>" + me.videos[0].total_views + " views</small>";
+            if (me.config.custom_logo) {
+                var brandUrl = 'http://alpha.powr.com/user/sun';
+                titleContent = "<a id='rc-video-close' href='javascript:void(0)' class='close'>CLOSE <span type='divider'>|</span> X</a><img src='" + me.config.custom_logo + "'><span id='rc-video-title'>" + titleContent + "</span>";
             }
 
             me.player.overlay({
@@ -131,18 +156,26 @@
                 class: "rc-video-overlay",
                 content: titleContent,
                 overlays: [{
-                    start: "useractive",
-                    end: "userinactive"
+                    start: 0,
+                    end: Infinity
                 }]
             });
             me.player.overlays_[0].show();
             me.player.on('timeupdate', me.onUpdate.bind(me));
+
+
+            revUtils.addEventListener(document.getElementById('rc-video-close'), 'click', function () {
+                me.neverFloat = true;
+                me.player.pause();
+                me.unfloatPlayer();
+            });
 
             if (navigator.userAgent.match(/iPhone/i) ||
                 navigator.userAgent.match(/iPad/i) ||
                 navigator.userAgent.match(/Android/i)) {
                 me.player.one('touchend', function () {
                     me.start(true);
+                    me.player.play();
                 });
             } else {
                 me.start(me.config.autoplay);
@@ -199,10 +232,8 @@
             this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), true);
             this.player.poster(this.videos[this.currentContent].thumbnail);
             var titleContent = this.videos[this.currentContent].title;
-            if (this.videos[this.currentContent].total_views) {
-                titleContent = titleContent + "<small>" + this.videos[this.currentContent].total_views + " views</small>";
-            }
-            this.player.overlays_[0].contentEl().innerHTML = titleContent;
+            // this.player.overlays_[0].contentEl().innerHTML = titleContent;
+            document.getElementById('rc-video-title').innerHTML = titleContent;
             this.player.ima.requestAds();
         }
     };
@@ -213,11 +244,70 @@
     };
 
     PowrVideo.prototype.floatPlayer = function() {
+        if (this.floated)
+            return;
+        if (this.neverFloat)
+            return;
         this.container.className = "rc-float-video powr_player";
+        var styleString = "";
+        var fs = this.config.floatSettings;
+
+        var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+
+        if (this.orientation == 'portrait') {
+            styleString += "top : 0px;";
+            if (fs.width > 0) {
+                styleString += "max-width: " + fs.width + "px;";
+                var l = (windowWidth - fs.width) / 2;
+                l = Math.max(l, 12);
+                styleString += "left : " + l + "px; right : " + l + "px; width : auto;";
+            } else {
+                styleString += "left : 0px; right : 0px; width : auto;";
+            }
+        } else {
+            if (fs.style.startsWith("top")) {
+                if (fs.header > 0) {
+                    styleString += "top : " + (fs.header + 20) + "px;";
+                } else {
+                    styleString += "top : " + (fs.margin + 20) + "px;";
+                }
+            } else {
+                styleString += "bottom : " + fs.margin + "px;";
+            }
+
+            if (fs.style.endsWith("right")) {
+                styleString += "right : " + fs.margin + "px;";
+            } else {
+                styleString += "left : " + fs.margin + "px;";
+            }
+            if (fs.width > 0) {
+                styleString += "width : " + fs.width + "px;";
+            } else {
+                var r = this.element.getBoundingClientRect();
+                var w = windowWidth - r.right;
+                w = w - 20;
+                styleString += "width : " + w + "px;";
+            }
+        }
+
+        this.container.setAttribute("style", styleString);
+        this.floated = true;
     };
 
     PowrVideo.prototype.unfloatPlayer = function() {
-        this.container.className = 'powr_player';
+        if (this.floated) {
+            this.container.className = 'powr_player';
+            this.container.removeAttribute("style");
+            this.floated = false;
+        }
+    };
+
+    PowrVideo.prototype.orientationChanged = function() {
+        if (this.floated) {
+            this.floated = false;
+            // refloat player if orientation has changed.
+            this.floatPlayer();
+        }
     };
 
     PowrVideo.prototype.checkVisible = function() {

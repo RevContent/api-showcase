@@ -3,30 +3,37 @@
     font-size: 20px;
 }
 
-.powr_player .video-js .vjs-control-bar {
-    height: 4em;
-}
 
-.powr_player .video-js .vjs-control {
-    font-size : 1.3em;
-}
+//.powr_player .video-js .vjs-control-bar {
+//    height: 4em;
+//}
 
-.powr_player .video-js .vjs-custom-logo {
-    width : auto;
-    padding : 4px;
-}
+//.powr_player .video-js .vjs-control {
+//    font-size : 1.3em;
+//}
+
+//.powr_player .video-js .vjs-custom-logo {
+//    width : auto;
+//    padding : 4px;
+//}
+
+//.powr_player .video-js .vjs-custom-logo a img {
+//    height : 100%;
+//}
+
 
 body .powr_player .video-js .rc-video-overlay {
     margin-left : 0px;
     left : 0px;
     top : 0px;
-    font-size : 20px;
+    font-size : 13px;
+    font-weight: bold;
     text-align : left;
     border-radius : 0;
     width : 100%;
-    background: -moz-linear-gradient(top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 100%);
-    background: -webkit-linear-gradient(top, rgba(0,0,0,0.8) 0%,rgba(0,0,0,0.3) 100%);
-    background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%,rgba(0,0,0,0.3) 100%);
+    background: -moz-linear-gradient(top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 30%);
+    background: -webkit-linear-gradient(top, rgba(0,0,0,0.8) 0%,rgba(0,0,0,0.3) 30%);
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%,rgba(0,0,0,0.3) 30%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#000000", endColorstr="#4d000000",GradientType=0 );
 
     -webkit-transition: visibility 1.5s, opacity 1.5s;
@@ -34,6 +41,11 @@ body .powr_player .video-js .rc-video-overlay {
     -ms-transition: visibility 1.5s, opacity 1.5s;
     -o-transition: visibility 1.5s, opacity 1.5s;
     transition: visibility 1.5s, opacity 1.5s;
+}
+
+body .powr_player .video-js .rc-video-overlay img {
+    max-height : 30px;
+    float : right;
 }
 
 .powr_player .rc-video-overlay > small {
@@ -45,21 +57,23 @@ body .powr_player .video-js .rc-video-overlay {
     font-size : 12px;
 }
 
-.powr_player .rc-float-video {
-    position : fixed;
-    right : 12px;
-    bottom : 12px;
-    width : 360px;
-    z-index : 100;
+.rc-video-overlay a.close {
+    display : none;
 }
 
-@media (orientation: portrait) {
-    .powr_player .rc-float-video {
-        position : fixed;
-        top : 12px;
-        left : 12px;
-        right : 12px;
-        z-index : 100;
-        width: auto;
-    }
+.rc-float-video {
+    position : fixed;
+    z-index : 100;
+    box-shadow: 0px 0px 4px #888888;
+}
+
+.rc-float-video .rc-video-overlay a.close {
+    display : block;
+    height : 20px;
+    color : #EEE;
+    background-color : #333;
+    padding : 5px;
+    margin-top : -30px;
+    float : right;
+    font-weight : bold;
 }
