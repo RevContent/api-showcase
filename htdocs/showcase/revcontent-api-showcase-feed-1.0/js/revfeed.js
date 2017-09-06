@@ -29,7 +29,7 @@ Author: michael@revcontent.com
             image_overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
             ad_overlay: false, // pass key value object { content_type: icon }
             ad_overlay_position: 'bottom_right', // center, top_left, top_right, bottom_right, bottom_left
-            header: 'Trending',
+            header: 'Powr Experience',
             // per_row: {
             //     sm: 2,
             //     md: 3
@@ -47,7 +47,7 @@ Author: michael@revcontent.com
             css: '',
             headline_size: 3,
             max_headline: false,
-            disclosure_text: 'Ads by Revcontent',
+            disclosure_text: 'by Revcontent',
             query_params: false,
             user_ip: false,
             user_agent: false,
@@ -84,17 +84,23 @@ Author: michael@revcontent.com
                     ratio: '12:6'
                 }
             ],
-            header_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(4n + 5), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+11)' :
+            header_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(3n + 6),' +
+                ' .rev-slider-breakpoint-gt-xs .rev-content:nth-child(3n+12)' :
                 '.rev-content:nth-child(4n + 2)', // goes after this selector
-            internal_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(4n + 4), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(4n + 5), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+10), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+11)' :
+            internal_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(3n + 4), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(3n + 5),' +
+                '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(3n+10), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(3n+11)' :
                 '.rev-content:nth-child(4n+1), .rev-content:nth-child(4n+2)',
             reactions_selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(n+10)',
+            meta_selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(n+10)',
             headline_top_selector: false,
             // headline_icon_selector: '.rev-content:nth-child(4n+10), .rev-content:nth-child(4n+11)',
             // headline_icon_selector: '.rev-content',
             viewable_percentage: 50,
             buffer: 500,
-            header_logo: false
+            header_logo: true,
+            window_width_devices: [
+                'phone'
+            ],
         };
 
         // merge options
@@ -119,6 +125,15 @@ Author: michael@revcontent.com
 
     RevFeed.prototype.init = function() {
         this.emitter = new EventEmitter();
+
+        this.element = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
+
+        this.containerElement = document.createElement('div');
+        this.containerElement.id = 'rev-feed';
+
+        revUtils.append(this.element, this.containerElement);
+
+        this.windowWidth();
 
         this.createInnerWidget();
 
@@ -149,14 +164,29 @@ Author: michael@revcontent.com
         });
     };
 
+    RevFeed.prototype.windowWidth = function() {
+
+        if (this.options.window_width_devices && revDetect.show(this.options.window_width_devices)) {
+            this.windowWidthEnabled = true;
+
+            var that = this;
+
+            revUtils.addEventListener(window, 'resize', function() {
+                setElementWindowWidth();
+            });
+
+            var setElementWindowWidth = function() {
+                revUtils.transformCss(that.element, 'none');
+                that.element.style.width = document.body.offsetWidth + 'px';
+                that.element.style.overflow = 'hidden';
+                revUtils.transformCss(that.element, 'translateX(-' + that.element.getBoundingClientRect().left + 'px)');
+            };
+
+            setElementWindowWidth();
+        }
+    };
+
     RevFeed.prototype.createInnerWidget = function() {
-        this.element = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
-
-        this.containerElement = document.createElement('div');
-        this.containerElement.id = 'rev-feed';
-
-        revUtils.append(this.element, this.containerElement);
-
         this.innerWidget = new RevSlider({
             api_source:   this.options.api_source,
             element:      [this.containerElement],
@@ -199,7 +229,9 @@ Author: michael@revcontent.com
             internal_selector: this.options.internal_selector,
             header_selector: this.options.header_selector,
             reactions_selector: this.options.reactions_selector,
-            headline_top_selector: this.options.headline_top_selector
+            meta_selector: this.options.meta_selector,
+            headline_top_selector: this.options.headline_top_selector,
+            window_width_enabled: this.windowWidthEnabled
         });
     };
 
@@ -264,11 +296,13 @@ Author: michael@revcontent.com
 
                 self.innerWidget.setUp(rowData.items);
 
-                self.innerWidget.getPadding(rowData.items);
+                self.innerWidget.getPadding(rowData.items, true);
 
                 self.innerWidget.setContentPadding(rowData.items);
 
                 self.innerWidget.setSize(rowData.items);
+
+                self.innerWidget.setUp(rowData.items);
 
                 self.innerWidget.grid.layout();
 

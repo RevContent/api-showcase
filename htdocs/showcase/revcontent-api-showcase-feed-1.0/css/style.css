@@ -8,7 +8,13 @@
          url('../../../app/resources/font/redacted-regular.svg#redactedregular') format('svg');
     font-weight: normal;
     font-style: normal;
+}
 
+@font-face {
+    font-family: 'pacifico';
+    src: url('../../../app/resources/font/Pacifico.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
 }
 
 /*@font-face {
