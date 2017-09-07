@@ -71,7 +71,10 @@
         var that = this;
 
         this.floated = false;
-        this.neverFloat = false || this.config.should_float;
+        this.neverFloat = false;
+        if (!this.config.should_float) {
+            this.neverFloat = true;
+        }
 
         var imaCss = document.createElement("link");
         imaCss.setAttribute("href", "//alpha.powr.com/css/videojs.ima.css");
