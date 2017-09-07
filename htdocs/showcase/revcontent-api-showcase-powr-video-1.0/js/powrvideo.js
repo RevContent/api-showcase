@@ -24,6 +24,7 @@
             };
         }
 
+        this.fixedHeight = -1;
         this.element = document.getElementById(this.config.id);
 
         this.playerId = "content_video";
@@ -41,7 +42,7 @@
 
         this.options = {
             id : this.playerId,
-            nativeControlsForTouch: false
+            nativeControlForTouch: false
         };
 
         if (config.hasOwnProperty('preloaded') && config.preloaded) {
@@ -70,7 +71,7 @@
         var that = this;
 
         this.floated = false;
-        this.neverFloat = false;
+        this.neverFloat = false || this.config.should_float;
 
         var imaCss = document.createElement("link");
         imaCss.setAttribute("href", "//alpha.powr.com/css/videojs.ima.css");
@@ -91,7 +92,10 @@
 
     PowrVideo.prototype.onResize = function() {
         var width = this.element.clientWidth;
-        var height = parseInt(0.5625 * width);
+        var height = this.fixedHeight;
+        if (height == -1) {
+            height = parseInt(0.5625 * width);
+        }
         this.element.setAttribute("style", "width : 100%; height : " + height + "px; background-color : #EFEFEF");
 
         var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
@@ -109,6 +113,13 @@
     }
 
     PowrVideo.prototype.setup = function () {
+        var mobile = false;
+        if (navigator.userAgent.match(/iPhone/i) ||
+            navigator.userAgent.match(/iPad/i) ||
+            navigator.userAgent.match(/Android/i)) {
+            mobile = true;
+        }
+
         this.container = document.createElement("div");
         this.container.className = 'powr_player';
         this.element.appendChild(this.container);
@@ -127,6 +138,9 @@
         dumbPlayer.setAttribute("preload", "auto");
         dumbPlayer.setAttribute("poster", this.videos[0].thumbnail);
         dumbPlayer.setAttribute("playsinline", "true");
+        if (mobile && this.config.autoplay) {
+            dumbPlayer.setAttribute("muted", "true");
+        }
         var contentSrc = document.createElement('source');
         contentSrc.setAttribute('src', this.videos[0].sd_url);
         contentSrc.setAttribute('type', 'video/mp4');
@@ -134,7 +148,10 @@
 
         this.container.appendChild(dumbPlayer);
 
-        this.player = videojs(this.playerId);
+        this.player = videojs(this.playerId, {
+            nativeControlForTouch: false
+        });
+
         this.currentContent = 0;
         //
         //this.player.logobrand({
@@ -146,8 +163,7 @@
         this.player.ready(function () {
             var titleContent = me.videos[0].title;
             if (me.config.custom_logo) {
-                var brandUrl = 'http://alpha.powr.com/user/sun';
-                titleContent = "<a id='rc-video-close' href='javascript:void(0)' class='close'>CLOSE <span type='divider'>|</span> X</a><img src='" + me.config.custom_logo + "'><span id='rc-video-title'>" + titleContent + "</span>";
+                titleContent = "<a class='rc-video-close' href='javascript:void(0)' class='close'><span class='label'>CLOSE | </span>X</a><img src='" + me.config.custom_logo + "'><span class='rc-video-title'>" + titleContent + "</span>";
             }
 
             me.player.overlay({
@@ -163,28 +179,31 @@
             me.player.overlays_[0].show();
             me.player.on('timeupdate', me.onUpdate.bind(me));
 
+            GlobalPlayer = me.player;
 
-            revUtils.addEventListener(document.getElementById('rc-video-close'), 'click', function () {
+            me.closeButton = me.container.querySelector(".rc-video-close");
+            me.titleDom = me.closeButton.querySelector(".rc-video-title");
+
+            revUtils.addEventListener(me.closeButton, 'click', function () {
                 me.neverFloat = true;
                 me.player.pause();
                 me.unfloatPlayer();
             });
-
-            if (navigator.userAgent.match(/iPhone/i) ||
-                navigator.userAgent.match(/iPad/i) ||
-                navigator.userAgent.match(/Android/i)) {
-                me.player.one('touchend', function () {
-                    me.start(true);
+//            if (navigator.userAgent.match(/iPhone/i) ||
+//                navigator.userAgent.match(/iPad/i) ||
+//                navigator.userAgent.match(/Android/i)) {
+//                me.player.one('touchend', function () {
+//                    me.start(true);
+//                    me.player.play();
+//                });
+//            } else {
+            me.start(me.config.autoplay);
+            if (!me.config.autoplay) {
+                me.player.one('click', function () {
                     me.player.play();
                 });
-            } else {
-                me.start(me.config.autoplay);
-                if (!me.config.autoplay) {
-                    me.player.one('click', function () {
-                        me.player.play();
-                    });
-                }
             }
+//            }
         });
     };
 
@@ -233,7 +252,7 @@
             this.player.poster(this.videos[this.currentContent].thumbnail);
             var titleContent = this.videos[this.currentContent].title;
             // this.player.overlays_[0].contentEl().innerHTML = titleContent;
-            document.getElementById('rc-video-title').innerHTML = titleContent;
+            this.titleDom.innerHTML = titleContent;
             this.player.ima.requestAds();
         }
     };
@@ -256,20 +275,19 @@
 
         if (this.orientation == 'portrait') {
             styleString += "top : 0px;";
-            if (fs.width > 0) {
-                styleString += "max-width: " + fs.width + "px;";
-                var l = (windowWidth - fs.width) / 2;
-                l = Math.max(l, 12);
-                styleString += "left : " + l + "px; right : " + l + "px; width : auto;";
-            } else {
-                styleString += "left : 0px; right : 0px; width : auto;";
-            }
+            styleString += "left : 0px; right : 0px; width : 100%; height : 176px;";
+            this.player.fluid(false);
+            this.player.dimensions(windowWidth, 176);
+
+            this.closeButton.setAttribute("style", "margin-top : 166px; margin-left : " + (windowWidth - 50) + "px");
+
         } else {
+            this.player.fluid(true);
             if (fs.style.startsWith("top")) {
                 if (fs.header > 0) {
-                    styleString += "top : " + (fs.header + 20) + "px;";
+                    styleString += "top : " + (fs.header) + "px;";
                 } else {
-                    styleString += "top : " + (fs.margin + 20) + "px;";
+                    styleString += "top : " + (fs.margin) + "px;";
                 }
             } else {
                 styleString += "bottom : " + fs.margin + "px;";
@@ -280,17 +298,23 @@
             } else {
                 styleString += "left : " + fs.margin + "px;";
             }
-            if (fs.width > 0) {
-                styleString += "width : " + fs.width + "px;";
+
+            var r = this.element.getBoundingClientRect();
+            var w = windowWidth - r.right;
+            w = w - 20;
+            w = Math.min(480, w);
+            styleString += "width : " + w + "px;";
+
+            var h = parseInt(0.5625 * w);
+            if (fs.style.startsWith("top")) {
+                this.closeButton.setAttribute("style", "margin-top : " + (h - 10) + "px;");
             } else {
-                var r = this.element.getBoundingClientRect();
-                var w = windowWidth - r.right;
-                w = w - 20;
-                styleString += "width : " + w + "px;";
+                this.closeButton.setAttribute("style", "margin-left : " + (w - 100) + "px; margin-top : -30px;");
             }
         }
 
         this.container.setAttribute("style", styleString);
+
         this.floated = true;
     };
 
@@ -299,8 +323,14 @@
             this.container.className = 'powr_player';
             this.container.removeAttribute("style");
             this.floated = false;
+            this.player.fluid(true);
         }
     };
+
+    PowrVideo.prototype.setFixedHeight = function(h) {
+        this.fixedHeight = h
+    };
+
 
     PowrVideo.prototype.orientationChanged = function() {
         if (this.floated) {
@@ -308,6 +338,10 @@
             // refloat player if orientation has changed.
             this.floatPlayer();
         }
+    };
+
+    PowrVideo.prototype.getTitle = function () {
+
     };
 
     PowrVideo.prototype.checkVisible = function() {
