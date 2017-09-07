@@ -82,6 +82,8 @@ a.rc-video-close {
     padding : 5px;
     position : absolute;
     font-weight : bold;
+    font-size : 13px;
+    z-index : 100;
 }
 
 @media (orientation: portrait) {
