@@ -641,7 +641,7 @@
                     padding-top:12px;
                 }
                 //padding-bottom: 12px;
-                padding: 0 12px 12px 12px;
+                padding: 0 10px 12px 9px;
                 .rev-comment-image {
                     width: 32px;
                     height: 32px;
@@ -787,6 +787,8 @@
         }
         .rev-after-image {
             margin-bottom: 8px;
+            margin-left: 0;
+            margin-right: 0;
         }
         .rev-comments {
             //padding-left: 8px;
