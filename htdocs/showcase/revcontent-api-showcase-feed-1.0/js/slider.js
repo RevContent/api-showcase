@@ -489,7 +489,8 @@ Author: michael@revcontent.com
 
                 // meta
                 meta.innerHTML = '<div class="rev-meta-inner">' +
-                                    '<div style="overflow: hidden; ">' +
+                                //'<div class="rev-meta-content" style="overflow: hidden; ">' +
+                                '<div class="rev-meta-content">' +
                                         '<div class="rev-provider"></div>' +
                                         '<div class="rev-date"></div>' +
                                     '</div>' +
