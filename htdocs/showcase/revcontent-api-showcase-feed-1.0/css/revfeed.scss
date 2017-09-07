@@ -239,6 +239,10 @@
             transition: background 250ms ease-in-out;
             background: #eee;
             overflow: hidden;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
 
         .rev-image img {
