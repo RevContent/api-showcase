@@ -211,6 +211,8 @@
     };
 
     PowrVideo.prototype.onUpdate = function() {
+        if (this.currentContent >= this.videos.length)
+            return;
         var video = this.videos[this.currentContent];
         var d = this.player.currentTime();
         d = (d * 1.0) / video.duration;
