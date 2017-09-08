@@ -185,7 +185,7 @@
             GlobalPlayer = me.player;
 
             me.closeButton = me.container.querySelector(".rc-video-close");
-            me.titleDom = me.closeButton.querySelector(".rc-video-title");
+            me.titleDom = me.container.querySelector(".rc-video-title");
 
             revUtils.addEventListener(me.closeButton, 'click', function () {
                 me.neverFloat = true;
