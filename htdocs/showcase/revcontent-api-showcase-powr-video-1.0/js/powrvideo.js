@@ -185,7 +185,7 @@
             GlobalPlayer = me.player;
 
             me.closeButton = me.container.querySelector(".rc-video-close");
-            me.titleDom = me.closeButton.querySelector(".rc-video-title");
+            me.titleDom = me.container.querySelector(".rc-video-title");
 
             revUtils.addEventListener(me.closeButton, 'click', function () {
                 me.neverFloat = true;
@@ -211,6 +211,8 @@
     };
 
     PowrVideo.prototype.onUpdate = function() {
+        if (this.currentContent >= this.videos.length)
+            return;
         var video = this.videos[this.currentContent];
         var d = this.player.currentTime();
         d = (d * 1.0) / video.duration;
