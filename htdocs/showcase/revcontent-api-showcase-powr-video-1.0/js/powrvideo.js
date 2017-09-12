@@ -182,7 +182,7 @@
             me.player.overlays_[0].show();
             me.player.on('timeupdate', me.onUpdate.bind(me));
 
-            GlobalPlayer = me.player;
+            GlobalPlayer = me;
 
             me.closeButton = me.container.querySelector(".rc-video-close");
             me.titleDom = me.container.querySelector(".rc-video-title");
@@ -259,6 +259,8 @@
             // this.player.overlays_[0].contentEl().innerHTML = titleContent;
             this.titleDom.innerHTML = titleContent;
             this.player.ima.requestAds();
+        } else {
+            this.currentContent--;
         }
     };
 
