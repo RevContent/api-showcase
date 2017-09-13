@@ -36,6 +36,10 @@
     "wolfy87-eventemitter": "~4",
     "jquery": "~1",
     "jquery-mousewheel": "~3",
-    "node-waves": "~0.7"
+    "node-waves": "~0.7",
+    "video.js" : "5.3",
+    "videojs-contrib-ads" : "5.0.3",
+    "videojs-ima" : "0.6.0",
+    "videojs-overlay" : "1.1.3"
   }
 }
