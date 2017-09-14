@@ -170,7 +170,7 @@
       "./showcase/revcontent-api-showcase-shifter-2.0/css/*"
     ]
   },
-  "feed": {
+  "feed2": {
     "name": "rev-feed",
     "description": "Content Feed",
     "homepage": "http://labs.revcontent.com",
@@ -193,7 +193,7 @@
       "./showcase/js/revbeacon.js",
       "./showcase/js/revapi.js",
       "./showcase/revcontent-api-showcase-feed-1.0/js/slider.js",
-      "./build/files/feed/revfeed.embed.js"
+      "./build/files/feed2/revfeed2.embed.js"
     ],
     "watch": [
       "./showcase/js/*",
