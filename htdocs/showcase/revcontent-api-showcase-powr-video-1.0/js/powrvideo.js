@@ -151,8 +151,10 @@
 
         this.container.appendChild(dumbPlayer);
 
+
+
         this.player = videojs(this.playerId, {
-            nativeControlForTouch: false
+            nativeControlForTouch: true
         });
 
         this.currentContent = 0;
@@ -163,6 +165,19 @@
         //});
 
         var me = this;
+
+        //revUtils.addEventListener(window, 'scroll', function () {
+          //  if (me.player) {
+          //      me.player.muted(false);
+          //  }
+        // });
+
+        revUtils.addEventListener(this.container, 'touchend', function () {
+            if (me.player) {
+                me.player.muted(false);
+            }
+        });
+
         this.player.ready(function () {
             var titleContent = me.videos[0].title;
             if (me.config.custom_logo) {
