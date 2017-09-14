@@ -29,7 +29,7 @@ Author: michael@revcontent.com
             image_overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
             ad_overlay: false, // pass key value object { content_type: icon }
             ad_overlay_position: 'bottom_right', // center, top_left, top_right, bottom_right, bottom_left
-            header: 'Powr Experience',
+            header: 'Experience',
             // per_row: {
             //     sm: 2,
             //     md: 3
@@ -97,10 +97,10 @@ Author: michael@revcontent.com
             // headline_icon_selector: '.rev-content',
             viewable_percentage: 50,
             buffer: 500,
-            header_logo: true,
+            header_logo: false,
             window_width_devices: [
                 'phone'
-            ],
+            ]
         };
 
         // merge options
