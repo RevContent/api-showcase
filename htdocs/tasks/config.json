@@ -1,4 +1,37 @@
 {
+  "powrvideo" : {
+    "name": "powr-video",
+    "description": "Powr Video Widget",
+    "homepage": "http://revcontent.com",
+    "version": "0.1.0",
+    "pkg": "./showcase/revcontent-api-showcase-powr-video-1.0/package.json",
+    "js": "./showcase/revcontent-api-showcase-powr-video-1.0/js/powrvideo.js",
+    "css": [
+      "./showcase/css/revdialog.css",
+      "./node_modules/video.js/dist/video-js.css",
+      "./node_modules/videojs-contrib-ads/dist/videojs.ads.css",
+      "./node_modules/videojs-overlay/dist/videojs-overlay.css",
+      "./showcase/revcontent-api-showcase-powr-video-1.0/css/powrvideo.scss"
+    ],
+    "build": [
+      "./node_modules/ev-emitter/ev-emitter.js",
+      "./node_modules/video.js/dist/video.js",
+      "./node_modules/videojs-overlay/dist/videojs-overlay.js",
+      "./showcase/revcontent-api-showcase-powr-video-1.0/js/videojs.logobrand.js",
+      "./node_modules/videojs-contrib-ads/dist/videojs.ads.js",
+      "./node_modules/videojs-ima/src/videojs.ima.js",
+      "./showcase/js/requestAnimationFrame.js",
+      "./showcase/js/revutils.js",
+      "./showcase/js/revapi.js",
+      "./build/files/powrvideo/revpowrvideo.embed.js"
+    ],
+    "watch": [
+      "./showcase/js/*",
+      "./showcase/css/*",
+      "./showcase/revcontent-api-showcase-powr-video-1.0/js/*",
+      "./showcase/revcontent-api-showcase-powr-video-1.0/css/*"
+    ]
+  },
   "infeedvideo": {
     "name": "in-feed-video",
     "description": "In Feed Video Widget",
@@ -7,8 +40,8 @@
     "pkg": "./showcase/revcontent-api-showcase-in-feed-video-1.0/package.json",
     "js": "./showcase/revcontent-api-showcase-in-feed-video-1.0/js/infeedvideo.js",
     "css": [
-        "./showcase/revcontent-api-showcase-in-feed-video-1.0/css/infeedvideo.scss",
-        "./showcase/css/revdialog.css"
+      "./showcase/revcontent-api-showcase-in-feed-video-1.0/css/infeedvideo.scss",
+      "./showcase/css/revdialog.css"
     ],
     "build": [
       "./node_modules/ev-emitter/ev-emitter.js",
