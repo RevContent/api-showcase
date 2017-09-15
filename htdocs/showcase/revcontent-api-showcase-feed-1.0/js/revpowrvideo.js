@@ -25719,7 +25719,7 @@ return api;
                 headerId : null
             };
         }
-
+	
         this.fixedHeight = -1;
         this.element = document.getElementById(this.config.id);
 
@@ -25729,7 +25729,11 @@ return api;
         }
         this.viewed = false;
         this.playerWidth = this.element.clientWidth;
-        this.playerHeight = 0.5625 * this.playerWidth;
+	if (this.config.fluid) {
+            this.playerHeight = document.body.clientHeight;
+	} else {
+	    this.playerHeight = 0.5625 * this.playerWidth;
+	}
 
         this.element.setAttribute("style", "width: 100%; height : " + parseInt(this.playerHeight) + "px; background-color : #EFEFEF;");
 
@@ -25795,6 +25799,9 @@ return api;
         if (height == -1) {
             height = parseInt(0.5625 * width);
         }
+	if (this.config.fluid) {
+	    height = document.body.clientHeight;
+	}
         this.element.setAttribute("style", "width : 100%; height : " + height + "px; background-color : #EFEFEF");
 
         var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
@@ -25895,7 +25902,16 @@ return api;
                     end: "custom2"
                 }]
             });
-            me.player.overlays_[0].show();
+	    if (me.config.fluid) {
+		me.player.overlays_[0].hide();
+	    } else {
+		me.player.overlays_[0].show();
+	    }
+	    if (me.config.fluid) {
+		me.player.fluid(false);
+		me.player.dimensions(me.playerWidth, me.playerHeight);
+	    }
+	    
             me.player.on('timeupdate', me.onUpdate.bind(me));
 
             me.player.on('play', me.onPlay.bind(me));
@@ -26141,11 +26157,15 @@ return api;
     };
 
     PowrVideo.prototype.onPause = function() {
-        this.player.overlays_[0].show();
+	if (!this.config.fluid) {
+            this.player.overlays_[0].show();
+	}
     };
 
     PowrVideo.prototype.onActive = function() {
-        this.player.overlays_[0].show();
+	if (!this.config.fluid) {
+            this.player.overlays_[0].show();
+	}
     };
 
     PowrVideo.prototype.onIdle = function() {
