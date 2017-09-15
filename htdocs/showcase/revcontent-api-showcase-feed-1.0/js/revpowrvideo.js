@@ -25934,7 +25934,7 @@ return api;
             });
 	    if (me.config.fluid) {
 		me.player.overlays_[0].hide();
-		me.player.overlays_[1].show();
+		me.player.overlays_[1].hide();
 	    } else {
 		me.player.overlays_[0].show();
 		me.player.overlays_[1].hide();
@@ -26048,6 +26048,9 @@ return api;
             return;
         if (this.neverFloat)
             return;
+	if (!this.hasOwnProperty("closeButton"))
+	    return;
+	
         this.container.className = "rc-float-video powr_player";
         var styleString = "";
         var fs = this.config.floatSettings;
