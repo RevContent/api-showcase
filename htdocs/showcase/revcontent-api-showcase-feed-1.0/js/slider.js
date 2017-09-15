@@ -146,9 +146,20 @@ Author: michael@revcontent.com
          {
             espn: [
                 {
+                    "headline": "Judge hits pair of 3-run homers, Yanks rout Orioles 13-5",
+                    "target_url": "http:\/\/www.espn.com\/mlb\/recap?gameId=370914110",
+                    "url": "http:\/\/www.espn.com\/mlb\/recap?gameId=370914110",
+                    "description": "Aaron Judge had a pair of three-run homers for a career-best six RBI, Todd Frazier hit a three-run homer that chased Wade Miley with one out in a six-run first inning and the New York Yankees routed the fading Baltimore Orioles 13-5 on Thursday night.",
+                    "date": "2017-09-15T02:32:08Z",
+                    "image": "http:\/\/a4.espncdn.com\/combiner\/i?img=%2Fmedia%2Fmotion%2F2017%2F0914%2Fdm_170914_MLB_YANKEES_SANCHEZ_HR%2Fdm_170914_MLB_YANKEES_SANCHEZ_HR.jpg",
+                    "author": "ESPN.com",
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
+                    "video_id": 1
+                },
+                {
                     "headline": "New York Yankees' Todd Frazier gives a big thumbs up to thumbs down",
-                    "target_url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/20706691\/new-york-yankees-todd-frazier-gives-big-thumbs-thumbs-down",
-                    "url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/20706691\/new-york-yankees-todd-frazier-gives-big-thumbs-thumbs-down",
+                    "target_url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20706691\/new-york-yankees-todd-frazier-gives-big-thumbs-thumbs-down",
+                    "url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20706691\/new-york-yankees-todd-frazier-gives-big-thumbs-thumbs-down",
                     "description": "While a fan gave Todd Frazier's homer on Monday night a thumbs down, the Yankees' third baseman has decided to make the gesture his own when there's reason to celebrate.",
                     "date": "2017-09-15T00:43:04Z",
                     "image": "http:\/\/a.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0813%2Fr243868_1296x729_16%2D9.jpg",
@@ -157,8 +168,8 @@ Author: michael@revcontent.com
                 },
                 {
                     "headline": "Yankee Stadium sound system fails for first inning of New York Yankees-Baltimore Orioles game",
-                    "target_url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/20706653\/yankee-stadium-sound-system-fails-first-inning-new-york-yankees-baltimore-orioles-game",
-                    "url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/20706653\/yankee-stadium-sound-system-fails-first-inning-new-york-yankees-baltimore-orioles-game",
+                    "target_url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20706653\/yankee-stadium-sound-system-fails-first-inning-new-york-yankees-baltimore-orioles-game",
+                    "url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20706653\/yankee-stadium-sound-system-fails-first-inning-new-york-yankees-baltimore-orioles-game",
                     "description": "Yankee Stadium's sound system failed before New York took the field against the Baltimore Orioles on Thursday night. There was no introduction of players or national anthem, and a pregame tribute to the late Gene Michael was scrapped.",
                     "date": "2017-09-15T00:36:04Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0807%2Fr241124_1296x729_16%2D9.jpg",
@@ -167,8 +178,8 @@ Author: michael@revcontent.com
                 },
                 {
                     "headline": "New York Yankees reliever Dellin Betances still upset over Joe Girardi bringing in Aroldis Chapman",
-                    "target_url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/20705971\/new-york-yankees-reliever-dellin-betances-upset-joe-girardi-bringing-aroldis-chapman",
-                    "url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/20705971\/new-york-yankees-reliever-dellin-betances-upset-joe-girardi-bringing-aroldis-chapman",
+                    "target_url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20705971\/new-york-yankees-reliever-dellin-betances-upset-joe-girardi-bringing-aroldis-chapman",
+                    "url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20705971\/new-york-yankees-reliever-dellin-betances-upset-joe-girardi-bringing-aroldis-chapman",
                     "description": "Dellin Betances isn't happy that Yankees manager Joe Girardi lifted him in favor of Aroldis Chapman on Wednesday. Girardi says that's a sign Betances believes in himself and he's fine if players are mad at him.",
                     "date": "2017-09-14T22:42:10Z",
                     "image": "http:\/\/a.espncdn.com\/combiner\/i?img=%2Fphoto%2F2015%2F0707%2Fmlb_betancesd_st_1296x729.jpg",
@@ -177,8 +188,8 @@ Author: michael@revcontent.com
                 },
                 {
                     "headline": "Yankees beat Rays 3-2, take 2 of 3 at Citi Field",
-                    "target_url": "http:\/\/www.espn.com\/\/mlb\/recap?gameId=370913130",
-                    "url": "http:\/\/www.espn.com\/\/mlb\/recap?gameId=370913130",
+                    "target_url": "http:\/\/www.espn.com\/mlb\/recap?gameId=370913130",
+                    "url": "http:\/\/www.espn.com\/mlb\/recap?gameId=370913130",
                     "description": "A disappointed Jaime Garcia didn't say a word to manager Joe Girardi when he was removed one out shy of qualifying for his first win with the Yankees, and New York beat the Tampa Bay Rays 3-2 Wednesday to take two of three games in the displaced series.",
                     "date": "2017-09-13T21:08:44Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fmedia%2Fmotion%2F2017%2F0913%2Fdm_170913_MLB_Yankees_Frazier_2_run_single%2Fdm_170913_MLB_Yankees_Frazier_2_run_single.jpg",
@@ -187,8 +198,8 @@ Author: michael@revcontent.com
                 },
                 {
                     "headline": "Shohei Otani and why being Babe Ruth isn't all it's cracked up to be",
-                    "target_url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/19635864\/shohei-otani-why-being-babe-ruth-all-cracked-be",
-                    "url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/19635864\/shohei-otani-why-being-babe-ruth-all-cracked-be",
+                    "target_url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/19635864\/shohei-otani-why-being-babe-ruth-all-cracked-be",
+                    "url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/19635864\/shohei-otani-why-being-babe-ruth-all-cracked-be",
                     "description": "The Japanese sensation has teams dreaming of an elite pitcher and an All-Star slugger wrapped into one. But there's a catch: Two-way stars might hurt more than they help.",
                     "date": "2017-09-13T12:45:00Z",
                     "image": "http:\/\/a.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0616%2Fr220033_2_1296x729_16%2D9.jpg",
@@ -197,18 +208,18 @@ Author: michael@revcontent.com
                 },
                 {
                     "headline": "Hechavarria HR leads Rays over Yankees 2-1 at Mets' park",
-                    "target_url": "http:\/\/www.espn.com\/\/mlb\/recap?gameId=370912130",
-                    "url": "http:\/\/www.espn.com\/\/mlb\/recap?gameId=370912130",
+                    "target_url": "http:\/\/www.espn.com\/mlb\/recap?gameId=370912130",
+                    "url": "http:\/\/www.espn.com\/mlb\/recap?gameId=370912130",
                     "description": "Adeiny Hechavarria hit a tiebreaking home run in the eighth inning off Sonny Gray and the Tampa Bay Rays, playing as the home team in a series relocated to Citi Field because of Hurricane Irma, beat the New York Yankees 2-1 on Tuesday night.",
                     "date": "2017-09-13T01:58:12Z",
-                    "image": "http:\/\/a.espncdn.com\/combiner\/i?img=%2Fmedia%2Fmotion%2F2017%2F0912%2Fdm_170912_mlb_yankees_rays_hl%2Fdm_170912_mlb_yankees_rays_hl.jpg",
+                    "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png",
                     "author": "ESPN.com",
                     "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
                 },
                 {
                     "headline": "New York Yankees play at Citi Field with Tampa Bay Rays displaced",
-                    "target_url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/20669784\/new-york-yankees-play-citi-field-tampa-bay-rays-displaced",
-                    "url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/20669784\/new-york-yankees-play-citi-field-tampa-bay-rays-displaced",
+                    "target_url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20669784\/new-york-yankees-play-citi-field-tampa-bay-rays-displaced",
+                    "url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20669784\/new-york-yankees-play-citi-field-tampa-bay-rays-displaced",
                     "description": "Hurricane Irma forced Tampa Bay to host its home series in its opponent's backyard. Though, perhaps, it wasn't much different than being at Tropicana Field, Yankees fans outnumbered Rays fans on a strange night in Queens.",
                     "date": "2017-09-12T12:45:00Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0911%2Fr257248_1296x729_16%2D9.jpg",
@@ -217,8 +228,8 @@ Author: michael@revcontent.com
                 },
                 {
                     "headline": "Yanks top Rays 5-1 as Frazier homers in series moved to Mets",
-                    "target_url": "http:\/\/www.espn.com\/\/mlb\/recap?gameId=370911130",
-                    "url": "http:\/\/www.espn.com\/\/mlb\/recap?gameId=370911130",
+                    "target_url": "http:\/\/www.espn.com\/mlb\/recap?gameId=370911130",
+                    "url": "http:\/\/www.espn.com\/mlb\/recap?gameId=370911130",
                     "description": "In the start of a series moved from Florida to Citi Field because of Hurricane Irma, Todd Frazier capitalized on Trevor Plouffe's two-out error with a three-run homer that led the New York Yankees over the Tampa Bay Rays 5-1 on Monday.",
                     "date": "2017-09-12T02:49:41Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png",
@@ -227,8 +238,8 @@ Author: michael@revcontent.com
                 },
                 {
                     "headline": "Jacoby Ellsbury of New York Yankees sets catcher's interference mark on birthday",
-                    "target_url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/20675120\/jacoby-ellsbury-new-york-yankees-sets-catcher-interference-mark-birthday",
-                    "url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/20675120\/jacoby-ellsbury-new-york-yankees-sets-catcher-interference-mark-birthday",
+                    "target_url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20675120\/jacoby-ellsbury-new-york-yankees-sets-catcher-interference-mark-birthday",
+                    "url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20675120\/jacoby-ellsbury-new-york-yankees-sets-catcher-interference-mark-birthday",
                     "description": "On his 34th birthday, Yankees OF Jacoby Ellsbury set an obscure major league record.",
                     "date": "2017-09-12T01:09:41Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fphoto%2F2016%2F0720%2Fr105672_1296x729_16%2D9.jpg",
@@ -237,11 +248,141 @@ Author: michael@revcontent.com
                 },
                 {
                     "headline": "New York Yankees activate outfielder Clint Frazier",
-                    "target_url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/20672763\/new-york-yankees-activate-outfielder-clint-frazier",
-                    "url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/20672763\/new-york-yankees-activate-outfielder-clint-frazier",
+                    "target_url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20672763\/new-york-yankees-activate-outfielder-clint-frazier",
+                    "url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20672763\/new-york-yankees-activate-outfielder-clint-frazier",
                     "description": "The New York Yankees activated outfielder Clint Frazier, who was on the disabled list with an oblique strain.",
                     "date": "2017-09-11T19:55:29Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0709%2Fr229087_1296x729_16%2D9.jpg",
+                    "author": "ESPN.com",
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                },
+                {
+                    "headline": "Judge, Sanchez 2 homers each in Yankees' 16-7 win at Texas",
+                    "target_url": "http:\/\/www.espn.com\/mlb\/recap?gameId=370910113",
+                    "url": "http:\/\/www.espn.com\/mlb\/recap?gameId=370910113",
+                    "description": "Aaron Judge became the second major league rookie with a 40-homer season, going deep twice as the AL wild card-leading New York Yankees got a series clinching 16-7 win over the Texas Rangers on Sunday.",
+                    "date": "2017-09-10T23:00:22Z",
+                    "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png",
+                    "author": "ESPN.com",
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                },
+                {
+                    "headline": "Aaron Judge of New York Yankees hits 40th HR for major milestone",
+                    "target_url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20660929\/aaron-judge-new-york-yankees-hits-40th-hr-major-milestone",
+                    "url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20660929\/aaron-judge-new-york-yankees-hits-40th-hr-major-milestone",
+                    "description": "New York Yankees slugger Aaron Judge has become the second major league rookie to hit 40 homers.",
+                    "date": "2017-09-10T20:52:04Z",
+                    "image": "http:\/\/a.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0427%2Fr204680_1296x729_16%2D9.jpg",
+                    "author": "ESPN.com",
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                },
+                {
+                    "headline": "Chapman gets save to finish Yanks' one-hittter",
+                    "target_url": "http:\/\/www.espn.com\/mlb\/recap?gameId=370909113",
+                    "url": "http:\/\/www.espn.com\/mlb\/recap?gameId=370909113",
+                    "description": "Aroldis Chapman earned his first save since being removed as closer to finish a one-hitter in the New York Yankees' 3-1 win over the Texas Rangers on Saturday.",
+                    "date": "2017-09-09T20:18:02Z",
+                    "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png",
+                    "author": "ESPN.com",
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                },
+                {
+                    "headline": "Perez wins 7th in a row; Rangers rally to beat Yankees 11-5",
+                    "target_url": "http:\/\/www.espn.com\/mlb\/recap?gameId=370908113",
+                    "url": "http:\/\/www.espn.com\/mlb\/recap?gameId=370908113",
+                    "description": "Martin Perez won his seventh straight start after the playoff-hopeful Texas Rangers rallied from an early four-run deficit and beat the AL wild card-leading New York Yankees 11-5 on Friday night.",
+                    "date": "2017-09-09T03:40:22Z",
+                    "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png",
+                    "author": "ESPN.com",
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                },
+                {
+                    "headline": "New York Yankees-Tampa Bay Rays series will be at Citi Field due to potential impact of Hurricane Irma",
+                    "target_url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20636736\/new-york-yankees-tampa-bay-rays-series-citi-field-due-potential-impact-hurricane-irma",
+                    "url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20636736\/new-york-yankees-tampa-bay-rays-series-citi-field-due-potential-impact-hurricane-irma",
+                    "description": "With Hurricane Irma bearing down on Florida, next week's series between the New York Yankees and Tampa Bay Rays will be played at Citi Field. The Rays will be considered the home team.",
+                    "date": "2017-09-08T19:04:58Z",
+                    "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fphoto%2F2014%2F0331%2Fmlb_g_mets11_1296x729.jpg",
+                    "author": "ESPN.com",
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                },
+                {
+                    "headline": "Yankees hit 4 HRs, beat Orioles 9-1 to win 3-game series",
+                    "target_url": "http:\/\/www.espn.com\/mlb\/recap?gameId=370907101",
+                    "url": "http:\/\/www.espn.com\/mlb\/recap?gameId=370907101",
+                    "description": "Aaron Judge and Chase Headley hit two-run homers, Starlin Castro and Todd Frazier added solo shots and the New York Yankees beat the Baltimore Orioles 9-1 Thursday for their first series win at Camden Yards in four years.",
+                    "date": "2017-09-07T21:08:53Z",
+                    "image": "http:\/\/a4.espncdn.com\/combiner\/i?img=%2Fmedia%2Fmotion%2F2017%2F0908%2Fdm_170908_sc_AFRICA_judge%2Fdm_170908_sc_AFRICA_judge.jpg",
+                    "author": "ESPN.com",
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                },
+                {
+                    "headline": "Former New York Yankees executive Gene 'Stick' Michael dies at 79",
+                    "target_url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20617536\/former-new-york-yankees-executive-gene-stick-michael-dies-79",
+                    "url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20617536\/former-new-york-yankees-executive-gene-stick-michael-dies-79",
+                    "description": "Gene &quot;Stick&quot; Michael, the New York Yankees executive who helped build the club's late-1990s dynasty teams and drafted Derek Jeter, has died at 79.",
+                    "date": "2017-09-07T14:45:58Z",
+                    "image": "http:\/\/a.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0907%2Fr254899_1296x729_16%2D9.jpg",
+                    "author": "ESPN.com",
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                },
+                {
+                    "headline": "Dustin Pedroia of Boston Red Sox insists sign stealing 'part of the game'",
+                    "target_url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20609320\/dustin-pedroia-boston-red-sox-insists-sign-stealing-part-game",
+                    "url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20609320\/dustin-pedroia-boston-red-sox-insists-sign-stealing-part-game",
+                    "description": "Boston players and staff members remained wholly unapologetic Wednesday over allegations of sign stealing, even making light of the situation.",
+                    "date": "2017-09-06T23:32:49Z",
+                    "image": "http:\/\/a3.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0615%2Fr220356_2_1296x864_3%2D2.jpg",
+                    "author": "Scott Lauber",
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                },
+                {
+                    "headline": "Boston Red Sox say they have video evidence of Yanks using YES camera to steal signs",
+                    "target_url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20608951\/boston-red-sox-say-video-evidence-yanks-using-yes-camera-steal-signs",
+                    "url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20608951\/boston-red-sox-say-video-evidence-yanks-using-yes-camera-steal-signs",
+                    "description": "The Red Sox said their complaint to the commissioner's office about the Yankees includes video evidence of the YES Network maintaining a fixed camera on bench coach Gary DiSarcina during a recent game at Yankee Stadium, a source told ESPN's Buster Olney.",
+                    "date": "2017-09-06T22:27:19Z",
+                    "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0818%2Fr246028_1296x729_16%2D9.jpg",
+                    "author": "Buster Olney",
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                },
+                {
+                    "headline": "Machado's 2-run HR in 9th lifts Orioles past Yankees 7-6",
+                    "target_url": "http:\/\/www.espn.com\/mlb\/recap?gameId=370905101",
+                    "url": "http:\/\/www.espn.com\/mlb\/recap?gameId=370905101",
+                    "description": "Manny Machado hit a two-run homer off Dellin Betances with two outs in the bottom of the ninth inning, capping a comeback that lifted the Baltimore Orioles past the New York Yankees 7-6 on Tuesday night.",
+                    "date": "2017-09-06T05:13:22Z",
+                    "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png",
+                    "author": "ESPN.com",
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                },
+                {
+                    "headline": "Boston Red Sox stole signs electronically against New York Yankees, other teams",
+                    "target_url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20593927\/boston-red-sox-stole-signs-electronically-new-york-yankees-other-teams",
+                    "url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20593927\/boston-red-sox-stole-signs-electronically-new-york-yankees-other-teams",
+                    "description": "Commissioner Rob Manfred confirmed Tuesday that the Red Sox used electronic communication from the dugout to steal opponents' signs and relay them to Boston players during games.",
+                    "date": "2017-09-05T20:59:22Z",
+                    "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0818%2Fr246028_1296x729_16%2D9.jpg",
+                    "author": "ESPN.com",
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                },
+                {
+                    "headline": "Aaron Judge of New York Yankees walked for 100th time in rookie season",
+                    "target_url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20578927\/aaron-judge-new-york-yankees-walked-100th-rookie-season",
+                    "url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20578927\/aaron-judge-new-york-yankees-walked-100th-rookie-season",
+                    "description": "Yankees outfielder Aaron Judge has been walked 103 times this season, putting him on track to break a 75-year-old rookie record.",
+                    "date": "2017-09-04T19:16:23Z",
+                    "image": "http:\/\/a3.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0710%2Fr229532_1296x729_16%2D9.jpg",
+                    "author": "ESPN.com",
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                },
+                {
+                    "headline": "Castro, Gregorius HRs help Yankees beat Orioles 7-4",
+                    "target_url": "http:\/\/www.espn.com\/mlb\/recap?gameId=370904101",
+                    "url": "http:\/\/www.espn.com\/mlb\/recap?gameId=370904101",
+                    "description": "Starlin Castro homered and drove in three runs, Didi Gregorius also went deep and the New York Yankees fueled their playoff push with a 7-4 victory over the Baltimore Orioles on Monday.",
+                    "date": "2017-09-04T21:45:53Z",
+                    "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png",
                     "author": "ESPN.com",
                     "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
                 }
@@ -2938,7 +3079,13 @@ Author: michael@revcontent.com
                 }
 
                 var revImage = item.element.querySelector('.rev-image');
-                revImage.innerHTML = '<img src=" ' + image + ' " />';
+
+                if (!itemData.video_id) {
+                    revImage.innerHTML = '<img src=" ' + image + ' " />';
+                } else {
+                    revImage.innerHTML = '<iframe src="http://code.revcontent.com/mock/feed3/video' + itemData.video_id + '.iframe.html" style="border: none; width: '+ roundedPreloaderWidth +'px; height: ' + roundedPreloaderHeight + 'px;""></iframe>';
+                }
+
 
                 // item.element.querySelector('img').setAttribute('src', image);
 
