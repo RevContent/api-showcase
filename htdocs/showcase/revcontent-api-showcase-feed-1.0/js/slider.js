@@ -996,6 +996,14 @@ Author: michael@revcontent.com
 
         this.dataPromise.then(function(data){
             that.updateDisplayedItems(that.grid.items, data);
+            setTimeout(function() {
+                that.grid.layout();
+            }, 500);
+
+            setTimeout(function() {
+                that.grid.layout();
+            }, 2000);
+
             if (that.options.beacons) {
                 revApi.beacons.setPluginSource(that.options.api_source).attach();
             }
@@ -2875,6 +2883,10 @@ Author: michael@revcontent.com
 
         // if (!this.dataPromise || item.textOverlay)
         //     return;
+
+        if (revDetect.mobile()) {
+            return;
+        }
 
         if (item.textOverlay)
             return;
