@@ -138,7 +138,7 @@ Author: michael@revcontent.com
             headline_top_selector: false,
             header_logo: false,
             window_width_enabled: false,
-            reactions: [ 'love', 'laugh', 'cool', 'puke', 'sad', 'angry' ]
+            reactions: [ 'love', 'laugh', 'cool', 'idiotic', 'sad', 'angry' ]
         };
 
         // merge options
