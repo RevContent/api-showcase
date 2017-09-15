@@ -10514,9 +10514,9 @@ Author: michael@revcontent.com
                 var roundedPreloaderHeight = Math.round(item.preloaderHeight);
                 var roundedPreloaderWidth = Math.round(item.preloaderWidth);
                 var image = itemData.image;
-                if (itemData.type == 'sponsored') {
-                    image = image.replace('h=315', 'h=' + roundedPreloaderHeight).replace('w=420', 'w=' + roundedPreloaderWidth) + '&h=' + roundedPreloaderHeight + '&w=' + roundedPreloaderWidth;
-                }
+                // if (itemData.type == 'sponsored') {
+                //     image = image.replace('h=315', 'h=' + roundedPreloaderHeight).replace('w=420', 'w=' + roundedPreloaderWidth) + '&h=' + roundedPreloaderHeight + '&w=' + roundedPreloaderWidth;
+                // }
 
                 var revImage = item.element.querySelector('.rev-image');
 
