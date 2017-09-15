@@ -92,7 +92,9 @@ a.rc-video-close {
     }
 
     .rc-float-video img {
-        display : none;
+        max-height : 20px !important;
+        margin-right : 38px;
+        margin-top : -2px;
     }
 
     .rc-float-video a.rc-video-close {
@@ -102,5 +104,6 @@ a.rc-video-close {
         -webkit-border-radius: 30px;
         -moz-border-radius: 30px;
         border-radius: 30px;
+        margin-top : -3px !important;
     }
 }
