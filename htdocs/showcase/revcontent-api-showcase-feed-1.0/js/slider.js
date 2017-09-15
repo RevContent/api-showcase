@@ -3102,7 +3102,23 @@ Author: michael@revcontent.com
                     if (item.type == 'internal' && !itemData.author) {
                         revUtils.remove(item.element.querySelector('.rev-before-image'));
                     } else {
-                        favicon.innerHTML = item.type == 'sponsored' ? '<span class="rev-headline-icon-image" style="background-repeat:no-repeat;background-image:url('+ this.logoURI +')' + '"></span>' : '<?xml version="1.0" ?><!DOCTYPE svg  PUBLIC "-//W3C//DTD SVG 1.1//EN"  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" version="1.1" viewBox="0 0 4335 4335" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><style type="text/css"> <![CDATA[.fil0 {fill:black} ]]> </style></defs><g id="Layer_x0020_1"><path class="fil0" d="M2121 179c1065,0 1929,864 1929,1929 0,1065 -864,1929 -1929,1929 -1065,0 -1929,-864 -1929,-1929 0,-1065 864,-1929 1929,-1929zm1059 3099c-92,-307 -377,-1047 -982,-1047 -21,0 -40,1 -59,2 -19,-1 -38,-2 -59,-2 -622,0 -906,783 -989,1072 -335,-289 -548,-718 -548,-1195 0,-872 707,-1578 1578,-1578 872,0 1578,707 1578,1578 0,464 -200,881 -519,1170zm-1053 408c4,-4 8,-8 12,-13 4,4 8,8 12,12 -8,0 -16,0 -24,0zm12 -2806c293,0 530,269 530,601 0,332 -237,601 -530,601 -293,0 -530,-269 -530,-601 0,-332 237,-601 530,-601z"/></g></svg>';
+                        // favicon.innerHTML = item.type == 'sponsored' ? '<span class="rev-headline-icon-image" style="background-repeat:no-repeat;background-image:url('+ this.logoURI +')' + '"></span>' : '<?xml version="1.0" ?><!DOCTYPE svg  PUBLIC "-//W3C//DTD SVG 1.1//EN"  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" version="1.1" viewBox="0 0 4335 4335" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><style type="text/css"> <![CDATA[.fil0 {fill:black} ]]> </style></defs><g id="Layer_x0020_1"><path class="fil0" d="M2121 179c1065,0 1929,864 1929,1929 0,1065 -864,1929 -1929,1929 -1065,0 -1929,-864 -1929,-1929 0,-1065 864,-1929 1929,-1929zm1059 3099c-92,-307 -377,-1047 -982,-1047 -21,0 -40,1 -59,2 -19,-1 -38,-2 -59,-2 -622,0 -906,783 -989,1072 -335,-289 -548,-718 -548,-1195 0,-872 707,-1578 1578,-1578 872,0 1578,707 1578,1578 0,464 -200,881 -519,1170zm-1053 408c4,-4 8,-8 12,-13 4,4 8,8 12,12 -8,0 -16,0 -24,0zm12 -2806c293,0 530,269 530,601 0,332 -237,601 -530,601 -293,0 -530,-269 -530,-601 0,-332 237,-601 530,-601z"/></g></svg>';
+
+                        if (item.type == 'sponsored') {
+                            favicon.innerHTML = '<span class="rev-headline-icon-image" style="background-repeat:no-repeat;background-image:url('+ this.logoURI +')' + '"></span>';
+                        } else {
+                            console.log(itemData.author.indexOf('.com'));
+                            if (itemData.author.indexOf('.com') === -1) {
+                                var names = itemData.author.split(' ');
+                                var initials = names[0].charAt(0) + names[1].charAt(0);
+                                favicon.innerHTML = '<div class="rev-author-initials">'+ initials +'</div>';
+                            } else {
+                                favicon.innerHTML = '<span class="rev-headline-icon-image" style="background-repeat:no-repeat;background-image:url('+ itemData.favicon_url +')' + '"></span>';
+                            }
+                        }
+
+                        // favicon.innerHTML = item.type == 'sponsored' ? '<span class="rev-headline-icon-image" style="background-repeat:no-repeat;background-image:url('+ this.logoURI +')' + '"></span>' : '<div class="rev-author-initials">AR</div>';
+
                         var date = item.element.querySelector('.rev-date');
                         if (date) {
                             if (item.type == 'sponsored') {
