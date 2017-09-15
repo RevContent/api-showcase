@@ -25719,10 +25719,7 @@ return api;
                 headerId : null
             };
         }
-	this.inIFrame = false;
-	if (this.config.hasOwnProperty("iframe_id")) {
-	    this.inIFrame = true;
-	}
+	
         this.fixedHeight = -1;
         this.element = document.getElementById(this.config.id);
 
@@ -25847,7 +25844,7 @@ return api;
         dumbPlayer.setAttribute("preload", "auto");
         dumbPlayer.setAttribute("poster", this.videos[0].thumbnail);
         dumbPlayer.setAttribute("playsinline", "true");
-        if ((mobile && this.config.autoplay) || this.inIFrame) {
+        if (mobile && this.config.autoplay) {
             dumbPlayer.setAttribute("muted", "true");
         }
         var contentSrc = document.createElement('source');
@@ -25877,7 +25874,7 @@ return api;
           //      me.player.muted(false);
           //  }
         // });
-        if ((mobile && this.config.autoplay) || this.inIFrame) {
+        if (mobile && this.config.autoplay) {
             this.player.one("touchend", function () {
                 if (me.player && me.player.muted()) {
                     me.player.muted(false);
@@ -26005,11 +26002,7 @@ return api;
     };
 
     PowrVideo.prototype.attachVisibleListener = function() {
-	if (this.inIFrame) {
-            revUtils.addEventListener(window.parent, 'scroll', this.checkVisible.bind(this));
-	} else {
-	    revUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
-	}
+        revUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
         this.checkVisible();
     };
 
@@ -26109,43 +26102,29 @@ return api;
     PowrVideo.prototype.checkVisible = function() {
         var that = this;
         requestAnimationFrame(function() {
-	    if (that.inIFrame) {
-		var iid = that.config.iframe_id;
-		var element = window.parent.document.getElementById(iid);
-		var windowHeight = window.parent.innerHeight || window.parent.document.documentElement.clientHeight || window.parent.document.body.clientHeight;
-		var elementTop = element.getBoundingClientRect().top;
-		var currentScroll = window.parent.pageYOffset || window.parent.document.documentElement.scrollTop || window.parent.document.body.scrollTop; 
 
-		if (elementTop + 20 < windowHeight) {
-		    if (that.player.paused()) {
-			that.player.play();
-		    }
-		}
-	    } else {
-		// what percentage of the element should be visible
-		// var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
-		// fire if within buffer
-		// var bufferPixels = (typeof buffer === 'number') ? buffer : 0;
-		
-		var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-		var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-		var elementTop = that.element.getBoundingClientRect().top;
-		var elementBottom = that.element.getBoundingClientRect().bottom;
-		var elementVisibleHeight = that.element.offsetHeight * 0.50;
-		
-		if ((elementTop + elementVisibleHeight) < windowHeight) {
-                    that.registerView();
-		}
-		
-		if (elementTop < 0 && (-1 * elementTop) > 0.2 * that.playerHeight) {
-                    that.floatPlayer();
-		} else {
-                    that.unfloatPlayer();
-		}
-	    }
+            // what percentage of the element should be visible
+            // var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
+            // fire if within buffer
+            // var bufferPixels = (typeof buffer === 'number') ? buffer : 0;
+
+            var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+            var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+            var elementTop = that.element.getBoundingClientRect().top;
+            var elementBottom = that.element.getBoundingClientRect().bottom;
+            var elementVisibleHeight = that.element.offsetHeight * 0.50;
+
+            if ((elementTop + elementVisibleHeight) < windowHeight) {
+                that.registerView();
+            }
+
+            if (elementTop < 0 && (-1 * elementTop) > 0.2 * that.playerHeight) {
+                that.floatPlayer();
+            } else {
+                that.unfloatPlayer();
+            }
         });
     };
-
 
 
     PowrVideo.prototype.adsManagerLoadedCallback = function() {
