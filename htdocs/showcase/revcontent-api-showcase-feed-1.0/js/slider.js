@@ -148,127 +148,141 @@ Author: michael@revcontent.com
                     "headline": "Learn About The Razor Causing So Many Guys To Switch",
                     "target_url": "https://ad.atdmt.com/c/go;p=11252201020181;ev.a=1;idfa=;idfa_lat=;aaid=;aaid_lat=;cache=",
                     "url": "https://ad.atdmt.com/c/go;p=11252201020181;ev.a=1;idfa=;idfa_lat=;aaid=;aaid_lat=;cache=",
-                    "date": "2016-08-25 16:52:35",
+                    // "date": "2016-08-25 16:52:35",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/32a03f8226eb18ac05ec671235a8704a.png",
                     "brand": "Harry's",
-                    "favicon_url": "https://www.harrys.com/favicon.ico"
+                    "favicon_url": "https://www.harrys.com/favicon.ico",
+                    "type": "sponsored"
                 },
                 {
                     "headline": "They Could Be Headed to the Hall of Fame, But Are They The Best?",
                     "target_url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
                     "url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
-                    "date": "2017-06-23 15:03:56",
+                    // "date": "2017-06-23 15:03:56",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1498244634.png",
                     "brand": "247Sports",
-                    "favicon_url": "http://247sports.com/favicon.ico"
+                    "favicon_url": "http://247sports.com/favicon.ico",
+                    "type": "sponsored"
                 },
                 {
                     "headline": "Jaw-Dropping New SUVs Offer More Than Ever",
                     "target_url": "http://myvoteitup.com/?utm_source=revcontent&utm_campaign=us-rc-direct-suv-mob&adgroup=native&utm_content=405df2",
                     "url": "http://myvoteitup.com/?utm_source=revcontent&utm_campaign=us-rc-direct-suv-mob&adgroup=native&utm_content=405df2",
-                    "date": "2017-05-15 22:04:46",
+                    // "date": "2017-05-15 22:04:46",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/00365660ca0b0f8bfcf13802f6f09644.png",
                     "brand": "SUV Sponsored Ads ",
-                    "favicon_url": null
+                    "favicon_url": null,
+                    "type": "sponsored"
                 },
                 {
                     "headline": "Here's Why HelloFresh Works For Us",
                     "target_url": "http://www.libertyproject.com/well-being/how-hellofresh-makes-home-cooking-easy-and-fun/",
                     "url": "http://www.libertyproject.com/well-being/how-hellofresh-makes-home-cooking-easy-and-fun/",
-                    "date": "2017-01-11 19:52:10",
+                    // "date": "2017-01-11 19:52:10",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/ed5c4db1f319ce75438ee1186b5b6da1.png",
                     "brand": "The Liberty Project ",
-                    "favicon_url": "http://www.libertyproject.com/favicon.ico"
+                    "favicon_url": "http://www.libertyproject.com/favicon.ico",
+                    "type": "sponsored"
                 },
                 {
                     "headline": "Predicting The 2017 Records of Every NFL Team",
                     "target_url": "http://247sports.com/Gallery/Predicting-the-2017-records-of-every-NFL-team--52256885/GallerySlides/522808?ftag=ACQ-00-10aaj0a",
                     "url": "http://247sports.com/Gallery/Predicting-the-2017-records-of-every-NFL-team--52256885/GallerySlides/522808?ftag=ACQ-00-10aaj0a",
-                    "date": "2017-06-26 17:20:39",
+                    // "date": "2017-06-26 17:20:39",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/b45345db19e02e5dd4c5d536f72978ce.png",
                     "brand": "247Sports",
-                    "favicon_url": "http://247sports.com/favicon.ico"
+                    "favicon_url": "http://247sports.com/favicon.ico",
+                    "type": "sponsored"
                 },
                 {
                     "headline": "Find the Cheapest Car Insurance Today!",
                     "target_url": "https://ff.zone/?flux_fts=xtxlataqlqalcqzzqeqpqlotaiqptxztaaoad52e&amp;flux_cost=0.01&amp;target={adv_targets}&amp;campaign={boost_id}&amp;content={content_id}&amp;widget={widget_id}",
                     "url": "https://ff.zone/?flux_fts=xtxlataqlqalcqzzqeqpqlotaiqptxztaaoad52e&amp;flux_cost=0.01&amp;target={adv_targets}&amp;campaign={boost_id}&amp;content={content_id}&amp;widget={widget_id}",
-                    "date": "2017-07-08 06:35:25",
+                    // "date": "2017-07-08 06:35:25",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1499510122.jpg",
                     "brand": "Top Car Insurances",
-                    "favicon_url": null
+                    "favicon_url": null,
+                    "type": "sponsored"
                 },
                 {
                     "headline": "Here Are the Best Affordable Vehicles for 2017",
                     "target_url": "http://adv.123trackingurl.com/aff_c?offer_id=8&amp;aff_id=1002",
                     "url": "http://adv.123trackingurl.com/aff_c?offer_id=8&amp;aff_id=1002",
-                    "date": "2016-10-20 08:44:36",
+                    // "date": "2016-10-20 08:44:36",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1476408119.jpg",
                     "brand": "Kelley Blue Book",
-                    "favicon_url": null
+                    "favicon_url": null,
+                    "type": "sponsored"
                 },
                 {
                     "headline": "Think The 'Boys Will Have a Better Record In '17? Think Again",
                     "target_url": "http://247sports.com/Gallery/Predicting-the-2017-records-of-every-NFL-team--52256885/GallerySlides/522808?ftag=ACQ-00-10aaj0a",
                     "url": "http://247sports.com/Gallery/Predicting-the-2017-records-of-every-NFL-team--52256885/GallerySlides/522808?ftag=ACQ-00-10aaj0a",
-                    "date": "2017-06-26 17:20:43",
+                    // "date": "2017-06-26 17:20:43",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/b45345db19e02e5dd4c5d536f72978ce.png",
                     "brand": "247Sports",
-                    "favicon_url": "http://247sports.com/favicon.ico"
+                    "favicon_url": "http://247sports.com/favicon.ico",
+                    "type": "sponsored"
                 },
                 {
                     "headline": "Just Released, Top New Pickup Trucks for 2017",
                     "target_url": "http://buynewpickuptruck.com",
                     "url": "http://buynewpickuptruck.com",
-                    "date": "2017-03-06 12:05:06",
+                    // "date": "2017-03-06 12:05:06",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1491243816.jpg",
                     "author": "BuyNewPickupTrucks (Ads)",
-                    "favicon_url": null
+                    "favicon_url": null,
+                    "type": "sponsored"
                 },
                 {
                     "headline": "This Course is Unlike Anything You've Experienced",
                     "target_url": "http://video.golfdigest.com/watch/golf-all-night-in-the-heart-of-dubai-at-emirates-golf-club?mbid=marketing_paid_revcontent_golf_Ejcpv",
                     "url": "http://video.golfdigest.com/watch/golf-all-night-in-the-heart-of-dubai-at-emirates-golf-club?mbid=marketing_paid_revcontent_golf_Ejcpv",
-                    "date": "2017-05-12 16:10:00",
+                    // "date": "2017-05-12 16:10:00",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1494619794.png",
                     "brand": "Golf Digest",
-                    "favicon_url": "http://video.golfdigest.com/favicon.ico"
+                    "favicon_url": "http://video.golfdigest.com/favicon.ico",
+                    "type": "sponsored"
                 },
                 {
                     "headline": "NBA Brother Duos, Ranked From Awful To Pretty Great",
                     "target_url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
                     "url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
-                    "date": "2017-06-26 17:43:34",
+                    // "date": "2017-06-26 17:43:34",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1498513901.png",
                     "brand": "247Sports",
-                    "favicon_url": "http://247sports.com/favicon.ico"
+                    "favicon_url": "http://247sports.com/favicon.ico",
+                    "type": "sponsored"
                 },
                 {
                     "headline": "3 Simple Steps to Shed Belly Fat over 40",
                     "target_url": "http://www.maxworkouts.com/lp/how-to-get-ripped-abs-after-40-pg-1",
                     "url": "http://www.maxworkouts.com/lp/how-to-get-ripped-abs-after-40-pg-1",
-                    "date": "2017-05-10 17:15:28",
+                    // "date": "2017-05-10 17:15:28",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1494450763.jpg",
                     "brand": "MAX Workouts",
-                    "favicon_url": "http://www.maxworkouts.com/design/images/favicon.png"
+                    "favicon_url": "http://www.maxworkouts.com/design/images/favicon.png",
+                    "type": "sponsored"
                 },
                 {
                     "headline": "They Could Be Headed To The Hall Of Fame, But Are They The Best?",
                     "target_url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
                     "url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
-                    "date": "2017-06-26 17:43:36",
+                    // "date": "2017-06-26 17:43:36",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1498514024.png",
                     "brand": "247Sports",
-                    "favicon_url": "http://247sports.com/favicon.ico"
+                    "favicon_url": "http://247sports.com/favicon.ico",
+                    "type": "sponsored"
                 },
                 {
                     "headline": "'Madden 17': Ratings for Every First-round Pick",
                     "target_url": "http://247sports.com/Gallery/Madden-17-ratings-released-for-NFL-first-round-draft-choices-52579234/GallerySlides/543715?ftag=ACQ-00-10aaj0a",
                     "url": "http://247sports.com/Gallery/Madden-17-ratings-released-for-NFL-first-round-draft-choices-52579234/GallerySlides/543715?ftag=ACQ-00-10aaj0a",
-                    "date": "2017-06-26 17:43:43",
+                    // "date": "2017-06-26 17:43:43",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/6fe74ed289a4369296c9d3a4b91998c4.png",
                     "brand": "247Sports",
-                    "favicon_url": "http://247sports.com/favicon.ico"
+                    "favicon_url": "http://247sports.com/favicon.ico",
+                    "type": "sponsored"
                 }
             ],
             newsweek: [
@@ -276,91 +290,101 @@ Author: michael@revcontent.com
                     "headline": "Learn About The Razor Causing So Many Guys To Switch",
                     "target_url": "https://ad.atdmt.com/c/go;p=11252201476526;ev.a=1;idfa=;idfa_lat=;aaid=;aaid_lat=;cache=",
                     "url": "https://ad.atdmt.com/c/go;p=11252201476526;ev.a=1;idfa=;idfa_lat=;aaid=;aaid_lat=;cache=",
-                    "date": "2016-08-25 16:57:15",
+                    // "date": "2016-08-25 16:57:15",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1474992575.png",
                     "brand": "Harry's",
-                    "favicon_url": null
+                    "favicon_url": null,
+                    "type": "Sponsored"
                 },
                 {
                     "headline": "Eva Longoria&#39;s Surprising DNA Test",
                     "target_url": "http://www.ancestry.com/s74266/t35312/rd.ashx",
                     "url": "http://www.ancestry.com/s74266/t35312/rd.ashx",
-                    "date": "2016-10-31 15:21:09",
+                    // "date": "2016-10-31 15:21:09",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1480975468.jpg",
                     "brand": "Ancestry",
-                    "favicon_url": null
+                    "favicon_url": null,
+                    "type": "Sponsored"
                 },
                 {
                     "headline": "The Most Liberal City In America Will Shock You",
                     "target_url": "http://www3.forbes.com/lifestyle/the-most-conservative-and-most-liberal-cities-in-america",
                     "url": "http://www3.forbes.com/lifestyle/the-most-conservative-and-most-liberal-cities-in-america",
-                    "date": "2016-11-03 16:56:48",
+                    // "date": "2016-11-03 16:56:48",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1477944994.jpg",
                     "brand": "Forbes",
-                    "favicon_url": null
+                    "favicon_url": null,
+                    "type": "Sponsored"
                 },
                 {
                     "headline": "This Course is Unlike Anything You've Experienced",
                     "target_url": "http://video.golfdigest.com/watch/golf-all-night-in-the-heart-of-dubai-at-emirates-golf-club?mbid=marketing_paid_revcontent_golf_Ejcpv",
                     "url": "http://video.golfdigest.com/watch/golf-all-night-in-the-heart-of-dubai-at-emirates-golf-club?mbid=marketing_paid_revcontent_golf_Ejcpv",
-                    "date": "2017-05-12 16:10:00",
+                    // "date": "2017-05-12 16:10:00",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1494619794.png",
                     "brand": "Golf Digest",
-                    "favicon_url": "http://video.golfdigest.com/favicon.ico"
+                    "favicon_url": "http://video.golfdigest.com/favicon.ico",
+                    "type": "Sponsored"
                 },
                 {
                     "headline": "We Tried Blue Apron: Here's What Happened",
                     "target_url": "http://www.libertyproject.com/culture/why-everyone-talking-about-blue-apron/",
                     "url": "http://www.libertyproject.com/culture/why-everyone-talking-about-blue-apron/",
-                    "date": "2016-09-01 15:23:09",
+                    // "date": "2016-09-01 15:23:09",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1470861635.png",
                     "brand": "The Liberty Project",
-                    "favicon_url": null
+                    "favicon_url": null,
+                    "type": "Sponsored"
                 },
                 {
                     "headline": "Jaw-Dropping New SUVs Offer More Than Ever",
                     "target_url": "http://myvoteitup.com/?utm_source=revcontent&utm_campaign=us-rc-direct-suv-mob&adgroup=native&utm_content=405df2",
                     "url": "http://myvoteitup.com/?utm_source=revcontent&utm_campaign=us-rc-direct-suv-mob&adgroup=native&utm_content=405df2",
-                    "date": "2017-05-15 22:04:46",
+                    // "date": "2017-05-15 22:04:46",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/00365660ca0b0f8bfcf13802f6f09644.png",
                     "brand": "SUV Sponsored Ads ",
-                    "favicon_url": null
+                    "favicon_url": null,
+                    "type": "Sponsored"
                 },
                 {
                     "headline": "We Tried Blue Apron: Here's What Happened",
                     "target_url": "http://www.popdust.com/why-everyone-is-talking-about-blue-apron-1891153755.html",
                     "url": "http://www.popdust.com/why-everyone-is-talking-about-blue-apron-1891153755.html",
-                    "date": "2016-11-08 11:52:51",
+                    // "date": "2016-11-08 11:52:51",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1478623971.jpg",
                     "brand": "Popdust",
-                    "favicon_url": null
+                    "favicon_url": null,
+                    "type": "Sponsored"
                 },
                 {
                     "headline": "3 Simple Steps to Shed Belly Fat over 40",
                     "target_url": "http://www.maxworkouts.com/lp/how-to-get-ripped-abs-after-40-pg-1",
                     "url": "http://www.maxworkouts.com/lp/how-to-get-ripped-abs-after-40-pg-1",
-                    "date": "2017-05-10 17:15:28",
+                    // "date": "2017-05-10 17:15:28",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1494450763.jpg",
                     "brand": "MAX Workouts",
-                    "favicon_url": "http://www.maxworkouts.com/design/images/favicon.png"
+                    "favicon_url": "http://www.maxworkouts.com/design/images/favicon.png",
+                    "type": "Sponsored"
                 },
                 {
                     "headline": "The Best Affordable Car Under $20,000",
                     "target_url": "http://adv.123trackingurl.com/aff_c?offer_id=6&amp;aff_id=1002",
                     "url": "http://adv.123trackingurl.com/aff_c?offer_id=6&amp;aff_id=1002",
-                    "date": "2016-10-20 08:56:00",
+                    // "date": "2016-10-20 08:56:00",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1476316214.jpg",
                     "brand": "Kelley Blue Book",
-                    "favicon_url": null
+                    "favicon_url": null,
+                    "type": "Sponsored"
                 },
                 {
                     "headline": "They Could Be Headed To The Hall Of Fame, But Are They The Best?",
                     "target_url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
                     "url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
-                    "date": "2017-06-26 17:43:36",
+                    // "date": "2017-06-26 17:43:36",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1498514024.png",
                     "brand": "247Sports",
-                    "favicon_url": "http://247sports.com/favicon.ico"
+                    "favicon_url": "http://247sports.com/favicon.ico",
+                    "type": "Sponsored"
                 },
             ]
         }
@@ -377,7 +401,8 @@ Author: michael@revcontent.com
                     "image": "http:\/\/a4.espncdn.com\/combiner\/i?img=%2Fmedia%2Fmotion%2F2017%2F0914%2Fdm_170914_MLB_YANKEES_SANCHEZ_HR%2Fdm_170914_MLB_YANKEES_SANCHEZ_HR.jpg",
                     "author": "ESPN.com",
                     "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
-                    "video_id": 1
+                    "video_id": 1,
+                    "type": "internal"
                 },
                 {
                     "headline": "New York Yankees' Todd Frazier gives a big thumbs up to thumbs down",
@@ -387,7 +412,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-15T00:43:04Z",
                     "image": "http:\/\/a.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0813%2Fr243868_1296x729_16%2D9.jpg",
                     "author": "ESPN.com",
-                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
+                    "type": "internal"
                 },
                 {
                     "headline": "Yankee Stadium sound system fails for first inning of New York Yankees-Baltimore Orioles game",
@@ -397,7 +423,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-15T00:36:04Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0807%2Fr241124_1296x729_16%2D9.jpg",
                     "author": "ESPN.com",
-                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
+                    "type": "internal"
                 },
                 {
                     "headline": "New York Yankees reliever Dellin Betances still upset over Joe Girardi bringing in Aroldis Chapman",
@@ -407,7 +434,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-14T22:42:10Z",
                     "image": "http:\/\/a.espncdn.com\/combiner\/i?img=%2Fphoto%2F2015%2F0707%2Fmlb_betancesd_st_1296x729.jpg",
                     "author": "ESPN.com",
-                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
+                    "type": "internal"
                 },
                 {
                     "headline": "Yankees beat Rays 3-2, take 2 of 3 at Citi Field",
@@ -417,7 +445,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-13T21:08:44Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fmedia%2Fmotion%2F2017%2F0913%2Fdm_170913_MLB_Yankees_Frazier_2_run_single%2Fdm_170913_MLB_Yankees_Frazier_2_run_single.jpg",
                     "author": "ESPN.com",
-                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
+                    "type": "internal"
                 },
                 {
                     "headline": "Shohei Otani and why being Babe Ruth isn't all it's cracked up to be",
@@ -427,7 +456,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-13T12:45:00Z",
                     "image": "http:\/\/a.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0616%2Fr220033_2_1296x729_16%2D9.jpg",
                     "author": "Sam Miller",
-                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
+                    "type": "internal"
                 },
                 {
                     "headline": "Hechavarria HR leads Rays over Yankees 2-1 at Mets' park",
@@ -437,7 +467,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-13T01:58:12Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png",
                     "author": "ESPN.com",
-                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
+                    "type": "internal"
                 },
                 {
                     "headline": "New York Yankees play at Citi Field with Tampa Bay Rays displaced",
@@ -447,7 +478,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-12T12:45:00Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0911%2Fr257248_1296x729_16%2D9.jpg",
                     "author": "Andrew Marchand",
-                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
+                    "type": "internal"
                 },
                 {
                     "headline": "Yanks top Rays 5-1 as Frazier homers in series moved to Mets",
@@ -457,7 +489,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-12T02:49:41Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png",
                     "author": "ESPN.com",
-                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
+                    "type": "internal"
                 },
                 {
                     "headline": "Jacoby Ellsbury of New York Yankees sets catcher's interference mark on birthday",
@@ -467,7 +500,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-12T01:09:41Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fphoto%2F2016%2F0720%2Fr105672_1296x729_16%2D9.jpg",
                     "author": "ESPN.com",
-                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
+                    "type": "internal"
                 },
                 {
                     "headline": "New York Yankees activate outfielder Clint Frazier",
@@ -477,7 +511,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-11T19:55:29Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0709%2Fr229087_1296x729_16%2D9.jpg",
                     "author": "ESPN.com",
-                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
+                    "type": "internal"
                 },
                 {
                     "headline": "Judge, Sanchez 2 homers each in Yankees' 16-7 win at Texas",
@@ -487,7 +522,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-10T23:00:22Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png",
                     "author": "ESPN.com",
-                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
+                    "type": "internal"
                 },
                 {
                     "headline": "Aaron Judge of New York Yankees hits 40th HR for major milestone",
@@ -497,7 +533,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-10T20:52:04Z",
                     "image": "http:\/\/a.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0427%2Fr204680_1296x729_16%2D9.jpg",
                     "author": "ESPN.com",
-                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
+                    "type": "internal"
                 },
                 {
                     "headline": "Chapman gets save to finish Yanks' one-hittter",
@@ -507,7 +544,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-09T20:18:02Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png",
                     "author": "ESPN.com",
-                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
+                    "type": "internal"
                 },
                 {
                     "headline": "Perez wins 7th in a row; Rangers rally to beat Yankees 11-5",
@@ -517,7 +555,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-09T03:40:22Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png",
                     "author": "ESPN.com",
-                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
+                    "type": "internal"
                 },
                 {
                     "headline": "New York Yankees-Tampa Bay Rays series will be at Citi Field due to potential impact of Hurricane Irma",
@@ -527,7 +566,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-08T19:04:58Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fphoto%2F2014%2F0331%2Fmlb_g_mets11_1296x729.jpg",
                     "author": "ESPN.com",
-                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
+                    "type": "internal"
                 },
                 {
                     "headline": "Yankees hit 4 HRs, beat Orioles 9-1 to win 3-game series",
@@ -537,7 +577,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-07T21:08:53Z",
                     "image": "http:\/\/a4.espncdn.com\/combiner\/i?img=%2Fmedia%2Fmotion%2F2017%2F0908%2Fdm_170908_sc_AFRICA_judge%2Fdm_170908_sc_AFRICA_judge.jpg",
                     "author": "ESPN.com",
-                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
+                    "type": "internal"
                 },
                 {
                     "headline": "Former New York Yankees executive Gene 'Stick' Michael dies at 79",
@@ -547,7 +588,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-07T14:45:58Z",
                     "image": "http:\/\/a.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0907%2Fr254899_1296x729_16%2D9.jpg",
                     "author": "ESPN.com",
-                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
+                    "type": "internal"
                 },
                 {
                     "headline": "Dustin Pedroia of Boston Red Sox insists sign stealing 'part of the game'",
@@ -557,7 +599,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-06T23:32:49Z",
                     "image": "http:\/\/a3.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0615%2Fr220356_2_1296x864_3%2D2.jpg",
                     "author": "Scott Lauber",
-                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
+                    "type": "internal"
                 },
                 {
                     "headline": "Boston Red Sox say they have video evidence of Yanks using YES camera to steal signs",
@@ -567,7 +610,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-06T22:27:19Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0818%2Fr246028_1296x729_16%2D9.jpg",
                     "author": "Buster Olney",
-                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
+                    "type": "internal"
                 },
                 {
                     "headline": "Machado's 2-run HR in 9th lifts Orioles past Yankees 7-6",
@@ -577,7 +621,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-06T05:13:22Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png",
                     "author": "ESPN.com",
-                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
+                    "type": "internal"
                 },
                 {
                     "headline": "Boston Red Sox stole signs electronically against New York Yankees, other teams",
@@ -587,7 +632,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-05T20:59:22Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0818%2Fr246028_1296x729_16%2D9.jpg",
                     "author": "ESPN.com",
-                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
+                    "type": "internal"
                 },
                 {
                     "headline": "Aaron Judge of New York Yankees walked for 100th time in rookie season",
@@ -597,7 +643,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-04T19:16:23Z",
                     "image": "http:\/\/a3.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0710%2Fr229532_1296x729_16%2D9.jpg",
                     "author": "ESPN.com",
-                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
+                    "type": "internal"
                 },
                 {
                     "headline": "Castro, Gregorius HRs help Yankees beat Orioles 7-4",
@@ -607,7 +654,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-04T21:45:53Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png",
                     "author": "ESPN.com",
-                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico",
+                    "type": "internal"
                 }
             ],
             newsweek: [
@@ -619,7 +667,8 @@ Author: michael@revcontent.com
                     "date": "2016-05-31",
                     "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2016\/05\/31\/rtx29n6o.jpg",
                     "author": "Josh Lowe",
-                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png",
+                    "type": "internal"
                 },
                 {
                     "headline": "Ivanka Trump Has Explained Why She Won't Stand Up to Her 'Daddy'",
@@ -629,7 +678,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-14",
                     "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/09\/14\/1409ivankatrump.jpg",
                     "author": "John Haltiwanger",
-                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png",
+                    "type": "internal"
                 },
                 {
                     "headline": "Trump Says He Likes That White House Adviser Ivanka Calls Him Daddy and Asks if She Can Tag Along to Events",
@@ -639,7 +689,8 @@ Author: michael@revcontent.com
                     "date": "2017-09-06",
                     "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/08\/25\/donald-trump-ivanka.JPG",
                     "author": "Harriet Sinclair",
-                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png",
+                    "type": "internal"
                 },
                 {
                     "headline": "Donald Trump's Son Says Media Coverage of President Would Drive Anyone to Suicide ",
@@ -649,7 +700,8 @@ Author: michael@revcontent.com
                     "date": "2017-08-31",
                     "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/08\/31\/gettyimages-815147102.jpg",
                     "author": "Callum Paton",
-                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png",
+                    "type": "internal"
                 },
                 {
                     "headline": "Ivanka and Donald Trump Finally Condemn Nazis, but Not Really, a Day After Charlottesville Violence ",
@@ -659,7 +711,8 @@ Author: michael@revcontent.com
                     "date": "2017-08-13",
                     "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/08\/13\/rts1bibl.jpg",
                     "author": "Cristina Silva",
-                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png",
+                    "type": "internal"
                 },
                 {
                     "headline": "Ivanka Trump Is Opening A New Store Somewhere That Will Never Ban Her Clothing Line",
@@ -669,7 +722,8 @@ Author: michael@revcontent.com
                     "date": "2017-08-09",
                     "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/07\/19\/rtx3amkv.jpg",
                     "author": "Harriet Sinclair",
-                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png",
+                    "type": "internal"
                 },
                 {
                     "headline": "What Does Melania Trump Do at the White House? First Lady Tweets About Drug Addiction, Not Cyberbullying Campaign",
@@ -679,7 +733,8 @@ Author: michael@revcontent.com
                     "date": "2017-08-09",
                     "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/07\/28\/7-28-17-melania-trump.jpeg",
                     "author": "Harriet Sinclair",
-                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png",
+                    "type": "internal"
                 },
                 {
                     "headline": "Why Does Eric Trump Want People to be Nicer to His Dad? ",
@@ -689,7 +744,8 @@ Author: michael@revcontent.com
                     "date": "2017-08-01",
                     "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/07\/30\/donald-trump.jpg",
                     "author": "Harriet Sinclair",
-                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png",
+                    "type": "internal"
                 },
                 {
                     "headline": "Trump Sees Women As Business Animals or 'Secretaries'",
@@ -699,7 +755,8 @@ Author: michael@revcontent.com
                     "date": "2017-08-03",
                     "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/08\/01\/trump.jpg",
                     "author": "Harriet Sinclair",
-                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png",
+                    "type": "internal"
                 },
                 {
                     "headline": "Donald Trump Isn't Happy About New Poll Showing He Is the President With Lowest Approval Rating in 70 Years",
@@ -709,7 +766,8 @@ Author: michael@revcontent.com
                     "date": "2017-07-16",
                     "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/07\/14\/trump.JPG",
                     "author": "Harriet Sinclair",
-                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png",
+                    "type": "internal"
                 },
                 {
                     "headline": "War on ISIS Under Trump Set to Double Civilian Death Toll Compared to Obama",
@@ -719,7 +777,8 @@ Author: michael@revcontent.com
                     "date": "2017-07-17",
                     "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/07\/17\/u.s.-coalition-strikes-mosul.jpg",
                     "author": "Jack Moore",
-                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png",
+                    "type": "internal"
                 },
                 {
                     "headline": "Melania Trump Is Still Not As Popular As Michelle Obama, but She Beats Hillary Clinton in First Lady Rankings",
@@ -729,7 +788,8 @@ Author: michael@revcontent.com
                     "date": "2017-07-08",
                     "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/07\/07\/rtswkjn.jpg",
                     "author": "Cristina Silva",
-                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png",
+                    "type": "internal"
                 },
                 {
                     "headline": "Could Trump Go on Trial? Lawyer Says It Is a \u2018Real Possibility\u2019 President Could Face Jury Over University Fraud Case",
@@ -739,7 +799,8 @@ Author: michael@revcontent.com
                     "date": "2017-07-03",
                     "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/07\/03\/trump_0.jpg",
                     "author": "Jason Le Miere",
-                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png",
+                    "type": "internal"
                 },
                 {
                     "headline": "Trump Funneled Cancer Charity Money to His Businesses, Associates: Report",
@@ -749,7 +810,8 @@ Author: michael@revcontent.com
                     "date": "2017-06-06",
                     "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/06\/06\/donald-trump.jpg",
                     "author": "Ryan Bort",
-                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png",
+                    "type": "internal"
                 },
                 {
                     "headline": "What Ivanka Trump Thinks of James Comey, the President and the 'Viciousness' of Washington",
@@ -759,7 +821,8 @@ Author: michael@revcontent.com
                     "date": "2017-06-12",
                     "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/06\/12\/ivanka-trump.jpg",
                     "author": "Ryan Bort",
-                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png",
+                    "type": "internal"
                 },
                 {
                     "headline": "Melania Trump Says Kathy Griffin May Be Mentally Ill After Beheaded President Photo ",
@@ -769,7 +832,8 @@ Author: michael@revcontent.com
                     "date": "2017-05-31",
                     "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/05\/31\/melania-donald-trump.JPG",
                     "author": "Jason Le Miere",
-                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png",
+                    "type": "internal"
                 },
                 {
                     "headline": "After Hand Swat, Melania Trump Again Avoids Holding Donald\u2019s Hand as They Land in Rome",
@@ -779,7 +843,8 @@ Author: michael@revcontent.com
                     "date": "2017-05-23",
                     "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/05\/23\/donald-trump-melania.JPG",
                     "author": "Jason Le Miere",
-                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png",
+                    "type": "internal"
                 },
                 {
                     "headline": "Ivanka Trump\u2019s First 100 Days Have Definitely Benefited One Group: The Trumps",
@@ -789,7 +854,8 @@ Author: michael@revcontent.com
                     "date": "2017-05-01",
                     "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/05\/01\/rts13pen.jpg",
                     "author": "Chris Riotta",
-                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png",
+                    "type": "internal"
                 },
                 {
                     "headline": "A Question of Trust: The Trump Family's Conflicts of Interest Aren't Going Away",
@@ -799,7 +865,8 @@ Author: michael@revcontent.com
                     "date": "2017-04-20",
                     "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/04\/20\/rts11crc.jpg",
                     "author": "Beth A. Rosenson",
-                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png",
+                    "type": "internal"
                 },
                 {
                     "headline": "Judge to Consider Student's Objection to Trump University Settlement",
@@ -809,7 +876,8 @@ Author: michael@revcontent.com
                     "date": "2017-03-29",
                     "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2016\/11\/19\/1119trumpuniversity01.JPG",
                     "author": "Reuters",
-                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png",
+                    "type": "internal"
                 }
             ]
          };
