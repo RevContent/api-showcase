@@ -371,6 +371,15 @@
                     display: inline-block;
                     background-size: contain;
                 }
+
+                .rev-author-initials {
+                line-height: 32px;
+                text-align: center;
+                font-size: 18px;
+                border: 1px solid rgba(0, 0, 0, 0.3);
+                color: rgba(0, 0, 0, 0.67);
+                border-radius: 4px;
+                }
             }
         }
 
@@ -1303,7 +1312,8 @@
         margin-top: 0 !important;
         margin-left: 0 !important;
         font-size: 13px;
-        line-height: 16px;
+        line-height: 18px;
+        top: -2.5px;
         height: auto;
         letter-spacing: .3px;
         font-weight: 700;
