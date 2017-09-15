@@ -1315,11 +1315,11 @@ Author: michael@revcontent.com
 
                 var reactionsContainer = document.createElement('div');
 
-                if (items[0].type === 'internal') {
+                // if (items[0].type === 'internal') {
                     var html = like_b64 + comment_b64 + share_b64;
-                } else {
-                    var html = like_b64;
-                }
+                // } else {
+                //     var html = like_b64;
+                // }
 
                 reactionsContainer.innerHTML = '<div class="rev-reaction-bar">' + html + '</div>';
                 revUtils.addClass(reactionsContainer, 'rev-reactions');
