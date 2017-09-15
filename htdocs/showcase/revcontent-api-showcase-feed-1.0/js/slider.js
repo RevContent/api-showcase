@@ -2809,19 +2809,18 @@ Author: michael@revcontent.com
             revUtils.append(this.head, this.header);
 
             if (this.options.header_logo) {
-                var headLogo = document.createElement('img');
-                revUtils.addClass(headLogo, 'rev-header-logo')
-                // headLogo.style.backgroundRepeat = 'no-repeat';
-                headLogo.style.float = 'left';
-                // headLogo.style.backgroundSize = 'contain';
-                headLogo.src = this.options.header_logo;
-                // headLogo.style.backgroundImage = 'url('+ this.logoURI +')';
-                // headLogo.style.backgroundImage = "url('" + this.options.header_logo + "')";
+                var char = this.options.header_logo.charAt(0);
 
-                // headLogo.style.height = this.head.offsetHeight + 'px';
-                // headLogo.style.height = '28px';
-                // // headLogo.style.width = this.head.offsetHeight + 'px';
-                // headLogo.style.width = '184px';
+                if (char === '<') {
+                    var headLogo = document.createElement('div');
+                    headLogo.innerHTML = this.options.header_logo;
+                } else {
+                    var headLogo = document.createElement('img');
+                    headLogo.src = this.options.header_logo;
+                }
+
+                revUtils.addClass(headLogo, 'rev-header-logo')
+                headLogo.style.float = 'left';
 
                 this.head.insertAdjacentElement('afterbegin', headLogo);
             }
