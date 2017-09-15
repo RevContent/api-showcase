@@ -25878,11 +25878,13 @@ return api;
           //      me.player.muted(false);
           //  }
         // });
+	me.skipNextClick = false;
         if ((mobile && this.config.autoplay) || this.inIFrame) {
-            this.player.one("touchend", function () {
+            this.player.one("touchend", function (e) {
                 if (me.player && me.player.muted()) {
                     me.player.muted(false);
 		    me.autoplaying = false;
+		    me.skipNextClick = true;
                 }
             });
             //revUtils.addEventListener(this.container, 'touchend', function () {
@@ -25898,7 +25900,11 @@ return api;
             }
 
 	    if (mobile) {
-		me.player.on("touchend", function () {
+		me.player.on("touchend", function (e) {
+		    if (me.skipNextClick) {
+			me.skipNextClick = false;
+			return;
+		    }
 		    if (!me.autoplaying) {
 			if (me.player.paused()) {
 			    me.player.play();
