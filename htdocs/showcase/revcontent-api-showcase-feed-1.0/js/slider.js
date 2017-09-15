@@ -2970,6 +2970,8 @@ Author: michael@revcontent.com
             var fill = urls.length > 0;
             var sponsoredURL = this.generateUrl(0, this.sponsoredLimit, false, false, false, (firstInternal > 0), fill);
             urls.push({
+                offset: 0,
+                limit: this.sponsoredLimit,
                 url: sponsoredURL,
                 type: 'sponsored'
             });
@@ -2992,6 +2994,20 @@ Author: michael@revcontent.com
                     });
                     return;
                 }
+
+                if (url.type == 'sponsored') {
+                    var resp = that.mockSponsored.slice(url.offset, url.limit);
+                    if (!resp.length) {
+                        reject();
+                        return;
+                    }
+                    resolve({
+                        type: url.type,
+                        data: resp
+                    });
+                    return;
+                }
+
                 revApi.request(url.url, function(resp) {
                     if (!resp.length) {
                         reject();

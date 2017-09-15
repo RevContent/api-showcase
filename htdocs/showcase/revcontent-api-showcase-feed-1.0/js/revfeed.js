@@ -325,6 +325,8 @@ Author: michael@revcontent.com
                     var sponsoredURL = self.innerWidget.generateUrl(self.sponsoredOffset, rowData.sponsoredLimit, false, false, false);
                     self.sponsoredOffset += rowData.sponsoredLimit;
                     urls.push({
+                        offset: self.sponsoredOffset,
+                        limit: rowData.sponsoredLimit,
                         url: sponsoredURL,
                         type: 'sponsored'
                     });
@@ -337,6 +339,15 @@ Author: michael@revcontent.com
 
                         if (url.type == 'internal') {
                             var resp = self.innerWidget.mockInternal[self.options.mock].slice(url.offset, url.offset + url.limit);
+                            resolve({
+                                type: url.type,
+                                data: resp
+                            });
+                            return;
+                        }
+
+                        if (url.type == 'sponsored') {
+                            var resp = self.innerWidget.mockSponsored.slice(url.offset, url.offset + url.limit);
                             resolve({
                                 type: url.type,
                                 data: resp
