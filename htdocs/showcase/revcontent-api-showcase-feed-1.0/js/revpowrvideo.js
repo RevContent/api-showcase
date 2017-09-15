@@ -25857,7 +25857,7 @@ return api;
         // videojs.support.requestFullScreen = false;
 
         this.player = videojs(this.playerId, {
-            nativeControlForTouch: false
+            nativeControlForTouch: true
         });
 
         this.currentContent = 0;
