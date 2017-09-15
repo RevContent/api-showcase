@@ -450,6 +450,42 @@ Author: michael@revcontent.com
             ]
          };
 
+         this.mockComments = [
+            {
+                name: "Eric Gundel",
+                icon: "https://scontent.fbna1-2.fna.fbcdn.net/v/t1.0-1/c17.0.100.100/p100x100/14495357_10207244418403959_8590106024589896961_n.jpg?oh=4075213756b85906b400a18b9c47fe00&oe=5A60BFF8",
+                comment: "Sale, Pomeranz, Fister. With his inability to pitch deep Pomeranz should either go 2 or 4 so that he is right before or after Sale. Only Fister's performance gives him a credible argument for going ahead of him so holding off until Game 4 is silly. Fister also has been going deep so he is the logical guy to follow Pomeranz."
+            },
+            {
+                name: "Daniel Canny",
+                icon: "https://scontent.fbna1-2.fna.fbcdn.net/v/t1.0-1/p100x100/12745519_10153828730110991_8288934923335204537_n.jpg?oh=31bf110189004eef484008d8c0fe0014&oe=5A1462A1",
+                comment: "I want no part of Price in these playoffs. Even if he was piching well right now and not on the DL. I think it should go Sale, Pomeranz 1-2 with Fister and Porcello as the 3/4 in some order. Pomeranz has earned the 2 spot. I like Fister but let' see what everybody thinks when someone roughs him up for 7 or 8 runs in 2 innings-which I predict will happen before the end of the season. It's an interesting call but I hope the Sox shut Price down. Make him earn that 30 million next year."
+            },
+            {
+                name: "Vinnie Bredice",
+                icon: "https://scontent.fbna1-2.fna.fbcdn.net/v/t1.0-1/p100x100/19105596_10211587788722367_8573624180233364817_n.jpg?oh=aa9da14633edb282a4887c7b11f73c29&oe=5A51FCD5",
+                comment: "It's bad enough the Yankees replica jerseys have the player last names on the back of them, now this? Chief for Ellsbury??? When has anyone ever heard him called Chief??? And A-A-Ron for Hicks??? When just about everyone on the team and his manager call him Hicksy? A lot of these nicknames sound forced or contrived. Glad to see that Gardner refused a nickname and went with his last name. Just a dumb idea all around and another way for MLB to suck the almighty dollar away from the fans."
+            },
+            {
+                name: "Michael Rinella",
+                icon: "https://scontent.fbna1-2.fna.fbcdn.net/v/t1.0-1/p100x100/14440758_10209944849559243_3334370350088150485_n.jpg?oh=4304b9cb6e6855e3d3d26013a51776fd&oe=5A12DCF9",
+                comment: "What is it with today's players oblique strains? Nobody and I mean nobody went on the DL with a flippin' oblique anything thirty or forty years ago."
+            },
+            {
+                name: "Lee Fogel",
+                icon: "https://scontent.fbna1-2.fna.fbcdn.net/v/t1.0-1/p100x100/18033393_1493137037424397_5285712530195291564_n.jpg?oh=e9b8d3ae7305d913e720612a26cb61cc&oe=5A13EB8A",
+                comment: "People ridiculed his signing but he put dollars in pockets and butts in seats. And, although he didn't blow anyone away, his results overall were better than just about anyone figured he would put up."
+            },
+            {
+                name: "Dennis Lio",
+                icon: "https://scontent.fbna1-2.fna.fbcdn.net/v/t1.0-1/p100x100/15965322_581838418669301_6626437843902271848_n.jpg?oh=844bd7dbf1d62d6316322ff40db53078&oe=5A12C32D",
+                comment: "When jealousy rears its ugly head in the realm of baseball, it is a terrible thing. Tim Tebow is what baseball is all about."
+            }
+        ];
+
+
+
+
 
 
         // merge options
@@ -3018,19 +3054,22 @@ Author: michael@revcontent.com
                     // var commentCount = random(3);
                     var commentCount = 1;
                     for (var commentId = 0; commentId < commentCount; commentId++) {
-                        var author = authors[Math.floor(Math.random() * authors.length)];
-                        var authorNames = author.split(' ');
-                        var authorImageString = author.split(' ')[authorNames.length - 1].toLowerCase();
-                        var authorImage = '/app/resources/img/' + authorImageString + '.png';
+
+                        var randomComment = this.mockComments[Math.floor(Math.random() * this.mockComments.length)];
+
+                        // var author = authors[Math.floor(Math.random() * authors.length)];
+                        // var authorNames = author.split(' ');
+                        // var authorImageString = author.split(' ')[authorNames.length - 1].toLowerCase();
+                        // var authorImage = '/app/resources/img/' + authorImageString + '.png';
 
                         commentHtml += '<div class="rev-comment">' +
-                                '<div class="rev-comment-image" style="background-image:url('+ authorImage +')">' +
+                                '<div class="rev-comment-image" style="background-image:url('+ randomComment.icon +')">' +
                                     // '<?xml version="1.0" ?><!DOCTYPE svg  PUBLIC "-//W3C//DTD SVG 1.1//EN"  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" version="1.1" viewBox="0 0 4335 4335" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><style type="text/css"> <![CDATA[.fil0 {fill:black} ]]> </style></defs><g id="Layer_x0020_1"><path class="fil0" d="M2121 179c1065,0 1929,864 1929,1929 0,1065 -864,1929 -1929,1929 -1065,0 -1929,-864 -1929,-1929 0,-1065 864,-1929 1929,-1929zm1059 3099c-92,-307 -377,-1047 -982,-1047 -21,0 -40,1 -59,2 -19,-1 -38,-2 -59,-2 -622,0 -906,783 -989,1072 -335,-289 -548,-718 -548,-1195 0,-872 707,-1578 1578,-1578 872,0 1578,707 1578,1578 0,464 -200,881 -519,1170zm-1053 408c4,-4 8,-8 12,-13 4,4 8,8 12,12 -8,0 -16,0 -24,0zm12 -2806c293,0 530,269 530,601 0,332 -237,601 -530,601 -293,0 -530,-269 -530,-601 0,-332 237,-601 530,-601z"/></g></svg>' +
                                 '</div>' +
                                 '<div class="rev-comment-text">' +
-                                    '<span class="rev-comment-author">' + author + '</span>' +
+                                    '<span class="rev-comment-author">' + randomComment.name + '</span>' +
                                     ' · ' +
-                                    '<span class="rev-comment-date">' + this.timeAgo(new Date(Date.now() - (random(120) * 60000)), true) + '</span>  ' + texts[Math.floor(Math.random() * texts.length)] +
+                                    '<span class="rev-comment-date">' + this.timeAgo(new Date(Date.now() - (random(120) * 60000)), true) + '</span>  ' + randomComment.comment +
                                 '</div>' +
                             '</div>' +
                             '</div>';
