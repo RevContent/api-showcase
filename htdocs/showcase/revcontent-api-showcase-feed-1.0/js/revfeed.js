@@ -100,7 +100,8 @@ Author: michael@revcontent.com
             header_logo: false,
             window_width_devices: [
                 'phone'
-            ]
+            ],
+            mock: false
         };
 
         // merge options
@@ -188,6 +189,7 @@ Author: michael@revcontent.com
 
     RevFeed.prototype.createInnerWidget = function() {
         this.innerWidget = new RevSlider({
+            mock: this.options.mock,
             api_source:   this.options.api_source,
             element:      [this.containerElement],
             url:          this.options.url,
@@ -312,6 +314,8 @@ Author: michael@revcontent.com
                     var internalURL = self.innerWidget.generateUrl(self.internalOffset, rowData.internalLimit, false, false, true);
                     self.internalOffset += rowData.internalLimit;
                     urls.push({
+                        offset: self.internalOffset,
+                        limit: rowData.internalLimit,
                         url: internalURL,
                         type: 'internal'
                     });
@@ -327,10 +331,18 @@ Author: michael@revcontent.com
                 }
 
                 this.promises = [];
-
                 for (var i = 0; i < urls.length; i++) {
                     this.promises.push(new Promise(function(resolve, reject) {
                         var url = urls[i];
+
+                        if (url.type == 'internal') {
+                            var resp = self.innerWidget.mockInternal[self.options.mock].slice(url.offset, url.offset + url.limit);
+                            resolve({
+                                type: url.type,
+                                data: resp
+                            });
+                            return;
+                        }
                         revApi.request(url.url, function(resp) {
                             resolve({
                                 type: url.type,
@@ -344,6 +356,9 @@ Author: michael@revcontent.com
                     self.innerWidget.updateDisplayedItems(rowData.items, data);
                     self.innerWidget.viewableItems = self.innerWidget.viewableItems.concat(rowData.items);
                     self.doing = false; // TODO should this be moved up and out
+                }, function(e) {
+                }).catch(function(e) {
+                    console.log(e);
                 });
             }
 

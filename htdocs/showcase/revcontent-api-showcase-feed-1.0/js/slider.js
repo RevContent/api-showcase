@@ -21,6 +21,7 @@ Author: michael@revcontent.com
 }( window, function factory(window, revUtils, revDetect, revApi, revDisclose) {
 'use strict';
 
+
     var RevSlider = function(opts) {
 
         var defaults = {
@@ -140,6 +141,317 @@ Author: michael@revcontent.com
             window_width_enabled: false,
             reactions: [ 'love', 'laugh', 'cool', 'idiotic', 'sad', 'angry' ]
         };
+
+
+        this.mockInternal =
+         {
+            espn: [
+                {
+                    "headline": "New York Yankees' Todd Frazier gives a big thumbs up to thumbs down",
+                    "target_url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/20706691\/new-york-yankees-todd-frazier-gives-big-thumbs-thumbs-down",
+                    "url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/20706691\/new-york-yankees-todd-frazier-gives-big-thumbs-thumbs-down",
+                    "description": "While a fan gave Todd Frazier's homer on Monday night a thumbs down, the Yankees' third baseman has decided to make the gesture his own when there's reason to celebrate.",
+                    "date": "2017-09-15T00:43:04Z",
+                    "image": "http:\/\/a.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0813%2Fr243868_1296x729_16%2D9.jpg",
+                    "author": "ESPN.com news services",
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                },
+                {
+                    "headline": "Yankee Stadium sound system fails for first inning of New York Yankees-Baltimore Orioles game",
+                    "target_url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/20706653\/yankee-stadium-sound-system-fails-first-inning-new-york-yankees-baltimore-orioles-game",
+                    "url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/20706653\/yankee-stadium-sound-system-fails-first-inning-new-york-yankees-baltimore-orioles-game",
+                    "description": "Yankee Stadium's sound system failed before New York took the field against the Baltimore Orioles on Thursday night. There was no introduction of players or national anthem, and a pregame tribute to the late Gene Michael was scrapped.",
+                    "date": "2017-09-15T00:36:04Z",
+                    "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0807%2Fr241124_1296x729_16%2D9.jpg",
+                    "author": "Associated Press",
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                },
+                {
+                    "headline": "New York Yankees reliever Dellin Betances still upset over Joe Girardi bringing in Aroldis Chapman",
+                    "target_url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/20705971\/new-york-yankees-reliever-dellin-betances-upset-joe-girardi-bringing-aroldis-chapman",
+                    "url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/20705971\/new-york-yankees-reliever-dellin-betances-upset-joe-girardi-bringing-aroldis-chapman",
+                    "description": "Dellin Betances isn't happy that Yankees manager Joe Girardi lifted him in favor of Aroldis Chapman on Wednesday. Girardi says that's a sign Betances believes in himself and he's fine if players are mad at him.",
+                    "date": "2017-09-14T22:42:10Z",
+                    "image": "http:\/\/a.espncdn.com\/combiner\/i?img=%2Fphoto%2F2015%2F0707%2Fmlb_betancesd_st_1296x729.jpg",
+                    "author": "Associated Press",
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                },
+                {
+                    "headline": "Yankees beat Rays 3-2, take 2 of 3 at Citi Field",
+                    "target_url": "http:\/\/www.espn.com\/\/mlb\/recap?gameId=370913130",
+                    "url": "http:\/\/www.espn.com\/\/mlb\/recap?gameId=370913130",
+                    "description": "A disappointed Jaime Garcia didn't say a word to manager Joe Girardi when he was removed one out shy of qualifying for his first win with the Yankees, and New York beat the Tampa Bay Rays 3-2 Wednesday to take two of three games in the displaced series.",
+                    "date": "2017-09-13T21:08:44Z",
+                    "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fmedia%2Fmotion%2F2017%2F0913%2Fdm_170913_MLB_Yankees_Frazier_2_run_single%2Fdm_170913_MLB_Yankees_Frazier_2_run_single.jpg",
+                    "author": "Associated Press",
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                },
+                {
+                    "headline": "Shohei Otani and why being Babe Ruth isn't all it's cracked up to be",
+                    "target_url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/19635864\/shohei-otani-why-being-babe-ruth-all-cracked-be",
+                    "url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/19635864\/shohei-otani-why-being-babe-ruth-all-cracked-be",
+                    "description": "The Japanese sensation has teams dreaming of an elite pitcher and an All-Star slugger wrapped into one. But there's a catch: Two-way stars might hurt more than they help.",
+                    "date": "2017-09-13T12:45:00Z",
+                    "image": "http:\/\/a.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0616%2Fr220033_2_1296x729_16%2D9.jpg",
+                    "author": "Sam Miller",
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                },
+                {
+                    "headline": "Hechavarria HR leads Rays over Yankees 2-1 at Mets' park",
+                    "target_url": "http:\/\/www.espn.com\/\/mlb\/recap?gameId=370912130",
+                    "url": "http:\/\/www.espn.com\/\/mlb\/recap?gameId=370912130",
+                    "description": "Adeiny Hechavarria hit a tiebreaking home run in the eighth inning off Sonny Gray and the Tampa Bay Rays, playing as the home team in a series relocated to Citi Field because of Hurricane Irma, beat the New York Yankees 2-1 on Tuesday night.",
+                    "date": "2017-09-13T01:58:12Z",
+                    "image": "http:\/\/a.espncdn.com\/combiner\/i?img=%2Fmedia%2Fmotion%2F2017%2F0912%2Fdm_170912_mlb_yankees_rays_hl%2Fdm_170912_mlb_yankees_rays_hl.jpg",
+                    "author": "Associated Press",
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                },
+                {
+                    "headline": "New York Yankees play at Citi Field with Tampa Bay Rays displaced",
+                    "target_url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/20669784\/new-york-yankees-play-citi-field-tampa-bay-rays-displaced",
+                    "url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/20669784\/new-york-yankees-play-citi-field-tampa-bay-rays-displaced",
+                    "description": "Hurricane Irma forced Tampa Bay to host its home series in its opponent's backyard. Though, perhaps, it wasn't much different than being at Tropicana Field, Yankees fans outnumbered Rays fans on a strange night in Queens.",
+                    "date": "2017-09-12T12:45:00Z",
+                    "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0911%2Fr257248_1296x729_16%2D9.jpg",
+                    "author": "Andrew Marchand",
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                },
+                {
+                    "headline": "Yanks top Rays 5-1 as Frazier homers in series moved to Mets",
+                    "target_url": "http:\/\/www.espn.com\/\/mlb\/recap?gameId=370911130",
+                    "url": "http:\/\/www.espn.com\/\/mlb\/recap?gameId=370911130",
+                    "description": "In the start of a series moved from Florida to Citi Field because of Hurricane Irma, Todd Frazier capitalized on Trevor Plouffe's two-out error with a three-run homer that led the New York Yankees over the Tampa Bay Rays 5-1 on Monday.",
+                    "date": "2017-09-12T02:49:41Z",
+                    "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png",
+                    "author": "Associated Press",
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                },
+                {
+                    "headline": "Jacoby Ellsbury of New York Yankees sets catcher's interference mark on birthday",
+                    "target_url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/20675120\/jacoby-ellsbury-new-york-yankees-sets-catcher-interference-mark-birthday",
+                    "url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/20675120\/jacoby-ellsbury-new-york-yankees-sets-catcher-interference-mark-birthday",
+                    "description": "On his 34th birthday, Yankees OF Jacoby Ellsbury set an obscure major league record.",
+                    "date": "2017-09-12T01:09:41Z",
+                    "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fphoto%2F2016%2F0720%2Fr105672_1296x729_16%2D9.jpg",
+                    "author": "Associated Press",
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                },
+                {
+                    "headline": "New York Yankees activate outfielder Clint Frazier",
+                    "target_url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/20672763\/new-york-yankees-activate-outfielder-clint-frazier",
+                    "url": "http:\/\/www.espn.com\/\/mlb\/story\/_\/id\/20672763\/new-york-yankees-activate-outfielder-clint-frazier",
+                    "description": "The New York Yankees activated outfielder Clint Frazier, who was on the disabled list with an oblique strain.",
+                    "date": "2017-09-11T19:55:29Z",
+                    "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0709%2Fr229087_1296x729_16%2D9.jpg",
+                    "author": "ESPN.com news services",
+                    "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
+                }
+            ],
+            newsweek: [
+                {
+                    "headline": "Stephen Hawking Is Stumped by the Rise of Trump",
+                    "target_url": "http:\/\/www.newsweek.com\/trump-stephen-hawking-brexit-464881",
+                    "url": "http:\/\/www.newsweek.com\/trump-stephen-hawking-brexit-464881",
+                    "description": "Hawking is also pushing for a 'Remain' vote in Britain's EU referendum.",
+                    "date": "2016-05-31",
+                    "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2016\/05\/31\/rtx29n6o.jpg",
+                    "author": "Josh Lowe",
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                },
+                {
+                    "headline": "Ivanka Trump Has Explained Why She Won't Stand Up to Her 'Daddy'",
+                    "target_url": "http:\/\/www.newsweek.com\/ivanka-trump-has-explained-why-she-wont-stand-her-daddy-664829",
+                    "url": "http:\/\/www.newsweek.com\/ivanka-trump-has-explained-why-she-wont-stand-her-daddy-664829",
+                    "description": "The first daughter also believes \"some people\"\u00a0have \"unrealistic expectations\" of her when it comes to influencing the president.",
+                    "date": "2017-09-14",
+                    "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/09\/14\/1409ivankatrump.jpg",
+                    "author": "John Haltiwanger",
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                },
+                {
+                    "headline": "Trump Says He Likes That White House Adviser Ivanka Calls Him Daddy and Asks if She Can Tag Along to Events",
+                    "target_url": "http:\/\/www.newsweek.com\/trump-says-he-likes-white-house-adviser-ivanka-calls-him-daddy-and-asks-if-she-660683",
+                    "url": "http:\/\/www.newsweek.com\/trump-says-he-likes-white-house-adviser-ivanka-calls-him-daddy-and-asks-if-she-660683",
+                    "description": "The president has previously raised eyebrows with comments about his daughter.",
+                    "date": "2017-09-06",
+                    "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/08\/25\/donald-trump-ivanka.JPG",
+                    "author": "Harriet Sinclair",
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                },
+                {
+                    "headline": "Donald Trump's Son Says Media Coverage of President Would Drive Anyone to Suicide ",
+                    "target_url": "http:\/\/www.newsweek.com\/donald-trumps-son-says-media-coverage-president-would-drive-person-suicide-657451",
+                    "url": "http:\/\/www.newsweek.com\/donald-trumps-son-says-media-coverage-president-would-drive-person-suicide-657451",
+                    "description": "The 33-year-old businessman said the president had to tune out negative coverage from the mainstream media.",
+                    "date": "2017-08-31",
+                    "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/08\/31\/gettyimages-815147102.jpg",
+                    "author": "Callum Paton",
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                },
+                {
+                    "headline": "Ivanka and Donald Trump Finally Condemn Nazis, but Not Really, a Day After Charlottesville Violence ",
+                    "target_url": "http:\/\/www.newsweek.com\/ivanka-and-donald-trump-finally-condemn-nazis-650218",
+                    "url": "http:\/\/www.newsweek.com\/ivanka-and-donald-trump-finally-condemn-nazis-650218",
+                    "description": "Neo-Nazi publication 'The Daily Stormer' praised Trump's comments as \"good.\" \"He didn't attack us. He just said the nation should come together. Nothing specific against us,\" the site wrote. ",
+                    "date": "2017-08-13",
+                    "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/08\/13\/rts1bibl.jpg",
+                    "author": "Cristina Silva",
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                },
+                {
+                    "headline": "Ivanka Trump Is Opening A New Store Somewhere That Will Never Ban Her Clothing Line",
+                    "target_url": "http:\/\/www.newsweek.com\/ivanka-trump-opening-new-store-trump-tower-649002",
+                    "url": "http:\/\/www.newsweek.com\/ivanka-trump-opening-new-store-trump-tower-649002",
+                    "description": "The first daughter's new boutique is set to open in New York this fall.",
+                    "date": "2017-08-09",
+                    "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/07\/19\/rtx3amkv.jpg",
+                    "author": "Harriet Sinclair",
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                },
+                {
+                    "headline": "What Does Melania Trump Do at the White House? First Lady Tweets About Drug Addiction, Not Cyberbullying Campaign",
+                    "target_url": "http:\/\/www.newsweek.com\/melania-trump-cyberbullying-opioid-addiction-white-house-first-lady-648902",
+                    "url": "http:\/\/www.newsweek.com\/melania-trump-cyberbullying-opioid-addiction-white-house-first-lady-648902",
+                    "description": "The first lady initially said she planned to fight cyberbullying in a pledge that prompted criticism over her husband's Twitter use.",
+                    "date": "2017-08-09",
+                    "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/07\/28\/7-28-17-melania-trump.jpeg",
+                    "author": "Harriet Sinclair",
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                },
+                {
+                    "headline": "Why Does Eric Trump Want People to be Nicer to His Dad? ",
+                    "target_url": "http:\/\/www.newsweek.com\/why-does-eric-trump-want-people-be-nicer-his-dad-644616",
+                    "url": "http:\/\/www.newsweek.com\/why-does-eric-trump-want-people-be-nicer-his-dad-644616",
+                    "description": "The president's son said lawmakers should be fighting for his father.",
+                    "date": "2017-08-01",
+                    "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/07\/30\/donald-trump.jpg",
+                    "author": "Harriet Sinclair",
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                },
+                {
+                    "headline": "Trump Sees Women As Business Animals or 'Secretaries'",
+                    "target_url": "http:\/\/www.newsweek.com\/trump-sees-woman-business-animals-or-secretaries-645552",
+                    "url": "http:\/\/www.newsweek.com\/trump-sees-woman-business-animals-or-secretaries-645552",
+                    "description": "A former construction executive who worked for The Trump Organization said the president only saw the secretaries as women.",
+                    "date": "2017-08-03",
+                    "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/08\/01\/trump.jpg",
+                    "author": "Harriet Sinclair",
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                },
+                {
+                    "headline": "Donald Trump Isn't Happy About New Poll Showing He Is the President With Lowest Approval Rating in 70 Years",
+                    "target_url": "http:\/\/www.newsweek.com\/trump-has-lowest-6-month-approval-rating-70-years-poll-shows-and-hes-not-happy-637430",
+                    "url": "http:\/\/www.newsweek.com\/trump-has-lowest-6-month-approval-rating-70-years-poll-shows-and-hes-not-happy-637430",
+                    "description": "The president shared his views on Twitter after the poll was released.",
+                    "date": "2017-07-16",
+                    "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/07\/14\/trump.JPG",
+                    "author": "Harriet Sinclair",
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                },
+                {
+                    "headline": "War on ISIS Under Trump Set to Double Civilian Death Toll Compared to Obama",
+                    "target_url": "http:\/\/www.newsweek.com\/president-trumps-isis-war-course-double-obamas-civilian-deaths-637538",
+                    "url": "http:\/\/www.newsweek.com\/president-trumps-isis-war-course-double-obamas-civilian-deaths-637538",
+                    "description": "The president's campaign against ISIS is killing 12 civilians a day, new investigation shows.",
+                    "date": "2017-07-17",
+                    "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/07\/17\/u.s.-coalition-strikes-mosul.jpg",
+                    "author": "Jack Moore",
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                },
+                {
+                    "headline": "Melania Trump Is Still Not As Popular As Michelle Obama, but She Beats Hillary Clinton in First Lady Rankings",
+                    "target_url": "http:\/\/www.newsweek.com\/michelle-obama-melania-trump-popular-ratings-michelle-obama-hillary-clinton-633792",
+                    "url": "http:\/\/www.newsweek.com\/michelle-obama-melania-trump-popular-ratings-michelle-obama-hillary-clinton-633792",
+                    "description": "Melania Trump is roughly as popular\u00a0as Hillary Clinton was when she was a few months into her husband's White House term in 1995.",
+                    "date": "2017-07-08",
+                    "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/07\/07\/rtswkjn.jpg",
+                    "author": "Cristina Silva",
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                },
+                {
+                    "headline": "Could Trump Go on Trial? Lawyer Says It Is a \u2018Real Possibility\u2019 President Could Face Jury Over University Fraud Case",
+                    "target_url": "http:\/\/www.newsweek.com\/trump-trial-university-lawsuit-settlement-631462",
+                    "url": "http:\/\/www.newsweek.com\/trump-trial-university-lawsuit-settlement-631462",
+                    "description": "Despite reaching a settlement over a lawsuit against Trump University, the president could yet face further action.",
+                    "date": "2017-07-03",
+                    "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/07\/03\/trump_0.jpg",
+                    "author": "Jason Le Miere",
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                },
+                {
+                    "headline": "Trump Funneled Cancer Charity Money to His Businesses, Associates: Report",
+                    "target_url": "http:\/\/www.newsweek.com\/donald-trump-funneled-kids-cancer-charity-money-businesses-621927",
+                    "url": "http:\/\/www.newsweek.com\/donald-trump-funneled-kids-cancer-charity-money-businesses-621927",
+                    "description": "Forbes has reported that Trump charged his son's charity to use Trump Organization golf courses.",
+                    "date": "2017-06-06",
+                    "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/06\/06\/donald-trump.jpg",
+                    "author": "Ryan Bort",
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                },
+                {
+                    "headline": "What Ivanka Trump Thinks of James Comey, the President and the 'Viciousness' of Washington",
+                    "target_url": "http:\/\/www.newsweek.com\/ivanka-trump-comey-testimony-624336",
+                    "url": "http:\/\/www.newsweek.com\/ivanka-trump-comey-testimony-624336",
+                    "description": "The president's daughter sat down with the hosts of 'Fox & Friends' on Monday morning.",
+                    "date": "2017-06-12",
+                    "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/06\/12\/ivanka-trump.jpg",
+                    "author": "Ryan Bort",
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                },
+                {
+                    "headline": "Melania Trump Says Kathy Griffin May Be Mentally Ill After Beheaded President Photo ",
+                    "target_url": "http:\/\/www.newsweek.com\/melania-trump-kathy-griffin-photo-618401",
+                    "url": "http:\/\/www.newsweek.com\/melania-trump-kathy-griffin-photo-618401",
+                    "description": "Melania Trump has joined the chorus of criticism of Kathy Griffin.",
+                    "date": "2017-05-31",
+                    "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/05\/31\/melania-donald-trump.JPG",
+                    "author": "Jason Le Miere",
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                },
+                {
+                    "headline": "After Hand Swat, Melania Trump Again Avoids Holding Donald\u2019s Hand as They Land in Rome",
+                    "target_url": "http:\/\/www.newsweek.com\/melania-trump-hand-hold-president-donald-614300",
+                    "url": "http:\/\/www.newsweek.com\/melania-trump-hand-hold-president-donald-614300",
+                    "description": "For the second time in as many days, Melania Trump has been spotted apparently avoiding her husband's hand-holding attempts.",
+                    "date": "2017-05-23",
+                    "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/05\/23\/donald-trump-melania.JPG",
+                    "author": "Jason Le Miere",
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                },
+                {
+                    "headline": "Ivanka Trump\u2019s First 100 Days Have Definitely Benefited One Group: The Trumps",
+                    "target_url": "http:\/\/www.newsweek.com\/ivanka-trump-fashion-policies-white-house-what-she-doing-592498",
+                    "url": "http:\/\/www.newsweek.com\/ivanka-trump-fashion-policies-white-house-what-she-doing-592498",
+                    "description": "Often cited as a moderating influence on the president, there isn't a single successful policy attributable to Ivanka Trump.",
+                    "date": "2017-05-01",
+                    "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/05\/01\/rts13pen.jpg",
+                    "author": "Chris Riotta",
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                },
+                {
+                    "headline": "A Question of Trust: The Trump Family's Conflicts of Interest Aren't Going Away",
+                    "target_url": "http:\/\/www.newsweek.com\/donald-trump-ivanka-conflicts-interest-586814",
+                    "url": "http:\/\/www.newsweek.com\/donald-trump-ivanka-conflicts-interest-586814",
+                    "description": "With his daughter Ivanka as adviser, the U.S. president draws attention to the family's potential conflicts of interest once again.",
+                    "date": "2017-04-20",
+                    "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2017\/04\/20\/rts11crc.jpg",
+                    "author": "Beth A. Rosenson",
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                },
+                {
+                    "headline": "Judge to Consider Student's Objection to Trump University Settlement",
+                    "target_url": "http:\/\/www.newsweek.com\/donald-trump-trump-university-trump-university-settlement-576443",
+                    "url": "http:\/\/www.newsweek.com\/donald-trump-trump-university-trump-university-settlement-576443",
+                    "description": "The objection raises the possibility the litigation could continue to dog Trump's presidency.",
+                    "date": "2017-03-29",
+                    "image": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/files\/styles\/full\/public\/2016\/11\/19\/1119trumpuniversity01.JPG",
+                    "author": "Reuters",
+                    "favicon_url": "http:\/\/s.newsweek.com\/sites\/www.newsweek.com\/themes\/newsweek\/favicons\/favicon-32x32.png"
+                }
+            ]
+         };
+
+
 
         // merge options
         this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
@@ -2339,6 +2651,8 @@ Author: michael@revcontent.com
         if (this.internalLimit > 0) {
             var internalURL = this.generateUrl(0, this.internalLimit, false, false, true);
             urls.push({
+                offset: 0,
+                limit: this.internalLimit,
                 url: internalURL,
                 type: 'internal'
             });
@@ -2357,9 +2671,22 @@ Author: michael@revcontent.com
         }
 
         this.promises = [];
+        var that = this;
         for (var i = 0; i < urls.length; i++) {
             this.promises.push(new Promise(function(resolve, reject) {
                 var url = urls[i];
+                if (url.type == 'internal') {
+                    var resp = that.mockInternal[that.options.mock].slice(url.offset, url.limit);
+                    if (!resp.length) {
+                        reject();
+                        return;
+                    }
+                    resolve({
+                        type: url.type,
+                        data: resp
+                    });
+                    return;
+                }
                 revApi.request(url.url, function(resp) {
                     if (!resp.length) {
                         reject();
@@ -2570,7 +2897,10 @@ Author: michael@revcontent.com
 
                 var roundedPreloaderHeight = Math.round(item.preloaderHeight);
                 var roundedPreloaderWidth = Math.round(item.preloaderWidth);
-                var image = itemData.image.replace('h=315', 'h=' + roundedPreloaderHeight).replace('w=420', 'w=' + roundedPreloaderWidth) + '&h=' + roundedPreloaderHeight + '&w=' + roundedPreloaderWidth;
+                var image = itemData.image;
+                if (itemData.type == 'sponsored') {
+                    image = image.replace('h=315', 'h=' + roundedPreloaderHeight).replace('w=420', 'w=' + roundedPreloaderWidth) + '&h=' + roundedPreloaderHeight + '&w=' + roundedPreloaderWidth;
+                }
 
                 var revImage = item.element.querySelector('.rev-image');
                 revImage.innerHTML = '<img src=" ' + image + ' " />';
