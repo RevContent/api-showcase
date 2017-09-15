@@ -1076,6 +1076,15 @@ Author: michael@revcontent.com
 
         var that = this;
 
+        var font = new FontFaceObserver('Montserrat');
+
+        font.load().then(function () {
+            that.setSize(that.grid.items);
+            that.grid.layout();
+        }).catch(function(e) {
+            console.log(e);
+        });
+
         this.dataPromise.then(function(data){
             that.updateDisplayedItems(that.grid.items, data);
             setTimeout(function() {
