@@ -287,73 +287,73 @@ Author: michael@revcontent.com
             ],
             newsweek: [
                 {
-                    "headline": "Learn About The Razor Causing So Many Guys To Switch",
+                    "headline": "Samsung Galaxy Note8 Available in Stores and Online Starting Today Following Strong Global Preorder Sales",
                     "target_url": "https://ad.atdmt.com/c/go;p=11252201476526;ev.a=1;idfa=;idfa_lat=;aaid=;aaid_lat=;cache=",
                     "url": "https://ad.atdmt.com/c/go;p=11252201476526;ev.a=1;idfa=;idfa_lat=;aaid=;aaid_lat=;cache=",
                     // "date": "2016-08-25 16:57:15",
-                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1474992575.png",
-                    "brand": "Harry's",
-                    "favicon_url": null,
+                    "image": "https://img.us.news.samsung.com/us/wp-content/uploads/2017/09/15140031/3-Top-Hero-Image-1024x724.jpg",
+                    "brand": "Samsung",
+                    "favicon_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOHs9bJl7yKSb-fOWDY7Aqqdgd5cUqliLhGYJiHB1po52M0T4EdQ",
                     "type": "Sponsored"
                 },
                 {
-                    "headline": "Eva Longoria&#39;s Surprising DNA Test",
+                    "headline": "Supercharging Cities",
                     "target_url": "http://www.ancestry.com/s74266/t35312/rd.ashx",
                     "url": "http://www.ancestry.com/s74266/t35312/rd.ashx",
                     // "date": "2016-10-31 15:21:09",
-                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1480975468.jpg",
-                    "brand": "Ancestry",
-                    "favicon_url": null,
+                    "image": "https://www.tesla.com/tesla_theme/assets/img/supercharger/supercharger-technology.png",
+                    "brand": "Tesla",
+                    "favicon_url": "https://forums.tesla.com/sites/all/themes/custom/tesla_theme/assets/img/icons/favicon-196x196.png",
                     "type": "Sponsored"
                 },
                 {
-                    "headline": "The Most Liberal City In America Will Shock You",
+                    "headline": "REVIEW: IS A NINJA BLENDER WORTH IT?",
                     "target_url": "http://www3.forbes.com/lifestyle/the-most-conservative-and-most-liberal-cities-in-america",
                     "url": "http://www3.forbes.com/lifestyle/the-most-conservative-and-most-liberal-cities-in-america",
                     // "date": "2016-11-03 16:56:48",
-                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1477944994.jpg",
-                    "brand": "Forbes",
-                    "favicon_url": null,
+                    "image": "http://www.geekyhostess.com/wp-content/uploads/2014/12/Ninja-Blender-1024x885.jpg",
+                    "brand": "The Geeky Hostess",
+                    "favicon_url": "https://pbs.twimg.com/profile_images/730129375484510208/Acaz-CK2_400x400.jpg",
                     "type": "Sponsored"
                 },
                 {
-                    "headline": "This Course is Unlike Anything You've Experienced",
-                    "target_url": "http://video.golfdigest.com/watch/golf-all-night-in-the-heart-of-dubai-at-emirates-golf-club?mbid=marketing_paid_revcontent_golf_Ejcpv",
+                    "headline": "Augusta National sues to stop auction of green jackets",
+                    "target_url": "http://www.augusta.com/masters/story/news/2017-08-14/augusta-national-sues-stop-auction-green-jackets",
                     "url": "http://video.golfdigest.com/watch/golf-all-night-in-the-heart-of-dubai-at-emirates-golf-club?mbid=marketing_paid_revcontent_golf_Ejcpv",
                     // "date": "2017-05-12 16:10:00",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1494619794.png",
-                    "brand": "Golf Digest",
-                    "favicon_url": "http://video.golfdigest.com/favicon.ico",
+                    "brand": "Masters",
+                    "favicon_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfirM6WAMTGKWHv0_k5fAbdy8KoAcT9UUefdcj1vLYGq6xdcI5",
                     "type": "Sponsored"
                 },
                 {
-                    "headline": "We Tried Blue Apron: Here's What Happened",
+                    "headline": "Night Falls Upon the Nike VaporMax",
                     "target_url": "http://www.libertyproject.com/culture/why-everyone-talking-about-blue-apron/",
                     "url": "http://www.libertyproject.com/culture/why-everyone-talking-about-blue-apron/",
                     // "date": "2016-09-01 15:23:09",
-                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1470861635.png",
-                    "brand": "The Liberty Project",
-                    "favicon_url": null,
+                    "image": "http://www.nikeblog.com/wp-content/uploads/2017/06/Nike-VaporMax-Flyknit-NIGHT-2.jpg",
+                    "brand": "NikeBlog",
+                    "favicon_url": "http://0.gravatar.com/avatar/ef285f851aadf16992ad8d8d24f1e3e4?s=200&r=pg&d=mm",
                     "type": "Sponsored"
                 },
                 {
-                    "headline": "Jaw-Dropping New SUVs Offer More Than Ever",
+                    "headline": "BUFFALO BILLS TEAM PATCHER 9FIFTY SNAPBACK",
                     "target_url": "http://myvoteitup.com/?utm_source=revcontent&utm_campaign=us-rc-direct-suv-mob&adgroup=native&utm_content=405df2",
                     "url": "http://myvoteitup.com/?utm_source=revcontent&utm_campaign=us-rc-direct-suv-mob&adgroup=native&utm_content=405df2",
                     // "date": "2017-05-15 22:04:46",
-                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/00365660ca0b0f8bfcf13802f6f09644.png",
-                    "brand": "SUV Sponsored Ads ",
-                    "favicon_url": null,
+                    "image": "https://embed.widencdn.net/img/neweracap/mtflxli3cw/640x360px/80395594_9FIFTY_TEAMPATCHER_BUFBIL_OTC_3QL.png?keep=c&u=eiggi3",
+                    "brand": "New Era Cap",
+                    "favicon_url": "https://embed.widencdn.net/img/neweracap/2jug0ujtub/640px/MKT_NELOGO_FYOF_FLAGONLY_Black_b#241F8B.png?u=h2iy0g",
                     "type": "Sponsored"
                 },
                 {
-                    "headline": "We Tried Blue Apron: Here's What Happened",
+                    "headline": "INTRODUCING THE JEEP® WRANGLER SMOKY MOUNTAIN EDITION",
                     "target_url": "http://www.popdust.com/why-everyone-is-talking-about-blue-apron-1891153755.html",
                     "url": "http://www.popdust.com/why-everyone-is-talking-about-blue-apron-1891153755.html",
                     // "date": "2016-11-08 11:52:51",
-                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1478623971.jpg",
-                    "brand": "Popdust",
-                    "favicon_url": null,
+                    "image": "https://blog.jeep.com/wp-content/uploads/2017/04/TW_NYAS-SmokyMountain-2-494x247.jpg",
+                    "brand": "Jeep",
+                    "favicon_url": "http://www.vectorsland.com/imgd/s9502-jeep-logo-51656.png",
                     "type": "Sponsored"
                 },
                 {
@@ -361,9 +361,9 @@ Author: michael@revcontent.com
                     "target_url": "http://www.maxworkouts.com/lp/how-to-get-ripped-abs-after-40-pg-1",
                     "url": "http://www.maxworkouts.com/lp/how-to-get-ripped-abs-after-40-pg-1",
                     // "date": "2017-05-10 17:15:28",
-                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1494450763.jpg",
-                    "brand": "MAX Workouts",
-                    "favicon_url": "http://www.maxworkouts.com/design/images/favicon.png",
+                    "image": "http://cdn.bmwblog.com/wp-content/uploads/2017/09/2018-BMW-X3-Frankfurt-04-830x553.jpg",
+                    "brand": "BMW",
+                    "favicon_url": "https://is3-ssl.mzstatic.com/image/thumb/Purple122/v4/14/3b/4b/143b4b9e-932e-0f6e-e96f-8a91b65a40a0/source/256x256bb.jpg",
                     "type": "Sponsored"
                 },
                 {
@@ -373,7 +373,7 @@ Author: michael@revcontent.com
                     // "date": "2016-10-20 08:56:00",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1476316214.jpg",
                     "brand": "Kelley Blue Book",
-                    "favicon_url": null,
+                    "favicon_url": "https://lh6.ggpht.com/bbXjhl_d5pjOexX_7jE8g13C7GbhkNc16D5x_8yKTybwYidk-2Ceyd1PVw8poufeIyU=w300",
                     "type": "Sponsored"
                 },
                 {
@@ -383,7 +383,7 @@ Author: michael@revcontent.com
                     // "date": "2017-06-26 17:43:36",
                     "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1498514024.png",
                     "brand": "247Sports",
-                    "favicon_url": "http://247sports.com/favicon.ico",
+                    "favicon_url": "https://s3media.247sports.com/Uploads/Assets/909/106/4106909.jpg",
                     "type": "Sponsored"
                 },
             ]
