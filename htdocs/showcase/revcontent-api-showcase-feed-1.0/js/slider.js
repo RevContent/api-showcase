@@ -1329,6 +1329,7 @@ Author: michael@revcontent.com
         var internalLimit = 0;
         var sponsoredLimit = 0;
         var itemsArr = [];
+        var rowLen = rows.length;
         // this.visibleLimit = 0;
 
         var random = function(max) {
@@ -1521,6 +1522,8 @@ Author: michael@revcontent.com
                 // // var headers = this.grid.appended([cell]);
                 // headers[0].type = 'header';
             }
+
+
 
             limit++;
             i++;
@@ -3675,6 +3678,8 @@ Author: michael@revcontent.com
                     // console.log(item.type);
                     comments.innerHTML = reactionHtml + (item.type == 'internal' ? commentHtml : '');
                     item.element.querySelector('.rev-content-inner').appendChild(comments);
+
+
                 }
 
                 // make sure the text-decoration is the same as the headline
@@ -3689,6 +3694,36 @@ Author: michael@revcontent.com
         // }
 
         // console.log('remove', this.removeItems); // HERE. REMOVE THESE and HALT THIS THING
+
+
+
+
+
+
+        // MOCK: See More + Suggested Interests
+
+        var see_more = '<div class="rev-see-more"><div class="rev-see-more-inner"></div></div>';
+
+        var suggested_interests = '<div id="rev-suggested" class="rev-suggested">' +
+            '<div class="rev-suggested-controls">' +
+                '<div class="control-box"><div class="control-action prev">&nbsp;&lt; &nbsp;</div><div class="control-action next">&nbsp; &gt;&nbsp;</div><span class="divider">&nbsp;</span></div>' +
+                '<p style="display:inline-block;margin:0 0 5px 0;padding:0;color:#555555;line-height:38px;"><strong style="font-weight:400">Suggested Topics</strong></p>' +
+            '</div>' +
+            '<div class="rev-suggested-inner">' +
+            '<ul class="rev-suggested-topics">' +
+            '<li class="topic-card topic-media" data-topic="Media"><span class="bookmark-topic"></span><span class="topic-name">Media</span></span></li>' +
+            '<li class="topic-card topic-art" data-topic="Art"><span class="bookmark-topic"></span><span class="topic-name">Art</span></li>' +
+            '<li class="topic-card topic-crypto" data-topic="Cryptocurrency"><span class="bookmark-topic"></span><span class="topic-name">Cryptocurrency</span></li>' +
+
+            '</ul>' +
+            '<div style="clear:both"></div>' +
+            '<p style="margin:0;color:#888888;font-weight:500;font-size:10px;line-height: 32px;padding: 0 1%;padding-right:3%;"><a style="cursor:pointer;color: #777777;">SEE ALL INTERESTS</a> <span style="float:right;font-size:12px;font-weight:700"></span></p>' +
+            '</div>' +
+            '</div>';
+
+        if(!$('#rev-suggested').length){
+            document.body.querySelector('#rev-slider-grid').insertAdjacentHTML('afterend', suggested_interests);
+        }
 
 
         // this.grid.reloadItems();
