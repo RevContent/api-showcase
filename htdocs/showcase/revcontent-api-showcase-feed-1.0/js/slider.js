@@ -1527,7 +1527,7 @@ Author: michael@revcontent.com
 
                 that.likeReactionIconShowTimeout = setTimeout(function() {
                     revUtils.addClass(item.element, 'rev-menu-active');
-                }, 750);
+                }, 400);
             });
         } else {
 
