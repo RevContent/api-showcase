@@ -142,7 +142,6 @@ Author: michael@revcontent.com
             reactions: [ 'love', 'laugh', 'cool', 'idiotic', 'sad', 'angry' ]
         };
 
-
         this.mockInternal =
          {
             espn: [
@@ -153,7 +152,7 @@ Author: michael@revcontent.com
                     "description": "While a fan gave Todd Frazier's homer on Monday night a thumbs down, the Yankees' third baseman has decided to make the gesture his own when there's reason to celebrate.",
                     "date": "2017-09-15T00:43:04Z",
                     "image": "http:\/\/a.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0813%2Fr243868_1296x729_16%2D9.jpg",
-                    "author": "ESPN.com news services",
+                    "author": "ESPN.com",
                     "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
                 },
                 {
@@ -163,7 +162,7 @@ Author: michael@revcontent.com
                     "description": "Yankee Stadium's sound system failed before New York took the field against the Baltimore Orioles on Thursday night. There was no introduction of players or national anthem, and a pregame tribute to the late Gene Michael was scrapped.",
                     "date": "2017-09-15T00:36:04Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0807%2Fr241124_1296x729_16%2D9.jpg",
-                    "author": "Associated Press",
+                    "author": "ESPN.com",
                     "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
                 },
                 {
@@ -173,7 +172,7 @@ Author: michael@revcontent.com
                     "description": "Dellin Betances isn't happy that Yankees manager Joe Girardi lifted him in favor of Aroldis Chapman on Wednesday. Girardi says that's a sign Betances believes in himself and he's fine if players are mad at him.",
                     "date": "2017-09-14T22:42:10Z",
                     "image": "http:\/\/a.espncdn.com\/combiner\/i?img=%2Fphoto%2F2015%2F0707%2Fmlb_betancesd_st_1296x729.jpg",
-                    "author": "Associated Press",
+                    "author": "ESPN.com",
                     "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
                 },
                 {
@@ -183,7 +182,7 @@ Author: michael@revcontent.com
                     "description": "A disappointed Jaime Garcia didn't say a word to manager Joe Girardi when he was removed one out shy of qualifying for his first win with the Yankees, and New York beat the Tampa Bay Rays 3-2 Wednesday to take two of three games in the displaced series.",
                     "date": "2017-09-13T21:08:44Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fmedia%2Fmotion%2F2017%2F0913%2Fdm_170913_MLB_Yankees_Frazier_2_run_single%2Fdm_170913_MLB_Yankees_Frazier_2_run_single.jpg",
-                    "author": "Associated Press",
+                    "author": "ESPN.com",
                     "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
                 },
                 {
@@ -203,7 +202,7 @@ Author: michael@revcontent.com
                     "description": "Adeiny Hechavarria hit a tiebreaking home run in the eighth inning off Sonny Gray and the Tampa Bay Rays, playing as the home team in a series relocated to Citi Field because of Hurricane Irma, beat the New York Yankees 2-1 on Tuesday night.",
                     "date": "2017-09-13T01:58:12Z",
                     "image": "http:\/\/a.espncdn.com\/combiner\/i?img=%2Fmedia%2Fmotion%2F2017%2F0912%2Fdm_170912_mlb_yankees_rays_hl%2Fdm_170912_mlb_yankees_rays_hl.jpg",
-                    "author": "Associated Press",
+                    "author": "ESPN.com",
                     "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
                 },
                 {
@@ -223,7 +222,7 @@ Author: michael@revcontent.com
                     "description": "In the start of a series moved from Florida to Citi Field because of Hurricane Irma, Todd Frazier capitalized on Trevor Plouffe's two-out error with a three-run homer that led the New York Yankees over the Tampa Bay Rays 5-1 on Monday.",
                     "date": "2017-09-12T02:49:41Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png",
-                    "author": "Associated Press",
+                    "author": "ESPN.com",
                     "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
                 },
                 {
@@ -233,7 +232,7 @@ Author: michael@revcontent.com
                     "description": "On his 34th birthday, Yankees OF Jacoby Ellsbury set an obscure major league record.",
                     "date": "2017-09-12T01:09:41Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fphoto%2F2016%2F0720%2Fr105672_1296x729_16%2D9.jpg",
-                    "author": "Associated Press",
+                    "author": "ESPN.com",
                     "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
                 },
                 {
@@ -243,7 +242,7 @@ Author: michael@revcontent.com
                     "description": "The New York Yankees activated outfielder Clint Frazier, who was on the disabled list with an oblique strain.",
                     "date": "2017-09-11T19:55:29Z",
                     "image": "http:\/\/a1.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0709%2Fr229087_1296x729_16%2D9.jpg",
-                    "author": "ESPN.com news services",
+                    "author": "ESPN.com",
                     "favicon_url": "http:\/\/a.espncdn.com\/favicon.ico"
                 }
             ],
