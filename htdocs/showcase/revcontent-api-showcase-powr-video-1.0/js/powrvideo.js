@@ -191,13 +191,18 @@
                 class: "rc-video-overlay",
                 content: titleContent,
                 overlays: [{
-                    start: 0,
-                    end: Infinity
+                    start: "custom1",
+                    end: "custom2"
                 }]
             });
             me.player.overlays_[0].show();
             me.player.on('timeupdate', me.onUpdate.bind(me));
 
+            me.player.on('play', me.onPlay.bind(me));
+            me.player.on('pause', me.onPause.bind(me));
+            me.player.on('useractive', me.onActive.bind(me));
+            me.player.on('userinactive', me.onIdle.bind(me));
+	    
             GlobalPlayer = me;
 
             me.closeButton = me.container.querySelector(".rc-video-close");
@@ -308,7 +313,7 @@
                 h.style.zIndex = 0;
             }
             // this.closeButton.setAttribute("style", "margin-top : 166px; margin-left : " + (windowWidth - 60) + "px");
-            this.closeButton.setAttribute("style", "margin-top : 0px; margin-left : " + (windowWidth - 60) + "px");
+            this.closeButton.setAttribute("style", "margin-top : 0px; margin-left : " + (windowWidth - 50) + "px");
 
         } else {
             this.player.fluid(true);
@@ -429,6 +434,24 @@
 
     PowrVideo.prototype.onAdEvent = function (event) {
 
+    };
+
+        PowrVideo.prototype.onPlay = function() {
+
+    };
+
+    PowrVideo.prototype.onPause = function() {
+        this.player.overlays_[0].show();
+    };
+
+    PowrVideo.prototype.onActive = function() {
+        this.player.overlays_[0].show();
+    };
+
+    PowrVideo.prototype.onIdle = function() {
+        if (!this.player.paused()) {
+            this.player.overlays_[0].hide();
+        }
     };
 
     return PowrVideo;
