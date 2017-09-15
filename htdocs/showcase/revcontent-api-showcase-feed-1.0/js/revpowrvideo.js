@@ -13441,7 +13441,7 @@ var Html5 = (function (_Tech) {
     // controls on touch enabled laptops like the Chrome Pixel
       if ((browser.TOUCH_ENABLED || browser.IS_IPHONE ||
           browser.IS_NATIVE_ANDROID) && options.nativeControlsForTouch === true) {
-    //if (browser.TOUCH_ENABLED && options.nativeControlsForTouch === true || browser.IS_IPHONE || browser.IS_NATIVE_ANDROID) {
+   // if (browser.TOUCH_ENABLED && options.nativeControlsForTouch === true || browser.IS_IPHONE || browser.IS_NATIVE_ANDROID) {
       this.setControls(true);
     }
 
