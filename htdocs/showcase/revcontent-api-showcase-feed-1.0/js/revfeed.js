@@ -312,24 +312,24 @@ Author: michael@revcontent.com
 
                 if (rowData.internalLimit > 0) {
                     var internalURL = self.innerWidget.generateUrl(self.internalOffset, rowData.internalLimit, false, false, true);
-                    self.internalOffset += rowData.internalLimit;
                     urls.push({
                         offset: self.internalOffset,
                         limit: rowData.internalLimit,
                         url: internalURL,
                         type: 'internal'
                     });
+                    self.internalOffset += rowData.internalLimit;
                 }
 
                 if (rowData.sponsoredLimit > 0) {
                     var sponsoredURL = self.innerWidget.generateUrl(self.sponsoredOffset, rowData.sponsoredLimit, false, false, false);
-                    self.sponsoredOffset += rowData.sponsoredLimit;
                     urls.push({
                         offset: self.sponsoredOffset,
                         limit: rowData.sponsoredLimit,
                         url: sponsoredURL,
                         type: 'sponsored'
                     });
+                    self.sponsoredOffset += rowData.sponsoredLimit;
                 }
 
                 this.promises = [];

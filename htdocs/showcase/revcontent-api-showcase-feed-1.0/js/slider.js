@@ -145,143 +145,143 @@ Author: michael@revcontent.com
         this.mockSponsored = {
             espn: [
                 {
-                    "headline": "Learn About The Razor Causing So Many Guys To Switch",
+                    "headline": "2017 New York Yankees Game Used Baseball",
                     "target_url": "https://ad.atdmt.com/c/go;p=11252201020181;ev.a=1;idfa=;idfa_lat=;aaid=;aaid_lat=;cache=",
                     "url": "https://ad.atdmt.com/c/go;p=11252201020181;ev.a=1;idfa=;idfa_lat=;aaid=;aaid_lat=;cache=",
                     // "date": "2016-08-25 16:52:35",
-                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/32a03f8226eb18ac05ec671235a8704a.png",
-                    "brand": "Harry's",
-                    "favicon_url": "https://www.harrys.com/favicon.ico",
+                    "image": "https://cdn.shopify.com/s/files/1/1161/1250/products/2017nyybau000027_01_grande_89c36092-682b-47ff-a5d1-74c7cc7a03f7.jpg?v=1505256128",
+                    "brand": "Steiner Sports",
+                    "favicon_url": "https://pbs.twimg.com/profile_images/806621571842527232/RLB5SEau.jpg",
                     "type": "sponsored"
                 },
                 {
-                    "headline": "They Could Be Headed to the Hall of Fame, But Are They The Best?",
+                    "headline": "Jim Kelly Signed Buffalo Bills White Mini Helmet w/ HOF Inscription",
                     "target_url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
                     "url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
                     // "date": "2017-06-23 15:03:56",
-                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1498244634.png",
-                    "brand": "247Sports",
-                    "favicon_url": "http://247sports.com/favicon.ico",
+                    "image": "https://ii.modells.com/fcgi-bin/iipsrv.fcgi?FIF=/images/modells//source/10000009/912d9b4eccfd249eb28968f662a718048f1b0f3038e2d15615e325efb4c9fce4_1152-976.tif&wid=446=&cvt=jpeg",
+                    "brand": "Modells",
+                    "favicon_url": "https://d2qbxixihjvzn0.cloudfront.net/ps/getCropped/7owbwtW000?res=225x225&index=us",
                     "type": "sponsored"
                 },
                 {
-                    "headline": "Jaw-Dropping New SUVs Offer More Than Ever",
+                    "headline": "Nike Sportswear Womens Fleece Pant",
                     "target_url": "http://myvoteitup.com/?utm_source=revcontent&utm_campaign=us-rc-direct-suv-mob&adgroup=native&utm_content=405df2",
                     "url": "http://myvoteitup.com/?utm_source=revcontent&utm_campaign=us-rc-direct-suv-mob&adgroup=native&utm_content=405df2",
                     // "date": "2017-05-15 22:04:46",
-                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/00365660ca0b0f8bfcf13802f6f09644.png",
-                    "brand": "SUV Sponsored Ads ",
-                    "favicon_url": null,
+                    "image": "https://ii.modells.com/fcgi-bin/iipsrv.fcgi?FIF=/images/modells//source/90000064/803660_2.tif&wid=446=&cvt=jpeg",
+                    "brand": "Modells",
+                    "favicon_url": "https://d2qbxixihjvzn0.cloudfront.net/ps/getCropped/7owbwtW000?res=225x225&index=us",
                     "type": "sponsored"
                 },
                 {
-                    "headline": "Here's Why HelloFresh Works For Us",
-                    "target_url": "http://www.libertyproject.com/well-being/how-hellofresh-makes-home-cooking-easy-and-fun/",
+                    "headline": "Check out this amazing Medicine ball",
+                    "target_url": "https://www.modells.com/product/impex_5_lb_d_shaped_hand_weight-idw-005.do?sortby=bestSellers&refType=&from=fn&ecList=7&ecCategory=110271",
                     "url": "http://www.libertyproject.com/well-being/how-hellofresh-makes-home-cooking-easy-and-fun/",
                     // "date": "2017-01-11 19:52:10",
-                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/ed5c4db1f319ce75438ee1186b5b6da1.png",
-                    "brand": "The Liberty Project ",
-                    "favicon_url": "http://www.libertyproject.com/favicon.ico",
+                    "image": "https://ii.modells.com/fcgi-bin/iipsrv.fcgi?FIF=/images/modells//source/90000078/idw-005_nc.tif&wid=446=&cvt=jpeg",
+                    "brand": "Modells",
+                    "favicon_url": "https://d2qbxixihjvzn0.cloudfront.net/ps/getCropped/7owbwtW000?res=225x225&index=us",
                     "type": "sponsored"
                 },
                 {
-                    "headline": "Predicting The 2017 Records of Every NFL Team",
-                    "target_url": "http://247sports.com/Gallery/Predicting-the-2017-records-of-every-NFL-team--52256885/GallerySlides/522808?ftag=ACQ-00-10aaj0a",
+                    "headline": "Gary Sanchez Signed 'Swinging' 8x10 Photo",
+                    "target_url": "https://www.steinersports.com/collections/signed-baseball-photos/products/gary-sanchez-signed-swinging-8x10-photo?sort=desc-bestselling",
                     "url": "http://247sports.com/Gallery/Predicting-the-2017-records-of-every-NFL-team--52256885/GallerySlides/522808?ftag=ACQ-00-10aaj0a",
                     // "date": "2017-06-26 17:20:39",
-                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/b45345db19e02e5dd4c5d536f72978ce.png",
-                    "brand": "247Sports",
-                    "favicon_url": "http://247sports.com/favicon.ico",
+                    "image": "//cdn.shopify.com/s/files/1/1161/1250/products/SANCPHS008004_182ecd35-ffdb-453d-b260-f2bcce395f73_grande.jpg?v=1497453132",
+                    "brand": "Steiner Sports",
+                    "favicon_url": "https://pbs.twimg.com/profile_images/806621571842527232/RLB5SEau.jpg",
                     "type": "sponsored"
                 },
                 {
-                    "headline": "Find the Cheapest Car Insurance Today!",
+                    "headline": "Jim Kelly Buffalo Bills Red Mini Helmet w/ HOF Inscription",
                     "target_url": "https://ff.zone/?flux_fts=xtxlataqlqalcqzzqeqpqlotaiqptxztaaoad52e&amp;flux_cost=0.01&amp;target={adv_targets}&amp;campaign={boost_id}&amp;content={content_id}&amp;widget={widget_id}",
                     "url": "https://ff.zone/?flux_fts=xtxlataqlqalcqzzqeqpqlotaiqptxztaaoad52e&amp;flux_cost=0.01&amp;target={adv_targets}&amp;campaign={boost_id}&amp;content={content_id}&amp;widget={widget_id}",
                     // "date": "2017-07-08 06:35:25",
-                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1499510122.jpg",
-                    "brand": "Top Car Insurances",
-                    "favicon_url": null,
+                    "image": "https://ii.modells.com/fcgi-bin/iipsrv.fcgi?FIF=/images/modells//source/10000010/038c75468fdf49f8adb750ce57b29593d187d66bc7f1c94aca4a285508efd8c7_1194-1064.tif&wid=446=&cvt=jpeg",
+                    "brand": "Modells",
+                    "favicon_url": "https://d2qbxixihjvzn0.cloudfront.net/ps/getCropped/7owbwtW000?res=225x225&index=us",
                     "type": "sponsored"
                 },
                 {
-                    "headline": "Here Are the Best Affordable Vehicles for 2017",
+                    "headline": "Jim Kelly & Thurman Thomas Dual Signed NFL Football w/ \"No One Circles the Wagons Like the Buffalo Bills\" Insc. (Inscribed by Thomas)",
                     "target_url": "http://adv.123trackingurl.com/aff_c?offer_id=8&amp;aff_id=1002",
                     "url": "http://adv.123trackingurl.com/aff_c?offer_id=8&amp;aff_id=1002",
                     // "date": "2016-10-20 08:44:36",
-                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1476408119.jpg",
-                    "brand": "Kelley Blue Book",
-                    "favicon_url": null,
+                    "image": "//cdn.shopify.com/s/files/1/1161/1250/products/eec1ffdb7a580941988f35b910fc4602_grande.jpg?v=1479630823",
+                    "brand": "Steiner Sports",
+                    "favicon_url": "https://pbs.twimg.com/profile_images/806621571842527232/RLB5SEau.jpg",
                     "type": "sponsored"
                 },
                 {
-                    "headline": "Think The 'Boys Will Have a Better Record In '17? Think Again",
+                    "headline": "Milwaukee Bucks Adult Fortune Quarter Zip Pullover",
                     "target_url": "http://247sports.com/Gallery/Predicting-the-2017-records-of-every-NFL-team--52256885/GallerySlides/522808?ftag=ACQ-00-10aaj0a",
                     "url": "http://247sports.com/Gallery/Predicting-the-2017-records-of-every-NFL-team--52256885/GallerySlides/522808?ftag=ACQ-00-10aaj0a",
                     // "date": "2017-06-26 17:20:43",
-                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/b45345db19e02e5dd4c5d536f72978ce.png",
-                    "brand": "247Sports",
-                    "favicon_url": "http://247sports.com/favicon.ico",
+                    "image": "https://ii.modells.com/fcgi-bin/iipsrv.fcgi?FIF=/images/modells//source/10000007/f4b0a5f3b3032a228383225704d15bb95448c20db0e01361448ea2797db08ed9_1200-1200.tif&wid=446=&cvt=jpeg",
+                    "brand": "Modells",
+                    "favicon_url": "https://d2qbxixihjvzn0.cloudfront.net/ps/getCropped/7owbwtW000?res=225x225&index=us",
                     "type": "sponsored"
                 },
                 {
-                    "headline": "Just Released, Top New Pickup Trucks for 2017",
+                    "headline": "OJ Anderson SB XXV Rushing 8x10 Photo",
                     "target_url": "http://buynewpickuptruck.com",
                     "url": "http://buynewpickuptruck.com",
                     // "date": "2017-03-06 12:05:06",
-                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1491243816.jpg",
-                    "author": "BuyNewPickupTrucks (Ads)",
-                    "favicon_url": null,
+                    "image": "//cdn.shopify.com/s/files/1/1161/1250/products/ANDEPHS008016_01_grande.jpg?v=1492445494",
+                    "brand": "Steiner Sports",
+                    "favicon_url": "https://pbs.twimg.com/profile_images/806621571842527232/RLB5SEau.jpg",
                     "type": "sponsored"
                 },
                 {
-                    "headline": "This Course is Unlike Anything You've Experienced",
+                    "headline": "Bollinger Cross Training Mat",
                     "target_url": "http://video.golfdigest.com/watch/golf-all-night-in-the-heart-of-dubai-at-emirates-golf-club?mbid=marketing_paid_revcontent_golf_Ejcpv",
                     "url": "http://video.golfdigest.com/watch/golf-all-night-in-the-heart-of-dubai-at-emirates-golf-club?mbid=marketing_paid_revcontent_golf_Ejcpv",
                     // "date": "2017-05-12 16:10:00",
-                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1494619794.png",
-                    "brand": "Golf Digest",
-                    "favicon_url": "http://video.golfdigest.com/favicon.ico",
+                    "image": "https://ii.modells.com/fcgi-bin/iipsrv.fcgi?FIF=/images/modells//source/90000071/6533_400.tif&wid=446=&cvt=jpeg",
+                    "brand": "Modells",
+                    "favicon_url": "https://d2qbxixihjvzn0.cloudfront.net/ps/getCropped/7owbwtW000?res=225x225&index=us",
                     "type": "sponsored"
                 },
                 {
-                    "headline": "NBA Brother Duos, Ranked From Awful To Pretty Great",
+                    "headline": "New York Yankees Adult Aaron Judge Jersey",
                     "target_url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
                     "url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
                     // "date": "2017-06-26 17:43:34",
-                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1498513901.png",
-                    "brand": "247Sports",
-                    "favicon_url": "http://247sports.com/favicon.ico",
+                    "image": "https://ii.modells.com/fcgi-bin/iipsrv.fcgi?FIF=/images/modells//source/90000077/7700yaasnk7j99_410.tif&wid=446=&cvt=jpeg",
+                    "brand": "Steiner Sports",
+                    "favicon_url": "https://pbs.twimg.com/profile_images/806621571842527232/RLB5SEau.jpg",
                     "type": "sponsored"
                 },
                 {
-                    "headline": "3 Simple Steps to Shed Belly Fat over 40",
+                    "headline": "Tom Hardy Signed The Dark Knight Rises At the Stock Exchange 8x10 Photo",
                     "target_url": "http://www.maxworkouts.com/lp/how-to-get-ripped-abs-after-40-pg-1",
                     "url": "http://www.maxworkouts.com/lp/how-to-get-ripped-abs-after-40-pg-1",
                     // "date": "2017-05-10 17:15:28",
-                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1494450763.jpg",
-                    "brand": "MAX Workouts",
-                    "favicon_url": "http://www.maxworkouts.com/design/images/favicon.png",
+                    "image": "//cdn.shopify.com/s/files/1/1161/1250/products/96d0d11b10c8e2e44a291fdeae92902a_grande.jpg?v=1477992521",
+                    "brand": "Steiner Sports",
+                    "favicon_url": "https://pbs.twimg.com/profile_images/806621571842527232/RLB5SEau.jpg",
                     "type": "sponsored"
                 },
                 {
-                    "headline": "They Could Be Headed To The Hall Of Fame, But Are They The Best?",
+                    "headline": "Kevin Seraphin New York Knicks 2015-16 Game Used #1 Blue Warmup Jacket (3XL)",
                     "target_url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
                     "url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
                     // "date": "2017-06-26 17:43:36",
-                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1498514024.png",
-                    "brand": "247Sports",
-                    "favicon_url": "http://247sports.com/favicon.ico",
+                    "image": "//cdn.shopify.com/s/files/1/1161/1250/products/7826e4bd11dc857cb2750e0b9dc4bd7f_6c19db25-586b-4e79-91f5-eafa8ba1211c_grande.jpg?v=1478077410",
+                    "brand": "Steiner Sports",
+                    "favicon_url": "https://pbs.twimg.com/profile_images/806621571842527232/RLB5SEau.jpg",
                     "type": "sponsored"
                 },
                 {
-                    "headline": "'Madden 17': Ratings for Every First-round Pick",
+                    "headline": "Chicago Bulls Adult City Gym Basketball Socks",
                     "target_url": "http://247sports.com/Gallery/Madden-17-ratings-released-for-NFL-first-round-draft-choices-52579234/GallerySlides/543715?ftag=ACQ-00-10aaj0a",
                     "url": "http://247sports.com/Gallery/Madden-17-ratings-released-for-NFL-first-round-draft-choices-52579234/GallerySlides/543715?ftag=ACQ-00-10aaj0a",
                     // "date": "2017-06-26 17:43:43",
-                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/6fe74ed289a4369296c9d3a4b91998c4.png",
-                    "brand": "247Sports",
-                    "favicon_url": "http://247sports.com/favicon.ico",
+                    "image": "https://ii.modells.com/fcgi-bin/iipsrv.fcgi?FIF=/images/modells//source/90000071/m558a17cbu_nc.tif&wid=446=&cvt=jpeg",
+                    "brand": "Modells",
+                    "favicon_url": "https://d2qbxixihjvzn0.cloudfront.net/ps/getCropped/7owbwtW000?res=225x225&index=us",
                     "type": "sponsored"
                 }
             ],
@@ -387,7 +387,7 @@ Author: michael@revcontent.com
                     "type": "Sponsored"
                 },
             ]
-        }
+        };
 
         this.mockInternal =
          {
@@ -3482,7 +3482,7 @@ Author: michael@revcontent.com
                         // favicon.innerHTML = item.type == 'sponsored' ? '<span class="rev-headline-icon-image" style="background-repeat:no-repeat;background-image:url('+ this.logoURI +')' + '"></span>' : '<?xml version="1.0" ?><!DOCTYPE svg  PUBLIC "-//W3C//DTD SVG 1.1//EN"  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" version="1.1" viewBox="0 0 4335 4335" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><style type="text/css"> <![CDATA[.fil0 {fill:black} ]]> </style></defs><g id="Layer_x0020_1"><path class="fil0" d="M2121 179c1065,0 1929,864 1929,1929 0,1065 -864,1929 -1929,1929 -1065,0 -1929,-864 -1929,-1929 0,-1065 864,-1929 1929,-1929zm1059 3099c-92,-307 -377,-1047 -982,-1047 -21,0 -40,1 -59,2 -19,-1 -38,-2 -59,-2 -622,0 -906,783 -989,1072 -335,-289 -548,-718 -548,-1195 0,-872 707,-1578 1578,-1578 872,0 1578,707 1578,1578 0,464 -200,881 -519,1170zm-1053 408c4,-4 8,-8 12,-13 4,4 8,8 12,12 -8,0 -16,0 -24,0zm12 -2806c293,0 530,269 530,601 0,332 -237,601 -530,601 -293,0 -530,-269 -530,-601 0,-332 237,-601 530,-601z"/></g></svg>';
 
                         if (item.type == 'sponsored') {
-                            favicon.innerHTML = '<span class="rev-headline-icon-image" style="background-repeat:no-repeat;background-image:url('+ this.logoURI +')' + '"></span>';
+                            favicon.innerHTML = '<span class="rev-headline-icon-image" style="background-repeat:no-repeat;background-image:url('+ itemData.favicon_url +')' + '"></span>';
                         } else {
                             var names = itemData.author.split(' ');
                             if (itemData.author_image) {
