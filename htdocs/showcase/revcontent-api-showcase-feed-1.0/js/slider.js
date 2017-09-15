@@ -353,7 +353,15 @@ Author: michael@revcontent.com
                     "brand": "Kelley Blue Book",
                     "favicon_url": null
                 },
-
+                {
+                    "headline": "They Could Be Headed To The Hall Of Fame, But Are They The Best?",
+                    "target_url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
+                    "url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
+                    "date": "2017-06-26 17:43:36",
+                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1498514024.png",
+                    "brand": "247Sports",
+                    "favicon_url": "http://247sports.com/favicon.ico"
+                },
             ]
         }
 
