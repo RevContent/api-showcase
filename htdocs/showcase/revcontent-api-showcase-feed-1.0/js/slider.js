@@ -1402,9 +1402,14 @@ Author: michael@revcontent.com
         var that = this;
         var likeReactionElement = item.element.querySelector('.rev-reaction-icon');
 
+        if (revDetect.mobile()) {
+            revUtils.addEventListener(likeReactionElement, 'click', function(el) {
+                clearTimeout(that.likeReactionIconHideTimeout);
 
-        if (revDetect.mobile()) { // TODO
-            console.log('sup');
+                that.likeReactionIconShowTimeout = setTimeout(function() {
+                    revUtils.addClass(item.element, 'rev-menu-active');
+                }, 750);
+            });
         } else {
 
             revUtils.addEventListener(likeReactionElement, 'mouseenter', function(el) {
@@ -1423,38 +1428,36 @@ Author: michael@revcontent.com
                     revUtils.removeClass(item.element, 'rev-menu-active');
                 }, 750);
             });
+
+            revUtils.addEventListener(likeReactionElement, 'click', function(el) {
+
+                revUtils.removeClass(item.element, 'rev-menu-active');
+                clearTimeout(that.likeReactionIconShowTimeout);
+
+                if (parseInt(likeReactionElement.getAttribute('data-active'))) {
+                    likeReactionElement.setAttribute('data-active', 0);
+
+                    revUtils.removeClass(likeReactionElement, 'rev-reaction-icon-', true);
+
+                    var count = item.element.querySelector('.rev-reaction-count');
+                    count.innerHTML = count.innerHTML.split(' ')[2];
+                } else {
+                    likeReactionElement.setAttribute('data-active', 1);
+                    revUtils.addClass(likeReactionElement, 'rev-reaction-icon-like');
+
+                    revUtils.addClass(likeReactionElement, 'rev-reaction-icon-selected'); // TODO: this should not be needed
+
+                    var count = item.element.querySelector('.rev-reaction-count');
+                    count.innerHTML = 'You and ' + count.innerHTML + ' others';
+                }
+            });
         }
-
-
-        revUtils.addEventListener(likeReactionElement, 'click', function(el) {
-
-            revUtils.removeClass(item.element, 'rev-menu-active');
-            clearTimeout(that.likeReactionIconShowTimeout);
-
-            if (parseInt(likeReactionElement.getAttribute('data-active'))) {
-                likeReactionElement.setAttribute('data-active', 0);
-
-                revUtils.removeClass(likeReactionElement, 'rev-reaction-icon-', true);
-
-                var count = item.element.querySelector('.rev-reaction-count');
-                count.innerHTML = count.innerHTML.split(' ')[2];
-            } else {
-                likeReactionElement.setAttribute('data-active', 1);
-                revUtils.addClass(likeReactionElement, 'rev-reaction-icon-like');
-
-                revUtils.addClass(likeReactionElement, 'rev-reaction-icon-selected'); // TODO: this should not be needed
-
-                var count = item.element.querySelector('.rev-reaction-count');
-                count.innerHTML = 'You and ' + count.innerHTML + ' others';
-            }
-        });
-
 
         var menuItems = item.element.querySelectorAll('.rev-reaction-menu-item');
 
         for (var menuItemCount = 0; menuItemCount < menuItems.length; menuItemCount++) {
-            revUtils.addEventListener(menuItems[menuItemCount], 'click', function(ev) {
-
+            revUtils.addEventListener(menuItems[menuItemCount], revDetect.mobile() ? 'touchstart' : 'click', function(ev) {
+                ev.preventDefault();
                 ev.stopPropagation();
 
                 likeReactionElement.setAttribute('data-active', 1);
@@ -1476,7 +1479,7 @@ Author: michael@revcontent.com
                 if (words.length == 1) {
                     count.innerHTML = 'You and ' + count.innerHTML + ' others';
                 }
-            });
+            }, {passive: false});
         }
     };
 
