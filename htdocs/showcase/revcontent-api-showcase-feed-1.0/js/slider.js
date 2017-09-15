@@ -3107,9 +3107,8 @@ Author: michael@revcontent.com
                         if (item.type == 'sponsored') {
                             favicon.innerHTML = '<span class="rev-headline-icon-image" style="background-repeat:no-repeat;background-image:url('+ this.logoURI +')' + '"></span>';
                         } else {
-                            console.log(itemData.author.indexOf('.com'));
-                            if (itemData.author.indexOf('.com') === -1) {
-                                var names = itemData.author.split(' ');
+                            var names = itemData.author.split(' ');
+                            if (itemData.author.indexOf('.com') === -1 && names[0] && names[1]) {
                                 var initials = names[0].charAt(0) + names[1].charAt(0);
                                 favicon.innerHTML = '<div class="rev-author-initials">'+ initials +'</div>';
                             } else {
