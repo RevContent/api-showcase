@@ -396,7 +396,7 @@ Author: michael@revcontent.com
                     "headline": "New York Yankees' Todd Frazier gives a big thumbs up to thumbs down",
                     "target_url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20706691\/new-york-yankees-todd-frazier-gives-big-thumbs-thumbs-down",
                     "url": "http:\/\/www.espn.com\/mlb\/story\/_\/id\/20706691\/new-york-yankees-todd-frazier-gives-big-thumbs-thumbs-down",
-                    "description": "While a fan gave Todd Frazier's homer on Monday night a thumbs down, the Yankees' third baseman has decided to make the gesture his own when there's reason to celebrate.",
+                    "description": "While a fan gave Todd Frazier's homer on Monday night a thumbs down, the Yankees' third baseman has decided to make the gesture his own when there's reason to celebrate. Do you think this was the right move?",
                     "date": "2017-09-15T00:43:04Z",
                     "image": "http:\/\/a.espncdn.com\/combiner\/i?img=%2Fphoto%2F2017%2F0813%2Fr243868_1296x729_16%2D9.jpg",
                     "author": "Jay Crawford",
@@ -1364,7 +1364,23 @@ Author: michael@revcontent.com
                                     '<h4></h4>' +
                                 '</div>';
 
+                // MOCK: Poll Results
+                var poll_mock = '<div class="rev-poll"><div class="rev-poll-inner">' +
+                                '<div class="vote-bar yes-vote" data-percent="63"><span class="vote-bar-count">63%</span><span class="vote-label">Yes, definitely!</span></div>' +
+                                '<div class="vote-bar no-vote" data-percent="37"><span class="vote-bar-count">37%</span><span class="vote-label">No way <img style="margin-left:10px;line-height:32px;vertical-align:middle" src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjE2cHgiIGhlaWdodD0iMTZweCIgdmlld0JveD0iMCAwIDYxMiA2MTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDYxMiA2MTI7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPGc+Cgk8ZyBpZD0iX3gzMV9fMzBfIj4KCQk8Zz4KCQkJPHBhdGggZD0iTTQyMS4yNjcsMTczLjQyNWMtOS4xNDItNS4yNzgtMjAuODQ3LTIuMTQyLTI2LjEyNSw3TDI3Mi44MzcsMzkyLjI3MmwtNjguNDI5LTYzLjExMiAgICAgYy03LjIyOS03LjcwNy0xOS4zMTYtOC4xMDgtMjcuMDI0LTAuODhjLTcuNzA3LDcuMjI5LTguMTA5LDE5LjMxNi0wLjg3OSwyNy4wNDNsODcuNDM5LDgwLjY1ICAgICBjNy4yMjksNy43MDcsMTkuMzE2LDguMTA4LDI3LjAyMywwLjg4YzIuMzMzLTIuMTgxLDEzNy4zMTctMjM3LjI4NCwxMzcuMzE3LTIzNy4yODQgICAgIEM0MzMuNTQ1LDE5MC40MDksNDMwLjQwOCwxNzguNzA0LDQyMS4yNjcsMTczLjQyNXogTTMwNiwwQzEzNi45OTIsMCwwLDEzNi45OTIsMCwzMDZzMTM2Ljk5MiwzMDYsMzA2LDMwNnMzMDYtMTM2Ljk5MiwzMDYtMzA2ICAgICBTNDc1LjAwOCwwLDMwNiwweiBNMzA2LDU3My43NUMxNTguMTI1LDU3My43NSwzOC4yNSw0NTMuODc1LDM4LjI1LDMwNkMzOC4yNSwxNTguMTI1LDE1OC4xMjUsMzguMjUsMzA2LDM4LjI1ICAgICBjMTQ3Ljg3NSwwLDI2Ny43NSwxMTkuODc1LDI2Ny43NSwyNjcuNzVDNTczLjc1LDQ1My44NzUsNDUzLjg3NSw1NzMuNzUsMzA2LDU3My43NXoiIGZpbGw9IiMwMDAwMDAiLz4KCQk8L2c+Cgk8L2c+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPC9zdmc+Cg==" /></span></div>' +
+
+
+                                '</div>' +
+                                '<div class="poll-summary">511 vote &middot; <a style="cursor:pointer;">Final results</a></div>' +
+                                '</div>';
+
                 items[0].element.querySelector('.rev-headline-brand-inner').insertAdjacentHTML('beforeend', description);
+
+                // MOCK: Add mock poll container for Index #0
+                if(items[0].index == 0) {
+                    items[0].element.querySelector('.rev-after-image').insertAdjacentHTML('afterend', poll_mock);
+                }
+
             } else {
                 if (!items[0].meta) {
                     items[0].element.querySelector('.rev-headline-brand-inner').insertAdjacentHTML('beforeend', '<div class="rev-provider"></div>');
