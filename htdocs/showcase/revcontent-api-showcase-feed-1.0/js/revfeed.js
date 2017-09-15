@@ -347,7 +347,7 @@ Author: michael@revcontent.com
                         }
 
                         if (url.type == 'sponsored') {
-                            var resp = self.innerWidget.mockSponsored.slice(url.offset, url.offset + url.limit);
+                            var resp = self.innerWidget.mockSponsored[self.options.mock].slice(url.offset, url.offset + url.limit);
                             resolve({
                                 type: url.type,
                                 data: resp

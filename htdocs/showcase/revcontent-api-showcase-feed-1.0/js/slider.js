@@ -142,134 +142,220 @@ Author: michael@revcontent.com
             reactions: [ 'love', 'laugh', 'cool', 'idiotic', 'sad', 'angry' ]
         };
 
-        this.mockSponsored = [
-            {
-                "headline": "Learn About The Razor Causing So Many Guys To Switch",
-                "target_url": "https://ad.atdmt.com/c/go;p=11252201020181;ev.a=1;idfa=;idfa_lat=;aaid=;aaid_lat=;cache=",
-                "url": "https://ad.atdmt.com/c/go;p=11252201020181;ev.a=1;idfa=;idfa_lat=;aaid=;aaid_lat=;cache=",
-                "date": "2016-08-25 16:52:35",
-                "image": "https://revcontent-p0.s3.amazonaws.com/content/images/32a03f8226eb18ac05ec671235a8704a.png",
-                "brand": "Harry's",
-                "favicon_url": null
-            },
-            {
-                "headline": "They Could Be Headed to the Hall of Fame, But Are They The Best?",
-                "target_url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
-                "url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
-                "date": "2017-06-23 15:03:56",
-                "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1498244634.png",
-                "brand": "247Sports",
-                "favicon_url": null
-            },
-            {
-                "headline": "Jaw-Dropping New SUVs Offer More Than Ever",
-                "target_url": "http://myvoteitup.com/?utm_source=revcontent&utm_campaign=us-rc-direct-suv-mob&adgroup=native&utm_content=405df2",
-                "url": "http://myvoteitup.com/?utm_source=revcontent&utm_campaign=us-rc-direct-suv-mob&adgroup=native&utm_content=405df2",
-                "date": "2017-05-15 22:04:46",
-                "image": "https://revcontent-p0.s3.amazonaws.com/content/images/00365660ca0b0f8bfcf13802f6f09644.png",
-                "brand": "SUV Sponsored Ads ",
-                "favicon_url": null
-            },
-            {
-                "headline": "Here's Why HelloFresh Works For Us",
-                "target_url": "http://www.libertyproject.com/well-being/how-hellofresh-makes-home-cooking-easy-and-fun/",
-                "url": "http://www.libertyproject.com/well-being/how-hellofresh-makes-home-cooking-easy-and-fun/",
-                "date": "2017-01-11 19:52:10",
-                "image": "https://revcontent-p0.s3.amazonaws.com/content/images/ed5c4db1f319ce75438ee1186b5b6da1.png",
-                "brand": "The Liberty Project ",
-                "favicon_url": null
-            },
-            {
-                "headline": "Predicting The 2017 Records of Every NFL Team",
-                "target_url": "http://247sports.com/Gallery/Predicting-the-2017-records-of-every-NFL-team--52256885/GallerySlides/522808?ftag=ACQ-00-10aaj0a",
-                "url": "http://247sports.com/Gallery/Predicting-the-2017-records-of-every-NFL-team--52256885/GallerySlides/522808?ftag=ACQ-00-10aaj0a",
-                "date": "2017-06-26 17:20:39",
-                "image": "https://revcontent-p0.s3.amazonaws.com/content/images/b45345db19e02e5dd4c5d536f72978ce.png",
-                "brand": "247Sports",
-                "favicon_url": null
-            },
-            {
-                "headline": "Find the Cheapest Car Insurance Today!",
-                "target_url": "https://ff.zone/?flux_fts=xtxlataqlqalcqzzqeqpqlotaiqptxztaaoad52e&amp;flux_cost=0.01&amp;target={adv_targets}&amp;campaign={boost_id}&amp;content={content_id}&amp;widget={widget_id}",
-                "url": "https://ff.zone/?flux_fts=xtxlataqlqalcqzzqeqpqlotaiqptxztaaoad52e&amp;flux_cost=0.01&amp;target={adv_targets}&amp;campaign={boost_id}&amp;content={content_id}&amp;widget={widget_id}",
-                "date": "2017-07-08 06:35:25",
-                "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1499510122.jpg",
-                "brand": "Top Car Insurances",
-                "favicon_url": null
-            },
-            {
-                "headline": "Here Are the Best Affordable Vehicles for 2017",
-                "target_url": "http://adv.123trackingurl.com/aff_c?offer_id=8&amp;aff_id=1002",
-                "url": "http://adv.123trackingurl.com/aff_c?offer_id=8&amp;aff_id=1002",
-                "date": "2016-10-20 08:44:36",
-                "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1476408119.jpg",
-                "brand": "Kelley Blue Book",
-                "favicon_url": null
-            },
-            {
-                "headline": "Think The 'Boys Will Have a Better Record In '17? Think Again",
-                "target_url": "http://247sports.com/Gallery/Predicting-the-2017-records-of-every-NFL-team--52256885/GallerySlides/522808?ftag=ACQ-00-10aaj0a",
-                "url": "http://247sports.com/Gallery/Predicting-the-2017-records-of-every-NFL-team--52256885/GallerySlides/522808?ftag=ACQ-00-10aaj0a",
-                "date": "2017-06-26 17:20:43",
-                "image": "https://revcontent-p0.s3.amazonaws.com/content/images/b45345db19e02e5dd4c5d536f72978ce.png",
-                "brand": "247Sports",
-                "favicon_url": null
-            },
-            {
-                "headline": "Just Released, Top New Pickup Trucks for 2017",
-                "target_url": "http://buynewpickuptruck.com",
-                "url": "http://buynewpickuptruck.com",
-                "date": "2017-03-06 12:05:06",
-                "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1491243816.jpg",
-                "author": "BuyNewPickupTrucks (Ads)",
-                "favicon_url": null
-            },
-            {
-                "headline": "This Course is Unlike Anything You've Experienced",
-                "target_url": "http://video.golfdigest.com/watch/golf-all-night-in-the-heart-of-dubai-at-emirates-golf-club?mbid=marketing_paid_revcontent_golf_Ejcpv",
-                "url": "http://video.golfdigest.com/watch/golf-all-night-in-the-heart-of-dubai-at-emirates-golf-club?mbid=marketing_paid_revcontent_golf_Ejcpv",
-                "date": "2017-05-12 16:10:00",
-                "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1494619794.png",
-                "brand": "Golf Digest",
-                "favicon_url": null
-            },
-            {
-                "headline": "NBA Brother Duos, Ranked From Awful To Pretty Great",
-                "target_url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
-                "url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
-                "date": "2017-06-26 17:43:34",
-                "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1498513901.png",
-                "brand": "247Sports",
-                "favicon_url": null
-            },
-            {
-                "headline": "3 Simple Steps to Shed Belly Fat over 40",
-                "target_url": "http://www.maxworkouts.com/lp/how-to-get-ripped-abs-after-40-pg-1",
-                "url": "http://www.maxworkouts.com/lp/how-to-get-ripped-abs-after-40-pg-1",
-                "date": "2017-05-10 17:15:28",
-                "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1494450763.jpg",
-                "brand": "MAX Workouts",
-                "favicon_url": null
-            },
-            {
-                "headline": "They Could Be Headed To The Hall Of Fame, But Are They The Best?",
-                "target_url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
-                "url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
-                "date": "2017-06-26 17:43:36",
-                "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1498514024.png",
-                "brand": "247Sports",
-                "favicon_url": null
-            },
-            {
-                "headline": "'Madden 17': Ratings for Every First-round Pick",
-                "target_url": "http://247sports.com/Gallery/Madden-17-ratings-released-for-NFL-first-round-draft-choices-52579234/GallerySlides/543715?ftag=ACQ-00-10aaj0a",
-                "url": "http://247sports.com/Gallery/Madden-17-ratings-released-for-NFL-first-round-draft-choices-52579234/GallerySlides/543715?ftag=ACQ-00-10aaj0a",
-                "date": "2017-06-26 17:43:43",
-                "image": "https://revcontent-p0.s3.amazonaws.com/content/images/6fe74ed289a4369296c9d3a4b91998c4.png",
-                "brand": "247Sports",
-                "favicon_url": null
-            }
-        ];
+        this.mockSponsored = {
+            espn: [
+                {
+                    "headline": "Learn About The Razor Causing So Many Guys To Switch",
+                    "target_url": "https://ad.atdmt.com/c/go;p=11252201020181;ev.a=1;idfa=;idfa_lat=;aaid=;aaid_lat=;cache=",
+                    "url": "https://ad.atdmt.com/c/go;p=11252201020181;ev.a=1;idfa=;idfa_lat=;aaid=;aaid_lat=;cache=",
+                    "date": "2016-08-25 16:52:35",
+                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/32a03f8226eb18ac05ec671235a8704a.png",
+                    "brand": "Harry's",
+                    "favicon_url": "https://www.harrys.com/favicon.ico"
+                },
+                {
+                    "headline": "They Could Be Headed to the Hall of Fame, But Are They The Best?",
+                    "target_url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
+                    "url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
+                    "date": "2017-06-23 15:03:56",
+                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1498244634.png",
+                    "brand": "247Sports",
+                    "favicon_url": "http://247sports.com/favicon.ico"
+                },
+                {
+                    "headline": "Jaw-Dropping New SUVs Offer More Than Ever",
+                    "target_url": "http://myvoteitup.com/?utm_source=revcontent&utm_campaign=us-rc-direct-suv-mob&adgroup=native&utm_content=405df2",
+                    "url": "http://myvoteitup.com/?utm_source=revcontent&utm_campaign=us-rc-direct-suv-mob&adgroup=native&utm_content=405df2",
+                    "date": "2017-05-15 22:04:46",
+                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/00365660ca0b0f8bfcf13802f6f09644.png",
+                    "brand": "SUV Sponsored Ads ",
+                    "favicon_url": null
+                },
+                {
+                    "headline": "Here's Why HelloFresh Works For Us",
+                    "target_url": "http://www.libertyproject.com/well-being/how-hellofresh-makes-home-cooking-easy-and-fun/",
+                    "url": "http://www.libertyproject.com/well-being/how-hellofresh-makes-home-cooking-easy-and-fun/",
+                    "date": "2017-01-11 19:52:10",
+                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/ed5c4db1f319ce75438ee1186b5b6da1.png",
+                    "brand": "The Liberty Project ",
+                    "favicon_url": "http://www.libertyproject.com/favicon.ico"
+                },
+                {
+                    "headline": "Predicting The 2017 Records of Every NFL Team",
+                    "target_url": "http://247sports.com/Gallery/Predicting-the-2017-records-of-every-NFL-team--52256885/GallerySlides/522808?ftag=ACQ-00-10aaj0a",
+                    "url": "http://247sports.com/Gallery/Predicting-the-2017-records-of-every-NFL-team--52256885/GallerySlides/522808?ftag=ACQ-00-10aaj0a",
+                    "date": "2017-06-26 17:20:39",
+                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/b45345db19e02e5dd4c5d536f72978ce.png",
+                    "brand": "247Sports",
+                    "favicon_url": "http://247sports.com/favicon.ico"
+                },
+                {
+                    "headline": "Find the Cheapest Car Insurance Today!",
+                    "target_url": "https://ff.zone/?flux_fts=xtxlataqlqalcqzzqeqpqlotaiqptxztaaoad52e&amp;flux_cost=0.01&amp;target={adv_targets}&amp;campaign={boost_id}&amp;content={content_id}&amp;widget={widget_id}",
+                    "url": "https://ff.zone/?flux_fts=xtxlataqlqalcqzzqeqpqlotaiqptxztaaoad52e&amp;flux_cost=0.01&amp;target={adv_targets}&amp;campaign={boost_id}&amp;content={content_id}&amp;widget={widget_id}",
+                    "date": "2017-07-08 06:35:25",
+                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1499510122.jpg",
+                    "brand": "Top Car Insurances",
+                    "favicon_url": null
+                },
+                {
+                    "headline": "Here Are the Best Affordable Vehicles for 2017",
+                    "target_url": "http://adv.123trackingurl.com/aff_c?offer_id=8&amp;aff_id=1002",
+                    "url": "http://adv.123trackingurl.com/aff_c?offer_id=8&amp;aff_id=1002",
+                    "date": "2016-10-20 08:44:36",
+                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1476408119.jpg",
+                    "brand": "Kelley Blue Book",
+                    "favicon_url": null
+                },
+                {
+                    "headline": "Think The 'Boys Will Have a Better Record In '17? Think Again",
+                    "target_url": "http://247sports.com/Gallery/Predicting-the-2017-records-of-every-NFL-team--52256885/GallerySlides/522808?ftag=ACQ-00-10aaj0a",
+                    "url": "http://247sports.com/Gallery/Predicting-the-2017-records-of-every-NFL-team--52256885/GallerySlides/522808?ftag=ACQ-00-10aaj0a",
+                    "date": "2017-06-26 17:20:43",
+                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/b45345db19e02e5dd4c5d536f72978ce.png",
+                    "brand": "247Sports",
+                    "favicon_url": "http://247sports.com/favicon.ico"
+                },
+                {
+                    "headline": "Just Released, Top New Pickup Trucks for 2017",
+                    "target_url": "http://buynewpickuptruck.com",
+                    "url": "http://buynewpickuptruck.com",
+                    "date": "2017-03-06 12:05:06",
+                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1491243816.jpg",
+                    "author": "BuyNewPickupTrucks (Ads)",
+                    "favicon_url": null
+                },
+                {
+                    "headline": "This Course is Unlike Anything You've Experienced",
+                    "target_url": "http://video.golfdigest.com/watch/golf-all-night-in-the-heart-of-dubai-at-emirates-golf-club?mbid=marketing_paid_revcontent_golf_Ejcpv",
+                    "url": "http://video.golfdigest.com/watch/golf-all-night-in-the-heart-of-dubai-at-emirates-golf-club?mbid=marketing_paid_revcontent_golf_Ejcpv",
+                    "date": "2017-05-12 16:10:00",
+                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1494619794.png",
+                    "brand": "Golf Digest",
+                    "favicon_url": "http://video.golfdigest.com/favicon.ico"
+                },
+                {
+                    "headline": "NBA Brother Duos, Ranked From Awful To Pretty Great",
+                    "target_url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
+                    "url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
+                    "date": "2017-06-26 17:43:34",
+                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1498513901.png",
+                    "brand": "247Sports",
+                    "favicon_url": "http://247sports.com/favicon.ico"
+                },
+                {
+                    "headline": "3 Simple Steps to Shed Belly Fat over 40",
+                    "target_url": "http://www.maxworkouts.com/lp/how-to-get-ripped-abs-after-40-pg-1",
+                    "url": "http://www.maxworkouts.com/lp/how-to-get-ripped-abs-after-40-pg-1",
+                    "date": "2017-05-10 17:15:28",
+                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1494450763.jpg",
+                    "brand": "MAX Workouts",
+                    "favicon_url": "http://www.maxworkouts.com/design/images/favicon.png"
+                },
+                {
+                    "headline": "They Could Be Headed To The Hall Of Fame, But Are They The Best?",
+                    "target_url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
+                    "url": "http://247sports.com/Gallery/NBA-brother-duos-ranked-from-awful-to-pretty-great-52872696/GallerySlides/561038?ftag=ACQ-00-10aaj0a",
+                    "date": "2017-06-26 17:43:36",
+                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1498514024.png",
+                    "brand": "247Sports",
+                    "favicon_url": "http://247sports.com/favicon.ico"
+                },
+                {
+                    "headline": "'Madden 17': Ratings for Every First-round Pick",
+                    "target_url": "http://247sports.com/Gallery/Madden-17-ratings-released-for-NFL-first-round-draft-choices-52579234/GallerySlides/543715?ftag=ACQ-00-10aaj0a",
+                    "url": "http://247sports.com/Gallery/Madden-17-ratings-released-for-NFL-first-round-draft-choices-52579234/GallerySlides/543715?ftag=ACQ-00-10aaj0a",
+                    "date": "2017-06-26 17:43:43",
+                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/6fe74ed289a4369296c9d3a4b91998c4.png",
+                    "brand": "247Sports",
+                    "favicon_url": "http://247sports.com/favicon.ico"
+                }
+            ],
+            newsweek: [
+                {
+                    "headline": "Learn About The Razor Causing So Many Guys To Switch",
+                    "target_url": "https://ad.atdmt.com/c/go;p=11252201476526;ev.a=1;idfa=;idfa_lat=;aaid=;aaid_lat=;cache=",
+                    "url": "https://ad.atdmt.com/c/go;p=11252201476526;ev.a=1;idfa=;idfa_lat=;aaid=;aaid_lat=;cache=",
+                    "date": "2016-08-25 16:57:15",
+                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1474992575.png",
+                    "brand": "Harry's",
+                    "favicon_url": null
+                },
+                {
+                    "headline": "Eva Longoria&#39;s Surprising DNA Test",
+                    "target_url": "http://www.ancestry.com/s74266/t35312/rd.ashx",
+                    "url": "http://www.ancestry.com/s74266/t35312/rd.ashx",
+                    "date": "2016-10-31 15:21:09",
+                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1480975468.jpg",
+                    "brand": "Ancestry",
+                    "favicon_url": null
+                },
+                {
+                    "headline": "The Most Liberal City In America Will Shock You",
+                    "target_url": "http://www3.forbes.com/lifestyle/the-most-conservative-and-most-liberal-cities-in-america",
+                    "url": "http://www3.forbes.com/lifestyle/the-most-conservative-and-most-liberal-cities-in-america",
+                    "date": "2016-11-03 16:56:48",
+                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1477944994.jpg",
+                    "brand": "Forbes",
+                    "favicon_url": null
+                },
+                {
+                    "headline": "This Course is Unlike Anything You've Experienced",
+                    "target_url": "http://video.golfdigest.com/watch/golf-all-night-in-the-heart-of-dubai-at-emirates-golf-club?mbid=marketing_paid_revcontent_golf_Ejcpv",
+                    "url": "http://video.golfdigest.com/watch/golf-all-night-in-the-heart-of-dubai-at-emirates-golf-club?mbid=marketing_paid_revcontent_golf_Ejcpv",
+                    "date": "2017-05-12 16:10:00",
+                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1494619794.png",
+                    "brand": "Golf Digest",
+                    "favicon_url": "http://video.golfdigest.com/favicon.ico"
+                },
+                {
+                    "headline": "We Tried Blue Apron: Here's What Happened",
+                    "target_url": "http://www.libertyproject.com/culture/why-everyone-talking-about-blue-apron/",
+                    "url": "http://www.libertyproject.com/culture/why-everyone-talking-about-blue-apron/",
+                    "date": "2016-09-01 15:23:09",
+                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1470861635.png",
+                    "brand": "The Liberty Project",
+                    "favicon_url": null
+                },
+                {
+                    "headline": "Jaw-Dropping New SUVs Offer More Than Ever",
+                    "target_url": "http://myvoteitup.com/?utm_source=revcontent&utm_campaign=us-rc-direct-suv-mob&adgroup=native&utm_content=405df2",
+                    "url": "http://myvoteitup.com/?utm_source=revcontent&utm_campaign=us-rc-direct-suv-mob&adgroup=native&utm_content=405df2",
+                    "date": "2017-05-15 22:04:46",
+                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/00365660ca0b0f8bfcf13802f6f09644.png",
+                    "brand": "SUV Sponsored Ads ",
+                    "favicon_url": null
+                },
+                {
+                    "headline": "We Tried Blue Apron: Here's What Happened",
+                    "target_url": "http://www.popdust.com/why-everyone-is-talking-about-blue-apron-1891153755.html",
+                    "url": "http://www.popdust.com/why-everyone-is-talking-about-blue-apron-1891153755.html",
+                    "date": "2016-11-08 11:52:51",
+                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1478623971.jpg",
+                    "brand": "Popdust",
+                    "favicon_url": null
+                },
+                {
+                    "headline": "3 Simple Steps to Shed Belly Fat over 40",
+                    "target_url": "http://www.maxworkouts.com/lp/how-to-get-ripped-abs-after-40-pg-1",
+                    "url": "http://www.maxworkouts.com/lp/how-to-get-ripped-abs-after-40-pg-1",
+                    "date": "2017-05-10 17:15:28",
+                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1494450763.jpg",
+                    "brand": "MAX Workouts",
+                    "favicon_url": "http://www.maxworkouts.com/design/images/favicon.png"
+                },
+                {
+                    "headline": "The Best Affordable Car Under $20,000",
+                    "target_url": "http://adv.123trackingurl.com/aff_c?offer_id=6&amp;aff_id=1002",
+                    "url": "http://adv.123trackingurl.com/aff_c?offer_id=6&amp;aff_id=1002",
+                    "date": "2016-10-20 08:56:00",
+                    "image": "https://revcontent-p0.s3.amazonaws.com/content/images/1476316214.jpg",
+                    "brand": "Kelley Blue Book",
+                    "favicon_url": null
+                },
+
+            ]
+        }
 
         this.mockInternal =
          {
@@ -720,38 +806,67 @@ Author: michael@revcontent.com
             ]
          };
 
-         this.mockComments = [
-            {
-                name: "Eric Gundel",
-                icon: "https://scontent.fbna1-2.fna.fbcdn.net/v/t1.0-1/c17.0.100.100/p100x100/14495357_10207244418403959_8590106024589896961_n.jpg?oh=4075213756b85906b400a18b9c47fe00&oe=5A60BFF8",
-                comment: "Sale, Pomeranz, Fister. With his inability to pitch deep Pomeranz should either go 2 or 4 so that he is right before or after Sale. Only Fister's performance gives him a credible argument for going ahead of him so holding off until Game 4 is silly. Fister also has been going deep so he is the logical guy to follow Pomeranz."
-            },
-            {
-                name: "Daniel Canny",
-                icon: "https://scontent.fbna1-2.fna.fbcdn.net/v/t1.0-1/p100x100/12745519_10153828730110991_8288934923335204537_n.jpg?oh=31bf110189004eef484008d8c0fe0014&oe=5A1462A1",
-                comment: "I want no part of Price in these playoffs. Even if he was piching well right now and not on the DL. I think it should go Sale, Pomeranz 1-2 with Fister and Porcello as the 3/4 in some order. Pomeranz has earned the 2 spot. I like Fister but let' see what everybody thinks when someone roughs him up for 7 or 8 runs in 2 innings-which I predict will happen before the end of the season. It's an interesting call but I hope the Sox shut Price down. Make him earn that 30 million next year."
-            },
-            {
-                name: "Vinnie Bredice",
-                icon: "https://scontent.fbna1-2.fna.fbcdn.net/v/t1.0-1/p100x100/19105596_10211587788722367_8573624180233364817_n.jpg?oh=aa9da14633edb282a4887c7b11f73c29&oe=5A51FCD5",
-                comment: "It's bad enough the Yankees replica jerseys have the player last names on the back of them, now this? Chief for Ellsbury??? When has anyone ever heard him called Chief??? And A-A-Ron for Hicks??? When just about everyone on the team and his manager call him Hicksy? A lot of these nicknames sound forced or contrived. Glad to see that Gardner refused a nickname and went with his last name. Just a dumb idea all around and another way for MLB to suck the almighty dollar away from the fans."
-            },
-            {
-                name: "Michael Rinella",
-                icon: "https://scontent.fbna1-2.fna.fbcdn.net/v/t1.0-1/p100x100/14440758_10209944849559243_3334370350088150485_n.jpg?oh=4304b9cb6e6855e3d3d26013a51776fd&oe=5A12DCF9",
-                comment: "What is it with today's players oblique strains? Nobody and I mean nobody went on the DL with a flippin' oblique anything thirty or forty years ago."
-            },
-            {
-                name: "Lee Fogel",
-                icon: "https://scontent.fbna1-2.fna.fbcdn.net/v/t1.0-1/p100x100/18033393_1493137037424397_5285712530195291564_n.jpg?oh=e9b8d3ae7305d913e720612a26cb61cc&oe=5A13EB8A",
-                comment: "People ridiculed his signing but he put dollars in pockets and butts in seats. And, although he didn't blow anyone away, his results overall were better than just about anyone figured he would put up."
-            },
-            {
-                name: "Dennis Lio",
-                icon: "https://scontent.fbna1-2.fna.fbcdn.net/v/t1.0-1/p100x100/15965322_581838418669301_6626437843902271848_n.jpg?oh=844bd7dbf1d62d6316322ff40db53078&oe=5A12C32D",
-                comment: "When jealousy rears its ugly head in the realm of baseball, it is a terrible thing. Tim Tebow is what baseball is all about."
-            }
-        ];
+         this.mockComments = {
+            espn: [
+                {
+                    name: "Eric Gundel",
+                    icon: "https://scontent.fbna1-2.fna.fbcdn.net/v/t1.0-1/c17.0.100.100/p100x100/14495357_10207244418403959_8590106024589896961_n.jpg?oh=4075213756b85906b400a18b9c47fe00&oe=5A60BFF8",
+                    comment: "Sale, Pomeranz, Fister. With his inability to pitch deep Pomeranz should either go 2 or 4 so that he is right before or after Sale. Only Fister's performance gives him a credible argument for going ahead of him so holding off until Game 4 is silly. Fister also has been going deep so he is the logical guy to follow Pomeranz."
+                },
+                {
+                    name: "Daniel Canny",
+                    icon: "https://scontent.fbna1-2.fna.fbcdn.net/v/t1.0-1/p100x100/12745519_10153828730110991_8288934923335204537_n.jpg?oh=31bf110189004eef484008d8c0fe0014&oe=5A1462A1",
+                    comment: "I want no part of Price in these playoffs. Even if he was piching well right now and not on the DL. I think it should go Sale, Pomeranz 1-2 with Fister and Porcello as the 3/4 in some order. Pomeranz has earned the 2 spot. I like Fister but let' see what everybody thinks when someone roughs him up for 7 or 8 runs in 2 innings-which I predict will happen before the end of the season. It's an interesting call but I hope the Sox shut Price down. Make him earn that 30 million next year."
+                },
+                {
+                    name: "Vinnie Bredice",
+                    icon: "https://scontent.fbna1-2.fna.fbcdn.net/v/t1.0-1/p100x100/19105596_10211587788722367_8573624180233364817_n.jpg?oh=aa9da14633edb282a4887c7b11f73c29&oe=5A51FCD5",
+                    comment: "It's bad enough the Yankees replica jerseys have the player last names on the back of them, now this? Chief for Ellsbury??? When has anyone ever heard him called Chief??? And A-A-Ron for Hicks??? When just about everyone on the team and his manager call him Hicksy? A lot of these nicknames sound forced or contrived. Glad to see that Gardner refused a nickname and went with his last name. Just a dumb idea all around and another way for MLB to suck the almighty dollar away from the fans."
+                },
+                {
+                    name: "Michael Rinella",
+                    icon: "https://scontent.fbna1-2.fna.fbcdn.net/v/t1.0-1/p100x100/14440758_10209944849559243_3334370350088150485_n.jpg?oh=4304b9cb6e6855e3d3d26013a51776fd&oe=5A12DCF9",
+                    comment: "What is it with today's players oblique strains? Nobody and I mean nobody went on the DL with a flippin' oblique anything thirty or forty years ago."
+                },
+                {
+                    name: "Lee Fogel",
+                    icon: "https://scontent.fbna1-2.fna.fbcdn.net/v/t1.0-1/p100x100/18033393_1493137037424397_5285712530195291564_n.jpg?oh=e9b8d3ae7305d913e720612a26cb61cc&oe=5A13EB8A",
+                    comment: "People ridiculed his signing but he put dollars in pockets and butts in seats. And, although he didn't blow anyone away, his results overall were better than just about anyone figured he would put up."
+                },
+                {
+                    name: "Dennis Lio",
+                    icon: "https://scontent.fbna1-2.fna.fbcdn.net/v/t1.0-1/p100x100/15965322_581838418669301_6626437843902271848_n.jpg?oh=844bd7dbf1d62d6316322ff40db53078&oe=5A12C32D",
+                    comment: "When jealousy rears its ugly head in the realm of baseball, it is a terrible thing. Tim Tebow is what baseball is all about."
+                }
+            ],
+            newsweek: [
+                {
+                    name: "Katona Johnson",
+                    icon: "https://scontent-mia3-2.xx.fbcdn.net/v/t1.0-1/p48x48/14457545_561653840701620_6308988878381143782_n.jpg?oh=3f72461276b7e15a0327dbce2f793eae&oe=5A5A2304",
+                    comment: "All she is showing is that she has not grown into womanhood yet. She still depends on her daddy. Remember she has not gone on her own. She has never really held a job outside her father's structure. Look at Jared, he looks like he has not had a separate thought from this family. She needs to leave DC and find her way to maturity. I bet Tiffany is more independent, smarter because her mother had total control of her upbringing."
+                },
+                {
+                    name: "Nancy Clifford",
+                    icon: "https://scontent-mia3-2.xx.fbcdn.net/v/t1.0-1/p48x48/13873033_10153831008331732_6356865474546752624_n.jpg?oh=41532f41615c9a4e6f6e9ecb78ba01aa&oe=5A4CC060",
+                    comment: "If trump was. not A thief and traitor we might give him a chance. He is destroying our country and reputation. RESIGN if he can't take it. What will he do when he goes to jail for treason"
+                },
+                {
+                    name: "Chelsea Doors",
+                    icon: "https://scontent-mia3-2.xx.fbcdn.net/v/t1.0-1/p48x48/21314293_1470408896387318_2143304306498232083_n.jpg?oh=483e3672928841df361285a486c74f7c&oe=5A47239F",
+                    comment: "Great place to buy Over Priced Polyester made in sweat shops throughout Asia, even though her daddy's administration celebrates \"Made in America Week\"."
+                },
+                {
+                    name: "John W Bletsch",
+                    icon: "https://scontent-mia3-2.xx.fbcdn.net/v/t1.0-1/p48x48/15698201_10207747359346750_4195257972201186511_n.jpg?oh=e5f37eccae878608529da6f7128aaffa&oe=5A5429AA",
+                    comment: "Again, it all depends upon whom is surveyed. Try a random survey and you will find that Michelle (Michael) Obama is roundly disliked for her faux haughty air and pretentious attitude while she is spending $millions of taxpayers' dollars as though her own on opulent affairs and vacations monthly. Truly an attitude of lottery rich trailer trash using her race to force acceptance among the moneyed elete."
+                },
+                {
+                    name: "Palin Smith",
+                    icon: "https://scontent-mia3-2.xx.fbcdn.net/v/t1.0-1/p48x48/17352341_10210518225049889_2739499951961938623_n.jpg?oh=4fb96860c3aaadfa83d6aeb9941ccbcd&oe=5A4E8A95",
+                    comment: "If Melania was black she would get a 98% approval rating.....if her hubby was a Democrat."
+                }
+            ]
+         }
 
 
 
@@ -2996,7 +3111,7 @@ Author: michael@revcontent.com
                 }
 
                 if (url.type == 'sponsored') {
-                    var resp = that.mockSponsored.slice(url.offset, url.limit);
+                    var resp = that.mockSponsored[that.options.mock].slice(url.offset, url.limit);
                     if (!resp.length) {
                         reject();
                         return;
@@ -3362,7 +3477,7 @@ Author: michael@revcontent.com
                     var commentCount = 1;
                     for (var commentId = 0; commentId < commentCount; commentId++) {
 
-                        var randomComment = this.mockComments[Math.floor(Math.random() * this.mockComments.length)];
+                        var randomComment = this.mockComments[this.options.mock][Math.floor(Math.random() * this.mockComments[this.options.mock].length)];
 
                         // var author = authors[Math.floor(Math.random() * authors.length)];
                         // var authorNames = author.split(' ');
