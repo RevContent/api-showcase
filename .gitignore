@@ -24,3 +24,5 @@ htdocs/app/resources/vendor/material-design-icons
 !htdocs/node_modules/wolfy87-eventemitter/EventEmitter.js
 !htdocs/node_modules/jquery/dist/jquery.js
 !htdocs/node_modules/jquery-mousewheel/jquery.mousewheel.js
+
+.idea/
