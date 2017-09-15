@@ -1319,7 +1319,7 @@ Author: michael@revcontent.com
                                         '<div class="rev-provider"></div>' +
                                         '<div class="rev-date"></div>' +
                                     '</div>' +
-                                    '<div class="rev-save"><?xml version="1.0" ?><svg contentScriptType="text/ecmascript" contentStyleType="text/css" preserveAspectRatio="xMidYMid meet" version="1.0" viewBox="0 0 60.000000 60.000000" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" zoomAndPan="magnify"><g><polygon fill="none" points="51.0,59.0 29.564941,45.130005 9.0,59.0 9.0,1.0 51.0,1.0" stroke="#231F20" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/><polygon fill="none" points="29.564941,11.087006 33.0,19.0 43.0,19.0 36.0,26.0 38.0,36.0 29.564941,30.0 21.0,36.0 23.0,26.0 16.0,19.0 26.0,19.0" stroke="#231F20" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/></g></svg>' +
+                                    '<div class="rev-save"><?xml version="1.0" ?><svg contentScriptType="text/ecmascript" contentStyleType="text/css" preserveAspectRatio="xMidYMid meet" version="1.0" viewBox="0 0 60.000000 60.000000" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" zoomAndPan="magnify"><g><polygon fill="none" points="51.0,59.0 29.564941,45.130005 9.0,59.0 9.0,1.0 51.0,1.0" stroke="#231F20" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/></g></svg>' +
                                     '</div>' +
                                 '</div>';
 
@@ -1331,13 +1331,14 @@ Author: michael@revcontent.com
                 meta.querySelector('.rev-meta-inner').insertAdjacentHTML('afterbegin', '<div class="rev-headline-icon-container"><div class="rev-headline-icon"></div></div>');
 
                 var save = meta.querySelector('.rev-meta-inner .rev-save');
-                revUtils.addEventListener(save, 'click', function(e) {
-
-                    revDisclose.onClickHandler(revDisclose.onClickHandlerObject ? revDisclose.onClickHandlerObject : null);
-
-                    e.preventDefault();
-                    e.stopPropagation();
-                }, {passive: false});
+                var handleSave = function(save) {
+                    revUtils.addEventListener(save, revDetect.mobile() ? 'touchstart' : 'click', function(e) {
+                        revUtils.addClass(save, 'rev-save-active');
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }, {passive: false});
+                }
+                handleSave(save);
             }
 
             if (this.options.internal_selector && items[0].element.matches(this.options.internal_selector)) {

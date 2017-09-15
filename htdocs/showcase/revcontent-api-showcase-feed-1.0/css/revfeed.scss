@@ -1310,6 +1310,13 @@
         .rev-save {
             float: right;
             width: 34px;
+
+            &.rev-save-active {
+                svg polygon {
+                    fill: rgba(90, 90, 90, 0.25);
+                }
+            }
+
             svg polygon {
                 stroke: rgba(90,90,90,.86);
             }
