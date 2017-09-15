@@ -26119,14 +26119,13 @@ return api;
 		var elementTop = element.getBoundingClientRect().top;
 		var currentScroll = window.parent.pageYOffset || window.parent.document.documentElement.scrollTop || window.parent.document.body.scrollTop; 
 
-		if (elementTop + 30 < windowHeight) {
-		    if (that.autoplaying && that.player.paused()) {
-			that.player.play();
-		    }
-		}
 		if (elementTop + elementHeight < 0) {
 		    if (that.autoplaying && !that.player.paused()) {
 			that.player.pause();
+		    }
+		} else if (elementTop + 30 < windowHeight) {
+		    if (that.autoplaying && that.player.paused()) {
+			that.player.play();
 		    }
 		}
 	    } else {
