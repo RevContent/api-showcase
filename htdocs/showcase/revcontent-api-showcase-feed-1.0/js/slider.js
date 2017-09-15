@@ -2676,7 +2676,7 @@ Author: michael@revcontent.com
             this.promises.push(new Promise(function(resolve, reject) {
                 var url = urls[i];
                 if (url.type == 'internal') {
-                    var resp = that.mockInternal[that.options.domain == 'newsweek.com' ? 'newsweek' : 'espn'].slice(url.offset, url.limit);
+                    var resp = that.mockInternal[that.options.mock].slice(url.offset, url.limit);
                     if (!resp.length) {
                         reject();
                         return;

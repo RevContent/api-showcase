@@ -100,7 +100,8 @@ Author: michael@revcontent.com
             header_logo: false,
             window_width_devices: [
                 'phone'
-            ]
+            ],
+            mock: false
         };
 
         // merge options
@@ -188,6 +189,7 @@ Author: michael@revcontent.com
 
     RevFeed.prototype.createInnerWidget = function() {
         this.innerWidget = new RevSlider({
+            mock: this.options.mock,
             api_source:   this.options.api_source,
             element:      [this.containerElement],
             url:          this.options.url,
@@ -334,7 +336,7 @@ Author: michael@revcontent.com
                         var url = urls[i];
 
                         if (url.type == 'internal') {
-                            var resp = self.innerWidget.mockInternal[self.options.domain == 'newsweek.com' ? 'newsweek' : 'espn'].slice(url.offset, url.offset + url.limit);
+                            var resp = self.innerWidget.mockInternal[self.options.mock].slice(url.offset, url.offset + url.limit);
                             resolve({
                                 type: url.type,
                                 data: resp
