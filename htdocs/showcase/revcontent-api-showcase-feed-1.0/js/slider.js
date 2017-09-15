@@ -3460,7 +3460,7 @@ Author: michael@revcontent.com
                 if (!itemData.video_id) {
                     revImage.innerHTML = '<img src=" ' + image + ' " />';
                 } else {
-                    revImage.innerHTML = '<iframe id="rc_video' + itemData.video_id + '" src="http://code.revcontent.com/mock/feed3/video' + itemData.video_id + '.iframe.html" style="border: none; width: '+ roundedPreloaderWidth +'px; height: ' + roundedPreloaderHeight + 'px;""></iframe>';
+                    revImage.innerHTML = '<iframe id="rc_video' + itemData.video_id + '" src="http://code.revcontent.com/mock/feed4/video' + itemData.video_id + '.iframe.html" style="border: none; width: '+ roundedPreloaderWidth +'px; height: ' + roundedPreloaderHeight + 'px;""></iframe>';
                 }
 
 
