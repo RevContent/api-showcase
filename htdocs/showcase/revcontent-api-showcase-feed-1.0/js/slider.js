@@ -3503,7 +3503,8 @@ Author: michael@revcontent.com
                 var revImage = item.element.querySelector('.rev-image');
 
                 if (!itemData.video_id) {
-                    revImage.innerHTML = '<img src=" ' + image + ' " />';
+                    revImage.style.backgroundImage = 'url('+ image +')';
+                    // revImage.innerHTML = '<img src=" ' + image + ' " />';
                 } else {
                     revImage.innerHTML = '<iframe id="rc_video' + itemData.video_id + '" src="http://code.revcontent.com/mock/feed3/video' + itemData.video_id + '.iframe.html" style="border: none; width: '+ roundedPreloaderWidth +'px; height: ' + roundedPreloaderHeight + 'px;""></iframe>';
                 }
