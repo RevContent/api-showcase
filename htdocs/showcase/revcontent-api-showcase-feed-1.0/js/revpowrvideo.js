@@ -25864,6 +25864,7 @@ return api;
         });
 
         this.currentContent = 0;
+	this.autoplaying = true;
         //
         //this.player.logobrand({
           //  image : this.config.custom_logo,
@@ -25881,6 +25882,7 @@ return api;
             this.player.one("touchend", function () {
                 if (me.player && me.player.muted()) {
                     me.player.muted(false);
+		    me.autoplaying = false;
                 }
             });
             //revUtils.addEventListener(this.container, 'touchend', function () {
@@ -26118,8 +26120,13 @@ return api;
 		var currentScroll = window.parent.pageYOffset || window.parent.document.documentElement.scrollTop || window.parent.document.body.scrollTop; 
 
 		if (elementTop + 30 < windowHeight) {
-		    if (that.player.paused()) {
+		    if (that.autoplaying && that.player.paused()) {
 			that.player.play();
+		    }
+		}
+		if (elementTop + elementHeight < 0) {
+		    if (that.autoplaying && !that.player.paused()) {
+			that.player.pause();
 		    }
 		}
 	    } else {

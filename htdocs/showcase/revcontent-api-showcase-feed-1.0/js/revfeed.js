@@ -29,7 +29,7 @@ Author: michael@revcontent.com
             image_overlay_position: 'center', // center, top_left, top_right, bottom_right, bottom_left
             ad_overlay: false, // pass key value object { content_type: icon }
             ad_overlay_position: 'bottom_right', // center, top_left, top_right, bottom_right, bottom_left
-            header: 'Experience',
+            header: 'Feed',
             // per_row: {
             //     sm: 2,
             //     md: 3
@@ -47,7 +47,7 @@ Author: michael@revcontent.com
             css: '',
             headline_size: 3,
             max_headline: false,
-            disclosure_text: 'by Revcontent',
+            disclosure_text: 'by Engage.IM',
             query_params: false,
             user_ip: false,
             user_agent: false,
