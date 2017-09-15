@@ -152,6 +152,8 @@
 
         this.container.appendChild(dumbPlayer);
 
+        // videojs.support.requestFullScreen = false;
+
         this.player = videojs(this.playerId, {
             nativeControlForTouch: false
         });
@@ -171,11 +173,14 @@
           //  }
         // });
         if (mobile && this.config.autoplay) {
-            revUtils.addEventListener(this.container, 'touchend', function () {
+            this.player.one("touchend", function () {
                 if (me.player && me.player.muted()) {
                     me.player.muted(false);
                 }
             });
+            //revUtils.addEventListener(this.container, 'touchend', function () {
+            //
+            //});
         }
 
 
