@@ -1402,3 +1402,86 @@
 #rev-slider2 {
     @import '../../css/revoverlay';
 }
+
+
+
+// MOCK: RevPoll Container
+// @todo: migrate to proper SCSS hierarchy above if these rules are accepted to main.
+.rev-poll {
+    border-top: 1px solid #e5e5e5;
+    padding: 9px;
+    padding-top: 18px;
+    font-size: 11px;
+    margin-top: 9px;
+    color: #777777;
+}
+
+.rev-poll-inner {
+    border: 1px solid #f0f0f0;
+    border-radius: 6px;
+}
+
+.rev-poll-inner .vote-bar {
+    height: 32px;
+    line-height: 32px;
+    margin: 6px;
+    border-radius: 6px;
+    display: block;
+    padding: 0 0;
+}
+
+.rev-poll-inner .vote-bar.yes-vote {
+ background-color: #eeeeee;
+    color: #ffffff;
+}
+
+.rev-poll-inner .vote-bar.yes-vote[data-percent="63"] .vote-label {
+    background-color: #73f899;
+    width: 63%;
+    display: block;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+.rev-poll-inner .vote-bar.yes-vote[data-percent="63"] .vote-bar-count {
+    color: #444444;
+    font-weight: bold;
+}
+
+.rev-poll-inner .vote-bar.no-vote[data-percent="37"] .vote-label {
+    background-color: #dddddd;
+    width: 37%;
+    display: block;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+.rev-poll-inner .vote-bar.no-vote[data-percent="37"] .vote-bar-count {
+    color: #444444;
+    font-weight: bold;
+}
+
+.rev-poll-inner .vote-bar.no-vote {
+    background-color: #eeeeee;
+    color: #777777;
+}
+
+.rev-poll-inner .vote-bar .vote-label {
+    padding: 0 9px;
+}
+
+.rev-poll-inner .vote-bar .vote-bar-count {
+    padding: 0 9px;
+    float: right;
+}
+
+.rev-poll .poll-summary {
+ padding: 9px;
+
+}
+.rev-poll .poll-summary a {
+    display: inline !important;
+}
+.rev-poll .poll-summary a:hover {
+    text-decoration: underline;
+}
+
