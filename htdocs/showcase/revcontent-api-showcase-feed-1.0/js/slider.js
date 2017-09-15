@@ -1542,16 +1542,29 @@ Author: michael@revcontent.com
         var likeReactionElement = item.element.querySelector('.rev-reaction-icon');
 
         if (revDetect.mobile()) {
-            revUtils.addEventListener(likeReactionElement, 'click', function(el) {
+            revUtils.addEventListener(likeReactionElement, 'touchstart', function(ev) {
+                ev.stopPropagation();
+                ev.preventDefault();
                 clearTimeout(that.likeReactionIconHideTimeout);
 
                 that.likeReactionIconShowTimeout = setTimeout(function() {
                     revUtils.addClass(item.element, 'rev-menu-active');
+
+                    var listener = function(ev) {
+                        revUtils.removeClass(item.element, 'rev-menu-active');
+                        ev.stopPropagation();
+                        ev.preventDefault();
+                        revUtils.removeEventListener(window, 'touchstart', listener);
+                    };
+
+                    revUtils.addEventListener(window, 'touchstart', listener, {passive: false});
+
                 }, 400);
-            });
+
+            }, {passive: false});
         } else {
 
-            revUtils.addEventListener(likeReactionElement, 'mouseenter', function(el) {
+            revUtils.addEventListener(likeReactionElement, 'mouseenter', function(ev) {
                 clearTimeout(that.likeReactionIconHideTimeout);
 
                 that.likeReactionIconShowTimeout = setTimeout(function() {
@@ -1559,16 +1572,15 @@ Author: michael@revcontent.com
                 }, 750);
             });
 
-            revUtils.addEventListener(likeReactionElement, 'mouseleave', function(el) {
+            revUtils.addEventListener(likeReactionElement, 'mouseleave', function(ev) {
                 clearTimeout(that.likeReactionIconShowTimeout);
 
                 that.likeReactionIconHideTimeout = setTimeout(function() {
-                    // revUtils.addClass(el.target.parentNode.parentNode, 'rev-menu-active');
                     revUtils.removeClass(item.element, 'rev-menu-active');
                 }, 750);
             });
 
-            revUtils.addEventListener(likeReactionElement, 'click', function(el) {
+            revUtils.addEventListener(likeReactionElement, 'click', function(ev) {
 
                 revUtils.removeClass(item.element, 'rev-menu-active');
                 clearTimeout(that.likeReactionIconShowTimeout);
