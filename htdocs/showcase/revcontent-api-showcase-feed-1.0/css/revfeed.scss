@@ -332,8 +332,10 @@
 
         .rev-image {
             position: relative;
-            transition: background 250ms ease-in-out;
-            background: #eee;
+            // transition: background 250ms ease-in-out;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-color: #eee;
             overflow: hidden;
             -webkit-user-select: none;
             -moz-user-select: none;
