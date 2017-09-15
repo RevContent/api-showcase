@@ -26113,10 +26113,11 @@ return api;
 		var iid = that.config.iframe_id;
 		var element = window.parent.document.getElementById(iid);
 		var windowHeight = window.parent.innerHeight || window.parent.document.documentElement.clientHeight || window.parent.document.body.clientHeight;
+		var elementHeight = element.getBoundingClientRect().height;
 		var elementTop = element.getBoundingClientRect().top;
 		var currentScroll = window.parent.pageYOffset || window.parent.document.documentElement.scrollTop || window.parent.document.body.scrollTop; 
 
-		if (elementTop + 20 < windowHeight) {
+		if (elementTop + 30 < windowHeight) {
 		    if (that.player.paused()) {
 			that.player.play();
 		    }
