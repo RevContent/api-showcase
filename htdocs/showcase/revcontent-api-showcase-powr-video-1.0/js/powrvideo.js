@@ -20,7 +20,8 @@
                 style : "bottom-right",
                 margin : 12,
                 header : 0,
-                width : 400
+                width : 400,
+                headerId : null
             };
         }
 
@@ -152,7 +153,7 @@
         this.container.appendChild(dumbPlayer);
 
         this.player = videojs(this.playerId, {
-            nativeControlForTouch: true
+            nativeControlForTouch: false
         });
 
         this.currentContent = 0;
@@ -171,7 +172,7 @@
         // });
         if (mobile && this.config.autoplay) {
             revUtils.addEventListener(this.container, 'touchend', function () {
-                if (me.player) {
+                if (me.player && me.player.muted()) {
                     me.player.muted(false);
                 }
             });
@@ -301,7 +302,13 @@
             this.player.fluid(false);
             this.player.dimensions(windowWidth, 176);
 
-            this.closeButton.setAttribute("style", "margin-top : 166px; margin-left : " + (windowWidth - 50) + "px");
+            if (fs.headerId != null) {
+                var h = document.getElementById(fs.headerId);
+                this.oldZ = h.style.zIndex;
+                h.style.zIndex = 0;
+            }
+            // this.closeButton.setAttribute("style", "margin-top : 166px; margin-left : " + (windowWidth - 60) + "px");
+            this.closeButton.setAttribute("style", "margin-top : 0px; margin-left : " + (windowWidth - 60) + "px");
 
         } else {
             this.player.fluid(true);
@@ -346,6 +353,11 @@
             this.container.removeAttribute("style");
             this.floated = false;
             this.player.fluid(true);
+
+            if (this.config.floatSettings.headerId != null) {
+                var h = document.getElementById(this.config.floatSettings.headerId);
+                h.style.zIndex = this.oldZ;
+            }
         }
     };
 
