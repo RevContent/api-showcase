@@ -3495,7 +3495,7 @@ Author: michael@revcontent.com
                         } else {
                             var names = itemData.author.split(' ');
                             if (itemData.author_image) {
-                                favicon.innerHTML = '<span class="rev-headline-icon-image" style="background-repeat:no-repeat;background-image:url('+ itemData.author_image +')' + '"></span>';
+                                favicon.innerHTML = '<span class="rev-headline-icon-image" style="border-radius: 50%;background-repeat:no-repeat;background-image:url('+ itemData.author_image +')' + '"></span>';
                             } else if (itemData.author.indexOf('.com') === -1 && names[0] && names[1]) {
                                 var initials = names[0].charAt(0) + names[1].charAt(0);
                                 favicon.innerHTML = '<div class="rev-author-initials">'+ initials +'</div>';
