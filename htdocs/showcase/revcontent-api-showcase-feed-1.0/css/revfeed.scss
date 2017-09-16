@@ -1497,6 +1497,7 @@
 }
 .rev-suggested-inner {
     padding: 9px 9px;
+    padding-top: 14px;
 }
 
 .rev-suggested .rev-suggested-controls {
@@ -1506,13 +1507,14 @@
     background-color: #ffffff;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
+    border-bottom: 1px solid #ddd;
 }
 
 .rev-suggested .rev-suggested-controls .control-box {
     display:block;
     width:80px;
     margin: 5px;
-    margin-top: 8px;
+    margin-top: 7px;
     float: right;
     height: 24px;
     line-height: 24px;
@@ -1596,7 +1598,7 @@
     background-color: rgba(0,0,0,0.7);
     border-radius: 4px;
     opacity: 0.9;
-    transition: all 0.8s ease;
+    transition: all 0.6s ease;
 }
 .rev-suggested ul.rev-suggested-topics > li:hover {
     opacity: 1.0;
@@ -1656,4 +1658,61 @@
     background-size: cover;
 }
 
+.rev-suggested ul.rev-suggested-topics > li.topic-health {
+    background: rgba(0,0,0,0.8) url(/showcase/revcontent-api-showcase-feed-1.0/img/interest-health.jpg) top left no-repeat;
+    background-size: cover;
+}
+
+.rev-suggested ul.rev-suggested-topics > li.topic-tech {
+    background: rgba(0,0,0,0.8) url(/showcase/revcontent-api-showcase-feed-1.0/img/interest-tech.jpeg) top left no-repeat;
+    background-size: cover;
+}
+
+.rev-suggested ul.rev-suggested-topics > li.topic-lifestyle {
+    background: rgba(0,0,0,0.8) url(/showcase/revcontent-api-showcase-feed-1.0/img/interest-lifestyle.jpeg) top left no-repeat;
+    background-size: cover;
+}
+
+
+
+// MOCK: CSS "Simulated" Pagination for Suggested Topics
+// Loops through 1-2 pages by toggling data-page on the UL container
+// interaction can be applied to real dataset
+.rev-suggested ul.rev-suggested-topics[data-page="1"] > li:nth-child(1),
+.rev-suggested ul.rev-suggested-topics[data-page="1"] > li:nth-child(2),
+.rev-suggested ul.rev-suggested-topics[data-page="1"] > li:nth-child(3){
+    width:32.5%;
+}
+.rev-suggested ul.rev-suggested-topics[data-page="1"] > li:nth-child(3) {
+    margin-right: 0;
+}
+.rev-suggested ul.rev-suggested-topics[data-page="1"] > li:nth-child(4),
+.rev-suggested ul.rev-suggested-topics[data-page="1"] > li:nth-child(5),
+.rev-suggested ul.rev-suggested-topics[data-page="1"] > li:nth-child(6){
+    width:0;
+    position: absolute;
+    margin:0;
+    margin-right:0;
+    overflow: hidden;
+}
+
+
+.rev-suggested ul.rev-suggested-topics[data-page="2"] > li:nth-child(1),
+.rev-suggested ul.rev-suggested-topics[data-page="2"] > li:nth-child(2),
+.rev-suggested ul.rev-suggested-topics[data-page="2"] > li:nth-child(3){
+    width: 0;
+    position: absolute;
+    margin:0;
+    margin-right:0;
+    overflow: hidden;
+}
+
+.rev-suggested ul.rev-suggested-topics[data-page="2"] > li:nth-child(4),
+.rev-suggested ul.rev-suggested-topics[data-page="2"] > li:nth-child(5),
+.rev-suggested ul.rev-suggested-topics[data-page="2"] > li:nth-child(6){
+    width:32%;
+}
+.rev-suggested ul.rev-suggested-topics[data-page="2"] > li:nth-child(6) {
+    margin-right: 0;
+}
 

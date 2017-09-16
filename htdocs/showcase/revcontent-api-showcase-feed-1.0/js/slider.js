@@ -3710,10 +3710,13 @@ Author: michael@revcontent.com
                 '<p style="display:inline-block;margin:0 0 5px 0;padding:0;color:#555555;line-height:38px;"><strong style="font-weight:400">Suggested Topics</strong></p>' +
             '</div>' +
             '<div class="rev-suggested-inner">' +
-            '<ul class="rev-suggested-topics">' +
+            '<ul class="rev-suggested-topics" data-page="1">' +
             '<li class="topic-card topic-media" data-topic="Media"><span class="bookmark-topic"></span><span class="topic-name">Media</span></span></li>' +
             '<li class="topic-card topic-art" data-topic="Art"><span class="bookmark-topic"></span><span class="topic-name">Art</span></li>' +
             '<li class="topic-card topic-crypto" data-topic="Cryptocurrency"><span class="bookmark-topic"></span><span class="topic-name">Cryptocurrency</span></li>' +
+            '<li class="topic-card topic-health" data-topic="Media"><span class="bookmark-topic"></span><span class="topic-name">Health</span></span></li>' +
+            '<li class="topic-card topic-tech" data-topic="Technology"><span class="bookmark-topic"></span><span class="topic-name">Technology</span></li>' +
+            '<li class="topic-card topic-lifestyle" data-topic="Lifestyle"><span class="bookmark-topic"></span><span class="topic-name">Lifestyle</span></li>' +
 
             '</ul>' +
             '<div style="clear:both"></div>' +
@@ -3723,6 +3726,24 @@ Author: michael@revcontent.com
 
         if(!$('#rev-suggested').length){
             document.body.querySelector('#rev-slider-grid').insertAdjacentHTML('afterend', suggested_interests);
+            // suggested topics: mock pagination (2 pages | looped)
+            $('#rev-suggested div.control-action.next').on('click', function(){
+                var the_topics = $('#rev-suggested ul.rev-suggested-topics');
+                if(parseInt(the_topics.attr('data-page')) == 2) {
+                    the_topics.attr('data-page', '1');
+                } else {
+                    the_topics.attr('data-page', '2');
+                }
+
+            });
+            $('#rev-suggested div.control-action.prev').on('click', function(){
+                var the_topics = $('#rev-suggested ul.rev-suggested-topics');
+                if(parseInt(the_topics.attr('data-page')) == 1) {
+                    the_topics.attr('data-page', '2');
+                } else {
+                    the_topics.attr('data-page', '1');
+                }
+            });
         }
 
 
