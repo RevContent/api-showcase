@@ -215,6 +215,7 @@
     ],
     "build": [
       "./node_modules/es6-promise/dist/es6-promise.js",
+      "./node_modules/hammerjs/hammer.js",
       "./node_modules/fontfaceobserver/fontfaceobserver.standalone.js",
       "./node_modules/mobile-detect/mobile-detect.js",
       "./showcase/revcontent-api-showcase-feed-1.0/node_modules/any-grid/dist/any-grid.js",

@@ -337,23 +337,24 @@ Author: michael@revcontent.com
                     this.promises.push(new Promise(function(resolve, reject) {
                         var url = urls[i];
 
-                        if (url.type == 'internal') {
-                            var resp = self.innerWidget.mockInternal[self.options.mock].slice(url.offset, url.offset + url.limit);
-                            resolve({
-                                type: url.type,
-                                data: resp
-                            });
-                            return;
-                        }
+                        // TODO - mock data
+                        // if (url.type == 'internal') {
+                        //     var resp = self.innerWidget.mockInternal[self.options.mock].slice(url.offset, url.offset + url.limit);
+                        //     resolve({
+                        //         type: url.type,
+                        //         data: resp
+                        //     });
+                        //     return;
+                        // }
 
-                        if (url.type == 'sponsored') {
-                            var resp = self.innerWidget.mockSponsored[self.options.mock].slice(url.offset, url.offset + url.limit);
-                            resolve({
-                                type: url.type,
-                                data: resp
-                            });
-                            return;
-                        }
+                        // if (url.type == 'sponsored') {
+                        //     var resp = self.innerWidget.mockSponsored[self.options.mock].slice(url.offset, url.offset + url.limit);
+                        //     resolve({
+                        //         type: url.type,
+                        //         data: resp
+                        //     });
+                        //     return;
+                        // }
                         revApi.request(url.url, function(resp) {
                             resolve({
                                 type: url.type,
