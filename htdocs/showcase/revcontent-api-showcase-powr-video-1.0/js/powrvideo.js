@@ -12,22 +12,31 @@
 }( window, function factory(window, revUtils, revApi) {
 
     var PowrInitialized = false;
-
+    /**
+     * id : id of the div to attach.
+     * tag : tag to use.
+     * dfp : true/false
+     * custom_logo : 
+     * autoplay : "none|load|focus" [ Whether to autoplay video ]
+     * videos : [ { "id" , "thumbnail" , "sd_url", "hd_url" } ]
+     * float : {
+          "desktop" : "bottom-right|none",
+	  "mobile" : "top|none",
+	  "minWidth" : 100,
+	  "maxWidth" : 200
+     * },
+     * iframe_id : "id" // Incase we are inside an iframe. 
+     * player_id : id to give the player we creating. 
+     */
     var PowrVideo = function(config) {
         this.config = config;
-        if (!this.config.floatSettings) {
-            this.config.floatSettings = {
-                style : "bottom-right",
-                margin : 12,
-                header : 0,
-                width : 400,
-                headerId : null
-            };
-        }
+	
+	this.floatSettings = this.createFloatSettings();
+	this.iframeSettings = this.createIframeSettings();
 	
         this.fixedHeight = -1;
         this.element = document.getElementById(this.config.id);
-
+	
         this.playerId = "content_video";
         if (config.playerId) {
             this.playerId = config.playerId;
@@ -74,13 +83,9 @@
         revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-powr-video');
 
         var that = this;
-
+	
         this.floated = false;
-        this.neverFloat = false;
-        if (!this.config.should_float) {
-            this.neverFloat = true;
-        }
-
+	
         var imaCss = document.createElement("link");
         imaCss.setAttribute("href", "//cdnjs.cloudflare.com/ajax/libs/videojs-ima/0.6.0/videojs.ima.css");
         imaCss.setAttribute("type", "text/css");
@@ -163,6 +168,7 @@
         });
 
         this.currentContent = 0;
+	this.autoplaying = true;
         //
         //this.player.logobrand({
           //  image : this.config.custom_logo,
@@ -213,12 +219,14 @@
             me.player.on('userinactive', me.onIdle.bind(me));
 	    
             GlobalPlayer = me;
-
+	    
             me.closeButton = me.container.querySelector(".rc-video-close");
             me.titleDom = me.container.querySelector(".rc-video-title");
 
             revUtils.addEventListener(me.closeButton, 'click', function () {
-                me.neverFloat = true;
+                me.floatSettings.landscape = false;//neverFloat = true;
+		me.floatSettings.portrait = false;
+		
                 me.player.pause();
                 me.unfloatPlayer();
             });
@@ -243,6 +251,8 @@
     PowrVideo.prototype.onUpdate = function() {
         if (this.currentContent >= this.videos.length)
             return;
+	if (!this.config.hasOwnProperty("tracking_url"))
+	    return;
         var video = this.videos[this.currentContent];
         var d = this.player.currentTime();
         d = (d * 1.0) / video.duration;
@@ -277,10 +287,12 @@
 
     PowrVideo.prototype.loadNextVideo = function() {
         var video = this.videos[this.currentContent];
-        if (video.tracking['end']) {
-            revApi.request(this.config.tracking_url + video.tracking['end'], function () { return ; });
-            video.tracking['end'] = null;
-        }
+	if (this.config.hasOwnProperty("tracking_url")) {
+            if (video.tracking['end']) {
+		revApi.request(this.config.tracking_url + video.tracking['end'], function () { return ; });
+		video.tracking['end'] = null;
+            }
+	}
         this.currentContent++;
         if (this.currentContent < this.videos.length) {
             this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), true);
@@ -302,12 +314,15 @@
     PowrVideo.prototype.floatPlayer = function() {
         if (this.floated)
             return;
-        if (this.neverFloat)
+        if (this.orientation == "portrait" && !this.floatSettings.portrait)
             return;
+	if (this.orientation == "landscape" && !this.floatSettings.landscape)
+	    return;
+	
         this.container.className = "rc-float-video powr_player";
         var styleString = "";
-        var fs = this.config.floatSettings;
-
+        var fs = this.floatSettings;
+	
         var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
         if (this.orientation == 'portrait') {
@@ -316,42 +331,37 @@
             this.player.fluid(false);
             this.player.dimensions(windowWidth, 176);
 
-            if (fs.headerId != null) {
-                var h = document.getElementById(fs.headerId);
-                this.oldZ = h.style.zIndex;
-                h.style.zIndex = 0;
-            }
             // this.closeButton.setAttribute("style", "margin-top : 166px; margin-left : " + (windowWidth - 60) + "px");
             this.closeButton.setAttribute("style", "margin-top : 0px; margin-left : " + (windowWidth - 50) + "px");
 
         } else {
             this.player.fluid(true);
-            if (fs.style.startsWith("top")) {
-                if (fs.header > 0) {
-                    styleString += "top : " + (fs.header) + "px;";
-                } else {
-                    styleString += "top : " + (fs.margin) + "px;";
-                }
+            if (fs.landscape_style.startsWith("top")) {
+                styleString += "top : 0px;";
             } else {
-                styleString += "bottom : " + fs.margin + "px;";
+                styleString += "bottom : 0px;";
             }
 
-            if (fs.style.endsWith("right")) {
-                styleString += "right : " + fs.margin + "px;";
+            if (fs.landscape_style.endsWith("right")) {
+                styleString += "right : 0px;";
             } else {
-                styleString += "left : " + fs.margin + "px;";
+                styleString += "left : 0px;";
             }
-
+	    
             var r = this.element.getBoundingClientRect();
             var w = windowWidth - r.right;
             w = w - 20;
-            w = Math.min(480, w);
+	    if (w < fs.min_width) {
+		w = fs.min_width;
+	    }
+	    if (w > fs.max_width) {
+		w = fs.max_width;
+	    }
             styleString += "width : " + w + "px;";
-
+	    
             var h = parseInt(0.5625 * w);
-            if (fs.style.startsWith("top")) {
-                this.closeButton.setAttribute("style", "margin-top : " + (h - 10) + "px;");
-            } else {
+            if (fs.landscape_style.startsWith("top")) {
+                this.closeButton.setAttribute("style", "margin-top : " + (h - 10) + "px;");            } else {
                 this.closeButton.setAttribute("style", "margin-left : " + (w - 100) + "px; margin-top : -30px;");
             }
         }
@@ -367,18 +377,12 @@
             this.container.removeAttribute("style");
             this.floated = false;
             this.player.fluid(true);
-
-            if (this.config.floatSettings.headerId != null) {
-                var h = document.getElementById(this.config.floatSettings.headerId);
-                h.style.zIndex = this.oldZ;
-            }
         }
     };
-
+    
     PowrVideo.prototype.setFixedHeight = function(h) {
         this.fixedHeight = h
     };
-
 
     PowrVideo.prototype.orientationChanged = function() {
         if (this.floated) {
@@ -395,31 +399,82 @@
     PowrVideo.prototype.checkVisible = function() {
         var that = this;
         requestAnimationFrame(function() {
+	    var ifs = that.config.iframeSettings;
+	    if (ifs.true) {
+		var element = window.parent.document.getElementById(ifs.id);
+		var windowHeight = window.parent.innerHeight || window.parent.document.documentElement.clientHeight || window.parent.document.body.clientHeight;
+		var elementHeight = element.getBoundingClientRect().height;
+		var elementTop = element.getBoundingClientRect().top;
+		var currentScroll = window.parent.pageYOffset || window.parent.document.documentElement.scrollTop || window.parent.document.body.scrollTop; 
+		
+		if (elementTop + elementHeight < 0) {
+		    if (that.visible) {
+			that.visible = false;
+			that.onHidden();
+		    }
+		    /*
+		    if (that.autoplaying && !that.player.paused()) {
+			that.player.pause();
+		    }
+		    */
+		} else if (elementTop + 30 < windowHeight) {
+		    if (!that.visible) {
+			that.visible = true;
+			that.onVisible();
+		    }
+		    /*
+		    if (that.autoplaying && that.player.paused()) {
+			that.player.play();
+		    }
+		    */
+		}
+		
+	    } else {
+		// what percentage of the element should be visible
+		// var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
+		// fire if within buffer
+		// var bufferPixels = (typeof buffer === 'number') ? buffer : 0;
+		var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+		var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+		var elementTop = that.element.getBoundingClientRect().top;
+		var elementBottom = that.element.getBoundingClientRect().bottom;
+		var elementVisibleHeight = that.element.offsetHeight * 0.50;
 
-            // what percentage of the element should be visible
-            // var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
-            // fire if within buffer
-            // var bufferPixels = (typeof buffer === 'number') ? buffer : 0;
-
-            var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-            var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-            var elementTop = that.element.getBoundingClientRect().top;
-            var elementBottom = that.element.getBoundingClientRect().bottom;
-            var elementVisibleHeight = that.element.offsetHeight * 0.50;
-
-            if ((elementTop + elementVisibleHeight) < windowHeight) {
-                that.registerView();
-            }
-
-            if (elementTop < 0 && (-1 * elementTop) > 0.2 * that.playerHeight) {
-                that.floatPlayer();
-            } else {
-                that.unfloatPlayer();
-            }
+		if (elementTop + that.playerHeight < 0) {
+		    if (that.visible) {
+			that.visible = false;
+			that.onHidden();
+		    }
+		} else if (elementTop + 30 < windowHeight) {
+		    if (!that.visible) {
+			that.visible = true;
+			that.onVisible();
+		    }
+		}
+		/*
+		if ((elementTop + elementVisibleHeight) < windowHeight) {
+                    that.registerView();
+		}
+		
+		if (elementTop < 0 && (-1 * elementTop) > 0.2 * that.playerHeight) {
+                    that.floatPlayer();
+		} else {
+                    that.unfloatPlayer();
+		}
+		*/
+	    }
         });
     };
 
+    PowrVideo.prototype.onVisible = function() {
+	this.registerView();
+	this.unfloatPlayer();
+    };
 
+    PowrVideo.prototype.onHidden = function() {
+	this.floatPlayer();
+    };
+    
     PowrVideo.prototype.adsManagerLoadedCallback = function() {
         var me = this;
         this.player.ima.addEventListener(google.ima.AdEvent.Type.STARTED, function () {
@@ -429,6 +484,8 @@
     };
 
     PowrVideo.prototype.registerView = function() {
+	if (!this.config.hasOwnProperty("tracking_url"))
+	    return;
         if (!this.viewed) {
             this.viewed = true;
             revApi.request(this.config.tracking_url + this.config.view_tracker, function() { return; });
@@ -445,7 +502,7 @@
 
     };
 
-        PowrVideo.prototype.onPlay = function() {
+    PowrVideo.prototype.onPlay = function() {
 
     };
 
@@ -463,5 +520,36 @@
         }
     };
 
+    PowrVideo.prototype.createFloatSettings = function() {
+	var c = this.config;
+	var ret = {
+	    "landscape" : false,
+	    "portrait" : false,
+	    "min_width" : 200,
+	    "max_width" : 400
+	};
+	if (!c.float) return ret;
+	if (c.float.desktop && c.float.desktop != "none") {
+	    ret.landscape = true;
+	    ret.landscape_style = c.float.desktop;
+	}
+	if (c.float.mobile && c.float.mobile != "none") {
+	    ret.portrait = true;
+	    ret.portrait_style = c.float.mobile;
+	}
+	return ret;
+    };
+
+    PowrVideo.prototype.createIframeSettings = function() {
+	var c = this.config;
+	var ret = {
+	    iframe : false
+	};
+	if (!c.iframe_id) return ret;
+	ret.iframe = true;
+	ret.id = c.iframe_id;
+	return ret;
+    };
+    
     return PowrVideo;
 }));

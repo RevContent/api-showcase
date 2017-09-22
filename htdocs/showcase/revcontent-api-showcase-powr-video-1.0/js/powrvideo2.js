@@ -516,7 +516,7 @@
 
     };
 
-        PowrVideo.prototype.onPlay = function() {
+    PowrVideo.prototype.onPlay = function() {
 
     };
 
