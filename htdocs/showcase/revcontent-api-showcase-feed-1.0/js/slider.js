@@ -703,6 +703,7 @@ Author: michael@revcontent.com
                     var html = like_b64 + comment_b64 + share_b64;
                 } else {
                     var html = like_b64;
+                    revUtils.addClass(reactionsContainer, 'rev-reactions-single');
                 }
 
                 reactionsContainer.innerHTML = '<div class="rev-reaction-bar">' + html + '</div>';
@@ -2238,7 +2239,7 @@ Author: michael@revcontent.com
         if (viewed) {
             url += '&viewed=true';
         }
-        
+
         return url;
     };
 
@@ -2633,10 +2634,10 @@ Author: michael@revcontent.com
                         var setUp = function(data) {
                             item.reactionData = data.d;
 
-                            var comments = document.createElement('div');
-                            revUtils.addClass(comments, 'rev-comments');
+                            var reactionsTotalElement = document.createElement('div');
+                            revUtils.addClass(reactionsTotalElement, 'rev-reactions-total');
 
-                            var reactionHtml = '<div class="rev-reactions-total"><div class="rev-reactions-total-inner">';
+                            var reactionHtml = '<div class="rev-reactions-total-inner">';
 
                             var reactionCountTotal = 0;
                             var zIndex = 100;
@@ -2660,30 +2661,40 @@ Author: michael@revcontent.com
 
                             reactionHtml += '<div ' + (!reactionCountTotal ? 'style="margin-left: 0;"' : '') + ' class="rev-reaction-count">'+ (reactionCountTotal ? reactionCountTotal : 'Be the first to react') +'</div>';
 
-                            reactionHtml += '</div></div>';
+                            reactionHtml += '</div>';
 
-                            var commentHtml = ''
+                            reactionsTotalElement.innerHTML = reactionHtml;
 
-                            if (itemData.comments && itemData.comments.length) {
-                                revUtils.addClass(comments, 'rev-has-comments');
+                            item.element.querySelector('.rev-content-inner').appendChild(reactionsTotalElement);
 
-                                var comment = comments[0];
+                            var mockComment = true;
+
+                            if ( (mockComment && item.type == 'internal') || (itemData.comments && itemData.comments.length)) {
+
+                                var commentsElement = document.createElement('div');
+                                revUtils.addClass(commentsElement, 'rev-comments');
+                                revUtils.addClass(commentsElement, 'rev-has-comments');
+
+                                var commentHtml = ''
+
+                                var comment = mockComment ? that.mockComments.espn[Math.floor(Math.random()*that.mockComments.espn.length)] : itemData.comments[0];
+
                                 commentHtml += '<div class="rev-comment">' +
-                                        '<div class="rev-comment-image" style="background-image:url('+ comment.comment_author_img +')">' +
+                                        '<div class="rev-comment-image" style="background-image:url('+ (mockComment ? comment.icon : comment.comment_author_img) +')">' +
                                             // '<?xml version="1.0" ?><!DOCTYPE svg  PUBLIC "-//W3C//DTD SVG 1.1//EN"  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" version="1.1" viewBox="0 0 4335 4335" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><style type="text/css"> <![CDATA[.fil0 {fill:black} ]]> </style></defs><g id="Layer_x0020_1"><path class="fil0" d="M2121 179c1065,0 1929,864 1929,1929 0,1065 -864,1929 -1929,1929 -1065,0 -1929,-864 -1929,-1929 0,-1065 864,-1929 1929,-1929zm1059 3099c-92,-307 -377,-1047 -982,-1047 -21,0 -40,1 -59,2 -19,-1 -38,-2 -59,-2 -622,0 -906,783 -989,1072 -335,-289 -548,-718 -548,-1195 0,-872 707,-1578 1578,-1578 872,0 1578,707 1578,1578 0,464 -200,881 -519,1170zm-1053 408c4,-4 8,-8 12,-13 4,4 8,8 12,12 -8,0 -16,0 -24,0zm12 -2806c293,0 530,269 530,601 0,332 -237,601 -530,601 -293,0 -530,-269 -530,-601 0,-332 237,-601 530,-601z"/></g></svg>' +
                                         '</div>' +
                                         '<div class="rev-comment-text">' +
-                                            '<span class="rev-comment-author">' + comment.comment_author + '</span>' +
+                                            '<span class="rev-comment-author">' + (mockComment ? comment.name : comment.comment_author) + '</span>' +
                                             ' · ' +
                                             '<span class="rev-comment-date">' + that.timeAgo(new Date(Date.now() - (random(120) * 60000)), true) + '</span>  ' + comment.comment +
                                         '</div>' +
                                     '</div>' +
                                     '</div>';
+
+                                commentsElement.innerHTML = commentHtml;
+
+                                item.element.querySelector('.rev-content-inner').appendChild(commentsElement);
                             }
-
-                            comments.innerHTML = reactionHtml + (item.type == 'internal' ? commentHtml : '');
-
-                            item.element.querySelector('.rev-content-inner').appendChild(comments);
 
                             that.setSize([item]);
 
