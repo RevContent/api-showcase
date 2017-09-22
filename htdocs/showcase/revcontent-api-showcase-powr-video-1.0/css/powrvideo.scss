@@ -31,9 +31,9 @@ body .powr_player .video-js .rc-video-overlay {
     text-align : left;
     border-radius : 0;
     width : 100%;
-    background: -moz-linear-gradient(top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 30%);
-    background: -webkit-linear-gradient(top, rgba(0,0,0,0.8) 0%,rgba(0,0,0,0.3) 30%);
-    background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%,rgba(0,0,0,0.3) 30%);
+    background: -moz-linear-gradient(top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0.0) 100%);
+    background: -webkit-linear-gradient(top, rgba(0,0,0,0.8) 0%,rgba(0,0,0,0.3) 30%, rgba(0,0,0,0) 100%);
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%,rgba(0,0,0,0.3) 30%, rgba(0,0,0,0) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#000000", endColorstr="#4d000000",GradientType=0 );
 
     -webkit-transition: visibility 1.5s, opacity 1.5s;
@@ -91,9 +91,19 @@ a.rc-video-close {
         display : none;
     }
 
+    .rc-float-video img {
+        max-height : 20px !important;
+        margin-right : 38px;
+        margin-top : -2px;
+    }
+
     .rc-float-video a.rc-video-close {
-        font-size : 30px;
+        font-size : 14px;
         padding-left : 10px;
         padding-right : 10px;
+        -webkit-border-radius: 30px;
+        -moz-border-radius: 30px;
+        border-radius: 30px;
+        margin-top : -3px !important;
     }
 }
