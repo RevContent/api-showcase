@@ -67,9 +67,18 @@
     };
 
     PowrVideo.prototype.getAdTag = function(videoId) {
-        return "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + this.config.tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
-            + "&cust_params=p_width%3D" + parseInt(this.playerWidth) + "%26p_height%3D" + parseInt(this.playerHeight)
-            + "&description_url=" + encodeURI("http://alpha.powr.com/video/" + videoId);
+	if (this.dfp) {
+            return "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + this.config.tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
+		+ "&cust_params=p_width%3D" + parseInt(this.playerWidth) + "%26p_height%3D" + parseInt(this.playerHeight)
+		+ "&description_url=" + encodeURI("http://alpha.powr.com/video/" + videoId);
+	} else {
+	    var tag = this.config.tag;
+	    tag = tag.replace("REFERRER_URL", encodeURI(window.location.href));
+	    tag = tag.replace("P_WIDTH", "" + parseInt(this.playerWidth));
+	    tag = tag.replace("P_HEIGHT", "" + parseInt(this.playerHeight));
+	    tag = tag.replace("CACHE_BUSTER", "" + new Date().getTime());
+	    return tag;
+	}
     };
 
     PowrVideo.prototype.init = function() {
@@ -116,7 +125,7 @@
         var newOrientation = '';
         if (windowWidth < windowHeight) {
             newOrientation = 'portrait';
-        } else if (windowWidth > windowHeight && this.orientation == 'portrait') {
+        } else if (windowWidth > windowHeight) {
             newOrientation = 'landscape';
         }
         if (newOrientation != this.orientation) {
@@ -399,7 +408,7 @@
     PowrVideo.prototype.checkVisible = function() {
         var that = this;
         requestAnimationFrame(function() {
-	    var ifs = that.config.iframeSettings;
+	    var ifs = that.iframeSettings;
 	    if (ifs.true) {
 		var element = window.parent.document.getElementById(ifs.id);
 		var windowHeight = window.parent.innerHeight || window.parent.document.documentElement.clientHeight || window.parent.document.body.clientHeight;
