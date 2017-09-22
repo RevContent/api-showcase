@@ -827,7 +827,7 @@ Author: michael@revcontent.com
 
                 if (iconName) {
 
-                    revApi.request('http://dv3-s1.revcontent.com/react.php?r=' + iconName + '&d=' + item.reactionData, function(data) {
+                    revApi.request( that.options.host + '/react.php?r=' + iconName + '&d=' + item.reactionData, function(data) {
                         return;
                     });
 
@@ -982,7 +982,7 @@ Author: michael@revcontent.com
 
                     var iconName = 'love';
 
-                    revApi.request('http://dv3-s1.revcontent.com/react.php?r=' + iconName + '&d=' + item.reactionData, function(data) {
+                    revApi.request( that.options.host + '/react.php?r=' + iconName + '&d=' + item.reactionData, function(data) {
                         return;
                     });
 
@@ -1018,7 +1018,7 @@ Author: michael@revcontent.com
                         return;
                     }
 
-                    revApi.request('http://dv3-s1.revcontent.com/react.php?r=' + iconName + '&d=' + item.reactionData, function(data) {
+                    revApi.request( that.options.host + '/react.php?r=' + iconName + '&d=' + item.reactionData, function(data) {
                         return;
                     });
 
@@ -2208,7 +2208,7 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.generateUrl = function(offset, count, empty, viewed, internal, below_article, fill) {
-        var url = (internal ? 'http://dv3-s1.revcontent.com/api/v1' : this.options.host ? this.options.host + '/api/v1' : this.options.url) +
+        var url = (this.options.host ? this.options.host + '/api/v1' : this.options.url) +
         '?api_key=' + this.options.api_key +
         this.getSerializedQueryParams() +
         '&pub_id=' + this.options.pub_id +
@@ -2690,7 +2690,7 @@ Author: michael@revcontent.com
                             that.grid.layout(3);
                         }
 
-                        revApi.xhr('https://dv3-s1.revcontent.com/api/v1/reactions/index.php?r=199&url=' + encodeURIComponent(itemData.url), function(data) {
+                        revApi.xhr(that.options.host + '/api/v1/reactions/index.php?r=199&url=' + encodeURIComponent(itemData.url), function(data) {
                             setUp(data);
                         }, function() {
                             setUp({d: false});
