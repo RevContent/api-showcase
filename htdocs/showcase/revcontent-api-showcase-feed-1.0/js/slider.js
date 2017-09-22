@@ -2208,7 +2208,7 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.generateUrl = function(offset, count, empty, viewed, internal, below_article, fill) {
-        var url = (this.options.host ? this.options.host + '/api/v1' : this.options.url) +
+        var url = (this.options.host ? this.options.host + '/api/v1/' : this.options.url) +
         '?api_key=' + this.options.api_key +
         this.getSerializedQueryParams() +
         '&pub_id=' + this.options.pub_id +
@@ -2238,7 +2238,7 @@ Author: michael@revcontent.com
         if (viewed) {
             url += '&viewed=true';
         }
-
+        
         return url;
     };
 
