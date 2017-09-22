@@ -2658,7 +2658,7 @@ Author: michael@revcontent.com
 
                             item.reactionCountTotal = reactionCountTotal;
 
-                            reactionHtml += '<div style="margin-left: 0;" class="rev-reaction-count">'+ (reactionCountTotal ? reactionCountTotal : 'Be the first to react') +'</div>';
+                            reactionHtml += '<div ' + (!reactionCountTotal ? 'style="margin-left: 0;"' : '') + ' class="rev-reaction-count">'+ (reactionCountTotal ? reactionCountTotal : 'Be the first to react') +'</div>';
 
                             reactionHtml += '</div></div>';
 
