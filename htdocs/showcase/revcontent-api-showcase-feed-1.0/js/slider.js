@@ -2667,7 +2667,7 @@ Author: michael@revcontent.com
 
                             item.element.querySelector('.rev-content-inner').appendChild(reactionsTotalElement);
 
-                            var mockComment = true;
+                            var mockComment = false;
 
                             if ( (mockComment && item.type == 'internal') || (itemData.comments && itemData.comments.length)) {
 
