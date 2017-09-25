@@ -30,11 +30,18 @@
      */
     var PowrVideo = function(config) {
         this.config = config;
+
+	this.mobile = false;
+        if (navigator.userAgent.match(/iPhone/i) ||
+            navigator.userAgent.match(/iPad/i) ||
+            navigator.userAgent.match(/Android/i)) {
+	    this.mobile = true;
+        }
 	
 	this.floatSettings = this.createFloatSettings();
 	this.iframeSettings = this.createIframeSettings();
+	this.autoplaySettings = this.createAutoplaySettings();
 	
-        this.fixedHeight = -1;
         this.element = document.getElementById(this.config.id);
 	
         this.playerId = "content_video";
@@ -113,34 +120,31 @@
     };
 
     PowrVideo.prototype.onResize = function() {
-        var width = this.element.clientWidth;
-        var height = this.fixedHeight;
-        if (height == -1) {
-            height = parseInt(0.5625 * width);
-        }
+	var width = this.element.clientWidth;
+        var height = parseInt(0.5625 * width);
+	
         this.element.setAttribute("style", "width : 100%; height : " + height + "px; background-color : #EFEFEF");
-
+	
         var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
         var windowWidth = window.innerWidth|| document.documentElement.clientWidth || document.body.clientWidth;
         var newOrientation = '';
         if (windowWidth < windowHeight) {
-            newOrientation = 'portrait';
+	    newOrientation = 'portrait';
         } else if (windowWidth > windowHeight) {
-            newOrientation = 'landscape';
+	    newOrientation = 'landscape';
         }
         if (newOrientation != this.orientation) {
-            this.orientation = newOrientation;
-            this.orientationChanged();
-        }
+	    this.orientation = newOrientation;
+	    this.orientationChanged();
+        } else {
+	    if (this.floated) {
+		this.floated = false;
+		this.floatPlayer();
+	    }
+	}
     }
 
     PowrVideo.prototype.setup = function () {
-        var mobile = false;
-        if (navigator.userAgent.match(/iPhone/i) ||
-            navigator.userAgent.match(/iPad/i) ||
-            navigator.userAgent.match(/Android/i)) {
-            mobile = true;
-        }
 
         this.container = document.createElement("div");
         this.container.className = 'powr_player';
@@ -158,26 +162,27 @@
         dumbPlayer.setAttribute('height', this.playerHeight + 'px');
         dumbPlayer.setAttribute("controls", "true");
         dumbPlayer.setAttribute("preload", "auto");
-        dumbPlayer.setAttribute("poster", this.videos[0].thumbnail);
+	if (!this.autoplaySettings.autoplay) {
+            dumbPlayer.setAttribute("poster", this.videos[0].thumbnail);
+	}
         dumbPlayer.setAttribute("playsinline", "true");
-        if (mobile && this.config.autoplay) {
+
+        if (this.autoplaySettings.autoplay && !this.autoplaySettings.audio) {
             dumbPlayer.setAttribute("muted", "true");
         }
+	
         var contentSrc = document.createElement('source');
         contentSrc.setAttribute('src', this.videos[0].sd_url);
         contentSrc.setAttribute('type', 'video/mp4');
         dumbPlayer.appendChild(contentSrc);
 
         this.container.appendChild(dumbPlayer);
-
-        // videojs.support.requestFullScreen = false;
-
         this.player = videojs(this.playerId, {
             nativeControlForTouch: false
         });
 
         this.currentContent = 0;
-	this.autoplaying = true;
+	this.autoplaying = this.autoplaySettings.autoplay;
         //
         //this.player.logobrand({
           //  image : this.config.custom_logo,
@@ -186,75 +191,62 @@
 
         var me = this;
 
-        //revUtils.addEventListener(window, 'scroll', function () {
-          //  if (me.player) {
-          //      me.player.muted(false);
-          //  }
-        // });
-        if (mobile && this.config.autoplay) {
-            this.player.one("touchend", function () {
+	// If we are autoplaying a muted version, let's toggle audio on first click
+        this.player.ready(this.onReady.bind(this));
+    };
+
+    PowrVideo.prototype.onReady = function() {
+	var me = this;
+	if (this.autoplaySettings.autoplay && !this.autoplaySettings.audio) {
+	    this.player.one("touchend", function () {
                 if (me.player && me.player.muted()) {
-                    me.player.muted(false);
+		    me.player.muted(false);
                 }
-            });
-            //revUtils.addEventListener(this.container, 'touchend', function () {
-            //
-            //});
+	    });
         }
-
-
-        this.player.ready(function () {
-            var titleContent = me.videos[0].title;
-            if (me.config.custom_logo) {
-                titleContent = "<a class='rc-video-close' href='javascript:void(0)' class='close'><span class='label'>CLOSE | </span>X</a><img src='" + me.config.custom_logo + "'><span class='rc-video-title'>" + titleContent + "</span>";
-            }
-
-            me.player.overlay({
-                align: "top",
-                showBackground: true,
-                class: "rc-video-overlay",
-                content: titleContent,
-                overlays: [{
-                    start: "custom1",
-                    end: "custom2"
-                }]
-            });
-            me.player.overlays_[0].show();
-            me.player.on('timeupdate', me.onUpdate.bind(me));
-
-            me.player.on('play', me.onPlay.bind(me));
-            me.player.on('pause', me.onPause.bind(me));
-            me.player.on('useractive', me.onActive.bind(me));
-            me.player.on('userinactive', me.onIdle.bind(me));
+	
+	this.player.controls(false);
+	
+	// Setup overlays
+        this.setupOverlays();
+	
+        this.player.on('timeupdate', this.onUpdate.bind(this));
+	
+        this.player.on('play', this.onPlay.bind(this));
+        this.player.on('pause', this.onPause.bind(this));
+        this.player.on('useractive', this.onActive.bind(this));
+        this.player.on('userinactive', this.onIdle.bind(this));
+	this.player.on('loadedmetadata', this.onMetadataLoaded.bind(this));
+	
+        GlobalPlayer = this;
+	
+        this.closeButton = this.container.querySelector(".rc-video-close");
+        this.titleDom = this.container.querySelector(".rc-video-title");
+	
+        revUtils.addEventListener(this.closeButton, 'click', function () {
+            me.floatSettings.landscape = false;//neverFloat = true;
+	    me.floatSettings.portrait = false;
 	    
-            GlobalPlayer = me;
-	    
-            me.closeButton = me.container.querySelector(".rc-video-close");
-            me.titleDom = me.container.querySelector(".rc-video-title");
-
-            revUtils.addEventListener(me.closeButton, 'click', function () {
-                me.floatSettings.landscape = false;//neverFloat = true;
-		me.floatSettings.portrait = false;
-		
-                me.player.pause();
-                me.unfloatPlayer();
-            });
-//            if (navigator.userAgent.match(/iPhone/i) ||
-//                navigator.userAgent.match(/iPad/i) ||
-//                navigator.userAgent.match(/Android/i)) {
-//                me.player.one('touchend', function () {
-//                    me.start(true);
-//                    me.player.play();
-//                });
-//            } else {
-            me.start(me.config.autoplay);
-            if (!me.config.autoplay) {
-                me.player.one('click', function () {
-                    me.player.play();
-                });
-            }
-//            }
+            me.player.pause();
+            me.unfloatPlayer();
         });
+	
+	if (me.autoplaySettings.autoplay) {
+	    this.player.bigPlayButton.hide();
+	    this.player.loadingSpinner.lockShowing();
+	    this.start(true);
+	} else {
+	    me.player.one('click', function() {
+		me.start(true);
+	    });
+	}
+	/*
+          if (!me.autoplaySettings.) {
+          me.player.one('click', function () {
+          me.player.play();
+          });
+          }
+	*/
     };
 
     PowrVideo.prototype.onUpdate = function() {
@@ -284,7 +276,9 @@
         this.player.ima(this.options, this.bind(this, this.adsManagerLoadedCallback));
         this.player.ima.initializeAdDisplayContainer();
         this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), playOnLoad);
-        this.player.poster(this.videos[this.currentContent].thumbnail);
+	if (!this.autoplaySettings.autoplay) {
+            this.player.poster(this.videos[this.currentContent].thumbnail);
+	}
 
         this.player.ima.requestAds();
 
@@ -305,7 +299,7 @@
         this.currentContent++;
         if (this.currentContent < this.videos.length) {
             this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), true);
-            this.player.poster(this.videos[this.currentContent].thumbnail);
+            // this.player.poster(this.videos[this.currentContent].thumbnail);
             var titleContent = this.videos[this.currentContent].title;
             // this.player.overlays_[0].contentEl().innerHTML = titleContent;
             this.titleDom.innerHTML = titleContent;
@@ -387,10 +381,6 @@
             this.floated = false;
             this.player.fluid(true);
         }
-    };
-    
-    PowrVideo.prototype.setFixedHeight = function(h) {
-        this.fixedHeight = h
     };
 
     PowrVideo.prototype.orientationChanged = function() {
@@ -488,6 +478,7 @@
         var me = this;
         this.player.ima.addEventListener(google.ima.AdEvent.Type.STARTED, function () {
             me.player.removeClass('vjs-ad-loading');
+	    me.player.loadingSpinner.unlockShowing();
         });
         this.player.ima.startFromReadyCallback();
     };
@@ -501,14 +492,55 @@
         }
     };
 
+    PowrVideo.prototype.getTitleContent = function() {
+	var titleContent = "<a class='rc-video-close' href='javascript:void(0)' class='close'><span class='label'>CLOSE | </span>X</a>";
+	if (this.config.custom_logo) {
+	    titleContent += "<img src='" + this.config.custom_logo + "'>";
+	}
+	if (this.currentContent < this.videos.length) {
+	    titleContent += "<span class='rc-video-title'>" + this.videos[this.currentContent].title + "</span>";
+	}
+	return titleContent;
+    };
+    
+    PowrVideo.prototype.setupOverlays = function() {
+	
+	this.player.overlay({
+            align: "top",
+            showBackground: true,
+            class: "rc-video-overlay",
+            content: this.getTitleContent(),
+            overlays: [{
+                start: "custom1",
+                end: "custom2"
+            }, {
+		start : "custom1",
+		end : "custom2",
+		content : "<img src='./img/play.png'>",
+		showBackground : false,
+		class : "rc-play-button"
+	    }, {
+		start : "custom1",
+		end : "custom2",
+		content : "<img src='./img/pause.png'>",
+		showBackground : false,
+	    }]
+        });
+	
+	this.titleOverlay = this.player.overlays_[0];
+	this.playOverlay = this.player.overlays_[1];
+	this.titleOverlay.show();
+	this.playOverlay.hide();
+    };
+
     PowrVideo.prototype.bind = function(thisObj, fn, argument) {
         return function() {
             fn.apply(thisObj, [argument]);
         };
     };
 
-    PowrVideo.prototype.onAdEvent = function (event) {
-
+    PowrVideo.prototype.onMetadataLoaded = function() {
+	this.player.loadingSpinner.unlockShowing();
     };
 
     PowrVideo.prototype.onPlay = function() {
@@ -534,7 +566,7 @@
 	var ret = {
 	    "landscape" : false,
 	    "portrait" : false,
-	    "min_width" : 200,
+	    "min_width" : 400,
 	    "max_width" : 400
 	};
 	if (!c.float) return ret;
@@ -557,6 +589,36 @@
 	if (!c.iframe_id) return ret;
 	ret.iframe = true;
 	ret.id = c.iframe_id;
+	return ret;
+    };
+
+    PowrVideo.prototype.createAutoplaySettings = function() {
+	var c = this.config;
+	var ret = {
+	    "autoplay" : false,
+	    "focus" : false,
+	    "audio" : false
+	};
+	if (typeof c.autoplay == "string") {
+	    if (c.autoplay == "none") return ret;
+	    ret.autoplay = true;
+	    if (c.autoplay == "load") {
+		ret.audio = !this.mobile;
+		return ret;
+	    }
+	    if (c.autoplay == "focus") {
+		ret.focus = true;
+		ret.audio = false;
+		return ret;
+	    }
+	} else {
+	    if (this.mobile) {
+		ret = c.autoplay.mobile;		
+	    } else {
+		ret = c.autoplay.desktop;
+	    }
+	}
+	
 	return ret;
     };
     
