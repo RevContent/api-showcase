@@ -399,50 +399,18 @@
 
    <!-- /. Fake Page Content -->
 
-    <!-- <script src="/build/files/feed2/revfeed2.pkgd.js"></script> -->
-    <script src="/build/revfeed2.min.js"></script>
+    <!-- <script src="/build/files/feed/revfeed.pkgd.js"></script> -->
+    <script src="/build/revfeed.min.js"></script>
 
     <script>
-        var below_article = true;
-
         var shifter = new RevFeed({
-            mock: 'newsweek',
-            host: 'http://localhost:8081',
+            host: 'https://dv3-s1.revcontent.com',
             id: 'grid',
             api_key : '092645d78e0a24a60169cd50fbbcea43e7b0f506',
             pub_id : 3887,
             widget_id : 27826,
             domain : 'newsweek.com',
-            column_spans: below_article ? [
-                {
-                    selector: '.rev-content-header, .rev-content',
-                    spans: 6
-                },
-                {
-                    selector: '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(-n+9)',
-                    spans: 2
-                },
-            ] : [
-                {
-                    selector: '.rev-content',
-                    spans: 6
-                },
-            ],
-            image_ratio: below_article ? [
-                {
-                    selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-content:nth-child(n+10)',
-                    ratio: '6:3'
-                }
-            ] : [
-                {
-                    selector: '.rev-content',
-                    ratio: '6:3'
-                }
-            ],
-            internal_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(3n + 4), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(3n + 5), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(3n+10), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(3n+11)' :
-                '.rev-content:nth-child(3n+1), .rev-content:nth-child(3n+2)',
-            meta_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(n+10)' : '.rev-content',
-            reactions_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(n+10)' : '.rev-content',
+            below_article: false
         });
     </script>
 

@@ -60,48 +60,55 @@ Author: michael@revcontent.com
             infinite: true,
             column_spans: below_article ? [
                 {
-                    selector: '.rev-content-header, .rev-content',
+                    selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+10), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+11)',
                     spans: 6
                 },
                 {
                     selector: '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(-n+9)',
                     spans: 2
                 },
+                {
+                    selector: '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+12), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+13)',
+                    spans: 3
+                }
             ] : [
                 {
-                    selector: '.rev-content-header, .rev-content',
+                    selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+1), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+2)',
                     spans: 6
                 },
+                {
+                    selector: '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+3), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+4)',
+                    spans: 3
+                }
             ],
             image_ratio: below_article ? [
                 {
-                    selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-content:nth-child(n+10)',
+                    selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+10), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+11)',
                     ratio: '6:3'
                 }
             ] : [
                 {
-                    selector: '.rev-content',
-                    ratio: '12:6'
+                    selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+1), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+2)',
+                    ratio: '6:3'
                 }
             ],
-            header_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(3n + 6),' +
-                ' .rev-slider-breakpoint-gt-xs .rev-content:nth-child(3n+12)' :
-                '.rev-content:nth-child(4n + 2)', // goes after this selector
+            header_selector: false,
             internal_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(3n + 4), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(3n + 5),' +
-                '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(3n+10), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(3n+11)' :
-                '.rev-content:nth-child(4n+1), .rev-content:nth-child(4n+2)',
-            reactions_selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(n+10)',
-            meta_selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(n+10)',
+                '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+10), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+11)' :
+                '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(3n + 1), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(3n + 2), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+1), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+2)',
+            reactions_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(n+10)' : '.rev-content',
+            meta_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(n+10)' : '.rev-content',
             headline_top_selector: false,
             // headline_icon_selector: '.rev-content:nth-child(4n+10), .rev-content:nth-child(4n+11)',
             // headline_icon_selector: '.rev-content',
             viewable_percentage: 50,
             buffer: 500,
-            header_logo: false,
+            brand_logo: false,
             window_width_devices: [
                 'phone'
             ],
-            mock: false
+            mock: false,
+            comment_div: false
         };
 
         // merge options
@@ -226,7 +233,8 @@ Author: michael@revcontent.com
             register_views: false,
             row_pages: true,
             visible_rows: 1,
-            header_logo: this.options.header_logo,
+            brand_logo: this.options.brand_logo,
+            comment_div: this.options.comment_div,
             developer: this.options.developer,
             internal_selector: this.options.internal_selector,
             header_selector: this.options.header_selector,
