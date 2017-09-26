@@ -108,7 +108,8 @@ Author: michael@revcontent.com
                 'phone'
             ],
             mock: false,
-            comment_div: false
+            comment_div: false,
+            reaction_id: 299
         };
 
         // merge options
@@ -235,6 +236,7 @@ Author: michael@revcontent.com
             visible_rows: 1,
             brand_logo: this.options.brand_logo,
             comment_div: this.options.comment_div,
+            reaction_id: this.options.reaction_id,
             developer: this.options.developer,
             internal_selector: this.options.internal_selector,
             header_selector: this.options.header_selector,

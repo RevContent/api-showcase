@@ -140,7 +140,7 @@ Author: michael@revcontent.com
             brand_logo: false,
             comment_div: false,
             window_width_enabled: false,
-            reactions: [ 'love', 'laugh', 'cool', 'idiotic', 'sad', 'angry' ],
+            reactions: [ 'love', 'exciting', 'interesting', 'idiotic', 'sad', 'angry' ],
             initial_icon_colors: [
                 'EF5350',
                 'F06292',
@@ -161,7 +161,8 @@ Author: michael@revcontent.com
                 'A1887F',
                 'E0E0E0',
                 '90A4AE'
-            ]
+            ],
+            reaction_id: 5
         };
 
          this.mockComments = {
@@ -562,6 +563,10 @@ Author: michael@revcontent.com
         }
     };
 
+    RevSlider.prototype.milliFormatter = function(value) {
+        return value > 999 ? (value/1000).toFixed(1) + 'k' : value
+    }
+
     RevSlider.prototype.createRows = function(grid, rows, initial) {
         var i = 0; // just in case
         var limit = 0;
@@ -573,11 +578,6 @@ Author: michael@revcontent.com
 
         var random = function(max) {
             return (Math.floor(Math.random() * (max - 30 + 1)) + 30).toLocaleString();
-        }
-
-        function kFormatter(max) {
-            var random = (Math.floor(Math.random() * (max - 30 + 1)) + 30)
-            return random > 999 ? (random/1000).toFixed(1) + 'k' : random
         }
 
         while (grid.nextRow < rows && i < 100) {
@@ -673,11 +673,11 @@ Author: michael@revcontent.com
                         '<div class="rev-reaction-menu">' +
                             '<div class="rev-reaction-icon">' +
                                 '<div class="rev-reaction-menu-container">' +
-                                    '<div class="rev-reaction-menu-item rev-reaction-menu-item-count"><div class="rev-reaction-menu-item-count-inner">'+ kFormatter(10000) +'</div></div>' +
+                                    '<div class="rev-reaction-menu-item rev-reaction-menu-item-count rev-reaction-menu-item-count-pos"><div class="rev-reaction-menu-item-count-inner"></div></div>' +
                                     '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="'+ this.options.reactions[0] +'"><div data-icon="' + this.options.reactions[0] + '" class="rev-reaction-menu-item-icon"></div></div>' +
                                     '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[1] + '"><div data-icon="' + this.options.reactions[1] + '" class="rev-reaction-menu-item-icon"></div></div>' +
                                     '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[2] + '"><div data-icon="' + this.options.reactions[2] + '" class="rev-reaction-menu-item-icon"></div></div>' +
-                                    '<div class="rev-reaction-menu-item rev-reaction-menu-item-count"><div class="rev-reaction-menu-item-count-inner">'+ kFormatter(1000) +'</div></div>' +
+                                    '<div class="rev-reaction-menu-item rev-reaction-menu-item-count rev-reaction-menu-item-count-neg"><div class="rev-reaction-menu-item-count-inner"></div></div>' +
                                     '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[3] + '"><div data-icon="' + this.options.reactions[3] + '" class="rev-reaction-menu-item-icon"></div></div>' +
                                     '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[4] + '"><div data-icon="' + this.options.reactions[4] + '" class="rev-reaction-menu-item-icon"></div></div>' +
                                     '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[5] + '"><div data-icon="' + this.options.reactions[5] + '" class="rev-reaction-menu-item-icon"></div></div>' +
@@ -802,9 +802,9 @@ Author: michael@revcontent.com
                 recognizers: [
                     [
                         Hammer.Press,
-                        // {
-
-                        // }
+                        {
+                            time: 200
+                        }
                     ],
                     [
                         Hammer.Tap,
@@ -918,7 +918,7 @@ Author: michael@revcontent.com
                     ev.stopPropagation();
                     revUtils.removeClass(item.element, 'rev-user-select-none');
                     revUtils.removeClass(item.element, 'rev-menu-active');
-                    
+
                     // ev.preventDefault(); // TODO
                     revUtils.removeEventListener(window, 'touchstart', listener);
                 };
@@ -934,7 +934,7 @@ Author: michael@revcontent.com
 
                 that.likeReactionIconShowTimeout = setTimeout(function() {
                     revUtils.addClass(item.element, 'rev-menu-active');
-                }, 500);
+                }, 400);
             });
 
             revUtils.addEventListener(likeReactionElement, 'mouseleave', function(ev) {
@@ -944,8 +944,8 @@ Author: michael@revcontent.com
                     revUtils.removeClass(likeReactionElement, 'rev-reaction-icon-active');
                     that.likeReactionIconHideTimeoutInner = setTimeout(function() {
                         revUtils.removeClass(item.element, 'rev-menu-active');
-                    }, 400);
-                }, 450);
+                    }, 600);
+                }, 150);
             });
 
             revUtils.addEventListener(item.element.querySelector('.rev-reaction-menu-container'), 'click', function(ev) {
@@ -994,7 +994,7 @@ Author: michael@revcontent.com
                         if (icons) {
                             iconTotal = icons.length;
                         }
-                        
+
                         item.element.querySelector('.rev-reactions-total-inner').insertAdjacentHTML('afterbegin', '<div style="z-index:' + (100 + iconTotal) + ';" class="rev-reaction rev-reaction-'+ iconName +'"><div class="rev-reaction-inner"><div class="rev-reaction-icon rev-reaction-icon-'+ iconName +'"></div></div></div>');
                     }
 
@@ -1047,6 +1047,14 @@ Author: michael@revcontent.com
                             iconTotal = icons.length;
                         }
                         item.element.querySelector('.rev-reactions-total-inner').insertAdjacentHTML('afterbegin', '<div style="z-index:' + (100 + iconTotal) + ';" class="rev-reaction rev-reaction-'+ iconName +'"><div class="rev-reaction-inner"><div class="rev-reaction-icon rev-reaction-icon-'+ iconName +'"></div></div></div>');
+                    }
+
+                    if (that.options.reactions.indexOf(iconName) < 3) {
+                        item.reactionCountTotalPos++;
+                        item.element.querySelector('.rev-reaction-menu-item-count-pos .rev-reaction-menu-item-count-inner').innerText = that.milliFormatter(item.reactionCountTotalPos);
+                    } else {
+                        item.reactionCountTotalNeg++;
+                        item.element.querySelector('.rev-reaction-menu-item-count-neg .rev-reaction-menu-item-count-inner').innerText = that.milliFormatter(item.reactionCountTotalNeg);
                     }
 
                     if (item.reactionCountTotal === 0) {
@@ -2577,7 +2585,7 @@ Author: michael@revcontent.com
                                         }
                                         this.initialColors[initials] = initialColor;
                                     }
-                                    favicon.innerHTML = '<div style="background-color:#'+ initialColor +'" class="rev-author-initials">'+ initials +'</div>';                                                                
+                                    favicon.innerHTML = '<div style="background-color:#'+ initialColor +'" class="rev-author-initials">'+ initials +'</div>';
                                 }
                             }
 
@@ -2633,6 +2641,7 @@ Author: michael@revcontent.com
                         }
 
                         var setUp = function(data) {
+
                             item.reactionData = data.d;
 
                             var reactionsTotalElement = document.createElement('div');
@@ -2641,13 +2650,28 @@ Author: michael@revcontent.com
                             var reactionHtml = '<div class="rev-reactions-total-inner">';
 
                             var reactionCountTotal = 0;
+                            var reactionCountTotalPos = 0;
+                            var reactionCountTotalNeg = 0;
                             var zIndex = 100;
+
+                            var positiveReactions = that.options.reactions.slice(0, 3);
+                            var negativeReactions = that.options.reactions.slice(3)
+
                             for (var reactionCounter = 0; reactionCounter < that.options.reactions.length; reactionCounter++) {
 
                                 // console.log('here');
                                 var reaction = that.options.reactions[reactionCounter];
                                 var reactionCount = data[reaction];
+
+                                // console.log(reactionCounter);
                                 if (reactionCount) {
+
+                                    if (reactionCounter < 3) {
+                                        reactionCountTotalPos += reactionCount;
+                                    } else {
+                                        reactionCountTotalNeg += reactionCount;
+                                    }
+
                                     reactionCountTotal += reactionCount;
                                     reactionHtml += '<div style="z-index:'+ zIndex +';" class="rev-reaction rev-reaction-' + reaction + '">' +
                                             '<div class="rev-reaction-inner">' +
@@ -2657,8 +2681,12 @@ Author: michael@revcontent.com
                                     zIndex--;
                                 }
                             }
-
+                            item.reactionCountTotalPos = reactionCountTotalPos;
+                            item.reactionCountTotalNeg = reactionCountTotalNeg;
                             item.reactionCountTotal = reactionCountTotal;
+
+                            item.element.querySelector('.rev-reaction-menu-item-count-pos .rev-reaction-menu-item-count-inner').innerText = that.milliFormatter(reactionCountTotalPos);
+                            item.element.querySelector('.rev-reaction-menu-item-count-neg .rev-reaction-menu-item-count-inner').innerText = that.milliFormatter(reactionCountTotalNeg);
 
                             reactionHtml += '<div ' + (!reactionCountTotal ? 'style="margin-left: 0;"' : '') + ' class="rev-reaction-count">'+ (reactionCountTotal ? reactionCountTotal : 'Be the first to react') +'</div>';
 
@@ -2702,7 +2730,7 @@ Author: michael@revcontent.com
                             that.grid.layout(3);
                         }
 
-                        revApi.xhr(that.options.host + '/api/v1/reactions/index.php?r=199&url=' + encodeURIComponent(itemData.url), function(data) {
+                        revApi.xhr(that.options.host + '/api/v1/reactions/index.php?r='+ that.options.reaction_id +'&url=' + encodeURIComponent(itemData.url), function(data) {
                             setUp(data);
                         }, function() {
                             setUp({d: false});
