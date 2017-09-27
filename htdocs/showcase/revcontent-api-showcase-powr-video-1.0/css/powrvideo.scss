@@ -44,7 +44,7 @@ body .powr_player .video-js .rc-video-overlay {
 }
 
 body .powr_player .video-js .rc-video-overlay img {
-    max-height : 30px;
+    max-height : 20px;
     float : right;
 }
 
@@ -71,7 +71,7 @@ a.rc-video-close {
 
 .rc-float-video {
     position : fixed;
-    z-index : 100000000000;
+    z-index : 1000000000000000;
     box-shadow: 0px 0px 4px #888888;
 }
 
@@ -84,6 +84,16 @@ a.rc-video-close {
     font-weight : bold;
     font-size : 13px;
     z-index : 100;
+}
+
+.rc-play-button {
+    
+}
+
+.rc-volume-button {
+    width : 64px !important;
+    right : 10px !important;
+    bottom : 10px !important;
 }
 
 @media (orientation: portrait) {
