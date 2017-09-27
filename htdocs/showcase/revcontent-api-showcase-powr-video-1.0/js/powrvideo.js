@@ -149,15 +149,38 @@
 	    }
 	}
 	if (this.player) {
-	    var x = this.player.width()/2 - 64;
-	    var y = this.player.height()/2 - 64;
+	    var w = this.getPlayerWidth();
+	    var h = this.getPlayerHeight();
+	    var x = w/2 - 64;
+	    var y = h/2 - 64;
 
 	    var playDom = this.playOverlay.contentEl();
 	    var pauseDom = this.pauseOverlay.contentEl();
 	    playDom.setAttribute("style", "left : " + x + "px; bottom : " + y + "px; top : auto;");
 	    pauseDom.setAttribute("style", "left : " + x + "px; bottom : " + y + "px; top : auto;"); 
 	}
-    }
+    };
+
+    PowrVideo.prototype.getPlayerHeight = function() {
+	if (this.floated) {
+	    if (this.orientation == "portrait") return 176;
+	    else return this.container.getBoundingClientRect().height;
+	} else {
+	    return this.element.getBoundingClientRect().height;
+	}
+    };
+    
+    PowrVideo.prototype.getPlayerWidth = function() {
+	if (this.floated) {
+	    if (this.orientation == "portrait") {
+		return window.innerWidth|| document.documentElement.clientWidth || document.body.clientWidth;
+	    } else {
+		return this.container.getBoundingClientRect().width;
+	    }
+	} else {
+	    return this.element.getBoundingClientRect().width;
+	}
+    };
 
     PowrVideo.prototype.setup = function () {
 
@@ -421,6 +444,7 @@
             this.container.removeAttribute("style");
             this.floated = false;
             this.player.fluid(true);
+
 	    this.onResize(false);
         }
     };
@@ -537,28 +561,28 @@
             }, {
 		start : "custom1",
 		end : "custom2",
-		content : "<img src='./img/play-orange.png'>",
+		content : "",
 		showBackground : false,
 		class : "rc-play-button"
 	    }, {
 		start : "custom1",
 		end : "custom2",
-		content : "<img src='./img/pause-orange.png'>",
+		content : "",
 		showBackground : false,
-		class : "rc-play-button"
+		class : "rc-pause-button"
 	    }, {
 		start : "custom1",
 		end : "custom2",
-		content : "<img src='./img/volume_on.png'>",
+		content : "",
 		showBackground : false,
-		class : "rc-volume-button",
+		class : "rc-volume-on-button",
 		align : "bottom-right"
 	    }, {
 		start : "custom1",
 		end : "custom2",
-		content : "<img src='./img/volume_off.png'>",
+		content : "",
 		showBackground : false,
-		class : "rc-volume-button",
+		class : "rc-volume-off-button",
 		align : "bottom-right"
 	    }]
         });
