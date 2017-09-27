@@ -58,7 +58,8 @@
 	    this.playerHeight = 0.5625 * this.playerWidth;
 	}
 
-        this.element.setAttribute("style", "width: 100%; height : " + parseInt(this.playerHeight) + "px; background-color : #EFEFEF;");
+	this.element.setAttribute("style", "width: " + parseInt(this.playerWidth) + "px; height : " + parseInt(this.playerHeight) + "px; background-color : #EFEFEF;");
+        // this.element.setAttribute("style", "width: 100%; height : " + parseInt(this.playerHeight) + "px; background-color : #EFEFEF;");
 
         this.videos = config.videos;
         this.currentContent = 0;
@@ -121,11 +122,14 @@
         revUtils.append(this.element, imaScript);
     };
 
-    PowrVideo.prototype.onResize = function() {
+    PowrVideo.prototype.onResize = function(shouldFloat) {
 	var width = this.element.clientWidth;
         var height = parseInt(0.5625 * width);
-	
-        this.element.setAttribute("style", "width : 100%; height : " + height + "px; background-color : #EFEFEF");
+	if (this.config.fluid) {
+	    height = this.element.clientHeight;
+	}
+
+        this.element.setAttribute("style", "width : " + width + "px; height : " + height + "px; background-color : #EFEFEF");
 	
         var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
         var windowWidth = window.innerWidth|| document.documentElement.clientWidth || document.body.clientWidth;
@@ -139,7 +143,7 @@
 	    this.orientation = newOrientation;
 	    this.orientationChanged();
         } else {
-	    if (this.floated) {
+	    if (shouldFloat && this.floated) {
 		this.floated = false;
 		this.floatPlayer();
 	    }
@@ -162,9 +166,9 @@
         this.element.appendChild(this.container);
 
         this.attachVisibleListener();
-        revUtils.addEventListener(window, 'resize', this.onResize.bind(this));
+        revUtils.addEventListener(window, 'resize', this.onResize.bind(this, true));
         this.orientation = 'none';
-        this.onResize();
+        this.onResize(true);
 
         var dumbPlayer = document.createElement('video');
         dumbPlayer.id = this.playerId;
@@ -214,8 +218,12 @@
 	// Setup overlays
         this.setupOverlays();
 
+	if (this.config.fluid) {
+	    this.player.fluid(false);
+	}
+	
 	// Manually invoke resize so it sts up play/apuse buttons.
-	this.onResize();
+	this.onResize(true);
 	
 	if (this.controlSettings.type == "custom") {
 	    if (!this.autoplaySettings.autoplay) {
@@ -338,7 +346,12 @@
     };
 
     PowrVideo.prototype.attachVisibleListener = function() {
-        revUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
+	if (this.iframeSettings.iframe) {
+            revUtils.addEventListener(window.parent, 'scroll', this.checkVisible.bind(this));
+	} else {
+	    revUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
+	}
+        // revUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
         this.checkVisible();
     };
 
@@ -399,7 +412,7 @@
 
         this.container.setAttribute("style", styleString);
         this.floated = true;
-	this.onResize();
+	this.onResize(false);
     };
 
     PowrVideo.prototype.unfloatPlayer = function() {
@@ -408,7 +421,7 @@
             this.container.removeAttribute("style");
             this.floated = false;
             this.player.fluid(true);
-	    this.onResize();
+	    this.onResize(false);
         }
     };
 
