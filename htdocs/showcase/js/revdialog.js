@@ -141,6 +141,9 @@
     };
 
     RevDialog.prototype.showDialog = function(injectedDialog) {
+        if (this.grid) {
+            this.grid.unbindResize();
+        }
         var that = injectedDialog || this;
         that.render().style.display = 'block';
         that.centerDialog();
@@ -150,6 +153,9 @@
     RevDialog.prototype.closeDialog = function() {
         document.body.style.overflow = this.bodyOverflow;
         this.element.style.display = 'none';
+        if (this.grid) {
+            this.grid.bindResize();
+        }
         // make sure we are ready for the about dialog if opened again
         this.setActive('about');
         return false;

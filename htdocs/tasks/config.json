@@ -203,6 +203,41 @@
       "./showcase/revcontent-api-showcase-shifter-2.0/css/*"
     ]
   },
+  "feed": {
+    "name": "rev-feed",
+    "description": "Content Feed",
+    "homepage": "http://labs.revcontent.com",
+    "version": "0.1.0",
+    "js": "./showcase/revcontent-api-showcase-feed-1.0/js/revfeed.js",
+    "css": [
+      "./showcase/revcontent-api-showcase-feed-1.0/css/revfeed.scss",
+      "./showcase/css/revdialog.css"
+    ],
+    "build": [
+      "./node_modules/es6-promise/dist/es6-promise.js",
+      "./node_modules/hammerjs/hammer.js",
+      "./node_modules/fontfaceobserver/fontfaceobserver.standalone.js",
+      "./node_modules/mobile-detect/mobile-detect.js",
+      "./showcase/revcontent-api-showcase-feed-1.0/node_modules/any-grid/dist/any-grid.js",
+      "./showcase/js/requestAnimationFrame.js",
+      "./showcase/js/revoverlay.js",
+      "./showcase/js/revutils.js",
+      "./showcase/js/revdialog.js",
+      "./showcase/js/revdisclose.js",
+      "./showcase/js/revdetect.js",
+      "./showcase/js/revbeacon.js",
+      "./showcase/js/revapi.js",
+      "./showcase/revcontent-api-showcase-feed-1.0/js/slider.js",
+      "./build/files/feed/revfeed.embed.js"
+    ],
+    "watch": [
+      "./showcase/js/*",
+      "./showcase/css/*",
+      "./showcase/revcontent-api-showcase-feed-1.0/node_modules/any-grid/dist/any-grid.js",
+      "./showcase/revcontent-api-showcase-feed-1.0/js/*",
+      "./showcase/revcontent-api-showcase-feed-1.0/css/*"
+    ]
+  },
   "side-shifter": {
     "name": "rev-side-shifter",
     "description": "Content Side Shifter",
