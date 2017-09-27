@@ -218,12 +218,18 @@
 	this.onResize();
 	
 	if (this.controlSettings.type == "custom") {
-	    if (this.autoplaySettings.autoplay) {
-		this.pauseOverlay.show();
-	    } else {
+	    if (!this.autoplaySettings.autoplay) {
 		this.playOverlay.show();
+		
 	    }
-	} 
+	}
+	if (this.controlSettings.type == "none") {
+	    if (this.autoplaySettings.audio) {
+		this.volumeOnOverlay.show();
+	    } else {
+		this.volumeOffOverlay.show();
+	    }
+	}
 	
         this.player.on('timeupdate', this.onUpdate.bind(this));
 	
@@ -392,8 +398,8 @@
         }
 
         this.container.setAttribute("style", styleString);
-
         this.floated = true;
+	this.onResize();
     };
 
     PowrVideo.prototype.unfloatPlayer = function() {
@@ -402,6 +408,7 @@
             this.container.removeAttribute("style");
             this.floated = false;
             this.player.fluid(true);
+	    this.onResize();
         }
     };
 
@@ -529,7 +536,14 @@
 	    }, {
 		start : "custom1",
 		end : "custom2",
-		content : "<img src='./img/volume-on.png'>",
+		content : "<img src='./img/volume_on.png'>",
+		showBackground : false,
+		class : "rc-volume-button",
+		align : "bottom-right"
+	    }, {
+		start : "custom1",
+		end : "custom2",
+		content : "<img src='./img/volume_off.png'>",
 		showBackground : false,
 		class : "rc-volume-button",
 		align : "bottom-right"
@@ -539,17 +553,21 @@
 	this.titleOverlay = this.player.overlays_[0];
 	this.playOverlay = this.player.overlays_[1];
 	this.pauseOverlay = this.player.overlays_[2];
-	this.volumeOverlay = this.player.overlays_[3];
+	this.volumeOnOverlay = this.player.overlays_[3];
+	this.volumeOffOverlay = this.player.overlays_[4];
 	this.titleOverlay.show();
 	this.playOverlay.hide();
 	this.pauseOverlay.hide();
-	this.volumeOverlay.hide();
+	this.volumeOnOverlay.hide();
+	this.volumeOffOverlay.hide();
 	
 	var ce = 'click';
 	if (this.mobile) ce = 'touchend';
 
 	revUtils.addEventListener(this.playOverlay.contentEl(), ce, this.onCustomPlay.bind(this));
 	revUtils.addEventListener(this.pauseOverlay.contentEl(), ce, this.onCustomPause.bind(this));
+	revUtils.addEventListener(this.volumeOnOverlay.contentEl(), ce, this.onCustomVolumeOn.bind(this));
+	revUtils.addEventListener(this.volumeOffOverlay.contentEl(), ce, this.onCustomVolumeOff.bind(this));
     };
 
     PowrVideo.prototype.bind = function(thisObj, fn, argument) {
@@ -574,9 +592,12 @@
     };
     
     PowrVideo.prototype.onClick = function() {
-	if (this.autoplaySettings.autoplay && this.player.muted()) {
-	    this.player.muted(false);
-	    return;
+	if (!this.oneTimeUnmute) {
+	    this.oneTimeUnmute = true;
+	    if (this.autoplaySettings.autoplay && this.player.muted()) {
+		this.player.muted(false);
+		return;
+	    }
 	}
 
 	// If floated player, let's make sure we first 
@@ -604,6 +625,15 @@
 		this.playOverlay.hide();
 		this.pauseOverlay.show();
 	    }
+
+	}
+
+	if (this.player.muted()) {
+	    this.volumeOffOverlay.show();
+	    this.volumeOnOverlay.hide();
+	} else {
+	    this.volumeOffOverlay.hide();
+	    this.volumeOnOverlay.show();
 	}
     };
 
@@ -617,6 +647,18 @@
 	this.player.pause();
 	this.pauseOverlay.hide();
 	this.playOverlay.show();
+    };
+
+    PowrVideo.prototype.onCustomVolumeOn = function() {
+	this.player.muted(true);
+	this.volumeOnOverlay.hide();
+	this.volumeOffOverlay.show();
+    };
+
+    PowrVideo.prototype.onCustomVolumeOff = function() {
+	this.player.muted(false);
+	this.volumeOnOverlay.show();
+	this.volumeOffOverlay.hide();
     };
     
     PowrVideo.prototype.onPlay = function() {
@@ -644,6 +686,8 @@
 	    this.titleOverlay.hide();
 	    this.playOverlay.hide();
 	    this.pauseOverlay.hide();
+	    this.volumeOnOverlay.hide();
+	    this.volumeOffOverlay.hide();
         }
     };
 
@@ -656,6 +700,14 @@
 	    "max_width" : 400
 	};
 	if (!c.float) return ret;
+	if (typeof c.float == 'string' && c.float == 'none') {
+	    return ret;
+	}
+	if (typeof c.float == 'string' && c.float == 'default') {
+	    ret.landscape = true;
+	    ret.portrait = true;
+	    return ret;
+	}
 	if (c.float.desktop && c.float.desktop != "none") {
 	    ret.landscape = true;
 	    ret.landscape_style = c.float.desktop;
@@ -702,7 +754,7 @@
 	}
 	return ret;
     };
-
+    
     PowrVideo.prototype.createAutoplaySettings = function() {
 	var c = this.config;
 	var ret = {

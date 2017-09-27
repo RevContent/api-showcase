@@ -90,6 +90,12 @@ a.rc-video-close {
     
 }
 
+.rc-volume-button {
+    width : 64px !important;
+    right : 10px !important;
+    bottom : 10px !important;
+}
+
 @media (orientation: portrait) {
     .rc-float-video a.rc-video-close .label {
         display : none;
