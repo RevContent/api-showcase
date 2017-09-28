@@ -743,6 +743,8 @@
 	if (typeof c.float == 'string' && c.float == 'default') {
 	    ret.landscape = true;
 	    ret.portrait = true;
+	    ret.landscape_style = "bottom-right";
+	    ret.portrait_style = "top";
 	    return ret;
 	}
 	if (c.float.desktop && c.float.desktop != "none") {
