@@ -25738,7 +25738,7 @@ return api;
 	this.iframeSettings = this.createIframeSettings();
 	this.autoplaySettings = this.createAutoplaySettings();
 	this.controlSettings = this.createControlSettings();
-	
+
         this.element = document.getElementById(this.config.id);
 	
         this.playerId = "content_video";
@@ -26064,13 +26064,13 @@ return api;
     };
 
     PowrVideo.prototype.attachVisibleListener = function() {
-	if (this.iframeSettings.iframe) {
-            revUtils.addEventListener(window.parent, 'scroll', this.checkVisible.bind(this));
-	} else {
+	if (!this.iframeSettings.iframe) {
+            // revUtils.addEventListener(window.parent, 'scroll', this.checkVisible.bind(this));
+	    //} else {
 	    revUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
+	    this.checkVisible();
 	}
         // revUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
-        this.checkVisible();
     };
 
     PowrVideo.prototype.floatPlayer = function() {
