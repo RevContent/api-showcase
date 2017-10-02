@@ -26080,7 +26080,8 @@ return api;
         var fs = this.floatSettings;
 	
         var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-
+	var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+	
         if (this.orientation == 'portrait') {
             styleString += "top : 0px;";
             styleString += "left : 0px; right : 0px; width : 100%; height : 176px;";
@@ -26113,15 +26114,22 @@ return api;
 	    if (w > fs.max_width) {
 		w = fs.max_width;
 	    }
+
+	    var h = parseInt(0.5625 * w);
+	    if (h > windowHeight/2) {
+		h = windowHeight/2;
+		w = parseInt(h / 0.5625);
+	    }
+	    
             styleString += "width : " + w + "px;";
 	    
-            var h = parseInt(0.5625 * w);
             if (fs.landscape_style.startsWith("top")) {
                 this.closeButton.setAttribute("style", "margin-top : " + (h - 10) + "px;");            } else {
                 this.closeButton.setAttribute("style", "margin-left : " + (w - 100) + "px; margin-top : -30px;");
-            }
+		}
+	    this.player.dimensions(w, parseInt(h));
         }
-
+	
         this.container.setAttribute("style", styleString);
         this.floated = true;
 	this.onResize(false);
@@ -26133,7 +26141,10 @@ return api;
             this.container.removeAttribute("style");
             this.floated = false;
             this.player.fluid(true);
-
+	    var w = this.element.getBoundingClientRect().width;
+	    var h = this.element.getBoundingClientRect().height;
+	    this.player.dimensions(w, h);
+	    
 	    this.onResize(false);
         }
     };

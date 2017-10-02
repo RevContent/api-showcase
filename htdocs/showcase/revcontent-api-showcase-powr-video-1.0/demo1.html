@@ -100,6 +100,10 @@ $.urlParam = function(name){
 
 		  var flt = $.urlParam('flt');
 		  if (flt == null) flt = 'right';
+
+		  if (flt == 'left') flt = "bottom-left";
+		  else if (flt == 'right') flt = "bottom-right";
+		  else flt = "none";
 		  
 		  new PowrVideo({
 		  "id": 'powr_video',
@@ -108,7 +112,7 @@ $.urlParam = function(name){
 		  "autoplay" : autoplay,
 		  "controls" : controls,
 		  "float" : {
-		  "desktop" : "bottom-" + flt,
+		  "desktop" : flt,
 		  "mobile" : "top"
 		  },
 		  "custom_logo": "./img/newsweek.png",
