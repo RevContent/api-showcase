@@ -43,20 +43,14 @@ if (!String.prototype.endsWith) {
      * controls : "custom"
      */
     var PowrVideo = function(config) {
-	
-	
         this.config = config;
-
 	this.mobile = false;
-	this.safari = false;
+	this.safari = this.isSafari();
         if (navigator.userAgent.match(/iPhone/i) ||
             navigator.userAgent.match(/iPad/i) ||
             navigator.userAgent.match(/Android/i)) {
 	    this.mobile = true;
         }
-	if (navigator.userAgent.match(/Safari/i)) {
-	    this.safari = true;
-	}
 	
 	this.floatSettings = this.createFloatSettings();
 	this.iframeSettings = this.createIframeSettings();
@@ -64,6 +58,10 @@ if (!String.prototype.endsWith) {
 	this.controlSettings = this.createControlSettings();
 
         this.element = document.getElementById(this.config.id);
+
+
+	
+	
 	
         this.playerId = "content_video";
         if (config.playerId) {
@@ -146,7 +144,9 @@ if (!String.prototype.endsWith) {
 	if (this.config.fluid) {
 	    height = this.element.clientHeight;
 	}
-
+	if (this.player && !this.floated) {
+	    this.player.dimensions(width, height);
+	}
         this.element.setAttribute("style", "width : 100%; height : " + height + "px; background-color : #EFEFEF");
 	
         var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
@@ -198,6 +198,18 @@ if (!String.prototype.endsWith) {
 
     PowrVideo.prototype.setup = function () {
 
+	this.events = [google.ima.AdEvent.Type.ALL_ADS_COMPLETED,
+                google.ima.AdEvent.Type.CLICK,
+                google.ima.AdEvent.Type.COMPLETE,
+                google.ima.AdEvent.Type.CONTENT_PAUSE_REQUESTED,
+                google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED,
+                google.ima.AdEvent.Type.FIRST_QUARTILE,
+                google.ima.AdEvent.Type.LOADED,
+                google.ima.AdEvent.Type.MIDPOINT,
+                google.ima.AdEvent.Type.PAUSED,
+                google.ima.AdEvent.Type.STARTED,
+                google.ima.AdEvent.Type.THIRD_QUARTILE];
+	
 	google.ima.settings.setDisableCustomPlaybackForIOS10Plus(true);
 	
         this.container = document.createElement("div");
@@ -291,6 +303,7 @@ if (!String.prototype.endsWith) {
 	} else {
 	    this.player.on('click', this.onClick.bind(this));
 	}
+	this.player.on('fullscreenchange', this.onFullscreenChange.bind(this));
 	
         GlobalPlayer = this;
 	
@@ -349,9 +362,9 @@ if (!String.prototype.endsWith) {
 	if (!this.autoplaySettings.autoplay) {
             this.player.poster(this.videos[this.currentContent].thumbnail);
 	}
-
+	
         this.player.ima.requestAds();
-
+	
         var me = this;
         this.player.ima.addContentEndedListener(function () {
             me.loadNextVideo();
@@ -368,12 +381,13 @@ if (!String.prototype.endsWith) {
 	}
         this.currentContent++;
         if (this.currentContent < this.videos.length) {
-            this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), true);
-            // this.player.poster(this.videos[this.currentContent].thumbnail);
+	    this.player.ima.initializeAdDisplayContainer();
+            this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), false);
             var titleContent = this.videos[this.currentContent].title;
-            // this.player.overlays_[0].contentEl().innerHTML = titleContent;
             this.titleDom.innerHTML = titleContent;
-            this.player.ima.requestAds();
+	    var me = this;
+	    me.player.ima.requestAds();
+	    me.player.play();
         } else {
             this.currentContent--;
         }
@@ -438,8 +452,8 @@ if (!String.prototype.endsWith) {
 	    }
 
 	    var h = parseInt(0.5625 * w);
-	    if (h > windowHeight/3) {
-		h = windowHeight/3;
+	    if (h > windowHeight/2) {
+		h = windowHeight/2;
 		w = parseInt(h / 0.5625);
 		h = parseInt(h);
 	    }
@@ -545,6 +559,12 @@ if (!String.prototype.endsWith) {
     
     PowrVideo.prototype.adsManagerLoadedCallback = function() {
         var me = this;
+	for (var index = 0; index < this.events.length; index++) {
+	    this.player.ima.addEventListener(
+		this.events[index],
+		this.bind(this, this.onAdEvent));
+	}
+	
         this.player.ima.addEventListener(google.ima.AdEvent.Type.STARTED, function () {
             me.player.removeClass('vjs-ad-loading');
 	    me.player.loadingSpinner.unlockShowing();
@@ -552,6 +572,10 @@ if (!String.prototype.endsWith) {
         this.player.ima.startFromReadyCallback();
     };
 
+    PowrVideo.prototype.onAdEvent = function(event) {
+	
+    };
+    
     PowrVideo.prototype.registerView = function() {
 	if (!this.config.hasOwnProperty("tracking_url"))
 	    return;
@@ -608,6 +632,13 @@ if (!String.prototype.endsWith) {
 		showBackground : false,
 		class : "rc-volume-off-button",
 		align : "bottom-right"
+	    }, {
+		start : "custom1",
+		end : "custom2",
+		content : "",
+		showBackground : false,
+		class : "rc-fullscreen-button",
+		align : "bottom-left"
 	    }]
         });
 	
@@ -616,7 +647,9 @@ if (!String.prototype.endsWith) {
 	this.pauseOverlay = this.player.overlays_[2];
 	this.volumeOnOverlay = this.player.overlays_[3];
 	this.volumeOffOverlay = this.player.overlays_[4];
+	this.fullscreenOverlay = this.player.overlays_[5];
 	this.titleOverlay.show();
+	this.fullscreenOverlay.hide();
 	this.playOverlay.hide();
 	this.pauseOverlay.hide();
 	this.volumeOnOverlay.hide();
@@ -625,10 +658,11 @@ if (!String.prototype.endsWith) {
 	var ce = 'click';
 	if (this.mobile) ce = 'touchend';
 
-	revUtils.addEventListener(this.playOverlay.contentEl(), ce, this.onCustomPlay.bind(this));
-	revUtils.addEventListener(this.pauseOverlay.contentEl(), ce, this.onCustomPause.bind(this));
-	revUtils.addEventListener(this.volumeOnOverlay.contentEl(), ce, this.onCustomVolumeOn.bind(this));
-	revUtils.addEventListener(this.volumeOffOverlay.contentEl(), ce, this.onCustomVolumeOff.bind(this));
+	revUtils.addEventListener(this.playOverlay.contentEl(), ce, this.bind(this, this.onCustomPlay));
+	revUtils.addEventListener(this.pauseOverlay.contentEl(), ce, this.bind(this, this.onCustomPause));
+	revUtils.addEventListener(this.volumeOnOverlay.contentEl(), ce, this.bind(this, this.onCustomVolumeOn));
+	revUtils.addEventListener(this.volumeOffOverlay.contentEl(), ce, this.bind(this, this.onCustomVolumeOff));
+	revUtils.addEventListener(this.fullscreenOverlay.contentEl(), ce, this.bind(this, this.onCustomFullscreen));
     };
 
     PowrVideo.prototype.bind = function(thisObj, fn, argument) {
@@ -651,6 +685,15 @@ if (!String.prototype.endsWith) {
 	if (this.dragging) return;
 	this.onClick();
     };
+
+    PowrVideo.prototype.onFullscreenChange = function() {
+	if (!this.player.isFullscreen()) {
+	    this.playOverlay.hide();
+	    this.pauseOverlay.hide();
+	    this.fullscreenOverlay.hide();
+	}
+    };
+
     
     PowrVideo.prototype.onClick = function() {
 	if (!this.started) {
@@ -667,14 +710,15 @@ if (!String.prototype.endsWith) {
 	    }
 	}
 
-	// If floated player, let's make sure we first 
+	// If floated player, let's make sure we first
+	/*
 	if (this.floated) {
 	    if (!this.player.paused() && !this.player.userActive()) {
 		this.player.reportUserActivity();
 		return;
 	    }
 	}
-	
+	*/
 	if (this.controlSettings.type == "default")
 	    return;
 	
@@ -692,7 +736,9 @@ if (!String.prototype.endsWith) {
 		this.playOverlay.hide();
 		this.pauseOverlay.show();
 	    }
-
+	    if (!this.player.isFullscreen()) {
+		this.fullscreenOverlay.show();
+	    }
 	}
 
 	if (this.player.muted()) {
@@ -704,7 +750,7 @@ if (!String.prototype.endsWith) {
 	}
     };
 
-    PowrVideo.prototype.onCustomPlay = function() {
+    PowrVideo.prototype.onCustomPlay = function(e) {
 	// Don't do anything if we haven't started yet.
 	if (!this.started) {
 	    return;
@@ -714,28 +760,40 @@ if (!String.prototype.endsWith) {
 	this.pauseOverlay.hide();
     };
 
-    PowrVideo.prototype.onCustomPause = function() {
+    PowrVideo.prototype.onCustomPause = function(e) {
 	this.player.pause();
 	this.pauseOverlay.hide();
 	this.playOverlay.show();
     };
 
-    PowrVideo.prototype.onCustomVolumeOn = function() {
+    PowrVideo.prototype.onCustomVolumeOn = function(e) {
+	this.cancelEvent(e);
 	this.player.muted(true);
 	this.volumeOnOverlay.hide();
 	this.volumeOffOverlay.show();
     };
 
-    PowrVideo.prototype.onCustomVolumeOff = function() {
+    PowrVideo.prototype.onCustomVolumeOff = function(e) {
+	this.cancelEvent(e);
 	this.player.muted(false);
 	this.volumeOnOverlay.show();
 	this.volumeOffOverlay.hide();
+    };
+
+    PowrVideo.prototype.onCustomFullscreen = function(e) {
+	this.cancelEvent(e);
+	this.player.requestFullscreen();
     };
     
     PowrVideo.prototype.onPlay = function() {
 	if (this.controlSettings.type == "custom") {
 	    this.pauseOverlay.hide();
 	    this.playOverlay.hide();
+	    if (this.player.muted()) {
+		this.volumeOffOverlay.show();
+	    } else {
+		this.volumeOnOverlay.show();
+	    }
 	}
     };
 
@@ -757,8 +815,9 @@ if (!String.prototype.endsWith) {
 	    this.titleOverlay.hide();
 	    this.playOverlay.hide();
 	    this.pauseOverlay.hide();
-	    this.volumeOnOverlay.hide();
-	    this.volumeOffOverlay.hide();
+	    this.fullscreenOverlay.hide();
+	    // this.volumeOnOverlay.hide();
+	    // this.volumeOffOverlay.hide();
         }
     };
 
@@ -768,7 +827,7 @@ if (!String.prototype.endsWith) {
 	    "landscape" : false,
 	    "portrait" : false,
 	    "min_width" : 400,
-	    "max_width" : 400
+	    "max_width" : 480
 	};
 	if (!c.float) return ret;
 	if (typeof c.float == 'string' && c.float == 'none') {
@@ -856,6 +915,28 @@ if (!String.prototype.endsWith) {
 	}
 	
 	return ret;
+    };
+
+    PowrVideo.prototype.isSafari = function() {
+	var is_chrome = navigator.userAgent.indexOf('Chrome') > -1;
+	var is_safari = navigator.userAgent.indexOf("Safari") > -1;
+	if ((is_chrome)&&(is_safari)) {is_safari=false;}
+	return is_safari;
+    }
+
+    
+    PowrVideo.prototype.bind = function(thisObj, fn) {
+	return function() {
+	    fn.apply(thisObj, arguments);
+	};
+    };
+
+    PowrVideo.prototype.cancelEvent = function(e) {
+	if (typeof e.stopPropagation != "undefined") {
+	    e.stopPropagation();
+	} else if (typeof e.cancelBubble != "undefined") {
+	    e.cancelBubble = true;
+	}
     };
     
     return PowrVideo;
