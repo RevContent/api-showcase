@@ -25725,6 +25725,8 @@ return api;
      * controls : "custom"
      */
     var PowrVideo = function(config) {
+	
+	
         this.config = config;
 
 	this.mobile = false;
@@ -25746,22 +25748,21 @@ return api;
             this.playerId = config.playerId;
         }
         this.viewed = false;
-        this.playerWidth = this.element.clientWidth;
-	if (this.config.fluid) {
-            this.playerHeight = this.element.clientHeight;
-	} else {
-	    this.playerHeight = 0.5625 * this.playerWidth;
+        var w = this.element.clientWidth;
+	var h = this.element.clientHeight;
+	if (!this.config.fluid) {
+	    h = 0.5625 * w;
 	}
-
-	this.element.setAttribute("style", "width: " + parseInt(this.playerWidth) + "px; height : " + parseInt(this.playerHeight) + "px; background-color : #EFEFEF;");
-        // this.element.setAttribute("style", "width: 100%; height : " + parseInt(this.playerHeight) + "px; background-color : #EFEFEF;");
-
+	
+	this.element.setAttribute("style", "width: 100%; height : " + parseInt(h) + "px; background-color : #EFEFEF;");
+	
         this.videos = config.videos;
         this.currentContent = 0;
-
+	
         this.options = {
             id : this.playerId,
-            nativeControlForTouch: false
+            nativeControlForTouch: false,
+	    adWillAutoPlay : this.autoplaySettings.autoplay
         };
 
         if (config.hasOwnProperty('preloaded') && config.preloaded) {
@@ -25774,13 +25775,13 @@ return api;
     PowrVideo.prototype.getAdTag = function(videoId) {
 	if (this.config.dfp) {
             return "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + this.config.tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
-		+ "&cust_params=p_width%3D" + parseInt(this.playerWidth) + "%26p_height%3D" + parseInt(this.playerHeight)
+		+ "&cust_params=p_width%3D" + parseInt(this.getPlayerWidth()) + "%26p_height%3D" + parseInt(this.getPlayerHeight())
 		+ "&description_url=" + encodeURI("http://alpha.powr.com/video/" + videoId);
 	} else {
 	    var tag = this.config.tag;
 	    tag = tag.replace("REFERRER_URL", encodeURI(window.location.href));
-	    tag = tag.replace("P_WIDTH", "" + parseInt(this.playerWidth));
-	    tag = tag.replace("P_HEIGHT", "" + parseInt(this.playerHeight));
+	    tag = tag.replace("P_WIDTH", "" + parseInt(this.getPlayerWidth()));
+	    tag = tag.replace("P_HEIGHT", "" + parseInt(this.getPlayerHeight()));
 	    tag = tag.replace("CACHE_BUSTER", "" + new Date().getTime());
 	    return tag;
 	}
@@ -25824,7 +25825,7 @@ return api;
 	    height = this.element.clientHeight;
 	}
 
-        this.element.setAttribute("style", "width : " + width + "px; height : " + height + "px; background-color : #EFEFEF");
+        this.element.setAttribute("style", "width : 100%; height : " + height + "px; background-color : #EFEFEF");
 	
         var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
         var windowWidth = window.innerWidth|| document.documentElement.clientWidth || document.body.clientWidth;
@@ -25843,6 +25844,7 @@ return api;
 		this.floatPlayer();
 	    }
 	}
+
 	if (this.player) {
 	    var w = this.getPlayerWidth();
 	    var h = this.getPlayerHeight();
@@ -25852,26 +25854,21 @@ return api;
 	    var playDom = this.playOverlay.contentEl();
 	    var pauseDom = this.pauseOverlay.contentEl();
 	    playDom.setAttribute("style", "left : " + x + "px; bottom : " + y + "px; top : auto;");
-	    pauseDom.setAttribute("style", "left : " + x + "px; bottom : " + y + "px; top : auto;"); 
+	    pauseDom.setAttribute("style", "left : " + x + "px; bottom : " + y + "px; top : auto;");
 	}
     };
 
     PowrVideo.prototype.getPlayerHeight = function() {
-	if (this.floated) {
-	    if (this.orientation == "portrait") return 176;
-	    else return this.container.getBoundingClientRect().height;
+	if (this.player) {
+	    return this.player.height();
 	} else {
 	    return this.element.getBoundingClientRect().height;
 	}
     };
     
     PowrVideo.prototype.getPlayerWidth = function() {
-	if (this.floated) {
-	    if (this.orientation == "portrait") {
-		return window.innerWidth|| document.documentElement.clientWidth || document.body.clientWidth;
-	    } else {
-		return this.container.getBoundingClientRect().width;
-	    }
+	if (this.player) {
+	    return this.player.width();
 	} else {
 	    return this.element.getBoundingClientRect().width;
 	}
@@ -25879,6 +25876,8 @@ return api;
 
     PowrVideo.prototype.setup = function () {
 
+	google.ima.settings.setDisableCustomPlaybackForIOS10Plus(true);
+	
         this.container = document.createElement("div");
         this.container.className = 'powr_player';
         this.element.appendChild(this.container);
@@ -25891,8 +25890,8 @@ return api;
         var dumbPlayer = document.createElement('video');
         dumbPlayer.id = this.playerId;
         dumbPlayer.className = 'video-js vjs-default-skin vjs-big-play-centered vjs-fluid';
-        dumbPlayer.setAttribute('width', this.playerWidth + 'px');
-        dumbPlayer.setAttribute('height', this.playerHeight + 'px');
+        dumbPlayer.setAttribute('width', this.getPlayerWidth() + 'px');
+        dumbPlayer.setAttribute('height', this.getPlayerHeight() + 'px');
         dumbPlayer.setAttribute("controls", "" + (this.controlSettings.type == 'default'));
         dumbPlayer.setAttribute("preload", "auto");
 	if (!this.autoplaySettings.autoplay) {
@@ -25946,7 +25945,6 @@ return api;
 	if (this.controlSettings.type == "custom") {
 	    if (!this.autoplaySettings.autoplay) {
 		this.playOverlay.show();
-		
 	    }
 	}
 	if (this.controlSettings.type == "none") {
@@ -25984,23 +25982,18 @@ return api;
             me.player.pause();
             me.unfloatPlayer();
         });
+
+	// Don't show big button. we have our own.
+	this.player.bigPlayButton.hide();
+	this.started = false;
 	
 	if (me.autoplaySettings.autoplay) {
-	    this.player.bigPlayButton.hide();
+	    this.playOverlay.hide();
 	    this.player.loadingSpinner.lockShowing();
 	    this.start(true);
 	} else {
-	    me.player.one('click', function() {
-		me.start(true);
-	    });
+	    this.playOverlay.show();
 	}
-	/*
-          if (!me.autoplaySettings.) {
-          me.player.one('click', function () {
-          me.player.play();
-          });
-          }
-	*/
     };
 
     PowrVideo.prototype.onUpdate = function() {
@@ -26027,6 +26020,7 @@ return api;
     };
     
     PowrVideo.prototype.start = function(playOnLoad) {
+	this.started = true;
         this.player.ima(this.options, this.bind(this, this.adsManagerLoadedCallback));
         this.player.ima.initializeAdDisplayContainer();
         this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), playOnLoad);
@@ -26150,6 +26144,7 @@ return api;
             // refloat player if orientation has changed.
             this.floatPlayer();
         }
+	this.onResize(true);
     };
 
     PowrVideo.prototype.getTitle = function () {
@@ -26190,7 +26185,7 @@ return api;
 		var elementBottom = that.element.getBoundingClientRect().bottom;
 		var elementVisibleHeight = that.element.offsetHeight * 0.50;
 
-		if (elementTop + that.playerHeight < 0) {
+		if (elementTop + that.getPlayerHeight() < 0) {
 		    if (that.visible) {
 			that.visible = false;
 			that.onHidden();
@@ -26324,6 +26319,12 @@ return api;
     };
     
     PowrVideo.prototype.onClick = function() {
+	if (!this.started) {
+	    this.playOverlay.hide();
+	    this.start(true);
+	    return;
+	}
+	
 	if (!this.oneTimeUnmute) {
 	    this.oneTimeUnmute = true;
 	    if (this.autoplaySettings.autoplay && this.player.muted()) {
@@ -26370,6 +26371,10 @@ return api;
     };
 
     PowrVideo.prototype.onCustomPlay = function() {
+	// Don't do anything if we haven't started yet.
+	if (!this.started) {
+	    return;
+	}
 	this.player.play();
 	this.playOverlay.hide();
 	this.pauseOverlay.hide();
@@ -26483,8 +26488,8 @@ return api;
 		return { type : c.controls };
 	    }
 	} else {
-	    if (this.mobile) return { type : c.mobile };
-	    else return { type : c.desktop };
+	    if (this.mobile) return { type : c.controls.mobile };
+	    else return { type : c.controls.desktop };
 	}
 	return ret;
     };

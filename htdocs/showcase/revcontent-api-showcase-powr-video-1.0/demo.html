@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Powr Player Demo</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var autoplay = "load";
+      var flt = "right";
+      var controls = "default";
+      var iframe = false;
+
+      $(function () {
+          load();
+      $("#iframe").height($(window).height() - $("nav").height());
+
+      $(window).on("resize", function() {
+      $("#iframe").height($(window).height() - $("nav").height());
+      });
+      
+      });
+
+      
+      function load() {
+      if (!iframe) {
+      $("#iframe").attr("src", "./demo1.html?autoplay=" + autoplay + "&flt=" + flt + "&controls=" + controls);
+      }
+      }
+
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-default" style="margin-bottom : 0px; border-bottom : 5px solid #FF0000;">
+      <div class="container-fluid">
+	<!-- Brand and toggle get grouped for better mobile display -->
+	<div class="navbar-header">
+	  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+	  </button>
+	  <a class="navbar-brand" href="#">POWR</a>
+	</div>
+	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	  <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Autoplay <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+		<li><a href="javascript:autoplay = 'load'; load();">On Load</a></li>
+		<li><a href="javascript:autoplay = 'focus'; load();">In Focus</a></li>
+		<li><a href="javascript:autoplay = 'none'; load();">Disable</a></li>
+              </ul>
+            </li>
+	    <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Controls <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+		<li><a href="javascript:controls = 'default'; load();">Default</a></li>
+		<li><a href="javascript:controls = 'custom'; load();">Touch Friendly</a></li>
+		<li><a href="javascript:controls = 'none'; load();">None</a></li>
+              </ul>
+            </li>
+	    <li class="dropdown">
+	      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Float  <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+		<li><a href="javascript:flt = 'right'; load();">Right</a></li>
+		<li><a href="javascript:flt = 'left'; load();">Left</a></li>
+		<li><a href="javascript:flt = 'none'; load();">None</a></li>
+              </ul>
+	    </li>
+	  </ul>
+	  <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Link</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+		<li><a href="#">Action</a></li>
+		<li><a href="#">Another action</a></li>
+		<li><a href="#">Something else here</a></li>
+		<li role="separator" class="divider"></li>
+		<li><a href="#">Separated link</a></li>
+              </ul>
+            </li>
+	  </ul>
+	</div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+    <div class="container-fluid" style="padding : 0;">
+      <iframe id='iframe' style='border none; width : 100%; height : 1000px;'></iframe>
+    </div>
+  </body>
+</html>  
