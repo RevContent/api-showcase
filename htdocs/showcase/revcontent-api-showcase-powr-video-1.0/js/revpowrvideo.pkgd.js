@@ -26133,9 +26133,10 @@ if (!String.prototype.endsWith) {
 	    }
 
 	    var h = parseInt(0.5625 * w);
-	    if (h > windowHeight/2) {
-		h = windowHeight/2;
+	    if (h > windowHeight/3) {
+		h = windowHeight/3;
 		w = parseInt(h / 0.5625);
+		h = parseInt(h);
 	    }
 	    
             styleString += "width : " + w + "px;";
