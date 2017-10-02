@@ -25743,11 +25743,15 @@ if (!String.prototype.endsWith) {
         this.config = config;
 
 	this.mobile = false;
+	this.safari = false;
         if (navigator.userAgent.match(/iPhone/i) ||
             navigator.userAgent.match(/iPad/i) ||
             navigator.userAgent.match(/Android/i)) {
 	    this.mobile = true;
         }
+	if (navigator.userAgent.match(/Safari/i)) {
+	    this.safari = true;
+	}
 	
 	this.floatSettings = this.createFloatSettings();
 	this.iframeSettings = this.createIframeSettings();
@@ -26529,7 +26533,7 @@ if (!String.prototype.endsWith) {
 	    if (c.autoplay == "none") return ret;
 	    ret.autoplay = true;
 	    if (c.autoplay == "load") {
-		ret.audio = !this.mobile;
+		ret.audio = (!this.mobile && !this.safari);
 		return ret;
 	    }
 	    if (c.autoplay == "focus") {
