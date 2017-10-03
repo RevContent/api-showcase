@@ -78,7 +78,7 @@ Author: michael@revcontent.com
                 },
                 {
                     selector: '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+3), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+4)',
-                    spans: 3
+                    spans: 6
                 }
             ],
             image_ratio: below_article ? [
