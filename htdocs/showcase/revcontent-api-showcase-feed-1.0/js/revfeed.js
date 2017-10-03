@@ -15,7 +15,7 @@ Author: michael@revcontent.com
 
     var RevFeed = function(opts) {
 
-        var below_article = (typeof opts.below_article !== 'undefined') ? opts.below_article : true;
+        var below_article = (typeof opts.below_article !== 'undefined') ? opts.below_article : false;
 
         var defaults = {
             api_source: 'rcfeed',
