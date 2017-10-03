@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <meta name="keywords" content="Donald Trump,White House">
+    <meta name="keywords" content="Virtual Reality,Technology">
 
     <title>Powr Video Example</title>
 
@@ -16,7 +16,8 @@
     <link href="css/bootstrap.css" rel="stylesheet">
 
     <link href="css/style.css" rel="stylesheet">
-
+    <script type="text/javascript" src="./js/revpowrvideo.min.js"></script>
+    
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -39,23 +40,23 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Showcase Example </a>
+                <a class="navbar-brand" href="#">Powr Player</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li>
-                        <a href="#">Life</a>
-                    </li>
-                    <li>
-                        <a href="#">News</a>
-                    </li>
-                    <li>
-                        <a href="#">Style</a>
-                    </li>
-                    <li>
-                        <a href="#">Culture</a>
-                    </li>
+                  <li>
+                    <a href="./demo1.html">Autoplay/Float</a>
+                  </li>
+                  <li>
+                    <a href="./demo2.html">ClickToPlay/Float</a>
+                  </li>
+                  <li>
+                    <a href="./demo3.html">Embed/PlayMutedWhenFocus</a>
+                  </li>
+                  <li>
+                    <a href="#">Culture</a>
+                  </li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -67,17 +68,41 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Donald Trump, White House
-                    <small>Keywords</small>
+                <h1 class="page-header">Virtual Reality, Technology
+                    <small>Revcontent Native API</small>
                 </h1>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-8">
-                <h2 class="redacted single-line">Try <a href="./autostream_vr.html">Virtual Reality</a></h2>
-
+                <h2 class="redacted single-line">Try <a href="./autostream_trump.html">Donald Trump</a></h2>
 		
+                <div id="powr_video"></div>
+		<script type="text/javascript">
+		  new PowrVideo({
+		  "id": 'powr_video',
+		  "dfp" : false,
+		  "tag" : "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dskippablelinear",
+		  "autoplay" : "load",
+		  "controls" : "default",
+		  "float" : {
+		  "desktop" : "bottom-right",
+		  "mobile" : "top"
+		  },
+		  "custom_logo": "http://lorempixel.com/100/40",
+		  "videos" : [
+		  {"id":15207,
+		  "user_id":673,
+		  "powr_id":-1,
+		  "duration":56,
+		  "title":"Lei Gardens",
+		  "sd_url" :"http://techslides.com/demos/sample-videos/small.mp4",
+		  "hd_url": "http://media.powr.com/480p/a4c75d3a-fb4b-4715-a51d-0462e2a3b5b5.mp4",
+		  "thumbnail":"http://lorempixel.com/300/150"}
+		  ]
+		  });
+		</script>
 
                 <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                 tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
