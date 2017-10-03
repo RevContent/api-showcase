@@ -158,9 +158,7 @@ Author: michael@revcontent.com
                 'FFD54F',
                 'FFB74D',
                 'FF8A65',
-                'A1887F',
-                'E0E0E0',
-                '90A4AE'
+                'A1887F'
             ],
             reaction_id: 5
         };
