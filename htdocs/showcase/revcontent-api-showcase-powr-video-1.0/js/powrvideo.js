@@ -628,7 +628,7 @@ if (!String.prototype.endsWith) {
 	    }, {
 		start : "custom1",
 		end : "custom2",
-		content : "",
+		content : "<div class='rc-bar'></div><div class='rc-bar'></div><div class='rc-bar'></div><div class='rc-bar'></div>",
 		showBackground : false,
 		class : "rc-volume-off-button",
 		align : "bottom-right"
