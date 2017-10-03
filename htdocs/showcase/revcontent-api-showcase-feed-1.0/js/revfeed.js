@@ -15,7 +15,7 @@ Author: michael@revcontent.com
 
     var RevFeed = function(opts) {
 
-        var below_article = (typeof opts.below_article !== 'undefined') ? opts.below_article : true;
+        var below_article = (typeof opts.below_article !== 'undefined') ? opts.below_article : false;
 
         var defaults = {
             api_source: 'rcfeed',
@@ -78,7 +78,7 @@ Author: michael@revcontent.com
                 },
                 {
                     selector: '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+3), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+4)',
-                    spans: 3
+                    spans: 6
                 }
             ],
             image_ratio: below_article ? [
