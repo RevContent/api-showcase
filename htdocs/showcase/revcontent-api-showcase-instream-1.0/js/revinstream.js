@@ -17,9 +17,9 @@ Author: michael@revcontent.com
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevInstream = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDisclose);
+    window.RevInstream = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDisclose, window.AnyGrid);
 
-}( window, function factory(window, revUtils, revDetect, revApi, revDisclose) {
+}( window, function factory(window, revUtils, revDetect, revApi, revDisclose, AnyGrid) {
 'use strict';
 
     var RevInstream = function(opts) {
