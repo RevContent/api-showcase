@@ -96,7 +96,7 @@ if (!String.prototype.endsWith) {
 	if (this.config.dfp) {
             return "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + this.config.tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
 		+ "&cust_params=p_width%3D" + parseInt(this.getPlayerWidth()) + "%26p_height%3D" + parseInt(this.getPlayerHeight())
-		+ "&description_url=" + encodeURI("http://alpha.powr.com/video/" + videoId);
+		+ "&description_url=" + encodeURI("http://www.powr.com/video/" + videoId);
 	} else {
 	    var tag = this.config.tag;
 	    tag = tag.replace("REFERRER_URL", encodeURI(window.location.href));
@@ -174,9 +174,7 @@ if (!String.prototype.endsWith) {
 	    var y = h/2 - 64;
 
 	    var playDom = this.playOverlay.contentEl();
-	    var pauseDom = this.pauseOverlay.contentEl();
 	    playDom.setAttribute("style", "left : " + x + "px; bottom : " + y + "px; top : auto;");
-	    pauseDom.setAttribute("style", "left : " + x + "px; bottom : " + y + "px; top : auto;");
 	}
     };
 
@@ -248,11 +246,13 @@ if (!String.prototype.endsWith) {
         });
 
         this.currentContent = 0;
-        //
-        //this.player.logobrand({
-          //  image : this.config.custom_logo,
-          //  destination : "http://alpha.powr.com/"
-        //});
+
+	if (this.controlSettings.type == 'default') {
+            this.player.logobrand({
+		image : "http://media.powr.com/rc_logo.png",
+		destination : "http://www.powr.com/"
+            });
+	}
 
         var me = this;
 
@@ -304,6 +304,12 @@ if (!String.prototype.endsWith) {
 	    this.player.on('click', this.onClick.bind(this));
 	}
 	this.player.on('fullscreenchange', this.onFullscreenChange.bind(this));
+	this.player.on('loadeddata', function() {
+	    console.log("LOADED DATA");
+	});
+	this.player.on('waiting', function() {
+	    console.log("WAITING FOR DATA");
+	});
 	
         GlobalPlayer = this;
 	
@@ -617,11 +623,12 @@ if (!String.prototype.endsWith) {
 		end : "custom2",
 		content : "",
 		showBackground : false,
-		class : "rc-pause-button"
+		class : "rc-pause-button",
+		align : "bottom-left"
 	    }, {
 		start : "custom1",
 		end : "custom2",
-		content : "",
+		content : "<div class='rc-bar'></div><div class='rc-bar'></div><div class='rc-bar'></div><div class='rc-bar'></div>",
 		showBackground : false,
 		class : "rc-volume-on-button",
 		align : "bottom-right"
@@ -638,7 +645,7 @@ if (!String.prototype.endsWith) {
 		content : "",
 		showBackground : false,
 		class : "rc-fullscreen-button",
-		align : "bottom-left"
+		align : "bottom-right"
 	    }]
         });
 	
@@ -740,7 +747,7 @@ if (!String.prototype.endsWith) {
 		this.fullscreenOverlay.show();
 	    }
 	}
-
+	
 	if (this.player.muted()) {
 	    this.volumeOffOverlay.show();
 	    this.volumeOnOverlay.hide();
@@ -755,15 +762,14 @@ if (!String.prototype.endsWith) {
 	if (!this.started) {
 	    return;
 	}
+	
 	this.player.play();
 	this.playOverlay.hide();
-	this.pauseOverlay.hide();
+	this.pauseOverlay.show();
     };
 
     PowrVideo.prototype.onCustomPause = function(e) {
 	this.player.pause();
-	this.pauseOverlay.hide();
-	this.playOverlay.show();
     };
 
     PowrVideo.prototype.onCustomVolumeOn = function(e) {
@@ -787,12 +793,14 @@ if (!String.prototype.endsWith) {
     
     PowrVideo.prototype.onPlay = function() {
 	if (this.controlSettings.type == "custom") {
-	    this.pauseOverlay.hide();
+	    console.log("PLAY CALLED");
 	    this.playOverlay.hide();
 	    if (this.player.muted()) {
 		this.volumeOffOverlay.show();
+		this.volumeOnOverlay.hide();
 	    } else {
 		this.volumeOnOverlay.show();
+		this.volumeOffOverlay.hide();
 	    }
 	}
     };
