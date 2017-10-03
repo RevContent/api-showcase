@@ -178,10 +178,10 @@ $reactionMenu8Y: 13.5px;
     position: relative;
 
     &.rev-slider-breakpoint-lt-sm .rev-content {
-        padding-bottom: 12px !important;
+        padding-bottom: 5px !important;
     }
     &.rev-slider-breakpoint-gt-xs .rev-content:nth-child(n+10) {
-        padding-bottom: 20px !important;
+        padding-bottom: 5px !important;
     }
 
     &.rev-slider-mobile {
@@ -1394,7 +1394,7 @@ $reactionMenu8Y: 13.5px;
 }
 
 .rev-slider-breakpoint-lt-sm #rev-feed .rev-content.rev-colspan-3, .rev-slider-breakpoint-lt-sm #rev-feed .rev-content.rev-colspan-6 {
-    padding-bottom: 16px;
+    padding-bottom: 5px;
 }
 
 #rev-feed .rev-content.rev-content-sponsored.rev-colspan-6 {
