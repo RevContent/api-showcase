@@ -310,6 +310,7 @@ if (!String.prototype.endsWith) {
 	this.player.on('waiting', function() {
 	    console.log("WAITING FOR DATA");
 	});
+	this.player.on('ended', this.bind(this, this.loadNextVideo));
 	
         GlobalPlayer = this;
 	
@@ -372,9 +373,9 @@ if (!String.prototype.endsWith) {
         this.player.ima.requestAds();
 	
         var me = this;
-        this.player.ima.addContentEndedListener(function () {
-            me.loadNextVideo();
-        });
+        // this.player.ima.addContentEndedListener(function () {
+        //    me.loadNextVideo();
+        //});
     };
 
     PowrVideo.prototype.loadNextVideo = function() {
@@ -387,6 +388,10 @@ if (!String.prototype.endsWith) {
 	}
         this.currentContent++;
         if (this.currentContent < this.videos.length) {
+	    if (!this.autoplaySettings.audio) {
+		this.player.muted(true);
+	    }
+	    
 	    this.player.ima.initializeAdDisplayContainer();
             this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), false);
             var titleContent = this.videos[this.currentContent].title;

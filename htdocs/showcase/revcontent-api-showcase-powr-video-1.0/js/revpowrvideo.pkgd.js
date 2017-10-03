@@ -25791,7 +25791,7 @@ if (!String.prototype.endsWith) {
 	if (this.config.dfp) {
             return "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + this.config.tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
 		+ "&cust_params=p_width%3D" + parseInt(this.getPlayerWidth()) + "%26p_height%3D" + parseInt(this.getPlayerHeight())
-		+ "&description_url=" + encodeURI("http://alpha.powr.com/video/" + videoId);
+		+ "&description_url=" + encodeURI("http://www.powr.com/video/" + videoId);
 	} else {
 	    var tag = this.config.tag;
 	    tag = tag.replace("REFERRER_URL", encodeURI(window.location.href));
@@ -25944,7 +25944,7 @@ if (!String.prototype.endsWith) {
 
 	if (this.controlSettings.type == 'default') {
             this.player.logobrand({
-		image : "./img/rc_logo.png",
+		image : "http://media.powr.com/rc_logo.png",
 		destination : "http://www.powr.com/"
             });
 	}
@@ -26005,6 +26005,7 @@ if (!String.prototype.endsWith) {
 	this.player.on('waiting', function() {
 	    console.log("WAITING FOR DATA");
 	});
+	this.player.on('ended', this.bind(this, this.loadNextVideo));
 	
         GlobalPlayer = this;
 	
@@ -26067,9 +26068,9 @@ if (!String.prototype.endsWith) {
         this.player.ima.requestAds();
 	
         var me = this;
-        this.player.ima.addContentEndedListener(function () {
-            me.loadNextVideo();
-        });
+        // this.player.ima.addContentEndedListener(function () {
+        //    me.loadNextVideo();
+        //});
     };
 
     PowrVideo.prototype.loadNextVideo = function() {
