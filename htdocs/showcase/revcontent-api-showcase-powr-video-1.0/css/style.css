@@ -142,3 +142,7 @@ footer {
   margin-right: 0;
   border-right: none;
 }
+
+.navbar-nav > li.dropdown > a {
+  text-transform: capitalize;
+}
