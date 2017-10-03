@@ -16,9 +16,9 @@ Author: michael@revcontent.com
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevSlider = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDisclose);
+    window.RevSlider = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDisclose, window.AnyGrid);
 
-}( window, function factory(window, revUtils, revDetect, revApi, revDisclose) {
+}( window, function factory(window, revUtils, revDetect, revApi, revDisclose, AnyGrid) {
 'use strict';
 
     var RevSlider = function(opts) {
