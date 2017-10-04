@@ -99,7 +99,8 @@ Author: michael@revcontent.com
             ],
             mock: false,
             comment_div: false,
-            reaction_id: 299
+            reaction_id: 299,
+            mobile_image_optimize: 1.2
         };
 
         // merge options
@@ -227,6 +228,7 @@ Author: michael@revcontent.com
             brand_logo: this.options.brand_logo,
             comment_div: this.options.comment_div,
             reaction_id: this.options.reaction_id,
+            mobile_image_optimize: this.options.mobile_image_optimize,
             developer: this.options.developer,
             internal_selector: this.options.internal_selector,
             header_selector: this.options.header_selector,

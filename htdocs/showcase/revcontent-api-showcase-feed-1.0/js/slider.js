@@ -160,7 +160,8 @@ Author: michael@revcontent.com
                 'FF8A65',
                 'A1887F'
             ],
-            reaction_id: 5
+            reaction_id: 5,
+            mobile_image_optimize: 1.2
         };
 
          this.mockComments = {
@@ -2529,12 +2530,16 @@ Author: michael@revcontent.com
                 anchor.setAttribute('href', itemData.url.replace('&uitm=1', '').replace('uitm=1', '') + (this.viewed ? '&viewed=true' : ''));
                 anchor.title = itemData.headline;
 
-                var roundedPreloaderHeight = Math.round(item.preloaderHeight);
-                var roundedPreloaderWidth = Math.round(item.preloaderWidth);
+                if (this.options.mobile_image_optimize && revDetect.mobile()) {
+                    var roundedPreloaderHeight = Math.round(item.preloaderHeight / this.options.mobile_image_optimize);
+                    var roundedPreloaderWidth = Math.round(item.preloaderWidth / this.options.mobile_image_optimize);
+                } else {
+                    var roundedPreloaderHeight = Math.round(item.preloaderHeight);
+                    var roundedPreloaderWidth = Math.round(item.preloaderWidth);
+                }
                 var image = itemData.image;
-                // if (itemData.type == 'sponsored') {
-                //     image = image.replace('h=315', 'h=' + roundedPreloaderHeight).replace('w=420', 'w=' + roundedPreloaderWidth) + '&h=' + roundedPreloaderHeight + '&w=' + roundedPreloaderWidth;
-                // }
+
+                image = image.replace('h=315', 'h=' + roundedPreloaderHeight).replace('w=420', 'w=' + roundedPreloaderWidth) + '&h=' + roundedPreloaderHeight + '&w=' + roundedPreloaderWidth;
 
                 var revImage = item.element.querySelector('.rev-image');
 
