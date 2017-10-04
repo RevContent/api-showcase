@@ -58,10 +58,6 @@ if (!String.prototype.endsWith) {
 	this.controlSettings = this.createControlSettings();
 
         this.element = document.getElementById(this.config.id);
-
-
-	
-	
 	
         this.playerId = "content_video";
         if (config.playerId) {
@@ -170,8 +166,8 @@ if (!String.prototype.endsWith) {
 	if (this.player) {
 	    var w = this.getPlayerWidth();
 	    var h = this.getPlayerHeight();
-	    var x = w/2 - 64;
-	    var y = h/2 - 64;
+	    var x = w/2 - 32;
+	    var y = h/2 - 32;
 
 	    var playDom = this.playOverlay.contentEl();
 	    playDom.setAttribute("style", "left : " + x + "px; bottom : " + y + "px; top : auto;");
@@ -281,7 +277,8 @@ if (!String.prototype.endsWith) {
 		this.playOverlay.show();
 	    }
 	}
-	if (this.controlSettings.type == "none") {
+	
+	if (this.controlSettings.type == "none" || this.controlSettings.type == "default") {
 	    if (this.autoplaySettings.audio) {
 		this.volumeOnOverlay.show();
 	    } else {
@@ -327,6 +324,8 @@ if (!String.prototype.endsWith) {
 
 	// Don't show big button. we have our own.
 	this.player.bigPlayButton.hide();
+	this.player.controlBar.volumeMenuButton.hide();
+
 	this.started = false;
 	
 	if (me.autoplaySettings.autoplay) {
@@ -671,10 +670,8 @@ if (!String.prototype.endsWith) {
 	if (this.mobile) ce = 'touchend';
 
 	revUtils.addEventListener(this.playOverlay.contentEl(), ce, this.bind(this, this.onCustomPlay));
-	revUtils.addEventListener(this.pauseOverlay.contentEl(), ce, this.bind(this, this.onCustomPause));
 	revUtils.addEventListener(this.volumeOnOverlay.contentEl(), ce, this.bind(this, this.onCustomVolumeOn));
 	revUtils.addEventListener(this.volumeOffOverlay.contentEl(), ce, this.bind(this, this.onCustomVolumeOff));
-	revUtils.addEventListener(this.fullscreenOverlay.contentEl(), ce, this.bind(this, this.onCustomFullscreen));
     };
 
     PowrVideo.prototype.bind = function(thisObj, fn, argument) {
@@ -701,7 +698,6 @@ if (!String.prototype.endsWith) {
     PowrVideo.prototype.onFullscreenChange = function() {
 	if (!this.player.isFullscreen()) {
 	    this.playOverlay.hide();
-	    this.pauseOverlay.hide();
 	    this.fullscreenOverlay.hide();
 	}
     };
@@ -721,8 +717,6 @@ if (!String.prototype.endsWith) {
 		return;
 	    }
 	}
-
-	// If floated player, let's make sure we first
 	/*
 	if (this.floated) {
 	    if (!this.player.paused() && !this.player.userActive()) {
@@ -731,6 +725,15 @@ if (!String.prototype.endsWith) {
 	    }
 	}
 	*/
+	
+	if (this.player.muted()) {
+	    this.volumeOffOverlay.show();
+	    this.volumeOnOverlay.hide();
+	} else {
+	    this.volumeOffOverlay.hide();
+	    this.volumeOnOverlay.show();
+	}
+	
 	if (this.controlSettings.type == "default")
 	    return;
 	
@@ -743,23 +746,14 @@ if (!String.prototype.endsWith) {
 	} else if (this.controlSettings.type == "custom") {
 	    if (this.player.paused()) {
 		this.playOverlay.show();
-		this.pauseOverlay.hide();
 	    } else {
 		this.playOverlay.hide();
-		this.pauseOverlay.show();
 	    }
 	    if (!this.player.isFullscreen()) {
-		this.fullscreenOverlay.show();
 	    }
 	}
 	
-	if (this.player.muted()) {
-	    this.volumeOffOverlay.show();
-	    this.volumeOnOverlay.hide();
-	} else {
-	    this.volumeOffOverlay.hide();
-	    this.volumeOnOverlay.show();
-	}
+	
     };
 
     PowrVideo.prototype.onCustomPlay = function(e) {
@@ -770,7 +764,6 @@ if (!String.prototype.endsWith) {
 	
 	this.player.play();
 	this.playOverlay.hide();
-	this.pauseOverlay.show();
     };
 
     PowrVideo.prototype.onCustomPause = function(e) {
@@ -778,14 +771,15 @@ if (!String.prototype.endsWith) {
     };
 
     PowrVideo.prototype.onCustomVolumeOn = function(e) {
-	this.cancelEvent(e);
+	// this.cancelEvent(e);
 	this.player.muted(true);
 	this.volumeOnOverlay.hide();
 	this.volumeOffOverlay.show();
     };
 
     PowrVideo.prototype.onCustomVolumeOff = function(e) {
-	this.cancelEvent(e);
+	// this.cancelEvent(e);
+	
 	this.player.muted(false);
 	this.volumeOnOverlay.show();
 	this.volumeOffOverlay.hide();
@@ -797,9 +791,10 @@ if (!String.prototype.endsWith) {
     };
     
     PowrVideo.prototype.onPlay = function() {
-	if (this.controlSettings.type == "custom") {
-	    console.log("PLAY CALLED");
-	    this.playOverlay.hide();
+	this.playOverlay.hide();
+	this.player.controlBar.volumeMenuButton.hide();
+
+	if (this.controlSettings.type == "custom" || this.controlSettings.type == "default") {
 	    if (this.player.muted()) {
 		this.volumeOffOverlay.show();
 		this.volumeOnOverlay.hide();
@@ -812,9 +807,8 @@ if (!String.prototype.endsWith) {
 
     PowrVideo.prototype.onPause = function() {
 	this.titleOverlay.show();
-	if (this.controlSettings.type == "custom") {
+	if (this.controlSettings.type == "custom" || this.controlSettings.type == "default") {
 	    this.playOverlay.show();
-	    this.pauseOverlay.hide();
 	}
 
     };
@@ -827,7 +821,6 @@ if (!String.prototype.endsWith) {
         if (!this.player.paused()) {
 	    this.titleOverlay.hide();
 	    this.playOverlay.hide();
-	    this.pauseOverlay.hide();
 	    this.fullscreenOverlay.hide();
 	    // this.volumeOnOverlay.hide();
 	    // this.volumeOffOverlay.hide();
@@ -876,28 +869,7 @@ if (!String.prototype.endsWith) {
     };
 
     PowrVideo.prototype.createControlSettings = function() {
-	var c = this.config;
-	if (typeof c.controls == "undefined")
-	    c.controls = "default";
-	if (typeof c.controls == "string") {
-	    if (c.controls == "default") {
-		if (this.mobile) {
-		    return {
-			type : "custom"
-		    };
-		} else {
-		    return {
-			type : "default"
-		    };
-		}
-	    } else {
-		return { type : c.controls };
-	    }
-	} else {
-	    if (this.mobile) return { type : c.controls.mobile };
-	    else return { type : c.controls.desktop };
-	}
-	return ret;
+	return { type : "default" };
     };
     
     PowrVideo.prototype.createAutoplaySettings = function() {
