@@ -632,9 +632,7 @@ Author: michael@revcontent.com
                 internalLimit++;
                 // }
 
-                var description = '<div class="rev-description">' +
-                                    '<h4></h4>' +
-                                '</div>';
+                var description = '<div class="rev-description"></div>';
 
                 // // MOCK: Poll Results
                 // var poll_mock = '<div class="rev-poll"><div class="rev-poll-inner">' +
@@ -744,9 +742,7 @@ Author: michael@revcontent.com
                 this.handleReactionMenu(items[0]);
             }
 
-            var headline = '<div class="rev-headline">' +
-                        '<h3></h3>' +
-                    '</div>';
+            var headline = '<div class="rev-headline"></div>';
 
             if (items[0].element.matches(this.options.headline_top_selector)) {
                 revUtils.addClass(items[0].element, 'rev-headline-top');
@@ -1622,7 +1618,7 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.setDescriptionLineHeight = function(item) {
-        var description = item.element.querySelector('.rev-description h4');
+        var description = item.element.querySelector('.rev-description');
         description.removeAttribute('style');
         if (!description) {
             return;
@@ -1638,7 +1634,7 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.setDescriptionFontSize = function(item) {
-        var description = item.element.querySelector('.rev-description h4');
+        var description = item.element.querySelector('.rev-description');
         description.removeAttribute('style');
         if (!description) {
             return;
@@ -1685,7 +1681,7 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.setHeadlineLineHeight = function(item) {
-        var headline = item.element.querySelector('.rev-headline h3');
+        var headline = item.element.querySelector('.rev-headline');
         headline.style.lineHeight = null;
 
         var computedLineHeight = parseInt(revUtils.getComputedStyle(headline, 'line-height'));
@@ -1707,7 +1703,7 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.setHeadlineFontSize = function(item) {
-        var headline = item.element.querySelector('.rev-headline h3');
+        var headline = item.element.querySelector('.rev-headline');
         headline.style.fontSize = null;
         var computedFontSize = parseInt(revUtils.getComputedStyle(headline, 'font-size'));
 
@@ -1720,7 +1716,7 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.setHeadlineMarginTop = function(item) {
-        var headline = item.element.querySelector('.rev-headline h3');
+        var headline = item.element.querySelector('.rev-headline');
         headline.style.marginTop = null;
         var computedMarginTop = parseInt(revUtils.getComputedStyle(headline, 'margin-top'));
 
@@ -1747,7 +1743,7 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.setDescriptionMarginTop = function(item) {
-        var description = item.element.querySelector('.rev-description h4');
+        var description = item.element.querySelector('.rev-description');
         if (!description) {
             return;
         }
@@ -1965,9 +1961,9 @@ Author: michael@revcontent.com
         // console.log(this.headlineMaxHeights, item.row, item.element);
         // el.style.maxHeight = (this.headlineMaxHeights[row][item.span][index] ? this.headlineMaxHeights[row][item.span][index].maxHeight : this.headlineMaxHeights[row][item.span].maxHeight) + 'px';
         // el.querySelector('h3').style.margin = item.headlineMarginTop +'px ' + item.innerMargin + 'px 0';
-        el.querySelector('h3').style.marginTop = item.headlineMarginTop +'px';
-        el.querySelector('h3').style.fontSize = item.headlineFontSize + 'px';
-        el.querySelector('h3').style.lineHeight = item.headlineLineHeight + 'px';
+        el.style.marginTop = item.headlineMarginTop +'px';
+        el.style.fontSize = item.headlineFontSize + 'px';
+        el.style.lineHeight = item.headlineLineHeight + 'px';
     };
 
     RevSlider.prototype.resizeAfterImage = function(item) {
@@ -2004,9 +2000,9 @@ Author: michael@revcontent.com
         }
         // el.style.maxHeight = (this.headlineMaxHeights[row][item.span][index] ? this.headlineMaxHeights[row][item.span][index].maxHeight : this.headlineMaxHeights[row][item.span].maxHeight) + 'px';
         // el.querySelector('h4').style.margin = item.descriptionMarginTop +'px ' + item.innerMargin + 'px 0';
-        el.querySelector('h4').style.marginTop = item.descriptionMarginTop +'px';
-        el.querySelector('h4').style.fontSize = item.descriptionFontSize + 'px';
-        el.querySelector('h4').style.lineHeight = item.descriptionLineHeight + 'px';
+        el.style.marginTop = item.descriptionMarginTop +'px';
+        el.style.fontSize = item.descriptionFontSize + 'px';
+        el.style.lineHeight = item.descriptionLineHeight + 'px';
     };
 
     RevSlider.prototype.resizeHeadlineIcon = function(el, row, index, item) {
@@ -2125,7 +2121,7 @@ Author: michael@revcontent.com
                 var ad = ads[i];
 
                 if (this.displayedItems[i]) { // reset headlines for new ellipsis check
-                    ad.querySelectorAll('.rev-headline h3')[0].innerHTML = this.displayedItems[i].headline;
+                    ad.querySelectorAll('.rev-headline')[0].innerHTML = this.displayedItems[i].headline;
                 }
             }
         }
@@ -2553,12 +2549,12 @@ Author: michael@revcontent.com
 
                 // item.element.querySelector('img').setAttribute('src', image);
 
-                var headline = item.element.querySelector('.rev-headline h3');
+                var headline = item.element.querySelector('.rev-headline');
                 headline.innerHTML = itemData.headline;
 
                 var description = item.element.querySelector('.rev-description');
                 if (description) {
-                    description.children[0].innerHTML = itemData.description ? itemData.description : 'Read More';
+                    description.innerHTML = itemData.description ? itemData.description : 'Read More';
                 }
 
                 var favicon = item.element.querySelector('.rev-headline-icon');
