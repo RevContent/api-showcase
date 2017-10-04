@@ -411,7 +411,7 @@ $reactionMenu8Y: 13.5px;
                                     visibility: visible;
                                     .rev-reaction-menu-item {
                                         opacity: 1;
-                                        transition: all .25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                                        transition: all .5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                                         // transition: all .4s cubic-bezier(0.6, -0.28, 0.735, 0.045);
 
                                     }
@@ -424,7 +424,7 @@ $reactionMenu8Y: 13.5px;
 
                                     .rev-reaction-menu-item:nth-of-type(1) { // count top
                                         // transform: translate3d(0, $side + 60%, 0);
-                                        transition-delay: .3s;
+                                        // transition-delay: .3s;
                                         transform: translate3d($reactionMenu1X, $reactionMenu1Y, 0);
                                     }
 
@@ -445,26 +445,26 @@ $reactionMenu8Y: 13.5px;
 
                                     .rev-reaction-menu-item:nth-of-type(5) { // count top
                                         // transform: translate3d(0, ($side + 60%) * -1, 0);
-                                        transition-delay: .9s;
+                                        // transition-delay: .9s;
                                         transform: translate3d($reactionMenu5X, $reactionMenu5Y, 0);
                                     }
 
                                     .rev-reaction-menu-item:nth-of-type(6) { // bottom left
                                         // transform: translate3d($edge, $edge * -1, 0);
                                         transform: translate3d($reactionMenu6X, $reactionMenu6Y, 0);
-                                        transition-delay: .6s;
+                                        // transition-delay: .6s;
                                     }
 
                                     .rev-reaction-menu-item:nth-of-type(7) { // left
                                         // transform: translate3d($side, 0, 0);
                                         transform: translate3d($reactionMenu7X, $reactionMenu7Y, 0);
-                                        transition-delay: .6s;
+                                        // transition-delay: .6s;
                                     }
 
                                     .rev-reaction-menu-item:nth-of-type(8) { // top left
                                         // transform: translate3d($edge, $edge, 0);
                                         transform: translate3d($reactionMenu8X, $reactionMenu8Y, 0);
-                                        transition-delay: .6s;
+                                        // transition-delay: .6s;
                                     }
                                 }
 

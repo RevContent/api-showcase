@@ -938,7 +938,7 @@ Author: michael@revcontent.com
 
                 that.likeReactionIconShowTimeout = setTimeout(function() {
                     revUtils.addClass(item.element, 'rev-menu-active');
-                }, 400);
+                }, 200);
             });
 
             revUtils.addEventListener(likeReactionElement, 'mouseleave', function(ev) {
@@ -949,7 +949,7 @@ Author: michael@revcontent.com
                     that.likeReactionIconHideTimeoutInner = setTimeout(function() {
                         revUtils.removeClass(item.element, 'rev-menu-active');
                     }, 600);
-                }, 150);
+                }, 400);
             });
 
             revUtils.addEventListener(item.element.querySelector('.rev-reaction-menu-container'), 'click', function(ev) {
