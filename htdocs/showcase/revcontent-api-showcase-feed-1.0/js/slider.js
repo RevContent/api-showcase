@@ -140,7 +140,7 @@ Author: michael@revcontent.com
             brand_logo: false,
             comment_div: false,
             window_width_enabled: false,
-            reactions: [ 'love', 'exciting', 'interesting', 'idiotic', 'sad', 'angry' ],
+            reactions: [ 'love', 'exciting', 'interesting', 'gross', 'sad', 'angry' ],
             initial_icon_colors: [
                 'EF5350',
                 'F06292',
@@ -2687,7 +2687,7 @@ Author: michael@revcontent.com
                                     reactionCountTotal += reactionCount;
                                     reactionHtml += '<div style="z-index:'+ zIndex +';" class="rev-reaction rev-reaction-' + reaction + '">' +
                                             '<div class="rev-reaction-inner">' +
-                                                '<div class="rev-reaction-icon rev-reaction-icon-' + reaction + '"></div>' +
+                                                '<div class="rev-reaction-icon rev-reaction-icon-' + reaction + '-full"></div>' +
                                             '</div>' +
                                         '</div>';
                                     zIndex--;
