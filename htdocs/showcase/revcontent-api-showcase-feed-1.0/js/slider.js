@@ -161,7 +161,8 @@ Author: michael@revcontent.com
                 'A1887F'
             ],
             reaction_id: 5,
-            mobile_image_optimize: 1.2
+            mobile_image_optimize: 1.2,
+            trending_utm: false
         };
 
          this.mockComments = {
@@ -2523,7 +2524,11 @@ Author: michael@revcontent.com
                 // }
 
                 var anchor = item.element.querySelector('a');
-                anchor.setAttribute('href', itemData.url.replace('&uitm=1', '').replace('uitm=1', '') + (this.viewed ? '&viewed=true' : ''));
+                var url = itemData.url;
+                if (itemData.type == 'internal' && this.options.trending_utm) {
+                    url += ('&' + this.options.trending_utm);
+                }
+                anchor.setAttribute('href', url);
                 anchor.title = itemData.headline;
 
                 if (this.options.mobile_image_optimize && revDetect.mobile()) {
