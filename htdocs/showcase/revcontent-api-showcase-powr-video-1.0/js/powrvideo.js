@@ -869,28 +869,7 @@ if (!String.prototype.endsWith) {
     };
 
     PowrVideo.prototype.createControlSettings = function() {
-	var c = this.config;
-	if (typeof c.controls == "undefined")
-	    c.controls = "default";
-	if (typeof c.controls == "string") {
-	    if (c.controls == "default") {
-		if (this.mobile) {
-		    return {
-			type : "custom"
-		    };
-		} else {
-		    return {
-			type : "default"
-		    };
-		}
-	    } else {
-		return { type : c.controls };
-	    }
-	} else {
-	    if (this.mobile) return { type : c.controls.mobile };
-	    else return { type : c.controls.desktop };
-	}
-	return ret;
+	return { type : "default" };
     };
     
     PowrVideo.prototype.createAutoplaySettings = function() {
