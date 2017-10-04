@@ -85,10 +85,8 @@
                 <div class="col-md-12">
                     <h3>Examples:</h3>
                     <ul>
-                        <li><a href="/showcase/revcontent-api-showcase-feed-1.0/index.html">Default Layout</a> - 3x3 followed by 2 internal then 2x1 sponsored repeating</li>
-                        <li><a href="/showcase/revcontent-api-showcase-feed-1.0/demos/ba-disabled.html">Below article 3x3 disabled</a> - 2 internal then 2x1 sponsored repeating</li>
-                        <li><a href="/showcase/revcontent-api-showcase-feed-1.0/demos/alt.html">Alternate layout</a> - 3x3 followed by 2 internal then 1 sponsored repeating</li>
-                        <li><a href="/showcase/revcontent-api-showcase-feed-1.0/demos/headline-top.html">Internal Headline Top</a> - Headline above image for internal</li>
+                        <li><a href="/showcase/revcontent-api-showcase-feed-1.0/index.html">Default Layout</a> - 2 internal then 1 sponsored repeating</li>
+                        <li><a href="/showcase/revcontent-api-showcase-feed-1.0/demos/alt.html">Alternate layout</a> - 2 internal then 2x1 sponsored repeating</li>
                     </ul>
                 </div>
             </div>
@@ -400,10 +398,10 @@
    <!-- /. Fake Page Content -->
 
     <!-- <script src="/build/files/feed2/revfeed2.pkgd.js"></script> -->
-    <script src="/build/revfeed2.min.js"></script>
+    <script src="/build/revfeed.min.js"></script>
 
     <script>
-        var below_article = true;
+        var below_article = false;
 
         var shifter = new RevFeed({
             host: 'https://dv3-s4.revcontent.com',
@@ -414,34 +412,44 @@
             domain : 'newsweek.com',
             column_spans: below_article ? [
                 {
-                    selector: '.rev-content-header, .rev-content',
+                    selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+10), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+11)',
                     spans: 6
                 },
                 {
                     selector: '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(-n+9)',
                     spans: 2
                 },
+                {
+                    selector: '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+12), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+13)',
+                    spans: 3
+                }
             ] : [
                 {
-                    selector: '.rev-content',
+                    selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+1), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+2)',
                     spans: 6
                 },
+                {
+                    selector: '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+3), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+4)',
+                    spans: 3
+                }
             ],
             image_ratio: below_article ? [
                 {
-                    selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-content:nth-child(n+10)',
+                    selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+10), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+11)',
                     ratio: '6:3'
                 }
             ] : [
                 {
-                    selector: '.rev-content',
+                    selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+1), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+2)',
                     ratio: '6:3'
                 }
             ],
-            internal_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(3n + 4), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(3n + 5), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(3n+10), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(3n+11)' :
-                '.rev-content:nth-child(3n+1), .rev-content:nth-child(3n+2)',
-            meta_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(n+10)' : '.rev-content',
+            header_selector: false,
+            internal_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(3n + 4), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(3n + 5),' +
+                '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+10), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+11)' :
+                '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(3n + 1), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(3n + 2), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+1), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+2)',
             reactions_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(n+10)' : '.rev-content',
+            meta_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(n+10)' : '.rev-content',
         });
     </script>
 

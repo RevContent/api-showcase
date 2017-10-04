@@ -60,44 +60,34 @@ Author: michael@revcontent.com
             infinite: true,
             column_spans: below_article ? [
                 {
-                    selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+10), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+11)',
+                    selector: '.rev-content-header, .rev-content',
                     spans: 6
                 },
                 {
                     selector: '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(-n+9)',
                     spans: 2
                 },
-                {
-                    selector: '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+12), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+13)',
-                    spans: 3
-                }
             ] : [
                 {
-                    selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+1), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+2)',
+                    selector: '.rev-content',
                     spans: 6
                 },
-                {
-                    selector: '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+3), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+4)',
-                    spans: 6
-                }
             ],
             image_ratio: below_article ? [
                 {
-                    selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+10), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+11)',
+                    selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-content:nth-child(n+10)',
                     ratio: '6:3'
                 }
             ] : [
                 {
-                    selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+1), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+2)',
+                    selector: '.rev-content',
                     ratio: '6:3'
                 }
             ],
-            header_selector: false,
-            internal_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(3n + 4), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(3n + 5),' +
-                '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+10), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+11)' :
-                '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(3n + 1), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(3n + 2), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+1), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(4n+2)',
-            reactions_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(n+10)' : '.rev-content',
+            internal_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(3n + 4), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(3n + 5), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(3n+10), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(3n+11)' :
+                '.rev-content:nth-child(3n+1), .rev-content:nth-child(3n+2)',
             meta_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(n+10)' : '.rev-content',
+            reactions_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(n+10)' : '.rev-content',
             headline_top_selector: false,
             // headline_icon_selector: '.rev-content:nth-child(4n+10), .rev-content:nth-child(4n+11)',
             // headline_icon_selector: '.rev-content',
@@ -109,7 +99,8 @@ Author: michael@revcontent.com
             ],
             mock: false,
             comment_div: false,
-            reaction_id: 299
+            reaction_id: 299,
+            mobile_image_optimize: 1.2
         };
 
         // merge options
@@ -237,6 +228,7 @@ Author: michael@revcontent.com
             brand_logo: this.options.brand_logo,
             comment_div: this.options.comment_div,
             reaction_id: this.options.reaction_id,
+            mobile_image_optimize: this.options.mobile_image_optimize,
             developer: this.options.developer,
             internal_selector: this.options.internal_selector,
             header_selector: this.options.header_selector,
