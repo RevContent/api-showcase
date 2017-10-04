@@ -871,6 +871,7 @@ Author: michael@revcontent.com
                     likeReactionElement.setAttribute('data-active', 0);
 
                     revUtils.removeClass(likeReactionElement, 'rev-reaction-icon-', true);
+                    revUtils.addClass(likeReactionElement, 'rev-reaction-icon-love');
 
                     that.reactionCount(item, iconName, false);
 
@@ -966,6 +967,7 @@ Author: michael@revcontent.com
                     likeReactionElement.setAttribute('data-active', 0);
 
                     revUtils.removeClass(likeReactionElement, 'rev-reaction-icon-', true);
+                    revUtils.addClass(likeReactionElement, 'rev-reaction-icon-love');
 
                     that.reactionCount(item, iconName, false);
                 } else {
