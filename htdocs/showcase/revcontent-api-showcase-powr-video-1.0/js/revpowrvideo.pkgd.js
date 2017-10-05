@@ -25949,6 +25949,8 @@ if (!String.prototype.endsWith) {
 
 	// If we are autoplaying a muted version, let's toggle audio on first click
         this.player.ready(this.onReady.bind(this));
+
+	// revutils.addEventListener(this.container, "touchstart", 
     };
 
     PowrVideo.prototype.onReady = function() {
@@ -25989,9 +25991,9 @@ if (!String.prototype.endsWith) {
         this.player.on('userinactive', this.onIdle.bind(this));
 	this.player.on('loadedmetadata', this.onMetadataLoaded.bind(this));
 	if (this.mobile) {
-	    this.player.on('touchstart', this.onTouchStart.bind(this));
-	    this.player.on('touchmove', this.onTouchMove.bind(this));
-	    this.player.on('touchend', this.onTouchEnd.bind(this));
+	    this.player.on('touchstart', this.bind(this, this.onTouchStart));
+	    this.player.on('touchmove', this.bind(this, this.onTouchMove));
+	    this.player.on('touchend', this.bind(this, this.onTouchEnd));
 	} else {
 	    this.player.on('click', this.onClick.bind(this));
 	}
@@ -26002,7 +26004,7 @@ if (!String.prototype.endsWith) {
 	this.player.on('waiting', function() {
 	    console.log("WAITING FOR DATA");
 	});
-	this.player.on('ended', this.bind(this, this.loadNextVideo));
+	this.player.on('ended', this.bind(this, this.loadNextVideoWithTick));
 	
         GlobalPlayer = this;
 	
@@ -26072,6 +26074,17 @@ if (!String.prototype.endsWith) {
         //});
     };
 
+    PowrVideo.prototype.loadNextVideoWithTick = function() {
+	if (this.player.ads.isInAdMode()) {
+	    return;
+	}
+	var me = this;
+	setTimeout(function() {
+	    me.loadNextVideo();
+	}, 100);
+    };
+
+    
     PowrVideo.prototype.loadNextVideo = function() {
         var video = this.videos[this.currentContent];
 	if (this.config.hasOwnProperty("tracking_url")) {
@@ -26083,7 +26096,7 @@ if (!String.prototype.endsWith) {
         this.currentContent++;
         if (this.currentContent < this.videos.length) {
 	    if (!this.autoplaySettings.audio) {
-		this.player.muted(true);
+		// this.player.muted(true);
 	    }
 	    
 	    this.player.ima.initializeAdDisplayContainer();
@@ -26364,7 +26377,14 @@ if (!String.prototype.endsWith) {
 	var ce = 'click';
 	if (this.mobile) ce = 'touchend';
 
-	revUtils.addEventListener(this.playOverlay.contentEl(), ce, this.bind(this, this.onCustomPlay));
+	if (this.mobile) {
+	    revUtils.addEventListener(this.playOverlay.contentEl(), 'touchstart', this.bind(this, this.onCustomPlayTouchStart));
+	    revUtils.addEventListener(this.playOverlay.contentEl(), 'touchend', this.bind(this, this.onCustomPlay));
+	    revUtils.addEventListener(this.playOverlay.contentEl(), 'mousedown', this.bind(this, this.onCustomPlayTouchStart));
+	} else {
+	    revUtils.addEventListener(this.playOverlay.contentEl(), 'click', this.bind(this, this.onCustomPlay));
+	}
+	
 	revUtils.addEventListener(this.volumeOnOverlay.contentEl(), ce, this.bind(this, this.onCustomVolumeOn));
 	revUtils.addEventListener(this.volumeOffOverlay.contentEl(), ce, this.bind(this, this.onCustomVolumeOff));
     };
@@ -26379,15 +26399,18 @@ if (!String.prototype.endsWith) {
 	this.player.loadingSpinner.unlockShowing();
     };
 
-    PowrVideo.prototype.onTouchStart = function() {
+    PowrVideo.prototype.onTouchStart = function(e) {
 	this.dragging = false;
+	this.cancelEvent(e);
     };
-    PowrVideo.prototype.onTouchMove = function() {
+    PowrVideo.prototype.onTouchMove = function(e) {
 	this.dragging = true;
+	this.cancelEvent(e);
     };
-    PowrVideo.prototype.onTouchEnd = function() {
+    PowrVideo.prototype.onTouchEnd = function(e) {
 	if (this.dragging) return;
 	this.onClick();
+	this.cancelEvent(e);
     };
 
     PowrVideo.prototype.onFullscreenChange = function() {
@@ -26451,6 +26474,10 @@ if (!String.prototype.endsWith) {
 	
     };
 
+    PowrVideo.prototype.onCustomPlayTouchStart = function(e) {
+	this.cancelEvent(e);
+    };
+    
     PowrVideo.prototype.onCustomPlay = function(e) {
 	// Don't do anything if we haven't started yet.
 	if (!this.started) {
@@ -26459,6 +26486,7 @@ if (!String.prototype.endsWith) {
 	
 	this.player.play();
 	this.playOverlay.hide();
+	this.cancelEvent(e);
     };
 
     PowrVideo.prototype.onCustomPause = function(e) {
@@ -26503,7 +26531,7 @@ if (!String.prototype.endsWith) {
     PowrVideo.prototype.onPause = function() {
 	this.titleOverlay.show();
 	if (this.controlSettings.type == "custom" || this.controlSettings.type == "default") {
-	    this.playOverlay.show();
+	    // this.playOverlay.show();
 	}
 
     };
