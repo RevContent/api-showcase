@@ -140,7 +140,7 @@ Author: michael@revcontent.com
             brand_logo: false,
             comment_div: false,
             window_width_enabled: false,
-            reactions: [ 'love', 'exciting', 'interesting', 'idiotic', 'sad', 'angry' ],
+            reactions: [ 'love', 'exciting', 'interesting', 'gross', 'sad', 'angry' ],
             initial_icon_colors: [
                 'EF5350',
                 'F06292',
@@ -161,7 +161,8 @@ Author: michael@revcontent.com
                 'A1887F'
             ],
             reaction_id: 5,
-            mobile_image_optimize: 1.2
+            mobile_image_optimize: 1.2,
+            trending_utm: false
         };
 
          this.mockComments = {
@@ -870,6 +871,7 @@ Author: michael@revcontent.com
                     likeReactionElement.setAttribute('data-active', 0);
 
                     revUtils.removeClass(likeReactionElement, 'rev-reaction-icon-', true);
+                    revUtils.addClass(likeReactionElement, 'rev-reaction-icon-love');
 
                     that.reactionCount(item, iconName, false);
 
@@ -965,6 +967,7 @@ Author: michael@revcontent.com
                     likeReactionElement.setAttribute('data-active', 0);
 
                     revUtils.removeClass(likeReactionElement, 'rev-reaction-icon-', true);
+                    revUtils.addClass(likeReactionElement, 'rev-reaction-icon-love');
 
                     that.reactionCount(item, iconName, false);
                 } else {
@@ -2523,7 +2526,11 @@ Author: michael@revcontent.com
                 // }
 
                 var anchor = item.element.querySelector('a');
-                anchor.setAttribute('href', itemData.url.replace('&uitm=1', '').replace('uitm=1', '') + (this.viewed ? '&viewed=true' : ''));
+                var url = itemData.url;
+                if (itemData.type == 'internal' && this.options.trending_utm) {
+                    url += ('&' + this.options.trending_utm);
+                }
+                anchor.setAttribute('href', url);
                 anchor.title = itemData.headline;
 
                 if (this.options.mobile_image_optimize && revDetect.mobile()) {
@@ -2687,7 +2694,7 @@ Author: michael@revcontent.com
                                     reactionCountTotal += reactionCount;
                                     reactionHtml += '<div style="z-index:'+ zIndex +';" class="rev-reaction rev-reaction-' + reaction + '">' +
                                             '<div class="rev-reaction-inner">' +
-                                                '<div class="rev-reaction-icon rev-reaction-icon-' + reaction + '"></div>' +
+                                                '<div class="rev-reaction-icon rev-reaction-icon-' + reaction + '-full"></div>' +
                                             '</div>' +
                                         '</div>';
                                     zIndex--;
