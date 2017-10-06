@@ -445,6 +445,12 @@ if (!String.prototype.endsWith) {
             // this.closeButton.setAttribute("style", "margin-top : 166px; margin-left : " + (windowWidth - 60) + "px");
             this.closeButton.setAttribute("style", "margin-top : 0px; margin-left : " + (windowWidth - 50) + "px");
 
+	    for (var i = 0; i < this.floatConflicts.length; i++) {
+		var f = this.floatConflicts[i];
+		var d = document.body.querySelector(f);
+		d.style.display = "none";
+	    }
+	    
         } else {
             this.player.fluid(true);
             if (fs.landscape_style.startsWith("top")) {
@@ -487,13 +493,8 @@ if (!String.prototype.endsWith) {
 	
         this.container.setAttribute("style", styleString);
         this.floated = true;
-	this.oldDisplays = {};
-	for (var i = 0; i < this.floatConflicts.length; i++) {
-	    var f = this.floatConflicts[i];
-	    var d = document.body.querySelector(f);
-	    this.oldDisplays[f] = d.style.display;
-	    d.style.display = "none";
-	}
+
+	
 	this.onResize(false);
     };
 
@@ -510,7 +511,7 @@ if (!String.prototype.endsWith) {
 	    for (var i = 0; i < this.floatConflicts.length; i++) {
 		var f = this.floatConflicts[i];
 		var d = document.body.querySelector(f);
-		d.style.display = this.oldDisplays[f];
+		d.style.display = "block";
 	    }
 	    
 	    this.onResize(false);
