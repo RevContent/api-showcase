@@ -25468,29 +25468,6 @@ utils.checkVisible = function(element, callback, percentVisible, buffer) {
     });
 };
 
-utils.checkVisibleItem = function(item, callback, percentVisible, buffer) {
-    var that = this;
-    requestAnimationFrame(function() {
-        // what percentage of the element should be visible
-        var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
-        // fire if within buffer
-        var bufferPixels = (typeof buffer === 'number') ? buffer : 0;
-
-        var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-        var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-        var elementTop = item.element.getBoundingClientRect().top;
-        var elementBottom = item.element.getBoundingClientRect().bottom;
-        var elementVisibleHeight = item.element.offsetHeight * visibleHeightMultiplier;
-
-        if ((scroll + windowHeight >= (elementTop + scroll + elementVisibleHeight - bufferPixels)) &&
-            elementBottom > elementVisibleHeight) {
-            callback.call(that, true, item);
-        } else {
-            callback.call(that, false, item)
-        }
-    });
-};
-
 utils.windowHeight = function() {
     return window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 }
@@ -25615,7 +25592,6 @@ return utils;
 'use strict';
 
 var api = {};
-
 api.beacons = revBeacon || {attach: function(){}};
 
 api.forceJSONP = true;
@@ -25629,32 +25605,28 @@ api.request = function(url, success, failure, JSONPCallback) {
         script.src = url + this.getReferer() + '&callback=' + JSONPCallback;
         document.body.appendChild(script);
     } else {
-        this.xhr(url, success, failure);
+        var request = new XMLHttpRequest();
+
+        request.open('GET', url + this.getReferer(), true);
+
+        request.onload = function() {
+            if (request.status >= 200 && request.status < 400) {
+                try {
+                    success(JSON.parse(request.responseText));
+                } catch(e) { }
+            } else if(failure) {
+                failure(request);
+            }
+        };
+
+        request.onerror = function() {
+            if (failure) {
+                failure(request);
+            }
+        };
+
+        request.send();
     }
-};
-
-api.xhr = function(url, success, failure) {
-    var request = new XMLHttpRequest();
-
-    request.open('GET', url + this.getReferer(), true);
-
-    request.onload = function() {
-        if (request.status >= 200 && request.status < 400) {
-            try {
-                success(JSON.parse(request.responseText));
-            } catch(e) { }
-        } else if(failure) {
-            failure(request);
-        }
-    };
-
-    request.onerror = function() {
-        if (failure) {
-            failure(request);
-        }
-    };
-
-    request.send();
 };
 
 api.getReferer = function() {
@@ -26140,6 +26112,12 @@ if (!String.prototype.endsWith) {
             // this.closeButton.setAttribute("style", "margin-top : 166px; margin-left : " + (windowWidth - 60) + "px");
             this.closeButton.setAttribute("style", "margin-top : 0px; margin-left : " + (windowWidth - 50) + "px");
 
+	    for (var i = 0; i < this.floatConflicts.length; i++) {
+		var f = this.floatConflicts[i];
+		var d = document.body.querySelector(f);
+		d.style.display = "none";
+	    }
+	    
         } else {
             this.player.fluid(true);
             if (fs.landscape_style.startsWith("top")) {
@@ -26183,11 +26161,7 @@ if (!String.prototype.endsWith) {
         this.container.setAttribute("style", styleString);
         this.floated = true;
 
-	for (var i = 0; i < this.floatConflicts.length; i++) {
-	    var f = this.floatConflicts[i];
-	    var d = document.body.querySelector(f);
-	    d.style.display = "none";
-	}
+	
 	this.onResize(false);
     };
 
