@@ -25724,7 +25724,10 @@ if (!String.prototype.endsWith) {
 	this.iframeSettings = this.createIframeSettings();
 	this.autoplaySettings = this.createAutoplaySettings();
 	this.controlSettings = this.createControlSettings();
-	this.floatConflicts = [];
+	this.floatConflicts = {
+	    "top" : [],
+	    "bottom" : []
+	};
 	if (this.config.float_conflicts) {
 	    this.floatConflicts = this.config.float_conflicts;
 	}
@@ -26102,6 +26105,9 @@ if (!String.prototype.endsWith) {
 	
         var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 	var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+
+	this.showConflicts("top");
+	this.showConflicts("bottom");
 	
         if (this.orientation == 'portrait') {
             styleString += "top : 0px;";
@@ -26112,11 +26118,7 @@ if (!String.prototype.endsWith) {
             // this.closeButton.setAttribute("style", "margin-top : 166px; margin-left : " + (windowWidth - 60) + "px");
             this.closeButton.setAttribute("style", "margin-top : 0px; margin-left : " + (windowWidth - 50) + "px");
 
-	    for (var i = 0; i < this.floatConflicts.length; i++) {
-		var f = this.floatConflicts[i];
-		var d = document.body.querySelector(f);
-		d.style.display = "none";
-	    }
+	    this.hideConflicts("top");
 	    
         } else {
             this.player.fluid(true);
@@ -26156,6 +26158,8 @@ if (!String.prototype.endsWith) {
                 this.closeButton.setAttribute("style", "margin-left : " + (w - 100) + "px; margin-top : -30px;");
 		}
 	    this.player.dimensions(w, parseInt(h));
+	    
+	    this.hideConflicts("bottom");
         }
 	
         this.container.setAttribute("style", styleString);
@@ -26165,6 +26169,35 @@ if (!String.prototype.endsWith) {
 	this.onResize(false);
     };
 
+    PowrVideo.prototype.showConflicts = function(t) {
+	try {
+	    for (var i = 0; i < this.floatConflicts[t].length; i++) {
+		try {
+		    var f = this.floatConflicts[t][i];
+		    var d = document.body.querySelector(f);
+		    d.style.display = "block";
+		} catch (e) {
+		}
+	    }
+	} catch (e) {
+	}
+    };
+
+    PowrVideo.prototype.hideConflicts = function(t) {
+	try {
+	    for (var i = 0; i < this.floatConflicts[t].length; i++) {
+		try {
+		    var f = this.floatConflicts[t][i];
+		    var d = document.body.querySelector(f);
+		    d.style.display = "none";
+		} catch (e) {
+		}
+	    }
+	} catch (e) {
+	}
+    };
+
+    
     PowrVideo.prototype.unfloatPlayer = function() {
         if (this.floated) {
             this.container.className = 'powr_player';
@@ -26174,14 +26207,10 @@ if (!String.prototype.endsWith) {
 	    var w = this.element.getBoundingClientRect().width;
 	    var h = this.element.getBoundingClientRect().height;
 	    this.player.dimensions(w, h);
-
-	    for (var i = 0; i < this.floatConflicts.length; i++) {
-		var f = this.floatConflicts[i];
-		var d = document.body.querySelector(f);
-		d.style.display = "block";
-	    }
-	    
 	    this.onResize(false);
+
+	    this.showConflicts("top");
+	    this.showConflicts("bottom");
         }
     };
 
