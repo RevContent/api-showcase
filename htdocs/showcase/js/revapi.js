@@ -78,7 +78,7 @@ api.getTimestamp = function() {
       return +new Date;
     };
 
-    return time();
+    return +time();
 };
 
 api.generateCallback = function(prefix, entropy){
