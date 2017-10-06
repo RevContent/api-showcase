@@ -25468,29 +25468,6 @@ utils.checkVisible = function(element, callback, percentVisible, buffer) {
     });
 };
 
-utils.checkVisibleItem = function(item, callback, percentVisible, buffer) {
-    var that = this;
-    requestAnimationFrame(function() {
-        // what percentage of the element should be visible
-        var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
-        // fire if within buffer
-        var bufferPixels = (typeof buffer === 'number') ? buffer : 0;
-
-        var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-        var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-        var elementTop = item.element.getBoundingClientRect().top;
-        var elementBottom = item.element.getBoundingClientRect().bottom;
-        var elementVisibleHeight = item.element.offsetHeight * visibleHeightMultiplier;
-
-        if ((scroll + windowHeight >= (elementTop + scroll + elementVisibleHeight - bufferPixels)) &&
-            elementBottom > elementVisibleHeight) {
-            callback.call(that, true, item);
-        } else {
-            callback.call(that, false, item)
-        }
-    });
-};
-
 utils.windowHeight = function() {
     return window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 }
@@ -25615,7 +25592,6 @@ return utils;
 'use strict';
 
 var api = {};
-
 api.beacons = revBeacon || {attach: function(){}};
 
 api.forceJSONP = true;
@@ -25629,32 +25605,28 @@ api.request = function(url, success, failure, JSONPCallback) {
         script.src = url + this.getReferer() + '&callback=' + JSONPCallback;
         document.body.appendChild(script);
     } else {
-        this.xhr(url, success, failure);
+        var request = new XMLHttpRequest();
+
+        request.open('GET', url + this.getReferer(), true);
+
+        request.onload = function() {
+            if (request.status >= 200 && request.status < 400) {
+                try {
+                    success(JSON.parse(request.responseText));
+                } catch(e) { }
+            } else if(failure) {
+                failure(request);
+            }
+        };
+
+        request.onerror = function() {
+            if (failure) {
+                failure(request);
+            }
+        };
+
+        request.send();
     }
-};
-
-api.xhr = function(url, success, failure) {
-    var request = new XMLHttpRequest();
-
-    request.open('GET', url + this.getReferer(), true);
-
-    request.onload = function() {
-        if (request.status >= 200 && request.status < 400) {
-            try {
-                success(JSON.parse(request.responseText));
-            } catch(e) { }
-        } else if(failure) {
-            failure(request);
-        }
-    };
-
-    request.onerror = function() {
-        if (failure) {
-            failure(request);
-        }
-    };
-
-    request.send();
 };
 
 api.getReferer = function() {
@@ -25752,7 +25724,10 @@ if (!String.prototype.endsWith) {
 	this.iframeSettings = this.createIframeSettings();
 	this.autoplaySettings = this.createAutoplaySettings();
 	this.controlSettings = this.createControlSettings();
-	this.floatConflicts = [];
+	this.floatConflicts = {
+	    "top" : [],
+	    "bottom" : []
+	};
 	if (this.config.float_conflicts) {
 	    this.floatConflicts = this.config.float_conflicts;
 	}
@@ -26130,6 +26105,9 @@ if (!String.prototype.endsWith) {
 	
         var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 	var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+
+	this.showConflicts("top");
+	this.showConflicts("bottom");
 	
         if (this.orientation == 'portrait') {
             styleString += "top : 0px;";
@@ -26140,6 +26118,8 @@ if (!String.prototype.endsWith) {
             // this.closeButton.setAttribute("style", "margin-top : 166px; margin-left : " + (windowWidth - 60) + "px");
             this.closeButton.setAttribute("style", "margin-top : 0px; margin-left : " + (windowWidth - 50) + "px");
 
+	    this.hideConflicts("top");
+	    
         } else {
             this.player.fluid(true);
             if (fs.landscape_style.startsWith("top")) {
@@ -26178,19 +26158,46 @@ if (!String.prototype.endsWith) {
                 this.closeButton.setAttribute("style", "margin-left : " + (w - 100) + "px; margin-top : -30px;");
 		}
 	    this.player.dimensions(w, parseInt(h));
+	    
+	    this.hideConflicts("bottom");
         }
 	
         this.container.setAttribute("style", styleString);
         this.floated = true;
 
-	for (var i = 0; i < this.floatConflicts.length; i++) {
-	    var f = this.floatConflicts[i];
-	    var d = document.body.querySelector(f);
-	    d.style.display = "none";
-	}
+	
 	this.onResize(false);
     };
 
+    PowrVideo.prototype.showConflicts = function(t) {
+	try {
+	    for (var i = 0; i < this.floatConflicts[t].length; i++) {
+		try {
+		    var f = this.floatConflicts[t][i];
+		    var d = document.body.querySelector(f);
+		    d.style.display = "block";
+		} catch (e) {
+		}
+	    }
+	} catch (e) {
+	}
+    };
+
+    PowrVideo.prototype.hideConflicts = function(t) {
+	try {
+	    for (var i = 0; i < this.floatConflicts[t].length; i++) {
+		try {
+		    var f = this.floatConflicts[t][i];
+		    var d = document.body.querySelector(f);
+		    d.style.display = "none";
+		} catch (e) {
+		}
+	    }
+	} catch (e) {
+	}
+    };
+
+    
     PowrVideo.prototype.unfloatPlayer = function() {
         if (this.floated) {
             this.container.className = 'powr_player';
@@ -26200,14 +26207,10 @@ if (!String.prototype.endsWith) {
 	    var w = this.element.getBoundingClientRect().width;
 	    var h = this.element.getBoundingClientRect().height;
 	    this.player.dimensions(w, h);
-
-	    for (var i = 0; i < this.floatConflicts.length; i++) {
-		var f = this.floatConflicts[i];
-		var d = document.body.querySelector(f);
-		d.style.display = "block";
-	    }
-	    
 	    this.onResize(false);
+
+	    this.showConflicts("top");
+	    this.showConflicts("bottom");
         }
     };
 
