@@ -41,6 +41,7 @@ if (!String.prototype.endsWith) {
      * iframe_id : "id" // Incase we are inside an iframe. 
      * player_id : id to give the player we creating. 
      * controls : "custom"
+     * float_conflicts : [ "" ]
      */
     var PowrVideo = function(config) {
         this.config = config;
@@ -56,7 +57,11 @@ if (!String.prototype.endsWith) {
 	this.iframeSettings = this.createIframeSettings();
 	this.autoplaySettings = this.createAutoplaySettings();
 	this.controlSettings = this.createControlSettings();
-
+	this.floatConflicts = [];
+	if (this.config.float_conflicts) {
+	    this.floatConflicts = this.config.float_conflicts;
+	}
+	
         this.element = document.getElementById(this.config.id);
 	
         this.playerId = "content_video";
@@ -440,6 +445,12 @@ if (!String.prototype.endsWith) {
             // this.closeButton.setAttribute("style", "margin-top : 166px; margin-left : " + (windowWidth - 60) + "px");
             this.closeButton.setAttribute("style", "margin-top : 0px; margin-left : " + (windowWidth - 50) + "px");
 
+	    for (var i = 0; i < this.floatConflicts.length; i++) {
+		var f = this.floatConflicts[i];
+		var d = document.body.querySelector(f);
+		d.style.display = "none";
+	    }
+	    
         } else {
             this.player.fluid(true);
             if (fs.landscape_style.startsWith("top")) {
@@ -482,6 +493,8 @@ if (!String.prototype.endsWith) {
 	
         this.container.setAttribute("style", styleString);
         this.floated = true;
+
+	
 	this.onResize(false);
     };
 
@@ -494,6 +507,12 @@ if (!String.prototype.endsWith) {
 	    var w = this.element.getBoundingClientRect().width;
 	    var h = this.element.getBoundingClientRect().height;
 	    this.player.dimensions(w, h);
+
+	    for (var i = 0; i < this.floatConflicts.length; i++) {
+		var f = this.floatConflicts[i];
+		var d = document.body.querySelector(f);
+		d.style.display = "block";
+	    }
 	    
 	    this.onResize(false);
         }
