@@ -25866,6 +25866,7 @@ if (!String.prototype.endsWith) {
     };
 
     PowrVideo.prototype.setup = function () {
+	google.ima.settings.setVpaidMode(google.ima.ImaSdkSettings.VpaidMode.INSECURE);
 
 	this.events = [google.ima.AdEvent.Type.ALL_ADS_COMPLETED,
                 google.ima.AdEvent.Type.CLICK,
