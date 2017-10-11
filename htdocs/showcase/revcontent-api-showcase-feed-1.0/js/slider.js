@@ -592,7 +592,7 @@ Author: michael@revcontent.com
             items[0].initial = initial;
             itemsArr.push(items[0]);
 
-            if (items[0].element.matches(this.options.meta_selector)) {
+            if (matchesSelector(items[0].element, this.options.meta_selector)) {
                 var meta = document.createElement('div');
                 revUtils.addClass(meta, 'rev-meta');
 
@@ -630,7 +630,7 @@ Author: michael@revcontent.com
                 // handleSave(save);
             }
 
-            if (this.options.internal_selector && items[0].element.matches(this.options.internal_selector)) {
+            if (this.options.internal_selector && matchesSelector(items[0].element, this.options.internal_selector)) {
                 items[0].type = 'internal';
                 internalLimit++;
                 // }
@@ -663,7 +663,7 @@ Author: michael@revcontent.com
                 sponsoredLimit++;
             }
 
-            if (items[0].element.matches(this.options.reactions_selector)) {
+            if (matchesSelector(items[0].element, this.options.reactions_selector)) {
 
                 items[0].reactions = true;
                 // reactions
@@ -747,14 +747,14 @@ Author: michael@revcontent.com
 
             var headline = '<div class="rev-headline"></div>';
 
-            if (items[0].element.matches(this.options.headline_top_selector)) {
+            if (matchesSelector(items[0].element, this.options.headline_top_selector)) {
                 revUtils.addClass(items[0].element, 'rev-headline-top');
                 items[0].element.querySelector('.rev-before-image').insertAdjacentHTML('beforeend', headline);
             } else {
                 items[0].element.querySelector('.rev-headline-brand-inner').insertAdjacentHTML('afterbegin', headline);
             }
 
-            if (this.options.header_selector && items[0].element.matches(this.options.header_selector)) {
+            if (this.options.header_selector && matchesSelector(items[0].element, this.options.header_selector)) {
                 var header = this.createHeader();
                 items[0].element.querySelector('.rev-ad-container').insertAdjacentElement('afterbegin', header);
                 // this.grid.element.appendChild(cell);
