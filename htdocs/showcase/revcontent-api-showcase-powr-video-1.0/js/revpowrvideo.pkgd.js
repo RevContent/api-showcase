@@ -25968,7 +25968,7 @@ if (!String.prototype.endsWith) {
 	this.onResize(true);
 	
 	if (!this.autoplaySettings.audio) {
-	    this.volumeOffOverlay.show();
+	    // this.volumeOffOverlay.show();
 	}
 	
         this.player.on('timeupdate', this.onUpdate.bind(this));
@@ -26048,6 +26048,7 @@ if (!String.prototype.endsWith) {
     
     PowrVideo.prototype.start = function(playOnLoad) {
 	this.waitForPlay = true;
+	setTimeout(this.bind(this, this.clearWait), 2000);
 	this.started = true;
         this.player.ima(this.options, this.bind(this, this.adsManagerLoadedCallback));
         this.player.ima.initializeAdDisplayContainer();
@@ -26061,6 +26062,12 @@ if (!String.prototype.endsWith) {
         // this.player.ima.addContentEndedListener(function () {
         //    me.loadNextVideo();
         //});
+    };
+
+    PowrVideo.prototype.clearWait = function() {
+	if (this.waitForPlay && this.player.paused()) {
+	    this.playOverlay.show();
+	}
     };
 
     PowrVideo.prototype.loadNextVideoWithTick = function() {
@@ -26424,6 +26431,7 @@ if (!String.prototype.endsWith) {
 	}
 	
 	if (this.waitForPlay && this.player.paused()) {
+	    this.player.muted(false);
 	    this.player.ima.initializeAdDisplayContainer();
             this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), false);
 	    this.player.ima.requestAds();
