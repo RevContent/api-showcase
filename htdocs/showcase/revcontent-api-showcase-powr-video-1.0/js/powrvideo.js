@@ -29,8 +29,8 @@ if (!String.prototype.endsWith) {
      * id : id of the div to attach.
      * tag : tag to use.
      * dfp : true/false
-     * custom_logo : 
-     * brand_logo : 
+     * custom_logo :
+     * brand_logo :
      * autoplay : "none|load|focus" [ Whether to autoplay video ]
      * videos : [ { "id" , "thumbnail" , "sd_url", "hd_url" } ]
      * float : {
@@ -39,8 +39,8 @@ if (!String.prototype.endsWith) {
 	  "minWidth" : 100,
 	  "maxWidth" : 200
      * },
-     * iframe_id : "id" // Incase we are inside an iframe. 
-     * player_id : id to give the player we creating. 
+     * iframe_id : "id" // Incase we are inside an iframe.
+     * player_id : id to give the player we creating.
      * controls : "custom"
      * float_conflicts : [ "" ]
      * permanent_close : true
@@ -54,7 +54,7 @@ if (!String.prototype.endsWith) {
             navigator.userAgent.match(/Android/i)) {
 	    this.mobile = true;
         }
-	
+
 	this.floatSettings = this.createFloatSettings();
 	this.iframeSettings = this.createIframeSettings();
 	this.autoplaySettings = this.createAutoplaySettings();
@@ -62,7 +62,7 @@ if (!String.prototype.endsWith) {
 	if (this.config.permanent_close) {
 	    this.permanentClose = this.config.permanent_close;
 	}
-	
+
 	this.floatConflicts = {
 	    "top" : [],
 	    "bottom" : []
@@ -70,9 +70,9 @@ if (!String.prototype.endsWith) {
 	if (this.config.float_conflicts) {
 	    this.floatConflicts = this.config.float_conflicts;
 	}
-	
+
         this.element = document.getElementById(this.config.id);
-	
+
         this.playerId = "content_video";
         if (config.playerId) {
             this.playerId = config.playerId;
@@ -83,12 +83,12 @@ if (!String.prototype.endsWith) {
 	if (!this.config.fluid) {
 	    h = 0.5625 * w;
 	}
-	
+
 	this.element.setAttribute("style", "width: 100%; height : " + parseInt(h) + "px; background-color : #EFEFEF; position : relative;");
-	
+
         this.videos = config.videos;
         this.currentContent = 0;
-	
+
         this.options = {
             id : this.playerId,
             nativeControlForTouch: false,
@@ -126,11 +126,11 @@ if (!String.prototype.endsWith) {
         }
 
         revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-powr-video');
-	
+
         var that = this;
-	
+
         this.floated = false;
-	
+
         var imaCss = document.createElement("link");
         imaCss.setAttribute("href", "//cdnjs.cloudflare.com/ajax/libs/videojs-ima/0.6.0/videojs.ima.css");
         imaCss.setAttribute("type", "text/css");
@@ -158,7 +158,7 @@ if (!String.prototype.endsWith) {
 	    this.player.dimensions(width, height);
 	}
         this.element.setAttribute("style", "width : 100%; height : " + height + "px; background-color : #EFEFEF");
-	
+
         var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
         var windowWidth = window.innerWidth|| document.documentElement.clientWidth || document.body.clientWidth;
         var newOrientation = '';
@@ -195,7 +195,7 @@ if (!String.prototype.endsWith) {
 	    return this.element.getBoundingClientRect().height;
 	}
     };
-    
+
     PowrVideo.prototype.getPlayerWidth = function() {
 	if (this.player) {
 	    return this.player.width();
@@ -218,9 +218,9 @@ if (!String.prototype.endsWith) {
                 google.ima.AdEvent.Type.PAUSED,
                 google.ima.AdEvent.Type.STARTED,
                 google.ima.AdEvent.Type.THIRD_QUARTILE];
-	
+
 	google.ima.settings.setDisableCustomPlaybackForIOS10Plus(true);
-	
+
         this.container = document.createElement("div");
         this.container.className = 'powr_player';
         this.element.appendChild(this.container);
@@ -233,7 +233,7 @@ if (!String.prototype.endsWith) {
 	    this.crossButton.setAttribute("href", "javascript: void(0)");
 	    this.crossButton.innerHTML = "X";
 	    // this.crossButton.style.display = "none";
-	
+
 	    this.container.appendChild(this.crossButton);
 
 	    revUtils.addEventListener(this.crossButton, 'click', this.bind(this, this.onCrossClicked));
@@ -259,7 +259,7 @@ if (!String.prototype.endsWith) {
         if (this.autoplaySettings.autoplay && !this.autoplaySettings.audio) {
             dumbPlayer.setAttribute("muted", "true");
         }
-	
+
         var contentSrc = document.createElement('source');
         contentSrc.setAttribute('src', this.videos[0].sd_url);
         contentSrc.setAttribute('type', 'video/mp4');
@@ -276,36 +276,36 @@ if (!String.prototype.endsWith) {
 	    image : "http://media.powr.com/rc_logo.png",
 	    destination : "http://www.powr.com/" + (this.config.username ? this.config.username : "")
         });
-	
+
         var me = this;
 
 	// If we are autoplaying a muted version, let's toggle audio on first click
         this.player.ready(this.onReady.bind(this));
 
-	// revutils.addEventListener(this.container, "touchstart", 
+	// revutils.addEventListener(this.container, "touchstart",
     };
 
     PowrVideo.prototype.onReady = function() {
 	var me = this;
 	this.player.controls(true);
 	this.player.enableTouchActivity();
-	
+
 	// Setup overlays
         this.setupOverlays();
 
 	if (this.config.fluid) {
 	    this.player.fluid(false);
 	}
-	
+
 	// Manually invoke resize so it sts up play/apuse buttons.
 	this.onResize(true);
-	
+
 	if (!this.autoplaySettings.audio) {
 	    // this.volumeOffOverlay.show();
 	}
-	
+
         this.player.on('timeupdate', this.onUpdate.bind(this));
-	
+
         this.player.on('play', this.onPlay.bind(this));
         this.player.on('pause', this.onPause.bind(this));
         this.player.on('useractive', this.onActive.bind(this));
@@ -327,16 +327,16 @@ if (!String.prototype.endsWith) {
 	});
 	this.player.on("volumechange", this.bind(this, this.onVolumeChange));
 	this.player.on('ended', this.bind(this, this.loadNextVideoWithTick));
-	
+
         GlobalPlayer = this;
-	
+
         this.closeButton = this.container.querySelector(".rc-video-close");
         this.titleDom = this.container.querySelector(".rc-video-title");
-	
+
         revUtils.addEventListener(this.closeButton, 'click', function () {
             me.floatSettings.landscape = false;//neverFloat = true;
 	    me.floatSettings.portrait = false;
-	    
+
             me.player.pause();
             me.unfloatPlayer();
         });
@@ -346,7 +346,7 @@ if (!String.prototype.endsWith) {
 	this.player.controlBar.volumeMenuButton.hide();
 
 	this.started = false;
-	
+
 	if (me.autoplaySettings.autoplay) {
 	    this.playOverlay.hide();
 	    this.player.loadingSpinner.lockShowing();
@@ -378,7 +378,7 @@ if (!String.prototype.endsWith) {
             video.tracking['q_3'] = null;
         }
     };
-    
+
     PowrVideo.prototype.start = function(playOnLoad) {
 	this.waitForPlay = true;
 	setTimeout(this.bind(this, this.clearWait), 2000);
@@ -389,9 +389,9 @@ if (!String.prototype.endsWith) {
 	if (!this.autoplaySettings.autoplay) {
 	    this.player.poster(this.videos[this.currentContent].thumbnail);
 	}
-	
+
         this.player.ima.requestAds();
-	
+
         // this.player.ima.addContentEndedListener(function () {
         //    me.loadNextVideo();
         //});
@@ -413,7 +413,7 @@ if (!String.prototype.endsWith) {
 	}, 100);
     };
 
-    
+
     PowrVideo.prototype.loadNextVideo = function() {
         var video = this.videos[this.currentContent];
 	if (this.config.hasOwnProperty("tracking_url")) {
@@ -436,10 +436,12 @@ if (!String.prototype.endsWith) {
         }
     };
 
-    // v.title, v.id
-    // http://www.powr.com/video/the-there-rekrjere-${id}
     PowrVideo.prototype.getVideoLink = function(v) {
-	return "javascript:void(0)";
+      var title = v.title;
+      if(title.trim().length > 0) {
+        title = title.toLowerCase().replace(/[^a-z0-9 ]+/g, "").replace(/ /g, "-") + "-";
+      }
+	    return  "http://www.powr.com/video/" + title + v.id;
     };
 
     PowrVideo.prototype.attachVisibleListener = function() {
@@ -463,13 +465,13 @@ if (!String.prototype.endsWith) {
         this.container.className = "rc-float-video powr_player " + (this.permanentClose == "yes" ? "powr_permanent_close" : "");
         var styleString = "";
         var fs = this.floatSettings;
-	
+
         var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 	var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 
 	this.showConflicts("top");
 	this.showConflicts("bottom");
-	
+
         if (this.orientation == 'portrait') {
             styleString += "top : 0px;";
             styleString += "left : 0px; right : 0px; width : 100%; height : 176px;";
@@ -480,7 +482,7 @@ if (!String.prototype.endsWith) {
             this.closeButton.setAttribute("style", "margin-top : 0px; margin-left : " + (windowWidth - 50) + "px");
 
 	    this.hideConflicts("top");
-	    
+
         } else {
             this.player.fluid(true);
             if (fs.landscape_style.startsWith("top")) {
@@ -494,7 +496,7 @@ if (!String.prototype.endsWith) {
             } else {
                 styleString += "left : 0px;";
             }
-	    
+
             var r = this.element.getBoundingClientRect();
             var w = windowWidth - r.right;
             w = w - 20;
@@ -511,22 +513,22 @@ if (!String.prototype.endsWith) {
 		w = parseInt(h / 0.5625);
 		h = parseInt(h);
 	    }
-	    
+
             styleString += "width : " + w + "px;";
-	    
+
             if (fs.landscape_style.startsWith("top")) {
                 this.closeButton.setAttribute("style", "margin-top : " + (h - 10) + "px;");            } else {
                 this.closeButton.setAttribute("style", "margin-left : " + (w - 100) + "px; margin-top : -30px;");
 		}
 	    this.player.dimensions(w, parseInt(h));
-	    
+
 	    this.hideConflicts("bottom");
         }
-	
+
         this.container.setAttribute("style", styleString);
         this.floated = true;
 
-	
+
 	this.onResize(false);
     };
 
@@ -558,7 +560,7 @@ if (!String.prototype.endsWith) {
 	}
     };
 
-    
+
     PowrVideo.prototype.unfloatPlayer = function() {
         if (this.floated) {
             this.container.className = 'powr_player ' + (this.permanentClose == "yes" ? 'powr_permanent_close' : '');
@@ -597,8 +599,8 @@ if (!String.prototype.endsWith) {
 		var windowHeight = window.parent.innerHeight || window.parent.document.documentElement.clientHeight || window.parent.document.body.clientHeight;
 		var elementHeight = element.getBoundingClientRect().height;
 		var elementTop = element.getBoundingClientRect().top;
-		var currentScroll = window.parent.pageYOffset || window.parent.document.documentElement.scrollTop || window.parent.document.body.scrollTop; 
-		
+		var currentScroll = window.parent.pageYOffset || window.parent.document.documentElement.scrollTop || window.parent.document.body.scrollTop;
+
 		if (elementTop + elementHeight < 0) {
 		    if (that.visible) {
 			that.visible = false;
@@ -610,7 +612,7 @@ if (!String.prototype.endsWith) {
 			that.onVisible();
 		    }
 		}
-		
+
 	    } else {
 		// what percentage of the element should be visible
 		// var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
@@ -645,7 +647,7 @@ if (!String.prototype.endsWith) {
     PowrVideo.prototype.onHidden = function() {
 	this.floatPlayer();
     };
-    
+
     PowrVideo.prototype.adsManagerLoadedCallback = function() {
         var me = this;
 	for (var index = 0; index < this.events.length; index++) {
@@ -653,7 +655,7 @@ if (!String.prototype.endsWith) {
 		this.events[index],
 		this.bind(this, this.onAdEvent));
 	}
-	
+
         this.player.ima.addEventListener(google.ima.AdEvent.Type.STARTED, function () {
             me.player.removeClass('vjs-ad-loading');
 	    me.player.loadingSpinner.unlockShowing();
@@ -662,9 +664,9 @@ if (!String.prototype.endsWith) {
     };
 
     PowrVideo.prototype.onAdEvent = function(event) {
-	
+
     };
-    
+
     PowrVideo.prototype.registerView = function() {
 	if (!this.config.hasOwnProperty("tracking_url"))
 	    return;
@@ -684,9 +686,9 @@ if (!String.prototype.endsWith) {
 	}
 	return titleContent;
     };
-    
+
     PowrVideo.prototype.setupOverlays = function() {
-	
+
 	this.player.overlay({
             showBackground: true,
             overlays: [{
@@ -717,7 +719,7 @@ if (!String.prototype.endsWith) {
 		align : "bottom-right"
 	    }]
         });
-	
+
 	this.titleOverlay = this.player.overlays_[0];
 	this.playOverlay = this.player.overlays_[1];
 	this.volumeOnOverlay = this.player.overlays_[2];
@@ -760,7 +762,7 @@ if (!String.prototype.endsWith) {
 	    this.playOverlay.hide();
 	}
     };
-    
+
     PowrVideo.prototype.onClick = function(e) {
 	if (!this.started) {
 	    this.playOverlay.hide();
@@ -768,7 +770,7 @@ if (!String.prototype.endsWith) {
 	    this.cancelEvent(e);
 	    return;
 	}
-	
+
 	if (this.waitForPlay && this.player.paused()) {
 	    this.player.muted(false);
 	    this.player.ima.initializeAdDisplayContainer();
@@ -790,7 +792,7 @@ if (!String.prototype.endsWith) {
 	    return;
 	}
     };
-    
+
     PowrVideo.prototype.onPlay = function() {
 	this.waitForPlay = false;
 	this.playOverlay.hide();
@@ -866,7 +868,7 @@ if (!String.prototype.endsWith) {
 	ret.id = c.iframe_id;
 	return ret;
     };
-    
+
     PowrVideo.prototype.isClickedOnBar = function(e) {
 	var t = e.target;
 	if (t.nodeName.toLowerCase() == "video") {
@@ -874,7 +876,7 @@ if (!String.prototype.endsWith) {
 	}
 	return true;
     };
-    
+
     PowrVideo.prototype.createAutoplaySettings = function() {
 	var c = this.config;
 	var ret = {
@@ -896,12 +898,12 @@ if (!String.prototype.endsWith) {
 	    }
 	} else {
 	    if (this.mobile) {
-		ret = c.autoplay.mobile;		
+		ret = c.autoplay.mobile;
 	    } else {
 		ret = c.autoplay.desktop;
 	    }
 	}
-	
+
 	return ret;
     };
 
@@ -912,7 +914,7 @@ if (!String.prototype.endsWith) {
 	return is_safari;
     }
 
-    
+
     PowrVideo.prototype.bind = function(thisObj, fn) {
 	return function() {
 	    fn.apply(thisObj, arguments);
@@ -931,6 +933,6 @@ if (!String.prototype.endsWith) {
 	    e.cancelBubble = true;
 	}
     };
-    
+
     return PowrVideo;
 }));
