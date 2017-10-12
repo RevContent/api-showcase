@@ -427,13 +427,19 @@ if (!String.prototype.endsWith) {
 	    this.player.ima.initializeAdDisplayContainer();
             this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), false);
             var titleContent = this.videos[this.currentContent].title;
-            this.titleDom.innerHTML = titleContent;
+            this.titleDom.innerHTML = '<a href="' + this.getVideoLink(this.videos[this.currentContent]) + '">' + titleContent + "</a>";
 	    var me = this;
 	    me.player.ima.requestAds();
 	    me.player.play();
         } else {
             this.currentContent--;
         }
+    };
+
+    // v.title, v.id
+    // http://www.powr.com/video/the-there-rekrjere-${id}
+    PowrVideo.prototype.getVideoLink = function(v) {
+	return "javascript:void(0)";
     };
 
     PowrVideo.prototype.attachVisibleListener = function() {
@@ -764,7 +770,6 @@ if (!String.prototype.endsWith) {
 	}
 	
 	if (this.waitForPlay && this.player.paused()) {
-	    alert(this.player.bufferedPercent());
 	    this.player.muted(false);
 	    this.player.ima.initializeAdDisplayContainer();
             this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), false);
