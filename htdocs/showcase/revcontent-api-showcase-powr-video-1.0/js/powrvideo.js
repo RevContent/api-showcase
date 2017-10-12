@@ -682,7 +682,7 @@ if (!String.prototype.endsWith) {
 	    titleContent += "<img src='" + this.config.custom_logo + "'>";
 	}
 	if (this.currentContent < this.videos.length) {
-	    titleContent += "<span class='rc-video-title'>" + this.videos[this.currentContent].title + "</span>";
+	    titleContent += "<span class='rc-video-title'><a href='" + this.getVideoLink(this.videos[this.currentContent]) + "'>" + this.videos[this.currentContent].title + "</a></span>";
 	}
 	return titleContent;
     };
