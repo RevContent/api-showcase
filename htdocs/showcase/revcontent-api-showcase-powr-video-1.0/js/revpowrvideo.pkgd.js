@@ -26554,6 +26554,9 @@ if (!String.prototype.endsWith) {
 	if (t.nodeName.toLowerCase() == "video") {
 	    return false;
 	}
+	if (t.className.indexOf("rc-play-button") > 0) {
+	    return false;
+	}
 	return true;
     };
 
