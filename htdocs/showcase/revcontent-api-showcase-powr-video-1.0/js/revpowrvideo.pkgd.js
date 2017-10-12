@@ -26100,6 +26100,8 @@ if (!String.prototype.endsWith) {
 	    me.player.ima.requestAds();
 	    me.player.play();
         } else {
+	    this.volumeOffOverlay.hide();
+	    this.playOverlay.show();
             this.currentContent--;
         }
     };
