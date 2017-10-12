@@ -76,9 +76,10 @@
 
     //setting defaults
     $(function () {
-    $("#autoplay").html(" Autoplay: " + urlObj.getParam('autoplay', 'load') +  " &nbsp;<span class='caret'></span>");
-    $("#flt").html(" Float: " + urlObj.getParam('flt', 'right') +  " &nbsp;<span class='caret'></span>");
-    $("#pclose").html(" Permanent Close : " + urlObj.getParam('pclose', 'no') +  " &nbsp;<span class='caret'></span>");
+    $("#autoplay").html("Autoplay: " + urlObj.getParam('autoplay', 'load') + " &nbsp;<span class='caret'></span>");
+    $("#flt").html("Float: " + urlObj.getParam('flt', 'right') + " &nbsp;<span class='caret'></span>");
+    $("#pclose").html("Permanent Close : " + urlObj.getParam('pclose', 'no') + " &nbsp;<span class='caret'></span>");
+    $("#ad_tag").html("Ad Tag : " + urlObj.getParam('ad_tag', 'john-demo') + " &nbsp;<span class='caret'></span>");
     });
   </script>
 </head>
@@ -113,10 +114,20 @@
             </ul>
           </li>
 	        <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="pclose">Permanent Close : <span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="pclose">Permanent Close: <span class="caret"></span></a>
             <ul class="dropdown-menu">
               <li><a href="javascript: urlObj.setParam('pclose', 'yes'); urlObj.loadUrl();">Yes</a></li>
               <li><a href="javascript: urlObj.setParam('pclose', 'no'); urlObj.loadUrl();">No</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="ad_tag">Ad Tag: <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="javascript: urlObj.setParam('ad_tag', 'test/google'); urlObj.loadUrl();">Google</a></li>
+              <li><a href="javascript: urlObj.setParam('ad_tag', 'test/facebook'); urlObj.loadUrl();">Facebook</a></li>
+              <li><a href="javascript: urlObj.setParam('ad_tag', 'test/tremor'); urlObj.loadUrl();">Tremor</a></li>
+              <li><a href="javascript: urlObj.setParam('ad_tag', 'test/connatix'); urlObj.loadUrl();">Connatix</a></li>
+              <li><a href="javascript: urlObj.setParam('ad_tag', 'john-demo'); urlObj.loadUrl();">None</a></li>
             </ul>
           </li>
         </ul>
@@ -139,8 +150,9 @@
         <div id="powr_video"></div>
         <script type="text/javascript">
         var autoplay = urlObj.getParam('autoplay', 'load');
-        var pclose = urlObj.getParam('pclose', 'no');
         var flt = urlObj.getParam('flt', 'right');
+        var pclose = urlObj.getParam('pclose', 'no');
+        var ad_tag = urlObj.getParam('ad_tag', 'john-demo');
         var mob_flt = "top";
 
         if (flt == 'left') flt = "bottom-left";
@@ -150,7 +162,7 @@
         new PowrVideo({
           "id": 'powr_video',
           "dfp" : true,
-          "tag" : "/21623266709/powr.com-945",
+          "tag" : "/21623266709/" + ad_tag,
         "autoplay" : autoplay,
 	"permanent_close" : pclose,
           "float" : {
