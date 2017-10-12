@@ -180,8 +180,13 @@ if (!String.prototype.endsWith) {
 	if (this.player) {
 	    var w = this.getPlayerWidth();
 	    var h = this.getPlayerHeight();
+	    if (this.player.isFullscreen()) {
+		w = windowWidth;
+		h = windowHeight;
+	    }
 	    var x = w/2 - 32;
 	    var y = h/2 - 32;
+	    
 
 	    var playDom = this.playOverlay.contentEl();
 	    playDom.setAttribute("style", "left : " + x + "px; bottom : " + y + "px; top : auto;");
@@ -760,9 +765,7 @@ if (!String.prototype.endsWith) {
     }
 
     PowrVideo.prototype.onFullscreenChange = function() {
-	if (!this.player.isFullscreen()) {
-	    this.playOverlay.hide();
-	}
+	this.onResize(true);
     };
 
     PowrVideo.prototype.onClick = function(e) {
@@ -772,6 +775,7 @@ if (!String.prototype.endsWith) {
 	    this.cancelEvent(e);
 	    return;
 	}
+	
 
 	if (this.waitForPlay && this.player.paused()) {
 	    this.player.muted(false);
@@ -791,6 +795,12 @@ if (!String.prototype.endsWith) {
 	    this.player.muted(false);
 	    this.volumeOffOverlay.hide();
 	    this.cancelEvent(e);
+	    return;
+	}
+
+	if (this.player.ended()) {
+	    this.player.ima.requestAds();
+	    this.player.play();
 	    return;
 	}
     };
