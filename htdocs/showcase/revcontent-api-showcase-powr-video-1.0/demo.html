@@ -78,7 +78,7 @@
     $(function () {
     $("#autoplay").html(" Autoplay: " + urlObj.getParam('autoplay', 'load') +  " &nbsp;<span class='caret'></span>");
     $("#flt").html(" Float: " + urlObj.getParam('flt', 'right') +  " &nbsp;<span class='caret'></span>");
-    $("#pclose").html(" Permanent Close : " + urlObj.getParam('pclose', 'no'));
+    $("#pclose").html(" Permanent Close : " + urlObj.getParam('pclose', 'no') +  " &nbsp;<span class='caret'></span>");
     });
   </script>
 </head>
@@ -101,7 +101,6 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="autoplay">Autoplay: <span class="caret"></span></a>
             <ul class="dropdown-menu">
               <li><a href="javascript: urlObj.setParam('autoplay', 'load'); urlObj.loadUrl();">On Load</a></li>
-              <li><a href="javascript: urlObj.setParam('autoplay', 'focus'); urlObj.loadUrl();">In Focus</a></li>
               <li><a href="javascript: urlObj.setParam('autoplay', 'none'); urlObj.loadUrl();">Disable</a></li>
             </ul>
           </li>
@@ -113,7 +112,7 @@
               <li><a href="javascript: urlObj.setParam('flt', 'none'); urlObj.loadUrl();">None</a></li>
             </ul>
           </li>
-	  <li class="dropdown">
+	        <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="pclose">Permanent Close : <span class="caret"></span></a>
             <ul class="dropdown-menu">
               <li><a href="javascript: urlObj.setParam('pclose', 'yes'); urlObj.loadUrl();">Yes</a></li>
@@ -140,12 +139,13 @@
         <div id="powr_video"></div>
         <script type="text/javascript">
         var autoplay = urlObj.getParam('autoplay', 'load');
+        var pclose = urlObj.getParam('pclose', 'no');
         var flt = urlObj.getParam('flt', 'right');
-	var pclose = urlObj.getParam('pclose', 'no');
+        var mob_flt = "top";
 
         if (flt == 'left') flt = "bottom-left";
         else if (flt == 'right') flt = "bottom-right";
-        else flt = "none";
+        else { flt = "none"; mob_flt = "none"; }
 
         new PowrVideo({
           "id": 'powr_video',
@@ -155,7 +155,7 @@
 	"permanent_close" : pclose,
           "float" : {
             "desktop" : flt,
-            "mobile" : "top"
+            "mobile" : mob_flt
           },
           "custom_logo": "./img/newsweek.png",
           "videos" : [
