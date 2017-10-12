@@ -58,6 +58,10 @@ if (!String.prototype.endsWith) {
 	this.floatSettings = this.createFloatSettings();
 	this.iframeSettings = this.createIframeSettings();
 	this.autoplaySettings = this.createAutoplaySettings();
+	this.permanentClose = "no";
+	if (this.config.permanent_close) {
+	    this.permanentClose = this.config.permanent_close;
+	}
 	
 	this.floatConflicts = {
 	    "top" : [],
@@ -80,7 +84,7 @@ if (!String.prototype.endsWith) {
 	    h = 0.5625 * w;
 	}
 	
-	this.element.setAttribute("style", "width: 100%; height : " + parseInt(h) + "px; background-color : #EFEFEF;");
+	this.element.setAttribute("style", "width: 100%; height : " + parseInt(h) + "px; background-color : #EFEFEF; position : relative;");
 	
         this.videos = config.videos;
         this.currentContent = 0;
@@ -221,6 +225,20 @@ if (!String.prototype.endsWith) {
         this.container.className = 'powr_player';
         this.element.appendChild(this.container);
 
+	if (this.permanentClose == "yes") {
+	    this.container.className = 'powr_player powr_permanent_close';
+	    this.crossButton = document.createElement("a");
+	    this.crossButton.className = 'powr_perm_close';
+	    this.crossButton.style = "display : block; position : absolute; right : 5px; top : 5px; background-color : #333; z-index : 10000; border-radius : 20px; color : #FFF; padding : 4px 11px; font-weight : 700; font-size : 14px; ";
+	    this.crossButton.setAttribute("href", "javascript: void(0)");
+	    this.crossButton.innerHTML = "X";
+	    // this.crossButton.style.display = "none";
+	
+	    this.container.appendChild(this.crossButton);
+
+	    revUtils.addEventListener(this.crossButton, 'click', this.bind(this, this.onCrossClicked));
+	}
+
         this.attachVisibleListener();
         revUtils.addEventListener(window, 'resize', this.onResize.bind(this, true));
         this.orientation = 'none';
@@ -255,7 +273,7 @@ if (!String.prototype.endsWith) {
         this.currentContent = 0;
 
         this.player.logobrand({
-	    image : "http://media.powr.com/powr_logo.png",
+	    image : "http://media.powr.com/rc_logo.png",
 	    destination : "http://www.powr.com/" + (this.config.username ? this.config.username : "")
         });
 	
@@ -432,8 +450,8 @@ if (!String.prototype.endsWith) {
             return;
 	if (this.orientation == "landscape" && !this.floatSettings.landscape)
 	    return;
-	
-        this.container.className = "rc-float-video powr_player";
+
+        this.container.className = "rc-float-video powr_player " + (this.permanentClose == "yes" ? "powr_permanent_close" : "");
         var styleString = "";
         var fs = this.floatSettings;
 	
@@ -534,7 +552,7 @@ if (!String.prototype.endsWith) {
     
     PowrVideo.prototype.unfloatPlayer = function() {
         if (this.floated) {
-            this.container.className = 'powr_player';
+            this.container.className = 'powr_player ' + (this.permanentClose == "yes" ? 'powr_permanent_close' : '');
             this.container.removeAttribute("style");
             this.floated = false;
             this.player.fluid(true);
@@ -761,6 +779,7 @@ if (!String.prototype.endsWith) {
 
 	if (this.player.muted()) {
 	    this.volumeOffOverlay.show();
+	    this.player.controlBar.hide();
 	}
     };
 
@@ -771,12 +790,16 @@ if (!String.prototype.endsWith) {
     PowrVideo.prototype.onActive = function() {
 	this.titleOverlay.show();
 	this.volumeOffOverlay.hide();
+	if (this.crossButton)
+	    this.crossButton.style.display = "block";
+	this.player.controlBar.show();
     };
 
     PowrVideo.prototype.onIdle = function() {
         if (!this.player.paused()) {
 	    this.titleOverlay.hide();
 	    this.playOverlay.hide();
+	    this.player.controlBar.hide();
 	    // this.volumeOnOverlay.hide();
 	    if (this.player.muted() || this.player.volume() == 0) {
 		this.volumeOffOverlay.show();
@@ -876,6 +899,11 @@ if (!String.prototype.endsWith) {
 	    fn.apply(thisObj, arguments);
 	};
     };
+
+    PowrVideo.prototype.onCrossClicked = function(e) {
+	this.element.remove();
+    };
+
 
     PowrVideo.prototype.cancelEvent = function(e) {
 	if (typeof e.stopPropagation != "undefined") {
