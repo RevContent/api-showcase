@@ -48,13 +48,10 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                   <li>
-                    <a href="./demo1.html">Autoplay/Float</a>
+                    <a href="#">Home</a>
                   </li>
                   <li>
-                    <a href="./demo2.html">ClickToPlay/Float</a>
-                  </li>
-                  <li>
-                    <a href="./demo3.html">Embed/PlayMutedWhenFocus</a>
+                    <a href="#">Settings</a>
                   </li>
                   <li>
                     <a href="#">Culture</a>
@@ -82,12 +79,11 @@
 		
                 <div id="powr_video"></div>
 		<script type="text/javascript">
-		  var urlObj = new URL(window.location.href);
 		  new PowrVideo({
 		  "id": 'powr_video',
-		  "dfp" : false,
-		  "tag" : "https://vcore.connatix.com/vpaid/?c_vi=OyOk9kZG7LYv25ZbhDB-dzlI3KcwhMI4bIW3jcFIKH6GiBb1NGXaV-Oc_0bzCzhG&c_pw=P_WIDTH&c_ph=P_HEIGHT&c_bu=REFERRER_URL&cb=CACHE_BUSTER",
-		  "autoplay" : urlObj.getParam('autoplay', 'load'),
+		  "dfp" : true,
+		  "tag" : "/21623266709/test/tremor",
+		  "autoplay" : "none",
 		  "controls" : "default",
 		  "float" : {
 		  "desktop" : "bottom-right",
