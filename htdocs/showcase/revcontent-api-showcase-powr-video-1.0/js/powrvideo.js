@@ -229,7 +229,7 @@ if (!String.prototype.endsWith) {
 	    this.container.className = 'powr_player powr_permanent_close';
 	    this.crossButton = document.createElement("a");
 	    this.crossButton.className = 'powr_perm_close';
-	    this.crossButton.style = "display : block; position : absolute; right : 5px; top : 5px; background-color : #333; z-index : 10000; border-radius : 20px; color : #FFF; padding : 4px 11px; font-weight : 700; font-size : 14px; ";
+	    // this.crossButton.style = "display : block; position : absolute; right : 5px; top : 5px; background-color : #333; z-index : 10000; border-radius : 20px; color : #FFF; padding : 4px 11px; font-weight : 700; font-size : 14px; ";
 	    this.crossButton.setAttribute("href", "javascript: void(0)");
 	    this.crossButton.innerHTML = "X";
 	    // this.crossButton.style.display = "none";
@@ -922,7 +922,9 @@ if (!String.prototype.endsWith) {
     };
 
     PowrVideo.prototype.onCrossClicked = function(e) {
-	this.element.remove();
+	if (this.element.parentNode !== null) {
+	    this.element.parentNode.removeChild(this.element);
+	}
     };
 
 
