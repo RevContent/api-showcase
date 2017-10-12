@@ -106,14 +106,6 @@
             </ul>
           </li>
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="controls">Controls: <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="javascript: urlObj.setParam('controls', 'default'); urlObj.loadUrl();">Default</a></li>
-              <li><a href="javascript: urlObj.setParam('controls', 'custom'); urlObj.loadUrl();">Touch Friendly</a></li>
-              <li><a href="javascript: urlObj.setParam('controls', 'none'); urlObj.loadUrl();">None</a></li>
-            </ul>
-          </li>
-          <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="flt">Float: <span class="caret"></span></a>
             <ul class="dropdown-menu">
               <li><a href="javascript: urlObj.setParam('flt', 'right'); urlObj.loadUrl();">Right</a></li>
@@ -141,7 +133,6 @@
         <div id="powr_video"></div>
         <script type="text/javascript">
         var autoplay = urlObj.getParam('autoplay', 'load');
-        var controls = urlObj.getParam('controls', 'default');
         var flt = urlObj.getParam('flt', 'right');
 
         if (flt == 'left') flt = "bottom-left";
@@ -153,7 +144,6 @@
           "dfp" : true,
           "tag" : "/21623266709/powr.com-945",
           "autoplay" : autoplay,
-          "controls" : controls,
           "float" : {
             "desktop" : flt,
             "mobile" : "top"

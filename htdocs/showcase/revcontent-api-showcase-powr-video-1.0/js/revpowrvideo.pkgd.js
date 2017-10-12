@@ -25697,6 +25697,7 @@ if (!String.prototype.endsWith) {
      * tag : tag to use.
      * dfp : true/false
      * custom_logo : 
+     * brand_logo : 
      * autoplay : "none|load|focus" [ Whether to autoplay video ]
      * videos : [ { "id" , "thumbnail" , "sd_url", "hd_url" } ]
      * float : {
@@ -25709,6 +25710,7 @@ if (!String.prototype.endsWith) {
      * player_id : id to give the player we creating. 
      * controls : "custom"
      * float_conflicts : [ "" ]
+     * permanent_close : true
      */
     var PowrVideo = function(config) {
         this.config = config;
@@ -25723,7 +25725,7 @@ if (!String.prototype.endsWith) {
 	this.floatSettings = this.createFloatSettings();
 	this.iframeSettings = this.createIframeSettings();
 	this.autoplaySettings = this.createAutoplaySettings();
-	this.controlSettings = this.createControlSettings();
+	
 	this.floatConflicts = {
 	    "top" : [],
 	    "bottom" : []
@@ -25919,13 +25921,11 @@ if (!String.prototype.endsWith) {
 
         this.currentContent = 0;
 
-	if (this.controlSettings.type == 'default') {
-            this.player.logobrand({
-		image : "http://media.powr.com/rc_logo.png",
-		destination : "http://www.powr.com/" + (this.config.username ? this.config.username : "")
-            });
-	}
-
+        this.player.logobrand({
+	    image : "http://media.powr.com/rc_logo.png",
+	    destination : "http://www.powr.com/" + (this.config.username ? this.config.username : "")
+        });
+	
         var me = this;
 
 	// If we are autoplaying a muted version, let's toggle audio on first click
@@ -26420,44 +26420,6 @@ if (!String.prototype.endsWith) {
 	    this.cancelEvent(e);
 	    return;
 	}
-
-	/*
-	if (!this.oneTimeUnmute) {
-	    this.oneTimeUnmute = true;
-	    if (this.autoplaySettings.autoplay && this.player.muted()) {
-		this.player.muted(false);
-		this.volumeOffOverlay.hide();
-		return;
-	    }
-	}
-	*/
-
-	/*
-	if (this.player.muted()) {
-	    this.volumeOffOverlay.show();
-	    this.volumeOnOverlay.hide();
-	} else {
-	    this.volumeOffOverlay.hide();
-	    this.volumeOnOverlay.show();
-	}
-	*/
-	
-	if (this.controlSettings.type == "default")
-	    return;
-	
-	if (this.controlSettings.type == "none") {
-	    if (this.player.paused()) {
-		this.player.play();
-	    } else {
-		this.player.pause();
-	    }
-	} else if (this.controlSettings.type == "custom") {
-	    if (this.player.paused()) {
-		this.playOverlay.show();
-	    } else {
-		this.playOverlay.hide();
-	    }
-	}
     };
     
     PowrVideo.prototype.onPlay = function() {
@@ -26471,10 +26433,6 @@ if (!String.prototype.endsWith) {
 
     PowrVideo.prototype.onPause = function() {
 	this.titleOverlay.show();
-	if (this.controlSettings.type == "custom" || this.controlSettings.type == "default") {
-	    // this.playOverlay.show();
-	}
-
     };
 
     PowrVideo.prototype.onActive = function() {
@@ -26533,11 +26491,7 @@ if (!String.prototype.endsWith) {
 	ret.id = c.iframe_id;
 	return ret;
     };
-
-    PowrVideo.prototype.createControlSettings = function() {
-	return { type : "default" };
-    };
-
+    
     PowrVideo.prototype.isClickedOnBar = function(e) {
 	var t = e.target;
 	if (t.nodeName.toLowerCase() == "video") {
