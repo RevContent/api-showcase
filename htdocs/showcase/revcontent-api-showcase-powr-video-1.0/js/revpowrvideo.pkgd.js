@@ -21806,7 +21806,8 @@ var GLOBAL_PLAYER = null;
         // Assign properties to elements and assign to parents
         newImage.setAttribute('src', options.image);
         newImage.setAttribute('height', '100%');
-        newLink.setAttribute('href', options.destination);
+            newLink.setAttribute('href', options.destination);
+	    newLink.setAttribute('target', '_blank');
         newLink.appendChild(newImage);
         newElement.appendChild(newLink);
 
@@ -26094,7 +26095,7 @@ if (!String.prototype.endsWith) {
 	    this.player.ima.initializeAdDisplayContainer();
             this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), false);
             var titleContent = this.videos[this.currentContent].title;
-            this.titleDom.innerHTML = '<a href="' + this.getVideoLink(this.videos[this.currentContent]) + '">' + titleContent + "</a>";
+            this.titleDom.innerHTML = '<a target="_blank" href="' + this.getVideoLink(this.videos[this.currentContent]) + '">' + titleContent + "</a>";
 	    var me = this;
 	    me.player.ima.requestAds();
 	    me.player.play();
@@ -26593,7 +26594,6 @@ if (!String.prototype.endsWith) {
 	    this.element.parentNode.removeChild(this.element);
 	}
     };
-
 
     PowrVideo.prototype.cancelEvent = function(e) {
 	if (typeof e.stopPropagation != "undefined") {
