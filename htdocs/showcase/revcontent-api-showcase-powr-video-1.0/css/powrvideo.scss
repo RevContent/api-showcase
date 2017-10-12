@@ -88,6 +88,13 @@ a.rc-video-close {
     overflow: hidden;
 }
 
+.rc-video-title a {
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    color : #FFF !important;
+}
+
 .rc-float-video {
     position : fixed;
     z-index : 1000000000000000;
