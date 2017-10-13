@@ -77,7 +77,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-10">
                 <h2 class="redacted single-line">Try <a href="./autostream_trump.html">Donald Trump</a></h2>
 		
                 <div id="powr_video"></div>
@@ -85,15 +85,15 @@
 		  var urlObj = new URL(window.location.href);
 		  new PowrVideo({
 		  "id": 'powr_video',
-		  "dfp" : false,
-		  "tag" : "https://vcore.connatix.com/vpaid/?c_vi=OyOk9kZG7LYv25ZbhDB-dzlI3KcwhMI4bIW3jcFIKH6GiBb1NGXaV-Oc_0bzCzhG&c_pw=P_WIDTH&c_ph=P_HEIGHT&c_bu=REFERRER_URL&cb=CACHE_BUSTER",
+		  "dfp" : true,
+		  "tag" : "/21623266709/test/google",
 		  "autoplay" : urlObj.getParam('autoplay', 'load'),
 		  "controls" : "default",
 		  "float" : {
 		  "desktop" : "bottom-right",
 		  "mobile" : "top"
 		  },
-		  "custom_logo": "http://lorempixel.com/100/40",
+		  "custom_logo": "./img/newsweek.png",
 		  "videos" : [
 		  {"id":15207,
 		  "user_id":673,
@@ -159,7 +159,7 @@
                 <br />
 
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <h3 class="redacted">This is just a testing title</h3>
                 <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
 

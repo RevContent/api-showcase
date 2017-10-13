@@ -30,7 +30,8 @@ var GLOBAL_PLAYER = null;
         // Assign properties to elements and assign to parents
         newImage.setAttribute('src', options.image);
         newImage.setAttribute('height', '100%');
-        newLink.setAttribute('href', options.destination);
+            newLink.setAttribute('href', options.destination);
+	    newLink.setAttribute('target', '_blank');
         newLink.appendChild(newImage);
         newElement.appendChild(newLink);
 

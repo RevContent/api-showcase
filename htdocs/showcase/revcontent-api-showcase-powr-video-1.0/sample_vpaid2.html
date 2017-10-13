@@ -17,8 +17,6 @@
 
     <link href="css/style.css" rel="stylesheet">
     <script type="text/javascript" src="./js/revpowrvideo.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script type="text/javascript" src="./js/url.js"></script>
     
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -82,12 +80,11 @@
 		
                 <div id="powr_video"></div>
 		<script type="text/javascript">
-		  var urlObj = new URL(window.location.href);
 		  new PowrVideo({
 		  "id": 'powr_video',
 		  "dfp" : false,
-		  "tag" : "https://vcore.connatix.com/vpaid/?c_vi=OyOk9kZG7LYv25ZbhDB-dzlI3KcwhMI4bIW3jcFIKH6GiBb1NGXaV-Oc_0bzCzhG&c_pw=P_WIDTH&c_ph=P_HEIGHT&c_bu=REFERRER_URL&cb=CACHE_BUSTER",
-		  "autoplay" : urlObj.getParam('autoplay', 'load'),
+		  "tag" : "http://dev.powr.com/tag/vpaid2",
+		  "autoplay" : "none",
 		  "controls" : "default",
 		  "float" : {
 		  "desktop" : "bottom-right",

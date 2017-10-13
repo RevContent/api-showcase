@@ -82,11 +82,14 @@
 		
                 <div id="powr_video"></div>
 		<script type="text/javascript">
+
+		  // "tag" : "https://vcore.connatix.com/vpaid/?c_vi=aBl0qlCaFC-Awou1mdqJplhGcpunT_sCEfDvjZOv_Jl6BaUnzhHtLoz2c6ngPcXA&c_pw=P_WIDTH&c_ph=P_HEIGHT&c_bu=REFERRER_URL&cb=CACHE_BUSTER"
+		  
 		  var urlObj = new URL(window.location.href);
 		  new PowrVideo({
 		  "id": 'powr_video',
-		  "dfp" : false,
-		  "tag" : "https://vcore.connatix.com/vpaid/?c_vi=OyOk9kZG7LYv25ZbhDB-dzlI3KcwhMI4bIW3jcFIKH6GiBb1NGXaV-Oc_0bzCzhG&c_pw=P_WIDTH&c_ph=P_HEIGHT&c_bu=REFERRER_URL&cb=CACHE_BUSTER",
+		  "dfp" : true,
+		  "tag" : "/21623266709/test/connatix",
 		  "autoplay" : urlObj.getParam('autoplay', 'load'),
 		  "controls" : "default",
 		  "float" : {
