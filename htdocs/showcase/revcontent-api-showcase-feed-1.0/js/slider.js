@@ -138,6 +138,7 @@ Author: michael@revcontent.com
             reactions_selector: false,
             headline_top_selector: false,
             brand_logo: false,
+            brand_logo_square: false,
             comment_div: false,
             window_width_enabled: false,
             reactions: [ 'love', 'exciting', 'interesting', 'gross', 'sad', 'angry' ],
@@ -631,24 +632,38 @@ Author: michael@revcontent.com
                 // handleSave(save);
             }
 
+            var description = '<div class="rev-description"></div>';
+
+            // // MOCK: Poll Results
+            // var poll_mock = '<div class="rev-poll"><div class="rev-poll-inner">' +
+            //                 '<div class="vote-bar yes-vote" data-percent="63"><span class="vote-bar-count">63%</span><span class="vote-label">Yes, definitely!</span></div>' +
+            //                 '<div class="vote-bar no-vote" data-percent="37"><span class="vote-bar-count">37%</span><span class="vote-label">No way <img style="margin-left:10px;line-height:32px;vertical-align:middle" src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjE2cHgiIGhlaWdodD0iMTZweCIgdmlld0JveD0iMCAwIDYxMiA2MTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDYxMiA2MTI7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPGc+Cgk8ZyBpZD0iX3gzMV9fMzBfIj4KCQk8Zz4KCQkJPHBhdGggZD0iTTQyMS4yNjcsMTczLjQyNWMtOS4xNDItNS4yNzgtMjAuODQ3LTIuMTQyLTI2LjEyNSw3TDI3Mi44MzcsMzkyLjI3MmwtNjguNDI5LTYzLjExMiAgICAgYy03LjIyOS03LjcwNy0xOS4zMTYtOC4xMDgtMjcuMDI0LTAuODhjLTcuNzA3LDcuMjI5LTguMTA5LDE5LjMxNi0wLjg3OSwyNy4wNDNsODcuNDM5LDgwLjY1ICAgICBjNy4yMjksNy43MDcsMTkuMzE2LDguMTA4LDI3LjAyMywwLjg4YzIuMzMzLTIuMTgxLDEzNy4zMTctMjM3LjI4NCwxMzcuMzE3LTIzNy4yODQgICAgIEM0MzMuNTQ1LDE5MC40MDksNDMwLjQwOCwxNzguNzA0LDQyMS4yNjcsMTczLjQyNXogTTMwNiwwQzEzNi45OTIsMCwwLDEzNi45OTIsMCwzMDZzMTM2Ljk5MiwzMDYsMzA2LDMwNnMzMDYtMTM2Ljk5MiwzMDYtMzA2ICAgICBTNDc1LjAwOCwwLDMwNiwweiBNMzA2LDU3My43NUMxNTguMTI1LDU3My43NSwzOC4yNSw0NTMuODc1LDM4LjI1LDMwNkMzOC4yNSwxNTguMTI1LDE1OC4xMjUsMzguMjUsMzA2LDM4LjI1ICAgICBjMTQ3Ljg3NSwwLDI2Ny43NSwxMTkuODc1LDI2Ny43NSwyNjcuNzVDNTczLjc1LDQ1My44NzUsNDUzLjg3NSw1NzMuNzUsMzA2LDU3My43NXoiIGZpbGw9IiMwMDAwMDAiLz4KCQk8L2c+Cgk8L2c+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPC9zdmc+Cg==" /></span></div>' +
+
+
+            //                 '</div>' +
+            //                 '<div class="poll-summary">511 vote &middot; <a style="cursor:pointer;">Final results</a></div>' +
+            //                 '</div>';
+
+            items[0].element.querySelector('.rev-headline-brand-inner').insertAdjacentHTML('beforeend', description);
+
             if (this.options.internal_selector && matchesSelector(items[0].element, this.options.internal_selector)) {
                 items[0].type = 'internal';
                 internalLimit++;
                 // }
 
-                var description = '<div class="rev-description"></div>';
+                // var description = '<div class="rev-description"></div>';
 
-                // // MOCK: Poll Results
-                // var poll_mock = '<div class="rev-poll"><div class="rev-poll-inner">' +
-                //                 '<div class="vote-bar yes-vote" data-percent="63"><span class="vote-bar-count">63%</span><span class="vote-label">Yes, definitely!</span></div>' +
-                //                 '<div class="vote-bar no-vote" data-percent="37"><span class="vote-bar-count">37%</span><span class="vote-label">No way <img style="margin-left:10px;line-height:32px;vertical-align:middle" src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjE2cHgiIGhlaWdodD0iMTZweCIgdmlld0JveD0iMCAwIDYxMiA2MTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDYxMiA2MTI7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPGc+Cgk8ZyBpZD0iX3gzMV9fMzBfIj4KCQk8Zz4KCQkJPHBhdGggZD0iTTQyMS4yNjcsMTczLjQyNWMtOS4xNDItNS4yNzgtMjAuODQ3LTIuMTQyLTI2LjEyNSw3TDI3Mi44MzcsMzkyLjI3MmwtNjguNDI5LTYzLjExMiAgICAgYy03LjIyOS03LjcwNy0xOS4zMTYtOC4xMDgtMjcuMDI0LTAuODhjLTcuNzA3LDcuMjI5LTguMTA5LDE5LjMxNi0wLjg3OSwyNy4wNDNsODcuNDM5LDgwLjY1ICAgICBjNy4yMjksNy43MDcsMTkuMzE2LDguMTA4LDI3LjAyMywwLjg4YzIuMzMzLTIuMTgxLDEzNy4zMTctMjM3LjI4NCwxMzcuMzE3LTIzNy4yODQgICAgIEM0MzMuNTQ1LDE5MC40MDksNDMwLjQwOCwxNzguNzA0LDQyMS4yNjcsMTczLjQyNXogTTMwNiwwQzEzNi45OTIsMCwwLDEzNi45OTIsMCwzMDZzMTM2Ljk5MiwzMDYsMzA2LDMwNnMzMDYtMTM2Ljk5MiwzMDYtMzA2ICAgICBTNDc1LjAwOCwwLDMwNiwweiBNMzA2LDU3My43NUMxNTguMTI1LDU3My43NSwzOC4yNSw0NTMuODc1LDM4LjI1LDMwNkMzOC4yNSwxNTguMTI1LDE1OC4xMjUsMzguMjUsMzA2LDM4LjI1ICAgICBjMTQ3Ljg3NSwwLDI2Ny43NSwxMTkuODc1LDI2Ny43NSwyNjcuNzVDNTczLjc1LDQ1My44NzUsNDUzLjg3NSw1NzMuNzUsMzA2LDU3My43NXoiIGZpbGw9IiMwMDAwMDAiLz4KCQk8L2c+Cgk8L2c+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPC9zdmc+Cg==" /></span></div>' +
+                // // // MOCK: Poll Results
+                // // var poll_mock = '<div class="rev-poll"><div class="rev-poll-inner">' +
+                // //                 '<div class="vote-bar yes-vote" data-percent="63"><span class="vote-bar-count">63%</span><span class="vote-label">Yes, definitely!</span></div>' +
+                // //                 '<div class="vote-bar no-vote" data-percent="37"><span class="vote-bar-count">37%</span><span class="vote-label">No way <img style="margin-left:10px;line-height:32px;vertical-align:middle" src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjE2cHgiIGhlaWdodD0iMTZweCIgdmlld0JveD0iMCAwIDYxMiA2MTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDYxMiA2MTI7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPGc+Cgk8ZyBpZD0iX3gzMV9fMzBfIj4KCQk8Zz4KCQkJPHBhdGggZD0iTTQyMS4yNjcsMTczLjQyNWMtOS4xNDItNS4yNzgtMjAuODQ3LTIuMTQyLTI2LjEyNSw3TDI3Mi44MzcsMzkyLjI3MmwtNjguNDI5LTYzLjExMiAgICAgYy03LjIyOS03LjcwNy0xOS4zMTYtOC4xMDgtMjcuMDI0LTAuODhjLTcuNzA3LDcuMjI5LTguMTA5LDE5LjMxNi0wLjg3OSwyNy4wNDNsODcuNDM5LDgwLjY1ICAgICBjNy4yMjksNy43MDcsMTkuMzE2LDguMTA4LDI3LjAyMywwLjg4YzIuMzMzLTIuMTgxLDEzNy4zMTctMjM3LjI4NCwxMzcuMzE3LTIzNy4yODQgICAgIEM0MzMuNTQ1LDE5MC40MDksNDMwLjQwOCwxNzguNzA0LDQyMS4yNjcsMTczLjQyNXogTTMwNiwwQzEzNi45OTIsMCwwLDEzNi45OTIsMCwzMDZzMTM2Ljk5MiwzMDYsMzA2LDMwNnMzMDYtMTM2Ljk5MiwzMDYtMzA2ICAgICBTNDc1LjAwOCwwLDMwNiwweiBNMzA2LDU3My43NUMxNTguMTI1LDU3My43NSwzOC4yNSw0NTMuODc1LDM4LjI1LDMwNkMzOC4yNSwxNTguMTI1LDE1OC4xMjUsMzguMjUsMzA2LDM4LjI1ICAgICBjMTQ3Ljg3NSwwLDI2Ny43NSwxMTkuODc1LDI2Ny43NSwyNjcuNzVDNTczLjc1LDQ1My44NzUsNDUzLjg3NSw1NzMuNzUsMzA2LDU3My43NXoiIGZpbGw9IiMwMDAwMDAiLz4KCQk8L2c+Cgk8L2c+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPC9zdmc+Cg==" /></span></div>' +
 
 
-                //                 '</div>' +
-                //                 '<div class="poll-summary">511 vote &middot; <a style="cursor:pointer;">Final results</a></div>' +
-                //                 '</div>';
+                // //                 '</div>' +
+                // //                 '<div class="poll-summary">511 vote &middot; <a style="cursor:pointer;">Final results</a></div>' +
+                // //                 '</div>';
 
-                items[0].element.querySelector('.rev-headline-brand-inner').insertAdjacentHTML('beforeend', description);
+                // items[0].element.querySelector('.rev-headline-brand-inner').insertAdjacentHTML('beforeend', description);
 
                 // MOCK: Add mock poll container for Index #0
                 // if(items[0].index == 0) {
@@ -1075,6 +1090,10 @@ Author: michael@revcontent.com
     RevSlider.prototype.transitionLogin = function(item) {
         var that = this;
         setTimeout(function() {
+            var logo = item.element.querySelector('.rev-auth-site-logo');
+            if (logo) {
+                logo.style.width = logo.offsetHeight + 'px';
+            }
             revUtils.removeClass(document.querySelector('.rev-flipped'), 'rev-flipped');
             revUtils.addClass(item.element, 'rev-flipped');
         }, 0);
@@ -1850,18 +1869,18 @@ Author: michael@revcontent.com
     //     }
     // };
 
-    RevSlider.prototype.createBrandLogo = function() {
+    RevSlider.prototype.createBrandLogo = function(className, square) {
         var char = this.options.brand_logo.charAt(0);
 
         if (char === '<') {
             var brandLogo = document.createElement('div');
-            brandLogo.innerHTML = this.options.brand_logo;
+            brandLogo.innerHTML = (square ? this.options.brand_logo_square : this.options.brand_logo);
         } else {
             var brandLogo = document.createElement('img');
-            brandLogo.src = this.options.brand_logo;
+            brandLogo.src = square ? this.options.brand_logo_square : this.options.brand_logo;
         }
 
-        revUtils.addClass(brandLogo, 'rev-header-logo')
+        revUtils.addClass(brandLogo, className)
 
         return brandLogo;
     };
@@ -1882,7 +1901,7 @@ Author: michael@revcontent.com
             revUtils.append(this.head, this.header);
 
             if (this.options.brand_logo) {
-                var brandLogo = this.createBrandLogo();
+                var brandLogo = this.createBrandLogo('rev-header-logo');
                 brandLogo.style.float = 'left';
                 this.head.insertAdjacentElement('afterbegin', brandLogo);
             }
@@ -2184,27 +2203,28 @@ Author: michael@revcontent.com
                 '</div>' +
 
                 '<div class="rev-flip-back">' +
+                    '<div class="rev-auth-mask"></div>' +
                     '<div class="rev-auth">' +
                         '<a class="rev-auth-close-button">' +
                             '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>' +
                         '</a>' +
                         '<div class="rev-auth-box">' +
+
                             '<div class="rev-auth-box-inner">' +
-                                '<div style="margin-top:0; color: #474750;" class="rev-auth-headline">Almost Done! Login to save your reaction <br /> <strong>and</strong> personalize your experience</div>' +
-                                '<div class="rev-auth-site-logo"></div>' +
-                                '<div class="rev-auth-headline">Login to your Account</div>' +
+                                '<div class="rev-auth-subline">'+ revDisclose.getDisclosure(this.options.disclosure_text) +'</div>' +
+                                '<div class="rev-auth-headline">Almost Done! Login to save your reaction <br /> <strong>and</strong> personalize your experience</div>' +
                                 '<div class="rev-auth-button">' +
                                     '<div class="rev-auth-button-icon">' +
                                         '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 455.73 455.73" xml:space="preserve"> <path style="fill:#3A559F;" d="M0,0v455.73h242.704V279.691h-59.33v-71.864h59.33v-60.353c0-43.893,35.582-79.475,79.475-79.475 h62.025v64.622h-44.382c-13.947,0-25.254,11.307-25.254,25.254v49.953h68.521l-9.47,71.864h-59.051V455.73H455.73V0H0z"/></svg>' +
                                     '</div>' +
                                     '<div class="rev-auth-button-text">' +
-                                        'Login with facebook' +
+                                        'Continue with facebook' +
                                     '</div>' +
                                 '</div>' +
                                 '<div class="rev-auth-terms">' +
-                                    '<a href="#">Terms</a>' +
+                                    '<span>by signing up you agree to the <a href="#">Terms</a></span>' +
                                     // '<span>|</span>' +
-                                    '<a href="#">Privacy Policy</a>' +
+                                    // '<a href="#">Privacy Policy</a>' +
                                 '</div>' +
                             '</div>' +
                         '</div>' +
@@ -2218,32 +2238,51 @@ Author: michael@revcontent.com
         cell.className = 'rev-content';
         cell.innerHTML = html;
 
-        var siteLogo = cell.querySelector('.rev-auth-site-logo');
+        if (this.options.brand_logo_square) {
 
-        if (this.options.brand_logo) {
-            revUtils.addClass(siteLogo, 'rev-has-brand-logo')
-            revUtils.append(siteLogo, this.createBrandLogo());
+            var brandLogoSquare = this.createBrandLogo('rev-auth-site-logo', true);
+
+            revUtils.prepend(cell.querySelector('.rev-auth-box'), brandLogoSquare);
+            // revUtils.append(siteLogo, this.createBrandLogo());
         }
 
-        var header = document.createElement('h2');
-        header.innerHTML = this.options.header;
-        revUtils.addClass(header, 'rev-header');
-        revUtils.append(siteLogo, header);
+        // var header = document.createElement('h2');
+        // header.innerHTML = this.options.header;
+        // revUtils.addClass(header, 'rev-header');
+        // revUtils.append(siteLogo, header);
 
-        var subline = document.createElement('div');
-        revUtils.addClass(subline, 'rev-auth-subline');
-        subline.innerHTML = revDisclose.getDisclosure(this.options.disclosure_text);
-        revUtils.append(siteLogo, subline);
+        // var subline = document.createElement('div');
+        // revUtils.addClass(subline, 'rev-auth-subline');
+        // subline.innerHTML = revDisclose.getDisclosure(this.options.disclosure_text);
+        // revUtils.append(siteLogo, subline);
 
 
         var close = cell.querySelector('.rev-auth-close-button');
         revUtils.addEventListener(close, 'click', function(e) {
             revUtils.removeClass(cell, 'rev-flipped');
+            // var blurred = document.querySelectorAll('.rev-blur');
+            // for (var i = 0; i < blurred.length; i++) {
+            //     revUtils.removeClass(blurred[i], 'rev-blur');
+            // }
 
+            // var blurred = document.querySelectorAll('.rev-blur-children');
+            // for (var i = 0; i < blurred.length; i++) {
+            //     revUtils.removeClass(blurred[i], 'rev-blur-children');
+            // }
 
             // revUtils.removeClass(document.body, 'rd-dialog-active');
         });
 
+        // revUtils.addEventListener(cell, 'click', function(e) {
+        //     if (revUtils.hasClass(cell, 'hover')) {
+        //         revUtils.removeClass(cell, 'hover');
+        //     } else {
+        //         revUtils.addClass(cell, 'hover');
+        //     }
+
+        //     e.preventDefault();
+        //     e.stopPropagation();
+        // }, {passive: false});
 
         return cell;
     };
@@ -2602,10 +2641,10 @@ Author: michael@revcontent.com
                         // if (item.type == 'sponsored') {
                         //     favicon.innerHTML = '<span class="rev-headline-icon-image" style="background-repeat:no-repeat;background-image:url('+ itemData.favicon_url +')' + '"></span>';
                         // } else {
-                            if (itemData.author_image) {
-                                favicon.innerHTML = '<span class="rev-headline-icon-image" style="border-radius: 50%;background-repeat:no-repeat;background-image:url('+ itemData.author_image +')' + '"></span>';
-                            } else {
-                                if (item.type == 'sponsored' && itemData.favicon_url) {
+                            // if (itemData.author_image) {
+                            //     favicon.innerHTML = '<span class="rev-headline-icon-image" style="border-radius: 50%;background-repeat:no-repeat;background-image:url('+ itemData.author_image +')' + '"></span>';
+                            // } else {
+                                if (itemData.favicon_url) {
                                     favicon.innerHTML = '<span class="rev-headline-icon-image" style="background-repeat:no-repeat;background-image:url('+ itemData.favicon_url +')' + '"></span>';
                                 } else {
                                     var iconInitialsWords = itemData.author ? itemData.author.split(' ') : itemData.brand.split(' ');
@@ -2634,7 +2673,7 @@ Author: michael@revcontent.com
                                     }
                                     favicon.innerHTML = '<div style="background-color:#'+ initialColor +'" class="rev-author-initials">'+ initials +'</div>';
                                 }
-                            }
+                            // }
 
                         var date = item.element.querySelector('.rev-date');
                         if (date) {
