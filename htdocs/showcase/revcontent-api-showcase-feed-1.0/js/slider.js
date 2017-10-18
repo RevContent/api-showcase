@@ -862,6 +862,8 @@ Author: michael@revcontent.com
 
                     that.reactionCount(item, iconName, true);
 
+                    that.transitionLogin(item);
+
                     return;
                 }
 
@@ -908,6 +910,8 @@ Author: michael@revcontent.com
                     }
 
                 }
+
+                that.transitionLogin(item);
             });
 
             this.mc.on('press', function(ev) {
@@ -1006,6 +1010,8 @@ Author: michael@revcontent.com
                         count.innerHTML = 'You and ' + item.reactionCountTotal + ' others';
                     }
                 }
+
+                that.transitionLogin(item);
             });
 
             var menuItems = item.element.querySelectorAll('.rev-reaction-menu-item');
@@ -1058,9 +1064,20 @@ Author: michael@revcontent.com
                     } else {
                         count.innerHTML = 'You and ' + item.reactionCountTotal + ' others';
                     }
+
+                    that.transitionLogin(item);
+
                 }, {passive: false});
             }
         }
+    };
+
+    RevSlider.prototype.transitionLogin = function(item) {
+        var that = this;
+        setTimeout(function() {
+            revUtils.removeClass(document.querySelector('.rev-flipped'), 'rev-flipped');
+            revUtils.addClass(item.element, 'rev-flipped');
+        }, 0);
     };
 
     RevSlider.prototype.reactionCount = function(item, iconName, increase) {
@@ -1833,6 +1850,22 @@ Author: michael@revcontent.com
     //     }
     // };
 
+    RevSlider.prototype.createBrandLogo = function() {
+        var char = this.options.brand_logo.charAt(0);
+
+        if (char === '<') {
+            var brandLogo = document.createElement('div');
+            brandLogo.innerHTML = this.options.brand_logo;
+        } else {
+            var brandLogo = document.createElement('img');
+            brandLogo.src = this.options.brand_logo;
+        }
+
+        revUtils.addClass(brandLogo, 'rev-header-logo')
+
+        return brandLogo;
+    };
+
     RevSlider.prototype.appendElements = function() {
 
         if (!this.options.hide_header) {
@@ -1849,19 +1882,8 @@ Author: michael@revcontent.com
             revUtils.append(this.head, this.header);
 
             if (this.options.brand_logo) {
-                var char = this.options.brand_logo.charAt(0);
-
-                if (char === '<') {
-                    var brandLogo = document.createElement('div');
-                    brandLogo.innerHTML = this.options.brand_logo;
-                } else {
-                    var brandLogo = document.createElement('img');
-                    brandLogo.src = this.options.brand_logo;
-                }
-
-                revUtils.addClass(brandLogo, 'rev-header-logo')
+                var brandLogo = this.createBrandLogo();
                 brandLogo.style.float = 'left';
-
                 this.head.insertAdjacentElement('afterbegin', brandLogo);
             }
         }
@@ -1885,7 +1907,7 @@ Author: michael@revcontent.com
 
             if (this.options.rev_position == 'top_right') {
                 revUtils.addClass(this.sponsored, 'top-right');
-                revUtils.prepend(this.head, this.sponsored);
+                revUtils.append(this.head, this.sponsored);
             } else if (sponsoredFoot) {
                 revUtils.addClass(this.sponsored, this.options.rev_position.replace('_', '-'));
                 revUtils.append(this.foot, this.sponsored);
@@ -2137,90 +2159,93 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.createNewCell = function() {
         var html = '<div class="rev-content-inner">' +
-            '<div class="rev-ad">' +
-                '<div class="rev-ad-container">' +
-                    '<div class="rev-ad-outer">' +
-                        '<a href="" target="_blank">' +
-                            '<div class="rev-ad-inner">' +
+            '<div class="rev-flip">' +
 
-                                // favicon, headline, description, provider and date
+                '<div class="rev-flip-front">' +
+                    '<div class="rev-ad">' +
+                        '<div class="rev-ad-container">' +
+                            '<div class="rev-ad-outer">' +
+                                '<a href="" target="_blank">' +
+                                    '<div class="rev-ad-inner">' +
+                                        '<div class="rev-before-image"></div>' +
 
-                                // '<div class="rev-meta">' +
-                                //     '<div class="rev-provider"></div>' +
-                                //     '<div class="rev-date">15 hrs</div>' +
-                                //     // '<div class="rev-headline">' +
-                                //     //     '<h3></h3>' +
-                                //     // '</div>' +
-                                // '</div>' +
+                                        '<div class="rev-image"></div>' +
 
-                                '<div class="rev-before-image"></div>' +
-
-                                '<div class="rev-image">' +
-                                    // '<img src=""/>' +
-                                '</div>' +
-
-                                '<div class="rev-after-image">' +
-                                    '<div class="rev-headline-brand">' +
-                                        '<div class="rev-headline-brand-inner">' +
-                                            // '<div class="rev-headline">' +
-                                            //     '<h3></h3>' +
-                                            // '</div>' +
-                                            // '<div class="rev-description">' +
-                                            //     '<h4></h4>' +
-                                            // '</div>' +
+                                        '<div class="rev-after-image">' +
+                                            '<div class="rev-headline-brand">' +
+                                                '<div class="rev-headline-brand-inner"></div>' +
+                                            '</div>' +
                                         '</div>' +
-                                        // '<div class="rev-provider"></div>' +
                                     '</div>' +
-                                '</div>' +
-
-
-
-                            /* '<div class="rev-feelings">' +
-                                    '<div class="rev-feelings-inner">' +
-
-                                        '<ul class="reactions-list">' +
-                                        '<li class="reaction-type reaction-type-love">' + '<span class="reaction-icon love"></span>' + '<span class="reaction-label"></span>' +
-                                        '<li class="reaction-type reaction-type-sad">' + '<span class="reaction-icon sad"></span>' + '<span class="reaction-label"></span>' +
-                                        '<li class="reaction-type reaction-type-angry">' + '<span class="reaction-icon angry"></span>' + '<span class="reaction-label"></span>' +
-                                        '</ul><div style="clear:both"></div>' +
-
-                                    '</div>' +
-                                '</div>' +
-
-
-
-                               '<div class="rev-actions">' +
-                                    '<div class="rev-actions-inner">' +
-
-                                        '<div class="rev-action-block rev-action-like"><a class="rev-action-trigger"><span class="rev-action-icon rev-action-icon-like"></span> Love</a></div>' +
-                                        //'<div class="rev-action-block rev-action-dislike"><a class="rev-action-trigger"><span class="rev-action-icon rev-action-icon-dislike"></span> Dislike</a></div>' +
-                                        '<div class="rev-action-block rev-action-comment"><a class="rev-action-trigger"><span class="rev-action-icon rev-action-icon-comment"></span> Comment</a></div>' +
-                                        '<div class="rev-action-block rev-action-share"><a class="rev-action-trigger"><span class="rev-action-icon rev-action-icon-share"></span> Share</a></div>' +
-
-                                    '</div>' +
-                                '</div><div style="clear:both"></div>' +*/
-
-
-
-
-                                // '<div class="rev-headline-brand">' +
-                                //     '<div class="rev-headline">' +
-                                //         '<h3></h3>' +
-                                //     '</div>' +
-                                //     '<div class="rev-provider"></div>' +
-                                // '</div>' +
+                                '</a>' +
                             '</div>' +
-                        '</a>' +
+                        '</div>' +
                     '</div>' +
                 '</div>' +
+
+                '<div class="rev-flip-back">' +
+                    '<div class="rev-auth">' +
+                        '<a class="rev-auth-close-button">' +
+                            '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>' +
+                        '</a>' +
+                        '<div class="rev-auth-box">' +
+                            '<div class="rev-auth-box-inner">' +
+                                '<div style="margin-top:0; color: #474750;" class="rev-auth-headline">Almost Done! Login to save your reaction <br /> <strong>and</strong> personalize your experience</div>' +
+                                '<div class="rev-auth-site-logo"></div>' +
+                                '<div class="rev-auth-headline">Login to your Account</div>' +
+                                '<div class="rev-auth-button">' +
+                                    '<div class="rev-auth-button-icon">' +
+                                        '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 455.73 455.73" xml:space="preserve"> <path style="fill:#3A559F;" d="M0,0v455.73h242.704V279.691h-59.33v-71.864h59.33v-60.353c0-43.893,35.582-79.475,79.475-79.475 h62.025v64.622h-44.382c-13.947,0-25.254,11.307-25.254,25.254v49.953h68.521l-9.47,71.864h-59.051V455.73H455.73V0H0z"/></svg>' +
+                                    '</div>' +
+                                    '<div class="rev-auth-button-text">' +
+                                        'Login with facebook' +
+                                    '</div>' +
+                                '</div>' +
+                                '<div class="rev-auth-terms">' +
+                                    '<a href="#">Terms</a>' +
+                                    // '<span>|</span>' +
+                                    '<a href="#">Privacy Policy</a>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' + // end back
+
             '</div>' +
         '</div>';
 
-            var cell = document.createElement('div');
-            cell.className = 'rev-content';
-            cell.innerHTML = html;
+        var cell = document.createElement('div');
+        cell.className = 'rev-content';
+        cell.innerHTML = html;
 
-            return cell;
+        var siteLogo = cell.querySelector('.rev-auth-site-logo');
+
+        if (this.options.brand_logo) {
+            revUtils.addClass(siteLogo, 'rev-has-brand-logo')
+            revUtils.append(siteLogo, this.createBrandLogo());
+        }
+
+        var header = document.createElement('h2');
+        header.innerHTML = this.options.header;
+        revUtils.addClass(header, 'rev-header');
+        revUtils.append(siteLogo, header);
+
+        var subline = document.createElement('div');
+        revUtils.addClass(subline, 'rev-auth-subline');
+        subline.innerHTML = revDisclose.getDisclosure(this.options.disclosure_text);
+        revUtils.append(siteLogo, subline);
+
+
+        var close = cell.querySelector('.rev-auth-close-button');
+        revUtils.addEventListener(close, 'click', function(e) {
+            revUtils.removeClass(cell, 'rev-flipped');
+
+
+            // revUtils.removeClass(document.body, 'rd-dialog-active');
+        });
+
+
+        return cell;
     };
 
     RevSlider.prototype.getSerializedQueryParams = function() {

@@ -219,7 +219,6 @@
       "./node_modules/fontfaceobserver/fontfaceobserver.standalone.js",
       "./showcase/revcontent-api-showcase-feed-1.0/node_modules/any-grid/dist/any-grid.js",
       "./showcase/js/requestAnimationFrame.js",
-      "./showcase/js/revoverlay.js",
       "./showcase/js/revutils.js",
       "./showcase/js/revdialog.js",
       "./showcase/js/revdisclose.js",
