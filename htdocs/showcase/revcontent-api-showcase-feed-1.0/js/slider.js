@@ -341,9 +341,10 @@ Author: michael@revcontent.com
         var that = this;
 
         if (typeof FontFaceObserver !== 'undefined') {
-            var font = new FontFaceObserver('Montserrat');
+            var fontNormal = new FontFaceObserver('Montserrat');
+            var fontBold = new FontFaceObserver('Montserrat', { weight: 500 });
 
-            font.load().then(function () {
+            Promise.all([fontNormal.load(), fontBold.load()]).then(function () {
                 that.setSize(that.grid.items);
                 that.grid.layout();
             }).catch(function(e) {
