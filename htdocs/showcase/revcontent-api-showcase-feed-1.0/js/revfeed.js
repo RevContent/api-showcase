@@ -94,6 +94,7 @@ Author: michael@revcontent.com
             viewable_percentage: 50,
             buffer: 500,
             brand_logo: false,
+            brand_logo_square: false,
             window_width_devices: [
                 'phone'
             ],
@@ -227,6 +228,7 @@ Author: michael@revcontent.com
             row_pages: true,
             visible_rows: 1,
             brand_logo: this.options.brand_logo,
+            brand_logo_square: this.options.brand_logo_square,
             comment_div: this.options.comment_div,
             reaction_id: this.options.reaction_id,
             mobile_image_optimize: this.options.mobile_image_optimize,

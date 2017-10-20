@@ -8,7 +8,17 @@ services:
         volumes:
             - ./htdocs:/public
             - ./default.conf:/etc/nginx/conf.d/default.conf
+        environment:
+          - VIRTUAL_HOST=api.dev
+        networks:
+          - nginx-proxy
     php:
         image: php:fpm
         volumes:
             - ./htdocs:/public
+        networks:
+          - nginx-proxy
+networks:
+  nginx-proxy:
+    external:
+      name: nginx-proxy
