@@ -379,6 +379,14 @@ $reactionMenu8Y: 13.5px;
     }
 
     .rev-content {
+        text-align: left;
+        transition-property: opacity;
+        transition-duration: .5s;
+        opacity: 1;
+        padding: 4px 4px 5px !important;
+        perspective: 1000px;
+        z-index: 1;
+        font-weight: normal;
 
         &.rev-content-breakpoint-lt-md {
             .rev-auth {
@@ -396,6 +404,10 @@ $reactionMenu8Y: 13.5px;
                     margin-top: 40px;
                 }
             }
+        }
+
+        a {
+            border: none !important;
         }
 
         .rev-reaction-icon-comment {
@@ -465,13 +477,6 @@ $reactionMenu8Y: 13.5px;
         .rev-content-inner {
             background: #fff;
         }
-
-        transition-property: opacity;
-        transition-duration: .5s;
-        opacity: 1;
-        padding: 4px 4px 5px !important;
-        perspective: 1000px;
-        z-index: 1;
 
         &.rev-flipped .rev-flip {
             transform: rotateY(180deg);

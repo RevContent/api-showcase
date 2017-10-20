@@ -3085,7 +3085,7 @@ Author: michael@revcontent.com
             minutes: "%d minutes",
             hour: "1 hr",
             hours: "%d hrs",
-            day: "a day",
+            day: "yesterday",
             days: "%d days",
             month: "1 month",
             months: "%d months",
