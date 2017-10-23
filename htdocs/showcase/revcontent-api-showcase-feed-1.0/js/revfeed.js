@@ -102,7 +102,8 @@ Author: michael@revcontent.com
             comment_div: false,
             reaction_id: 299,
             mobile_image_optimize: false,
-            trending_utm: false
+            trending_utm: false,
+            keywords: false
         };
 
         // merge options
@@ -233,6 +234,7 @@ Author: michael@revcontent.com
             reaction_id: this.options.reaction_id,
             mobile_image_optimize: this.options.mobile_image_optimize,
             trending_utm: this.options.trending_utm,
+            keywords: this.options.keywords,
             developer: this.options.developer,
             internal_selector: this.options.internal_selector,
             header_selector: this.options.header_selector,
