@@ -1987,6 +1987,8 @@ Author: michael@revcontent.com
 
         this.grid.layout();
 
+        this.resizeImageCheck(this.grid.items);
+
         // this.updateDisplayedItems(this.grid.items);
 
         // this.checkEllipsis(true);
@@ -1996,6 +1998,38 @@ Author: michael@revcontent.com
         // this.updatePagination(true);
 
         this.emitter.emitEvent('resized');
+    };
+
+    RevSlider.prototype.resizeImageCheck = function(items) {
+        for (var i = 0; i < items.length; i++) {
+            var revImage = items[i].element.querySelector('.rev-image');
+            if (items[i].preloaderHeight > parseInt(revImage.getAttribute('data-img-height')) ||  items[i].preloaderWidth > parseInt(revImage.getAttribute('data-img-width'))) {
+                this.setImage(items[i], revImage);
+            }
+        }
+    };
+
+    RevSlider.prototype.setImage = function(item, revImage) {
+        if (this.options.mobile_image_optimize && revDetect.mobile()) {
+            var roundedPreloaderHeight = Math.round(item.preloaderHeight / this.options.mobile_image_optimize);
+            var roundedPreloaderWidth = Math.round(item.preloaderWidth / this.options.mobile_image_optimize);
+        } else {
+            var roundedPreloaderHeight = Math.round(item.preloaderHeight);
+            var roundedPreloaderWidth = Math.round(item.preloaderWidth);
+        }
+        var image = item.data.image;
+
+        image = image.replace('h=315', 'h=' + roundedPreloaderHeight).replace('w=420', 'w=' + roundedPreloaderWidth) + '&h=' + roundedPreloaderHeight + '&w=' + roundedPreloaderWidth;
+
+        revImage.setAttribute('data-img-height', roundedPreloaderHeight);
+        revImage.setAttribute('data-img-width', roundedPreloaderWidth);
+
+        if (!item.data.video_id) {
+            revImage.style.backgroundImage = 'url('+ image +')';
+            // revImage.innerHTML = '<img src=" ' + image + ' " />';
+        } else {
+            revImage.innerHTML = '<iframe id="rc_video' + item.data.video_id + '" src="http://code.revcontent.com/mock/feed4/video' + item.data.video_id + '.iframe.html" style="border: none; width: '+ roundedPreloaderWidth +'px; height: ' + roundedPreloaderHeight + 'px;""></iframe>';
+        }
     };
 
     RevSlider.prototype.resizeImage = function(el, item) {
@@ -2600,26 +2634,7 @@ Author: michael@revcontent.com
                 anchor.setAttribute('href', url);
                 anchor.title = itemData.headline;
 
-                if (this.options.mobile_image_optimize && revDetect.mobile()) {
-                    var roundedPreloaderHeight = Math.round(item.preloaderHeight / this.options.mobile_image_optimize);
-                    var roundedPreloaderWidth = Math.round(item.preloaderWidth / this.options.mobile_image_optimize);
-                } else {
-                    var roundedPreloaderHeight = Math.round(item.preloaderHeight);
-                    var roundedPreloaderWidth = Math.round(item.preloaderWidth);
-                }
-                var image = itemData.image;
-
-                image = image.replace('h=315', 'h=' + roundedPreloaderHeight).replace('w=420', 'w=' + roundedPreloaderWidth) + '&h=' + roundedPreloaderHeight + '&w=' + roundedPreloaderWidth;
-
-                var revImage = item.element.querySelector('.rev-image');
-
-                if (!itemData.video_id) {
-                    revImage.style.backgroundImage = 'url('+ image +')';
-                    // revImage.innerHTML = '<img src=" ' + image + ' " />';
-                } else {
-                    revImage.innerHTML = '<iframe id="rc_video' + itemData.video_id + '" src="http://code.revcontent.com/mock/feed4/video' + itemData.video_id + '.iframe.html" style="border: none; width: '+ roundedPreloaderWidth +'px; height: ' + roundedPreloaderHeight + 'px;""></iframe>';
-                }
-
+                this.setImage(item, item.element.querySelector('.rev-image'));
 
                 // item.element.querySelector('img').setAttribute('src', image);
 
