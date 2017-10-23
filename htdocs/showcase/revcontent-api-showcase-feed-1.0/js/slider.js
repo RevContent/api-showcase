@@ -163,7 +163,8 @@ Author: michael@revcontent.com
             ],
             reaction_id: 5,
             mobile_image_optimize: 1.2,
-            trending_utm: false
+            trending_utm: false,
+            keywords: false
         };
 
          this.mockComments = {
@@ -2346,6 +2347,10 @@ Author: michael@revcontent.com
 
         if (internal) {
             url += '&show_comments=1';
+        }
+
+        if (this.options.keywords) {
+            url += ('&keywords=' + this.options.keywords)
         }
 
         url += fill ? '&fill=true' : '';
