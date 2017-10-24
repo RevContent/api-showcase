@@ -6,13 +6,12 @@
   <body style='border : none; padding : 0; margin : 0;'>
     <div id="powr_video" style='width : 100%; height : 100%;'></div>
     <script type="text/javascript">
-      alert(window.parent.passingObj["revcontent"]);
-      
       new PowrVideo({
       "id": 'powr_video',
       "dfp" : true,
       "tag" : "/21623266709/powr.com-945",
-      "autoplay" : "focus",
+      "autoplay" : "load",
+      "muted" : false,
       "fluid" : true,
       "controls" : "custom",
       "float" : "none",
@@ -26,8 +25,7 @@
       "sd_url" : "http://media.powr.com/480p/a4c75d3a-fb4b-4715-a51d-0462e2a3b5b5.mp4",
       "hd_url":"http://techslides.com/demos/sample-videos/small.mp4",
       "thumbnail":"http://lorempixel.com/300/150"}
-      ],
-      "iframe_id" : "rc_powr_1"
+      ]
       });
     </script>
   </body>

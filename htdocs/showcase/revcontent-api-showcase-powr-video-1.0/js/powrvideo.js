@@ -25,6 +25,7 @@ if (!String.prototype.endsWith) {
 }( window, function factory(window, revUtils, revApi) {
 
     var PowrInitialized = false;
+    var PowrPlayers = 0;
     /**
      * id : id of the div to attach.
      * tag : tag to use.
@@ -39,7 +40,6 @@ if (!String.prototype.endsWith) {
 	  "minWidth" : 100,
 	  "maxWidth" : 200
      * },
-     * iframe_id : "id" // Incase we are inside an iframe.
      * player_id : id to give the player we creating.
      * controls : "custom"
      * float_conflicts : [ "" ]
@@ -56,7 +56,6 @@ if (!String.prototype.endsWith) {
         }
 
 	this.floatSettings = this.createFloatSettings();
-	this.iframeSettings = this.createIframeSettings();
 	this.autoplaySettings = this.createAutoplaySettings();
 	this.permanentClose = "no";
 	if (this.config.permanent_close) {
@@ -73,18 +72,20 @@ if (!String.prototype.endsWith) {
 
         this.element = document.getElementById(this.config.id);
 
-        this.playerId = "content_video";
+        this.playerId = "content_video_" + (++PowrPlayers);
         if (config.playerId) {
             this.playerId = config.playerId;
         }
         this.viewed = false;
         var w = this.element.clientWidth;
 	var h = this.element.clientHeight;
+	var hs = "100%";
 	if (!this.config.fluid) {
 	    h = 0.5625 * w;
-	}
-
-	this.element.setAttribute("style", "width: 100%; height : " + parseInt(h) + "px; background-color : #EFEFEF; position : relative;");
+	    hs = parseInt(h) + "px";
+	} 
+	
+	this.element.setAttribute("style", "width: 100%; height : " + hs + "; background-color : #EFEFEF; position : relative;");
 
         this.videos = config.videos;
         this.currentContent = 0;
@@ -151,14 +152,17 @@ if (!String.prototype.endsWith) {
     PowrVideo.prototype.onResize = function(shouldFloat) {
 	var width = this.element.clientWidth;
         var height = parseInt(0.5625 * width);
+	var hs = height + "px";
+	
 	if (this.config.fluid) {
 	    height = this.element.clientHeight;
+	    hs = "100%";
 	}
 	if (this.player && !this.floated) {
 	    this.player.dimensions(width, height);
 	}
-        this.element.setAttribute("style", "width : 100%; height : " + height + "px; background-color : #EFEFEF");
-
+        this.element.setAttribute("style", "width : 100%; height : " + hs + "; background-color : #EFEFEF");
+	
         var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
         var windowWidth = window.innerWidth|| document.documentElement.clientWidth || document.body.clientWidth;
         var newOrientation = '';
@@ -452,13 +456,10 @@ if (!String.prototype.endsWith) {
     };
 
     PowrVideo.prototype.attachVisibleListener = function() {
-	if (!this.iframeSettings.iframe) {
-            // revUtils.addEventListener(window.parent, 'scroll', this.checkVisible.bind(this));
-	    //} else {
+	if (this.floatSettings.landscape || this.floatSettings.portrait || this.autoplaySettings.focus) {
 	    revUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
 	    this.checkVisible();
 	}
-        // revUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
     };
 
     PowrVideo.prototype.floatPlayer = function() {
@@ -600,47 +601,25 @@ if (!String.prototype.endsWith) {
     PowrVideo.prototype.checkVisible = function() {
         var that = this;
         requestAnimationFrame(function() {
-	    var ifs = that.iframeSettings;
-	    if (ifs.true) {
-		var element = window.parent.document.getElementById(ifs.id);
-		var windowHeight = window.parent.innerHeight || window.parent.document.documentElement.clientHeight || window.parent.document.body.clientHeight;
-		var elementHeight = element.getBoundingClientRect().height;
-		var elementTop = element.getBoundingClientRect().top;
-		var currentScroll = window.parent.pageYOffset || window.parent.document.documentElement.scrollTop || window.parent.document.body.scrollTop;
-
-		if (elementTop + elementHeight < 0) {
-		    if (that.visible) {
-			that.visible = false;
-			that.onHidden();
-		    }
-		} else if (elementTop + 30 < windowHeight) {
-		    if (!that.visible) {
-			that.visible = true;
-			that.onVisible();
-		    }
+	    // what percentage of the element should be visible
+	    // var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
+	    // fire if within buffer
+	    // var bufferPixels = (typeof buffer === 'number') ? buffer : 0;
+	    var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+	    var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+	    var elementTop = that.element.getBoundingClientRect().top;
+	    var elementBottom = that.element.getBoundingClientRect().bottom;
+	    var elementVisibleHeight = that.element.offsetHeight * 0.50;
+	    
+	    if (elementTop + that.getPlayerHeight() < 0) {
+		if (that.visible) {
+		    that.visible = false;
+		    that.onHidden();
 		}
-
-	    } else {
-		// what percentage of the element should be visible
-		// var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
-		// fire if within buffer
-		// var bufferPixels = (typeof buffer === 'number') ? buffer : 0;
-		var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-		var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-		var elementTop = that.element.getBoundingClientRect().top;
-		var elementBottom = that.element.getBoundingClientRect().bottom;
-		var elementVisibleHeight = that.element.offsetHeight * 0.50;
-
-		if (elementTop + that.getPlayerHeight() < 0) {
-		    if (that.visible) {
-			that.visible = false;
-			that.onHidden();
-		    }
-		} else if (elementTop + 30 < windowHeight) {
-		    if (!that.visible) {
-			that.visible = true;
-			that.onVisible();
-		    }
+	    } else if (elementTop + 30 < windowHeight) {
+		if (!that.visible) {
+		    that.visible = true;
+		    that.onVisible();
 		}
 	    }
         });
@@ -899,16 +878,20 @@ if (!String.prototype.endsWith) {
 	    "focus" : false,
 	    "audio" : false
 	};
+	
 	if (typeof c.autoplay == "string") {
 	    if (c.autoplay == "none") return ret;
 	    ret.autoplay = true;
 	    if (c.autoplay == "load") {
 		ret.audio = (!this.mobile && !this.safari);
+		if (ret.audio && this.config.muted) {
+		    ret.audio = this.config.muted;
+		}
 		return ret;
 	    }
 	    if (c.autoplay == "focus") {
 		ret.focus = true;
-		ret.audio = false;
+		ret.audio = this.config.muted;
 		return ret;
 	    }
 	} else {

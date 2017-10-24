@@ -79,7 +79,8 @@
       $("#autoplay").html("Autoplay: " + urlObj.getParam('autoplay', 'load') + " &nbsp;<span class='caret'></span>");
       $("#flt").html("Float: " + urlObj.getParam('flt', 'right') + " &nbsp;<span class='caret'></span>");
       $("#pclose").html("Permanent Close: " + urlObj.getParam('pclose', 'no') + " &nbsp;<span class='caret'></span>");
-      $("#ad_tag").html("Ad Tag: " + urlObj.getParam('ad_tag', 'none') + " &nbsp;<span class='caret'></span>");
+    $("#ad_tag").html("Ad Tag: " + urlObj.getParam('ad_tag', 'none') + " &nbsp;<span class='caret'></span>");
+    $("#fluid").html("Fluid : " + urlObj.getParam('fluid', 'no') + " &nbsp;<span class='caret'></span>");
     });
   </script>
 </head>
@@ -113,13 +114,21 @@
               <li><a href="javascript: urlObj.setParam('flt', 'none'); urlObj.loadUrl();">None</a></li>
             </ul>
           </li>
-	        <li class="dropdown">
+<li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="pclose"></a>
             <ul class="dropdown-menu">
               <li><a href="javascript: urlObj.setParam('pclose', 'yes'); urlObj.loadUrl();">Yes</a></li>
               <li><a href="javascript: urlObj.setParam('pclose', 'no'); urlObj.loadUrl();">No</a></li>
             </ul>
           </li>
+           <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="fluid"></a>
+            <ul class="dropdown-menu">
+              <li><a href="javascript: urlObj.setParam('fluid', 'true'); urlObj.loadUrl();">Yes</a></li>
+              <li><a href="javascript: urlObj.setParam('fluid', 'false'); urlObj.loadUrl();">No</a></li>
+            </ul>
+          </li>
+	  
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="ad_tag"></a>
             <ul class="dropdown-menu">
@@ -147,18 +156,28 @@
     <div class="row">
       <div class="col-md-8">
         <h2 class="redacted single-line">Try <a href="./autostream_trump.html">Donald Trump</a></h2>
-
-        <div id="powr_video"></div>
+	<div style='width : 100%;' id='powr_container'>
+          <div id="powr_video"></div>
+	</div>
         <script type="text/javascript">
         var autoplay = urlObj.getParam('autoplay', 'load');
         var flt = urlObj.getParam('flt', 'right');
         var pclose = urlObj.getParam('pclose', 'no');
         var ad_tag = urlObj.getParam('ad_tag', 'john-demo');
+	var fluid = urlObj.getParam('fluid', 'no');
         var mob_flt = "top";
 
+	if (fluid == 'no') fluid = false;
+	else fluid = true;
+	
         if (flt == 'left') flt = "bottom-left";
         else if (flt == 'right') flt = "bottom-right";
         else { flt = "none"; mob_flt = "none"; }
+
+	if (fluid) {
+	document.getElementById('powr_container').style.width = "400px";
+	document.getElementById('powr_container').style.height = "600px";
+	}
 
         new PowrVideo({
           "id": 'powr_video',
@@ -170,7 +189,8 @@
             "desktop" : flt,
             "mobile" : mob_flt
           },
-          "custom_logo": "./img/newsweek.png",
+        "custom_logo": "./img/newsweek.png",
+	"fluid" : fluid,
           "videos" : [
         {"id":15207,
             "user_id":673,
