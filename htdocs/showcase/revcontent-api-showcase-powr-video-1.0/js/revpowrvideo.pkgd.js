@@ -25708,7 +25708,6 @@ if (!String.prototype.endsWith) {
 	  "minWidth" : 100,
 	  "maxWidth" : 200
      * },
-     * iframe_id : "id" // Incase we are inside an iframe.
      * player_id : id to give the player we creating.
      * controls : "custom"
      * float_conflicts : [ "" ]
@@ -26547,16 +26546,20 @@ if (!String.prototype.endsWith) {
 	    "focus" : false,
 	    "audio" : false
 	};
+	
 	if (typeof c.autoplay == "string") {
 	    if (c.autoplay == "none") return ret;
 	    ret.autoplay = true;
 	    if (c.autoplay == "load") {
 		ret.audio = (!this.mobile && !this.safari);
+		if (ret.audio && this.config.muted) {
+		    ret.audio = this.config.muted;
+		}
 		return ret;
 	    }
 	    if (c.autoplay == "focus") {
 		ret.focus = true;
-		ret.audio = false;
+		ret.audio = this.config.muted;
 		return ret;
 	    }
 	} else {
