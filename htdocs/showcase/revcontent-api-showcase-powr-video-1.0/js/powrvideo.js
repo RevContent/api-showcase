@@ -470,7 +470,7 @@ if (!String.prototype.endsWith) {
 	if (this.orientation == "landscape" && !this.floatSettings.landscape)
 	    return;
 
-	utils.addClass(document.body, 'powr_player_floating');
+	revUtils.addClass(document.body, 'powr_player_floating');
         this.container.className = "rc-float-video powr_player " + (this.permanentClose == "yes" ? "powr_permanent_close" : "");
         var styleString = "";
         var fs = this.floatSettings;
@@ -572,7 +572,7 @@ if (!String.prototype.endsWith) {
 
     PowrVideo.prototype.unfloatPlayer = function() {
         if (this.floated) {
-	    utils.removeClass(document.body, 'powr_player_floating');
+	    revUtils.removeClass(document.body, 'powr_player_floating');
             this.container.className = 'powr_player ' + (this.permanentClose == "yes" ? 'powr_permanent_close' : '');
             this.container.removeAttribute("style");
             this.floated = false;
