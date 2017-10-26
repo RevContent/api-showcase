@@ -78,7 +78,8 @@
     $(function () {
       $("#autoplay").html("Autoplay: " + urlObj.getParam('autoplay', 'load') + " &nbsp;<span class='caret'></span>");
       $("#flt").html("Float: " + urlObj.getParam('flt', 'right') + " &nbsp;<span class='caret'></span>");
-      $("#pclose").html("Permanent Close: " + urlObj.getParam('pclose', 'no') + " &nbsp;<span class='caret'></span>");
+    $("#pclose").html("Permanent Close: " + urlObj.getParam('pclose', 'no') + " &nbsp;<span class='caret'></span>");
+    $("#muted").html("Muted : " + urlObj.getParam('muted', 'no') + "&nbsp;<span class='caret'></span>");
     $("#ad_tag").html("Ad Tag: " + urlObj.getParam('ad_tag', 'none') + " &nbsp;<span class='caret'></span>");
     $("#fluid").html("Fluid : " + urlObj.getParam('fluid', 'no') + " &nbsp;<span class='caret'></span>");
     });
@@ -120,7 +121,17 @@
               <li><a href="javascript: urlObj.setParam('pclose', 'yes'); urlObj.loadUrl();">Yes</a></li>
               <li><a href="javascript: urlObj.setParam('pclose', 'no'); urlObj.loadUrl();">No</a></li>
             </ul>
+</li>
+
+           <li class="dropdown">
+             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="muted"></a>
+            <ul class="dropdown-menu">
+              <li><a href="javascript: urlObj.setParam('muted', 'yes'); urlObj.loadUrl();">Yes</a></li>
+              <li><a href="javascript: urlObj.setParam('muted', 'no'); urlObj.loadUrl();">No</a></li>
+            </ul>
           </li>
+
+
            <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="fluid"></a>
             <ul class="dropdown-menu">
@@ -165,6 +176,7 @@
         var pclose = urlObj.getParam('pclose', 'no');
         var ad_tag = urlObj.getParam('ad_tag', 'john-demo');
 	var fluid = urlObj.getParam('fluid', 'no');
+	var muted = urlObj.getParam('muted', 'no');
         var mob_flt = "top";
 
 	if (fluid == 'no') fluid = false;
@@ -191,6 +203,7 @@
           },
         "custom_logo": "./img/newsweek.png",
 	"fluid" : fluid,
+	"muted" : muted,
           "videos" : [
         {"id":15207,
             "user_id":673,
