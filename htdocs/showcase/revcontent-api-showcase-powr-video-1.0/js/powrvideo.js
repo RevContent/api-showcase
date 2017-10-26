@@ -43,7 +43,8 @@ if (!String.prototype.endsWith) {
      * player_id : id to give the player we creating.
      * controls : "custom"
      * float_conflicts : [ "" ]
-     * permanent_close : true
+     * permanent_close : "yes" or "no"
+     * muted : "yes" or "no"
      */
     var PowrVideo = function(config) {
         this.config = config;
@@ -886,14 +887,17 @@ if (!String.prototype.endsWith) {
 	    ret.autoplay = true;
 	    if (c.autoplay == "load") {
 		ret.audio = (!this.mobile && !this.safari);
-		if (ret.audio && this.config.muted) {
-		    ret.audio = this.config.muted;
+		if (ret.audio && this.config.hasOwnProperty("muted")) {
+		    ret.audio = (this.config.muted == "no");
 		}
 		return ret;
 	    }
 	    if (c.autoplay == "focus") {
 		ret.focus = true;
-		ret.audio = this.config.muted;
+		ret.audio = false;
+		if (this.config.hasOwnProperty("muted")) {
+		    ret.audio = (this.config.muted == "no");
+		}
 		return ret;
 	    }
 	} else {
