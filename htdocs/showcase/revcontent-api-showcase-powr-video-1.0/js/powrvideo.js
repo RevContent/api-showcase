@@ -59,8 +59,8 @@ if (!String.prototype.endsWith) {
 	this.floatSettings = this.createFloatSettings();
 	this.autoplaySettings = this.createAutoplaySettings();
 	this.permanentClose = "no";
-	if (this.config.permanent_close) {
-	    this.permanentClose = this.config.permanent_close;
+	if (this.config.permanent_cross) {
+	    this.permanentClose = this.config.permanent_cross;
 	}
 
 	this.floatConflicts = {
