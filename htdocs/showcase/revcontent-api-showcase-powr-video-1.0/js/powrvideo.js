@@ -45,6 +45,7 @@ if (!String.prototype.endsWith) {
      * float_conflicts : [ "" ]
      * permanent_close : "yes" or "no"
      * muted : "yes" or "no"
+     * show_on_focus : "yes" or "no"
      */
     var PowrVideo = function(config) {
         this.config = config;
@@ -61,6 +62,10 @@ if (!String.prototype.endsWith) {
 	this.permanentClose = "no";
 	if (this.config.permanent_cross) {
 	    this.permanentClose = this.config.permanent_cross;
+	}
+	this.showOnFocus = "no";
+	if (this.config.show_on_focus) {
+	    this.showOnFocus = this.config.show_on_focus;
 	}
 
 	this.floatConflicts = {
@@ -84,11 +89,21 @@ if (!String.prototype.endsWith) {
 	if (!this.config.fluid) {
 	    h = 0.5625 * w;
 	    hs = parseInt(h) + "px";
-	} 
+	}
+
+	this.videos = config.videos;
+
+	if (this.videos.length == 0) {
+	    this.onCrossClicked(null);
+	    return;
+	}
 	
 	this.element.setAttribute("style", "width: 100%; height : " + hs + "; background-color : #EFEFEF; position : relative;");
+	if (this.showOnFocus == "yes") {
+	    revUtils.addClass(this.element, "powr_hidden");
+	}
+	
 
-        this.videos = config.videos;
         this.currentContent = 0;
 
         this.options = {
@@ -215,6 +230,12 @@ if (!String.prototype.endsWith) {
     };
 
     PowrVideo.prototype.setup = function () {
+	this.attachVisibleListener();
+	if (this.showOnFocus == "yes" && !this.hasOwnProperty("setupOnVisible")) {
+	    this.setupOnVisible = true;
+	    return;
+	}
+	revUtils.removeClass(this.element, "powr_hidden");
 	google.ima.settings.setVpaidMode(google.ima.ImaSdkSettings.VpaidMode.INSECURE);
 
 	this.events = [google.ima.AdEvent.Type.ALL_ADS_COMPLETED,
@@ -249,7 +270,7 @@ if (!String.prototype.endsWith) {
 	    revUtils.addEventListener(this.crossButton, 'click', this.bind(this, this.onCrossClicked));
 	}
 
-        this.attachVisibleListener();
+
         revUtils.addEventListener(window, 'resize', this.onResize.bind(this, true));
         this.orientation = 'none';
         this.onResize(true);
@@ -391,7 +412,7 @@ if (!String.prototype.endsWith) {
 
     PowrVideo.prototype.start = function(playOnLoad) {
 	this.waitForPlay = true;
-	setTimeout(this.bind(this, this.clearWait), 2000);
+	setTimeout(this.bind(this, this.clearWait), 5000);
 	this.started = true;
         this.player.ima(this.options, this.bind(this, this.adsManagerLoadedCallback));
         this.player.ima.initializeAdDisplayContainer();
@@ -457,10 +478,12 @@ if (!String.prototype.endsWith) {
     };
 
     PowrVideo.prototype.attachVisibleListener = function() {
-	if (this.floatSettings.landscape || this.floatSettings.portrait || this.autoplaySettings.focus) {
+	if (this.visibleListenerAttached) return;
+	if (this.floatSettings.landscape || this.floatSettings.portrait || this.autoplaySettings.focus || (this.showOnFocus == 'yes')) {
 	    revUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
 	    this.checkVisible();
 	}
+	this.visibleListenerAttached = true;
     };
 
     PowrVideo.prototype.floatPlayer = function() {
@@ -629,11 +652,19 @@ if (!String.prototype.endsWith) {
     };
 
     PowrVideo.prototype.onVisible = function() {
+	if (this.setupOnVisible) {
+	    this.setupOnVisible = false;
+	    this.setup();
+	}
+	
 	this.registerView();
 	this.unfloatPlayer();
     };
 
     PowrVideo.prototype.onHidden = function() {
+	if (this.setupOnVisible) {
+	    return;
+	}
 	this.floatPlayer();
     };
 
@@ -757,7 +788,6 @@ if (!String.prototype.endsWith) {
 	    this.cancelEvent(e);
 	    return;
 	}
-	
 
 	if (this.waitForPlay && this.player.paused()) {
 	    this.player.muted(false);
@@ -774,6 +804,7 @@ if (!String.prototype.endsWith) {
 	}
 
 	if (this.player.muted()) {
+	    this.player.controls(true);
 	    this.player.muted(false);
 	    this.volumeOffOverlay.hide();
 	    this.cancelEvent(e);
@@ -794,7 +825,8 @@ if (!String.prototype.endsWith) {
 
 	if (this.player.muted()) {
 	    this.volumeOffOverlay.show();
-	    this.player.controlBar.hide();
+	    // this.player.controlBar.hide();
+	    this.player.controls(false);
 	}
     };
 
@@ -807,14 +839,15 @@ if (!String.prototype.endsWith) {
 	this.volumeOffOverlay.hide();
 	if (this.crossButton)
 	    this.crossButton.style.display = "block";
-	this.player.controlBar.show();
+	// this.player.controlBar.show();
     };
 
     PowrVideo.prototype.onIdle = function() {
         if (!this.player.paused()) {
 	    this.titleOverlay.hide();
 	    this.playOverlay.hide();
-	    this.player.controlBar.hide();
+	    // this.player.controlBar.hide();
+	    // this.player.controls(false);
 	    // this.volumeOnOverlay.hide();
 	    if (this.player.muted() || this.player.volume() == 0) {
 		this.volumeOffOverlay.show();

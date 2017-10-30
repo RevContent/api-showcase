@@ -2,6 +2,10 @@
     position : relative;
 }
 
+.powr_hidden {
+    visibility : hidden;
+}
+
 .powr_permanent_close .rc-video-overlay img {
     margin-right : 38px !important;
 }
@@ -10,11 +14,11 @@ body .rc-float-video .rc-video-overlay img {
     margin-right : auto !important;
 }
 
-.powr_player .video-js .vjs-control-bar {
-    background: -moz-linear-gradient(bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.0) 100%);
-    background: -webkit-linear-gradient(bottom, rgba(0,0,0,0.8) 0%,rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%);
-    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%,rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%);
-}
+//.powr_player .video-js .vjs-control-bar {
+//    background: -moz-linear-gradient(bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.0) 100%);
+//    background: -webkit-linear-gradient(bottom, rgba(0,0,0,0.8) 0%,rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%);
+//    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%,rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%);
+//}
 
 .powr_player h2.powr-video-player {
     font-family: Arial !important;
