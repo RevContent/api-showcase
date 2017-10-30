@@ -38,6 +38,10 @@ body .rc-float-video .rc-video-overlay img {
     padding : 6px 10px 6px 6px;
 }
 
+.powr_player .video-js .vjs-custom-logo a {
+    border : none !important;
+}
+
 .powr_player .video-js .vjs-custom-logo a img {
     height : 100% !important;
     width : auto !important;
