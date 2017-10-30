@@ -26459,6 +26459,9 @@ if (!String.prototype.endsWith) {
 
 	if (this.waitForPlay && this.player.paused()) {
 	    this.player.muted(false);
+	    var v = this.getVideoElement();
+	    v.removeAttribute("muted");
+	    
 	    this.player.ima.initializeAdDisplayContainer();
             this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), false);
 	    this.player.ima.requestAds();
@@ -26474,6 +26477,9 @@ if (!String.prototype.endsWith) {
 	if (this.player.muted()) {
 	    this.player.controls(true);
 	    this.player.muted(false);
+	    var v = this.getVideoElement();
+	    v.removeAttribute("muted");
+	    
 	    this.volumeOffOverlay.hide();
 	    this.cancelEvent(e);
 	    return;
@@ -26638,6 +26644,10 @@ if (!String.prototype.endsWith) {
 	} else if (typeof e.cancelBubble != "undefined") {
 	    e.cancelBubble = true;
 	}
+    };
+
+    PowrVideo.prototype.getVideoElement = function() {
+	return this.element.querySelector("video");
     };
 
     return PowrVideo;
