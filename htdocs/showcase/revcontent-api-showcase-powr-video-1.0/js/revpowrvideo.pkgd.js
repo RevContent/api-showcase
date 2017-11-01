@@ -25724,6 +25724,7 @@ if (!String.prototype.endsWith) {
             navigator.userAgent.match(/Android/i)) {
 	    this.mobile = true;
         }
+	this.log("Mobile Mode " + this.mobile);
 
 	this.floatSettings = this.createFloatSettings();
 	this.autoplaySettings = this.createAutoplaySettings();
@@ -25734,6 +25735,12 @@ if (!String.prototype.endsWith) {
 	this.showOnFocus = "no";
 	if (this.config.show_on_focus) {
 	    this.showOnFocus = this.config.show_on_focus;
+	}
+	this.waitForAutoplay = 5000;
+	if (this.config.wait_for_autoplay) {
+	    try {
+		this.waitForAutoplay = parseInt(this.config.wait_for_autoplay);
+	    } catch (e) {}
 	}
 
 	this.floatConflicts = {
@@ -25791,6 +25798,7 @@ if (!String.prototype.endsWith) {
 	if (this.config.dfp) {
             return "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + this.config.tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
 		+ "&cust_params=p_width%3D" + parseInt(this.getPlayerWidth()) + "%26p_height%3D" + parseInt(this.getPlayerHeight())
+	        + "%26p_protocol%3D" + this.getProtocol() + 
 		+ "&description_url=" + encodeURI("http://www.powr.com/video/" + videoId);
 	} else {
 	    var tag = this.config.tag;
@@ -25800,6 +25808,12 @@ if (!String.prototype.endsWith) {
 	    tag = tag.replace("CACHE_BUSTER", "" + new Date().getTime());
 	    return tag;
 	}
+    };
+
+    PowrVideo.prototype.getProtocol = function() {
+	var ret = window.location.protocol;
+	ret = ret.replace(":", "");
+	return ret;
     };
 
     PowrVideo.prototype.init = function() {
@@ -25956,6 +25970,7 @@ if (!String.prototype.endsWith) {
         dumbPlayer.setAttribute("playsinline", "true");
 
         if (this.autoplaySettings.autoplay && !this.autoplaySettings.audio) {
+	    this.log("Setting player muted");
             dumbPlayer.setAttribute("muted", "true");
         }
 
@@ -26080,7 +26095,7 @@ if (!String.prototype.endsWith) {
 
     PowrVideo.prototype.start = function(playOnLoad) {
 	this.waitForPlay = true;
-	setTimeout(this.bind(this, this.clearWait), 5000);
+	setTimeout(this.bind(this, this.clearWait), this.config.waitForAutoplay);
 	this.started = true;
         this.player.ima(this.options, this.bind(this, this.adsManagerLoadedCallback));
         this.player.ima.initializeAdDisplayContainer();
@@ -26648,6 +26663,10 @@ if (!String.prototype.endsWith) {
 
     PowrVideo.prototype.getVideoElement = function() {
 	return this.element.querySelector("video");
+    };
+
+    PowrVideo.prototype.log = function(m) {
+	if ((typeof console) != "undefined") console.log(m);
     };
 
     return PowrVideo;

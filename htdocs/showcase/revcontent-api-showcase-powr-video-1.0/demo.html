@@ -97,6 +97,7 @@
     var fluid = urlObj.getParam('fluid', 'no');
     var muted = urlObj.getParam('muted', 'no');
     var n_videos = parseInt(urlObj.getParam('videos', '2'));
+    var wait_for_autoplay = parseInt(urlObj.getParam('w_auto', '5000'));
     var mob_flt = "top";
     
     if (fluid == 'no') fluid = false;
@@ -564,7 +565,8 @@
           },
         "custom_logo": "./img/newsweek.png",
 	"fluid" : fluid,
-	"muted" : muted,
+			      "muted" : muted,
+			      "wait_for_autoplay" : wait_for_autoplay,
           "videos" : videos
         });
         </script>
