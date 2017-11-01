@@ -84,6 +84,7 @@
     $("#fluid").html("Fluid : " + urlObj.getParam('fluid', 'no') + " &nbsp;<span class='caret'></span>");
     $("#afocus").html("Show On Focus : " + urlObj.getParam('afocus', 'no') + " &nbsp;<span class='caret'></span>");
     $("#videos").html("Total Videos : " + urlObj.getParam('videos', '2') + " &nbsp;<span class='caret'></span>");
+    $("#adtype").html("Ad Type : " + urlObj.getParam('adtype', 'preroll') + " &nbsp;<span class='caret'></span>");
     if (urlObj.getParam('richard_mode', 'no') == 'yes') {
     $("#ad_tag_parent").css("display", "block");
     }
@@ -98,6 +99,7 @@
     var muted = urlObj.getParam('muted', 'no');
     var n_videos = parseInt(urlObj.getParam('videos', '2'));
     var wait_for_autoplay = parseInt(urlObj.getParam('w_auto', '5000'));
+    var adtype = urlObj.getParam('adtype', 'preroll');
     var mob_flt = "top";
     
     if (fluid == 'no') fluid = false;
@@ -171,15 +173,24 @@
           </li>
 
 
-           <li class="dropdown">
+          <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="fluid"></a>
             <ul class="dropdown-menu">
               <li><a href="javascript: urlObj.setParam('fluid', 'true'); urlObj.loadUrl();">Yes</a></li>
               <li><a href="javascript: urlObj.setParam('fluid', 'false'); urlObj.loadUrl();">No</a></li>
             </ul>
           </li>
+	  <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="adtype"></a>
+            <ul class="dropdown-menu">
+              <li><a href="javascript: urlObj.setParam('adtype', 'preroll'); urlObj.loadUrl();">PreRoll</a></li>
+              <li><a href="javascript: urlObj.setParam('adtype', '0.25'); urlObj.loadUrl();">MidRoll (25%)</a></li>
+	      <li><a href="javascript: urlObj.setParam('adtype', '0.5'); urlObj.loadUrl();">MidRoll (50%)</a></li>
+	      <li><a href="javascript: urlObj.setParam('adtype', 'postroll'); urlObj.loadUrl();">PostRoll</a></li>
+            </ul>
+          </li>
 	  
-<li class="dropdown" style='display : none;' id='ad_tag_parent'>
+          <li class="dropdown" style='display : none;' id='ad_tag_parent'>
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="ad_tag"></a>
             <ul class="dropdown-menu">
               <li><a href="javascript: urlObj.setParam('ad_tag', 'test/connatix'); urlObj.loadUrl();">Connatix</a></li>
@@ -566,6 +577,7 @@
         "custom_logo": "./img/newsweek.png",
 	"fluid" : fluid,
 			      "muted" : muted,
+			      "adtype" : adtype,
 			      "wait_for_autoplay" : wait_for_autoplay,
           "videos" : videos
         });
