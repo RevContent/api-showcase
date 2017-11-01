@@ -130,7 +130,7 @@ if (!String.prototype.endsWith) {
 	if (this.config.dfp) {
             return "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + this.config.tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
 		+ "&cust_params=p_width%3D" + parseInt(this.getPlayerWidth()) + "%26p_height%3D" + parseInt(this.getPlayerHeight())
-	        + "%26p_protocol%3D" + this.getProtocol() + 
+	        + "%26p_protocol%3D" + this.getProtocol()
 		+ "&description_url=" + encodeURI("http://www.powr.com/video/" + videoId);
 	} else {
 	    var tag = this.config.tag;
