@@ -2233,7 +2233,6 @@ Author: michael@revcontent.com
             return false;
         }
 
-        console.log(xhr.responseText);
         try {
             var jsonResponse = JSON.parse(xhr.responseText);
             return jsonResponse.success;
