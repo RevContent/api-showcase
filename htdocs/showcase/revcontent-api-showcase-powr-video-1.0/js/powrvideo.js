@@ -25,6 +25,7 @@ if (!String.prototype.endsWith) {
 }( window, function factory(window, revUtils, revApi) {
 
     var PowrInitialized = false;
+    var PowrPlayers = 0;
     /**
      * id : id of the div to attach.
      * tag : tag to use.
@@ -39,11 +40,12 @@ if (!String.prototype.endsWith) {
 	  "minWidth" : 100,
 	  "maxWidth" : 200
      * },
-     * iframe_id : "id" // Incase we are inside an iframe.
      * player_id : id to give the player we creating.
      * controls : "custom"
      * float_conflicts : [ "" ]
-     * permanent_close : true
+     * permanent_close : "yes" or "no"
+     * muted : "yes" or "no"
+     * show_on_focus : "yes" or "no"
      */
     var PowrVideo = function(config) {
         this.config = config;
@@ -54,13 +56,23 @@ if (!String.prototype.endsWith) {
             navigator.userAgent.match(/Android/i)) {
 	    this.mobile = true;
         }
+	this.log("Mobile Mode " + this.mobile);
 
 	this.floatSettings = this.createFloatSettings();
-	this.iframeSettings = this.createIframeSettings();
 	this.autoplaySettings = this.createAutoplaySettings();
 	this.permanentClose = "no";
-	if (this.config.permanent_close) {
-	    this.permanentClose = this.config.permanent_close;
+	if (this.config.permanent_cross) {
+	    this.permanentClose = this.config.permanent_cross;
+	}
+	this.showOnFocus = "no";
+	if (this.config.show_on_focus) {
+	    this.showOnFocus = this.config.show_on_focus;
+	}
+	this.waitForAutoplay = 5000;
+	if (this.config.wait_for_autoplay) {
+	    try {
+		this.waitForAutoplay = parseInt(this.config.wait_for_autoplay);
+	    } catch (e) {}
 	}
 
 	this.floatConflicts = {
@@ -73,20 +85,32 @@ if (!String.prototype.endsWith) {
 
         this.element = document.getElementById(this.config.id);
 
-        this.playerId = "content_video";
+        this.playerId = "content_video_" + (++PowrPlayers);
         if (config.playerId) {
             this.playerId = config.playerId;
         }
         this.viewed = false;
         var w = this.element.clientWidth;
 	var h = this.element.clientHeight;
+	var hs = "100%";
 	if (!this.config.fluid) {
 	    h = 0.5625 * w;
+	    hs = parseInt(h) + "px";
 	}
 
-	this.element.setAttribute("style", "width: 100%; height : " + parseInt(h) + "px; background-color : #EFEFEF; position : relative;");
+	this.videos = config.videos;
 
-        this.videos = config.videos;
+	if (this.videos.length == 0) {
+	    this.onCrossClicked(null);
+	    return;
+	}
+	
+	this.element.setAttribute("style", "width: 100%; height : " + hs + "; background-color : #EFEFEF; position : relative;");
+	if (this.showOnFocus == "yes") {
+	    revUtils.addClass(this.element, "powr_hidden");
+	}
+	
+
         this.currentContent = 0;
 
         this.options = {
@@ -106,6 +130,7 @@ if (!String.prototype.endsWith) {
 	if (this.config.dfp) {
             return "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + this.config.tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
 		+ "&cust_params=p_width%3D" + parseInt(this.getPlayerWidth()) + "%26p_height%3D" + parseInt(this.getPlayerHeight())
+	        + "%26p_protocol%3D" + this.getProtocol()
 		+ "&description_url=" + encodeURI("http://www.powr.com/video/" + videoId);
 	} else {
 	    var tag = this.config.tag;
@@ -115,6 +140,12 @@ if (!String.prototype.endsWith) {
 	    tag = tag.replace("CACHE_BUSTER", "" + new Date().getTime());
 	    return tag;
 	}
+    };
+
+    PowrVideo.prototype.getProtocol = function() {
+	var ret = window.location.protocol;
+	ret = ret.replace(":", "");
+	return ret;
     };
 
     PowrVideo.prototype.init = function() {
@@ -151,14 +182,17 @@ if (!String.prototype.endsWith) {
     PowrVideo.prototype.onResize = function(shouldFloat) {
 	var width = this.element.clientWidth;
         var height = parseInt(0.5625 * width);
+	var hs = height + "px";
+	
 	if (this.config.fluid) {
 	    height = this.element.clientHeight;
+	    hs = "100%";
 	}
 	if (this.player && !this.floated) {
 	    this.player.dimensions(width, height);
 	}
-        this.element.setAttribute("style", "width : 100%; height : " + height + "px; background-color : #EFEFEF");
-
+        this.element.setAttribute("style", "width : 100%; height : " + hs + "; background-color : #EFEFEF");
+	
         var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
         var windowWidth = window.innerWidth|| document.documentElement.clientWidth || document.body.clientWidth;
         var newOrientation = '';
@@ -210,6 +244,12 @@ if (!String.prototype.endsWith) {
     };
 
     PowrVideo.prototype.setup = function () {
+	this.attachVisibleListener();
+	if (this.showOnFocus == "yes" && !this.hasOwnProperty("setupOnVisible")) {
+	    this.setupOnVisible = true;
+	    return;
+	}
+	revUtils.removeClass(this.element, "powr_hidden");
 	google.ima.settings.setVpaidMode(google.ima.ImaSdkSettings.VpaidMode.INSECURE);
 
 	this.events = [google.ima.AdEvent.Type.ALL_ADS_COMPLETED,
@@ -244,7 +284,7 @@ if (!String.prototype.endsWith) {
 	    revUtils.addEventListener(this.crossButton, 'click', this.bind(this, this.onCrossClicked));
 	}
 
-        this.attachVisibleListener();
+
         revUtils.addEventListener(window, 'resize', this.onResize.bind(this, true));
         this.orientation = 'none';
         this.onResize(true);
@@ -262,6 +302,7 @@ if (!String.prototype.endsWith) {
         dumbPlayer.setAttribute("playsinline", "true");
 
         if (this.autoplaySettings.autoplay && !this.autoplaySettings.audio) {
+	    this.log("Setting player muted");
             dumbPlayer.setAttribute("muted", "true");
         }
 
@@ -386,7 +427,7 @@ if (!String.prototype.endsWith) {
 
     PowrVideo.prototype.start = function(playOnLoad) {
 	this.waitForPlay = true;
-	setTimeout(this.bind(this, this.clearWait), 2000);
+	setTimeout(this.bind(this, this.clearWait), this.config.waitForAutoplay);
 	this.started = true;
         this.player.ima(this.options, this.bind(this, this.adsManagerLoadedCallback));
         this.player.ima.initializeAdDisplayContainer();
@@ -452,13 +493,12 @@ if (!String.prototype.endsWith) {
     };
 
     PowrVideo.prototype.attachVisibleListener = function() {
-	if (!this.iframeSettings.iframe) {
-            // revUtils.addEventListener(window.parent, 'scroll', this.checkVisible.bind(this));
-	    //} else {
+	if (this.visibleListenerAttached) return;
+	if (this.floatSettings.landscape || this.floatSettings.portrait || this.autoplaySettings.focus || (this.showOnFocus == 'yes')) {
 	    revUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
 	    this.checkVisible();
 	}
-        // revUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
+	this.visibleListenerAttached = true;
     };
 
     PowrVideo.prototype.floatPlayer = function() {
@@ -469,6 +509,7 @@ if (!String.prototype.endsWith) {
 	if (this.orientation == "landscape" && !this.floatSettings.landscape)
 	    return;
 
+	revUtils.addClass(document.body, 'powr_player_floating');
         this.container.className = "rc-float-video powr_player " + (this.permanentClose == "yes" ? "powr_permanent_close" : "");
         var styleString = "";
         var fs = this.floatSettings;
@@ -570,6 +611,7 @@ if (!String.prototype.endsWith) {
 
     PowrVideo.prototype.unfloatPlayer = function() {
         if (this.floated) {
+	    revUtils.removeClass(document.body, 'powr_player_floating');
             this.container.className = 'powr_player ' + (this.permanentClose == "yes" ? 'powr_permanent_close' : '');
             this.container.removeAttribute("style");
             this.floated = false;
@@ -600,58 +642,44 @@ if (!String.prototype.endsWith) {
     PowrVideo.prototype.checkVisible = function() {
         var that = this;
         requestAnimationFrame(function() {
-	    var ifs = that.iframeSettings;
-	    if (ifs.true) {
-		var element = window.parent.document.getElementById(ifs.id);
-		var windowHeight = window.parent.innerHeight || window.parent.document.documentElement.clientHeight || window.parent.document.body.clientHeight;
-		var elementHeight = element.getBoundingClientRect().height;
-		var elementTop = element.getBoundingClientRect().top;
-		var currentScroll = window.parent.pageYOffset || window.parent.document.documentElement.scrollTop || window.parent.document.body.scrollTop;
-
-		if (elementTop + elementHeight < 0) {
-		    if (that.visible) {
-			that.visible = false;
-			that.onHidden();
-		    }
-		} else if (elementTop + 30 < windowHeight) {
-		    if (!that.visible) {
-			that.visible = true;
-			that.onVisible();
-		    }
+	    // what percentage of the element should be visible
+	    // var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
+	    // fire if within buffer
+	    // var bufferPixels = (typeof buffer === 'number') ? buffer : 0;
+	    var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+	    var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+	    var elementTop = that.element.getBoundingClientRect().top;
+	    var elementBottom = that.element.getBoundingClientRect().bottom;
+	    var elementVisibleHeight = that.element.offsetHeight * 0.50;
+	    
+	    if (elementTop + that.getPlayerHeight() < 0) {
+		if (that.visible) {
+		    that.visible = false;
+		    that.onHidden();
 		}
-
-	    } else {
-		// what percentage of the element should be visible
-		// var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
-		// fire if within buffer
-		// var bufferPixels = (typeof buffer === 'number') ? buffer : 0;
-		var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-		var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-		var elementTop = that.element.getBoundingClientRect().top;
-		var elementBottom = that.element.getBoundingClientRect().bottom;
-		var elementVisibleHeight = that.element.offsetHeight * 0.50;
-
-		if (elementTop + that.getPlayerHeight() < 0) {
-		    if (that.visible) {
-			that.visible = false;
-			that.onHidden();
-		    }
-		} else if (elementTop + 30 < windowHeight) {
-		    if (!that.visible) {
-			that.visible = true;
-			that.onVisible();
-		    }
+	    } else if (elementTop + 30 < windowHeight) {
+		if (!that.visible) {
+		    that.visible = true;
+		    that.onVisible();
 		}
 	    }
         });
     };
 
     PowrVideo.prototype.onVisible = function() {
+	if (this.setupOnVisible) {
+	    this.setupOnVisible = false;
+	    this.setup();
+	}
+	
 	this.registerView();
 	this.unfloatPlayer();
     };
 
     PowrVideo.prototype.onHidden = function() {
+	if (this.setupOnVisible) {
+	    return;
+	}
 	this.floatPlayer();
     };
 
@@ -775,10 +803,12 @@ if (!String.prototype.endsWith) {
 	    this.cancelEvent(e);
 	    return;
 	}
-	
 
 	if (this.waitForPlay && this.player.paused()) {
 	    this.player.muted(false);
+	    var v = this.getVideoElement();
+	    v.removeAttribute("muted");
+	    
 	    this.player.ima.initializeAdDisplayContainer();
             this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), false);
 	    this.player.ima.requestAds();
@@ -792,7 +822,11 @@ if (!String.prototype.endsWith) {
 	}
 
 	if (this.player.muted()) {
+	    this.player.controls(true);
 	    this.player.muted(false);
+	    var v = this.getVideoElement();
+	    v.removeAttribute("muted");
+	    
 	    this.volumeOffOverlay.hide();
 	    this.cancelEvent(e);
 	    return;
@@ -812,7 +846,8 @@ if (!String.prototype.endsWith) {
 
 	if (this.player.muted()) {
 	    this.volumeOffOverlay.show();
-	    this.player.controlBar.hide();
+	    // this.player.controlBar.hide();
+	    this.player.controls(false);
 	}
     };
 
@@ -825,14 +860,15 @@ if (!String.prototype.endsWith) {
 	this.volumeOffOverlay.hide();
 	if (this.crossButton)
 	    this.crossButton.style.display = "block";
-	this.player.controlBar.show();
+	// this.player.controlBar.show();
     };
 
     PowrVideo.prototype.onIdle = function() {
         if (!this.player.paused()) {
 	    this.titleOverlay.hide();
 	    this.playOverlay.hide();
-	    this.player.controlBar.hide();
+	    // this.player.controlBar.hide();
+	    // this.player.controls(false);
 	    // this.volumeOnOverlay.hide();
 	    if (this.player.muted() || this.player.volume() == 0) {
 		this.volumeOffOverlay.show();
@@ -899,16 +935,23 @@ if (!String.prototype.endsWith) {
 	    "focus" : false,
 	    "audio" : false
 	};
+	
 	if (typeof c.autoplay == "string") {
 	    if (c.autoplay == "none") return ret;
 	    ret.autoplay = true;
 	    if (c.autoplay == "load") {
 		ret.audio = (!this.mobile && !this.safari);
+		if (ret.audio && this.config.hasOwnProperty("muted")) {
+		    ret.audio = (this.config.muted == "no");
+		}
 		return ret;
 	    }
 	    if (c.autoplay == "focus") {
 		ret.focus = true;
 		ret.audio = false;
+		if (this.config.hasOwnProperty("muted")) {
+		    ret.audio = (this.config.muted == "no");
+		}
 		return ret;
 	    }
 	} else {
@@ -948,6 +991,14 @@ if (!String.prototype.endsWith) {
 	} else if (typeof e.cancelBubble != "undefined") {
 	    e.cancelBubble = true;
 	}
+    };
+
+    PowrVideo.prototype.getVideoElement = function() {
+	return this.element.querySelector("video");
+    };
+
+    PowrVideo.prototype.log = function(m) {
+	if ((typeof console) != "undefined") console.log(m);
     };
 
     return PowrVideo;
