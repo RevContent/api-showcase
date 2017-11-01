@@ -17,10 +17,8 @@ Author: michael@revcontent.com
     'use strict';
     // browser global
     window.RevSlider = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDisclose);
-
 }( window, function factory(window, revUtils, revDetect, revApi, revDisclose) {
 'use strict';
-
 
     var RevSlider = function(opts) {
 
@@ -164,7 +162,11 @@ Author: michael@revcontent.com
             reaction_id: 5,
             mobile_image_optimize: 1.2,
             trending_utm: false,
-            keywords: false
+            keywords: false,
+            disclosure_about_src: '//trends.revcontent.com/engage-about.php',
+            disclosure_about_height: 575,
+            disclosure_interest_src: '//trends.revcontent.com/engage-interests.php',
+            disclosure_interest_height: 520
         };
 
          this.mockComments = {
@@ -1095,8 +1097,10 @@ Author: michael@revcontent.com
             if (logo) {
                 logo.style.width = logo.offsetHeight + 'px';
             }
-            revUtils.removeClass(document.querySelector('.rev-flipped'), 'rev-flipped');
-            revUtils.addClass(item.element, 'rev-flipped');
+            // if(!that.isConnected()) { // TODO
+                revUtils.removeClass(document.querySelector('.rev-flipped'), 'rev-flipped');
+                revUtils.addClass(item.element, 'rev-flipped');
+            // }
         }, 0);
     };
 
@@ -1923,7 +1927,7 @@ Author: michael@revcontent.com
 
             revUtils.addClass(this.sponsored, 'rev-sponsored');
             revDisclose.setGrid(this.grid);
-            this.sponsored.innerHTML = revDisclose.getDisclosure(this.options.disclosure_text);
+            this.sponsored.innerHTML = this.getDisclosure();
 
             if (this.options.rev_position == 'top_right') {
                 revUtils.addClass(this.sponsored, 'top-right');
@@ -2211,7 +2215,38 @@ Author: michael@revcontent.com
         revUtils.ellipsisText(this.grid.element.querySelectorAll('.rev-content .rev-headline'));
     };
 
+    RevSlider.prototype.clickLogin = function(btn) {
+        var url = this.options.host + "/feed.php?provider=facebook_engage&w=" + this.options.widget_id + "&p=" + this.options.pub_id;
+        window.open(url, 'Login', 'resizable,width=600,height=800');
+        var node = document.querySelector('.rev-auth-close-button');
+        var clickEvent = document.createEvent ('MouseEvents');
+        clickEvent.initEvent ("click", true, true);
+        node.dispatchEvent (clickEvent);
+    };
+
+    RevSlider.prototype.isConnected = function() {
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.onerror = function (e) {
+            console.error(xhr.statusText);
+            return false;
+        };
+        xhr.open('GET', this.options.host + '/feed2.php?provider=facebook_engage', false);
+        xhr.send(null);
+        if (xhr.status !== 200) {
+            return false;
+        }
+
+        try {
+            var jsonResponse = JSON.parse(xhr.responseText);
+            return jsonResponse.success;
+        } catch (err) {
+            return false;
+        }
+    };
+
     RevSlider.prototype.createNewCell = function() {
+        var that = this;
         var html = '<div class="rev-content-inner">' +
             '<div class="rev-flip">' +
 
@@ -2246,7 +2281,7 @@ Author: michael@revcontent.com
                         '<div class="rev-auth-box">' +
 
                             '<div class="rev-auth-box-inner">' +
-                                '<div class="rev-auth-subline">'+ revDisclose.getDisclosure(this.options.disclosure_text) +'</div>' +
+                                '<div class="rev-auth-subline">'+ this.getDisclosure() +'</div>' +
                                 '<div class="rev-auth-headline">Almost Done! Login to save your reaction <br /> <strong>and</strong> personalize your experience</div>' +
                                 '<div class="rev-auth-button">' +
                                     '<div class="rev-auth-button-icon">' +
@@ -2319,7 +2354,23 @@ Author: michael@revcontent.com
         //     e.stopPropagation();
         // }, {passive: false});
 
+
+        revUtils.addEventListener(cell.querySelector('.rev-auth-button-text'), 'click', function(e) {
+            if(!that.isConnected()) {
+                that.clickLogin();
+            }
+        });
+
         return cell;
+    };
+
+    RevSlider.prototype.getDisclosure = function() {
+        return revDisclose.getDisclosure(this.options.disclosure_text, {
+            aboutSrc: this.options.disclosure_about_src,
+            aboutHeight: this.options.disclosure_about_height,
+            interestSrc: this.options.disclosure_interest_src,
+            interestHeight: this.options.disclosure_interest_height,
+        });
     };
 
     RevSlider.prototype.getSerializedQueryParams = function() {
