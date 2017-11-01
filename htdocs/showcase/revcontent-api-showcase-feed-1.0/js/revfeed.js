@@ -103,7 +103,11 @@ Author: michael@revcontent.com
             reaction_id: 299,
             mobile_image_optimize: false,
             trending_utm: false,
-            keywords: false
+            keywords: false,
+            disclosure_about_src: '//dv3-s4.revcontent.com/engage-about.php',
+            disclosure_about_height: 575,
+            disclosure_interest_src: '//dv3-s4.revcontent.com/engage-interests.php',
+            disclosure_interest_height: 520,
         };
 
         // merge options
@@ -241,7 +245,11 @@ Author: michael@revcontent.com
             reactions_selector: this.options.reactions_selector,
             meta_selector: this.options.meta_selector,
             headline_top_selector: this.options.headline_top_selector,
-            window_width_enabled: this.windowWidthEnabled
+            window_width_enabled: this.windowWidthEnabled,
+            disclosure_about_src: this.options.disclosure_about_src,
+            disclosure_about_height: this.options.disclosure_about_height,
+            disclosure_interest_src: this.options.disclosure_interest_src,
+            disclosure_interest_height: this.options.disclosure_interest_height
         });
     };
 

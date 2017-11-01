@@ -69,9 +69,25 @@
         this.grid = grid;
     };
 
-    RevDisclose.prototype.getDisclosure = function (disclosureText) {
+    RevDisclose.prototype.getDisclosure = function (disclosureText, dialogOptions) {
         var self = this;
         self.setDisclosureText(disclosureText);
+
+        if (typeof dialogOptions === 'object') {
+            if (dialogOptions.aboutSrc) {
+                self.dialog.aboutSrc = dialogOptions.aboutSrc;
+            }
+            if (dialogOptions.aboutHeight) {
+                self.dialog.aboutHeight = dialogOptions.aboutHeight;
+            }
+            if (dialogOptions.interestSrc) {
+                self.dialog.interestSrc = dialogOptions.interestSrc;
+            }
+            if (dialogOptions.interestHeight) {
+                self.dialog.interestHeight = dialogOptions.interestHeight;
+            }
+        }
+
         if(typeof self.dialog === "object") {
             if (this.grid) {
                 self.dialog.grid = this.grid;

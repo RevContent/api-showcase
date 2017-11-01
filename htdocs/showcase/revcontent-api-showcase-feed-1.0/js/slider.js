@@ -162,7 +162,11 @@ Author: michael@revcontent.com
             reaction_id: 5,
             mobile_image_optimize: 1.2,
             trending_utm: false,
-            keywords: false
+            keywords: false,
+            disclosure_about_src: '//trends.revcontent.com/engage-about.php',
+            disclosure_about_height: 575,
+            disclosure_interest_src: '//trends.revcontent.com/engage-interests.php',
+            disclosure_interest_height: 520
         };
 
          this.mockComments = {
@@ -1093,10 +1097,10 @@ Author: michael@revcontent.com
             if (logo) {
                 logo.style.width = logo.offsetHeight + 'px';
             }
-            if(!that.isConnected()) {
+            // if(!that.isConnected()) { // TODO
                 revUtils.removeClass(document.querySelector('.rev-flipped'), 'rev-flipped');
                 revUtils.addClass(item.element, 'rev-flipped');
-            }
+            // }
         }, 0);
     };
 
@@ -1923,7 +1927,7 @@ Author: michael@revcontent.com
 
             revUtils.addClass(this.sponsored, 'rev-sponsored');
             revDisclose.setGrid(this.grid);
-            this.sponsored.innerHTML = revDisclose.getDisclosure(this.options.disclosure_text);
+            this.sponsored.innerHTML = this.getDisclosure();
 
             if (this.options.rev_position == 'top_right') {
                 revUtils.addClass(this.sponsored, 'top-right');
@@ -2277,7 +2281,7 @@ Author: michael@revcontent.com
                         '<div class="rev-auth-box">' +
 
                             '<div class="rev-auth-box-inner">' +
-                                '<div class="rev-auth-subline">'+ revDisclose.getDisclosure(this.options.disclosure_text) +'</div>' +
+                                '<div class="rev-auth-subline">'+ this.getDisclosure() +'</div>' +
                                 '<div class="rev-auth-headline">Almost Done! Login to save your reaction <br /> <strong>and</strong> personalize your experience</div>' +
                                 '<div class="rev-auth-button">' +
                                     '<div class="rev-auth-button-icon">' +
@@ -2351,15 +2355,22 @@ Author: michael@revcontent.com
         // }, {passive: false});
 
 
-        var continueWithFacebook = cell.querySelector('.rev-auth-button-text');
-        revUtils.addEventListener(cell);
-        revUtils.addEventListener(continueWithFacebook, 'click', function(e) {
+        revUtils.addEventListener(cell.querySelector('.rev-auth-button-text'), 'click', function(e) {
             if(!that.isConnected()) {
                 that.clickLogin();
             }
         });
 
         return cell;
+    };
+
+    RevSlider.prototype.getDisclosure = function() {
+        return revDisclose.getDisclosure(this.options.disclosure_text, {
+            aboutSrc: this.options.disclosure_about_src,
+            aboutHeight: this.options.disclosure_about_height,
+            interestSrc: this.options.disclosure_interest_src,
+            interestHeight: this.options.disclosure_interest_height,
+        });
     };
 
     RevSlider.prototype.getSerializedQueryParams = function() {
