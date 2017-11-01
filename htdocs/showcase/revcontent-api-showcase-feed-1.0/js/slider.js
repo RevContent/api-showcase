@@ -17,10 +17,8 @@ Author: michael@revcontent.com
     'use strict';
     // browser global
     window.RevSlider = factory(window, window.revUtils, window.revDetect, window.revApi, window.revDisclose);
-
 }( window, function factory(window, revUtils, revDetect, revApi, revDisclose) {
 'use strict';
-
 
     var RevSlider = function(opts) {
 
@@ -1095,8 +1093,10 @@ Author: michael@revcontent.com
             if (logo) {
                 logo.style.width = logo.offsetHeight + 'px';
             }
-            revUtils.removeClass(document.querySelector('.rev-flipped'), 'rev-flipped');
-            revUtils.addClass(item.element, 'rev-flipped');
+            if(!that.isConnected()) {
+                revUtils.removeClass(document.querySelector('.rev-flipped'), 'rev-flipped');
+                revUtils.addClass(item.element, 'rev-flipped');
+            }
         }, 0);
     };
 
@@ -2211,7 +2211,39 @@ Author: michael@revcontent.com
         revUtils.ellipsisText(this.grid.element.querySelectorAll('.rev-content .rev-headline'));
     };
 
+    RevSlider.prototype.clickLogin = function(btn) {
+        var url = this.options.host + "/feed.php?provider=facebook_engage&w=" + this.options.widget_id + "&p=" + this.options.pub_id;
+        window.open(url, 'Login', 'resizable,width=600,height=800');
+        var node = document.querySelector('.rev-auth-close-button');
+        var clickEvent = document.createEvent ('MouseEvents');
+        clickEvent.initEvent ("click", true, true);
+        node.dispatchEvent (clickEvent);
+    };
+
+    RevSlider.prototype.isConnected = function() {
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.onerror = function (e) {
+            console.error(xhr.statusText);
+            return false;
+        };
+        xhr.open('GET', this.options.host + '/feed2.php?provider=facebook_engage', false);
+        xhr.send(null);
+        if (xhr.status !== 200) {
+            return false;
+        }
+
+        console.log(xhr.responseText);
+        try {
+            var jsonResponse = JSON.parse(xhr.responseText);
+            return jsonResponse.success;
+        } catch (err) {
+            return false;
+        }
+    };
+
     RevSlider.prototype.createNewCell = function() {
+        var that = this;
         var html = '<div class="rev-content-inner">' +
             '<div class="rev-flip">' +
 
@@ -2318,6 +2350,15 @@ Author: michael@revcontent.com
         //     e.preventDefault();
         //     e.stopPropagation();
         // }, {passive: false});
+
+
+        var continueWithFacebook = cell.querySelector('.rev-auth-button-text');
+        revUtils.addEventListener(cell);
+        revUtils.addEventListener(continueWithFacebook, 'click', function(e) {
+            if(!that.isConnected()) {
+                that.clickLogin();
+            }
+        });
 
         return cell;
     };
