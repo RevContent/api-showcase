@@ -72,12 +72,6 @@ if (!String.prototype.endsWith) {
 	if (this.config.adtype) {
 	    this.adtype = this.config.adtype;
 	}
-	this.waitForAutoplay = 5000;
-	if (this.config.wait_for_autoplay) {
-	    try {
-		this.waitForAutoplay = parseInt(this.config.wait_for_autoplay);
-	    } catch (e) {}
-	}
 
 	this.floatConflicts = {
 	    "top" : [],
@@ -101,9 +95,9 @@ if (!String.prototype.endsWith) {
 	    h = 0.5625 * w;
 	    hs = parseInt(h) + "px";
 	}
-
+	
 	this.videos = config.videos;
-
+	
 	if (this.videos.length == 0) {
 	    this.onCrossClicked(null);
 	    return;
@@ -113,23 +107,34 @@ if (!String.prototype.endsWith) {
 	if (this.showOnFocus == "yes") {
 	    revUtils.addClass(this.element, "powr_hidden");
 	}
-	
 
         this.currentContent = 0;
 
         this.options = {
             id : this.playerId,
             nativeControlForTouch: false,
-	    adWillAutoPlay : this.autoplaySettings.autoplay,
 	    prerollTimeout : 2000,
-	    timeout : 10000
+	    timeout : 10000,
+	    adWillAutoPlay : this.autoplaySettings.autoplay
         };
 
-        if (config.hasOwnProperty('preloaded') && config.preloaded) {
-            this.setup();
-        } else {
-            this.init();
-        }
+	var me = this;
+	this.checkAutoplaySupport(function (b) {
+	    me.autoplaySettings.autoplay = (me.autoplaySettings.autoplay && b);
+	    // We support audio
+	    if (!me.config.hasOwnProperty("muted") || me.config.muted == "no") {
+		// And we are not autoplaying
+		if (!me.autoplaySettings.autoplay) {
+		    me.autoplaySettings.audio = true;
+		}
+	    }
+
+	    if (me.config.hasOwnProperty('preloaded') && me.config.preloaded) {
+		me.setup();
+            } else {
+		me.init();
+            }
+	});
     };
 
     PowrVideo.prototype.getAdBreak = function(type, url, duration) {
@@ -177,7 +182,7 @@ if (!String.prototype.endsWith) {
 	if (this.config.dfp) {
             return "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + this.config.tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
 		+ "&cust_params=p_width%3D" + parseInt(this.getPlayerWidth()) + "%26p_height%3D" + parseInt(this.getPlayerHeight())
-	        + "%26p_protocol%3D" + this.getProtocol()
+	        + "%26secure%3D" + this.getProtocol()
 		+ "&description_url=" + encodeURI("http://www.powr.com/video/" + videoId);
 	} else {
 	    var tag = this.config.tag;
@@ -473,8 +478,6 @@ if (!String.prototype.endsWith) {
     };
 
     PowrVideo.prototype.start = function(playOnLoad) {
-	this.waitForPlay = true;
-	setTimeout(this.bind(this, this.clearWait), this.config.waitForAutoplay);
 	this.started = true;
         this.player.ima(this.options, this.bind(this, this.adsManagerLoadedCallback));
         this.player.ima.initializeAdDisplayContainer();
@@ -489,12 +492,6 @@ if (!String.prototype.endsWith) {
         // this.player.ima.addContentEndedListener(function () {
         //    me.loadNextVideo();
         //});
-    };
-
-    PowrVideo.prototype.clearWait = function() {
-	if (this.waitForPlay && this.player.paused()) {
-	    this.playOverlay.show();
-	}
     };
 
     PowrVideo.prototype.loadNextVideoWithTick = function() {
@@ -825,14 +822,17 @@ if (!String.prototype.endsWith) {
     };
 
     PowrVideo.prototype.onTouchStart = function(e) {
+	if (this.player.ima && this.player.ima.adPlaying) return;
 	this.dragging = false;
 	this.cancelEvent(e);
     };
     PowrVideo.prototype.onTouchMove = function(e) {
+	if (this.player.ima && this.player.ima.adPlaying) return;
 	this.dragging = true;
 	this.cancelEvent(e);
     };
     PowrVideo.prototype.onTouchEnd = function(e) {
+	if (this.player.ima && this.player.ima.adPlaying) return;
 	if (this.dragging) return;
 	this.onClick(e);
 	this.cancelEvent(e);
@@ -846,6 +846,9 @@ if (!String.prototype.endsWith) {
     };
 
     PowrVideo.prototype.onClick = function(e) {
+	if (this.player.ima && this.player.ima.adPlaying) {
+	    return;
+	}
 	if (!this.started) {
 	    this.playOverlay.hide();
 	    this.start(true);
@@ -853,29 +856,16 @@ if (!String.prototype.endsWith) {
 	    return;
 	}
 
-	if (this.waitForPlay && this.player.paused()) {
-	    this.player.muted(false);
-	    var v = this.getVideoElement();
-	    v.removeAttribute("muted");
-	    
-	    this.player.ima.initializeAdDisplayContainer();
-	    this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].sd_url, this.getAdsResponse(this.videos[this.currentContent]), false);
-	    this.player.ima.requestAds();
-	    this.player.play();
-	    // this.cancelEvent(e);
-	    return;
-	}
-
 	if (this.isClickedOnBar(e)) {
 	    return;
 	}
 
+	this.player.controls(true);
+	var v = this.getVideoElement();
+	v.removeAttribute("muted");
+	
 	if (this.player.muted()) {
-	    this.player.controls(true);
 	    this.player.muted(false);
-	    var v = this.getVideoElement();
-	    v.removeAttribute("muted");
-	    
 	    this.volumeOffOverlay.hide();
 	    this.cancelEvent(e);
 	    return;
@@ -889,7 +879,6 @@ if (!String.prototype.endsWith) {
     };
 
     PowrVideo.prototype.onPlay = function() {
-	this.waitForPlay = false;
 	this.playOverlay.hide();
 	// this.player.controlBar.volumeMenuButton.hide();
 
@@ -1044,6 +1033,52 @@ if (!String.prototype.endsWith) {
 
     PowrVideo.prototype.getVideoElement = function() {
 	return this.element.querySelector("video");
+    };
+    
+    PowrVideo.prototype.checkAutoplaySupport = function(callback) {
+	if (!this.mobile) {
+	    callback(true);
+	    return;
+	}
+	// var old = revUtils.getCookie("p_a_s");
+	// if (old != "") {
+	// callback(old == "yes");
+	// return;
+	// }
+
+	var video = document.createElement('video');
+	video.autoplay = true;
+	video.src = 'data:video/mp4;base64,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';
+	video.muted = true;
+	video.setAttribute('webkit-playsinline', 'webkit-playsinline');
+	video.setAttribute('playsinline', 'playsinline');
+	
+	video.load();
+	video.style.display = 'none';
+	video.playing = false;
+	video.play();
+	// Check if video plays
+	video.onplay = function() {
+	    this.playing = true;
+	};
+	// Video has loaded, check autoplay support
+	video.oncanplay = function() {
+	    if (video.playing) {
+		// PowrVideo.setCookie('p_a_s', 'yes', 1);
+		callback(true);
+	    } else {
+		// revUtils.setCookie('p_a_s', 'no', 1);
+		callback(false);
+	    }
+	};
+    };
+
+    PowrVideo.setCookie = function(cname, cvalue, exminutes) {
+	var d = new Date();
+	d.setTime(d.getTime() + (exminutes*60*1000));
+	var expires = "expires="+d.toUTCString();
+	var cpath = "; path=/; domain=" + top.location.host;
+	document.cookie = cname + "=" + cvalue + "; " + expires + cpath;
     };
 
     PowrVideo.prototype.log = function(m) {
