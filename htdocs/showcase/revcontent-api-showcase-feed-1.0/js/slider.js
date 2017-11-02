@@ -2231,7 +2231,7 @@ Author: michael@revcontent.com
             console.error(xhr.statusText);
             return false;
         };
-        xhr.open('GET', this.options.host + '/feed2.php?provider=facebook_engage', false);
+        xhr.open('GET', this.options.host + '/feed.php?provider=facebook_engage&action=connected', false);
         xhr.send(null);
         if (xhr.status !== 200) {
             return false;
