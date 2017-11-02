@@ -119,6 +119,8 @@ if (!String.prototype.endsWith) {
         this.options = {
             id : this.playerId,
             nativeControlForTouch: false,
+	    prerollTimeout : 2000,
+	    timeout : 1000,
 	    adWillAutoPlay : this.autoplaySettings.autoplay
         };
 
@@ -342,8 +344,6 @@ if (!String.prototype.endsWith) {
         dumbPlayer.setAttribute("preload", "auto");
 	if (!this.autoplaySettings.autoplay) {
             dumbPlayer.setAttribute("poster", this.videos[0].thumbnail);
-	} else {
-	    dumbPlayer.setAttribute("autoplay", "true");
 	}
         dumbPlayer.setAttribute("playsinline", "true");
 
