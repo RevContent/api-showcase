@@ -114,7 +114,7 @@ if (!String.prototype.endsWith) {
             id : this.playerId,
             nativeControlForTouch: false,
 	    prerollTimeout : 2000,
-	    timeout : 1000,
+	    timeout : 10000,
 	    adWillAutoPlay : this.autoplaySettings.autoplay
         };
 
