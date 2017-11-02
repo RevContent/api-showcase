@@ -25769,9 +25769,9 @@ if (!String.prototype.endsWith) {
 	    h = 0.5625 * w;
 	    hs = parseInt(h) + "px";
 	}
-
+	
 	this.videos = config.videos;
-
+	
 	if (this.videos.length == 0) {
 	    this.onCrossClicked(null);
 	    return;
@@ -25781,13 +25781,14 @@ if (!String.prototype.endsWith) {
 	if (this.showOnFocus == "yes") {
 	    revUtils.addClass(this.element, "powr_hidden");
 	}
-	
 
         this.currentContent = 0;
 
         this.options = {
             id : this.playerId,
             nativeControlForTouch: false,
+	    prerollTimeout : 2000,
+	    timeout : 1000,
 	    adWillAutoPlay : this.autoplaySettings.autoplay
         };
 
@@ -25843,7 +25844,7 @@ if (!String.prototype.endsWith) {
 	if (this.config.dfp) {
             return "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + this.config.tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
 		+ "&cust_params=p_width%3D" + parseInt(this.getPlayerWidth()) + "%26p_height%3D" + parseInt(this.getPlayerHeight())
-	        + "%26p_protocol%3D" + this.getProtocol()
+	        + "%26secure%3D" + this.getProtocol()
 		+ "&description_url=" + encodeURI("http://www.powr.com/video/" + videoId);
 	} else {
 	    var tag = this.config.tag;
@@ -26011,8 +26012,6 @@ if (!String.prototype.endsWith) {
         dumbPlayer.setAttribute("preload", "auto");
 	if (!this.autoplaySettings.autoplay) {
             dumbPlayer.setAttribute("poster", this.videos[0].thumbnail);
-	} else {
-	    dumbPlayer.setAttribute("autoplay", "true");
 	}
         dumbPlayer.setAttribute("playsinline", "true");
 
