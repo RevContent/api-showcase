@@ -26704,11 +26704,15 @@ if (!String.prototype.endsWith) {
     };
     
     PowrVideo.prototype.checkAutoplaySupport = function(callback) {
-	var old = revUtils.getCookie("p_a_s");
-	if (old != "") {
+	if (!this.mobile) {
 	    callback(true);
 	    return;
 	}
+	// var old = revUtils.getCookie("p_a_s");
+	// if (old != "") {
+	// callback(old == "yes");
+	// return;
+	// }
 
 	var video = document.createElement('video');
 	video.autoplay = true;
@@ -26728,10 +26732,10 @@ if (!String.prototype.endsWith) {
 	// Video has loaded, check autoplay support
 	video.oncanplay = function() {
 	    if (video.playing) {
-		PowrVideo.setCookie('p_a_s', 'yes', 1);
+		// PowrVideo.setCookie('p_a_s', 'yes', 1);
 		callback(true);
 	    } else {
-		revUtils.setCookie('p_a_s', 'no', 1);
+		// revUtils.setCookie('p_a_s', 'no', 1);
 		callback(false);
 	    }
 	};
