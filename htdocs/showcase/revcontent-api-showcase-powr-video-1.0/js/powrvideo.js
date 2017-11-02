@@ -860,12 +860,12 @@ if (!String.prototype.endsWith) {
 	    return;
 	}
 
+	this.player.controls(true);
+	var v = this.getVideoElement();
+	v.removeAttribute("muted");
+	
 	if (this.player.muted()) {
-	    this.player.controls(true);
 	    this.player.muted(false);
-	    var v = this.getVideoElement();
-	    v.removeAttribute("muted");
-	    
 	    this.volumeOffOverlay.hide();
 	    this.cancelEvent(e);
 	    return;
