@@ -2872,7 +2872,7 @@ Author: michael@revcontent.com
                                         '<div class="rev-comment-text">' +
                                             '<span class="rev-comment-author">' + (mockComment ? comment.name : comment.comment_author) + '</span>' +
                                             ' · ' +
-                                            '<span class="rev-comment-date">' + that.timeAgo(new Date(Date.now() - (random(120) * 60000)), true) + '</span>  ' + comment.comment +
+                                            '<span class="rev-comment-date">' + that.timeAgo(itemData.comment_time, true) + '</span>  ' + comment.comment +
                                         '</div>' +
                                     '</div>' +
                                     '</div>';
