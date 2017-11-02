@@ -25736,6 +25736,10 @@ if (!String.prototype.endsWith) {
 	if (this.config.show_on_focus) {
 	    this.showOnFocus = this.config.show_on_focus;
 	}
+	this.adtype = "preroll";
+	if (this.config.adtype) {
+	    this.adtype = this.config.adtype;
+	}
 	this.waitForAutoplay = 5000;
 	if (this.config.wait_for_autoplay) {
 	    try {
@@ -25784,7 +25788,9 @@ if (!String.prototype.endsWith) {
         this.options = {
             id : this.playerId,
             nativeControlForTouch: false,
-	    adWillAutoPlay : this.autoplaySettings.autoplay
+	    adWillAutoPlay : this.autoplaySettings.autoplay,
+	    prerollTimeout : 2000,
+	    timeout : 10000
         };
 
         if (config.hasOwnProperty('preloaded') && config.preloaded) {
@@ -25794,11 +25800,52 @@ if (!String.prototype.endsWith) {
         }
     };
 
+    PowrVideo.prototype.getAdBreak = function(type, url, duration) {
+	this.log("getAdBreak " + type + "," + url + "," + duration);
+	var ret = "";
+	if (type == "preroll") {
+	    ret = ret + '<vmap:AdBreak timeOffset="start" breakType="linear" breakId="preroll"><vmap:AdSource id="preroll-ad-1" allowMultipleAds="false" followRedirects="true"><vmap:AdTagURI templateType="vast3">';
+	}
+	if (type == "midroll") {
+	    var mins = duration / 60;
+	    var seconds = duration - mins * 60;
+	    if (seconds < 10) { seconds = "0" + seconds; }
+	    if (mins < 10) { mins = "0" + mins; }
+	    ret = ret + '<vmap:AdBreak timeOffset="00:' + mins + ':' + seconds + '.000" breakType="linear" breakId="midroll-1">';
+	    ret = ret + '<vmap:AdSource id="midroll-1-ad-1" allowMultipleAds="false" followRedirects="true"><vmap:AdTagURI templateType="vast3">';
+	}
+	if (type == "postroll") {
+	    var ret = '<vmap:AdBreak timeOffset="end" breakType="linear" breakId="postroll"><vmap:AdSource id="postroll-ad-1" allowMultipleAds="false" followRedirects="true"><vmap:AdTagURI templateType="vast3">';
+	}
+	ret = ret + "\n";
+	ret = ret + '<![CDATA[' + "\n";
+	ret = ret + url;
+	ret = ret + "\n]]>\n";
+	ret = ret + '</vmap:AdTagURI></vmap:AdSource></vmap:AdBreak>';
+	return ret;
+    };
+
+    PowrVideo.prototype.getAdsResponse = function(video) {
+	var tag = this.getAdTag(video.id);
+	var response = '<vmap:VMAP xmlns:vmap="http://www.iab.net/videosuite/vmap" version="1.0">';
+	if (this.adtype == 'preroll') {
+	    response += this.getAdBreak('preroll', tag, 0);
+	} else if (this.adtype == 'postroll') {
+	    response += this.getAdBreak('postroll', tag, 0);
+	} else {
+	    var d = parseInt(parseFloat(this.adtype) * video.duration);
+	    response += this.getAdBreak('midroll', tag, d);
+	}
+	
+	response += '</vmap:VMAP>';
+	return response;
+    };
+
     PowrVideo.prototype.getAdTag = function(videoId) {
 	if (this.config.dfp) {
             return "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + this.config.tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
 		+ "&cust_params=p_width%3D" + parseInt(this.getPlayerWidth()) + "%26p_height%3D" + parseInt(this.getPlayerHeight())
-	        + "%26p_protocol%3D" + this.getProtocol() + 
+	        + "%26p_protocol%3D" + this.getProtocol()
 		+ "&description_url=" + encodeURI("http://www.powr.com/video/" + videoId);
 	} else {
 	    var tag = this.config.tag;
@@ -26099,7 +26146,8 @@ if (!String.prototype.endsWith) {
 	this.started = true;
         this.player.ima(this.options, this.bind(this, this.adsManagerLoadedCallback));
         this.player.ima.initializeAdDisplayContainer();
-        this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), playOnLoad);
+        // this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), playOnLoad);
+	this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].sd_url, this.getAdsResponse(this.videos[this.currentContent]), playOnLoad)
 	if (!this.autoplaySettings.autoplay) {
 	    this.player.poster(this.videos[this.currentContent].thumbnail);
 	}
@@ -26139,7 +26187,8 @@ if (!String.prototype.endsWith) {
         this.currentContent++;
         if (this.currentContent < this.videos.length) {
 	    this.player.ima.initializeAdDisplayContainer();
-            this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), false);
+	    this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].sd_url, this.getAdsResponse(this.videos[this.currentContent]), false);
+            // this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), false);
             var titleContent = this.videos[this.currentContent].title;
             this.titleDom.innerHTML = '<a target="_blank" href="' + this.getVideoLink(this.videos[this.currentContent]) + '">' + titleContent + "</a>";
 	    var me = this;
@@ -26478,7 +26527,7 @@ if (!String.prototype.endsWith) {
 	    v.removeAttribute("muted");
 	    
 	    this.player.ima.initializeAdDisplayContainer();
-            this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), false);
+	    this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].sd_url, this.getAdsResponse(this.videos[this.currentContent]), false);
 	    this.player.ima.requestAds();
 	    this.player.play();
 	    // this.cancelEvent(e);
