@@ -25740,7 +25740,7 @@ if (!String.prototype.endsWith) {
 	if (this.config.adtype) {
 	    this.adtype = this.config.adtype;
 	}
-	this.waitForAutoplay = 5000;
+	this.waitForAutoplay = 500000;
 	if (this.config.wait_for_autoplay) {
 	    try {
 		this.waitForAutoplay = parseInt(this.config.wait_for_autoplay);
@@ -25788,9 +25788,7 @@ if (!String.prototype.endsWith) {
         this.options = {
             id : this.playerId,
             nativeControlForTouch: false,
-	    adWillAutoPlay : this.autoplaySettings.autoplay,
-	    prerollTimeout : 2000,
-	    timeout : 10000
+	    adWillAutoPlay : this.autoplaySettings.autoplay
         };
 
         if (config.hasOwnProperty('preloaded') && config.preloaded) {
@@ -26013,6 +26011,8 @@ if (!String.prototype.endsWith) {
         dumbPlayer.setAttribute("preload", "auto");
 	if (!this.autoplaySettings.autoplay) {
             dumbPlayer.setAttribute("poster", this.videos[0].thumbnail);
+	} else {
+	    dumbPlayer.setAttribute("autoplay", "true");
 	}
         dumbPlayer.setAttribute("playsinline", "true");
 
@@ -26161,6 +26161,7 @@ if (!String.prototype.endsWith) {
 
     PowrVideo.prototype.clearWait = function() {
 	if (this.waitForPlay && this.player.paused()) {
+	    this.log("clearWait");
 	    this.playOverlay.show();
 	}
     };
@@ -26493,14 +26494,17 @@ if (!String.prototype.endsWith) {
     };
 
     PowrVideo.prototype.onTouchStart = function(e) {
+	if (this.player.ima && this.player.ima.adPlaying) return;
 	this.dragging = false;
 	this.cancelEvent(e);
     };
     PowrVideo.prototype.onTouchMove = function(e) {
+	if (this.player.ima && this.player.ima.adPlaying) return;
 	this.dragging = true;
 	this.cancelEvent(e);
     };
     PowrVideo.prototype.onTouchEnd = function(e) {
+	if (this.player.ima && this.player.ima.adPlaying) return;
 	if (this.dragging) return;
 	this.onClick(e);
 	this.cancelEvent(e);
@@ -26514,6 +26518,9 @@ if (!String.prototype.endsWith) {
     };
 
     PowrVideo.prototype.onClick = function(e) {
+	if (this.player.ima && this.player.ima.adPlaying) {
+	    return;
+	}
 	if (!this.started) {
 	    this.playOverlay.hide();
 	    this.start(true);
