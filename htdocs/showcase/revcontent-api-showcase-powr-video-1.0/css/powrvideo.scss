@@ -244,3 +244,10 @@ a.rc-video-close {
     font-size: inherit !important;
 }
 
+.powr_player .video-js .vjs-progress-control .vjs-mouse-display {
+    font-family : serif;
+}
+
+.powr_player .video-js .vjs-progress-control .vjs-play-progress:after {
+    font-family : serif;
+}
