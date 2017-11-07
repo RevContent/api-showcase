@@ -23745,7 +23745,8 @@ registerPlugin('ads', contribAdsPlugin);
       adsRequest.nonLinearAdSlotHeight =
           this.settings.nonLinearHeight || (this.getPlayerHeight() / 3);
 
-      adsRequest.setAdWillAutoPlay(this.settings.adWillAutoPlay);
+	adsRequest.setAdWillAutoPlay(this.settings.adWillAutoPlay);
+	adsRequest.setAdWillPlayMuted(this.settings.adWillPlayMuted);
 
       this.adsLoader.requestAds(adsRequest);
     }.bind(this);
@@ -25782,8 +25783,9 @@ if (!String.prototype.endsWith) {
             id : this.playerId,
             nativeControlForTouch: false,
 	    prerollTimeout : 2000,
-	    timeout : 1000,
+	    timeout : 10000,
 	    adWillAutoPlay : this.autoplaySettings.autoplay
+
         };
 
 	var me = this;
@@ -25796,7 +25798,6 @@ if (!String.prototype.endsWith) {
 		    me.autoplaySettings.audio = true;
 		}
 	    }
-
 	    if (me.config.hasOwnProperty('preloaded') && me.config.preloaded) {
 		me.setup();
             } else {
@@ -25970,7 +25971,7 @@ if (!String.prototype.endsWith) {
 	    return;
 	}
 	revUtils.removeClass(this.element, "powr_hidden");
-	google.ima.settings.setVpaidMode(google.ima.ImaSdkSettings.VpaidMode.INSECURE);
+	// google.ima.settings.setVpaidMode(google.ima.ImaSdkSettings.VpaidMode.INSECURE);
 
 	this.events = [google.ima.AdEvent.Type.ALL_ADS_COMPLETED,
                 google.ima.AdEvent.Type.CLICK,
@@ -26413,7 +26414,11 @@ if (!String.prototype.endsWith) {
     };
 
     PowrVideo.prototype.onAdEvent = function(event) {
-
+	if (event.type == "loaded") {
+	    if (this.player.muted()) {
+		this.player.ima.getAdsManager().setVolume(0);
+	    }
+	}
     };
 
     PowrVideo.prototype.registerView = function() {
