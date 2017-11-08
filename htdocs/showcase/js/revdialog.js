@@ -203,7 +203,9 @@
                     that.setActive('interest');
                     break;
                 case 'close_me':
-                    that.emitter.emitEvent('dialog_closed');
+                    if (that.emitter) {
+                        that.emitter.emitEvent('dialog_closed');
+                    }
                     that.closeDialog();
                     break;
             }
