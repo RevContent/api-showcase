@@ -26,6 +26,12 @@
         this.interestLoaded = false;
     };
 
+    RevDialog.prototype.postMessage = function() {
+        if (this.aboutFrame) {
+            this.aboutFrame.contentWindow.postMessage({'msg': 'auth_me'}, '*');
+        }
+    };
+
     RevDialog.prototype.setActive = function(active) {
         this.active = active;
 
@@ -125,7 +131,12 @@
 
             this.modalContentContainer.appendChild(this.loading);
 
-            this.aboutFrame = this.createFrame(this.aboutSrc);
+            var frameSrc = this.aboutSrc;
+            if (this.widget_id && this.pub_id) {
+                frameSrc += '?widget_id=' + this.widget_id + '&pub_id=' + this.pub_id;
+            }
+
+            this.aboutFrame = this.createFrame(frameSrc);
             this.setActive('about');
             // append iframe
             this.modalContentContainer.appendChild(this.aboutFrame);
@@ -192,6 +203,9 @@
                     that.setActive('interest');
                     break;
                 case 'close_me':
+                    if (that.emitter) {
+                        that.emitter.emitEvent('dialog_closed');
+                    }
                     that.closeDialog();
                     break;
             }

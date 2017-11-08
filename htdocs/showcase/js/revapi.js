@@ -35,8 +35,12 @@ api.request = function(url, success, failure, JSONPCallback) {
     }
 };
 
-api.xhr = function(url, success, failure) {
+api.xhr = function(url, success, failure, withCredentials) {
     var request = new XMLHttpRequest();
+
+    if (withCredentials) {
+        request.withCredentials = true;
+    }
 
     request.open('GET', url + this.getReferer(), true);
 
