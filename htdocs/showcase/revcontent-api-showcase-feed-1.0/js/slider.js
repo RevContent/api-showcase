@@ -252,6 +252,14 @@ Author: michael@revcontent.com
 
         this.emitter = new EventEmitter();
 
+        revDisclose.setEmitter(this.emitter);
+
+        this.emitter.on('dialog_closed', function() {
+            that.isAuthenticated(function(response) {
+                that.updateAuthElements();
+            });
+        });
+
         this.data = [];
         this.displayedItems = [];
 
@@ -2364,10 +2372,11 @@ Author: michael@revcontent.com
                         } else {
                             // TODO
                         }
+                        revDisclose.postMessage();
                     });
                     clearInterval(closedCheckInterval);
                 }
-            }, 1000);
+            }, 100);
         });
 
         return cell;
@@ -2379,6 +2388,8 @@ Author: michael@revcontent.com
             aboutHeight: this.options.disclosure_about_height,
             interestSrc: this.options.disclosure_interest_src,
             interestHeight: this.options.disclosure_interest_height,
+            widget_id: this.options.widget_id,
+            pub_id: this.options.pub_id
         });
     };
 
@@ -3129,9 +3140,16 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.updateAuthElements = function() {
         var authBoxes = document.querySelectorAll('.rev-auth-box');
-        for (var i = 0; i < authBoxes.length; i++) {
-            authBoxes[i].querySelector('.rev-auth-headline').innerText = 'Currently logged in!';
-            authBoxes[i].querySelector('.rev-auth-button-text').innerText = 'Log out';
+        if (this.authenticated) {
+            for (var i = 0; i < authBoxes.length; i++) {
+                authBoxes[i].querySelector('.rev-auth-headline').innerText = 'Currently logged in!';
+                authBoxes[i].querySelector('.rev-auth-button-text').innerText = 'Log out';
+            }
+        } else {
+            for (var i = 0; i < authBoxes.length; i++) {
+                authBoxes[i].querySelector('.rev-auth-headline').innerHTML = 'Almost Done! Login to save your reaction <br /> <strong>and</strong> personalize your experience';
+                authBoxes[i].querySelector('.rev-auth-button-text').innerText = 'Continue with facebook';
+            }
         }
     };
 
