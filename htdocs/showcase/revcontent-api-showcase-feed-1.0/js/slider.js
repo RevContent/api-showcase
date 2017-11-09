@@ -136,7 +136,7 @@ Author: michael@revcontent.com
             reactions_selector: false,
             headline_top_selector: false,
             brand_logo: false,
-            brand_logo_square: false,
+            brand_logo_secondary: false,
             comment_div: false,
             window_width_enabled: false,
             reactions: [ 'love', 'exciting', 'interesting', 'gross', 'sad', 'angry' ],
@@ -1896,10 +1896,10 @@ Author: michael@revcontent.com
 
         if (char === '<') {
             var brandLogo = document.createElement('div');
-            brandLogo.innerHTML = (square ? this.options.brand_logo_square : this.options.brand_logo);
+            brandLogo.innerHTML = (square ? this.options.brand_logo_secondary : this.options.brand_logo);
         } else {
             var brandLogo = document.createElement('img');
-            brandLogo.src = square ? this.options.brand_logo_square : this.options.brand_logo;
+            brandLogo.src = square ? this.options.brand_logo_secondary : this.options.brand_logo;
         }
 
         revUtils.addClass(brandLogo, className)
@@ -2307,7 +2307,7 @@ Author: michael@revcontent.com
         cell.className = 'rev-content';
         cell.innerHTML = html;
 
-        if (this.options.brand_logo_square) {
+        if (this.options.brand_logo_secondary) {
 
             var brandLogoSquare = this.createBrandLogo('rev-auth-site-logo', true);
 
