@@ -204,9 +204,9 @@
     ]
   },
   "feed": {
-    "name": "rev-feed",
+    "name": "Feed",
     "description": "Content Feed",
-    "homepage": "http://labs.revcontent.com",
+    "homepage": "http://engage.im",
     "version": "0.1.0",
     "file_prefix": "",
     "js": "./showcase/revcontent-api-showcase-feed-1.0/js/revfeed.js",
