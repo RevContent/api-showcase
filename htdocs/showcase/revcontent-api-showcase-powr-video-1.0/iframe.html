@@ -1,0 +1,111 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Powr Player Demo</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script type='text/javascript' src='http://assets.powr.com/build/revpowrvideo.min.js'></script>
+  <script type="text/javascript">
+    //URL class
+    var URL = function(url) {
+      this.url = url;
+      this.parseUrl();
+    };
+    //supported function by url class
+    URL.prototype = {
+      getUrl: function() {
+          return this.url;
+      },
+      getActualUrl: function() {
+          return this.actual_url;
+      },
+      getParams: function() {
+          return this.params;
+      },
+      getParam: function(name, default_value) {
+        if(name in this.params) {
+          return this.params[name];
+        } else {
+          return default_value != null ? default_value : null;
+        }
+      },
+      setParam: function(name, value) {
+          this.params[name] = value;
+      },
+      getParamsString: function() {
+        var pairs = [];
+        $.each(this.params, function(key, value) {
+          pairs.push(key + "=" + value);
+        });
+        return pairs.join("&");
+      },
+      buildUrl: function() {
+        return this.getActualUrl() + "?" + this.getParamsString();
+      },
+      parseUrl: function() {
+        var params = {};
+        var index = this.url.indexOf("\?");
+
+        if(index !== -1) {
+          var pairs = this.url.substring(index + 1).split('&');
+          $.each(pairs, function(i, value) {
+            if(!value) return;
+            var pair = value.split('=');
+            params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+          });
+          this.actual_url = this.url.substring(0, index);
+        } else {
+          this.actual_url = this.url;
+        }
+        this.params = params;
+      },
+      loadUrl: function() {
+        window.location.href = this.buildUrl();
+      }
+    };
+
+    // create global url object
+    var urlObj = new URL(window.location.href);
+    var autoplay = urlObj.getParam('autoplay', 'load');
+    var ad_tag = urlObj.getParam('ad_tag', 'john-demo');
+    var muted = urlObj.getParam('muted', 'no');
+    var n_videos = parseInt(urlObj.getParam('videos', '2'));
+    var adtype = urlObj.getParam('adtype', 'preroll');
+  </script>
+</head>
+<body style="border : none; padding : 0; margin : 0;">
+  <div style='width : 100%; height: 100%;' id='powr_video'></div>
+  <script type="text/javascript">
+    var videos = [];
+    for (var i = 0; i < n_videos; i++) {
+			videos.push({
+			"id":15207,
+			"user_id":673,
+			"powr_id":-1,
+			"duration":56,
+			"title":"Lei Gardens",
+			"sd_url" :"http://media.powr.com/480p/c86f88c5-c001-4ff9-be4b-27d6e5d93abf.mp4",
+			"hd_url": "http://media.powr.com/480p/a4c75d3a-fb4b-4715-a51d-0462e2a3b5b5.mp4",
+			"thumbnail":"http://lorempixel.com/300/150"
+			});
+			}
+			alert('will call powr video');
+        new PowrVideo({
+        "id": 'powr_video',
+			"dfp" : true,
+			"controls" : "default",
+        "tag" : "/21623266709/" + ad_tag,
+	"autoplay" : autoplay,
+	"permanent_cross" : "no",
+	"show_on_focus" : "no",
+        "float" : "none",
+        "custom_logo": "./img/newsweek.png",
+	"fluid" : true,
+	"muted" : muted,
+         "adtype" : adtype,
+          "videos" : videos
+        });
+        </script>
+
+  
+</body>
+</html>
