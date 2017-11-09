@@ -28,13 +28,15 @@ if (!config[widget]) {
   return false;
 }
 
+var filePrefix = typeof config[widget].file_prefix === 'undefined' ? 'rev' : config[widget].file_prefix;
+
 gulp.task('minifycss', function() {
     return gulp.src(config[widget].css)
         .pipe(sass().on('error', function (err) {
             notify().write(err);
             this.emit('end');
         }))
-        .pipe(concat('rev'+ widget +'.min.css'))
+        .pipe(concat(filePrefix + widget +'.min.css'))
         .pipe(autoprefixer({
             browsers: ['> 1%'],
             cascade: false
@@ -52,7 +54,7 @@ gulp.task('embedcss', ['minifycss'], function () {
                 return file.contents.toString('utf8');
             }
         }))
-        .pipe(rename('rev'+ widget +'.embed.js'))
+        .pipe(rename(filePrefix + widget +'.embed.js'))
         .pipe(gulp.dest('./build/files/' + widget));
 });
 
@@ -74,7 +76,7 @@ gulp.task('build', ['minifycss', 'embedcss'], function(cb) {
 
       pump([
             gulp.src(config[widget].build),
-            concat('rev'+ widget +'.pkgd.js'),
+            concat(filePrefix + widget +'.pkgd.js'),
             gulp.dest('./build/files/' + widget),
             uglify({
                 mangle: true
@@ -84,7 +86,7 @@ gulp.task('build', ['minifycss', 'embedcss'], function(cb) {
                 notify().write(fileArr[fileArr.length - 1] + ' Line: ' + err.lineNumber + ' ' + messageArr[messageArr.length - 1]);
                 this.emit('end');
             }),
-            rename('rev'+ widget +'.min.js'),
+            rename(filePrefix + widget +'.min.js'),
             header(banner, { pkg : config[widget] } ),
             gulp.dest('./build')
         ],

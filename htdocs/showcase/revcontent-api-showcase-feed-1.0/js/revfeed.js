@@ -1,5 +1,5 @@
 /*
-Project: RevFeed
+Project: Feed
 Version: 0.0.1
 Author: michael@revcontent.com
 */
@@ -8,12 +8,12 @@ Author: michael@revcontent.com
 ( function( window, factory ) {
     'use strict';
     // browser global
-    window.RevFeed = factory(window, window.revUtils, window.revDetect, window.revDisclose);
+    window.Feed = factory(window, window.revUtils, window.revDetect, window.revDisclose);
 
 }( window, function factory(window, revUtils, revDetect, revDisclose) {
 'use strict';
 
-    var RevFeed = function(opts) {
+    var Feed = function(opts) {
 
         var below_article = (typeof opts.below_article !== 'undefined') ? opts.below_article : false;
 
@@ -130,7 +130,7 @@ Author: michael@revcontent.com
         this.init();
     };
 
-    RevFeed.prototype.init = function() {
+    Feed.prototype.init = function() {
         this.emitter = new EventEmitter();
 
         this.element = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
@@ -171,7 +171,7 @@ Author: michael@revcontent.com
         });
     };
 
-    RevFeed.prototype.windowWidth = function() {
+    Feed.prototype.windowWidth = function() {
 
         if (this.options.window_width_devices && revDetect.show(this.options.window_width_devices)) {
             this.windowWidthEnabled = true;
@@ -193,7 +193,7 @@ Author: michael@revcontent.com
         }
     };
 
-    RevFeed.prototype.createInnerWidget = function() {
+    Feed.prototype.createInnerWidget = function() {
         this.innerWidget = new RevSlider({
             mock: this.options.mock,
             api_source:   this.options.api_source,
@@ -253,7 +253,7 @@ Author: michael@revcontent.com
         });
     };
 
-    RevFeed.prototype.viewability = function() {
+    Feed.prototype.viewability = function() {
         this.viewed = [];
 
         var self = this;
@@ -279,7 +279,7 @@ Author: michael@revcontent.com
         });
     };
 
-    RevFeed.prototype.infinite = function() {
+    Feed.prototype.infinite = function() {
         var self = this;
 
         this.scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
@@ -411,7 +411,7 @@ Author: michael@revcontent.com
         revUtils.addEventListener(window, 'scroll', this.scrollListener);
     };
 
-    RevFeed.prototype.checkVisible = function() {
+    Feed.prototype.checkVisible = function() {
         var self = this;
         for (var i = 0; i < this.innerWidget.viewableItems.length; i++) {
             revUtils.checkVisibleItem(this.innerWidget.viewableItems[i], function(viewed, item) {
@@ -430,7 +430,7 @@ Author: michael@revcontent.com
         }
     };
 
-    RevFeed.prototype.registerView = function(viewed) {
+    Feed.prototype.registerView = function(viewed) {
 
         var view = viewed[0].data.view;
 
@@ -453,6 +453,6 @@ Author: michael@revcontent.com
         });
     };
 
-    return RevFeed;
+    return Feed;
 
 }));
