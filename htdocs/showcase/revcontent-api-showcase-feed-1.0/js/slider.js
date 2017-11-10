@@ -163,9 +163,9 @@ Author: michael@revcontent.com
             mobile_image_optimize: 1.2,
             trending_utm: false,
             keywords: false,
-            disclosure_about_src: '//trends.revcontent.com/engage-about.php',
+            disclosure_about_src: '//trends.engage.im/engage-about.php',
             disclosure_about_height: 575,
-            disclosure_interest_src: '//trends.revcontent.com/engage-interests.php',
+            disclosure_interest_src: '//trends.engage.im/engage-interests.php',
             disclosure_interest_height: 520
         };
 

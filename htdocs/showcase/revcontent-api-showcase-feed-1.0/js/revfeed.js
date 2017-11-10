@@ -104,10 +104,10 @@ Author: michael@revcontent.com
             mobile_image_optimize: false,
             trending_utm: false,
             keywords: false,
-            disclosure_about_src: '//dv3-s4.revcontent.com/engage-about.php',
-            disclosure_about_height: 575,
-            disclosure_interest_src: '//dv3-s4.revcontent.com/engage-interests.php',
-            disclosure_interest_height: 520,
+            disclosure_about_src: '//trends.engage.im/engage-about.php',
+            disclosure_about_height: 591,
+            disclosure_interest_src: '//trends.engage.im/engage-interests.php',
+            disclosure_interest_height: 1066
         };
 
         // merge options
