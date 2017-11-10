@@ -251,3 +251,8 @@ a.rc-video-close {
 .powr_player .video-js .vjs-progress-control .vjs-play-progress:after {
     font-family : serif;
 }
+
+.powr_player .video-js .vjs-control-bar .vjs-volume-menu-button:before, .powr_player .video-js .vjs-control-bar .vjs-volume-menu-button .vjs-menu {
+    background-color : rgba(43, 51, 63, 0.9);
+}
+
