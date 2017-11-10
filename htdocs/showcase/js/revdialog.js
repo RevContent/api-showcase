@@ -48,14 +48,15 @@
                 // wait for load before showing and centering
                 if (!this.aboutLoaded) {
                     this.loading.style.display = 'block';
+                    this.centerDialog(this.aboutHeight);
                     // create about iframe
                     var that = this;
                     revUtils.addEventListener(this.aboutFrame, 'load', function() {
                         that.loading.style.display = 'none';
                         that.aboutFrame.style.display = 'block';
-                        that.centerDialog();
                         that.aboutLoaded = true;
                         revUtils.removeEventListener(that.aboutFrame, 'load', arguments.callee);
+                        that.aboutFrame.contentWindow.postMessage({'msg': 'resize_me'}, '*');
                     });
                 } else {
                     this.aboutFrame.style.display = 'block';
@@ -73,9 +74,10 @@
                         that.loading.style.display = 'none';
                         revUtils.addClass(that.element, 'rev-interest-dialog');
                         that.interestFrame.style.display = 'block';
-                        that.centerDialog();
+                        that.centerDialog(that.interestHeight);
                         that.interestLoaded = true;
                         revUtils.removeEventListener(that.interestFrame, 'load', arguments.callee);
+                        that.interestFrame.contentWindow.postMessage({'msg': 'resize_me'}, '*');
                     });
                 } else {
                     revUtils.addClass(this.element, 'rev-interest-dialog');
@@ -137,11 +139,14 @@
             }
 
             this.aboutFrame = this.createFrame(frameSrc);
-            this.setActive('about');
+
+            this.attachPostMesssage();
+
             // append iframe
             this.modalContentContainer.appendChild(this.aboutFrame);
 
-            this.attachPostMesssage();
+            this.setActive('about');
+
             this.attachResize();
         }
 
@@ -172,23 +177,25 @@
         return false;
     };
 
-    RevDialog.prototype.centerDialog = function(context) {
+    RevDialog.prototype.centerDialog = function(height) {
         var containerWidth = document.documentElement.clientWidth;
         var containerHeight = document.documentElement.clientHeight;
-
         // do we need to go to compact mode?
-        this.frameHeight = this.active == 'about' ? this.aboutHeight : this.interestHeight;
+        if (height) {
+            this[this.active === 'about' ? 'aboutHeightActive' : 'interestHeightActive'] = height;
+        }
 
-        this.modalContentContainer.style.height = this.frameHeight + 'px';
+        var frameHeight = this[this.active + 'HeightActive'];
 
-        var availableSpace = containerHeight - 20;
-        if (availableSpace < this.frameHeight) {
-            var compact = true;
+        this.modalContentContainer.style.height = frameHeight + 'px';
+
+        var availableSpace = containerHeight - 30;
+        if (availableSpace < frameHeight) {
             this.modalContentContainer.style.height = availableSpace + 'px';
         }
 
         var left = Math.max(0, (containerWidth / 2) - (this.modalContentContainer.offsetWidth / 2));
-        var top = compact ? 0 : Math.max(0, (containerHeight / 2) - (this.modalContentContainer.offsetHeight / 2));
+        var top = Math.max(0, (containerHeight / 2) - (this.modalContentContainer.offsetHeight / 2));
 
         var db = document.querySelector('.rd-box');
         db.style.top = top+'px';
@@ -197,6 +204,7 @@
 
     RevDialog.prototype.attachPostMesssage = function() {
         var that = this;
+
         revUtils.addEventListener(window, 'message', function(e) {
             switch (e.data.msg) {
                 case 'open_me':
@@ -208,6 +216,9 @@
                     }
                     that.closeDialog();
                     break;
+                case 'resize_me':
+                    that.centerDialog(e.data.height);
+                    break;
             }
         });
     };
@@ -218,7 +229,11 @@
         revUtils.addEventListener(window, 'resize', function() {
             clearTimeout(resizeEnd);
             resizeEnd = setTimeout(function() {
-                that.centerDialog('resize');
+                if (that.active == 'about') {
+                    that.aboutFrame.contentWindow.postMessage({'msg': 'resize_me'}, '*');
+                } else if (that.acvite == 'interest') {
+                    that.interestFrame.contentWindow.postMessage({'msg': 'resize_me'}, '*');
+                }
             }, 100);
         });
     };
