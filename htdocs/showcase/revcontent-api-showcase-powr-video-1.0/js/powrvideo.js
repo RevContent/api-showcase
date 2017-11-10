@@ -581,15 +581,15 @@ if (!String.prototype.endsWithPowr) {
         } else {
             this.player.fluid(true);
             if (fs.landscape_style.startsWithPowr("top")) {
-                styleString += "top : 0px;";
+                styleString += "top : 10px;";
             } else {
-                styleString += "bottom : 0px;";
+                styleString += "bottom : 10px;";
             }
 
             if (fs.landscape_style.endsWithPowr("right")) {
-                styleString += "right : 0px;";
+                styleString += "right : 10px;";
             } else {
-                styleString += "left : 0px;";
+                styleString += "left : 10px;";
             }
 
             var r = this.element.getBoundingClientRect();
@@ -612,9 +612,10 @@ if (!String.prototype.endsWithPowr) {
             styleString += "width : " + w + "px;";
 
             if (fs.landscape_style.startsWithPowr("top")) {
-                this.closeButton.setAttribute("style", "margin-top : " + (h - 10) + "px;");            } else {
-                this.closeButton.setAttribute("style", "margin-left : " + (w - 100) + "px; margin-top : -30px;");
-		}
+                this.closeButton.setAttribute("style", "margin-top : " + (h - 10) + "px;");
+	    } else {
+                this.closeButton.setAttribute("style", "margin-left : " + (w - 100) + "px; margin-top : -32px; z-index : -10 !important;");
+	    }
 	    this.player.dimensions(w, parseInt(h));
 
 	    this.hideConflicts("bottom");
@@ -622,7 +623,6 @@ if (!String.prototype.endsWithPowr) {
 
         this.container.setAttribute("style", styleString);
         this.floated = true;
-
 
 	this.onResize(false);
     };
@@ -763,7 +763,7 @@ if (!String.prototype.endsWithPowr) {
     };
 
     PowrVideo.prototype.getTitleContent = function() {
-	var titleContent = "<a class='rc-video-close' href='javascript:void(0)' class='close'><span class='label'>CLOSE | </span>X</a>";
+	var titleContent = "<a class='rc-video-close' href='javascript:void(0)' class='close'><span>CLOSE | </span>X</a>";
 	if (this.config.custom_logo) {
 	    titleContent += "<img src='" + this.config.custom_logo + "'>";
 	}
