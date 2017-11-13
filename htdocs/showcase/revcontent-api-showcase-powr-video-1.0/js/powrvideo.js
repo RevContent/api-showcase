@@ -376,8 +376,8 @@ if (!String.prototype.endsWithPowr) {
         this.currentContent = 0;
 
         this.player.logobrand({
-	    image : "http://media.powr.com/rc_logo.png",
-	    destination : "http://www.powr.com/" + (this.config.username ? this.config.username : "")
+	    image : "https://media.powr.com/rc_logo.png",
+	    destination : "https://www.powr.com/" + (this.config.username ? this.config.username : "")
         });
 
         var me = this;
