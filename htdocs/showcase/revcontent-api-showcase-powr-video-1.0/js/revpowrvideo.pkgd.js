@@ -25717,6 +25717,7 @@ if (!String.prototype.endsWithPowr) {
      * show_on_focus : "yes" or "no"
      * custom_css : ""
      * rc_widget_id : ""
+     * url : ""
      */
     var PowrVideo = function(config) {
         this.config = config;
@@ -25853,10 +25854,14 @@ if (!String.prototype.endsWithPowr) {
 
     PowrVideo.prototype.getAdTag = function(videoId) {
 	if (this.config.dfp) {
-            return "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + this.config.tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
+            var ret = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + this.config.tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
 		+ "&cust_params=p_width%3D" + parseInt(this.getPlayerWidth()) + "%26p_height%3D" + parseInt(this.getPlayerHeight())
-	        + "%26secure%3D" + this.getProtocol()
-		+ "&description_url=" + encodeURI("http://www.powr.com/video/" + videoId);
+	        + "%26secure%3D" + this.getProtocol();
+	    if (this.config.url) {
+		ret = ret + "%26p_url%3D" + this.config.url;
+	    }
+	    ret += "&description_url=" + encodeURI("http://www.powr.com/video/" + videoId);
+	    return ret;
 	} else {
 	    var tag = this.config.tag;
 	    tag = tag.replace("REFERRER_URL", encodeURI(window.location.href));
