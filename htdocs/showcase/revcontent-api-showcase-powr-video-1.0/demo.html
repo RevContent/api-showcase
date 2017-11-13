@@ -129,6 +129,7 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="autoplay"></span></a>
             <ul class="dropdown-menu">
               <li><a href="javascript: urlObj.setParam('autoplay', 'load'); urlObj.loadUrl();">On Load</a></li>
+	      <li><a href="javascript: urlObj.setParam('autoplay', 'focus'); urlObj.loadUrl();">On Focus</a></li>
               <li><a href="javascript: urlObj.setParam('autoplay', 'none'); urlObj.loadUrl();">Disable</a></li>
             </ul>
           </li>
@@ -220,7 +221,7 @@
       <div class="col-md-8">
         <h2 class="redacted single-line">Try <a href="./autostream_trump.html">Donald Trump</a></h2>
 	<script type="text/javascript">
-	  if (afocus == 'no') {
+	  if (afocus == 'no' && autoplay != 'focus') {
 	  document.write("<div style='width : 100%;' id='powr_container'><div id='powr_video'></div></div>");
 	  if (fluid) {
 	  document.getElementById('powr_container').style.width = "400px";
@@ -346,7 +347,7 @@
           proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         </p>
 	<script type="text/javascript">
-	  if (afocus == 'yes') {
+	  if (afocus == 'yes' || autoplay == 'focus') {
 	  document.write("<div style='width : 100%;' id='powr_container'><div id='powr_video'></div></div>");
 	  if (fluid) {
 	  document.getElementById('powr_container').style.width = "400px";

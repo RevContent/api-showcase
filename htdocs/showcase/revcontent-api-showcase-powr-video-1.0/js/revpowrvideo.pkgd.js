@@ -26018,6 +26018,8 @@ if (!String.prototype.endsWithPowr) {
         dumbPlayer.setAttribute('height', this.getPlayerHeight() + 'px');
         dumbPlayer.setAttribute("controls", "true");
         dumbPlayer.setAttribute("preload", "auto");
+
+	this.log("Setting up Video Element");
 	if (!this.autoplaySettings.autoplay) {
             dumbPlayer.setAttribute("poster", this.videos[0].thumbnail);
 	}
@@ -26116,9 +26118,14 @@ if (!String.prototype.endsWithPowr) {
 	this.started = false;
 
 	if (me.autoplaySettings.autoplay) {
-	    this.playOverlay.hide();
-	    this.player.loadingSpinner.lockShowing();
-	    this.start(true);
+	    if (me.autoplaySettings.focus) {
+		this.autoplayOnVisible = true;
+		this.playOverlay.show();
+	    } else {
+		this.playOverlay.hide();
+		this.player.loadingSpinner.lockShowing();
+		this.start(true);
+	    }
 	} else {
 	    this.playOverlay.show();
 	}
@@ -26383,11 +26390,19 @@ if (!String.prototype.endsWithPowr) {
     };
 
     PowrVideo.prototype.onVisible = function() {
+	this.log("onVisible");
 	if (this.setupOnVisible) {
 	    this.setupOnVisible = false;
 	    this.setup();
 	}
 	
+	if (this.autoplayOnVisible) {
+	    this.autoplayOnVisible = false;
+	    this.playOverlay.hide();
+	    this.player.loadingSpinner.lockShowing();
+	    this.start(true);
+	}
+		
 	this.registerView();
 	this.unfloatPlayer();
     };
