@@ -129,17 +129,20 @@ a.rc-video-close {
 
 .rc-float-video a.rc-video-close {
     display : block !important;
-    color : #EEE !important;
-    background-color : #333 !important;
+    color : #FFF !important;
+    background-color : #C7C7C7 !important;
     padding : 5px !important;
     position : absolute !important;
-    font-weight : bold !important;
-    font-size : 13px !important;
+    font-size : 12px !important;
     z-index : 100 !important;
 }
 
+.rc-float-video .vjs-ad-playing a.rc-video-close {
+    display : none !important;
+}
+
 .rc-float-video a.rc-video-close span {
-    color : #EEE !important;
+    color : #FFF !important;
 }
 
 .rc-play-button {
@@ -250,4 +253,8 @@ a.rc-video-close {
 
 .powr_player .video-js .vjs-progress-control .vjs-play-progress:after {
     font-family : serif;
+}
+
+.powr_player .vjs-control-bar .vjs-volume-menu-button {
+    -webkit-appearance : none !important;
 }

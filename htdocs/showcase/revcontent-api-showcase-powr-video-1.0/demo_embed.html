@@ -11,7 +11,6 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="./js/revpowrvideo.pkgd.js"></script>
   <script type="text/javascript">
     //URL class
     var URL = function(url) {
@@ -77,12 +76,8 @@
     //setting defaults
     $(function () {
     $("#autoplay").html("Autoplay: " + urlObj.getParam('autoplay', 'load') + " &nbsp;<span class='caret'></span>");
-    $("#flt").html("Float: " + urlObj.getParam('flt', 'right') + " &nbsp;<span class='caret'></span>");
-    $("#pclose").html("Permanent Close: " + urlObj.getParam('pclose', 'no') + " &nbsp;<span class='caret'></span>");
     $("#muted").html("Muted : " + urlObj.getParam('muted', 'no') + "&nbsp;<span class='caret'></span>");
     $("#ad_tag").html("Ad Tag: " + urlObj.getParam('ad_tag', 'none') + " &nbsp;<span class='caret'></span>");
-    $("#fluid").html("Fluid : " + urlObj.getParam('fluid', 'no') + " &nbsp;<span class='caret'></span>");
-    $("#afocus").html("Show On Focus : " + urlObj.getParam('afocus', 'no') + " &nbsp;<span class='caret'></span>");
     $("#videos").html("Total Videos : " + urlObj.getParam('videos', '2') + " &nbsp;<span class='caret'></span>");
     $("#adtype").html("Ad Type : " + urlObj.getParam('adtype', 'preroll') + " &nbsp;<span class='caret'></span>");
     if (urlObj.getParam('richard_mode', 'no') == 'yes') {
@@ -91,23 +86,12 @@
     });
 
     var autoplay = urlObj.getParam('autoplay', 'load');
-    var flt = urlObj.getParam('flt', 'right');
-    var pclose = urlObj.getParam('pclose', 'no');
-    var afocus = urlObj.getParam('afocus', 'no');
     var ad_tag = urlObj.getParam('ad_tag', 'john-demo');
-    var fluid = urlObj.getParam('fluid', 'no');
     var muted = urlObj.getParam('muted', 'no');
     var n_videos = parseInt(urlObj.getParam('videos', '2'));
     var wait_for_autoplay = parseInt(urlObj.getParam('w_auto', '5000'));
     var adtype = urlObj.getParam('adtype', 'preroll');
-    var mob_flt = "top";
-    
-    if (fluid == 'no') fluid = false;
-    else fluid = true;
-	
-    if (flt == 'left') flt = "bottom-left";
-    else if (flt == 'right') flt = "bottom-right";
-    else { flt = "none"; mob_flt = "none"; }
+
   </script>
 </head>
 <body>
@@ -129,33 +113,10 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="autoplay"></span></a>
             <ul class="dropdown-menu">
               <li><a href="javascript: urlObj.setParam('autoplay', 'load'); urlObj.loadUrl();">On Load</a></li>
-	      <li><a href="javascript: urlObj.setParam('autoplay', 'focus'); urlObj.loadUrl();">On Focus</a></li>
               <li><a href="javascript: urlObj.setParam('autoplay', 'none'); urlObj.loadUrl();">Disable</a></li>
             </ul>
           </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="flt"></a>
-            <ul class="dropdown-menu">
-              <li><a href="javascript: urlObj.setParam('flt', 'right'); urlObj.loadUrl();">Right</a></li>
-              <li><a href="javascript: urlObj.setParam('flt', 'left'); urlObj.loadUrl();">Left</a></li>
-              <li><a href="javascript: urlObj.setParam('flt', 'none'); urlObj.loadUrl();">None</a></li>
-            </ul>
-          </li>
-           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="pclose"></a>
-            <ul class="dropdown-menu">
-              <li><a href="javascript: urlObj.setParam('pclose', 'yes'); urlObj.loadUrl();">Yes</a></li>
-              <li><a href="javascript: urlObj.setParam('pclose', 'no'); urlObj.loadUrl();">No</a></li>
-            </ul>
-	   </li>
 	   
-           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="afocus"></a>
-            <ul class="dropdown-menu">
-              <li><a href="javascript: urlObj.setParam('afocus', 'yes'); urlObj.loadUrl();">Yes</a></li>
-              <li><a href="javascript: urlObj.setParam('afocus', 'no'); urlObj.loadUrl();">No</a></li>
-            </ul>
-	   </li>
            <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="videos"></a>
             <ul class="dropdown-menu">
@@ -173,14 +134,6 @@
             </ul>
           </li>
 
-
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="fluid"></a>
-            <ul class="dropdown-menu">
-              <li><a href="javascript: urlObj.setParam('fluid', 'true'); urlObj.loadUrl();">Yes</a></li>
-              <li><a href="javascript: urlObj.setParam('fluid', 'false'); urlObj.loadUrl();">No</a></li>
-            </ul>
-          </li>
 	  <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="adtype"></a>
             <ul class="dropdown-menu">
@@ -220,16 +173,9 @@
     <div class="row">
       <div class="col-md-8">
         <h2 class="redacted single-line">Try <a href="./autostream_trump.html">Donald Trump</a></h2>
-	<script type="text/javascript">
-	  if (afocus == 'no' && autoplay != 'focus') {
-	  document.write("<div style='width : 100%;' id='powr_container'><div id='powr_video'></div></div>");
-	  if (fluid) {
-	  document.getElementById('powr_container').style.width = "400px";
-	  document.getElementById('powr_container').style.height = "600px";
-	  }
-	  }
+	<script type='text/javascript'>
+	  document.write("<iframe class='powr_embed' src='./iframe.html?" + urlObj.getParamsString() + "' width='600px' height='400px' allowfullscreen></iframe>");
 	</script>
-
         <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
           tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
           quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
@@ -346,15 +292,6 @@
           cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
           proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         </p>
-	<script type="text/javascript">
-	  if (afocus == 'yes' || autoplay == 'focus') {
-	  document.write("<div style='width : 100%;' id='powr_container'><div id='powr_video'></div></div>");
-	  if (fluid) {
-	  document.getElementById('powr_container').style.width = "400px";
-	  document.getElementById('powr_container').style.height = "600px";
-	  }
-	  }
-	</script>
 
 	<p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
           tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
@@ -549,41 +486,6 @@
       </div>
     </div>
   </div>
-	<script type="text/javascript">
-	  var videos = [];
-	  for (var i = 0; i < n_videos; i++) {
-	  videos.push({
-	"id":15207,
-        "user_id":673,
-        "powr_id":-1,
-        "duration":56,
-        "title":"Lei Gardens",
-        "sd_url" :"http://media.powr.com/480p/c86f88c5-c001-4ff9-be4b-27d6e5d93abf.mp4",
-        "hd_url": "http://media.powr.com/480p/a4c75d3a-fb4b-4715-a51d-0462e2a3b5b5.mp4",
-        "thumbnail":"http://lorempixel.com/300/150"
-	});
-	  }
-
-        new PowrVideo({
-          "id": 'powr_video',
-          "dfp" : true,
-          "tag" : "/21623266709/" + ad_tag,
-        "autoplay" : autoplay,
-	"permanent_cross" : pclose,
-	"show_on_focus" : afocus,
-        "float" : {
-            "desktop" : flt,
-            "mobile" : mob_flt
-          },
-        "custom_logo": "./img/newsweek.png",
-	"fluid" : fluid,
-			      "muted" : muted,
-			      "adtype" : adtype,
-			      "wait_for_autoplay" : wait_for_autoplay,
-          "videos" : videos
-        });
-        </script>
-
-  
+  <script type='text/javascript' src='./js/powriframefix.js'></script>
 </body>
 </html>

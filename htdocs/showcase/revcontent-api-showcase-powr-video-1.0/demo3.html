@@ -1,265 +1,588 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Powr Player Demo</title>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <meta name="keywords" content="Virtual Reality,Technology">
+  <link href="css/bootstrap.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
 
-    <title>Powr Video Example</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="./js/revpowrvideo2.pkgd.js"></script>
+  <script type="text/javascript">
+    //URL class
+    var URL = function(url) {
+      this.url = url;
+      this.parseUrl();
+    };
+    //supported function by url class
+    URL.prototype = {
+      getUrl: function() {
+          return this.url;
+      },
+      getActualUrl: function() {
+          return this.actual_url;
+      },
+      getParams: function() {
+          return this.params;
+      },
+      getParam: function(name, default_value) {
+        if(name in this.params) {
+          return this.params[name];
+        } else {
+          return default_value != null ? default_value : null;
+        }
+      },
+      setParam: function(name, value) {
+          this.params[name] = value;
+      },
+      getParamsString: function() {
+        var pairs = [];
+        $.each(this.params, function(key, value) {
+          pairs.push(key + "=" + value);
+        });
+        return pairs.join("&");
+      },
+      buildUrl: function() {
+        return this.getActualUrl() + "?" + this.getParamsString();
+      },
+      parseUrl: function() {
+        var params = {};
+        var index = this.url.indexOf("\?");
 
-    <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+        if(index !== -1) {
+          var pairs = this.url.substring(index + 1).split('&');
+          $.each(pairs, function(i, value) {
+            if(!value) return;
+            var pair = value.split('=');
+            params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+          });
+          this.actual_url = this.url.substring(0, index);
+        } else {
+          this.actual_url = this.url;
+        }
+        this.params = params;
+      },
+      loadUrl: function() {
+        window.location.href = this.buildUrl();
+      }
+    };
 
-    <link href="css/style.css" rel="stylesheet">
-    <script type="text/javascript" src="./js/revpowrvideo.pkgd.js"></script>
+    // create global url object
+    var urlObj = new URL(window.location.href);
+
+    //setting defaults
+    $(function () {
+    $("#autoplay").html("Autoplay: " + urlObj.getParam('autoplay', 'load') + " &nbsp;<span class='caret'></span>");
+    $("#flt").html("Float: " + urlObj.getParam('flt', 'right') + " &nbsp;<span class='caret'></span>");
+    $("#pclose").html("Permanent Close: " + urlObj.getParam('pclose', 'no') + " &nbsp;<span class='caret'></span>");
+    $("#muted").html("Muted : " + urlObj.getParam('muted', 'no') + "&nbsp;<span class='caret'></span>");
+    $("#ad_tag").html("Ad Tag: " + urlObj.getParam('ad_tag', 'none') + " &nbsp;<span class='caret'></span>");
+    $("#fluid").html("Fluid : " + urlObj.getParam('fluid', 'no') + " &nbsp;<span class='caret'></span>");
+    $("#afocus").html("Show On Focus : " + urlObj.getParam('afocus', 'no') + " &nbsp;<span class='caret'></span>");
+    $("#videos").html("Total Videos : " + urlObj.getParam('videos', '2') + " &nbsp;<span class='caret'></span>");
+    $("#adtype").html("Ad Type : " + urlObj.getParam('adtype', 'preroll') + " &nbsp;<span class='caret'></span>");
+    if (urlObj.getParam('richard_mode', 'no') == 'yes') {
+    $("#ad_tag_parent").css("display", "block");
+    }
+    });
+
+    var autoplay = urlObj.getParam('autoplay', 'load');
+    var flt = urlObj.getParam('flt', 'right');
+    var pclose = urlObj.getParam('pclose', 'no');
+    var afocus = urlObj.getParam('afocus', 'no');
+    var ad_tag = urlObj.getParam('ad_tag', 'john-demo');
+    var fluid = urlObj.getParam('fluid', 'no');
+    var muted = urlObj.getParam('muted', 'no');
+    var n_videos = parseInt(urlObj.getParam('videos', '2'));
+    var wait_for_autoplay = parseInt(urlObj.getParam('w_auto', '5000'));
+    var adtype = urlObj.getParam('adtype', 'preroll');
+    var mob_flt = "top";
     
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
+    if (fluid == 'no') fluid = false;
+    else fluid = true;
+	
+    if (flt == 'left') flt = "bottom-left";
+    else if (flt == 'right') flt = "bottom-right";
+    else { flt = "none"; mob_flt = "none"; }
+  </script>
 </head>
-
 <body>
-
-    <!-- Navigation -->
-    <nav class="navbar navbar-inverse" role="navigation">
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">Powr Player</a>
-            </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                  <li>
-                    <a href="./demo1.html">Autoplay/Float</a>
-                  </li>
-                  <li>
-                    <a href="./demo2.html">ClickToPlay/Float</a>
-                  </li>
-                  <li>
-                    <a href="./demo3.html">Embed/PlayMutedWhenFocus</a>
-                  </li>
-                  <li>
-                    <a href="#">Culture</a>
-                  </li>
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container -->
-    </nav>
-
-    <!-- Fake Page Content -->
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <h1 class="page-header">Virtual Reality, Technology
-                    <small>Revcontent Native API</small>
-                </h1>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-8">
-              <h2 class="redacted single-line">Try <a href="./autostream_trump.html">Donald Trump</a></h2>
-	      <div id="rcjsload_7741ba"></div> 
-<script type="text/javascript"> 
-(function() { 
-var referer="";try{if(referer=document.referrer,"undefined"==typeof referer)throw"undefined"}catch(exception){referer=document.location.href,(""==referer||"undefined"==typeof referer)&&(referer=document.URL)}referer=referer.substr(0,700); 
-var rcel = document.createElement("script"); 
-rcel.id = "rc_" + Math.floor(Math.random() * 1000); 
-rcel.type = "text/javascript"; 
-rcel.src = "http://trends.revcontent.com/video.js.php?v=15382&uid=945&t="+rcel.id+"&c="+(new Date()).getTime()+"&width="+(window.outerWidth || document.documentElement.clientWidth)+"&referer="+referer; 
-rcel.async = true; 
-var rcds = document.getElementById("rcjsload_7741ba"); rcds.appendChild(rcel); 
-})();
-</script>
-
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum. in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit</p>
-
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit</p>
-
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                <br />
+  <nav class="navbar navbar-default" style="margin-bottom : 0px; border-bottom : 5px solid #FF0000;">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">POWR</a>
+      </div>
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="autoplay"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="javascript: urlObj.setParam('autoplay', 'load'); urlObj.loadUrl();">On Load</a></li>
+              <li><a href="javascript: urlObj.setParam('autoplay', 'none'); urlObj.loadUrl();">Disable</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="flt"></a>
+            <ul class="dropdown-menu">
+              <li><a href="javascript: urlObj.setParam('flt', 'right'); urlObj.loadUrl();">Right</a></li>
+              <li><a href="javascript: urlObj.setParam('flt', 'left'); urlObj.loadUrl();">Left</a></li>
+              <li><a href="javascript: urlObj.setParam('flt', 'none'); urlObj.loadUrl();">None</a></li>
+            </ul>
+          </li>
+           <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="pclose"></a>
+            <ul class="dropdown-menu">
+              <li><a href="javascript: urlObj.setParam('pclose', 'yes'); urlObj.loadUrl();">Yes</a></li>
+              <li><a href="javascript: urlObj.setParam('pclose', 'no'); urlObj.loadUrl();">No</a></li>
+            </ul>
+	   </li>
+	   
+           <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="afocus"></a>
+            <ul class="dropdown-menu">
+              <li><a href="javascript: urlObj.setParam('afocus', 'yes'); urlObj.loadUrl();">Yes</a></li>
+              <li><a href="javascript: urlObj.setParam('afocus', 'no'); urlObj.loadUrl();">No</a></li>
+            </ul>
+	   </li>
+           <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="videos"></a>
+            <ul class="dropdown-menu">
+              <li><a href="javascript: urlObj.setParam('videos', '0'); urlObj.loadUrl();">0</a></li>
+              <li><a href="javascript: urlObj.setParam('videos', '1'); urlObj.loadUrl();">1</a></li>
+	      <li><a href="javascript: urlObj.setParam('videos', '2'); urlObj.loadUrl();">2</a></li>
+            </ul>
+	   </li>
+	   
+           <li class="dropdown">
+             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="muted"></a>
+            <ul class="dropdown-menu">
+              <li><a href="javascript: urlObj.setParam('muted', 'yes'); urlObj.loadUrl();">Yes</a></li>
+              <li><a href="javascript: urlObj.setParam('muted', 'no'); urlObj.loadUrl();">No</a></li>
+            </ul>
+          </li>
 
 
-
-                <br />
-
-            </div>
-            <div class="col-md-4">
-                <h3 class="redacted">This is just a testing title</h3>
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
-
-                <h3 class="redacted">This is just a testing title</h3>
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
-
-                <h3 class="redacted">This is just a testing title</h3>
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
-
-                <h3 class="redacted">Project Details</h3>
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem,
-                adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
-
-                <div class="redacted-image redacted-image-66"></div>
-
-                <h3 class="redacted">This is just a testing title</h3>
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
-            </div>
-        </div>
-
-
-        <div class="row">
-            <div class="col-md-8">
-                <div class="redacted-image redacted-image-66"></div>
-
-                <br />
-
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum. in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit</p>
-
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                <!-- another grid -->
-
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit</p>
-
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            </div>
-            <div class="col-md-4">
-                <h3 class="redacted">This is just a testing title</h3>
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
-
-                <h3 class="redacted">This is just a testing title</h3>
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
-
-                <h3 class="redacted">This is just a testing title</h3>
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
-
-                <h3 class="redacted">Project Details</h3>
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem,
-                adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
-
-                <div class="redacted-image redacted-image-66"></div>
-
-                <br / >
-
-                <div class="redacted-image redacted-image-66"></div>
-
-                <br / >
-
-                <div class="redacted-image redacted-image-66"></div>
-
-                <h3 class="redacted">This is just a testing title</h3>
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
-
-                <h3 class="redacted">This is just a testing title</h3>
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
-
-                <h3 class="redacted">Project Details</h3>
-                <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem,
-                adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
-            </div>
-        </div>
-        <!-- Footer -->
-
-
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="fluid"></a>
+            <ul class="dropdown-menu">
+              <li><a href="javascript: urlObj.setParam('fluid', 'true'); urlObj.loadUrl();">Yes</a></li>
+              <li><a href="javascript: urlObj.setParam('fluid', 'false'); urlObj.loadUrl();">No</a></li>
+            </ul>
+          </li>
+	  <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="adtype"></a>
+            <ul class="dropdown-menu">
+              <li><a href="javascript: urlObj.setParam('adtype', 'preroll'); urlObj.loadUrl();">PreRoll</a></li>
+              <li><a href="javascript: urlObj.setParam('adtype', '0.25'); urlObj.loadUrl();">MidRoll (25%)</a></li>
+	      <li><a href="javascript: urlObj.setParam('adtype', '0.5'); urlObj.loadUrl();">MidRoll (50%)</a></li>
+	      <li><a href="javascript: urlObj.setParam('adtype', 'postroll'); urlObj.loadUrl();">PostRoll</a></li>
+            </ul>
+          </li>
+	  
+          <li class="dropdown" style='display : none;' id='ad_tag_parent'>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="ad_tag"></a>
+            <ul class="dropdown-menu">
+              <li><a href="javascript: urlObj.setParam('ad_tag', 'test/connatix'); urlObj.loadUrl();">Connatix</a></li>
+              <li><a href="javascript: urlObj.setParam('ad_tag', 'test/facebook'); urlObj.loadUrl();">Facebook</a></li>
+              <li><a href="javascript: urlObj.setParam('ad_tag', 'test/google'); urlObj.loadUrl();">Google</a></li>
+              <li><a href="javascript: urlObj.setParam('ad_tag', 'test/spotx'); urlObj.loadUrl();">Spotx</a></li>
+              <li><a href="javascript: urlObj.setParam('ad_tag', 'test/tremor'); urlObj.loadUrl();">Tremor</a></li>
+	      <li><a href="javascript: urlObj.setParam('ad_tag', 'test/Matomy'); urlObj.loadUrl();">Matomy</a></li>
+	      <li><a href="javascript: urlObj.setParam('ad_tag', 'test/Aol'); urlObj.loadUrl();">Aol</a></li>
+              <li><a href="javascript: urlObj.setParam('ad_tag', 'john-demo'); urlObj.loadUrl();">None</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+  <div class="container" style="padding : 0; -webkit-overflow-scrolling: touch;">
+    <div class="row">
+      <div class="col-lg-12">
+        <h1 class="page-header">Virtual Reality, Technology
+          <small>Revcontent Native API</small>
+        </h1>
+      </div>
     </div>
 
-   <!-- /. Fake Page Content -->
+    <div class="row">
+      <div class="col-md-8">
+        <h2 class="redacted single-line">Try <a href="./autostream_trump.html">Donald Trump</a></h2>
+	<script type="text/javascript">
+	  if (afocus == 'no') {
+	  document.write("<div style='width : 100%;' id='powr_container'><div id='powr_video'></div></div>");
+	  if (fluid) {
+	  document.getElementById('powr_container').style.width = "400px";
+	  document.getElementById('powr_container').style.height = "600px";
+	  }
+	  }
+	</script>
 
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum. in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit
+        </p>
+
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+
+	        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum. in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit
+        </p>
+
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+
+
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit
+        </p>
+
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+
+	<p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+
+	<p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+
+	<p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+
+	<p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+
+	<p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+	<script type="text/javascript">
+	  if (afocus == 'yes') {
+	  document.write("<div style='width : 100%;' id='powr_container'><div id='powr_video'></div></div>");
+	  if (fluid) {
+	  document.getElementById('powr_container').style.width = "400px";
+	  document.getElementById('powr_container').style.height = "600px";
+	  }
+	  }
+	</script>
+
+	<p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+
+        <br />
+
+
+
+        <br />
+
+      </div>
+      <div class="col-md-4">
+        <h3 class="redacted">This is just a testing title</h3>
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
+
+        <h3 class="redacted">This is just a testing title</h3>
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
+
+        <h3 class="redacted">This is just a testing title</h3>
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
+
+        <h3 class="redacted">Project Details</h3>
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem,
+          adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.
+        </p>
+
+        <div class="redacted-image redacted-image-66"></div>
+
+        <h3 class="redacted">This is just a testing title</h3>
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-md-8">
+        <div class="redacted-image redacted-image-66"></div>
+
+        <br />
+
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum. in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit
+        </p>
+
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+
+	       <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum. in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit
+        </p>
+
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+
+	       <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum. in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit
+        </p>
+
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+
+
+
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+
+        <!-- another grid -->
+
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit
+        </p>
+
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+      </div>
+      <div class="col-md-4">
+        <h3 class="redacted">This is just a testing title</h3>
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
+
+        <h3 class="redacted">This is just a testing title</h3>
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
+
+        <h3 class="redacted">This is just a testing title</h3>
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pepllentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
+
+        <h3 class="redacted">Project Details</h3>
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem,
+          adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.
+        </p>
+
+        <div class="redacted-image redacted-image-66"></div>
+
+        <br / >
+
+        <div class="redacted-image redacted-image-66"></div>
+
+        <br / >
+
+        <div class="redacted-image redacted-image-66"></div>
+
+        <h3 class="redacted">This is just a testing title</h3>
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
+
+        <h3 class="redacted">This is just a testing title</h3>
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
+
+        <h3 class="redacted">Project Details</h3>
+        <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem,
+          adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.
+        </p>
+      </div>
+    </div>
+  </div>
+	<script type="text/javascript">
+	  var videos = [];
+	  for (var i = 0; i < n_videos; i++) {
+	  videos.push({
+	"id":15207,
+        "user_id":673,
+        "powr_id":-1,
+        "duration":56,
+        "title":"Lei Gardens",
+        "sd_url" :"http://media.powr.com/480p/c86f88c5-c001-4ff9-be4b-27d6e5d93abf.mp4",
+        "hd_url": "http://media.powr.com/480p/a4c75d3a-fb4b-4715-a51d-0462e2a3b5b5.mp4",
+        "thumbnail":"http://lorempixel.com/300/150"
+	});
+	  }
+
+        new PowrVideo({
+          "id": 'powr_video',
+          "dfp" : true,
+          "tag" : "/21623266709/" + ad_tag,
+        "autoplay" : autoplay,
+	"permanent_cross" : pclose,
+	"show_on_focus" : afocus,
+        "float" : {
+            "desktop" : flt,
+            "mobile" : mob_flt
+          },
+        "custom_logo": "./img/newsweek.png",
+	"fluid" : fluid,
+			      "muted" : muted,
+			      "adtype" : adtype,
+			      "wait_for_autoplay" : wait_for_autoplay,
+          "videos" : videos
+        });
+        </script>
+
+  
 </body>
-
-
 </html>
