@@ -8,8 +8,8 @@
     "js": "./showcase/revcontent-api-showcase-powr-video-1.0/js/powrvideo.js",
     "css": [
       "./showcase/css/revdialog.css",
-      "./node_modules/video.js/dist/video-js.css",
-      "./node_modules/videojs-contrib-ads/dist/videojs.ads.css",
+      "./showcase/revcontent-api-showcase-powr-video-1.0/css/video-js.css",
+      "./showcase/revcontent-api-showcase-powr-video-1.0/css/videojs.ads.css",
       "./node_modules/videojs-overlay/dist/videojs-overlay.css",
       "./showcase/revcontent-api-showcase-powr-video-1.0/css/powrvideo.scss"
     ],

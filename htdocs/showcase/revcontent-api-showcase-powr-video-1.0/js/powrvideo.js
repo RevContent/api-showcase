@@ -46,6 +46,9 @@ if (!String.prototype.endsWithPowr) {
      * permanent_close : "yes" or "no"
      * muted : "yes" or "no"
      * show_on_focus : "yes" or "no"
+     * custom_css : ""
+     * rc_widget_id : ""
+     * url : ""
      */
     var PowrVideo = function(config) {
         this.config = config;
@@ -182,10 +185,14 @@ if (!String.prototype.endsWithPowr) {
 
     PowrVideo.prototype.getAdTag = function(videoId) {
 	if (this.config.dfp) {
-            return "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + this.config.tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
+            var ret = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + this.config.tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
 		+ "&cust_params=p_width%3D" + parseInt(this.getPlayerWidth()) + "%26p_height%3D" + parseInt(this.getPlayerHeight())
-	        + "%26secure%3D" + this.getProtocol()
-		+ "&description_url=" + encodeURI("http://www.powr.com/video/" + videoId);
+	        + "%26secure%3D" + this.getProtocol();
+	    if (this.config.url) {
+		ret = ret + "%26p_url%3D" + this.config.url;
+	    }
+	    ret += "&description_url=" + encodeURI("http://www.powr.com/video/" + videoId);
+	    return ret;
 	} else {
 	    var tag = this.config.tag;
 	    tag = tag.replace("REFERRER_URL", encodeURI(window.location.href));
@@ -349,6 +356,8 @@ if (!String.prototype.endsWithPowr) {
         dumbPlayer.setAttribute('height', this.getPlayerHeight() + 'px');
         dumbPlayer.setAttribute("controls", "true");
         dumbPlayer.setAttribute("preload", "auto");
+
+	this.log("Setting up Video Element");
 	if (!this.autoplaySettings.autoplay) {
             dumbPlayer.setAttribute("poster", this.videos[0].thumbnail);
 	}
@@ -372,8 +381,8 @@ if (!String.prototype.endsWithPowr) {
         this.currentContent = 0;
 
         this.player.logobrand({
-	    image : "http://media.powr.com/rc_logo.png",
-	    destination : "http://www.powr.com/" + (this.config.username ? this.config.username : "")
+	    image : "https://media.powr.com/rc_logo.png",
+	    destination : "https://www.powr.com/" + (this.config.username ? this.config.username : "")
         });
 
         var me = this;
@@ -447,9 +456,14 @@ if (!String.prototype.endsWithPowr) {
 	this.started = false;
 
 	if (me.autoplaySettings.autoplay) {
-	    this.playOverlay.hide();
-	    this.player.loadingSpinner.lockShowing();
-	    this.start(true);
+	    if (me.autoplaySettings.focus) {
+		this.autoplayOnVisible = true;
+		this.playOverlay.show();
+	    } else {
+		this.playOverlay.hide();
+		this.player.loadingSpinner.lockShowing();
+		this.start(true);
+	    }
 	} else {
 	    this.playOverlay.show();
 	}
@@ -714,11 +728,19 @@ if (!String.prototype.endsWithPowr) {
     };
 
     PowrVideo.prototype.onVisible = function() {
+	this.log("onVisible");
 	if (this.setupOnVisible) {
 	    this.setupOnVisible = false;
 	    this.setup();
 	}
 	
+	if (this.autoplayOnVisible) {
+	    this.autoplayOnVisible = false;
+	    this.playOverlay.hide();
+	    this.player.loadingSpinner.lockShowing();
+	    this.start(true);
+	}
+		
 	this.registerView();
 	this.unfloatPlayer();
     };
@@ -746,6 +768,7 @@ if (!String.prototype.endsWithPowr) {
     };
 
     PowrVideo.prototype.onAdEvent = function(event) {
+	this.log("onAdEvent", event);
 	if (event.type == "loaded") {
 	    if (this.player.muted()) {
 		this.player.ima.getAdsManager().setVolume(0);
@@ -1095,8 +1118,8 @@ if (!String.prototype.endsWithPowr) {
 	document.cookie = cname + "=" + cvalue + "; " + expires + cpath;
     };
 
-    PowrVideo.prototype.log = function(m) {
-	if ((typeof console) != "undefined") console.log(m);
+    PowrVideo.prototype.log = function() {
+	if ((typeof console) != "undefined") console.log(arguments);
     };
 
     return PowrVideo;
