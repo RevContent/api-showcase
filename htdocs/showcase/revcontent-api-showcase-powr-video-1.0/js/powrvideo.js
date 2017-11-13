@@ -46,6 +46,8 @@ if (!String.prototype.endsWithPowr) {
      * permanent_close : "yes" or "no"
      * muted : "yes" or "no"
      * show_on_focus : "yes" or "no"
+     * custom_css : ""
+     * rc_widget_id : ""
      */
     var PowrVideo = function(config) {
         this.config = config;
@@ -761,6 +763,7 @@ if (!String.prototype.endsWithPowr) {
     };
 
     PowrVideo.prototype.onAdEvent = function(event) {
+	this.log("onAdEvent", event);
 	if (event.type == "loaded") {
 	    if (this.player.muted()) {
 		this.player.ima.getAdsManager().setVolume(0);
@@ -1110,8 +1113,8 @@ if (!String.prototype.endsWithPowr) {
 	document.cookie = cname + "=" + cvalue + "; " + expires + cpath;
     };
 
-    PowrVideo.prototype.log = function(m) {
-	if ((typeof console) != "undefined") console.log(m);
+    PowrVideo.prototype.log = function() {
+	if ((typeof console) != "undefined") console.log(arguments);
     };
 
     return PowrVideo;
