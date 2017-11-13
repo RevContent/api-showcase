@@ -42,11 +42,11 @@ Author: michael@revcontent.com
             column_spans: [
                 {
                     spans: 2,
-                    selector: "#rev-slider.rev-slider-breakpoint-md .rev-content:nth-child(4)",
+                    selector: "#rev-slider2.rev-slider-breakpoint-md .rev-content:nth-child(4)",
                 },
                 {
                     spans: 2,
-                    selector: "#rev-slider.rev-slider-breakpoint-sm .rev-content:nth-child(3)",
+                    selector: "#rev-slider2.rev-slider-breakpoint-sm .rev-content:nth-child(3)",
                 }
             ],
             headline_size: 3,
@@ -153,10 +153,15 @@ Author: michael@revcontent.com
             that.heights.sort(function(a, b){return a - b});
         };
 
-        this.innerWidget.emitter.on('resized', function() {
+        var setHeight = function() {
             getHeight(); // get heights
             // set height to largest
             that.innerWidget.innerContainerElement.style.height = that.heights[(that.heights.length - 1)] + 'px';
+        };
+
+        this.innerWidget.emitter.addListeners({
+            ready: setHeight(),
+            resized: setHeight()
         });
 
         var that = this;
