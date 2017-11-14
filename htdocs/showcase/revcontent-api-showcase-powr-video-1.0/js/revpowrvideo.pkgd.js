@@ -23869,7 +23869,8 @@ registerPlugin('ads', contribAdsPlugin);
      *     the AdsManager.
      * @private
      */
-    var onAdError_ = function(adErrorEvent) {
+      var onAdError_ = function(adErrorEvent) {
+	  window.console.log("GOT ERROR");
       var errorMessage = adErrorEvent.getError !== undefined ? adErrorEvent.getError() : adErrorEvent.stack;
       window.console.log('Ad error: ' + errorMessage);
       this.vjsControls.show();
@@ -25982,16 +25983,21 @@ if (!String.prototype.endsWithPowr) {
 	// google.ima.settings.setVpaidMode(google.ima.ImaSdkSettings.VpaidMode.INSECURE);
 
 	this.events = [google.ima.AdEvent.Type.ALL_ADS_COMPLETED,
-                google.ima.AdEvent.Type.CLICK,
-                google.ima.AdEvent.Type.COMPLETE,
-                google.ima.AdEvent.Type.CONTENT_PAUSE_REQUESTED,
-                google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED,
-                google.ima.AdEvent.Type.FIRST_QUARTILE,
-                google.ima.AdEvent.Type.LOADED,
-                google.ima.AdEvent.Type.MIDPOINT,
-                google.ima.AdEvent.Type.PAUSED,
-                google.ima.AdEvent.Type.STARTED,
-                google.ima.AdEvent.Type.THIRD_QUARTILE];
+                       google.ima.AdEvent.Type.CLICK,
+                       google.ima.AdEvent.Type.COMPLETE,
+                       google.ima.AdEvent.Type.CONTENT_PAUSE_REQUESTED,
+                       google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED,
+                       google.ima.AdEvent.Type.FIRST_QUARTILE,
+                       google.ima.AdEvent.Type.LOADED,
+                       google.ima.AdEvent.Type.MIDPOINT,
+                       google.ima.AdEvent.Type.PAUSED,
+                       google.ima.AdEvent.Type.STARTED,
+		       google.ima.AdEvent.Type.VOLUME_CHANGED,
+		       google.ima.AdEvent.Type.VOLUME_MUTED,
+                       google.ima.AdEvent.Type.THIRD_QUARTILE,
+		       google.ima.AdEvent.Type.LOG,
+		       google.ima.AdErrorEvent.Type.AD_ERROR
+		      ];
 
 	google.ima.settings.setDisableCustomPlaybackForIOS10Plus(true);
 
@@ -26173,6 +26179,8 @@ if (!String.prototype.endsWithPowr) {
 
         this.player.ima.requestAds();
 
+	this.showRCAd(26191);
+	
         // this.player.ima.addContentEndedListener(function () {
         //    me.loadNextVideo();
         //});
@@ -26338,6 +26346,36 @@ if (!String.prototype.endsWithPowr) {
 	}
     };
 
+    PowrVideo.prototype.getReferer = function() {
+	var referer = "";
+	try {
+	    referer = document.referrer
+	    if ("undefined" == typeof referer)
+		throw "undefined"
+	} catch (exception) {
+	    referer = document.location.href;
+	    if ("" ==referer || "undefined" == typeof referer)
+		referer=document.URL;
+	}
+	referer=referer.substr(0,700);
+	return referer;
+    };
+    
+    PowrVideo.prototype.showRCAd = function(widgetId) {
+	this.rcDiv = document.createElement("div");
+	this.rcDiv.setAttribute("style", "z-index : 10000000; width : 100%; position : absolute; background-color : rgba(255, 255, 255, 1.0); height : 100%; overflow : hidden; left : 0px; top : 0px; padding : 12px;");
+	this.container.appendChild(this.rcDiv);
+	
+	var referer = this.getReferer();
+	
+	var rcel = document.createElement("script");
+	rcel.id = 'rc_' + Math.floor(Math.random() * 1000);
+	rcel.type = 'text/javascript';
+	rcel.src = "http://dv3-s1.revcontent.com/serve.js.php?w=" + widgetId + "&t="+rcel.id+"&c="+(new Date()).getTime()+"&width="+(window.outerWidth || document.documentElement.clientWidth)+"&referer="+referer;
+	rcel.async = true;
+	this.rcDiv.appendChild(rcel);
+    };
+    
 
     PowrVideo.prototype.unfloatPlayer = function() {
         if (this.floated) {
