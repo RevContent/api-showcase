@@ -18,9 +18,9 @@ Author: michael@revcontent.com
         var below_article = (typeof opts.below_article !== 'undefined') ? opts.below_article : false;
 
         var defaults = {
-            api_source: 'rcfeed',
-            url: 'https://trends.revcontent.com/api/v1/',
-            host: 'https://trends.revcontent.com',
+            api_source: 'feed',
+            host: 'https://trends.engage.im',
+            url: 'https://trends.engage.im/api/v1/',
             devices: [
                 'phone', 'tablet', 'desktop'
             ],
@@ -105,7 +105,7 @@ Author: michael@revcontent.com
             trending_utm: false,
             keywords: false,
             disclosure_about_src: '//trends.engage.im/engage-about.php',
-            disclosure_about_height: 591,
+            disclosure_about_height: 463,
             disclosure_interest_src: '//trends.engage.im/engage-interests.php',
             disclosure_interest_height: 1066
         };

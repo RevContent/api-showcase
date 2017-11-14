@@ -1892,14 +1892,15 @@ Author: michael@revcontent.com
     // };
 
     RevSlider.prototype.createBrandLogo = function(className, square) {
-        var char = this.options.brand_logo.charAt(0);
+        var char = square ? this.options.brand_logo_secondary.charAt(0) : this.options.brand_logo.charAt(0);
+
+        var brandLogo = document.createElement('div');
 
         if (char === '<') {
-            var brandLogo = document.createElement('div');
             brandLogo.innerHTML = (square ? this.options.brand_logo_secondary : this.options.brand_logo);
         } else {
-            var brandLogo = document.createElement('img');
-            brandLogo.src = square ? this.options.brand_logo_secondary : this.options.brand_logo;
+            // var brandLogo = document.createElement('img');
+            brandLogo.innerHTML = '<img src="'+ (square ? this.options.brand_logo_secondary : this.options.brand_logo) +'"/>';
         }
 
         revUtils.addClass(brandLogo, className)
