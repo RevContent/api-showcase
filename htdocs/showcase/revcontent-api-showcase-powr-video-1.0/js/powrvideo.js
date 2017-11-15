@@ -281,11 +281,13 @@ if (!String.prototype.endsWithPowr) {
 	    var x = w/2 - 32;
 	    var y = h/2 - 32;
 	    
-
 	    var playDom = this.playOverlay.contentEl();
 	    playDom.setAttribute("style", "left : " + x + "px; bottom : " + y + "px; top : auto;");
+
 	}
+	
     };
+
 
     PowrVideo.prototype.getPlayerHeight = function() {
 	if (this.player) {
@@ -506,10 +508,8 @@ if (!String.prototype.endsWithPowr) {
 	if (!this.autoplaySettings.autoplay) {
 	    this.player.poster(this.videos[this.currentContent].thumbnail);
 	}
-
+	this.adsPlayed = 0;
         this.player.ima.requestAds();
-
-	this.showRCAd(26191);
 	
         // this.player.ima.addContentEndedListener(function () {
         //    me.loadNextVideo();
@@ -537,6 +537,8 @@ if (!String.prototype.endsWithPowr) {
 	}
         this.currentContent++;
         if (this.currentContent < this.videos.length) {
+	    this.adsPlayed = 0;
+	    
 	    this.player.ima.initializeAdDisplayContainer();
 	    this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].sd_url, this.getAdsResponse(this.videos[this.currentContent]), false);
             // this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), false);
@@ -692,9 +694,24 @@ if (!String.prototype.endsWithPowr) {
     };
     
     PowrVideo.prototype.showRCAd = function(widgetId) {
+	if (this.rcDiv)
+	    return;
 	this.rcDiv = document.createElement("div");
-	this.rcDiv.setAttribute("style", "z-index : 10000000; width : 100%; position : absolute; background-color : rgba(255, 255, 255, 1.0); height : 100%; overflow : hidden; left : 0px; top : 0px; padding : 12px;");
+	revUtils.addClass(this.rcDiv, "powr_rc_container");
 	this.container.appendChild(this.rcDiv);
+	
+	var skipBtn = document.createElement("a");
+	revUtils.addClass(skipBtn, "powr_skip");
+	skipBtn.innerHTML = "Skip Ad";
+	this.rcDiv.appendChild(skipBtn);
+	var me = this;
+	revUtils.addEventListener(this.rcDiv, "click", function() {
+	    me.hideRCAd();
+	});
+
+	var label = document.createElement("label");
+	label.innerHTML = "Advertisement";
+	this.rcDiv.appendChild(label);
 	
 	var referer = this.getReferer();
 	
@@ -704,9 +721,18 @@ if (!String.prototype.endsWithPowr) {
 	rcel.src = "http://dv3-s1.revcontent.com/serve.js.php?w=" + widgetId + "&t="+rcel.id+"&c="+(new Date()).getTime()+"&width="+(window.outerWidth || document.documentElement.clientWidth)+"&referer="+referer;
 	rcel.async = true;
 	this.rcDiv.appendChild(rcel);
+	
+	this.player.pause();
+	//setTimeout(this.hideRCAd.bind(this), 5000);
     };
-    
 
+    PowrVideo.prototype.hideRCAd = function() {
+	this.container.removeChild(this.rcDiv);
+	this.rcDiv = null;
+	this.player.muted(false);
+	this.player.play();
+    }
+    
     PowrVideo.prototype.unfloatPlayer = function() {
         if (this.floated) {
 	    revUtils.removeClass(document.body, 'powr_player_floating');
@@ -806,9 +832,20 @@ if (!String.prototype.endsWithPowr) {
 
     PowrVideo.prototype.onAdEvent = function(event) {
 	this.log("onAdEvent", event);
-	if (event.type == "loaded") {
+	if (event.type == google.ima.AdEvent.Type.LOADED) {
 	    if (this.player.muted()) {
 		this.player.ima.getAdsManager().setVolume(0);
+	    }
+	}
+	if (event.type == google.ima.AdEvent.Type.STARTED) {
+	    this.adsPlayed++;
+	}
+	if (event.type == google.ima.AdEvent.Type.ALL_ADS_COMPLETED) {
+	    if (this.adsPlayed == 0) {
+		this.log("No ads shown. Backfill");
+		if (this.config.widgetId) {
+		    this.showRCAd(this.config.widgetId);
+		}
 	    }
 	}
     };
@@ -944,6 +981,10 @@ if (!String.prototype.endsWithPowr) {
     };
 
     PowrVideo.prototype.onPlay = function() {
+	if (this.rcDiv) {
+	    this.player.pause();
+	    return;
+	}
 	this.playOverlay.hide();
 	// this.player.controlBar.volumeMenuButton.hide();
 
