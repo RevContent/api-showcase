@@ -718,7 +718,7 @@ if (!String.prototype.endsWithPowr) {
 	var rcel = document.createElement("script");
 	rcel.id = 'rc_' + Math.floor(Math.random() * 1000);
 	rcel.type = 'text/javascript';
-	rcel.src = "http://dv3-s1.revcontent.com/serve.js.php?w=" + widgetId + "&t="+rcel.id+"&c="+(new Date()).getTime()+"&width="+(window.outerWidth || document.documentElement.clientWidth)+"&referer="+referer;
+	rcel.src = "https://video.powr.com/serve.js.php?w=" + widgetId + "&t="+rcel.id+"&c="+(new Date()).getTime()+"&width="+(window.outerWidth || document.documentElement.clientWidth)+"&referer="+referer;
 	rcel.async = true;
 	this.rcDiv.appendChild(rcel);
 	
@@ -843,8 +843,8 @@ if (!String.prototype.endsWithPowr) {
 	if (event.type == google.ima.AdEvent.Type.ALL_ADS_COMPLETED) {
 	    if (this.adsPlayed == 0) {
 		this.log("No ads shown. Backfill");
-		if (this.config.widgetId) {
-		    this.showRCAd(this.config.widgetId);
+		if (this.config.widget_id && this.config.widget_id != -1) {
+		    this.showRCAd(this.config.widget_id);
 		}
 	    }
 	}
@@ -968,6 +968,7 @@ if (!String.prototype.endsWithPowr) {
 	
 	if (this.player.muted()) {
 	    this.player.muted(false);
+	    this.player.volume(1);
 	    this.volumeOffOverlay.hide();
 	    this.cancelEvent(e);
 	    return;
