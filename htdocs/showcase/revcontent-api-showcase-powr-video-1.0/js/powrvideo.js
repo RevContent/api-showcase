@@ -702,15 +702,13 @@ if (!String.prototype.endsWithPowr) {
 	
 	var skipBtn = document.createElement("a");
 	revUtils.addClass(skipBtn, "powr_skip");
-	skipBtn.innerHTML = "Skip Ad";
+	revUtils.addClass(skipBtn, "powr_disabled");
+	skipBtn.innerHTML = "Loading ...";
 	this.rcDiv.appendChild(skipBtn);
-	var me = this;
-	revUtils.addEventListener(this.rcDiv, "click", function() {
-	    me.hideRCAd();
-	});
+	
 
 	var label = document.createElement("label");
-	label.innerHTML = "Advertisement";
+	label.innerHTML = "Ads By Revcontent";
 	this.rcDiv.appendChild(label);
 	
 	var referer = this.getReferer();
@@ -723,9 +721,31 @@ if (!String.prototype.endsWithPowr) {
 	this.rcDiv.appendChild(rcel);
 	
 	this.player.pause();
+	this.rcCountDownSeconds = 5;
+	this.rcCountDownInterval = setInterval(this.rcAdCountdown.bind(this), 1000);
 	//setTimeout(this.hideRCAd.bind(this), 5000);
     };
 
+    PowrVideo.prototype.rcAdCountdown = function() {
+	var totalPhotos = this.rcDiv.querySelectorAll(".rc-photo");
+	if (totalPhotos.length == 0) return;
+	
+	this.rcCountDownSeconds--;
+	if (this.rcCountDownSeconds <= 0) {
+	    clearInterval(this.rcCountDownInterval);
+	    this.rcCountDownInterval = null;
+	    var me = this;
+	    revUtils.addEventListener(this.rcDiv, "click", function() {
+		me.hideRCAd();
+	    });
+
+	    this.rcDiv.querySelector(".powr_skip").innerHTML = "Skip Ad";
+	} else {
+	    this.rcDiv.querySelector(".powr_skip").innerHTML = "Wait " + this.rcCountDownSeconds;
+	}
+    }
+
+    
     PowrVideo.prototype.hideRCAd = function() {
 	this.container.removeChild(this.rcDiv);
 	this.rcDiv = null;
