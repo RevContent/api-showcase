@@ -699,6 +699,7 @@ if (!String.prototype.endsWithPowr) {
 	if (this.rcDiv)
 	    return;
 	this.rcDiv = document.createElement("div");
+	revUtils.addClass(this.element, "rc_ad_showing");
 	revUtils.addClass(this.rcDiv, "powr_rc_container");
 	this.container.appendChild(this.rcDiv);
 	
@@ -727,6 +728,8 @@ if (!String.prototype.endsWithPowr) {
 	this.rcCountDownSeconds = 15;
 	this.rcCountDownInterval = setInterval(this.rcAdCountdown.bind(this), 1000);
 	//setTimeout(this.hideRCAd.bind(this), 5000);
+
+	
     };
 
     PowrVideo.prototype.rcAdCountdown = function() {
@@ -754,6 +757,7 @@ if (!String.prototype.endsWithPowr) {
 
     
     PowrVideo.prototype.hideRCAd = function() {
+	revUtils.removeClass(this.element, "rc_ad_showing");
 	this.container.removeChild(this.rcDiv);
 	this.rcDiv = null;
 	this.player.muted(false);

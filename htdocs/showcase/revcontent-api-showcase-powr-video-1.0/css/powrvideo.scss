@@ -138,7 +138,7 @@ a.rc-video-close {
     z-index : 100 !important;
 }
 
-.rc-float-video .vjs-ad-playing a.rc-video-close {
+.rc-float-video .vjs-ad-playing a.rc-video-close, body .rc-ad-showing a.rc-video-close {
     display : none !important;
 }
 
