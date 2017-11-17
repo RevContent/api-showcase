@@ -281,11 +281,13 @@ if (!String.prototype.endsWithPowr) {
 	    var x = w/2 - 32;
 	    var y = h/2 - 32;
 	    
-
 	    var playDom = this.playOverlay.contentEl();
 	    playDom.setAttribute("style", "left : " + x + "px; bottom : " + y + "px; top : auto;");
+
 	}
+	
     };
+
 
     PowrVideo.prototype.getPlayerHeight = function() {
 	if (this.player) {
@@ -313,16 +315,21 @@ if (!String.prototype.endsWithPowr) {
 	// google.ima.settings.setVpaidMode(google.ima.ImaSdkSettings.VpaidMode.INSECURE);
 
 	this.events = [google.ima.AdEvent.Type.ALL_ADS_COMPLETED,
-                google.ima.AdEvent.Type.CLICK,
-                google.ima.AdEvent.Type.COMPLETE,
-                google.ima.AdEvent.Type.CONTENT_PAUSE_REQUESTED,
-                google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED,
-                google.ima.AdEvent.Type.FIRST_QUARTILE,
-                google.ima.AdEvent.Type.LOADED,
-                google.ima.AdEvent.Type.MIDPOINT,
-                google.ima.AdEvent.Type.PAUSED,
-                google.ima.AdEvent.Type.STARTED,
-                google.ima.AdEvent.Type.THIRD_QUARTILE];
+                       google.ima.AdEvent.Type.CLICK,
+                       google.ima.AdEvent.Type.COMPLETE,
+                       google.ima.AdEvent.Type.CONTENT_PAUSE_REQUESTED,
+                       google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED,
+                       google.ima.AdEvent.Type.FIRST_QUARTILE,
+                       google.ima.AdEvent.Type.LOADED,
+                       google.ima.AdEvent.Type.MIDPOINT,
+                       google.ima.AdEvent.Type.PAUSED,
+                       google.ima.AdEvent.Type.STARTED,
+		       google.ima.AdEvent.Type.VOLUME_CHANGED,
+		       google.ima.AdEvent.Type.VOLUME_MUTED,
+                       google.ima.AdEvent.Type.THIRD_QUARTILE,
+		       google.ima.AdEvent.Type.LOG,
+		       google.ima.AdErrorEvent.Type.AD_ERROR
+		      ];
 
 	google.ima.settings.setDisableCustomPlaybackForIOS10Plus(true);
 
@@ -501,9 +508,9 @@ if (!String.prototype.endsWithPowr) {
 	if (!this.autoplaySettings.autoplay) {
 	    this.player.poster(this.videos[this.currentContent].thumbnail);
 	}
-
+	this.adsPlayed = 0;
         this.player.ima.requestAds();
-
+	
         // this.player.ima.addContentEndedListener(function () {
         //    me.loadNextVideo();
         //});
@@ -530,6 +537,8 @@ if (!String.prototype.endsWithPowr) {
 	}
         this.currentContent++;
         if (this.currentContent < this.videos.length) {
+	    this.adsPlayed = 0;
+	    
 	    this.player.ima.initializeAdDisplayContainer();
 	    this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].sd_url, this.getAdsResponse(this.videos[this.currentContent]), false);
             // this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), false);
@@ -669,7 +678,61 @@ if (!String.prototype.endsWithPowr) {
 	}
     };
 
+    PowrVideo.prototype.getReferer = function() {
+	var referer = "";
+	try {
+	    referer = document.referrer
+	    if ("undefined" == typeof referer)
+		throw "undefined"
+	} catch (exception) {
+	    referer = document.location.href;
+	    if ("" ==referer || "undefined" == typeof referer)
+		referer=document.URL;
+	}
+	referer=referer.substr(0,700);
+	return referer;
+    };
+    
+    PowrVideo.prototype.showRCAd = function(widgetId) {
+	if (this.rcDiv)
+	    return;
+	this.rcDiv = document.createElement("div");
+	revUtils.addClass(this.rcDiv, "powr_rc_container");
+	this.container.appendChild(this.rcDiv);
+	
+	var skipBtn = document.createElement("a");
+	revUtils.addClass(skipBtn, "powr_skip");
+	skipBtn.innerHTML = "Skip Ad";
+	this.rcDiv.appendChild(skipBtn);
+	var me = this;
+	revUtils.addEventListener(this.rcDiv, "click", function() {
+	    me.hideRCAd();
+	});
 
+	var label = document.createElement("label");
+	label.innerHTML = "Advertisement";
+	this.rcDiv.appendChild(label);
+	
+	var referer = this.getReferer();
+	
+	var rcel = document.createElement("script");
+	rcel.id = 'rc_' + Math.floor(Math.random() * 1000);
+	rcel.type = 'text/javascript';
+	rcel.src = "https://video.powr.com/serve.js.php?w=" + widgetId + "&t="+rcel.id+"&c="+(new Date()).getTime()+"&width="+(window.outerWidth || document.documentElement.clientWidth)+"&referer="+referer;
+	rcel.async = true;
+	this.rcDiv.appendChild(rcel);
+	
+	this.player.pause();
+	//setTimeout(this.hideRCAd.bind(this), 5000);
+    };
+
+    PowrVideo.prototype.hideRCAd = function() {
+	this.container.removeChild(this.rcDiv);
+	this.rcDiv = null;
+	this.player.muted(false);
+	this.player.play();
+    }
+    
     PowrVideo.prototype.unfloatPlayer = function() {
         if (this.floated) {
 	    revUtils.removeClass(document.body, 'powr_player_floating');
@@ -769,9 +832,20 @@ if (!String.prototype.endsWithPowr) {
 
     PowrVideo.prototype.onAdEvent = function(event) {
 	this.log("onAdEvent", event);
-	if (event.type == "loaded") {
+	if (event.type == google.ima.AdEvent.Type.LOADED) {
 	    if (this.player.muted()) {
 		this.player.ima.getAdsManager().setVolume(0);
+	    }
+	}
+	if (event.type == google.ima.AdEvent.Type.STARTED) {
+	    this.adsPlayed++;
+	}
+	if (event.type == google.ima.AdEvent.Type.ALL_ADS_COMPLETED) {
+	    if (this.adsPlayed == 0) {
+		this.log("No ads shown. Backfill");
+		if (this.config.widget_id && this.config.widget_id != -1) {
+		    this.showRCAd(this.config.widget_id);
+		}
 	    }
 	}
     };
@@ -894,6 +968,7 @@ if (!String.prototype.endsWithPowr) {
 	
 	if (this.player.muted()) {
 	    this.player.muted(false);
+	    this.player.volume(1);
 	    this.volumeOffOverlay.hide();
 	    this.cancelEvent(e);
 	    return;
@@ -907,6 +982,10 @@ if (!String.prototype.endsWithPowr) {
     };
 
     PowrVideo.prototype.onPlay = function() {
+	if (this.rcDiv) {
+	    this.player.pause();
+	    return;
+	}
 	this.playOverlay.hide();
 	// this.player.controlBar.volumeMenuButton.hide();
 

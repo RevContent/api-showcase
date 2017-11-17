@@ -14,6 +14,7 @@ body .rc-float-video .rc-video-overlay img {
     margin-right : auto !important;
 }
 
+
 //.powr_player .video-js .vjs-control-bar {
 //    background: -moz-linear-gradient(bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.0) 100%);
 //    background: -webkit-linear-gradient(bottom, rgba(0,0,0,0.8) 0%,rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%);
@@ -201,7 +202,25 @@ a.rc-video-close {
     display : none;
 }
 
+.powr_player.rc-float-video .rc-photo {
+    height : 110px !important;
+}
+
+.powr_player.rc-float-video .rc-headline {
+    font-size : 12px !important;
+}
+
+
 @media (orientation: portrait) {
+    body .powr_player.rc-float-video .rc-photo {
+	height : 70px !important;
+    }
+
+    body .powr_player.rc-float-video .rc-headline {
+	font-size : 10px !important;
+    }
+
+    
     body .rc-float-video a.powr_perm_close {
 	display : block !important;
     }
@@ -215,7 +234,7 @@ a.rc-video-close {
     }
 
     
-    .rc-float-video a.rc-video-close .label {
+    .rc-float-video a.rc-video-close span {
         display : none !important;
     }
 
@@ -257,4 +276,60 @@ a.rc-video-close {
 
 .powr_player .vjs-control-bar .vjs-volume-menu-button {
     -webkit-appearance : none !important;
+}
+
+.powr_player .powr_rc_container {
+    padding-top : 10%;
+    padding-left : 10px;
+    padding-right : 10px;
+    padding-bottom : 10px;
+    z-index : 100000;
+    position : absolute;
+    width : 100%;
+    height : 100%;
+    overflow : hidden;
+    left : 0px;
+    top : 0px;
+    background-color : rgba(0, 0, 0, 0.9);
+}
+
+.rc-float-video.powr_player .powr_rc_container {
+    padding-top : 10px;
+}
+
+.powr_player .powr_rc_container .rc-item .rc-headline {
+    color : #FFF !important;
+}
+
+.powr_player .powr_rc_container .rc-text-top {
+    display : none !important;
+}
+
+.powr_player .powr_rc_container .row-item h3 {
+    display : none !important;
+}
+
+.powr_rc_container > label {
+    display : inline-block;
+    margin-bottom : 5px;
+    font-weight : bold;
+    font-size : 12px;
+    color : #EFEFEF;
+}
+
+
+.powr_player a.powr_skip {
+    background-color : #000;
+    z-index : 10000000;
+    position: absolute;
+    right: 0px;
+    bottom: 20px;
+    padding: 8px;
+    color: white;
+    border: 1px solid #FFF;
+    cursor : pointer;
+}
+
+body .powr_player.rc-float-video a.powr_skip {
+    bottom : 5px;
 }
