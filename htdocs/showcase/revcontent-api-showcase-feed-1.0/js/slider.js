@@ -889,11 +889,7 @@ Author: michael@revcontent.com
                         item.element.querySelector('.rev-reactions-total-inner').insertAdjacentHTML('afterbegin', '<div style="z-index:' + (100 + iconTotal) + ';" class="rev-reaction rev-reaction-'+ iconName +'"><div class="rev-reaction-inner"><div class="rev-reaction-icon rev-reaction-icon-'+ iconName +'-full"></div></div></div>');
                     }
 
-                    if (item.reactionCountTotal === 0) {
-                        count.innerHTML = 'You reacted!';
-                    } else {
-                        count.innerHTML = 'You and ' + item.reactionCountTotal + ' others';
-                    }
+                    that.setReactionText(item);
 
                     that.reactionCount(item, iconName, true);
 
@@ -925,7 +921,6 @@ Author: michael@revcontent.com
 
                     var count = item.element.querySelector('.rev-reaction-count');
                     count.style.marginLeft = null; // remove margin left
-                    // count.innerHTML = 'You and ' + count.innerHTML + ' others';
 
                     if (!item.element.querySelector('.rev-reactions-total-inner .rev-reaction.rev-reaction-'+ iconName)) {
                         var iconTotal = 0;
@@ -938,12 +933,7 @@ Author: michael@revcontent.com
 
                     that.reactionCount(item, iconName, true);
 
-                    if (item.reactionCountTotal === 0) {
-                        count.innerHTML = 'You reacted!';
-                    } else {
-                        count.innerHTML = 'You and ' + item.reactionCountTotal + ' others';
-                    }
-
+                    that.setReactionText(item);
                 }
 
                 that.transitionLogin(item);
@@ -1021,7 +1011,6 @@ Author: michael@revcontent.com
                     var count = item.element.querySelector('.rev-reaction-count');
 
                     count.style.marginLeft = null; // remove margin left
-                    // count.innerHTML = 'You and ' + count.innerHTML + ' others';
 
                     revApi.request( that.options.host + '/react.php?r=' + iconName + '&d=' + item.reactionData, function(data) {
                         return;
@@ -1039,11 +1028,7 @@ Author: michael@revcontent.com
 
                     that.reactionCount(item, iconName, true);
 
-                    if (item.reactionCountTotal === 0) {
-                        count.innerHTML = 'You reacted!';
-                    } else {
-                        count.innerHTML = 'You and ' + item.reactionCountTotal + ' others';
-                    }
+                    that.setReactionText(item);
                 }
 
                 that.transitionLogin(item);
@@ -1094,11 +1079,7 @@ Author: michael@revcontent.com
 
                     that.reactionCount(item, iconName, true);
 
-                    if (item.reactionCountTotal === 0) {
-                        count.innerHTML = 'You reacted!';
-                    } else {
-                        count.innerHTML = 'You and ' + item.reactionCountTotal + ' others';
-                    }
+                    that.setReactionText(item);
 
                     that.transitionLogin(item);
 
@@ -1159,6 +1140,17 @@ Author: michael@revcontent.com
                 item.reactionCountTotalNeg--;
             }
             item.element.querySelector('.rev-reaction-menu-item-count-neg .rev-reaction-menu-item-count-inner').innerText = this.milliFormatter(item.reactionCountTotalNeg);
+        }
+    };
+
+    RevSlider.prototype.setReactionText = function(item) {
+        var count = item.element.querySelector('.rev-reaction-count');
+
+        if (item.reactionCountTotal === 0) {
+            count.innerHTML = 'You reacted!';
+        } else {
+            console.log(item.reactionCountTotal);
+            count.innerHTML = 'You and ' + item.reactionCountTotal + (item.reactionCountTotal === 1 ? ' other' : ' others');
         }
     };
 
