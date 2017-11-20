@@ -1114,6 +1114,29 @@ Author: michael@revcontent.com
             if (logo) {
                 logo.style.width = logo.offsetHeight + 'px';
             }
+
+            var headline = item.element.querySelector('.rev-auth-headline');
+
+            var lineHeight = parseInt(revUtils.getComputedStyle(headline, 'line-height'));
+            var height = parseInt(revUtils.getComputedStyle(headline, 'height'));
+            var fontSize = parseInt(revUtils.getComputedStyle(headline, 'font-size'));
+            var lines = height / lineHeight;
+
+            var fallback = 0; // just in case
+            while(lines >= 3 && fallback < 100) {
+                fallback++;
+
+                fontSize--;
+                lineHeight--;
+
+                headline.style.fontSize = fontSize + 'px';
+                headline.style.lineHeight = lineHeight + 'px';
+
+                height = parseInt(revUtils.getComputedStyle(headline, 'height'));
+
+                lines = height / lineHeight;
+            }
+
             if (!that.authenticated) {
                 revUtils.removeClass(document.querySelector('.rev-flipped'), 'rev-flipped');
                 revUtils.addClass(item.element, 'rev-flipped');
