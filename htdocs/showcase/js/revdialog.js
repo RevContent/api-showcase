@@ -207,7 +207,7 @@
 
         revUtils.addEventListener(window, 'message', function(e) {
             switch (e.data.msg) {
-                case 'open_me':
+                case 'active_interest':
                     that.setActive('interest');
                     break;
                 case 'close_me':
