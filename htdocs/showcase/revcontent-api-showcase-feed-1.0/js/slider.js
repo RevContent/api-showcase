@@ -3226,12 +3226,9 @@ Author: michael@revcontent.com
             time = time.replace(/-/, "/").replace(/-/, "/");
             time = time.replace(/T/, " ").replace(/Z/, " UTC");
             time = time.replace(/([\+\-]\d\d)\:?(\d\d)/, " $1$2"); // -04:00 -> -0400
-            time = new Date(time * 1000 || time);
         }
 
-        // if (true) {
-        //     console.log(time.toString());
-        // }
+        time = new Date(time * 1000 || time);
 
         var now = new Date();
         var seconds = ((now.getTime() - time) * .001) >> 0;
