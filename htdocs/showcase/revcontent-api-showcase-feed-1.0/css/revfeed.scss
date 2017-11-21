@@ -488,6 +488,30 @@ $reactionMenu8Y: 13.5px;
             transform: rotateY(180deg);
         }
 
+
+
+        &.rev-flipped {
+            @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+              .rev-flip {
+                transform: none;
+                overflow: hidden;
+              }
+
+              .rev-flip-front {
+                transform: translate3d(0, -100%, 0);
+                transition-duration: .5s;
+                transition-property: transform;
+                transition-timing-function: ease-in-out;
+              }
+
+              .rev-flip-back {
+                transform: none;
+              }
+            }
+        }
+
+
+
         .rev-flip {
             // z-index: 1;
             width: 100%;
@@ -518,6 +542,7 @@ $reactionMenu8Y: 13.5px;
 
         /* front pane, placed above back */
         .rev-flip-front {
+            background: #fff;
             z-index: 2;
             /* for firefox 31 */
             transform: rotateY(0deg);
