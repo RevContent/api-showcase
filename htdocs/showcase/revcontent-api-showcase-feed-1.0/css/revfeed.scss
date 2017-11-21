@@ -1614,6 +1614,7 @@ $reactionMenu8Y: 13.5px;
                 margin-right: auto;
                 text-shadow: none;
                 position: relative;
+                align-items: flex-end;
 
                 &:before, &:after {
                     z-index: -1;
@@ -1637,13 +1638,8 @@ $reactionMenu8Y: 13.5px;
                 }
 
                 .rev-auth-button-icon {
-                    width: 50px;
+                    width: 42px;
                     background-color: #3A559F;
-                    // margin-left: -1px;
-                    svg {
-                        background-color: #fff;
-                        // float: right;
-                    }
                 }
                 .rev-auth-button-text {
                     color: #fff;
