@@ -67,13 +67,15 @@
                 if (!this.interestLoaded) {
                     this.loading.style.display = 'block';
                     this.interestFrame = this.createFrame(this.interestSrc);
-                    this.interestFrame.style.display = 'none';
+                    this.interestFrame.style.opacity = 0;
+                    this.modalContentContainer.style.overflow = 'hidden';
                     this.modalContentContainer.appendChild(this.interestFrame);
                     var that = this;
                     revUtils.addEventListener(this.interestFrame, 'load', function() {
                         that.loading.style.display = 'none';
                         revUtils.addClass(that.element, 'rev-interest-dialog');
-                        that.interestFrame.style.display = 'block';
+                        that.modalContentContainer.style.overflow = 'visible';
+                        that.interestFrame.style.opacity = 1;
                         that.centerDialog(that.interestHeight);
                         that.interestLoaded = true;
                         revUtils.removeEventListener(that.interestFrame, 'load', arguments.callee);
@@ -167,6 +169,7 @@
     };
 
     RevDialog.prototype.closeDialog = function() {
+        this.aboutFrame.contentWindow.postMessage({'msg': 'close_me'}, '*');
         document.body.style.overflow = this.bodyOverflow;
         this.element.style.display = 'none';
         if (this.grid) {
