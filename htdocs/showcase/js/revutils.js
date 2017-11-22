@@ -480,6 +480,29 @@ utils.checkVisible = function(element, callback, percentVisible, buffer) {
     });
 };
 
+utils.checkVisibleItem = function(item, callback, percentVisible, buffer) {
+    var that = this;
+    requestAnimationFrame(function() {
+        // what percentage of the element should be visible
+        var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
+        // fire if within buffer
+        var bufferPixels = (typeof buffer === 'number') ? buffer : 0;
+
+        var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+        var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        var elementTop = item.element.getBoundingClientRect().top;
+        var elementBottom = item.element.getBoundingClientRect().bottom;
+        var elementVisibleHeight = item.element.offsetHeight * visibleHeightMultiplier;
+
+        if ((scroll + windowHeight >= (elementTop + scroll + elementVisibleHeight - bufferPixels)) &&
+            elementBottom > elementVisibleHeight) {
+            callback.call(that, true, item);
+        } else {
+            callback.call(that, false, item)
+        }
+    });
+};
+
 utils.windowHeight = function() {
     return window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 }

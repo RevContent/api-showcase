@@ -1,5 +1,17 @@
 app.service('widgets', function() {
     this.data = {
+        'feed': {
+            title: 'RevFeed',
+            img: 'feed.gif?v=2',
+            preview_img: 'preview-feed.jpg?v=2',
+            description: 'A feed-inspired experience that engages users with your content, and keeps them coming back for more, or in this case scrolling!',
+            link: 'revcontent-api-showcase-feed-1.0/index.html',
+            // docs: 'revcontent-api-showcase-feed-1.0/README.md',
+            bg: '#29599a',
+            img_animated: false,
+            image_animation_duration: 10000,
+            new: true
+        },
         'in-feed-video': {
             title: 'In-Feed Video',
             img: 'infeedvideo.gif?v=2',
@@ -22,7 +34,7 @@ app.service('widgets', function() {
             bg: '#1674d2',
             img_animated: false,
             image_animation_duration: 10000,
-            new: true
+            // new: true
         },
         'exit-pop': {
             title: 'RevExit',

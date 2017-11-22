@@ -26,6 +26,12 @@
         this.interestLoaded = false;
     };
 
+    RevDialog.prototype.postMessage = function() {
+        if (this.aboutFrame) {
+            this.aboutFrame.contentWindow.postMessage({'msg': 'auth_me'}, '*');
+        }
+    };
+
     RevDialog.prototype.setActive = function(active) {
         this.active = active;
 
@@ -42,14 +48,15 @@
                 // wait for load before showing and centering
                 if (!this.aboutLoaded) {
                     this.loading.style.display = 'block';
+                    this.centerDialog(this.aboutHeight);
                     // create about iframe
                     var that = this;
                     revUtils.addEventListener(this.aboutFrame, 'load', function() {
                         that.loading.style.display = 'none';
                         that.aboutFrame.style.display = 'block';
-                        that.centerDialog();
                         that.aboutLoaded = true;
                         revUtils.removeEventListener(that.aboutFrame, 'load', arguments.callee);
+                        that.aboutFrame.contentWindow.postMessage({'msg': 'resize_me'}, '*');
                     });
                 } else {
                     this.aboutFrame.style.display = 'block';
@@ -60,16 +67,19 @@
                 if (!this.interestLoaded) {
                     this.loading.style.display = 'block';
                     this.interestFrame = this.createFrame(this.interestSrc);
-                    this.interestFrame.style.display = 'none';
+                    this.interestFrame.style.opacity = 0;
+                    this.modalContentContainer.style.overflow = 'hidden';
                     this.modalContentContainer.appendChild(this.interestFrame);
                     var that = this;
                     revUtils.addEventListener(this.interestFrame, 'load', function() {
                         that.loading.style.display = 'none';
                         revUtils.addClass(that.element, 'rev-interest-dialog');
-                        that.interestFrame.style.display = 'block';
-                        that.centerDialog();
+                        that.modalContentContainer.style.overflow = 'visible';
+                        that.interestFrame.style.opacity = 1;
+                        that.centerDialog(that.interestHeight);
                         that.interestLoaded = true;
                         revUtils.removeEventListener(that.interestFrame, 'load', arguments.callee);
+                        that.interestFrame.contentWindow.postMessage({'msg': 'resize_me'}, '*');
                     });
                 } else {
                     revUtils.addClass(this.element, 'rev-interest-dialog');
@@ -125,12 +135,20 @@
 
             this.modalContentContainer.appendChild(this.loading);
 
-            this.aboutFrame = this.createFrame(this.aboutSrc);
-            this.setActive('about');
+            var frameSrc = this.aboutSrc;
+            if (this.widget_id && this.pub_id) {
+                frameSrc += '?widget_id=' + this.widget_id + '&pub_id=' + this.pub_id;
+            }
+
+            this.aboutFrame = this.createFrame(frameSrc);
+
+            this.attachPostMesssage();
+
             // append iframe
             this.modalContentContainer.appendChild(this.aboutFrame);
 
-            this.attachPostMesssage();
+            this.setActive('about');
+
             this.attachResize();
         }
 
@@ -141,6 +159,9 @@
     };
 
     RevDialog.prototype.showDialog = function(injectedDialog) {
+        if (this.grid) {
+            this.grid.unbindResize();
+        }
         var that = injectedDialog || this;
         that.render().style.display = 'block';
         that.centerDialog();
@@ -148,30 +169,36 @@
     };
 
     RevDialog.prototype.closeDialog = function() {
+        this.aboutFrame.contentWindow.postMessage({'msg': 'close_me'}, '*');
         document.body.style.overflow = this.bodyOverflow;
         this.element.style.display = 'none';
+        if (this.grid) {
+            this.grid.bindResize();
+        }
         // make sure we are ready for the about dialog if opened again
         this.setActive('about');
         return false;
     };
 
-    RevDialog.prototype.centerDialog = function(context) {
+    RevDialog.prototype.centerDialog = function(height) {
         var containerWidth = document.documentElement.clientWidth;
         var containerHeight = document.documentElement.clientHeight;
-
         // do we need to go to compact mode?
-        this.frameHeight = this.active == 'about' ? this.aboutHeight : this.interestHeight;
+        if (height) {
+            this[this.active === 'about' ? 'aboutHeightActive' : 'interestHeightActive'] = height;
+        }
 
-        this.modalContentContainer.style.height = this.frameHeight + 'px';
+        var frameHeight = this[this.active + 'HeightActive'];
 
-        var availableSpace = containerHeight - 20;
-        if (availableSpace < this.frameHeight) {
-            var compact = true;
+        this.modalContentContainer.style.height = frameHeight + 'px';
+
+        var availableSpace = containerHeight - 30;
+        if (availableSpace < frameHeight) {
             this.modalContentContainer.style.height = availableSpace + 'px';
         }
 
         var left = Math.max(0, (containerWidth / 2) - (this.modalContentContainer.offsetWidth / 2));
-        var top = compact ? 0 : Math.max(0, (containerHeight / 2) - (this.modalContentContainer.offsetHeight / 2));
+        var top = Math.max(0, (containerHeight / 2) - (this.modalContentContainer.offsetHeight / 2));
 
         var db = document.querySelector('.rd-box');
         db.style.top = top+'px';
@@ -180,13 +207,20 @@
 
     RevDialog.prototype.attachPostMesssage = function() {
         var that = this;
+
         revUtils.addEventListener(window, 'message', function(e) {
             switch (e.data.msg) {
-                case 'open_me':
+                case 'active_interest':
                     that.setActive('interest');
                     break;
                 case 'close_me':
+                    if (that.emitter) {
+                        that.emitter.emitEvent('dialog_closed');
+                    }
                     that.closeDialog();
+                    break;
+                case 'resize_me':
+                    that.centerDialog(e.data.height);
                     break;
             }
         });
@@ -198,7 +232,11 @@
         revUtils.addEventListener(window, 'resize', function() {
             clearTimeout(resizeEnd);
             resizeEnd = setTimeout(function() {
-                that.centerDialog('resize');
+                if (that.active == 'about') {
+                    that.aboutFrame.contentWindow.postMessage({'msg': 'resize_me'}, '*');
+                } else if (that.acvite == 'interest') {
+                    that.interestFrame.contentWindow.postMessage({'msg': 'resize_me'}, '*');
+                }
             }, 100);
         });
     };

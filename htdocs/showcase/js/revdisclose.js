@@ -31,6 +31,10 @@
         }
     };
 
+    RevDisclose.prototype.setEmitter = function(emitter) {
+        this.emitter = emitter;
+    }
+
     RevDisclose.prototype.setDialog = function(dialog){
         var self = this;
         if(typeof dialog === "object"){
@@ -65,10 +69,47 @@
         return self.plainText ? self.disclosureText : self.disclosureHtml;
     };
 
-    RevDisclose.prototype.getDisclosure = function (disclosureText) {
+    RevDisclose.prototype.setGrid = function (grid) {
+        this.grid = grid;
+    };
+
+    RevDisclose.prototype.postMessage = function() {
+        this.dialog.postMessage();
+    };
+
+    RevDisclose.prototype.getDisclosure = function (disclosureText, dialogOptions) {
         var self = this;
         self.setDisclosureText(disclosureText);
+
+        if (this.emitter) {
+            self.dialog.emitter = this.emitter;
+        }
+
+        if (typeof dialogOptions === 'object') {
+            if (dialogOptions.aboutSrc) {
+                self.dialog.aboutSrc = dialogOptions.aboutSrc;
+            }
+            if (dialogOptions.aboutHeight) {
+                self.dialog.aboutHeight = dialogOptions.aboutHeight;
+            }
+            if (dialogOptions.interestSrc) {
+                self.dialog.interestSrc = dialogOptions.interestSrc;
+            }
+            if (dialogOptions.interestHeight) {
+                self.dialog.interestHeight = dialogOptions.interestHeight;
+            }
+            if (dialogOptions.widget_id) {
+                self.dialog.widget_id = dialogOptions.widget_id;
+            }
+            if (dialogOptions.pub_id) {
+                self.dialog.pub_id = dialogOptions.pub_id;
+            }
+        }
+
         if(typeof self.dialog === "object") {
+            if (this.grid) {
+                self.dialog.grid = this.grid;
+            }
             self.setOnClickHandler(self.dialog.showDialog, self.dialog);
         } else {
             self.setOnClickHandler(self.defaultOnClick);

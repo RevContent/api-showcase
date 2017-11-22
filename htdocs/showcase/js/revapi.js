@@ -17,6 +17,7 @@
 'use strict';
 
 var api = {};
+
 api.beacons = revBeacon || {attach: function(){}};
 
 api.forceJSONP = true;
@@ -30,28 +31,36 @@ api.request = function(url, success, failure, JSONPCallback) {
         script.src = url + this.getReferer() + '&callback=' + JSONPCallback;
         document.body.appendChild(script);
     } else {
-        var request = new XMLHttpRequest();
-
-        request.open('GET', url + this.getReferer(), true);
-
-        request.onload = function() {
-            if (request.status >= 200 && request.status < 400) {
-                try {
-                    success(JSON.parse(request.responseText));
-                } catch(e) { }
-            } else if(failure) {
-                failure(request);
-            }
-        };
-
-        request.onerror = function() {
-            if (failure) {
-                failure(request);
-            }
-        };
-
-        request.send();
+        this.xhr(url, success, failure);
     }
+};
+
+api.xhr = function(url, success, failure, withCredentials) {
+    var request = new XMLHttpRequest();
+
+    if (withCredentials) {
+        request.withCredentials = true;
+    }
+
+    request.open('GET', url + this.getReferer(), true);
+
+    request.onload = function() {
+        if (request.status >= 200 && request.status < 400) {
+            try {
+                success(JSON.parse(request.responseText));
+            } catch(e) { }
+        } else if(failure) {
+            failure(request);
+        }
+    };
+
+    request.onerror = function() {
+        if (failure) {
+            failure(request);
+        }
+    };
+
+    request.send();
 };
 
 api.getReferer = function() {
@@ -73,7 +82,7 @@ api.getTimestamp = function() {
       return +new Date;
     };
 
-    return time();
+    return +time();
 };
 
 api.generateCallback = function(prefix, entropy){
