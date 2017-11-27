@@ -202,6 +202,7 @@
 	      <li><a href="javascript: urlObj.setParam('ad_tag', 'test/Matomy'); urlObj.loadUrl();">Matomy</a></li>
 	      <li><a href="javascript: urlObj.setParam('ad_tag', 'test/Aol'); urlObj.loadUrl();">Aol</a></li>
               <li><a href="javascript: urlObj.setParam('ad_tag', 'john-demo'); urlObj.loadUrl();">None</a></li>
+	      <li><a href="javascript: urlObj.setParam('ad_tag', 'lkqd'); urlObj.loadUrl();">LKQD</a></li>
             </ul>
           </li>
         </ul>
@@ -565,9 +566,9 @@
 	  }
 
         new PowrVideo({
-          "id": 'powr_video',
-          "dfp" : true,
-          "tag" : "/21623266709/" + ad_tag,
+			      "id": 'powr_video',
+			      "adserver" : (ad_tag != "lkqd") ? "dfp" : "lkqd",
+			      "tag" : (ad_tag != "lkqd") ? ("/21623266709/" + ad_tag) : "563870",
         "autoplay" : autoplay,
 	"permanent_cross" : pclose,
 	"show_on_focus" : afocus,
@@ -581,7 +582,7 @@
 			      "adtype" : adtype,
 			      "wait_for_autoplay" : wait_for_autoplay,
 			      "videos" : videos,
-			      "widget_id" : 85181
+			      "widget_id" : -1
         });
         </script>
 

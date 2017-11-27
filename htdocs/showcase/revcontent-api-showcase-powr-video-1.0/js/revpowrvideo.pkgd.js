@@ -25699,7 +25699,7 @@ if (!String.prototype.endsWithPowr) {
     /**
      * id : id of the div to attach.
      * tag : tag to use.
-     * dfp : true/false
+     * adserver : dfp | lkqd
      * custom_logo :
      * brand_logo :
      * autoplay : "none|load|focus" [ Whether to autoplay video ]
@@ -25838,7 +25838,7 @@ if (!String.prototype.endsWithPowr) {
     };
 
     PowrVideo.prototype.getAdsResponse = function(video) {
-	var tag = this.getAdTag(video.id);
+	var tag = this.getAdTag(video);
 	var response = '<vmap:VMAP xmlns:vmap="http://www.iab.net/videosuite/vmap" version="1.0">';
 	if (this.adtype == 'preroll') {
 	    response += this.getAdBreak('preroll', tag, 0);
@@ -25853,15 +25853,18 @@ if (!String.prototype.endsWithPowr) {
 	return response;
     };
 
-    PowrVideo.prototype.getAdTag = function(videoId) {
-	if (this.config.dfp) {
+    PowrVideo.prototype.getAdTag = function(video) {
+	if (this.config.adserver == "dfp") {
             var ret = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + this.config.tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
 		+ "&cust_params=p_width%3D" + parseInt(this.getPlayerWidth()) + "%26p_height%3D" + parseInt(this.getPlayerHeight())
 	        + "%26secure%3D" + this.getProtocol();
 	    if (this.config.url) {
 		ret = ret + "%26p_url%3D" + this.config.url;
 	    }
-	    ret += "&description_url=" + encodeURI("http://www.powr.com/video/" + videoId);
+	    ret += "&description_url=" + encodeURI("http://www.powr.com/video/" + video.id);
+	    return ret;
+	} else if (this.config.adserver == "lkqd") {
+	    var ret = "//v.lkqd.net/ad?pid=456&sid=" + this.config.tag + "&output=vastvpaid&support=html5flash&execution=any&placement=&playinit=auto&volume=100&width=" + parseInt(this.getPlayerWidth()) + "&height=" + parseInt(this.getPlayerHeight()) + "&dnt=0&pageurl=" + encodeURI(window.location.href) + "&contentid=" + video.id + "&contenttitle=" + encodeURI(video.title) + "&contentlength=" + video.duration + "&contenturl=" + encodeURI("http://www.powr.com/video/" + video.id) + "&rnd=" + new Date().getTime();
 	    return ret;
 	} else {
 	    var tag = this.config.tag;
@@ -26870,7 +26873,7 @@ if (!String.prototype.endsWithPowr) {
 	    if (!me.autoplayDetected) {
 		callback(false);
 	    }
-	}, 1000);
+	}, 5000);
 	
 	// Check if video plays
 	video.onplay = function() {
