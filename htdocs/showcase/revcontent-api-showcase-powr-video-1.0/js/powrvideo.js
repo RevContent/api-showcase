@@ -60,7 +60,9 @@ if (!String.prototype.endsWithPowr) {
 	    this.mobile = true;
         }
 	this.log("Mobile Mode " + this.mobile);
-
+	if (this.config.dfp) {
+	    this.config.adserver = "dfp";
+	}
 	this.floatSettings = this.createFloatSettings();
 	this.autoplaySettings = this.createAutoplaySettings();
 	this.permanentClose = "no";
