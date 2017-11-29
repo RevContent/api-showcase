@@ -25755,6 +25755,9 @@ if (!String.prototype.endsWithPowr) {
 	if (this.config.float_conflicts) {
 	    this.floatConflicts = this.config.float_conflicts;
 	}
+	if (!this.config.mobile_tag) {
+	    this.config.mobile_tag = this.config.tag;
+	}
 
         this.element = document.getElementById(this.config.id);
 
@@ -25856,21 +25859,28 @@ if (!String.prototype.endsWithPowr) {
     };
 
     PowrVideo.prototype.getAdTag = function(video) {
+	var url = encodeURI(window.location.href);
+	if (this.config.url) {
+	    url = this.config.url;
+	}
+	var tag = this.config.tag;
+	if (this.mobile) {
+	    tag = this.config.mobile_tag;
+	}
 	if (this.config.adserver == "dfp") {
-            var ret = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + this.config.tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
+            var ret = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
 		+ "&cust_params=p_width%3D" + parseInt(this.getPlayerWidth()) + "%26p_height%3D" + parseInt(this.getPlayerHeight())
 	        + "%26secure%3D" + this.getProtocol();
 	    if (this.config.url) {
-		ret = ret + "%26p_url%3D" + this.config.url;
+		ret = ret + "%26p_url%3D" + url;
 	    }
 	    ret += "&description_url=" + encodeURI("http://www.powr.com/video/" + video.id);
 	    return ret;
 	} else if (this.config.adserver == "lkqd") {
-	    var ret = "//v.lkqd.net/ad?pid=456&sid=" + this.config.tag + "&output=vastvpaid&support=html5flash&execution=any&placement=&playinit=auto&volume=100&width=" + parseInt(this.getPlayerWidth()) + "&height=" + parseInt(this.getPlayerHeight()) + "&dnt=0&pageurl=" + encodeURI(window.location.href) + "&contentid=" + video.id + "&contenttitle=" + encodeURI(video.title) + "&contentlength=" + video.duration + "&contenturl=" + encodeURI("http://www.powr.com/video/" + video.id) + "&rnd=" + new Date().getTime();
+	    var ret = "//v.lkqd.net/ad?pid=456&sid=" + tag + "&output=vastvpaid&support=html5flash&execution=any&placement=&playinit=auto&volume=100&width=" + parseInt(this.getPlayerWidth()) + "&height=" + parseInt(this.getPlayerHeight()) + "&dnt=0&pageurl=" + url + "&contentid=" + video.id + "&contenttitle=" + encodeURI(video.title) + "&contentlength=" + video.duration + "&contenturl=" + encodeURI("http://www.powr.com/video/" + video.id) + "&rnd=" + new Date().getTime();
 	    return ret;
 	} else {
-	    var tag = this.config.tag;
-	    tag = tag.replace("REFERRER_URL", encodeURI(window.location.href));
+	    tag = tag.replace("REFERRER_URL", url);
 	    tag = tag.replace("P_WIDTH", "" + parseInt(this.getPlayerWidth()));
 	    tag = tag.replace("P_HEIGHT", "" + parseInt(this.getPlayerHeight()));
 	    tag = tag.replace("CACHE_BUSTER", "" + new Date().getTime());
