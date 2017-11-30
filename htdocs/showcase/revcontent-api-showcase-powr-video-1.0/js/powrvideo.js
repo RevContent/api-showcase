@@ -594,7 +594,7 @@ if (!String.prototype.endsWithPowr) {
         if (this.orientation == "portrait" && !this.floatSettings.portrait)
             return;
 	if (this.orientation == "landscape" && !this.floatSettings.landscape)
-	    return;
+	    return; 
 
 	revUtils.addClass(document.body, 'powr_player_floating');
         this.container.className = "rc-float-video powr_player " + (this.permanentClose == "yes" ? "powr_permanent_close" : "");
@@ -848,6 +848,10 @@ if (!String.prototype.endsWithPowr) {
 	    this.playOverlay.hide();
 	    this.player.loadingSpinner.lockShowing();
 	    this.start(true);
+
+	    this.pauseOnHidden = true;
+	} else if (this.pauseOnHidden && this.player.paused()) {
+	    this.player.play();
 	}
 		
 	this.registerView();
@@ -859,6 +863,11 @@ if (!String.prototype.endsWithPowr) {
 	    return;
 	}
 	this.floatPlayer();
+	
+	if (this.pauseOnHidden && !this.player.paused() && !this.floated) {
+	    this.player.pause();
+	}
+
     };
 
     PowrVideo.prototype.adsManagerLoadedCallback = function() {
