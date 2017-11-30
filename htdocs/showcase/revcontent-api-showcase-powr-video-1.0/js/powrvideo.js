@@ -850,7 +850,7 @@ if (!String.prototype.endsWithPowr) {
 	    this.start(true);
 
 	    this.pauseOnHidden = true;
-	} else if (this.pauseOnHidden && this.player.paused()) {
+	} else if (this.pauseOnHidden && this.autoPaused && this.player.paused()) {
 	    this.player.play();
 	}
 		
@@ -865,6 +865,7 @@ if (!String.prototype.endsWithPowr) {
 	this.floatPlayer();
 	
 	if (this.pauseOnHidden && !this.player.paused() && !this.floated) {
+	    this.autoPaused = true;
 	    this.player.pause();
 	}
 
@@ -1041,6 +1042,7 @@ if (!String.prototype.endsWithPowr) {
 	    this.player.pause();
 	    return;
 	}
+	this.autoPaused = false;
 	this.playOverlay.hide();
 	// this.player.controlBar.volumeMenuButton.hide();
 
@@ -1051,7 +1053,7 @@ if (!String.prototype.endsWithPowr) {
 	}
     };
 
-    PowrVideo.prototype.onPause = function() {
+    PowrVideo.prototype.onPause = function(e) {
 	this.titleOverlay.show();
     };
 
