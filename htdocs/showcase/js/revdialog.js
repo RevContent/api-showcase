@@ -45,12 +45,14 @@
                 // wait for load before showing and centering
                 if (!this.aboutLoaded) {
                     this.aboutFrame.style.opacity = 0;
+                    this.modalContentContainer.style.overflow = 'hidden';
                     this.loading.style.display = 'block';
                     this.centerDialog(this.aboutHeight);
                     // create about iframe
                     var that = this;
                     revUtils.addEventListener(this.aboutFrame, 'load', function() {
                         that.loading.style.display = 'none';
+                        that.modalContentContainer.style.overflow = 'visible';
                         that.aboutFrame.style.opacity = 1;
                         that.aboutLoaded = true;
                         revUtils.removeEventListener(that.aboutFrame, 'load', arguments.callee);
@@ -131,7 +133,7 @@
             document.body.appendChild(this.element);
 
             // cache the modal content container
-            this.modalContentContainer = this.element.querySelectorAll('.rd-modal-content')[0]
+            this.modalContentContainer = this.element.querySelector('.rd-modal-content');
 
             this.modalContentContainer.appendChild(this.loading);
 
