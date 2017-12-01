@@ -260,7 +260,7 @@ a.rc-video-close {
     }
 
     .powr_player .powr_rc_container {
-	padding-top : 10%;
+	padding-top : 4%;
 	padding-left : 10px;
 	padding-right : 10px;
 	padding-bottom : 10px;
@@ -280,10 +280,11 @@ a.rc-video-close {
 
     body .powr_rc_container .rc-photo {
 	height : 100px !important;
+	width : 90% !important;
     }
 
     body .powr_rc_container .rc-item .rc-headline {
-	font-size : 12px !important;
+	font-size : 11px !important;
     }
 
 }
@@ -361,4 +362,8 @@ a.rc-video-close {
 
 body .powr_player.rc-float-video a.powr_skip {
     bottom : 5px;
+}
+
+body .powr_rc_container {
+    box-sizing : border-box;
 }
