@@ -743,8 +743,6 @@ if (!String.prototype.endsWithPowr) {
 	this.rcCountDownSeconds = 15;
 	this.rcCountDownInterval = setInterval(this.rcAdCountdown.bind(this), 1000);
 	//setTimeout(this.hideRCAd.bind(this), 5000);
-
-	
     };
 
     PowrVideo.prototype.rcAdCountdown = function() {
