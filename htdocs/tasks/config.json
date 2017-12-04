@@ -41,8 +41,6 @@
     "js": "./showcase/revcontent-api-showcase-powr-video-1.0/js/powrapi.js",
     "css": [],
     "build": [
-      "./node_modules/ev-emitter/ev-emitter.js",
-      "./showcase/js/requestAnimationFrame.js",
       "./showcase/js/revutils.js",
       "./showcase/js/revapi.js",
       "./build/files/powrapi/revpowrapi.embed.js"
