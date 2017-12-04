@@ -259,15 +259,15 @@ a.rc-video-close {
         margin-top : -3px !important;
     }
 
-    .powr_player .powr_rc_container {
-	padding-top : 4%;
-	padding-left : 10px;
-	padding-right : 10px;
-	padding-bottom : 10px;
+    body .powr_player .powr_rc_container {
+	padding-top : 4% !important;
+	padding-left : 10px !important;
+	padding-right : 10px !important;
+	padding-bottom : 10px !important;
 	z-index : 100000;
 	position : absolute;
-	width : 100%;
-	height : 100%;
+	width : 100% !important;
+	height : 100% !important;
 	overflow : hidden;
 	left : 0px;
 	top : 0px;
