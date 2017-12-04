@@ -93,6 +93,7 @@
     var adtype = urlObj.getParam('adtype', 'preroll');
 
   </script>
+  <script type='text/javascript' src='./js/revpowrapi.pkgd.js'></script>
 </head>
 <body>
   <nav class="navbar navbar-default" style="margin-bottom : 0px; border-bottom : 5px solid #FF0000;">
@@ -116,7 +117,7 @@
               <li><a href="javascript: urlObj.setParam('autoplay', 'none'); urlObj.loadUrl();">Disable</a></li>
             </ul>
           </li>
-	   
+
            <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="videos"></a>
             <ul class="dropdown-menu">
@@ -125,7 +126,7 @@
 	      <li><a href="javascript: urlObj.setParam('videos', '2'); urlObj.loadUrl();">2</a></li>
             </ul>
 	   </li>
-	   
+
            <li class="dropdown">
              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="muted"></a>
             <ul class="dropdown-menu">
@@ -143,7 +144,7 @@
 	      <li><a href="javascript: urlObj.setParam('adtype', 'postroll'); urlObj.loadUrl();">PostRoll</a></li>
             </ul>
           </li>
-	  
+
           <li class="dropdown" style='display : none;' id='ad_tag_parent'>
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="ad_tag"></a>
             <ul class="dropdown-menu">
@@ -173,9 +174,11 @@
     <div class="row">
       <div class="col-md-8">
         <h2 class="redacted single-line">Try <a href="./autostream_trump.html">Donald Trump</a></h2>
-	<script type='text/javascript'>
-	  document.write("<iframe class='powr_embed' src='./iframe.html?" + urlObj.getParamsString() + "' width='600px' height='400px' allowfullscreen></iframe>");
-	</script>
+
+      	<script type='text/javascript'>
+      	  document.write("<iframe class='powr_embed' id='powriframe_1' src='./iframe.html?" + urlObj.getParamsString() + "' width='600px' height='400px' allowfullscreen></iframe>");
+      	</script>
+
         <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
           tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
           quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
@@ -487,5 +490,10 @@
     </div>
   </div>
   <script type='text/javascript' src='./js/powriframefix.js'></script>
+  <script type='text/javascript'>
+    var ivideo = new PowrApi({
+        "id": 'powriframe_1'
+    });
+  </script>
 </body>
 </html>

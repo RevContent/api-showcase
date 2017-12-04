@@ -32,6 +32,28 @@
       "./showcase/revcontent-api-showcase-powr-video-1.0/css/*"
     ]
   },
+  "powrapi" : {
+    "name": "powr-api",
+    "description": "Powr Api",
+    "homepage": "http://revcontent.com",
+    "version": "0.1.0",
+    "pkg": "./showcase/revcontent-api-showcase-powr-video-1.0/package.json",
+    "js": "./showcase/revcontent-api-showcase-powr-video-1.0/js/powrapi.js",
+    "css": [],
+    "build": [
+      "./node_modules/ev-emitter/ev-emitter.js",
+      "./showcase/js/requestAnimationFrame.js",
+      "./showcase/js/revutils.js",
+      "./showcase/js/revapi.js",
+      "./build/files/powrapi/revpowrapi.embed.js"
+    ],
+    "watch": [
+      "./showcase/js/*",
+      "./showcase/css/*",
+      "./showcase/revcontent-api-showcase-powr-video-1.0/js/*",
+      "./showcase/revcontent-api-showcase-powr-video-1.0/css/*"
+    ]
+  },
   "infeedvideo": {
     "name": "in-feed-video",
     "description": "In Feed Video Widget",
