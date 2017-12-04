@@ -15,7 +15,7 @@
     ],
     "build": [
       "./node_modules/ev-emitter/ev-emitter.js",
-      "./node_modules/video.js/dist/video.js",
+      "./showcase/revcontent-api-showcase-powr-video-1.0/js/video.js",
       "./node_modules/videojs-overlay/dist/videojs-overlay.js",
       "./showcase/revcontent-api-showcase-powr-video-1.0/js/videojs.logobrand.js",
       "./node_modules/videojs-contrib-ads/dist/videojs.ads.js",
