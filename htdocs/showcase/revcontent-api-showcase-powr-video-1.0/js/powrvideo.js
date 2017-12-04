@@ -20,22 +20,21 @@ if (!String.prototype.endsWithPowr) {
 function receiveMessage(event) {
   var player = this.player;
   var video = this.videos[this.currentContent];
-  var response = {}
+  var response = "";
 
   if(event.data === "play") {
     player.play();
-    response['msg'] = "playing";
+    response = "playing";
   } else if(event.data === "pause") {
     player.pause();
-    response['msg'] = "paused";
+    response = "paused";
   } else if(event.data === "duration") {
-    response['duration'] = player.currentTime();
-    response['msg'] = "video duration";
+    response = player.currentTime();
   } else if(event.data === "ping") {
-    response['msg'] = "OK!";
+    response = "OK!";
   }
 
-  event.source.postMessage(JSON.stringify(response), event.origin);
+  event.source.postMessage(response, event.origin);
 }
 
 // universal module definition

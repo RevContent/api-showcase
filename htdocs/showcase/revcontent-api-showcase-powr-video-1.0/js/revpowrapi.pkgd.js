@@ -728,6 +728,7 @@ return api;
       this.config = config;
       this.element = document.getElementById(this.config.id);
       this.window = this.element.contentWindow || this.element;
+      this.callbackFunction = null;
   };
 
   PowrApi.prototype.ping = function() {
@@ -744,13 +745,23 @@ return api;
 
   PowrApi.prototype.duration = function(callback) {
     this.window.postMessage("duration", this.element.src);
+    if(this.callbackFunction != null) {
+      window.removeEventListener("message", this.callbackFunction, false);
+    }
+    this.callbackFunction = callback;
     window.addEventListener("message", callback, false);
+
   }
 
   PowrApi.prototype.requestUpdates = function (callback) {
     setInterval(function(window, src) {
       window.postMessage("duration", src);
     }, 5000, this.window, this.element.src);
+    
+    if(this.callbackFunction != null) {
+      window.removeEventListener("message", this.callbackFunction, false);
+    }
+    this.callbackFunction = callback;
     window.addEventListener("message", callback, false);
   }
 
