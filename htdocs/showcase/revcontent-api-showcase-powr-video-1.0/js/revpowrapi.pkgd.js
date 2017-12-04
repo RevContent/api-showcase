@@ -746,6 +746,10 @@ return api;
     this.window.postMessage("duration", this.element.src);
   }
 
+  PowrApi.prototype.current_time = function () {
+    this.window.postMessage("current_time", this.element.src);
+  }
+
   function receiveMessage(event) {
     if (event.origin !== "http://code.revcontent.com")
       return;
