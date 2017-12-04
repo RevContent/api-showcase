@@ -31,20 +31,17 @@
     this.window.postMessage("pause", this.element.src);
   }
 
-  PowrApi.prototype.duration = function() {
+  PowrApi.prototype.duration = function(callback) {
     this.window.postMessage("duration", this.element.src);
+    window.addEventListener("message", callback, false);
   }
 
-  PowrApi.prototype.current_time = function () {
-    this.window.postMessage("current_time", this.element.src);
+  PowrApi.prototype.requestUpdates = function (callback) {
+    setInterval(function(window, src) {
+      window.postMessage("duration", src);
+    }, 5000, this.window, this.element.src);
+    window.addEventListener("message", callback, false);
   }
-
-  function receiveMessage(event) {
-    if (event.origin !== "http://code.revcontent.com")
-      return;
-    if ((typeof console) != "undefined") console.log("data2: " + event.data);
-  }
-  window.addEventListener("message", receiveMessage, false);
 
   PowrApi.prototype.log = function() {
     if ((typeof console) != "undefined") console.log(arguments);

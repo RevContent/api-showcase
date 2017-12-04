@@ -25720,9 +25720,6 @@ if (!String.prototype.endsWithPowr) {
 }
 
 function receiveMessage(event) {
-  if (event.origin !== "http://code.revcontent.com")
-    return;
-
   var player = this.player;
   var video = this.videos[this.currentContent];
   var response = {}
@@ -25734,18 +25731,8 @@ function receiveMessage(event) {
     player.pause();
     response['msg'] = "paused";
   } else if(event.data === "duration") {
-    response['duration'] = parseInt(video.duration);
+    response['duration'] = player.currentTime();
     response['msg'] = "video duration";
-  } else if(event.data === "current_time") {
-    response['current_time'] = player.currentTime();
-    response['msg'] = "player current time";
-
-    setInterval( function(event, player) {
-      var resp = {}
-      resp['current_time'] = player.currentTime();
-      resp['msg'] = "player current time";
-      event.source.postMessage(JSON.stringify(resp), event.origin);
-    }, 5000, event, player);
   } else if(event.data === "ping") {
     response['msg'] = "OK!";
   }
@@ -25785,6 +25772,7 @@ function receiveMessage(event) {
      * custom_css : ""
      * rc_widget_id : ""
      * url : ""
+     * iframe_id: ""
      */
     var PowrVideo = function(config) {
         this.config = config;
@@ -25989,7 +25977,9 @@ function receiveMessage(event) {
         });
         revUtils.append(this.element, imaScript);
 
-        window.addEventListener("message", this.bind(this, receiveMessage), false);
+        if(this.config.hasOwnProperty("iframe_id") && this.config.iframe_id != "") {
+          window.addEventListener("message", this.bind(this, receiveMessage), false);
+        }
     };
 
     PowrVideo.prototype.onResize = function(shouldFloat) {
