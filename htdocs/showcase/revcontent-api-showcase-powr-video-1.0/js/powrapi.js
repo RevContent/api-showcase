@@ -43,7 +43,12 @@
   }
 
   PowrApi.prototype.duration = function(callback) {
-    this.callbackFunctions["duration"] = callback;
+    if(this.callbackFunctions.hasOwnProperty("duration")) {
+      this.callbackFunctions["duration"].push(callback);
+    } else {
+      this.callbackFunctions["duration"] = Array();
+    }
+    this.callbackFunctions["duration"].push(callback);
     this.window.postMessage("duration", this.element.src);
   }
 
@@ -60,7 +65,10 @@
         if(data.flag === "update" && this.callbackFunctions.hasOwnProperty("update")) {
           this.callbackFunctions["update"](data);
         } else if(data.flag === "duration" && this.callbackFunctions.hasOwnProperty("duration")) {
-          this.callbackFunctions["duration"](data);
+          this.callbackFunctions["duration"].shift()(data);
+          if(this.callbackFunctions["duration"].length == 0) {
+            delete this.callbackFunctions.duration;
+          }
         }
       }
   }
