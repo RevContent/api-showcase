@@ -25731,7 +25731,7 @@ function receiveMessage(event) {
     player.pause();
     response = "paused";
   } else if(event.data === "duration") {
-    response = player.currentTime();
+    response = JSON.stringify({'duration': player.currentTime(), 'iframe_id': this.config.iframe_id});
   } else if(event.data === "ping") {
     response = "OK!";
   }

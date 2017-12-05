@@ -176,7 +176,7 @@
         <h2 class="redacted single-line">Try <a href="./autostream_trump.html">Donald Trump</a></h2>
 
       	<script type='text/javascript'>
-      	  document.write("<iframe class='powr_embed' id='powriframe_1' src='./iframe.html?" + urlObj.getParamsString() + "' width='600px' height='400px' allowfullscreen></iframe>");
+      	  document.write("<iframe class='powr_embed' id='powriframe_1' src='./iframe.html?" + urlObj.getParamsString() + "&iframe_id=powriframe_1' width='600px' height='400px' allowfullscreen></iframe>");
       	</script>
 
         <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -256,7 +256,7 @@
           proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         </p>
 
-	<p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+	      <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
           tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
           quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
           consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -264,7 +264,7 @@
           proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         </p>
 
-	<p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+	      <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
           tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
           quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
           consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -272,7 +272,7 @@
           proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         </p>
 
-	<p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+	      <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
           tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
           quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
           consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -280,7 +280,7 @@
           proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         </p>
 
-	<p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+	      <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
           tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
           quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
           consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -288,7 +288,11 @@
           proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         </p>
 
-	<p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+        <script type='text/javascript'>
+      	  document.write("<iframe class='powr_embed' id='powriframe_2' src='./iframe.html?" + urlObj.getParamsString() + "&iframe_id=powriframe_2' width='600px' height='400px' allowfullscreen></iframe>");
+      	</script>
+
+	      <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
           tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
           quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
           consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -296,7 +300,7 @@
           proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         </p>
 
-	<p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+	      <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
           tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
           quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
           consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -312,9 +316,6 @@
         </p>
 
         <br />
-
-
-
         <br />
 
       </div>
@@ -491,8 +492,12 @@
   </div>
   <script type='text/javascript' src='./js/powriframefix.js'></script>
   <script type='text/javascript'>
-    var ivideo = new PowrApi({
+    var ivideo1 = new PowrApi({
         "id": 'powriframe_1'
+    });
+
+    var ivideo2 = new PowrApi({
+        "id": 'powriframe_2'
     });
   </script>
 </body>

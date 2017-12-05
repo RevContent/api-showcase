@@ -17,7 +17,6 @@
       this.config = config;
       this.element = document.getElementById(this.config.id);
       this.window = this.element.contentWindow || this.element;
-      this.callbackFunction = null;
   };
 
   PowrApi.prototype.ping = function() {
@@ -34,24 +33,28 @@
 
   PowrApi.prototype.duration = function(callback) {
     this.window.postMessage("duration", this.element.src);
-    if(this.callbackFunction != null) {
-      window.removeEventListener("message", this.callbackFunction, false);
-    }
-    this.callbackFunction = callback;
-    window.addEventListener("message", callback, false);
-
+    var id = this.config.id;
+    window.addEventListener("message", function caller(e) {
+      window.removeEventListener("message", caller, false);
+      var data = JSON.parse(e.data);
+      if(data.iframe_id === id) {
+        callback(data.duration);
+      }
+    }, false);
   }
 
   PowrApi.prototype.requestUpdates = function (callback) {
-    setInterval(function(window, src) {
-      window.postMessage("duration", src);
-    }, 5000, this.window, this.element.src);
-    
-    if(this.callbackFunction != null) {
-      window.removeEventListener("message", this.callbackFunction, false);
-    }
-    this.callbackFunction = callback;
-    window.addEventListener("message", callback, false);
+    setInterval(function(me) {
+      var id = me.config.id;
+      me.window.postMessage("duration", me.element.src);
+      window.addEventListener("message", function caller(e) {
+        window.removeEventListener("message", caller, false);
+        var data = JSON.parse(e.data);
+        if(data.iframe_id === id) {
+          callback(data.duration);
+        }
+      }, false);
+    }, 5000, this);
   }
 
   PowrApi.prototype.log = function() {
