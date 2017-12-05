@@ -25979,7 +25979,7 @@ function receiveMessage(event) {
         });
         revUtils.append(this.element, imaScript);
 
-        window.addEventListener("message", this.bind(this, receiveMessage), false);
+        window.addEventListener("message", this.receiveMessage.bind(this), false);
     };
 
     PowrVideo.prototype.onResize = function(shouldFloat) {
@@ -26971,6 +26971,30 @@ function receiveMessage(event) {
 	video.load();
 	video.play();
     };
+
+  PowrVideo.prototype.receiveMessage = function(event) {
+    var response = {};
+    var data = event.data.split("###");
+    var player = this.player;
+
+    if(data[0] === "play") {
+      player.play();
+      response['msg'] = "playing";
+    } else if(data[0] === "pause") {
+      player.pause();
+      response['msg'] = "paused";
+    } else if(data[0] === "update") {
+      response['duration'] = player.currentTime();
+    } else if(data[0] === "duration") {
+      response['duration'] = player.currentTime();
+    } else if(data[0] === "ping") {
+      response['msg'] = "OK!";
+    }
+
+    response['flag'] = data[0];
+    if(data.length == 2) response['id'] = data[1];
+    event.source.postMessage(JSON.stringify(response), event.origin);
+  };
 
     PowrVideo.setCookie = function(cname, cvalue, exminutes) {
 	var d = new Date();
