@@ -25911,6 +25911,9 @@ if (!String.prototype.endsWithPowr) {
 	} else if (this.config.adserver == "lkqd") {
 	    var ret = "//v.lkqd.net/ad?pid=456&sid=" + tag + "&output=vastvpaid&support=html5flash&execution=any&placement=&playinit=auto&volume=100&width=" + parseInt(this.getPlayerWidth()) + "&height=" + parseInt(this.getPlayerHeight()) + "&dnt=0&pageurl=" + url + "&contentid=" + video.id + "&contenttitle=" + encodeURI(video.title) + "&contentlength=" + video.duration + "&contenturl=" + encodeURI("http://www.powr.com/video/" + video.id) + "&rnd=" + new Date().getTime();
 	    return ret;
+	} else if (this.config.adserver == "ss") {
+	    var ret = "//vid.springserve.com/vast/182244?w=" + parseInt(this.getPlayerWidth()) + "&h=" + parseInt(this.getPlayerHeight()) + "&url=" + url + "&cb=" + new Date().getTime();
+	    return ret;
 	} else {
 	    tag = tag.replace("REFERRER_URL", url);
 	    tag = tag.replace("P_WIDTH", "" + parseInt(this.getPlayerWidth()));
