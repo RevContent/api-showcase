@@ -3,7 +3,7 @@
   <meta charset="utf-8">
   <title>Powr Player Demo</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script type='text/javascript' src='http://assets.powr.com/build/revpowrvideo.min.js'></script>
+  <script type='text/javascript' src="./js/revpowrvideo.pkgd.js"></script>
   <script type="text/javascript">
     //URL class
     var URL = function(url) {
@@ -81,14 +81,14 @@
 			"id":15207,
 			"user_id":673,
 			"powr_id":-1,
-			"duration":56,
+			"duration":240,
 			"title":"Lei Gardens",
 			"sd_url" :"http://media.powr.com/480p/c86f88c5-c001-4ff9-be4b-27d6e5d93abf.mp4",
 			"hd_url": "http://media.powr.com/480p/a4c75d3a-fb4b-4715-a51d-0462e2a3b5b5.mp4",
 			"thumbnail":"http://lorempixel.com/300/150"
 			});
 			}
-			alert('will call powr video');
+			// alert('will call powr video');
         new PowrVideo({
         "id": 'powr_video',
 			"dfp" : true,
@@ -102,10 +102,11 @@
 	"fluid" : true,
 	"muted" : muted,
          "adtype" : adtype,
-          "videos" : videos
+          "videos" : videos,
+          "widget_id" : -1
         });
         </script>
 
-  
+
 </body>
 </html>

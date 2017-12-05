@@ -35,35 +35,37 @@
     RevDialog.prototype.setActive = function(active) {
         this.active = active;
 
-        // hide the frames
-        this.aboutFrame.style.display = 'none';
-        if (this.interestFrame) {
-            this.interestFrame.style.display = 'none';
-        }
-
         switch (active) {
             case 'about':
+                if (this.interestFrame) {
+                    this.interestFrame.style.display = 'none';
+                }
                 // set height and class right away b/c is always first
                 revUtils.removeClass(this.element, 'rev-interest-dialog');
                 // wait for load before showing and centering
                 if (!this.aboutLoaded) {
+                    this.aboutFrame.style.opacity = 0;
+                    this.modalContentContainer.style.overflow = 'hidden';
                     this.loading.style.display = 'block';
                     this.centerDialog(this.aboutHeight);
                     // create about iframe
                     var that = this;
                     revUtils.addEventListener(this.aboutFrame, 'load', function() {
                         that.loading.style.display = 'none';
-                        that.aboutFrame.style.display = 'block';
+                        that.modalContentContainer.style.overflow = 'visible';
+                        that.aboutFrame.style.opacity = 1;
                         that.aboutLoaded = true;
                         revUtils.removeEventListener(that.aboutFrame, 'load', arguments.callee);
                         that.aboutFrame.contentWindow.postMessage({'msg': 'resize_me'}, '*');
                     });
                 } else {
+                    // this.aboutFrame.style.opacity = 1;
                     this.aboutFrame.style.display = 'block';
                     this.centerDialog();
                 }
                 break;
             case 'interest':
+                this.aboutFrame.style.display = 'none';
                 if (!this.interestLoaded) {
                     this.loading.style.display = 'block';
                     this.interestFrame = this.createFrame(this.interestSrc);
@@ -131,7 +133,7 @@
             document.body.appendChild(this.element);
 
             // cache the modal content container
-            this.modalContentContainer = this.element.querySelectorAll('.rd-modal-content')[0]
+            this.modalContentContainer = this.element.querySelector('.rd-modal-content');
 
             this.modalContentContainer.appendChild(this.loading);
 
