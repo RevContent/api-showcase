@@ -176,7 +176,7 @@
         <h2 class="redacted single-line">Try <a href="./autostream_trump.html">Donald Trump</a></h2>
 
       	<script type='text/javascript'>
-      	  document.write("<iframe class='powr_embed' id='powriframe_1' src='./iframe.html?" + urlObj.getParamsString() + "&iframe_id=powriframe_1' width='600px' height='400px' allowfullscreen></iframe>");
+      	  document.write("<iframe class='powr_embed' id='powriframe_1' src='./iframe.html?" + urlObj.getParamsString() + "' width='600px' height='400px' allowfullscreen></iframe>");
       	</script>
 
         <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -289,7 +289,7 @@
         </p>
 
         <script type='text/javascript'>
-      	  document.write("<iframe class='powr_embed' id='powriframe_2' src='./iframe.html?" + urlObj.getParamsString() + "&iframe_id=powriframe_2' width='600px' height='400px' allowfullscreen></iframe>");
+      	  document.write("<iframe class='powr_embed' id='powriframe_2' src='./iframe.html?" + urlObj.getParamsString() + "' width='600px' height='400px' allowfullscreen></iframe>");
       	</script>
 
 	      <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -493,11 +493,11 @@
   <script type='text/javascript' src='./js/powriframefix.js'></script>
   <script type='text/javascript'>
     var ivideo1 = new PowrApi({
-        "id": 'powriframe_1'
+        "iframe_id": 'powriframe_1'
     });
 
     var ivideo2 = new PowrApi({
-        "id": 'powriframe_2'
+        "iframe_id": 'powriframe_2'
     });
   </script>
 </body>

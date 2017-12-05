@@ -18,26 +18,26 @@ if (!String.prototype.endsWithPowr) {
 }
 
 function receiveMessage(event) {
-  var player = this.player;
-  var video = this.videos[this.currentContent];
   var response = {};
+  var data = event.data.split("###");
+  var player = this.player;
 
-  response['flag'] = event.data;
-  if(event.data === "play") {
+  if(data[0] === "play") {
     player.play();
     response['msg'] = "playing";
-  } else if(event.data === "pause") {
+  } else if(data[0] === "pause") {
     player.pause();
     response['msg'] = "paused";
-  } else if(event.data === "update") {
+  } else if(data[0] === "update") {
     response['duration'] = player.currentTime();
-  } else if(event.data === "duration") {
+  } else if(data[0] === "duration") {
     response['duration'] = player.currentTime();
-  } else if(event.data === "ping") {
+  } else if(data[0] === "ping") {
     response['msg'] = "OK!";
   }
 
-  response['iframe_id'] = this.config.iframe_id;
+  response['flag'] = data[0];
+  if(data.length == 2) response['id'] = data[1];
   event.source.postMessage(JSON.stringify(response), event.origin);
 }
 
@@ -73,7 +73,6 @@ function receiveMessage(event) {
      * custom_css : ""
      * rc_widget_id : ""
      * url : ""
-     * iframe_id: ""
      */
     var PowrVideo = function(config) {
         this.config = config;
@@ -278,9 +277,7 @@ function receiveMessage(event) {
         });
         revUtils.append(this.element, imaScript);
 
-        if(this.config.hasOwnProperty("iframe_id") && this.config.iframe_id != "") {
-          window.addEventListener("message", this.bind(this, receiveMessage), false);
-        }
+        window.addEventListener("message", this.bind(this, receiveMessage), false);
     };
 
     PowrVideo.prototype.onResize = function(shouldFloat) {
