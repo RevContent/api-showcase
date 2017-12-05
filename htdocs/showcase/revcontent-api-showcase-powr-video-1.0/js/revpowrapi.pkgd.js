@@ -743,8 +743,8 @@ return api;
   }
 
   PowrApi.prototype.duration = function(callback) {
-    this.window.postMessage("duration", this.element.src);
     var id = this.config.id;
+    this.window.postMessage("duration", this.element.src);
     window.addEventListener("message", function caller(e) {
       window.removeEventListener("message", caller, false);
       var data = JSON.parse(e.data);
