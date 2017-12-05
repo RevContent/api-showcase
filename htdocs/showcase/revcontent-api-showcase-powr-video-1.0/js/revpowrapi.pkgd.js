@@ -754,9 +754,7 @@ return api;
   }
 
   PowrApi.prototype.duration = function(callback) {
-    if(this.callbackFunctions.hasOwnProperty("duration")) {
-      this.callbackFunctions["duration"].push(callback);
-    } else {
+    if(!this.callbackFunctions.hasOwnProperty("duration")) {
       this.callbackFunctions["duration"] = Array();
     }
     this.callbackFunctions["duration"].push(callback);
