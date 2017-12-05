@@ -775,11 +775,8 @@ return api;
       if(data.hasOwnProperty("iframe_id") && data.iframe_id === this.config.id && data.hasOwnProperty("flag")) {
         if(data.flag === "update" && this.callbackFunctions.hasOwnProperty("update")) {
           this.callbackFunctions["update"](data);
-        } else if(data.flag === "duration" && this.callbackFunctions.hasOwnProperty("duration")) {
+        } else if(data.flag === "duration" && this.callbackFunctions.hasOwnProperty("duration") && this.callbackFunctions["duration"].length > 0) {
           this.callbackFunctions["duration"].shift()(data);
-          if(this.callbackFunctions["duration"].length == 0) {
-            delete this.callbackFunctions.duration;
-          }
         }
       }
   }
