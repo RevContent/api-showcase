@@ -25722,21 +25722,22 @@ if (!String.prototype.endsWithPowr) {
 function receiveMessage(event) {
   var player = this.player;
   var video = this.videos[this.currentContent];
-  var response = "";
+  var response = {};
 
   if(event.data === "play") {
     player.play();
-    response = "playing";
+    response['msg'] = "playing";
   } else if(event.data === "pause") {
     player.pause();
-    response = "paused";
+    response['msg'] = "paused";
   } else if(event.data === "duration") {
-    response = JSON.stringify({'duration': player.currentTime(), 'iframe_id': this.config.iframe_id});
+    response['duration'] = player.currentTime();
   } else if(event.data === "ping") {
-    response = "OK!";
+    response['msg'] = "OK!";
   }
 
-  event.source.postMessage(response, event.origin);
+  response['iframe_id'] = this.config.iframe_id;
+  event.source.postMessage(JSON.stringify(response), event.origin);
 }
 
 // universal module definition

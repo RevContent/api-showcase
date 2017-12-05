@@ -17,11 +17,22 @@
       this.config = config;
       this.element = document.getElementById(this.config.id);
       this.window = this.element.contentWindow || this.element;
+      this.callbackFunction = null;
+
+      this.init();
   };
+
+  PowrApi.prototype.init = function() {
+    window.addEventListener("message", this.processMessage.bind(this), false);
+  }
 
   PowrApi.prototype.ping = function() {
     this.window.postMessage("ping", this.element.src);
   }
+
+  PowrApi.prototype.log = function() {
+    if ((typeof console) != "undefined") console.log(arguments);
+  };
 
   PowrApi.prototype.play = function() {
     this.window.postMessage("play", this.element.src);
@@ -32,33 +43,24 @@
   }
 
   PowrApi.prototype.duration = function(callback) {
-    var id = this.config.id;
+    this.callbackFunction = callback;
     this.window.postMessage("duration", this.element.src);
-    window.addEventListener("message", function caller(e) {
-      window.removeEventListener("message", caller, false);
-      var data = JSON.parse(e.data);
-      if(data.iframe_id === id) {
-        callback(data.duration);
-      }
-    }, false);
   }
 
   PowrApi.prototype.requestUpdates = function (callback) {
     setInterval(function(me) {
-      var id = me.config.id;
+      me.callbackFunction = callback;
       me.window.postMessage("duration", me.element.src);
-      window.addEventListener("message", function caller(e) {
-        window.removeEventListener("message", caller, false);
-        var data = JSON.parse(e.data);
-        if(data.iframe_id === id) {
-          callback(data.duration);
-        }
-      }, false);
     }, 5000, this);
   }
 
-  PowrApi.prototype.log = function() {
-    if ((typeof console) != "undefined") console.log(arguments);
+  PowrApi.prototype.processMessage = function(e) {
+    if(this.callbackFunction != null) {
+      var data = JSON.parse(e.data);
+      if(data.iframe_id === this.config.id) {
+        this.callbackFunction(data);
+      }
+    }
   };
 
   return PowrApi;
