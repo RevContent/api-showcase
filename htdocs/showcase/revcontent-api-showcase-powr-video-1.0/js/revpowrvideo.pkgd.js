@@ -25724,12 +25724,15 @@ function receiveMessage(event) {
   var video = this.videos[this.currentContent];
   var response = {};
 
+  response['flag'] = event.data;
   if(event.data === "play") {
     player.play();
     response['msg'] = "playing";
   } else if(event.data === "pause") {
     player.pause();
     response['msg'] = "paused";
+  } else if(event.data === "update") {
+    response['duration'] = player.currentTime();
   } else if(event.data === "duration") {
     response['duration'] = player.currentTime();
   } else if(event.data === "ping") {
