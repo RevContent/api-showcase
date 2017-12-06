@@ -125,7 +125,7 @@ Author: michael@revcontent.com
             return;
         }
 
-        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-feed');
+        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-feed',  this.options.css);
 
         this.init();
     };
