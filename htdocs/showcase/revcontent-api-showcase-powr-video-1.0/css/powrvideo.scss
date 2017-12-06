@@ -138,7 +138,7 @@ a.rc-video-close {
     z-index : 100 !important;
 }
 
-.rc-float-video .vjs-ad-playing a.rc-video-close {
+.rc-float-video .vjs-ad-playing a.rc-video-close, body .rc-ad-showing a.rc-video-close {
     display : none !important;
 }
 
@@ -258,6 +258,35 @@ a.rc-video-close {
         border-radius: 30px !important;
         margin-top : -3px !important;
     }
+
+    body .powr_player .powr_rc_container {
+	padding-top : 4% !important;
+	padding-left : 10px !important;
+	padding-right : 10px !important;
+	padding-bottom : 10px !important;
+	z-index : 100000;
+	position : absolute;
+	width : 100% !important;
+	height : 100% !important;
+	overflow : hidden;
+	left : 0px;
+	top : 0px;
+	background-color : rgba(0, 0, 0, 0.9);
+    }
+    
+    body .rc-float-video.powr_player .powr_rc_container {
+	padding-top : 0px;
+    }
+
+    body .powr_rc_container .rc-photo {
+	height : 100px !important;
+	width : 90% !important;
+    }
+
+    body .powr_rc_container .rc-item .rc-headline {
+	font-size : 11px !important;
+    }
+
 }
 
 .video-js .vjs-control {
@@ -310,11 +339,12 @@ a.rc-video-close {
 }
 
 .powr_rc_container > label {
-    display : inline-block;
+    display : block;
+    text-align : right;
     margin-bottom : 5px;
-    font-weight : bold;
     font-size : 12px;
-    color : #EFEFEF;
+    font-weight : normal !important;
+    color : #999999;
 }
 
 
@@ -332,4 +362,8 @@ a.rc-video-close {
 
 body .powr_player.rc-float-video a.powr_skip {
     bottom : 5px;
+}
+
+body .powr_rc_container {
+    box-sizing : border-box;
 }

@@ -202,6 +202,8 @@
 	      <li><a href="javascript: urlObj.setParam('ad_tag', 'test/Matomy'); urlObj.loadUrl();">Matomy</a></li>
 	      <li><a href="javascript: urlObj.setParam('ad_tag', 'test/Aol'); urlObj.loadUrl();">Aol</a></li>
               <li><a href="javascript: urlObj.setParam('ad_tag', 'john-demo'); urlObj.loadUrl();">None</a></li>
+	      <li><a href="javascript: urlObj.setParam('ad_tag', 'lkqd'); urlObj.loadUrl();">LKQD</a></li>
+	      <li><a href="javascript: urlObj.setParam('ad_tag', 'ss'); urlObj.loadUrl();">Spring Serve</a></li>
             </ul>
           </li>
         </ul>
@@ -563,11 +565,13 @@
         "thumbnail":"http://lorempixel.com/300/150"
 	});
 	  }
-
+			      var adserver = "dfp";
+			      if (ad_tag == "lkqd") adserver = "lkqd";
+			      if (ad_tag == "ss") adserver = "ss";
         new PowrVideo({
-          "id": 'powr_video',
-          "dfp" : true,
-          "tag" : "/21623266709/" + ad_tag,
+			      "id": 'powr_video',
+			      "adserver" : adserver,
+			      "tag" : (ad_tag != "lkqd") ? ("/21623266709/" + ad_tag) : "563870",
         "autoplay" : autoplay,
 	"permanent_cross" : pclose,
 	"show_on_focus" : afocus,
@@ -581,7 +585,7 @@
 			      "adtype" : adtype,
 			      "wait_for_autoplay" : wait_for_autoplay,
 			      "videos" : videos,
-			      "widget_id" : 85181
+			      "widget_id" : -1
         });
         </script>
 

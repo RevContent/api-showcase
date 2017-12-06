@@ -15,15 +15,35 @@
     ],
     "build": [
       "./node_modules/ev-emitter/ev-emitter.js",
-      "./node_modules/video.js/dist/video.js",
+      "./showcase/revcontent-api-showcase-powr-video-1.0/js/video.js",
       "./node_modules/videojs-overlay/dist/videojs-overlay.js",
       "./showcase/revcontent-api-showcase-powr-video-1.0/js/videojs.logobrand.js",
-      "./node_modules/videojs-contrib-ads/dist/videojs.ads.js",
-      "./node_modules/videojs-ima/src/videojs.ima.js",
+      "./showcase/revcontent-api-showcase-powr-video-1.0/js/videojs.ads.js",
+      "./showcase/revcontent-api-showcase-powr-video-1.0/js/videojs.ima.js",
       "./showcase/js/requestAnimationFrame.js",
       "./showcase/js/revutils.js",
       "./showcase/js/revapi.js",
       "./build/files/powrvideo/revpowrvideo.embed.js"
+    ],
+    "watch": [
+      "./showcase/js/*",
+      "./showcase/css/*",
+      "./showcase/revcontent-api-showcase-powr-video-1.0/js/*",
+      "./showcase/revcontent-api-showcase-powr-video-1.0/css/*"
+    ]
+  },
+  "powrapi" : {
+    "name": "powr-api",
+    "description": "Powr Api",
+    "homepage": "http://revcontent.com",
+    "version": "0.1.0",
+    "pkg": "./showcase/revcontent-api-showcase-powr-video-1.0/package.json",
+    "js": "./showcase/revcontent-api-showcase-powr-video-1.0/js/powrapi.js",
+    "css": [],
+    "build": [
+      "./showcase/js/revutils.js",
+      "./showcase/js/revapi.js",
+      "./build/files/powrapi/revpowrapi.embed.js"
     ],
     "watch": [
       "./showcase/js/*",
