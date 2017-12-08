@@ -175,6 +175,7 @@
       "./showcase/revcontent-api-showcase-scroller-1.0/css/revscroller-standard.scss"
     ],
     "build": [
+      "./node_modules/es6-promise/dist/es6-promise.js",
       "./showcase/js/mousewheel.js",
       "./showcase/js/revapi.js",
       "./showcase/js/revutils.js",
