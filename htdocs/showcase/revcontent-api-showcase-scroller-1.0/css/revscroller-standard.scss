@@ -1,0 +1,30 @@
+.rev-scroller {
+    position: relative;
+    overflow-y: hidden;
+    //TODO
+    // box-shadow: inset 0 -10px 10px -10px #000000;
+
+    .rev-scroller-button {
+        position: absolute;
+        height: 40px;
+        width: 50px;
+        background: #fff;
+        background: linear-gradient(to bottom,#ffffff 0,rgba(246,246,246,.92) 53%,rgba(255,255,255,.84) 100%);
+        bottom: 0;
+        border-width: 1px 1px 0 1px;
+        border: 1px solid rgba(121, 121, 121, 0.37);
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        left: 50%;
+        margin-left: -25px;
+        z-index: 10000;
+        border-width: 1px 1px 0;
+        cursor: pointer;
+        svg {
+            height: 40px;
+            width: 40px;
+            margin-left: 5px;
+            fill: #696969;
+        }
+    }
+}

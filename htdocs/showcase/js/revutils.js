@@ -480,9 +480,14 @@ utils.checkVisible = function(element, callback, percentVisible, buffer) {
     });
 };
 
-utils.checkVisibleItem = function(item, callback, percentVisible, buffer) {
+utils.checkVisibleItem = function(item, callback, percentVisible, buffer, container) {
     var that = this;
     requestAnimationFrame(function() {
+
+        if (container && container.offsetHeight <= item.element.offsetTop) {
+            callback.call(that, false, item)
+            return;
+        }
         // what percentage of the element should be visible
         var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
         // fire if within buffer
