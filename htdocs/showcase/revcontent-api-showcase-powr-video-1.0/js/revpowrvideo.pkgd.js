@@ -26957,30 +26957,32 @@ if (!String.prototype.endsWithPowr) {
     };
 
   PowrVideo.prototype.receiveMessage = function(event) {
-    var response = {};
-    var data = event.data.split("###");
-    var player = this.player;
+    if(event.data.indexOf("###") !== -1) {
+      var response = {};
+      var data = event.data.split("###");
+      var player = this.player;
 
-    if(data[0] === "play") {
-      player.play();
-      response['msg'] = "playing";
-    } else if(data[0] === "pause") {
-      player.pause();
-      response['msg'] = "paused";
-    } else if(data[0] === "update") {
-      response['duration'] = player.currentTime();
-    } else if(data[0] === "duration") {
-      response['duration'] = player.currentTime();
-    } else if(data[0] === "ping") {
-      response['msg'] = "OK!";
-    } else if(data[0] === "listen") {
-      this.adlistener = {"flag": data[0], "id": data[1], "source": event.source, "origin": event.origin};
-      response['msg'] = "OK!";
+      if(data[0] === "play") {
+        player.play();
+        response['msg'] = "playing";
+      } else if(data[0] === "pause") {
+        player.pause();
+        response['msg'] = "paused";
+      } else if(data[0] === "update") {
+        response['duration'] = player.currentTime();
+      } else if(data[0] === "duration") {
+        response['duration'] = player.currentTime();
+      } else if(data[0] === "ping") {
+        response['msg'] = "OK!";
+      } else if(data[0] === "listen") {
+        this.adlistener = {"flag": data[0], "id": data[1], "source": event.source, "origin": event.origin};
+        response['msg'] = "OK!";
+      }
+
+      response['flag'] = data[0];
+      response['id'] = data[1];
+      event.source.postMessage(JSON.stringify(response), event.origin);
     }
-
-    response['flag'] = data[0];
-    if(data.length == 2) response['id'] = data[1];
-    event.source.postMessage(JSON.stringify(response), event.origin);
   };
 
     PowrVideo.setCookie = function(cname, cvalue, exminutes) {

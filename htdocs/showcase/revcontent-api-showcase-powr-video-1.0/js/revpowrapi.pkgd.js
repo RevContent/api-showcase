@@ -774,6 +774,7 @@ return api;
   }
 
   PowrApi.prototype.processMessage = function(e) {
+    try {
       var data = JSON.parse(e.data);
       if(data.hasOwnProperty("id") && data.id === this.config.id && data.hasOwnProperty("flag")) {
         if(data.flag === "update" && this.callbackFunctions.hasOwnProperty("update")) {
@@ -786,6 +787,9 @@ return api;
           this.log(data.msg);
         }
       }
+    } catch (e) {
+      return;
+    }
   }
 
   return PowrApi;
