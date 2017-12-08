@@ -26600,6 +26600,11 @@ if (!String.prototype.endsWithPowr) {
 	}
 	if (event.type == google.ima.AdEvent.Type.STARTED) {
 	    this.adsPlayed++;
+      if(this.adlistener != null) {
+        var response = {"id": this.adlistener.id, "flag": this.adlistener.flag, "msg": "ad_shown"};
+        this.adlistener.source.postMessage(JSON.stringify(response), this.adlistener.origin);
+        this.adlistener = null;
+      }
 	}
 	if (event.type == google.ima.AdEvent.Type.ALL_ADS_COMPLETED) {
 	    if (this.adsPlayed == 0) {
@@ -26967,6 +26972,9 @@ if (!String.prototype.endsWithPowr) {
     } else if(data[0] === "duration") {
       response['duration'] = player.currentTime();
     } else if(data[0] === "ping") {
+      response['msg'] = "OK!";
+    } else if(data[0] === "listen") {
+      this.adlistener = {"flag": data[0], "id": data[1], "source": event.source, "origin": event.origin};
       response['msg'] = "OK!";
     }
 

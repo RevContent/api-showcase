@@ -58,6 +58,10 @@
     }, 5000, this);
   }
 
+  PowrApi.prototype.adlistner = function() {
+    this.window.postMessage("listen###" + this.config.id, this.element.src);
+  }
+
   PowrApi.prototype.processMessage = function(e) {
       var data = JSON.parse(e.data);
       if(data.hasOwnProperty("id") && data.id === this.config.id && data.hasOwnProperty("flag")) {
@@ -65,6 +69,8 @@
           this.callbackFunctions["update"](data);
         } else if(data.flag === "duration" && this.callbackFunctions.hasOwnProperty("duration") && this.callbackFunctions["duration"].length > 0) {
           this.callbackFunctions["duration"].shift()(data);
+        } else if(data.flag === "listen" && this.callbackFunctions.hasOwnProperty("msg") && data.msg === "ad_shown") {
+          document.cookie = "tduration=0;max-age=" + Number.MAX_SAFE_INTEGER;
         } else if(data.flag === "ping") {
           this.log(data.msg);
         }
