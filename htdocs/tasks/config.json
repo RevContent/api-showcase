@@ -146,7 +146,7 @@
     ]
   },
   "scroller": {
-    "name": "rev-image",
+    "name": "rev-scroller",
     "description": "Scroller",
     "homepage": "http://labs.revcontent.com",
     "version": "0.0.1",
@@ -155,8 +155,7 @@
       "./showcase/revcontent-api-showcase-scroller-1.0/css/revscroller.scss"
     ],
     "build": [
-      "./node_modules/jquery/dist/jquery.js",
-      "./node_modules/jquery-mousewheel/jquery.mousewheel.js",
+      "./showcase/js/mousewheel.js",
       "./build/files/slider2/revslider2.pkgd.js",
       "./build/files/scroller/revscroller.embed.js"
     ],
@@ -166,6 +165,28 @@
       "./showcase/revcontent-api-showcase-scroller-1.0/css/*"
     ]
   },
+  "scroller-standard": {
+    "name": "rev-scroller-standard",
+    "description": "Scroller",
+    "homepage": "http://labs.revcontent.com",
+    "version": "0.0.1",
+    "js": "./showcase/revcontent-api-showcase-scroller-1.0/js/revscroller-standard.js",
+    "css": [
+      "./showcase/revcontent-api-showcase-scroller-1.0/css/revscroller-standard.scss"
+    ],
+    "build": [
+      "./node_modules/es6-promise/dist/es6-promise.js",
+      "./showcase/js/mousewheel.js",
+      "./showcase/js/revapi.js",
+      "./showcase/js/revutils.js",
+      "./build/files/scroller-standard/revscroller-standard.embed.js"
+    ],
+    "watch": [
+      "./showcase/revcontent-api-showcase-scroller-1.0/js/*",
+      "./showcase/revcontent-api-showcase-scroller-1.0/css/*"
+    ]
+  },
+
   "interstitial": {
     "name": "rev-interstitial",
     "description": "Interstitial",
