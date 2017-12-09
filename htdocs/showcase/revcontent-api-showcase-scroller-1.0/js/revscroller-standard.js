@@ -63,19 +63,21 @@ Author: michael@revcontent.com
     // create the elements
     RevScroller.prototype.createElements = function() {
 
-        this.element = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);        
+        this.element = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
 
-        this.containerElement = this.element.parentNode;
+        this.items = this.element.querySelectorAll('.rc-item');
 
-        this.elements = this.element.querySelectorAll('.rc-item');
+        this.containerElement = this.element.querySelector('#rc-row-container');
+
+        this.innerElement = this.containerElement.querySelector('.rc-row');
     };
 
     RevScroller.prototype.setHeight = function () {
         this.heights = [];
 
         var height = 0;
-        for (var i = 0; i < this.elements.length; i++) {
-            var element = this.elements[i];
+        for (var i = 0; i < this.items.length; i++) {
+            var element = this.items[i];
             height = Math.max(height, element.offsetHeight);
             if (((i + 1) % this.options.cols) == 0) {
                 this.heights.push(height);
@@ -147,8 +149,8 @@ Author: michael@revcontent.com
                     that.transform = (that.scrollSpace * -1);
                 }
 
-                revUtils.transitionDurationCss(that.element, '0ms');
-                revUtils.transformCss(that.element, 'translate3d(0, ' + that.transform + 'px, 0)');
+                revUtils.transitionDurationCss(that.innerElement, '0ms');
+                revUtils.transformCss(that.innerElement, 'translate3d(0, ' + that.transform + 'px, 0)');
 
                 if (that.transform !== 0 && !holdIt) {
                     event.preventDefault();
@@ -189,8 +191,8 @@ Author: michael@revcontent.com
                     bottom = true;
                 }
             }
-            revUtils.transitionDurationCss(that.element, '1000ms');
-            revUtils.transformCss(that.element, 'translate3d(0, ' + that.transform + 'px, 0)');
+            revUtils.transitionDurationCss(that.innerElement, '1000ms');
+            revUtils.transformCss(that.innerElement, 'translate3d(0, ' + that.transform + 'px, 0)');
 
             if (that.viewableItems.length) {
                 that.checkVisible(false);
@@ -201,10 +203,10 @@ Author: michael@revcontent.com
     RevScroller.prototype.initViewability = function () {
         this.viewableItems = [];
 
-        for (var i = 0; i < this.elements.length; i++) {
+        for (var i = 0; i < this.items.length; i++) {
             this.viewableItems.push({ 
                 index: i, 
-                element: this.elements[i] 
+                element: this.items[i] 
             });
         }
 
