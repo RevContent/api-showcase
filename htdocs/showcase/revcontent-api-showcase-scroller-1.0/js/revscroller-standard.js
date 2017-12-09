@@ -279,7 +279,7 @@ Author: michael@revcontent.com
             }
         }
 
-        var params = 'view=' + this.view;
+        var params = 'view=' + encodeURIComponent(this.view);
 
         for (var i = 0; i < viewed.length; i++) {
             params += '&' + encodeURIComponent('p[]') + '=' + viewed[i].index;
