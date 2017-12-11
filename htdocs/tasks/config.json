@@ -176,12 +176,13 @@
     ],
     "build": [
       "./node_modules/es6-promise/dist/es6-promise.js",
-      "./showcase/js/mousewheel.js",
       "./showcase/js/revapi.js",
       "./showcase/js/revutils.js",
       "./build/files/scroller-standard/revscroller-standard.embed.js"
     ],
     "watch": [
+      "./showcase/js/*",
+      "./showcase/css/*",
       "./showcase/revcontent-api-showcase-scroller-1.0/js/*",
       "./showcase/revcontent-api-showcase-scroller-1.0/css/*"
     ]

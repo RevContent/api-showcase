@@ -22,7 +22,9 @@ Author: michael@revcontent.com
             developer: false,
             viewable_percentage: 50,
             visible_rows: 3,
-            query_params: false
+            half_row: false,
+            query_params: false,
+            jq: false
         };
 
         // merge options
@@ -47,8 +49,10 @@ Author: michael@revcontent.com
         this.initViewability();
 
         // can trigger views
-        this.mouseWheel();
+        this.scroll();
         this.button();
+
+        this.resize();
 
         // just in case
         var fallbacks = [500, 1000, 2000, 5000];
@@ -90,7 +94,7 @@ Author: michael@revcontent.com
 
         for (var i = 0; i < this.heights.length; i++) {
             if (i < this.options.visible_rows) {
-                if (i === (this.options.visible_rows - 1)) {
+                if (this.options.half_row && i === (this.options.visible_rows - 1)) {
                     var half = (this.heights[i] / 2)
                     height += half;
                     this.scrollSpace += half;
@@ -106,64 +110,45 @@ Author: michael@revcontent.com
             revUtils.addClass(this.containerElement, 'rev-scroller');
             this.containerElement.style.height = height + 'px';
         }
+
+        this.scrollBarWidth = this.containerElement.offsetWidth - this.innerElement.offsetWidth;
+
+        if (this.scrollBarWidth) {
+            this.containerElement.parentNode.style.overflow = 'hidden';
+            this.containerElement.style.marginRight = (this.scrollBarWidth * -1) + 'px';
+        }
     };
 
-    RevScroller.prototype.mouseWheel = function () {
+    RevScroller.prototype.scroll = function() {
         var that = this;
-        var direction;
 
-        var hovering = false;
+        that.containerVisibleListener = function (e) {
+            if (that.buttonPressed) {
+                return;
+            }
 
-        revUtils.addEventListener(this.containerElement, 'mouseenter', function () {
-            hovering = true;
-        });
-
-        revUtils.addEventListener(this.containerElement, 'mouseleave', function () {
-            hovering = false;
-        });
-
-        // TODO - shoudl this be a scroll box?
-        window.addWheelListener(this.containerElement, function (event) {
-            if (hovering) {
-
-                if (event.deltaY > 0) {
-                    direction = 'down';
-                    that.transform -= event.deltaY;
-                } else {
-                    direction = 'up';
-                    that.transform -= event.deltaY;
-                }
-
-                if (that.transform > 0) {
-                    that.transform = 0;
-                }
-
-                if (that.viewableItems.length) {
-                    that.checkVisible(false);
-                }
-
-                var holdIt = false;
-
-                if (Math.abs(that.transform) > that.scrollSpace) {
-                    holdIt = true;
-                    that.transform = (that.scrollSpace * -1);
-                }
-
-                revUtils.transitionDurationCss(that.innerElement, '0ms');
-                revUtils.transformCss(that.innerElement, 'translate3d(0, ' + that.transform + 'px, 0)');
-
-                if (that.transform !== 0 && !holdIt) {
-                    event.preventDefault();
+            var height = 0;
+            for (var i = 0; i < that.heights.length; i++) {
+                height += that.heights[i];
+                if (that.containerElement.scrollTop <= height) {
+                    that.currentRow = i;
+                    break;
                 }
             }
-        });
+
+            if (that.viewableItems.length) {
+                that.checkVisible();
+            }
+        };
+        
+        revUtils.addEventListener(this.containerElement, 'scroll', that.containerVisibleListener);
     };
 
     RevScroller.prototype.button = function () {
         this.button = document.createElement('div');
         this.button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36"><path d="M24.88 12.88L18 19.76l-6.88-6.88L9 15l9 9 9-9z"/><path d="M0 0h36v36H0z" fill="none"/></svg>';
         revUtils.addClass(this.button, 'rev-scroller-button');
-        revUtils.append(this.containerElement, this.button);
+        revUtils.append(this.containerElement.parentNode, this.button);
 
         var bottom = false;
         var that = this;
@@ -183,22 +168,37 @@ Author: michael@revcontent.com
                     that.transform += that.heights[i];
                 }
 
-                that.transform = (that.transform * -1);
-
-                if (Math.abs(that.transform) > that.scrollSpace) {
-                    that.transform = (that.scrollSpace * -1);
+                if (that.transform >= that.scrollSpace) {
+                    that.transform = (that.scrollSpace);
                     that.button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36"><path d="M18 12l-9 9 2.12 2.12L18 16.24l6.88 6.88L27 21z" /></svg>';
                     bottom = true;
                 }
             }
-            revUtils.transitionDurationCss(that.innerElement, '1000ms');
-            revUtils.transformCss(that.innerElement, 'translate3d(0, ' + that.transform + 'px, 0)');
+
+            that.buttonPressed = true;
+            
+            that.containerElement.scrollTop = that.transform;
 
             if (that.viewableItems.length) {
-                that.checkVisible(false);
+                that.checkVisible();
             }
+
+            setTimeout(function() {
+                that.buttonPressed = false;
+            });
         });
     };
+
+    RevScroller.prototype.resize = function() {
+        if (!this.options.jq) {
+            return; // TODO: if no jquery passed
+        } else {
+            var that = this;
+            this.options.jq(window).on('resize_' + this.options.id, function () {
+                that.setHeight();
+            });
+        }
+    }
 
     RevScroller.prototype.initViewability = function () {
         this.viewableItems = [];
@@ -218,7 +218,7 @@ Author: michael@revcontent.com
                 that.registerView(that.viewed);
             }
 
-            that.visibleListener = that.checkVisible.bind(that, true);
+            that.visibleListener = that.checkVisible.bind(that);
             revUtils.addEventListener(window, 'scroll', that.visibleListener);
         }, function (e) {
             console.log(e, 'someething went wrong');
@@ -250,11 +250,7 @@ Author: michael@revcontent.com
         });
     };
 
-    RevScroller.prototype.checkVisible = function (container) {
-        if (!this.viewableItems.length) {
-            revUtils.removeEventListener(window, 'scroll', this.visibleListener);
-        }
-
+    RevScroller.prototype.checkVisible = function () {
         var self = this;
         for (var i = 0; i < this.viewableItems.length; i++) {
             revUtils.checkVisibleItem(this.viewableItems[i], function (viewed, item) {
@@ -267,9 +263,14 @@ Author: michael@revcontent.com
                             revUtils.removeEventListener(window, 'scroll', self.visibleListener);
                         }
                         self.registerView([item]);
+
+                        if (!self.viewableItems.length) {
+                            revUtils.removeEventListener(window, 'scroll', self.visibleListener);
+                            revUtils.removeEventListener(self.containerElement, 'scroll', self.containerVisibleListener);
+                        }
                     }
                 }
-            }, self.options.viewable_percentage, false, (container ? this.containerElement : false));
+            }, self.options.viewable_percentage, false, this.containerElement);
         }
     };
 
