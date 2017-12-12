@@ -480,9 +480,14 @@ utils.checkVisible = function(element, callback, percentVisible, buffer) {
     });
 };
 
-utils.checkVisibleItem = function(item, callback, percentVisible, buffer) {
+utils.checkVisibleItem = function(item, callback, percentVisible, buffer, container) {
     var that = this;
     requestAnimationFrame(function() {
+
+        if (container && ((container.offsetHeight) <= (item.element.offsetTop - container.scrollTop))) {
+            callback.call(that, false, item)
+            return;
+        }
         // what percentage of the element should be visible
         var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
         // fire if within buffer
@@ -494,11 +499,13 @@ utils.checkVisibleItem = function(item, callback, percentVisible, buffer) {
         var elementBottom = item.element.getBoundingClientRect().bottom;
         var elementVisibleHeight = item.element.offsetHeight * visibleHeightMultiplier;
 
-        if ((scroll + windowHeight >= (elementTop + scroll + elementVisibleHeight - bufferPixels)) &&
+        var containerBottom = container ? (scroll + windowHeight) - (container.getBoundingClientRect().top + scroll + container.offsetHeight) : 0;
+
+        if ((scroll + windowHeight >= (elementTop + scroll + elementVisibleHeight - bufferPixels + (containerBottom > 0 ? containerBottom : 0) )) &&
             elementBottom > elementVisibleHeight) {
             callback.call(that, true, item);
         } else {
-            callback.call(that, false, item)
+            callback.call(that, false, item);
         }
     });
 };
