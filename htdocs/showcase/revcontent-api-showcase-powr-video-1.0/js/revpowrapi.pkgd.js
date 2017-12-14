@@ -774,7 +774,7 @@ return api;
   PowrApi.prototype.requestUpdates = function (callback) {
     setInterval(function(me) {
       me.callbackFunctions["update"] = callback;
-      me.window.postMessage("update" + this.seperator + me.config.id, me.element.src);
+      me.window.postMessage("update" + me.seperator + me.config.id, me.element.src);
     }, 5000, this);
   }
 
