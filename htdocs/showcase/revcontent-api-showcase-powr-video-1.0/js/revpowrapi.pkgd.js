@@ -737,6 +737,8 @@ return api;
       this.window = this.element.contentWindow || this.element;
       this.config.id = this.config.iframe_id + Date.now();
       this.callbackFunctions = {};
+      this.adListeners = Array();
+      this.seperator = "###";
 
       this.init();
   };
@@ -746,7 +748,7 @@ return api;
   }
 
   PowrApi.prototype.ping = function() {
-    this.window.postMessage("ping###" + this.config.id, this.element.src);
+    this.window.postMessage("ping" + this.seperator + this.config.id, this.element.src);
   }
 
   PowrApi.prototype.log = function() {
@@ -754,11 +756,11 @@ return api;
   };
 
   PowrApi.prototype.play = function() {
-    this.window.postMessage("play###" + this.config.id, this.element.src);
+    this.window.postMessage("play" + this.seperator + this.config.id, this.element.src);
   }
 
   PowrApi.prototype.pause = function() {
-    this.window.postMessage("pause###" + this.config.id, this.element.src);
+    this.window.postMessage("pause" + this.seperator + this.config.id, this.element.src);
   }
 
   PowrApi.prototype.duration = function(callback) {
@@ -766,18 +768,20 @@ return api;
       this.callbackFunctions["duration"] = Array();
     }
     this.callbackFunctions["duration"].push(callback);
-    this.window.postMessage("duration###" + this.config.id, this.element.src);
+    this.window.postMessage("duration" + this.seperator + this.config.id, this.element.src);
   }
 
   PowrApi.prototype.requestUpdates = function (callback) {
     setInterval(function(me) {
       me.callbackFunctions["update"] = callback;
-      me.window.postMessage("update###" + me.config.id, me.element.src);
+      me.window.postMessage("update" + this.seperator + me.config.id, me.element.src);
     }, 5000, this);
   }
 
-  PowrApi.prototype.adlistner = function() {
-    this.window.postMessage("listen###" + this.config.id, this.element.src);
+  PowrApi.prototype.adListener = function() {
+    var listenerId = "listener_" + Date.now();
+    this.adListeners.push(listenerId)
+    this.window.postMessage("listen" + this.seperator + this.config.id + this.seperator + listenerId, this.element.src);
   }
 
   PowrApi.prototype.processMessage = function(e) {
@@ -788,8 +792,11 @@ return api;
           this.callbackFunctions["update"](data);
         } else if(data.flag === "duration" && this.callbackFunctions.hasOwnProperty("duration") && this.callbackFunctions["duration"].length > 0) {
           this.callbackFunctions["duration"].shift()(data);
-        } else if(data.flag === "listen" && data.hasOwnProperty("msg") && data.msg === "ad_shown") {
-          document.cookie = "tduration=" + total_duration + ";path=/;expires=" + Number.MAX_SAFE_INTEGER;
+        } else if(data.flag === "listen" && this.adListeners.length > 0 && data.hasOwnProperty("listenerId") && data.hasOwnProperty("msg") && data.msg === "ad_shown") {
+          var index = this.adListeners.indexOf(data.listenerId);
+          if(index != -1) {
+            document.cookie = "tduration=0;path=/;expires=" + Number.MAX_SAFE_INTEGER;
+          }
         } else if(data.flag === "ping") {
           this.log(data.msg);
         }

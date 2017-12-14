@@ -257,6 +257,7 @@ if (!String.prototype.endsWithPowr) {
         revUtils.append(this.element, imaScript);
 
         window.addEventListener("message", this.receiveMessage.bind(this), false);
+        this.adListeners = Array();
     };
 
     PowrVideo.prototype.onResize = function(shouldFloat) {
@@ -898,10 +899,11 @@ if (!String.prototype.endsWithPowr) {
 	}
 	if (event.type == google.ima.AdEvent.Type.STARTED) {
 	    this.adsPlayed++;
-      if(this.adlistener != null) {
-        var response = {"id": this.adlistener.id, "flag": this.adlistener.flag, "msg": "ad_shown"};
-        this.adlistener.source.postMessage(JSON.stringify(response), this.adlistener.origin);
-        this.adlistener = null;
+      if(this.adListeners.length > 0) {
+        this.adListeners.forEach(function(listener) {
+          var response = {"id": listener.id, "listenerId": listener.listenerId, "flag": listener.flag, "msg": "ad_shown"};
+          listener.source.postMessage(JSON.stringify(response), listener.origin);
+        });
       }
 	}
 	if (event.type == google.ima.AdEvent.Type.ALL_ADS_COMPLETED) {
@@ -1255,9 +1257,10 @@ if (!String.prototype.endsWithPowr) {
     };
 
   PowrVideo.prototype.receiveMessage = function(event) {
-    if(event != null && event.data != null && event.data.indexOf("###") !== -1) {
+    var seperator = "###";
+    if(event != null && event.data != null && event.data.indexOf(seperator) !== -1) {
       var response = {};
-      var data = event.data.split("###");
+      var data = event.data.split(seperator);
       var player = this.player;
 
       if(data[0] === "play") {
@@ -1272,8 +1275,8 @@ if (!String.prototype.endsWithPowr) {
         response['duration'] = player.currentTime();
       } else if(data[0] === "ping") {
         response['msg'] = "OK!";
-      } else if(data[0] === "listen") {
-        this.adlistener = {"flag": data[0], "id": data[1], "source": event.source, "origin": event.origin};
+      } else if(data[0] === "listen" && data.length == 3) {
+        this.adListeners.push({"flag": data[0], "id": data[1], "listenerId": data[2], "source": event.source, "origin": event.origin});
         response['msg'] = "OK!";
       }
 
