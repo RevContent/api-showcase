@@ -1255,7 +1255,7 @@ if (!String.prototype.endsWithPowr) {
     };
 
   PowrVideo.prototype.receiveMessage = function(event) {
-    if(event.data.indexOf("###") !== -1) {
+    if(event != null && event.data != null && event.data.indexOf("###") !== -1) {
       var response = {};
       var data = event.data.split("###");
       var player = this.player;
