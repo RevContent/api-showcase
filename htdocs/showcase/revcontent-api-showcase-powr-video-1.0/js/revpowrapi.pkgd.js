@@ -788,8 +788,8 @@ return api;
           this.callbackFunctions["update"](data);
         } else if(data.flag === "duration" && this.callbackFunctions.hasOwnProperty("duration") && this.callbackFunctions["duration"].length > 0) {
           this.callbackFunctions["duration"].shift()(data);
-        } else if(data.flag === "listen" && this.callbackFunctions.hasOwnProperty("msg") && data.msg === "ad_shown") {
-          document.cookie = "tduration=0;max-age=" + Number.MAX_SAFE_INTEGER;
+        } else if(data.flag === "listen" && data.hasOwnProperty("msg") && data.msg === "ad_shown") {
+          document.cookie = "tduration=" + total_duration + ";path=/;expires=" + Number.MAX_SAFE_INTEGER;
         } else if(data.flag === "ping") {
           this.log(data.msg);
         }
