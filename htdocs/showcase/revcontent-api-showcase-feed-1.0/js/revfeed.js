@@ -106,16 +106,26 @@ Author: michael@revcontent.com
 
             var start = (this.options.initial_internal + this.options.initial_sponsored + 1);
 
-            for (var i = 1; i <= this.options.initial_internal; i++) {
-                this.options.internal_selector += '.rev-content:nth-child('+ i +'),';
+            if (this.options.initial_sponsored) {
+                for (var i = 1; i <= this.options.initial_internal; i++) {
+                    this.options.internal_selector += '.rev-content:nth-child('+ i +'),';
+                }
             }
 
-            for (var i = 1; i <= this.options.internal; i++) {
-                this.options.internal_selector += '.rev-content:nth-child('+ (this.options.internal + 1) +'n + '+ start +'),';
-                start++;
+            if (this.options.sponsored) {
+                for (var i = 1; i <= this.options.internal; i++) {
+                    this.options.internal_selector += '.rev-content:nth-child('+ (this.options.internal + 1) +'n + '+ start +'),';
+                    start++;
+                }
+            } else if (this.options.initial_sponsored) {
+                this.options.internal_selector += '.rev-content:nth-child(n+'+ start +'),';
             }
 
             this.options.internal_selector = this.options.internal_selector.slice(0, -1);
+
+            if (this.options.internal_selector === '') { // if we don't have anything it is all internal
+                this.options.internal_selector = '.rev-content';
+            }
         }
 
         // store options
