@@ -25471,9 +25471,14 @@ utils.checkVisible = function(element, callback, percentVisible, buffer) {
     });
 };
 
-utils.checkVisibleItem = function(item, callback, percentVisible, buffer) {
+utils.checkVisibleItem = function(item, callback, percentVisible, buffer, container) {
     var that = this;
     requestAnimationFrame(function() {
+
+        if (container && ((container.offsetHeight) <= (item.element.offsetTop - container.scrollTop))) {
+            callback.call(that, false, item)
+            return;
+        }
         // what percentage of the element should be visible
         var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
         // fire if within buffer
@@ -25485,11 +25490,13 @@ utils.checkVisibleItem = function(item, callback, percentVisible, buffer) {
         var elementBottom = item.element.getBoundingClientRect().bottom;
         var elementVisibleHeight = item.element.offsetHeight * visibleHeightMultiplier;
 
-        if ((scroll + windowHeight >= (elementTop + scroll + elementVisibleHeight - bufferPixels)) &&
+        var containerBottom = container ? (scroll + windowHeight) - (container.getBoundingClientRect().top + scroll + container.offsetHeight) : 0;
+
+        if ((scroll + windowHeight >= (elementTop + scroll + elementVisibleHeight - bufferPixels + (containerBottom > 0 ? containerBottom : 0) )) &&
             elementBottom > elementVisibleHeight) {
             callback.call(that, true, item);
         } else {
-            callback.call(that, false, item)
+            callback.call(that, false, item);
         }
     });
 };
@@ -25959,6 +25966,7 @@ if (!String.prototype.endsWithPowr) {
         revUtils.append(this.element, imaScript);
 
         window.addEventListener("message", this.receiveMessage.bind(this), false);
+        this.adListeners = Array();
     };
 
     PowrVideo.prototype.onResize = function(shouldFloat) {
@@ -26600,6 +26608,12 @@ if (!String.prototype.endsWithPowr) {
 	}
 	if (event.type == google.ima.AdEvent.Type.STARTED) {
 	    this.adsPlayed++;
+      if(this.adListeners.length > 0) {
+        this.adListeners.forEach(function(listener) {
+          var response = {"id": listener.id, "listenerId": listener.listenerId, "flag": listener.flag, "msg": "ad_shown"};
+          listener.source.postMessage(JSON.stringify(response), listener.origin);
+        });
+      }
 	}
 	if (event.type == google.ima.AdEvent.Type.ALL_ADS_COMPLETED) {
 	    if (this.adsPlayed == 0) {
@@ -26952,9 +26966,10 @@ if (!String.prototype.endsWithPowr) {
     };
 
   PowrVideo.prototype.receiveMessage = function(event) {
-    if(event != null && event.hasOwnProperty("data") && event.data.indexOf("###") !== -1) {
+    var seperator = "###";
+    if(event != null && event.data != null && event.data.indexOf(seperator) !== -1) {
       var response = {};
-      var data = event.data.split("###");
+      var data = event.data.split(seperator);
       var player = this.player;
 
       if(data[0] === "play") {
@@ -26968,6 +26983,9 @@ if (!String.prototype.endsWithPowr) {
       } else if(data[0] === "duration") {
         response['duration'] = player.currentTime();
       } else if(data[0] === "ping") {
+        response['msg'] = "OK!";
+      } else if(data[0] === "listen" && data.length == 3) {
+        this.adListeners.push({"flag": data[0], "id": data[1], "listenerId": data[2], "source": event.source, "origin": event.origin});
         response['msg'] = "OK!";
       }
 
