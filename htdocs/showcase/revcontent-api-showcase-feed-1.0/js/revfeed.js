@@ -106,10 +106,8 @@ Author: michael@revcontent.com
 
             var start = (this.options.initial_internal + this.options.initial_sponsored + 1);
 
-            if (this.options.initial_sponsored) {
-                for (var i = 1; i <= this.options.initial_internal; i++) {
-                    this.options.internal_selector += '.rev-content:nth-child('+ i +'),';
-                }
+            for (var i = 1; i <= this.options.initial_internal; i++) {
+                this.options.internal_selector += '.rev-content:nth-child('+ i +'),';
             }
 
             if (this.options.sponsored) {
