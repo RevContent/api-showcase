@@ -25890,7 +25890,9 @@ if (!String.prototype.endsWithPowr) {
 	    response += this.getAdBreak('postroll', tag, 0);
 	} else {
 	    var d = parseInt(parseFloat(this.adtype) * video.duration);
-	    response += this.getAdBreak('midroll', tag, d);
+      if(d >= 0) {
+	       response += this.getAdBreak('midroll', tag, d);
+      }
 	}
 
 	response += '</vmap:VMAP>';
