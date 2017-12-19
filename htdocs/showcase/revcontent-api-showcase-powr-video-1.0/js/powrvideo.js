@@ -256,8 +256,9 @@ if (!String.prototype.endsWithPowr) {
         });
         revUtils.append(this.element, imaScript);
 
-        window.addEventListener("message", this.receiveMessage.bind(this), false);
         this.adListeners = Array();
+        window.addEventListener("message", this.receiveMessage.bind(this), false);
+        window.parent.postMessage("player_ready", "*");
     };
 
     PowrVideo.prototype.onResize = function(shouldFloat) {
