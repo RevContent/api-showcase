@@ -104,24 +104,26 @@ Author: michael@revcontent.com
 
             this.options.internal_selector = '';
 
-            var start = (this.options.initial_internal + this.options.initial_sponsored + 1);
+            if (this.options.initial_sponsored || this.options.sponsored) { // we have sponsored, determine what should be internal
 
-            for (var i = 1; i <= this.options.initial_internal; i++) {
-                this.options.internal_selector += '.rev-content:nth-child('+ i +'),';
-            }
-
-            if (this.options.sponsored) {
-                for (var i = 1; i <= this.options.internal; i++) {
-                    this.options.internal_selector += '.rev-content:nth-child('+ (this.options.internal + 1) +'n + '+ start +'),';
-                    start++;
+                for (var i = 1; i <= this.options.initial_internal; i++) { // initial internal using nth-child
+                    this.options.internal_selector += '.rev-content:nth-child('+ i +'),';
                 }
-            } else if (this.options.initial_sponsored) {
-                this.options.internal_selector += '.rev-content:nth-child(n+'+ start +'),';
-            }
 
-            this.options.internal_selector = this.options.internal_selector.slice(0, -1);
+                // internal starts up again
+                var start = (this.options.initial_internal + this.options.initial_sponsored + 1);
 
-            if (this.options.internal_selector === '') { // if we don't have anything it is all internal
+                if (this.options.sponsored) { // pattern for sponsored based on internal
+                    for (var i = 1; i <= this.options.internal; i++) {
+                        this.options.internal_selector += '.rev-content:nth-child('+ (this.options.internal + this.options.sponsored) +'n + '+ start +'),';
+                        start++;
+                    }
+                } else if (this.options.initial_sponsored) { // only inital sponsored so everything after start will be internal
+                    this.options.internal_selector += '.rev-content:nth-child(n+'+ start +'),';
+                }
+                // trim comma
+                this.options.internal_selector = this.options.internal_selector.slice(0, -1);
+            } else { // everything is internal
                 this.options.internal_selector = '.rev-content';
             }
         }
