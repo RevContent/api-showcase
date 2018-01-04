@@ -53,24 +53,29 @@ Author: michael@revcontent.com
             auto_scroll: true,
             rev_position: 'top_right',
             developer: false,
-            per_row: 6,
+            per_row: {
+                xxs: 1,
+                xs: 1,
+                sm: 1,
+                md: 2,
+                lg: 2,
+                xl: 3,
+                xxl: 3
+            },
+            breakpoints: {
+                xxs: 0,
+                xs: 100,
+                sm: 549,
+                md: 550,
+                lg: 700,
+                xl: 1000,
+                xxl: 1001
+            },
             rows: 4,
             infinite: true,
-            column_spans: [
-                {
-                    selector: '.rev-content',
-                    spans: 6
-                },
-            ],
-            image_ratio: [
-                {
-                    selector: '.rev-content',
-                    ratio: '6:3'
-                }
-            ],
+            column_spans: [],
+            image_ratio: '6:3',
             internal_selector: false, // dynamic based on internal, sponsored, initial_internal and initial_sponsored options
-            meta_selector: '.rev-content',
-            reactions_selector: '.rev-content',
             headline_top_selector: false,
             // headline_icon_selector: '.rev-content:nth-child(4n+10), .rev-content:nth-child(4n+11)',
             // headline_icon_selector: '.rev-content',
@@ -254,15 +259,13 @@ Author: michael@revcontent.com
             keywords: this.options.keywords,
             developer: this.options.developer,
             internal_selector: this.options.internal_selector,
-            header_selector: this.options.header_selector,
-            reactions_selector: this.options.reactions_selector,
-            meta_selector: this.options.meta_selector,
             headline_top_selector: this.options.headline_top_selector,
             window_width_enabled: this.windowWidthEnabled,
             disclosure_about_src: this.options.disclosure_about_src,
             disclosure_about_height: this.options.disclosure_about_height,
             disclosure_interest_src: this.options.disclosure_interest_src,
-            disclosure_interest_height: this.options.disclosure_interest_height
+            disclosure_interest_height: this.options.disclosure_interest_height,
+            breakpoints: this.options.breakpoints
         });
     };
 
@@ -325,18 +328,6 @@ Author: michael@revcontent.com
 
                 var rowData = self.innerWidget.createRows(self.innerWidget.grid, moreRowCount);
 
-                self.innerWidget.setUp(rowData.items);
-
-                self.innerWidget.getPadding(rowData.items, true);
-
-                self.innerWidget.setContentPadding(rowData.items);
-
-                self.innerWidget.setSize(rowData.items);
-
-                self.innerWidget.setUp(rowData.items);
-
-                self.innerWidget.grid.layout();
-
                 var urls = [];
 
                 if (rowData.internalLimit > 0) {
@@ -365,25 +356,6 @@ Author: michael@revcontent.com
                 for (var i = 0; i < urls.length; i++) {
                     this.promises.push(new Promise(function(resolve, reject) {
                         var url = urls[i];
-
-                        // TODO - mock data
-                        // if (url.type == 'internal') {
-                        //     var resp = self.innerWidget.mockInternal[self.options.mock].slice(url.offset, url.offset + url.limit);
-                        //     resolve({
-                        //         type: url.type,
-                        //         data: resp
-                        //     });
-                        //     return;
-                        // }
-
-                        // if (url.type == 'sponsored') {
-                        //     var resp = self.innerWidget.mockSponsored[self.options.mock].slice(url.offset, url.offset + url.limit);
-                        //     resolve({
-                        //         type: url.type,
-                        //         data: resp
-                        //     });
-                        //     return;
-                        // }
                         revApi.request(url.url, function(resp) {
                             resolve({
                                 type: url.type,
