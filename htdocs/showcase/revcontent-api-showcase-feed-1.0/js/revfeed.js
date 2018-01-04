@@ -15,8 +15,6 @@ Author: michael@revcontent.com
 
     var Feed = function(opts) {
 
-        var below_article = (typeof opts.below_article !== 'undefined') ? opts.below_article : false;
-
         var defaults = {
             api_source: 'feed',
             host: 'https://trends.engage.im',
@@ -56,38 +54,23 @@ Author: michael@revcontent.com
             rev_position: 'top_right',
             developer: false,
             per_row: 6,
-            rows: below_article ? 5 : 4,
+            rows: 4,
             infinite: true,
-            column_spans: below_article ? [
-                {
-                    selector: '.rev-content-header, .rev-content',
-                    spans: 6
-                },
-                {
-                    selector: '.rev-slider-breakpoint-gt-xs .rev-content:nth-child(-n+9)',
-                    spans: 2
-                },
-            ] : [
+            column_spans: [
                 {
                     selector: '.rev-content',
                     spans: 6
                 },
             ],
-            image_ratio: below_article ? [
-                {
-                    selector: '.rev-slider-breakpoint-lt-sm .rev-content, .rev-content:nth-child(n+10)',
-                    ratio: '6:3'
-                }
-            ] : [
+            image_ratio: [
                 {
                     selector: '.rev-content',
                     ratio: '6:3'
                 }
             ],
-            internal_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content:nth-child(3n + 4), .rev-slider-breakpoint-lt-sm .rev-content:nth-child(3n + 5), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(3n+10), .rev-slider-breakpoint-gt-xs .rev-content:nth-child(3n+11)' :
-                '.rev-content:nth-child(3n+1), .rev-content:nth-child(3n+2)',
-            meta_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(n+10)' : '.rev-content',
-            reactions_selector: below_article ? '.rev-slider-breakpoint-lt-sm .rev-content, .rev-slider-breakpoint-gt-xs .rev-content:nth-child(n+10)' : '.rev-content',
+            internal_selector: false, // dynamic based on internal, sponsored, initial_internal and initial_sponsored options
+            meta_selector: '.rev-content',
+            reactions_selector: '.rev-content',
             headline_top_selector: false,
             // headline_icon_selector: '.rev-content:nth-child(4n+10), .rev-content:nth-child(4n+11)',
             // headline_icon_selector: '.rev-content',
@@ -107,11 +90,43 @@ Author: michael@revcontent.com
             disclosure_about_src: '//trends.engage.im/engage-about.php',
             disclosure_about_height: 463,
             disclosure_interest_src: '//trends.engage.im/engage-interests.php',
-            disclosure_interest_height: 1066
+            disclosure_interest_height: 1066,
+            internal: 2,
+            sponsored: 1,
+            initial_internal: 2,
+            initial_sponsored: 1
         };
 
         // merge options
         this.options = revUtils.extend(defaults, opts);
+
+        if (!this.options.internal_selector) {
+
+            this.options.internal_selector = '';
+
+            if (this.options.initial_sponsored || this.options.sponsored) { // we have sponsored, determine what should be internal
+
+                for (var i = 1; i <= this.options.initial_internal; i++) { // initial internal using nth-child
+                    this.options.internal_selector += '.rev-content:nth-child('+ i +'),';
+                }
+
+                // internal starts up again
+                var start = (this.options.initial_internal + this.options.initial_sponsored + 1);
+
+                if (this.options.sponsored) { // pattern for sponsored based on internal
+                    for (var i = 1; i <= this.options.internal; i++) {
+                        this.options.internal_selector += '.rev-content:nth-child('+ (this.options.internal + this.options.sponsored) +'n + '+ start +'),';
+                        start++;
+                    }
+                } else if (this.options.initial_sponsored) { // only inital sponsored so everything after start will be internal
+                    this.options.internal_selector += '.rev-content:nth-child(n+'+ start +'),';
+                }
+                // trim comma
+                this.options.internal_selector = this.options.internal_selector.slice(0, -1);
+            } else { // everything is internal
+                this.options.internal_selector = '.rev-content';
+            }
+        }
 
         // store options
         revUtils.storeUserOptions(this.options);

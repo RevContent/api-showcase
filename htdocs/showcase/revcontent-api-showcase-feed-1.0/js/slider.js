@@ -2474,11 +2474,9 @@ Author: michael@revcontent.com
         }
 
         if (this.sponsoredLimit > 0) {
-            // if the first internal is greater than 0 there is a ba
-            var firstInternal = revUtils.siblingIndex(this.grid.element.querySelector(this.options.internal_selector));
             // don't register multiple widget impressions
             // var fill = urls.length > 0;
-            var sponsoredURL = this.generateUrl(0, this.sponsoredLimit, false, false, false, (firstInternal > 0));
+            var sponsoredURL = this.generateUrl(0, this.sponsoredLimit, false, false, false);
             urls.push({
                 offset: 0,
                 limit: this.sponsoredLimit,
