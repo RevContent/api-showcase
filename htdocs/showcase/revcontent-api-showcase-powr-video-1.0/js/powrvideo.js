@@ -404,10 +404,10 @@ if (!String.prototype.endsWithPowr) {
         }
 
         var contentSrc = document.createElement('source');
-        if(!this.mobile) {
-          contentSrc.setAttribute('src', this.videos[0].sd_url);
-        } else {
+        if(this.mobile && this.videos[0].mobile_url != null) {
           contentSrc.setAttribute('src', this.videos[0].mobile_url);
+        } else {
+          contentSrc.setAttribute('src', this.videos[0].sd_url);
         }
         contentSrc.setAttribute('type', 'video/mp4');
         dumbPlayer.appendChild(contentSrc);
@@ -536,10 +536,10 @@ if (!String.prototype.endsWithPowr) {
       this.player.ima(this.options, this.bind(this, this.adsManagerLoadedCallback));
       this.player.ima.initializeAdDisplayContainer();
       // this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), playOnLoad);
-      if(!this.mobile) {
-        this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].sd_url, this.getAdsResponse(this.videos[this.currentContent]), playOnLoad);
-      } else {
+      if(this.mobile && this.videos[this.currentContent].mobile_url != null) {
         this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].mobile_url, this.getAdsResponse(this.videos[this.currentContent]), playOnLoad);
+      } else {
+        this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].sd_url, this.getAdsResponse(this.videos[this.currentContent]), playOnLoad);
       }
     	if (!this.autoplaySettings.autoplay) {
     	    this.player.poster(this.videos[this.currentContent].thumbnail);
@@ -579,11 +579,11 @@ if (!String.prototype.endsWithPowr) {
 	    this.adsPlayed = 0;
 
 	    this.player.ima.initializeAdDisplayContainer();
-      if(!this.mobile) {
-	       this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].sd_url, this.getAdsResponse(this.videos[this.currentContent]), false);
-       } else {
-         this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].mobile_url, this.getAdsResponse(this.videos[this.currentContent]), false);
-       }
+      if(this.mobile && this.videos[this.currentContent].mobile_url != null) {
+        this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].mobile_url, this.getAdsResponse(this.videos[this.currentContent]), false);
+      } else {
+        this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].sd_url, this.getAdsResponse(this.videos[this.currentContent]), false);
+      }
             // this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), false);
             var titleContent = this.videos[this.currentContent].title;
             this.titleDom.innerHTML = '<a target="_blank" href="' + this.getVideoLink(this.videos[this.currentContent]) + '">' + titleContent + "</a>";
