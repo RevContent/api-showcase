@@ -793,7 +793,7 @@ return api;
   PowrApi.prototype.endListener = function(func) {
     this.endListeners.push(func);
     if(this.endListeners.length == 0) {
-      this.window.postMessage("end" + this.seperator + this.config.id + this.seperator, this.element.src);
+      this.window.postMessage("end" + this.seperator + this.config.id, this.element.src);
     }
   }
 
