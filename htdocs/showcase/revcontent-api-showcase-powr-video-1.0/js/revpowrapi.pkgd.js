@@ -792,7 +792,7 @@ return api;
 
   PowrApi.prototype.endListener = function(func) {
     this.endListeners.push(func);
-    if(this.endListeners.length == 0) {
+    if(this.endListeners.length == 1) {
       this.window.postMessage("end" + this.seperator + this.config.id, this.element.src);
     }
   }
@@ -813,9 +813,9 @@ return api;
           }
         } else if(data.flag === "ping") {
           this.log(data.msg);
-        } else if(data.flag === "end") {
-          for (var func in endListeners) {
-            func();
+        } else if(data.flag === "video_ended") {
+          for (var index in this.endListeners) {
+            this.endListeners[index]();
           }
         }
       }

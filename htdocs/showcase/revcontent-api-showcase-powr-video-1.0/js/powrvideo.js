@@ -1263,6 +1263,13 @@ if (!String.prototype.endsWithPowr) {
 	video.play();
     };
 
+  PowrVideo.prototype.videoEnd = function(data) {
+    var response = {};
+    response['flag'] = data.flag;
+    response['id'] = data.id;
+    data.source.postMessage(JSON.stringify(response), data.origin);
+  };
+
   PowrVideo.prototype.receiveMessage = function(event) {
     try {
       var seperator = "###";
@@ -1290,11 +1297,7 @@ if (!String.prototype.endsWithPowr) {
           this.adtype = data[2];
           response['msg'] = "updated";
         } else if(data[0] === "end") {
-          response['flag'] = data[0];
-          response['id'] = data[1];
-          this.player.on('ended', function() {
-            event.source.postMessage(JSON.stringify(response), event.origin);
-          });
+          player.on('ended', this.videoEnd.bind(this, {"flag": "video_ended", "id": data[1], "source": event.source, "origin": event.origin}));
           response['msg'] = "add end listener";
         }
 
