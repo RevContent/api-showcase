@@ -733,12 +733,14 @@ return api;
    */
   var PowrApi = function(config) {
       this.config = config;
+      this.seperator = "###";
       this.element = document.getElementById(this.config.iframe_id);
       this.window = this.element.contentWindow || this.element;
       this.config.id = this.config.iframe_id + Date.now();
+
       this.callbackFunctions = {};
       this.adListeners = Array();
-      this.seperator = "###";
+      this.endListeners = Array();
 
       this.init();
   };
@@ -784,6 +786,17 @@ return api;
     this.window.postMessage("listen" + this.seperator + this.config.id + this.seperator + listenerId, this.element.src);
   }
 
+  PowrApi.prototype.setAdType = function(adtype) {
+    this.window.postMessage("adtype" + this.seperator + this.config.id + this.seperator + adtype, this.element.src);
+  }
+
+  PowrApi.prototype.endListener = function(func) {
+    this.endListeners.push(func);
+    if(this.endListeners.length == 0) {
+      this.window.postMessage("end" + this.seperator + this.config.id + this.seperator, this.element.src);
+    }
+  }
+
   PowrApi.prototype.processMessage = function(e) {
     try {
       var data = JSON.parse(e.data);
@@ -796,9 +809,14 @@ return api;
           var index = this.adListeners.indexOf(data.listenerId);
           if(index != -1) {
             document.cookie = "tduration=0;path=/;expires=" + Number.MAX_SAFE_INTEGER;
+            this.setAdType(-1);
           }
         } else if(data.flag === "ping") {
           this.log(data.msg);
+        } else if(data.flag === "end") {
+          for (var func in endListeners) {
+            func();
+          }
         }
       }
     } catch (e) {
