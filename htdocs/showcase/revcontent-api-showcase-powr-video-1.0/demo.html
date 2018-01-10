@@ -101,10 +101,10 @@
     var wait_for_autoplay = parseInt(urlObj.getParam('w_auto', '5000'));
     var adtype = urlObj.getParam('adtype', 'preroll');
     var mob_flt = "top";
-    
+
     if (fluid == 'no') fluid = false;
     else fluid = true;
-	
+
     if (flt == 'left') flt = "bottom-left";
     else if (flt == 'right') flt = "bottom-right";
     else { flt = "none"; mob_flt = "none"; }
@@ -148,7 +148,7 @@
               <li><a href="javascript: urlObj.setParam('pclose', 'no'); urlObj.loadUrl();">No</a></li>
             </ul>
 	   </li>
-	   
+
            <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="afocus"></a>
             <ul class="dropdown-menu">
@@ -164,7 +164,7 @@
 	      <li><a href="javascript: urlObj.setParam('videos', '2'); urlObj.loadUrl();">2</a></li>
             </ul>
 	   </li>
-	   
+
            <li class="dropdown">
              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="muted"></a>
             <ul class="dropdown-menu">
@@ -177,8 +177,8 @@
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="fluid"></a>
             <ul class="dropdown-menu">
-              <li><a href="javascript: urlObj.setParam('fluid', 'true'); urlObj.loadUrl();">Yes</a></li>
-              <li><a href="javascript: urlObj.setParam('fluid', 'false'); urlObj.loadUrl();">No</a></li>
+              <li><a href="javascript: urlObj.setParam('fluid', 'yes'); urlObj.loadUrl();">Yes</a></li>
+              <li><a href="javascript: urlObj.setParam('fluid', 'no'); urlObj.loadUrl();">No</a></li>
             </ul>
           </li>
 	  <li class="dropdown">
@@ -190,7 +190,7 @@
 	      <li><a href="javascript: urlObj.setParam('adtype', 'postroll'); urlObj.loadUrl();">PostRoll</a></li>
             </ul>
           </li>
-	  
+
           <li class="dropdown" style='display : none;' id='ad_tag_parent'>
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="ad_tag"></a>
             <ul class="dropdown-menu">
@@ -589,6 +589,6 @@
         });
         </script>
 
-  
+
 </body>
 </html>
