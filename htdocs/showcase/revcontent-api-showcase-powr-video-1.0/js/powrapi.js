@@ -66,6 +66,41 @@
     this.window.postMessage("listen" + this.seperator + this.config.id + this.seperator + listenerId, this.element.src);
   }
 
+  PowrApi.prototype.setVideoAutoplayOnFocus = function (visible) {
+    if(visible) {
+      this.play();
+    } else {
+      this.pause();
+    }
+  }
+
+  PowrApi.prototype.checkVisible = function(element, callback, percentVisible, buffer) {
+    // what percentage of the element should be visible
+    var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
+    // fire if within buffer
+    var bufferPixels = (typeof buffer === 'number') ? buffer : 0;
+
+    var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+    var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+    var elementTop = element.getBoundingClientRect().top;
+    var elementBottom = element.getBoundingClientRect().bottom;
+    var elementVisibleHeight = element.offsetHeight * visibleHeightMultiplier;
+
+    if ((scroll + windowHeight >= (elementTop + scroll + elementVisibleHeight - bufferPixels)) &&
+        elementBottom > elementVisibleHeight) {
+        callback.call(this, true);
+    } else {
+        callback.call(this, false);
+    }
+  }
+
+  PowrApi.prototype.addVisiblityListener = function () {
+    var element = document.getElementsByClassName("powr_embed");
+    if(element.length > 0) {
+      revUtils.addEventListener(window.parent, 'scroll', this.checkVisible.bind(this, element[0], this.setVideoAutoplayOnFocus));
+    }
+  }
+
   PowrApi.prototype.processMessage = function(e) {
     try {
       var data = JSON.parse(e.data);
