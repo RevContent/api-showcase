@@ -827,6 +827,10 @@ return api;
     this.window.postMessage("adtype" + this.seperator + this.config.id + this.seperator + adtype, this.element.src);
   }
 
+  PowrApi.prototype.getAdType = function(adtype) {
+    this.window.postMessage("get_adtype" + this.seperator + this.config.id, this.element.src);
+  }
+
   PowrApi.prototype.endListener = function(func) {
     this.endListeners.push(func);
     if(this.endListeners.length == 1) {
@@ -854,6 +858,12 @@ return api;
           for (var index in this.endListeners) {
             this.endListeners[index]();
           }
+        } else if(data.flag === "adtype") {
+          this.log(data.msg);
+        } else if(data.flag === "get_adtype") {
+          this.log("adtype: " + data.msg);
+        } else if(data.flag === "end") {
+          this.log(data.msg);
         }
       }
     } catch (e) {

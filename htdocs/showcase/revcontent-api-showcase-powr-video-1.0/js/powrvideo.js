@@ -1307,7 +1307,9 @@ if (!String.prototype.endsWithPowr) {
           response['msg'] = "OK!";
         } else if(data[0] === "adtype") {
           this.adtype = data[2];
-          response['msg'] = "updated";
+          response['msg'] = "updated adtype: " + data[2];
+        } else if(data[0] === "get_adtype") {
+          response['msg'] = this.adtype;
         } else if(data[0] === "end") {
           player.on('ended', this.videoEnd.bind(this, {"flag": "video_ended", "id": data[1], "source": event.source, "origin": event.origin}));
           response['msg'] = "add end listener";
