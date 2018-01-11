@@ -23,6 +23,7 @@
       this.callbackFunctions = {};
       this.adListeners = Array();
       this.endListeners = Array();
+      this.visibleListeners = Array();
 
       this.init();
   };
@@ -39,12 +40,12 @@
     if ((typeof console) != "undefined") console.log(arguments);
   };
 
-  PowrApi.prototype.play = function() {
-    this.window.postMessage("play" + this.seperator + this.config.id, this.element.src);
-  }
-
-  PowrApi.prototype.pause = function() {
-    this.window.postMessage("pause" + this.seperator + this.config.id, this.element.src);
+  PowrApi.prototype.playerState = function(play) {
+    if(play) {
+      this.window.postMessage("play" + this.seperator + this.config.id, this.element.src);
+    } else {
+      this.window.postMessage("pause" + this.seperator + this.config.id, this.element.src);
+    }
   }
 
   PowrApi.prototype.duration = function(callback) {
@@ -68,11 +69,19 @@
     this.window.postMessage("listen" + this.seperator + this.config.id + this.seperator + listenerId, this.element.src);
   }
 
-  PowrApi.prototype.setVideoAutoplayOnFocus = function (visible) {
-    if(visible) {
-      this.play();
-    } else {
-      this.pause();
+  PowrApi.prototype.setVideoAutoplayOnFocus = function (play_on_focus) {
+    var element = document.getElementsByClassName("powr_embed");
+    if(element.length > 0) {
+      if(play_on_focus) {
+        var func = this.checkVisible.bind(this, element[0], this.playerState);
+        this.visibleListeners.push(func);
+        revUtils.addEventListener(window.parent, 'scroll', func);
+      } else {
+        for (var index in this.visibleListeners) {
+          var func = this.visibleListeners[index];
+          revUtils.removeEventListener(window.parent, 'scroll', func);
+        }
+      }
     }
   }
 
@@ -93,13 +102,6 @@
         callback.call(this, true);
     } else {
         callback.call(this, false);
-    }
-  }
-
-  PowrApi.prototype.addVisiblityListener = function () {
-    var element = document.getElementsByClassName("powr_embed");
-    if(element.length > 0) {
-      revUtils.addEventListener(window.parent, 'scroll', this.checkVisible.bind(this, element[0], this.setVideoAutoplayOnFocus));
     }
   }
 
