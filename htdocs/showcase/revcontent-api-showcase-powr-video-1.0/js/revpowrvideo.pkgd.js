@@ -27021,7 +27021,7 @@ if (!String.prototype.endsWithPowr) {
           response['msg'] = this.adtype;
         } else if(data[0] === "end") {
           player.on('ended', this.videoEnd.bind(this, {"flag": "video_ended", "id": data[1], "source": event.source, "origin": event.origin}));
-          response['msg'] = "add end listener";
+          response['msg'] = "added video end listener";
         }
 
         response['flag'] = data[0];

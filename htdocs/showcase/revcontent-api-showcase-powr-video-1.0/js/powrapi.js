@@ -77,11 +77,13 @@
         this.visibleListeners.push(func);
         revUtils.addEventListener(window.parent, 'scroll', func);
       }
+      this.log("added onfocus video autoplay listener");
     } else {
       for (var i in this.visibleListeners) {
         var func = this.visibleListeners[i];
         revUtils.removeEventListener(window.parent, 'scroll', func);
       }
+      this.log("removed onfocus video autoplay listeners");
     }
   }
 
