@@ -488,9 +488,30 @@
   </div>
   <script type='text/javascript' src='./js/powriframefix.js'></script>
   <script type='text/javascript'>
-    var ivideo1 = new PowrApi({
-        "iframe_id": 'powriframe_1'
-    });
+    var ivideo1 = null;
+    $(function () {
+        var initPowrApi = function() {
+          ivideo1 = new PowrApi({
+              "iframe_id": 'powriframe_1'
+          });
+
+          ivideo1.addAdListener();
+          
+          ivideo1.addVideoEndListener(function () {
+              ivideo1.setAdType(-1);
+          });
+          ivideo1.setVideoAutoplayOnFocus(true);
+        };
+
+        var messageListener = function(event) {
+            if(event.data === "player_ready") {
+                initPowrApi();
+                window.removeEventListener('message', messageListener, false);
+            }
+        };
+        window.addEventListener("message" , messageListener, false);
+
+      });
   </script>
 </body>
 </html>

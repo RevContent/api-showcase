@@ -25969,11 +25969,6 @@ if (!String.prototype.endsWithPowr) {
 
         this.adListeners = Array();
         window.addEventListener("message", this.receiveMessage.bind(this), false);
-        try {
-          window.parent.postMessage("player_ready", "*");
-        } catch (e) {
-          this.log("window.parent is null");
-        }
     };
 
     PowrVideo.prototype.onResize = function(shouldFloat) {
@@ -26256,6 +26251,12 @@ if (!String.prototype.endsWithPowr) {
     	this.adsPlayed = 0;
       this.player.ima.requestAds();
 	    var me = this;
+
+      try {
+        window.parent.postMessage("player_ready", "*");
+      } catch (e) {
+        this.log("window.parent is null");
+      }
         //this.player.ima.addContentAndAdsEndedListener(function () {
 	    //setTimeout(function () {
 	//me.loadNextVideo();
@@ -27028,7 +27029,9 @@ if (!String.prototype.endsWithPowr) {
         response['id'] = data[1];
         event.source.postMessage(JSON.stringify(response), event.origin);
       }
-    } catch (e) {}
+    } catch (e) {
+      this.log(e);
+    }
   };
 
     PowrVideo.setCookie = function(cname, cvalue, exminutes) {

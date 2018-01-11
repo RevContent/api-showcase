@@ -781,7 +781,7 @@ return api;
     }, 5000, this);
   }
 
-  PowrApi.prototype.adListener = function() {
+  PowrApi.prototype.addAdListener = function() {
     var listenerId = "listener_" + Date.now();
     this.adListeners.push(listenerId)
     this.window.postMessage("listen" + this.seperator + this.config.id + this.seperator + listenerId, this.element.src);
@@ -833,7 +833,7 @@ return api;
     this.window.postMessage("get_adtype" + this.seperator + this.config.id, this.element.src);
   }
 
-  PowrApi.prototype.endListener = function(func) {
+  PowrApi.prototype.addVideoEndListener = function(func) {
     this.endListeners.push(func);
     if(this.endListeners.length == 1) {
       this.window.postMessage("end" + this.seperator + this.config.id, this.element.src);
