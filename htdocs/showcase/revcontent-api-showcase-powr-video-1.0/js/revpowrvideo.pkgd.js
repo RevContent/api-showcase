@@ -26302,7 +26302,6 @@ if (!String.prototype.endsWithPowr) {
         } else {
 	    this.volumeOffOverlay.hide();
 	    this.playOverlay.show();
-            this.currentContent = 0;
         }
     };
 
@@ -26771,6 +26770,7 @@ if (!String.prototype.endsWithPowr) {
 
 	if (this.player.ended()) {
     this.adsPlayed = 0;
+    this.currentContent = 0;
 
     this.player.ima.initializeAdDisplayContainer();
     if(this.mobile && (this.videos[this.currentContent].mobile_url != null)) {
@@ -26801,6 +26801,24 @@ if (!String.prototype.endsWithPowr) {
 	    // this.player.controlBar.hide();
 	    this.player.controls(false);
 	}
+
+  if (this.currentContent == this.videos.length) {
+    this.adsPlayed = 0;
+    this.currentContent = 0;
+
+    this.player.ima.initializeAdDisplayContainer();
+    if(this.mobile && (this.videos[this.currentContent].mobile_url != null)) {
+      this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].mobile_url, this.getAdsResponse(this.videos[this.currentContent]), false);
+    } else {
+      this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].sd_url, this.getAdsResponse(this.videos[this.currentContent]), false);
+    }
+    var titleContent = this.videos[this.currentContent].title;
+    this.titleDom.innerHTML = '<a target="_blank" href="' + this.getVideoLink(this.videos[this.currentContent]) + '">' + titleContent + "</a>";
+    this.player.ima.requestAds();
+
+    this.player.play();
+    return;
+  }
     };
 
     PowrVideo.prototype.onPause = function(e) {
