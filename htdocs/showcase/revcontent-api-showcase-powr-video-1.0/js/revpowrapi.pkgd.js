@@ -788,17 +788,17 @@ return api;
   }
 
   PowrApi.prototype.setVideoAutoplayOnFocus = function (play_on_focus) {
-    var element = document.getElementsByClassName("powr_embed");
-    if(element.length > 0) {
-      if(play_on_focus) {
+    if(play_on_focus) {
+      var element = document.getElementsByClassName("powr_embed");
+      if(element.length > 0) {
         var func = this.checkVisible.bind(this, element[0], this.playerState);
         this.visibleListeners.push(func);
         revUtils.addEventListener(window.parent, 'scroll', func);
-      } else {
-        for (var index in this.visibleListeners) {
-          var func = this.visibleListeners[index];
-          revUtils.removeEventListener(window.parent, 'scroll', func);
-        }
+      }
+    } else {
+      for (var i in this.visibleListeners) {
+        var func = this.visibleListeners[i];
+        revUtils.removeEventListener(window.parent, 'scroll', func);
       }
     }
   }
