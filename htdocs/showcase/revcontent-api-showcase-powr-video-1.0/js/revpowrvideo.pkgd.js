@@ -26764,6 +26764,12 @@ if (!String.prototype.endsWithPowr) {
 	    this.cancelEvent(e);
 	    return;
 	}
+
+  if (this.player.ended()) {
+    this.player.ima.requestAds();
+    this.player.play();
+    return;
+  }
     };
 
     PowrVideo.prototype.onPlay = function() {
