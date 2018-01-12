@@ -20,10 +20,10 @@
       this.window = this.element.contentWindow || this.element;
       this.config.id = this.config.iframe_id + Date.now();
 
+      this.visibleListener = null;
       this.callbackFunctions = {};
       this.adListeners = Array();
       this.endListeners = Array();
-      this.visibleListeners = Array();
 
       this.init();
   };
@@ -70,19 +70,16 @@
   }
 
   PowrApi.prototype.setVideoAutoplayOnFocus = function (play_on_focus) {
-    if(play_on_focus) {
+    if(play_on_focus && this.visibleListener == null) {
       var element = document.getElementsByClassName("powr_embed");
       if(element.length > 0) {
-        var func = this.checkVisible.bind(this, element[0], this.playerState);
-        this.visibleListeners.push(func);
-        revUtils.addEventListener(window.parent, 'scroll', func);
+        this.visibleListener = this.checkVisible.bind(this, element[0], this.playerState);
+        revUtils.addEventListener(window.parent, 'scroll', this.visibleListener);
       }
       this.log("added onfocus video autoplay listener");
-    } else {
-      for (var i in this.visibleListeners) {
-        var func = this.visibleListeners[i];
-        revUtils.removeEventListener(window.parent, 'scroll', func);
-      }
+    } else if(this.visibleListener != null) {
+      revUtils.removeEventListener(window.parent, 'scroll', this.visibleListener);
+      this.visibleListener = null;
       this.log("removed onfocus video autoplay listeners");
     }
   }
