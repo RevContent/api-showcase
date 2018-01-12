@@ -795,7 +795,7 @@ return api;
         revUtils.addEventListener(window.parent, 'scroll', this.visibleListener);
       }
       this.log("added onfocus video autoplay listener");
-    } else if(this.visibleListener != null) {
+    } else if(!play_on_focus && this.visibleListener != null) {
       revUtils.removeEventListener(window.parent, 'scroll', this.visibleListener);
       this.visibleListener = null;
       this.log("removed onfocus video autoplay listeners");
