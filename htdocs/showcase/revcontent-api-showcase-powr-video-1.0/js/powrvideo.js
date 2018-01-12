@@ -260,11 +260,6 @@ if (!String.prototype.endsWithPowr) {
 
         this.adListeners = Array();
         window.addEventListener("message", this.receiveMessage.bind(this), false);
-        try {
-          window.parent.postMessage("player_ready", "*");
-        } catch (e) {
-          this.log("window.parent is null");
-        }
     };
 
     PowrVideo.prototype.onResize = function(shouldFloat) {
@@ -506,6 +501,12 @@ if (!String.prototype.endsWithPowr) {
 	} else {
 	    this.playOverlay.show();
 	}
+
+  try {
+    window.parent.postMessage("player_ready", "*");
+  } catch (e) {
+    this.log("window.parent is null");
+  }
     };
 
     PowrVideo.prototype.onUpdate = function() {
@@ -574,7 +575,7 @@ if (!String.prototype.endsWithPowr) {
 		video.tracking['end'] = null;
             }
 	}
-        this.currentContent++;
+        this.currentContent = (this.currentContent + 1) % this.videos.length;
         if (this.currentContent < this.videos.length) {
 	    this.adsPlayed = 0;
 
@@ -589,10 +590,6 @@ if (!String.prototype.endsWithPowr) {
             this.titleDom.innerHTML = '<a target="_blank" href="' + this.getVideoLink(this.videos[this.currentContent]) + '">' + titleContent + "</a>";
 	    this.player.ima.requestAds();
 	    this.player.play();
-        } else {
-	    this.volumeOffOverlay.hide();
-	    this.playOverlay.show();
-            this.currentContent--;
         }
     };
 
@@ -1059,11 +1056,11 @@ if (!String.prototype.endsWithPowr) {
 	    return;
 	}
 
-	if (this.player.ended()) {
-	    this.player.ima.requestAds();
-	    this.player.play();
-	    return;
-	}
+  if (this.player.ended()) {
+    this.player.ima.requestAds();
+    this.player.play();
+    return;
+  }
     };
 
     PowrVideo.prototype.onPlay = function() {
@@ -1319,7 +1316,9 @@ if (!String.prototype.endsWithPowr) {
         response['id'] = data[1];
         event.source.postMessage(JSON.stringify(response), event.origin);
       }
-    } catch (e) {}
+    } catch (e) {
+      this.log(e);
+    }
   };
 
     PowrVideo.setCookie = function(cname, cvalue, exminutes) {
