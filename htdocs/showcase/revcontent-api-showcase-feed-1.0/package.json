@@ -7,7 +7,6 @@
     "url": "git:///Revcontent/api-showcase.git"
   },
   "dependencies": {
-    "outlayer": "1.4.2",
-    "any-grid": "2.0.0-alpha.11"
+    "outlayer": "1.4.2"
   }
 }
