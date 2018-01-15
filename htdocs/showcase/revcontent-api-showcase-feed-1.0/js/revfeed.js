@@ -53,23 +53,15 @@ Author: michael@revcontent.com
             auto_scroll: true,
             rev_position: 'top_right',
             developer: false,
-            per_row: {
-                xxs: 1,
-                xs: 1,
-                sm: 1,
-                md: 2,
-                lg: 2,
-                xl: 3,
-                xxl: 3
-            },
+            per_row: 1,
             breakpoints: {
                 xxs: 0,
                 xs: 100,
                 sm: 549,
                 md: 550,
                 lg: 700,
-                xl: 1000,
-                xxl: 1001
+                xl: 1001,
+                xxl: 1500
             },
             rows: 4,
             infinite: true,
@@ -101,6 +93,18 @@ Author: michael@revcontent.com
             initial_internal: 2,
             initial_sponsored: 1
         };
+
+        if (opts.masonry_layout) {
+            defaults.per_row = {
+                xxs: 1,
+                xs: 1,
+                sm: 1,
+                md: 2,
+                lg: 2,
+                xl: 3,
+                xxl: 3
+            };
+        }
 
         // merge options
         this.options = revUtils.extend(defaults, opts);
