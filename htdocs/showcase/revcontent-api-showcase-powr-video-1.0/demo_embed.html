@@ -288,10 +288,6 @@
           proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         </p>
 
-        <script type='text/javascript'>
-      	  document.write("<iframe class='powr_embed' id='powriframe_2' src='./iframe.html?" + urlObj.getParamsString() + "' width='600px' height='400px' allowfullscreen></iframe>");
-      	</script>
-
 	      <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
           tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
           quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
@@ -492,13 +488,30 @@
   </div>
   <script type='text/javascript' src='./js/powriframefix.js'></script>
   <script type='text/javascript'>
-    var ivideo1 = new PowrApi({
-        "iframe_id": 'powriframe_1'
-    });
+    var ivideo1 = null;
+    $(function () {
+        var initPowrApi = function() {
+          ivideo1 = new PowrApi({
+              "iframe_id": 'powriframe_1'
+          });
 
-    var ivideo2 = new PowrApi({
-        "iframe_id": 'powriframe_2'
-    });
+          ivideo1.addAdListener();
+          
+          ivideo1.addVideoEndListener(function () {
+              ivideo1.setAdType(-1);
+          });
+          ivideo1.setVideoAutoplayOnFocus(true);
+        };
+
+        var messageListener = function(event) {
+            if(event.data === "player_ready") {
+                initPowrApi();
+                window.removeEventListener('message', messageListener, false);
+            }
+        };
+        window.addEventListener("message" , messageListener, false);
+
+      });
   </script>
 </body>
 </html>

@@ -25471,9 +25471,14 @@ utils.checkVisible = function(element, callback, percentVisible, buffer) {
     });
 };
 
-utils.checkVisibleItem = function(item, callback, percentVisible, buffer) {
+utils.checkVisibleItem = function(item, callback, percentVisible, buffer, container) {
     var that = this;
     requestAnimationFrame(function() {
+
+        if (container && ((container.offsetHeight) <= (item.element.offsetTop - container.scrollTop))) {
+            callback.call(that, false, item)
+            return;
+        }
         // what percentage of the element should be visible
         var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
         // fire if within buffer
@@ -25485,11 +25490,13 @@ utils.checkVisibleItem = function(item, callback, percentVisible, buffer) {
         var elementBottom = item.element.getBoundingClientRect().bottom;
         var elementVisibleHeight = item.element.offsetHeight * visibleHeightMultiplier;
 
-        if ((scroll + windowHeight >= (elementTop + scroll + elementVisibleHeight - bufferPixels)) &&
+        var containerBottom = container ? (scroll + windowHeight) - (container.getBoundingClientRect().top + scroll + container.offsetHeight) : 0;
+
+        if ((scroll + windowHeight >= (elementTop + scroll + elementVisibleHeight - bufferPixels + (containerBottom > 0 ? containerBottom : 0) )) &&
             elementBottom > elementVisibleHeight) {
             callback.call(that, true, item);
         } else {
-            callback.call(that, false, item)
+            callback.call(that, false, item);
         }
     });
 };
@@ -25735,7 +25742,7 @@ if (!String.prototype.endsWithPowr) {
      * custom_logo :
      * brand_logo :
      * autoplay : "none|load|focus" [ Whether to autoplay video ]
-     * videos : [ { "id" , "thumbnail" , "sd_url", "hd_url" } ]
+     * videos : [ { "id" , "thumbnail" , "sd_url", "hd_url", "mobile_url" } ]
      * float : {
           "desktop" : "bottom-right|none",
 	  "mobile" : "top|none",
@@ -25883,7 +25890,9 @@ if (!String.prototype.endsWithPowr) {
 	    response += this.getAdBreak('postroll', tag, 0);
 	} else {
 	    var d = parseInt(parseFloat(this.adtype) * video.duration);
-	    response += this.getAdBreak('midroll', tag, d);
+      if(d >= 0) {
+	       response += this.getAdBreak('midroll', tag, d);
+      }
 	}
 
 	response += '</vmap:VMAP>';
@@ -25958,6 +25967,7 @@ if (!String.prototype.endsWithPowr) {
         });
         revUtils.append(this.element, imaScript);
 
+        this.adListeners = Array();
         window.addEventListener("message", this.receiveMessage.bind(this), false);
     };
 
@@ -26098,7 +26108,11 @@ if (!String.prototype.endsWithPowr) {
         }
 
         var contentSrc = document.createElement('source');
-        contentSrc.setAttribute('src', this.videos[0].sd_url);
+        if(this.mobile && (this.videos[0].mobile_url != null)) {
+          contentSrc.setAttribute('src', this.videos[0].mobile_url);
+        } else {
+          contentSrc.setAttribute('src', this.videos[0].sd_url);
+        }
         contentSrc.setAttribute('type', 'video/mp4');
         dumbPlayer.appendChild(contentSrc);
 
@@ -26196,6 +26210,12 @@ if (!String.prototype.endsWithPowr) {
 	} else {
 	    this.playOverlay.show();
 	}
+
+  try {
+    window.parent.postMessage("player_ready", "*");
+  } catch (e) {
+    this.log("window.parent is null");
+  }
     };
 
     PowrVideo.prototype.onUpdate = function() {
@@ -26222,17 +26242,21 @@ if (!String.prototype.endsWithPowr) {
     };
 
     PowrVideo.prototype.start = function(playOnLoad) {
-	this.started = true;
-        this.player.ima(this.options, this.bind(this, this.adsManagerLoadedCallback));
-        this.player.ima.initializeAdDisplayContainer();
-        // this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), playOnLoad);
-	this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].sd_url, this.getAdsResponse(this.videos[this.currentContent]), playOnLoad)
-	if (!this.autoplaySettings.autoplay) {
-	    this.player.poster(this.videos[this.currentContent].thumbnail);
-	}
-	this.adsPlayed = 0;
-        this.player.ima.requestAds();
-	var me = this;
+      this.started = true;
+      this.player.ima(this.options, this.bind(this, this.adsManagerLoadedCallback));
+      this.player.ima.initializeAdDisplayContainer();
+      // this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), playOnLoad);
+      if(this.mobile && (this.videos[this.currentContent].mobile_url != null)) {
+        this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].mobile_url, this.getAdsResponse(this.videos[this.currentContent]), playOnLoad);
+      } else {
+        this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].sd_url, this.getAdsResponse(this.videos[this.currentContent]), playOnLoad);
+      }
+    	if (!this.autoplaySettings.autoplay) {
+    	    this.player.poster(this.videos[this.currentContent].thumbnail);
+    	}
+    	this.adsPlayed = 0;
+      this.player.ima.requestAds();
+	    var me = this;
         //this.player.ima.addContentAndAdsEndedListener(function () {
 	    //setTimeout(function () {
 	//me.loadNextVideo();
@@ -26260,21 +26284,21 @@ if (!String.prototype.endsWithPowr) {
 		video.tracking['end'] = null;
             }
 	}
-        this.currentContent++;
+        this.currentContent = (this.currentContent + 1) % this.videos.length;
         if (this.currentContent < this.videos.length) {
 	    this.adsPlayed = 0;
 
 	    this.player.ima.initializeAdDisplayContainer();
-	    this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].sd_url, this.getAdsResponse(this.videos[this.currentContent]), false);
+      if(this.mobile && (this.videos[this.currentContent].mobile_url != null)) {
+        this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].mobile_url, this.getAdsResponse(this.videos[this.currentContent]), false);
+      } else {
+        this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].sd_url, this.getAdsResponse(this.videos[this.currentContent]), false);
+      }
             // this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), false);
             var titleContent = this.videos[this.currentContent].title;
             this.titleDom.innerHTML = '<a target="_blank" href="' + this.getVideoLink(this.videos[this.currentContent]) + '">' + titleContent + "</a>";
 	    this.player.ima.requestAds();
 	    this.player.play();
-        } else {
-	    this.volumeOffOverlay.hide();
-	    this.playOverlay.show();
-            this.currentContent--;
         }
     };
 
@@ -26600,6 +26624,12 @@ if (!String.prototype.endsWithPowr) {
 	}
 	if (event.type == google.ima.AdEvent.Type.STARTED) {
 	    this.adsPlayed++;
+      if(this.adListeners.length > 0) {
+        this.adListeners.forEach(function(listener) {
+          var response = {"id": listener.id, "listenerId": listener.listenerId, "flag": listener.flag, "msg": "ad_shown"};
+          listener.source.postMessage(JSON.stringify(response), listener.origin);
+        });
+      }
 	}
 	if (event.type == google.ima.AdEvent.Type.ALL_ADS_COMPLETED) {
 	    if (this.adsPlayed == 0) {
@@ -26735,11 +26765,11 @@ if (!String.prototype.endsWithPowr) {
 	    return;
 	}
 
-	if (this.player.ended()) {
-	    this.player.ima.requestAds();
-	    this.player.play();
-	    return;
-	}
+  if (this.player.ended()) {
+    this.player.ima.requestAds();
+    this.player.play();
+    return;
+  }
     };
 
     PowrVideo.prototype.onPlay = function() {
@@ -26951,28 +26981,53 @@ if (!String.prototype.endsWithPowr) {
 	video.play();
     };
 
-  PowrVideo.prototype.receiveMessage = function(event) {
+  PowrVideo.prototype.videoEnd = function(data) {
     var response = {};
-    var data = event.data.split("###");
-    var player = this.player;
+    response['flag'] = data.flag;
+    response['id'] = data.id;
+    data.source.postMessage(JSON.stringify(response), data.origin);
+  };
 
-    if(data[0] === "play") {
-      player.play();
-      response['msg'] = "playing";
-    } else if(data[0] === "pause") {
-      player.pause();
-      response['msg'] = "paused";
-    } else if(data[0] === "update") {
-      response['duration'] = player.currentTime();
-    } else if(data[0] === "duration") {
-      response['duration'] = player.currentTime();
-    } else if(data[0] === "ping") {
-      response['msg'] = "OK!";
+  PowrVideo.prototype.receiveMessage = function(event) {
+    try {
+      var seperator = "###";
+      if(event != null && event.data != null && event.data.indexOf(seperator) !== -1) {
+        var response = {};
+        var data = event.data.split(seperator);
+        var player = this.player;
+
+        if(data[0] === "play") {
+          player.play();
+          response['msg'] = "playing";
+        } else if(data[0] === "pause") {
+          player.pause();
+          response['msg'] = "paused";
+        } else if(data[0] === "update") {
+          response['duration'] = player.currentTime();
+        } else if(data[0] === "duration") {
+          response['duration'] = player.currentTime();
+        } else if(data[0] === "ping") {
+          response['msg'] = "OK!";
+        } else if(data[0] === "listen" && data.length == 3) {
+          this.adListeners.push({"flag": data[0], "id": data[1], "listenerId": data[2], "source": event.source, "origin": event.origin});
+          response['msg'] = "OK!";
+        } else if(data[0] === "adtype") {
+          this.adtype = data[2];
+          response['msg'] = "updated adtype: " + data[2];
+        } else if(data[0] === "get_adtype") {
+          response['msg'] = this.adtype;
+        } else if(data[0] === "end") {
+          player.on('ended', this.videoEnd.bind(this, {"flag": "video_ended", "id": data[1], "source": event.source, "origin": event.origin}));
+          response['msg'] = "added video end listener";
+        }
+
+        response['flag'] = data[0];
+        response['id'] = data[1];
+        event.source.postMessage(JSON.stringify(response), event.origin);
+      }
+    } catch (e) {
+      this.log(e);
     }
-
-    response['flag'] = data[0];
-    if(data.length == 2) response['id'] = data[1];
-    event.source.postMessage(JSON.stringify(response), event.origin);
   };
 
     PowrVideo.setCookie = function(cname, cvalue, exminutes) {
