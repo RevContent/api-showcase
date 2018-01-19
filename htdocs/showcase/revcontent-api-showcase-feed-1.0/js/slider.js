@@ -961,6 +961,7 @@ Author: michael@revcontent.com
                                                         '<div class="rev-provider"></div>' +
                                                         '<div class="rev-date"></div>' +
                                                     '</div>' +
+                                                    '<div class="rev-save"><?xml version="1.0" ?><svg contentScriptType="text/ecmascript" contentStyleType="text/css" preserveAspectRatio="xMidYMid meet" version="1.0" viewBox="0 0 60.000000 60.000000" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" zoomAndPan="magnify"><g><polygon fill="none" points="51.0,59.0 29.564941,45.130005 9.0,59.0 9.0,1.0 51.0,1.0" stroke="#231F20" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/></g></svg></div>' +
                                                 '</div>' +
                                             '</div>' +
                                         '</div>' +
@@ -1035,6 +1036,21 @@ Author: michael@revcontent.com
 
             revUtils.prepend(cell.querySelector('.rev-auth-box'), brandLogoSquare);
         }
+
+        var save = cell.querySelector('.rev-meta-inner .rev-save');
+        var handleSave = function(save) {
+            revUtils.addEventListener(save, revDetect.mobile() ? 'touchstart' : 'click', function(e) {
+                if (revUtils.hasClass(save, 'rev-save-active')) {
+                    revUtils.removeClass(save, 'rev-save-active');
+                } else {
+                    revUtils.addClass(save, 'rev-save-active');
+                    //console.log("flip card, auth, save book mark");
+                }
+                e.preventDefault();
+                e.stopPropagation();
+            }, {passive: false});
+        }
+        handleSave(save);
 
         var close = cell.querySelector('.rev-auth-close-button');
         revUtils.addEventListener(close, 'click', function(e) {
