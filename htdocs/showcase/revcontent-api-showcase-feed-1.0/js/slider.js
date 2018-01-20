@@ -400,7 +400,9 @@ Author: michael@revcontent.com
         // TODO: make this a 2 step process. first append single element then get type, second add innerhtml
         for (var i = 0; i < total; i++) {
 
-            if (this.authenticated && !this.interestsCarouselVisible && i == patternTotal) {
+            //  && i == patternTotal
+            // @todo find replacement/correct var for patternTotal
+            if (this.authenticated && !this.interestsCarouselVisible) {
                 this.appendInterestsCarousel(grid);
             }
 
