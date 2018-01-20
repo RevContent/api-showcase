@@ -1106,9 +1106,20 @@ Author: michael@revcontent.com
                 if (popup.closed) {
                     that.isAuthenticated(function(response) {
                         if (response === true) {
-                            revUtils.removeClass(cell, 'rev-flipped');
-                            that.updateAuthElements();
-                            alert("One Last Step - Engage password");
+                       
+                            var headline = cell.querySelector('.rev-auth-headline');
+                            var button = cell.querySelector('.rev-auth-button');
+                            var image = cell.querySelector('.rev-auth-site-logo');
+                            var container = cell.querySelector('.rev-auth-box');
+
+                            if (image) {
+                                image.innerHTML = "<img src='https://graph.facebook.com/758080600/picture?type=square' />";
+                            } else {     
+                                container.insertAdjacentHTML('afterbegin',"<img src='https://graph.facebook.com/758080600/picture?type=square' />");
+                            }
+
+                            button.style.display = "none";
+                            headline.innerHTML = "One Last Step, Please enter a password:<br/><input type='text' class='rev-engpass'/><input type='button' value='Sign Up'/>";
                         } else {
                             // TODO
                         }
@@ -1119,8 +1130,15 @@ Author: michael@revcontent.com
             }, 100);
         });
 
+        revUtils.addEventListener(cell.querySelector('.rev-auth-button'), 'click', function(e) {
+            //revUtils.removeClass(cell, 'rev-flipped');
+            //that.updateAuthElements();
+        });
+
         return cell;
     };
+
+    
 
     RevSlider.prototype.getDisclosure = function() {
         return revDisclose.getDisclosure(this.options.disclosure_text, {
