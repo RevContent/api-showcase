@@ -1477,7 +1477,7 @@ Author: michael@revcontent.com
       interests[2] = { id: 400, people: 2599710, title: "Bitcoin Cash", slug: "bch", image: '', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
 
 
-      this.interests.list = interests;
+      //this.interests.list = interests;
 
       return interests;
     };
@@ -1547,7 +1547,7 @@ Author: michael@revcontent.com
 
         grid.layoutItems(interestsCarouselItemArr, true);
 
-        var carousel = interestsCarousel.querySelector('.interests-carousel');
+        var carousel = interestsCarousel.querySelector('.feed-interests-carousel');
 
         var interests_flick = new Flickity( carousel, {
             wrapAround: false,
