@@ -262,7 +262,8 @@ Author: michael@revcontent.com
             list: [],
             subscribed: [],
             subscribed_ids: [],
-            available: []
+            available: [],
+            recommended: []
         };
 
         this.getData();
