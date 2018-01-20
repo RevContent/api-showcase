@@ -253,10 +253,12 @@
     "file_prefix": "",
     "js": "./showcase/revcontent-api-showcase-feed-1.0/js/revfeed.js",
     "css": [
+      "./node_modules/flickity/css/flickity.css",
       "./showcase/revcontent-api-showcase-feed-1.0/css/revfeed.scss",
       "./showcase/css/revdialog.css"
     ],
     "build": [
+      "./node_modules/flickity/dist/flickity.pkgd.js",
       "./showcase/revcontent-api-showcase-feed-1.0/node_modules/desandro-get-style-property/get-style-property.js",
       "./showcase/revcontent-api-showcase-feed-1.0/node_modules/get-size/get-size.js",
       "./showcase/revcontent-api-showcase-feed-1.0/node_modules/desandro-matches-selector/matches-selector.js",
