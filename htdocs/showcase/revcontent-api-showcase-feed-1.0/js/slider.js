@@ -242,9 +242,6 @@ Author: michael@revcontent.com
 
         this.setGridClasses();
 
-        // SWIPE Feature (Explore Panel)
-        // this.appendExplorePanel(this.grid);
-
         this.createCells(this.grid);
 
         if (this.limit == 0) {
@@ -1109,7 +1106,10 @@ Author: michael@revcontent.com
                 if (popup.closed) {
                     that.isAuthenticated(function(response) {
                         if (response === true) {
-                       
+                            revUtils.removeClass(cell, 'rev-flipped');
+                            that.updateAuthElements();
+
+                            /* secondary auth page, deemed unnecessary for now
                             var headline = cell.querySelector('.rev-auth-headline');
                             var button = cell.querySelector('.rev-auth-button');
                             var image = cell.querySelector('.rev-auth-site-logo');
@@ -1122,7 +1122,7 @@ Author: michael@revcontent.com
                             }
 
                             button.style.display = "none";
-                            headline.innerHTML = "One Last Step, Please enter a password:<br/><input type='text' class='rev-engpass'/><input type='button' value='Sign Up'/>";
+                            headline.innerHTML = "One Last Step, Please enter a password:<br/><input type='text' class='rev-engpass'/><input type='button' value='Sign Up'/>";*/
                         } else {
                             // TODO
                         }
@@ -1133,10 +1133,12 @@ Author: michael@revcontent.com
             }, 100);
         });
 
+        /* secondary auth page, deemed unnecessary for now
         revUtils.addEventListener(cell.querySelector('.rev-auth-button'), 'click', function(e) {
             //revUtils.removeClass(cell, 'rev-flipped');
             //that.updateAuthElements();
         });
+        */
 
         return cell;
     };
@@ -1603,89 +1605,6 @@ Author: michael@revcontent.com
         });
 
 
-    };
-
-    RevSlider.prototype.appendExplorePanel = function(grid){
-        var explorePanel = document.createElement('div');
-        explorePanel.id = 'revfeed-explore';
-        explorePanel.classList.add('revfeed-explore');
-        explorePanel.classList.add('revfeed-explore-panel');
-        explorePanel.classList.add('revfeed-explore-panel--docked');
-        explorePanel.innerHTML = '<div id="revfeed-explore-wrapper" class="revfeed-explore-wrapper">' +
-            '<div><div style="line-height:32px;height:32px;border-bottom:1.0px solid #dddddd;padding:0 12px">' +
-            '<strong style="font-family:Montserrat;letter-spacing:1px;color:#222222">EXPLORE &nbsp;<small style="color:#00a8ff">FEED</small></strong>' +
-            '</div></div>' +
-            '<div style="display:block;height:50vw;overflow:hidden;margin-bottom:2px">' +
-            '<div style="display:block;float:left;width:33vw;height:100%;"><div style="display:block;width:100%;height:100%;background:transparent url(http://placehold.it/106x200?text=1) top left no-repeat;background-repeat: no-repeat;background-size:cover;">&nbsp;</div></div>' +
-            '<div style="display:block;float:left;width:34vw;height:100%"><div style="display:block;width:100%;height:100%;border-left:2px solid #ffffff;border-right:2px solid #ffffff;background:transparent url(http://placehold.it/106x200?text=2) top left no-repeat;background-repeat: no-repeat;background-size:cover;">&nbsp;</div></div>' +
-            '<div style="display:block;float:left;width:33vw;height:100%"><div style="display:block;width:100%;height:100%;background:transparent url(http://placehold.it/106x200?text=3) top left no-repeat;background-repeat: no-repeat;background-size:cover;">&nbsp;</div></div>' +
-            '<div style="clear:both"></div>' +
-            '</div>' +
-            '<div style="display:block;height:50vw;overflow:hidden;margin-bottom:2px">' +
-            '<div style="display:block;float:left;width:34vw;height:100%"><div style="display:block;width:100%;height:100%;border-right:2px solid #ffffff;background:transparent url(http://placehold.it/106x200?text=4) top left no-repeat;background-repeat: no-repeat;background-size:cover;">&nbsp;</div></div>' +
-            '<div style="display:block;float:left;width:66vw;height:100%"><div style="display:block;width:100%;height:100%;background:transparent url(http://placehold.it/106x200?text=5) top left no-repeat;background-repeat: no-repeat;background-size:cover;">&nbsp;</div></div>' +
-            '<div style="clear:both"></div>' +
-            '</div>' +
-            '<div style="display:block;height:50vw;overflow:hidden;margin-bottom:2px">' +
-            '<div style="display:block;float:left;width:50vw;height:100%"><div style="display:block;width:100%;height:100%;border-right:2px solid #ffffff;background:transparent url(http://placehold.it/106x200?text=6) top left no-repeat;background-repeat: no-repeat;background-size:cover;">&nbsp;</div></div>' +
-            '<div style="display:block;float:left;width:50vw;height:100%"><div style="display:block;width:100%;height:100%;background:transparent url(http://placehold.it/212x200?text=7) top left no-repeat;background-repeat: no-repeat;background-size:cover;">&nbsp;</div></div>' +
-            '<div style="clear:both"></div>' +
-            '</div>' +
-            '<div style="display:block;height:50vw;overflow:hidden;margin-bottom:2px">' +
-            '<div style="display:block;float:left;width:33vw;height:100%;"><div style="display:block;width:100%;height:100%;background:transparent url(http://placehold.it/106x200?text=1) top left no-repeat;background-repeat: no-repeat;background-size:cover;">&nbsp;</div></div>' +
-            '<div style="display:block;float:left;width:34vw;height:100%"><div style="display:block;width:100%;height:100%;border-left:2px solid #ffffff;border-right:2px solid #ffffff;background:transparent url(http://placehold.it/106x200?text=2) top left no-repeat;background-repeat: no-repeat;background-size:cover;">&nbsp;</div></div>' +
-            '<div style="display:block;float:left;width:33vw;height:100%"><div style="display:block;width:100%;height:100%;background:transparent url(http://placehold.it/106x200?text=3) top left no-repeat;background-repeat: no-repeat;background-size:cover;">&nbsp;</div></div>' +
-            '<div style="clear:both"></div>' +
-            '</div>' +
-
-            '</div>';
-
-        if (this.options.brand_logo) {
-            var brandLogo = this.createBrandLogo('rev-header-logo');
-            brandLogo.style.textAlign = 'center';
-            brandLogo.style.display = 'block';
-            brandLogo.style.height = '48px';
-            brandLogo.style.lineHeight = '48px';
-            brandLogo.style.paddingTop = '9px';
-            explorePanel.insertAdjacentElement('afterbegin', brandLogo);
-        }
-        grid.element.prepend(explorePanel);
-        var SwipeFeed = new Hammer.Manager(document.getElementById('grid'), {
-
-        });
-        var is_scrolling;
-        SwipeFeed.add( new Hammer.Pan({ direction: Hammer.DIRECTION_HORIZONTAL, threshold: 50 }) );
-        window.addEventListener('scroll', function() {
-            is_scrolling = true;
-        }, { passive: true });
-        window.addEventListener('touchend', function() {
-            is_scrolling = false;
-        });
-        SwipeFeed.on("panleft", function(ev) {
-            if (is_scrolling) {
-                return;
-            }
-            top.location.href = '#revfeed-explore';
-            explorePanel.classList.remove('revfeed-explore-panel--docked');
-            explorePanel.classList.add('revfeed-explore-panel--visible');
-            document.body.classList.add('revfeed-is-exploring');
-
-        });
-        SwipeFeed.on("panright", function(ev) {
-            if (is_scrolling) {
-                return;
-            }
-            explorePanel.classList.remove('revfeed-explore-panel--visible');
-            explorePanel.classList.add('revfeed-explore-panel--docked');
-            document.body.classList.remove('revfeed-is-exploring');
-        });
-
-        revUtils.addEventListener(grid.element, 'touchstart', function(e){
-            if(document.body.classList.contains('revfeed-is-exploring')){
-                //e.preventDefault();
-                //e.stopPropagation();
-            }
-        }, {passive: false});
     };
 
     RevSlider.prototype.extractRootDomain = function(url) {
