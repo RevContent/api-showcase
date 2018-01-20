@@ -715,6 +715,7 @@ $reactionMenu8Y: 13.5px;
         }
 
         .rev-image {
+            width: 100%;
             position: relative;
             // transition: background 250ms ease-in-out;
             background-size: cover;
@@ -930,6 +931,7 @@ $reactionMenu8Y: 13.5px;
             }
 
             .rev-reaction-bar {
+                height: 20px;
                 display: flex;
                 justify-content: space-around;
                 // &:after {
@@ -1388,6 +1390,7 @@ $reactionMenu8Y: 13.5px;
 
             .rev-reactions-total-inner {
                 display: inline-block;
+                height: 20px;
                 .rev-reaction {
                     display: inline-block;
                     position: relative;
@@ -1845,6 +1848,7 @@ $reactionMenu8Y: 13.5px;
     padding-top: 11px;
     margin-bottom: 10px;
     .rev-meta-inner {
+        height: 34px;
         line-height: 0;
 
         .rev-meta-content {
