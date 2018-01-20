@@ -1533,7 +1533,7 @@ Author: michael@revcontent.com
         interestsCarousel.innerHTML = '<div><h1 style="font-size:17px;padding-left:9px">Content You Love' +
             '<small style="font-size:12px;font-weight:normal;padding-left:15px;color:#777777"><sup>SIMILAR TOPICS</sup></small>' +
             '</h1>' +
-            '<div id="feed-interests" class="interests-carousel">' +
+            '<div id="rev-feed-interests" class="feed-interests-carousel">' +
 
                 interest_cells +
 
