@@ -427,6 +427,7 @@ Author: michael@revcontent.com
             items[i].element.querySelector('.rev-reaction-bar').innerHTML = reactionHtml[i];
             this.handleShareAction(items[i]);
             this.handleReactionMenu(items[i]);
+            this.handleBookmarkAction(items[i]);
         }
 
         return {
@@ -510,7 +511,7 @@ Author: michael@revcontent.com
 
                     that.reactionCount(item, iconName, true);
 
-                    that.transitionLogin(item);
+                    that.transitionLogin(item, 'reaction');
 
                     return;
                 }
@@ -553,7 +554,7 @@ Author: michael@revcontent.com
                     that.setReactionText(item);
                 }
 
-                that.transitionLogin(item);
+                that.transitionLogin(item, 'reaction');
             });
 
             this.mc.on('press', function(ev) {
@@ -648,7 +649,7 @@ Author: michael@revcontent.com
                     that.setReactionText(item);
                 }
 
-                that.transitionLogin(item);
+                that.transitionLogin(item, 'reaction');
             });
 
             var menuItems = item.element.querySelectorAll('.rev-reaction-menu-item');
@@ -698,22 +699,28 @@ Author: michael@revcontent.com
 
                     that.setReactionText(item);
 
-                    that.transitionLogin(item);
+                    that.transitionLogin(item, 'reaction');
 
                 }, {passive: false});
             }
         }
     };
 
-    RevSlider.prototype.transitionLogin = function(item) {
+    RevSlider.prototype.transitionLogin = function(item, engagetype) {
         var that = this;
         setTimeout(function() {
             var headline = item.element.querySelector('.rev-auth-headline');
-
+            var engagetxt = item.element.querySelector('.rev-engage-type-txt');
             var lineHeight = parseInt(revUtils.getComputedStyle(headline, 'line-height'));
             var height = parseInt(revUtils.getComputedStyle(headline, 'height'));
             var fontSize = parseInt(revUtils.getComputedStyle(headline, 'font-size'));
             var lines = height / lineHeight;
+
+            if (engagetype == 'reaction') {
+                engagetxt.innerHTML = 'Almost Done! Login to save your reaction';
+            } else if (engagetype == 'bookmark') {
+                engagetxt.innerHTML = 'Almost Done! Login to save your bookmark';
+            }
 
             var fallback = 0; // just in case
             while(lines >= 3 && fallback < 100) {
@@ -800,6 +807,27 @@ Author: michael@revcontent.com
                 }
             }, {passive: false});
         }
+    }
+
+    RevSlider.prototype.handleBookmarkAction = function(item) {
+
+        var that = this;
+        var bookmark = item.element.querySelector('.rev-meta-inner .rev-save');
+
+        var handleSave = function(bookmark) {
+            revUtils.addEventListener(bookmark, revDetect.mobile() ? 'touchstart' : 'click', function(e) {
+                if (revUtils.hasClass(bookmark, 'rev-save-active')) {
+                    revUtils.removeClass(bookmark, 'rev-save-active');
+                } else {
+                    revUtils.addClass(bookmark, 'rev-save-active');
+                    that.transitionLogin(item, 'bookmark');
+                }
+                e.preventDefault();
+                e.stopPropagation();
+            }, {passive: false});
+        }
+        handleSave(bookmark);
+
     }
 
     RevSlider.prototype.gridOptions = function() {
@@ -994,7 +1022,7 @@ Author: michael@revcontent.com
                             '<div class="rev-auth-box-inner">' +
                                 '<div class="rev-auth-subline">'+ this.getDisclosure() +'</div>' +
                                 '<div class="rev-auth-headline">' +
-                                    (this.authenticated ? 'Currently logged in!' : 'Almost Done! Login to save your reaction <br /> <strong>and</strong> personalize your experience') +
+                                    (this.authenticated ? 'Currently logged in!' : '<span class="rev-engage-type-txt">Almost Done! Login to save your reaction</span> <br /> <strong>and</strong> personalize your experience') +
                                 '</div>' +
                                 '<div class="rev-auth-button">' +
                                     '<div class="rev-auth-button-icon">' +
@@ -1036,21 +1064,6 @@ Author: michael@revcontent.com
 
             revUtils.prepend(cell.querySelector('.rev-auth-box'), brandLogoSquare);
         }
-
-        var save = cell.querySelector('.rev-meta-inner .rev-save');
-        var handleSave = function(save) {
-            revUtils.addEventListener(save, revDetect.mobile() ? 'touchstart' : 'click', function(e) {
-                if (revUtils.hasClass(save, 'rev-save-active')) {
-                    revUtils.removeClass(save, 'rev-save-active');
-                } else {
-                    revUtils.addClass(save, 'rev-save-active');
-                    //console.log("flip card, auth, save book mark");
-                }
-                e.preventDefault();
-                e.stopPropagation();
-            }, {passive: false});
-        }
-        handleSave(save);
 
         var close = cell.querySelector('.rev-auth-close-button');
         revUtils.addEventListener(close, 'click', function(e) {
