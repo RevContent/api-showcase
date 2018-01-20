@@ -735,10 +735,12 @@ Author: michael@revcontent.com
             var fontSize = parseInt(revUtils.getComputedStyle(headline, 'font-size'));
             var lines = height / lineHeight;
 
-            if (engagetype == 'reaction') {
-                engagetxt.innerHTML = 'Almost Done! Login to save your reaction';
-            } else if (engagetype == 'bookmark') {
-                engagetxt.innerHTML = 'Almost Done! Login to save your bookmark';
+            if (engagetxt) {
+                if (engagetype == 'reaction') {
+                    engagetxt.innerHTML = 'Almost Done! Login to save your reaction';
+                } else if (engagetype == 'bookmark') {
+                    engagetxt.innerHTML = 'Almost Done! Login to save your bookmark';
+                }
             }
 
             var fallback = 0; // just in case
@@ -1105,6 +1107,7 @@ Author: michael@revcontent.com
                         if (response === true) {
                             revUtils.removeClass(cell, 'rev-flipped');
                             that.updateAuthElements();
+                            alert("One Last Step - Engage password");
                         } else {
                             // TODO
                         }
