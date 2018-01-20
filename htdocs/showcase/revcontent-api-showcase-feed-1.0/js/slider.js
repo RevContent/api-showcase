@@ -880,7 +880,7 @@ Author: michael@revcontent.com
             brandLogo.innerHTML = '<img src="'+ (square ? this.options.brand_logo_secondary : this.options.brand_logo) +'"/>';
         }
 
-        revUtils.addClass(brandLogo, className)
+        revUtils.addClass(brandLogo, className);
 
         return brandLogo;
     };
@@ -1514,7 +1514,7 @@ Author: michael@revcontent.com
             var the_cell = '' +
             // Interest Image should be stored as CSS by slug/name ID interest-' + interest.slug.toLowerCase() + '
             // $image property in interest object could be used as override if non-empty.
-            '<div class="carousel-cell interest-cell interest-' + interest.slug.toLowerCase() + ' selected-interest" data-people="' + interest.people + '" data-title="' + interest.title + '" data-interest="' + interest.slug.toLowerCase() + ">' +
+            '<div class="carousel-cell interest-cell interest-' + interest.slug.toLowerCase() + ' selected-interest" data-people="' + interest.people + '" data-title="' + interest.title + '" data-interest="' + interest.slug.toLowerCase() + '">' +
                 '<div class="cell-wrapper">' +
                     '<span class="selector ' + (interest.subscribed ? 'subscribed' : '') + '"></span>' +
                     '<div class="interest-title">' + interest.title + '</div>' +
