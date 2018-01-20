@@ -253,6 +253,18 @@ Author: michael@revcontent.com
             that.resize();
         });
 
+        // inject:mock
+        // endinject
+
+        this.authenticated = false;
+
+        this.interests = {
+            list: [],
+            subscribed: [],
+            subscribed_ids: [],
+            available: []
+        };
+
         this.getData();
 
         var that = this;
@@ -387,6 +399,11 @@ Author: michael@revcontent.com
 
         // TODO: make this a 2 step process. first append single element then get type, second add innerhtml
         for (var i = 0; i < total; i++) {
+
+            if (this.authenticated && !this.interestsCarouselVisible && i == patternTotal) {
+                this.appendInterestsCarousel(grid);
+            }
+
             var element = this.createNewCell();
             // items.push(item);
             grid.element.appendChild(element);
@@ -1444,6 +1461,123 @@ Author: michael@revcontent.com
         }
     };
 
+    RevSlider.prototype.fetchInterestsData = function(){
+      // MOCK Data -- Replace with proper DB/service fetch
+      // Return an array of Interest Objects.
+      var interests = [];
+      interests[0] = { id: 100, people: 1043201, title: "Technology", slug: "technology", image: '', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[1] = { id: 200, people: 1235111, title: "Advertising", slug: "advertising",image: '', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[2] = { id: 300, people: 2599710, title: "Ethereum", slug: "ethereum", image: '', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[2] = { id: 400, people: 2599710, title: "Bitcoin Cash", slug: "bch", image: '', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+
+
+      this.interests.list = interests;
+
+      return interests;
+    };
+
+    RevSlider.prototype.subscribeToInterest = function(interestId){
+        if(this.interests.subscribed_ids[interestId] == undefined) {
+            this.interests.subscribed.push(this.interests.list[interestId]);
+            this.interests.subscribed_ids.push(interestId);
+            return interestId;
+        } else {
+            return false;
+        }
+    };
+
+    RevSlider.prototype.unsubscribeFromInterest = function(interestId){
+        if(this.interests.subscribed_ids[interestId] !== undefined) {
+            var revised_interests = [];
+            var revised_ids = [];
+            for(var i=0;i<this.interests.subscribed;i++){
+                if(this.interests.subscribed[i].id !== interestId){
+                    revised_interests.push(this.interests.subscribed[i]);
+                    revised_ids.push(this.interests.subscribed[i].id);
+                }
+            }
+            this.interests.subscribed = revised_interests;
+            this.interests.subscribed_ids = revised_ids;
+            return interestId;
+        } else {
+            return false;
+        }
+    };
+
+    RevSlider.prototype.appendInterestsCarousel = function (grid) {
+        this.interestsCarouselVisible = true;
+        var interest_cells = '';
+        var interests_data = this.fetchInterestsData();
+        var interests_count = interests_data.length;
+        for(var i=0;i<interests_count;i++){
+            var interest = interests_data[i];
+            var the_cell = '' +
+            // Interest Image should be stored as CSS by slug/name ID interest-' + interest.slug.toLowerCase() + '
+            // $image property in interest object could be used as override if non-empty.
+            '<div class="carousel-cell interest-cell interest-' + interest.slug.toLowerCase() + ' selected-interest" data-people="' + interest.people + '" data-title="' + interest.title + '" data-interest="' + interest.slug.toLowerCase() + ">' +
+                '<div class="cell-wrapper">' +
+                    '<span class="selector ' + (interest.subscribed ? 'subscribed' : '') + '"></span>' +
+                    '<div class="interest-title">' + interest.title + '</div>' +
+                '</div>' +
+            '</div>';
+            interest_cells += the_cell;
+        }
+
+        var interestsCarousel = document.createElement('div');
+        interestsCarousel.className = 'rev-content';
+        interestsCarousel.innerHTML = '<div><h1 style="font-size:17px;padding-left:9px">Content You Love' +
+            '<small style="font-size:12px;font-weight:normal;padding-left:15px;color:#777777"><sup>SIMILAR TOPICS</sup></small>' +
+            '</h1>' +
+            '<div id="feed-interests" class="interests-carousel">' +
+
+                interest_cells +
+
+            '</div>' +
+            '</div>';
+
+        grid.element.appendChild(interestsCarousel);
+
+        var interestsCarouselItemArr = grid.addItems([interestsCarousel]);
+
+        grid.layoutItems(interestsCarouselItemArr, true);
+
+        var carousel = interestsCarousel.querySelector('.interests-carousel');
+
+        var interests_flick = new Flickity( carousel, {
+            wrapAround: false,
+            prevNextButtons: false,
+            pageDots: false,
+            adaptiveHeight: true,
+            freeScroll: true,
+            selectedAttraction: 0.15,
+            freeScrollFriction: 0.03,
+            initialIndex: 3
+        });
+
+        interests_flick.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) {
+            if ( !cellElement ) {
+                return;
+            }
+            if(cellElement.classList.contains('selected-interest')){
+                cellElement.classList.remove('selected-interest');
+                cellElement.querySelectorAll('span.selector')[0].classList.remove('subscribed');
+            } else {
+                cellElement.classList.add('selected-interest');
+                cellElement.querySelectorAll('span.selector')[0].classList.add('subscribed');
+            }
+        });
+
+        interests_flick.on( 'dragStart', function( event, pointer ) {
+            carousel.classList.add('is-dragging');
+        });
+
+        interests_flick.on( 'dragEnd', function( event, pointer ) {
+            carousel.classList.remove('is-dragging');
+        });
+
+
+    };
+
     RevSlider.prototype.extractRootDomain = function(url) {
         if (!url) {
             return '';
@@ -1471,7 +1605,7 @@ Author: michael@revcontent.com
             domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1];
         }
         return domain;
-    }
+    };
 
     RevSlider.prototype.timeAgo = function(time, output) {
         var templates = {
