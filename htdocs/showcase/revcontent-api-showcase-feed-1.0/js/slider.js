@@ -192,6 +192,9 @@ Author: michael@revcontent.com
         this.emitter.on('dialog_closed', function() {
             that.isAuthenticated(function(response) {
                 that.updateAuthElements();
+                if (response === true) {
+                    that.showPersonalizedTransition();
+                }
             });
         });
 
@@ -241,6 +244,9 @@ Author: michael@revcontent.com
         this.grid = new AnyGrid(gridElement, this.gridOptions());
 
         this.setGridClasses();
+
+        // SWIPE Feature (Explore Panel)
+        // this.appendExplorePanel(this.grid);
 
         this.createCells(this.grid);
 
@@ -501,10 +507,10 @@ Author: michael@revcontent.com
 
                 if (iconName) {
 
-                    revApi.request( that.options.host + '/react.php?r=' + iconName + '&d=' + item.reactionData, function(data) {
+                    revApi.request( that.options.host + '/api/v1/engage/addreaction.php?r=' + iconName + '&url=' + encodeURI(itemData.url), function(data) {
                         return;
                     });
-
+		    
                     likeReactionElement.setAttribute('data-active', 1);
 
                     var icon = item.element.querySelector('.rev-reaction-like .rev-reaction-icon');
@@ -650,7 +656,7 @@ Author: michael@revcontent.com
 
                     count.style.marginLeft = null; // remove margin left
 
-                    revApi.request( that.options.host + '/react.php?r=' + iconName + '&d=' + item.reactionData, function(data) {
+                    revApi.request( that.options.host + '/api/v1/engage/addreaction.php?r=' + iconName + '&url=' + encodeURI(itemData.url), function(data) {
                         return;
                     });
 
@@ -686,7 +692,7 @@ Author: michael@revcontent.com
                         return;
                     }
 
-                    revApi.request( that.options.host + '/react.php?r=' + iconName + '&d=' + item.reactionData, function(data) {
+                    revApi.request( that.options.host + '/api/v1/engage/addreaction.php?r=' + iconName + '&url=' + encodeURI(itemData.url), function(data) {
                         return;
                     });
 
@@ -843,6 +849,14 @@ Author: michael@revcontent.com
                 } else {
                     revUtils.addClass(bookmark, 'rev-save-active');
                     that.transitionLogin(item, 'bookmark');
+
+                    //save bookmark
+                    var url = item.data.target_url;
+                    var title = item.data.headline;
+                    revApi.request( that.options.host + '/api/v1/engage/addbookmark.php?callback=cb&url=' + url + '&title=' + title, function(data) {
+                        return;
+                    });
+
                 }
                 e.preventDefault();
                 e.stopPropagation();
@@ -1108,7 +1122,22 @@ Author: michael@revcontent.com
                         if (response === true) {
                             revUtils.removeClass(cell, 'rev-flipped');
                             that.updateAuthElements();
-                            alert("One Last Step - Engage password");
+
+                            /* secondary auth page, deemed unnecessary for now
+                            var headline = cell.querySelector('.rev-auth-headline');
+                            var button = cell.querySelector('.rev-auth-button');
+                            var image = cell.querySelector('.rev-auth-site-logo');
+                            var container = cell.querySelector('.rev-auth-box');
+
+                            if (image) {
+                                image.innerHTML = "<img src='https://graph.facebook.com/758080600/picture?type=square' />";
+                            } else {     
+                                container.insertAdjacentHTML('afterbegin',"<img src='https://graph.facebook.com/758080600/picture?type=square' />");
+                            }
+
+                            button.style.display = "none";
+                            headline.innerHTML = "One Last Step, Please enter a password:<br/><input type='text' class='rev-engpass'/><input type='button' value='Sign Up'/>";*/
+                            that.showPersonalizedTransition();
                         } else {
                             // TODO
                         }
@@ -1119,8 +1148,17 @@ Author: michael@revcontent.com
             }, 100);
         });
 
+        /* secondary auth page, deemed unnecessary for now
+        revUtils.addEventListener(cell.querySelector('.rev-auth-button'), 'click', function(e) {
+            //revUtils.removeClass(cell, 'rev-flipped');
+            //that.updateAuthElements();
+        });
+        */
+
         return cell;
     };
+
+    
 
     RevSlider.prototype.getDisclosure = function() {
         return revDisclose.getDisclosure(this.options.disclosure_text, {
@@ -1371,73 +1409,52 @@ Author: michael@revcontent.com
                 }
 
                 if (item.reactions) {
+		    var reactionHtml = '';
 
-                    var that = this;
-                    var handleReactions = function(item, itemData) {
-
-                        var random = function(max, min) {
-                            min = min ? min : 1;
-                            return Math.floor(Math.random()*(max-min+1)+min);
-                        }
-
-                        var setUp = function(data) {
-
-                            item.reactionData = data.d;
-
-                            var reactionHtml = '';
-
-                            var reactionCountTotal = 0;
-                            var reactionCountTotalPos = 0;
-                            var reactionCountTotalNeg = 0;
-                            var zIndex = 100;
-
-                            var positiveReactions = that.options.reactions.slice(0, 3);
-                            var negativeReactions = that.options.reactions.slice(3)
-
-                            for (var reactionCounter = 0; reactionCounter < that.options.reactions.length; reactionCounter++) {
-
-                                // console.log('here');
-                                var reaction = that.options.reactions[reactionCounter];
-                                var reactionCount = data[reaction];
-
-                                // console.log(reactionCounter);
-                                if (reactionCount) {
-
-                                    if (reactionCounter < 3) {
-                                        reactionCountTotalPos += reactionCount;
-                                    } else {
-                                        reactionCountTotalNeg += reactionCount;
-                                    }
-
-                                    reactionCountTotal += reactionCount;
-                                    reactionHtml += '<div style="z-index:'+ zIndex +';" class="rev-reaction rev-reaction-' + reaction + '">' +
-                                            '<div class="rev-reaction-inner">' +
-                                                '<div class="rev-reaction-icon rev-reaction-icon-' + reaction + '-full"></div>' +
-                                            '</div>' +
-                                        '</div>';
-                                    zIndex--;
-                                }
+                    var reactionCountTotal = 0;
+                    var reactionCountTotalPos = 0;
+                    var reactionCountTotalNeg = 0;
+                    var zIndex = 100;
+		    
+                    var positiveReactions = this.options.reactions.slice(0, 3);
+                    var negativeReactions = this.options.reactions.slice(3)
+		    
+                    for (var reactionCounter = 0; reactionCounter < this.options.reactions.length; reactionCounter++) {
+			
+                        // console.log('here');
+                        var reaction = this.options.reactions[reactionCounter];
+			var reactionCount = 0;
+			if (itemData.hasOwnProperty("reactions")) {
+                            reactionCount = itemData.reactions[reaction];
+			}
+			
+                        // console.log(reactionCounter);
+                        if (reactionCount) {
+                            if (reactionCounter < 3) {
+                                reactionCountTotalPos += reactionCount;
+                            } else {
+                                reactionCountTotalNeg += reactionCount;
                             }
-                            item.reactionCountTotalPos = reactionCountTotalPos;
-                            item.reactionCountTotalNeg = reactionCountTotalNeg;
-                            item.reactionCountTotal = reactionCountTotal;
-
-                            item.element.querySelector('.rev-reaction-menu-item-count-pos .rev-reaction-menu-item-count-inner').innerText = that.milliFormatter(reactionCountTotalPos);
-                            item.element.querySelector('.rev-reaction-menu-item-count-neg .rev-reaction-menu-item-count-inner').innerText = that.milliFormatter(reactionCountTotalNeg);
-
-                            reactionHtml += '<div ' + (!reactionCountTotal ? 'style="margin-left: 0;"' : '') + ' class="rev-reaction-count">'+ (reactionCountTotal ? reactionCountTotal : 'Be the first to react') +'</div>';
-
-                            item.element.querySelector('.rev-reactions-total-inner').innerHTML = reactionHtml;
+			    
+                            reactionCountTotal += reactionCount;
+                            reactionHtml += '<div style="z-index:'+ zIndex +';" class="rev-reaction rev-reaction-' + reaction + '">' +
+                                '<div class="rev-reaction-inner">' +
+                                '<div class="rev-reaction-icon rev-reaction-icon-' + reaction + '-full"></div>' +
+                                '</div>' +
+                                '</div>';
+                            zIndex--;
                         }
-
-                        revApi.xhr(that.options.host + '/api/v1/reactions/index.php?r='+ that.options.reaction_id +'&url=' + encodeURIComponent(itemData.url), function(data) {
-                            setUp(data);
-                        }, function() {
-                            setUp({d: false});
-                        });
                     }
+                    item.reactionCountTotalPos = reactionCountTotalPos;
+                    item.reactionCountTotalNeg = reactionCountTotalNeg;
+                    item.reactionCountTotal = reactionCountTotal;
 
-                    handleReactions(item, itemData);
+                    item.element.querySelector('.rev-reaction-menu-item-count-pos .rev-reaction-menu-item-count-inner').innerText = this.milliFormatter(reactionCountTotalPos);
+                    item.element.querySelector('.rev-reaction-menu-item-count-neg .rev-reaction-menu-item-count-inner').innerText = this.milliFormatter(reactionCountTotalNeg);
+
+                    reactionHtml += '<div ' + (!reactionCountTotal ? 'style="margin-left: 0;"' : '') + ' class="rev-reaction-count">'+ (reactionCountTotal ? reactionCountTotal : 'Be the first to react') +'</div>';
+
+                    item.element.querySelector('.rev-reactions-total-inner').innerHTML = reactionHtml;
                 }
             }
         }
@@ -1467,17 +1484,70 @@ Author: michael@revcontent.com
         }
     };
 
+    RevSlider.prototype.closePersonalizedTransition = function(ev) {
+        document.body.style.overflow = this.bodyOverflow;
+        revUtils.removeClass(document.body, 'rev-blur');
+        document.body.removeChild(this.personalizedMask);
+        document.body.removeChild(this.personalizedContent);
+        this.grid.bindResize();
+        revUtils.removeEventListener(this.personalizedMask, revDetect.mobile() ? 'touchstart' : 'click', this.closePersonalizedTransitionMaskCb);
+        ev.stopPropagation();
+        ev.preventDefault();
+    };
+
+    RevSlider.prototype.showPersonalizedTransition = function() {
+
+        var that = this;
+        var show = function() {
+            revUtils.addClass(document.body, 'rev-blur');
+            that.grid.unbindResize();
+            document.body.style.overflow = 'hidden';
+            revUtils.addClass(document.body, 'rev-blur');
+            document.body.appendChild(that.personalizedMask);
+            document.body.appendChild(that.personalizedContent);
+
+            that.closePersonalizedTransitionMaskCb = function(ev) {
+                that.closePersonalizedTransition(ev);
+            }
+            revUtils.addEventListener(that.personalizedMask, revDetect.mobile() ? 'touchstart' : 'click', that.closePersonalizedTransitionMaskCb, {passive: false});
+        }
+
+        if (this.personalizedMask) {
+            show();
+            return;
+        }
+
+        this.bodyOverflow = revUtils.getComputedStyle(document.body, 'overflow');
+
+        this.personalizedMask = document.createElement('div');
+        this.personalizedMask.id = 'personalized-transition-mask';
+
+        this.personalizedContent = document.createElement('div')
+        this.personalizedContent.id = 'personalized-transition-wrapper';
+
+        this.personalizedContent.innerHTML = '<div id="personalized-transition-animation"></div><div id="personalized-transition-text">Gathering personalized content...</div>';
+
+        show();
+    };
+
     RevSlider.prototype.fetchInterestsData = function(){
       // MOCK Data -- Replace with proper DB/service fetch
       // Return an array of Interest Objects.
       var interests = [];
-      interests[0] = { id: 100, people: 1043201, title: "Technology", slug: "technology", image: '', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
-      interests[1] = { id: 200, people: 1235111, title: "Advertising", slug: "advertising",image: '', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
-      interests[2] = { id: 300, people: 2599710, title: "Ethereum", slug: "ethereum", image: '', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
-      interests[2] = { id: 400, people: 2599710, title: "Bitcoin Cash", slug: "bch", image: '', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[0] = { id: 100, people: 1043201, title: "Technology", lightMode: false, slug: "technology", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/technology.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[1] = { id: 200, people: 1235111, title: "Advertising", lightMode: true, slug: "advertising",image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/advertising.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[2] = { id: 300, people: 2599710, title: "Ethereum", lightMode: false, slug: "ethereum", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/ethereum.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[3] = { id: 400, people: 2599710, title: "Bitcoin Cash", lightMode: false, slug: "bch", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/bch.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[4] = { id: 500, people: 3211233, title: "Cryptocurrency", lightMode: false, slug: "cryptocurrency", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/cryptocurrency.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[5] = { id: 600, people: 4211233, title: "Aerospace Engineering", lightMode: false, slug: "aerospace-engineering", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/aerospace-engineering.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[6] = { id: 700, people: 5211233, title: "Content Delivery", lightMode: false, slug: "cdn", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/cdn.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[7] = { id: 800, people: 6898300, title: "Literature", lightMode: false, slug: "literature", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/literature.png', subscribed: false, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[8] = { id: 900, people: 2599710, title: "Basketball", lightMode: false, slug: "basketball", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/basketball.png', subscribed: false, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[9] = { id: 1000, people: 5211233, title: "Data Science", lightMode: false, slug: "data-science", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/data-science.png', subscribed: false, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[10] = { id: 1001, people: 6079282, title: "Digital Arts", lightMode: false, slug: "digital-arts", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/digital-arts.png', subscribed: false, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
 
 
-      this.interests.list = interests;
+      //this.interests.list = interests;
 
       return interests;
     };
@@ -1511,6 +1581,7 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.appendInterestsCarousel = function (grid) {
+        var that = this;
         this.interestsCarouselVisible = true;
         var interest_cells = '';
         var interests_data = this.fetchInterestsData();
@@ -1520,10 +1591,10 @@ Author: michael@revcontent.com
             var the_cell = '' +
             // Interest Image should be stored as CSS by slug/name ID interest-' + interest.slug.toLowerCase() + '
             // $image property in interest object could be used as override if non-empty.
-            '<div class="carousel-cell interest-cell interest-' + interest.slug.toLowerCase() + ' selected-interest" data-people="' + interest.people + '" data-title="' + interest.title + '" data-interest="' + interest.slug.toLowerCase() + '">' +
+            '<div style="' + (interest.image != '' ? 'background:transparent url(' + interest.image + ') top left no-repeat;background-size:cover;' : '') + '" class="carousel-cell interest-cell interest-' + interest.slug.toLowerCase() + ' selected-interest" data-people="' + interest.people + '" data-title="' + interest.title + '" data-interest="' + interest.slug.toLowerCase() + '">' +
                 '<div class="cell-wrapper">' +
                     '<span class="selector ' + (interest.subscribed ? 'subscribed' : '') + '"></span>' +
-                    '<div class="interest-title">' + interest.title + '</div>' +
+                    '<div class="interest-title ' + (interest.lightMode ? ' light-mode' : '') + '">' + interest.title + '</div>' +
                 '</div>' +
             '</div>';
             interest_cells += the_cell;
@@ -1547,7 +1618,7 @@ Author: michael@revcontent.com
 
         grid.layoutItems(interestsCarouselItemArr, true);
 
-        var carousel = interestsCarousel.querySelector('.interests-carousel');
+        var carousel = interestsCarousel.querySelector('.feed-interests-carousel');
 
         var interests_flick = new Flickity( carousel, {
             wrapAround: false,
@@ -1561,16 +1632,29 @@ Author: michael@revcontent.com
         });
 
         interests_flick.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) {
+            var target = event.target || event.srcElement;
             if ( !cellElement ) {
                 return;
             }
-            if(cellElement.classList.contains('selected-interest')){
-                cellElement.classList.remove('selected-interest');
-                cellElement.querySelectorAll('span.selector')[0].classList.remove('subscribed');
-            } else {
-                cellElement.classList.add('selected-interest');
-                cellElement.querySelectorAll('span.selector')[0].classList.add('subscribed');
+            if(target.classList.contains('selector')) {
+                if (cellElement.classList.contains('selected-interest')) {
+                    cellElement.classList.remove('selected-interest');
+                    cellElement.querySelectorAll('span.selector')[0].classList.remove('subscribed');
+                    // this.unsubscribeFromInterest();
+                    that.notify('Topic removed from your feed.', {label: 'continue', link: '#'});
+                } else {
+                    cellElement.classList.add('selected-interest');
+                    cellElement.querySelectorAll('span.selector')[0].classList.add('subscribed');
+                    // this.subscribeToInterest();
+                    that.notify('Topic added, new content available.', {label: 'continue', link: '#'});
+                }
             }
+
+            if(target.classList.contains('cell-wrapper')){
+                // Load an Explore Panel in "TOPIC" mode to show articles in that interest category...
+                // this.swipeToPanel('trending', target.getAttribute('data-slug'));
+            }
+
         });
 
         interests_flick.on( 'dragStart', function( event, pointer ) {
@@ -1582,6 +1666,89 @@ Author: michael@revcontent.com
         });
 
 
+    };
+
+    RevSlider.prototype.appendExplorePanel = function(grid){
+        var explorePanel = document.createElement('div');
+        explorePanel.id = 'revfeed-explore';
+        explorePanel.classList.add('revfeed-explore');
+        explorePanel.classList.add('revfeed-explore-panel');
+        explorePanel.classList.add('revfeed-explore-panel--docked');
+        explorePanel.innerHTML = '<div id="revfeed-explore-wrapper" class="revfeed-explore-wrapper">' +
+            '<div><div style="line-height:32px;height:32px;border-bottom:1.0px solid #dddddd;padding:0 12px">' +
+            '<strong style="font-family:Montserrat;letter-spacing:1px;color:#222222">EXPLORE &nbsp;<small style="color:#00a8ff">FEED</small></strong>' +
+            '</div></div>' +
+            '<div style="display:block;height:50vw;overflow:hidden;margin-bottom:2px">' +
+            '<div style="display:block;float:left;width:33vw;height:100%;"><div style="display:block;width:100%;height:100%;background:transparent url(http://placehold.it/106x200?text=1) top left no-repeat;background-repeat: no-repeat;background-size:cover;">&nbsp;</div></div>' +
+            '<div style="display:block;float:left;width:34vw;height:100%"><div style="display:block;width:100%;height:100%;border-left:2px solid #ffffff;border-right:2px solid #ffffff;background:transparent url(http://placehold.it/106x200?text=2) top left no-repeat;background-repeat: no-repeat;background-size:cover;">&nbsp;</div></div>' +
+            '<div style="display:block;float:left;width:33vw;height:100%"><div style="display:block;width:100%;height:100%;background:transparent url(http://placehold.it/106x200?text=3) top left no-repeat;background-repeat: no-repeat;background-size:cover;">&nbsp;</div></div>' +
+            '<div style="clear:both"></div>' +
+            '</div>' +
+            '<div style="display:block;height:50vw;overflow:hidden;margin-bottom:2px">' +
+            '<div style="display:block;float:left;width:34vw;height:100%"><div style="display:block;width:100%;height:100%;border-right:2px solid #ffffff;background:transparent url(http://placehold.it/106x200?text=4) top left no-repeat;background-repeat: no-repeat;background-size:cover;">&nbsp;</div></div>' +
+            '<div style="display:block;float:left;width:66vw;height:100%"><div style="display:block;width:100%;height:100%;background:transparent url(http://placehold.it/106x200?text=5) top left no-repeat;background-repeat: no-repeat;background-size:cover;">&nbsp;</div></div>' +
+            '<div style="clear:both"></div>' +
+            '</div>' +
+            '<div style="display:block;height:50vw;overflow:hidden;margin-bottom:2px">' +
+            '<div style="display:block;float:left;width:50vw;height:100%"><div style="display:block;width:100%;height:100%;border-right:2px solid #ffffff;background:transparent url(http://placehold.it/106x200?text=6) top left no-repeat;background-repeat: no-repeat;background-size:cover;">&nbsp;</div></div>' +
+            '<div style="display:block;float:left;width:50vw;height:100%"><div style="display:block;width:100%;height:100%;background:transparent url(http://placehold.it/212x200?text=7) top left no-repeat;background-repeat: no-repeat;background-size:cover;">&nbsp;</div></div>' +
+            '<div style="clear:both"></div>' +
+            '</div>' +
+            '<div style="display:block;height:50vw;overflow:hidden;margin-bottom:2px">' +
+            '<div style="display:block;float:left;width:33vw;height:100%;"><div style="display:block;width:100%;height:100%;background:transparent url(http://placehold.it/106x200?text=1) top left no-repeat;background-repeat: no-repeat;background-size:cover;">&nbsp;</div></div>' +
+            '<div style="display:block;float:left;width:34vw;height:100%"><div style="display:block;width:100%;height:100%;border-left:2px solid #ffffff;border-right:2px solid #ffffff;background:transparent url(http://placehold.it/106x200?text=2) top left no-repeat;background-repeat: no-repeat;background-size:cover;">&nbsp;</div></div>' +
+            '<div style="display:block;float:left;width:33vw;height:100%"><div style="display:block;width:100%;height:100%;background:transparent url(http://placehold.it/106x200?text=3) top left no-repeat;background-repeat: no-repeat;background-size:cover;">&nbsp;</div></div>' +
+            '<div style="clear:both"></div>' +
+            '</div>' +
+
+            '</div>';
+
+        if (this.options.brand_logo) {
+            var brandLogo = this.createBrandLogo('rev-header-logo');
+            brandLogo.style.textAlign = 'center';
+            brandLogo.style.display = 'block';
+            brandLogo.style.height = '48px';
+            brandLogo.style.lineHeight = '48px';
+            brandLogo.style.paddingTop = '9px';
+            explorePanel.insertAdjacentElement('afterbegin', brandLogo);
+        }
+        grid.element.prepend(explorePanel);
+        var SwipeFeed = new Hammer.Manager(document.getElementById('grid'), {
+
+        });
+        var is_scrolling;
+        SwipeFeed.add( new Hammer.Pan({ direction: Hammer.DIRECTION_HORIZONTAL, threshold: 50 }) );
+        window.addEventListener('scroll', function() {
+            is_scrolling = true;
+        }, { passive: true });
+        window.addEventListener('touchend', function() {
+            is_scrolling = false;
+        });
+        SwipeFeed.on("panleft", function(ev) {
+            if (is_scrolling) {
+                return;
+            }
+            top.location.href = '#revfeed-explore';
+            explorePanel.classList.remove('revfeed-explore-panel--docked');
+            explorePanel.classList.add('revfeed-explore-panel--visible');
+            document.body.classList.add('revfeed-is-exploring');
+
+        });
+        SwipeFeed.on("panright", function(ev) {
+            if (is_scrolling) {
+                return;
+            }
+            explorePanel.classList.remove('revfeed-explore-panel--visible');
+            explorePanel.classList.add('revfeed-explore-panel--docked');
+            document.body.classList.remove('revfeed-is-exploring');
+        });
+
+        revUtils.addEventListener(grid.element, 'touchstart', function(e){
+            if(document.body.classList.contains('revfeed-is-exploring')){
+                //e.preventDefault();
+                //e.stopPropagation();
+            }
+        }, {passive: false});
     };
 
     RevSlider.prototype.extractRootDomain = function(url) {
@@ -1665,6 +1832,33 @@ Author: michael@revcontent.com
                 years < 1.5 && template('year', 1) ||
                 template('years', years)
                 ) + templates.suffix;
+    };
+
+    RevSlider.prototype.notify = function(message, action){
+        if(!message){
+            return;
+        }
+        var notice_panel = document.getElementById('rev-notify-panel');
+        if(typeof notice_panel == 'object' && notice_panel != null){
+            notice_panel.remove();
+        }
+        var notice = document.createElement('div');
+        notice.id = 'rev-notify-panel';
+        notice.classList.add('rev-notify');
+        notice.classList.add('rev-notify-alert');
+        notice.classList.add('rev-notify-alert--default');
+        notice.innerHTML = '<p style="margin:0;padding:0"><a class="notice-action" href="' + (action.link || '#') + '" style="text-transform:uppercase;float:right;font-weight:bold;padding-left:8px;">' + action.label + '</a> ' + message + '</p>';
+        notice.setAttribute('style',';position:fixed;top:-48px;left:0;z-index:15000;width:100%;height:32px;line-height:32px;font-size:10px;font-family:"Montserrat";padding:0 9px;background-color:rgba(0,0,0,0.7);color:#ffffff;');
+
+        document.body.appendChild(notice);
+        notice.style.top = 0;
+        setTimeout(function() {
+            document.getElementById('rev-notify-panel').style.top = '-48px';
+            var notice_panel = document.getElementById('rev-notify-panel');
+            if(typeof notice_panel == 'object' && notice_panel != null){
+                notice_panel.remove();
+            }
+        }, 2000);
     };
 
     RevSlider.prototype.destroy = function() {

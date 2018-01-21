@@ -1,0 +1,47 @@
+.revfeed-explore {
+
+  position: fixed!important;
+  z-index: 20000;
+  top: 0;
+  left: 0;
+  width: 103vw;
+  height: 100vh;
+  background-color: #ffffff;
+  box-shadow: 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12), 0 3px 5px -1px rgba(0,0,0,0.3);
+  border:1px solid #aaaaaa;
+  overflow: hidden;
+
+  &.revfeed-explore-panel {
+
+    transition: all 0.5s;
+    opacity: 1;
+    display: block;
+    border-radius: 8px;
+
+    &.revfeed-explore-panel--docked {
+      left: 110vw;
+      opacity: 0.9;
+    }
+
+    &.revfeed-explore-panel--active {
+      left: 1vw;
+      opacity: 1;
+    }
+
+
+    .revfeed-explore-wrapper {
+      overflow-x: hidden;
+      overflow-y: auto;
+      min-height: 150vh;
+      height: 300vh;
+    }
+
+
+  }
+
+
+
+
+}
+
+
