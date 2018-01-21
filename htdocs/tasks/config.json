@@ -254,6 +254,7 @@
     "js": "./showcase/revcontent-api-showcase-feed-1.0/js/revfeed.js",
     "css": [
       "./node_modules/flickity/css/flickity.css",
+      "./node_modules/node-waves/dist/waves.css",
       "./showcase/revcontent-api-showcase-feed-1.0/css/revfeed.scss",
       "./showcase/revcontent-api-showcase-feed-1.0/css/revfeed-interests.scss",
       "./showcase/revcontent-api-showcase-feed-1.0/css/revfeed-explore.scss",
@@ -271,6 +272,7 @@
       "./showcase/revcontent-api-showcase-feed-1.0/node_modules/outlayer/item.js",
       "./showcase/revcontent-api-showcase-feed-1.0/node_modules/outlayer/outlayer.js",
       "./showcase/revcontent-api-showcase-feed-1.0/js/any-grid.js",
+      "./node_modules/node-waves/dist/waves.js",
       "./node_modules/hammerjs/hammer.js",
       "./node_modules/es6-promise/dist/es6-promise.js",
       "./node_modules/fontfaceobserver/fontfaceobserver.standalone.js",
