@@ -1043,7 +1043,7 @@ Author: michael@revcontent.com
             revImage.style.backgroundImage = 'url('+ image +')';
             // revImage.innerHTML = '<img src=" ' + image + ' " />';
         } else {
-	    var cb = new Date().getMilliseconds();
+	    var cb = new Date().getTime();
             var site_url = document.location.href;
             revImage.innerHTML = '<iframe id="rc_video' + item.data.video_id + '" src="//video.powr.com/video.js.php?if=true&v=' + item.data.video_id + '&uid='+this.options.pub_id+'&t=1&c='+cb+'&su='+ encodeURI(site_url) +'&adt=-1" style="border: none; width: '+ roundedPreloaderWidth +'px; height: ' + roundedPreloaderHeight + 'px;""></iframe>';
             // revImage.innerHTML = '<iframe id="rc_video' + item.data.video_id + '" src="http://code.revcontent.com/mock/feed4/video' + item.data.video_id + '.iframe.html" style="border: none; width: '+ roundedPreloaderWidth +'px; height: ' + roundedPreloaderHeight + 'px;""></iframe>';
@@ -1463,6 +1463,18 @@ Author: michael@revcontent.com
                     item.element.querySelector('.rev-content-inner').appendChild(commentsElement);
                 }
 
+		var myReaction = '';
+		if (itemData.my_reaction) {
+		    myReaction = itemData.my_reaction;
+		    var likeReactionElement = item.element.querySelector('.rev-reaction-icon');
+		    likeReactionElement.setAttribute('data-active', 1);
+		    
+		    var icon = item.element.querySelector('.rev-reaction-like .rev-reaction-icon');
+                    revUtils.removeClass(icon, 'rev-reaction-icon-', true);
+                    revUtils.addClass(icon, 'rev-reaction-icon-' + myReaction);
+                    revUtils.addClass(icon, 'rev-reaction-icon-selected'); 
+                    revUtils.removeClass(item.element, 'rev-menu-active');
+		}
                 if (item.reactions) {
 		    var reactionHtml = '';
 
@@ -1507,7 +1519,11 @@ Author: michael@revcontent.com
                     item.element.querySelector('.rev-reaction-menu-item-count-pos .rev-reaction-menu-item-count-inner').innerText = this.milliFormatter(reactionCountTotalPos);
                     item.element.querySelector('.rev-reaction-menu-item-count-neg .rev-reaction-menu-item-count-inner').innerText = this.milliFormatter(reactionCountTotalNeg);
 
-                    reactionHtml += '<div ' + (!reactionCountTotal ? 'style="margin-left: 0;"' : '') + ' class="rev-reaction-count">'+ (reactionCountTotal ? reactionCountTotal : 'Be the first to react') +'</div>';
+		    if (myReaction) {
+			reactionHtml += '<div class="rev-reaction-count">'+ ((reactionCountTotal == 1) ? 'You reacted' : 'You and ' + (reactionCountTotal - 1) + ' others') + '</div>';
+		    } else {
+			reactionHtml += '<div ' + (!reactionCountTotal ? 'style="margin-left: 0;"' : '') + ' class="rev-reaction-count">'+ (reactionCountTotal ? reactionCountTotal : 'Be the first to react') +'</div>';
+		    }
 
                     item.element.querySelector('.rev-reactions-total-inner').innerHTML = reactionHtml;
                 }
