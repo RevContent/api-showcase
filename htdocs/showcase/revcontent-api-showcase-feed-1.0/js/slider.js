@@ -1471,7 +1471,7 @@ Author: michael@revcontent.com
 		    
 		    var icon = item.element.querySelector('.rev-reaction-like .rev-reaction-icon');
                     revUtils.removeClass(icon, 'rev-reaction-icon-', true);
-                    revUtils.addClass(icon, 'rev-reaction-icon-' + iconName);
+                    revUtils.addClass(icon, 'rev-reaction-icon-' + myReaction);
                     revUtils.addClass(icon, 'rev-reaction-icon-selected'); 
                     revUtils.removeClass(item.element, 'rev-menu-active');
 		}
