@@ -869,7 +869,7 @@ Author: michael@revcontent.com
                     //save bookmark
                     var url = item.data.target_url;
                     var title = item.data.headline;
-                    revApi.request( that.options.host + '/api/v1/engage/addbookmark.php?callback=cb&url=' + url + '&title=' + title, function(data) {
+                    revApi.request( that.options.host + '/api/v1/engage/addbookmark.php?url=' + encodeURI(url) + '&title=' + encodeURI(title), function(data) {
                         return;
                     });
 
