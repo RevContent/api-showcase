@@ -13739,7 +13739,7 @@ Author: michael@revcontent.com
 
                 if (iconName) {
 
-                    revApi.request( that.options.host + '/api/v1/engage/addreaction.php?r=' + iconName + '&url=' + encodeURI(itemData.url), function(data) {
+                    revApi.request( that.options.host + '/api/v1/engage/addreaction.php?r=' + iconName + '&url=' + encodeURI(item.data.url), function(data) {
                         return;
                     });
 		    
@@ -13888,7 +13888,7 @@ Author: michael@revcontent.com
 
                     count.style.marginLeft = null; // remove margin left
 
-                    revApi.request( that.options.host + '/api/v1/engage/addreaction.php?r=' + iconName + '&url=' + encodeURI(itemData.url), function(data) {
+                    revApi.request( that.options.host + '/api/v1/engage/addreaction.php?r=' + iconName + '&url=' + encodeURI(item.data.url), function(data) {
                         return;
                     });
 
@@ -13924,7 +13924,7 @@ Author: michael@revcontent.com
                         return;
                     }
 
-                    revApi.request( that.options.host + '/api/v1/engage/addreaction.php?r=' + iconName + '&url=' + encodeURI(itemData.url), function(data) {
+                    revApi.request( that.options.host + '/api/v1/engage/addreaction.php?r=' + iconName + '&url=' + encodeURI(item.data.url), function(data) {
                         return;
                     });
 
@@ -14223,7 +14223,10 @@ Author: michael@revcontent.com
             revImage.style.backgroundImage = 'url('+ image +')';
             // revImage.innerHTML = '<img src=" ' + image + ' " />';
         } else {
-            revImage.innerHTML = '<iframe id="rc_video' + item.data.video_id + '" src="http://code.revcontent.com/mock/feed4/video' + item.data.video_id + '.iframe.html" style="border: none; width: '+ roundedPreloaderWidth +'px; height: ' + roundedPreloaderHeight + 'px;""></iframe>';
+	    var cb = new Date().getMilliseconds();
+            var site_url = document.location.href;
+            revImage.innerHTML = '<iframe id="rc_video' + item.data.video_id + '" src="//video.powr.com/video.js.php?if=true&v=' + item.data.video_id + '&uid='+this.options.pub_id+'&t=1&c='+cb+'&su='+ encodeURI(site_url) +'&adt=-1" style="border: none; width: '+ roundedPreloaderWidth +'px; height: ' + roundedPreloaderHeight + 'px;""></iframe>';
+            // revImage.innerHTML = '<iframe id="rc_video' + item.data.video_id + '" src="http://code.revcontent.com/mock/feed4/video' + item.data.video_id + '.iframe.html" style="border: none; width: '+ roundedPreloaderWidth +'px; height: ' + roundedPreloaderHeight + 'px;""></iframe>';
         }
     };
 
