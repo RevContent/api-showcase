@@ -507,10 +507,10 @@ Author: michael@revcontent.com
 
                 if (iconName) {
 
-                    revApi.request( that.options.host + '/react.php?r=' + iconName + '&d=' + item.reactionData, function(data) {
+                    revApi.request( that.options.host + '/api/v1/engage/addreaction.php?r=' + iconName + '&url=' + encodeURI(itemData.url), function(data) {
                         return;
                     });
-
+		    
                     likeReactionElement.setAttribute('data-active', 1);
 
                     var icon = item.element.querySelector('.rev-reaction-like .rev-reaction-icon');
@@ -656,7 +656,7 @@ Author: michael@revcontent.com
 
                     count.style.marginLeft = null; // remove margin left
 
-                    revApi.request( that.options.host + '/react.php?r=' + iconName + '&d=' + item.reactionData, function(data) {
+                    revApi.request( that.options.host + '/api/v1/engage/addreaction.php?r=' + iconName + '&url=' + encodeURI(itemData.url), function(data) {
                         return;
                     });
 
@@ -692,7 +692,7 @@ Author: michael@revcontent.com
                         return;
                     }
 
-                    revApi.request( that.options.host + '/react.php?r=' + iconName + '&d=' + item.reactionData, function(data) {
+                    revApi.request( that.options.host + '/api/v1/engage/addreaction.php?r=' + iconName + '&url=' + encodeURI(itemData.url), function(data) {
                         return;
                     });
 
@@ -1401,73 +1401,52 @@ Author: michael@revcontent.com
                 }
 
                 if (item.reactions) {
+		    var reactionHtml = '';
 
-                    var that = this;
-                    var handleReactions = function(item, itemData) {
-
-                        var random = function(max, min) {
-                            min = min ? min : 1;
-                            return Math.floor(Math.random()*(max-min+1)+min);
-                        }
-
-                        var setUp = function(data) {
-
-                            item.reactionData = data.d;
-
-                            var reactionHtml = '';
-
-                            var reactionCountTotal = 0;
-                            var reactionCountTotalPos = 0;
-                            var reactionCountTotalNeg = 0;
-                            var zIndex = 100;
-
-                            var positiveReactions = that.options.reactions.slice(0, 3);
-                            var negativeReactions = that.options.reactions.slice(3)
-
-                            for (var reactionCounter = 0; reactionCounter < that.options.reactions.length; reactionCounter++) {
-
-                                // console.log('here');
-                                var reaction = that.options.reactions[reactionCounter];
-                                var reactionCount = data[reaction];
-
-                                // console.log(reactionCounter);
-                                if (reactionCount) {
-
-                                    if (reactionCounter < 3) {
-                                        reactionCountTotalPos += reactionCount;
-                                    } else {
-                                        reactionCountTotalNeg += reactionCount;
-                                    }
-
-                                    reactionCountTotal += reactionCount;
-                                    reactionHtml += '<div style="z-index:'+ zIndex +';" class="rev-reaction rev-reaction-' + reaction + '">' +
-                                            '<div class="rev-reaction-inner">' +
-                                                '<div class="rev-reaction-icon rev-reaction-icon-' + reaction + '-full"></div>' +
-                                            '</div>' +
-                                        '</div>';
-                                    zIndex--;
-                                }
+                    var reactionCountTotal = 0;
+                    var reactionCountTotalPos = 0;
+                    var reactionCountTotalNeg = 0;
+                    var zIndex = 100;
+		    
+                    var positiveReactions = this.options.reactions.slice(0, 3);
+                    var negativeReactions = this.options.reactions.slice(3)
+		    
+                    for (var reactionCounter = 0; reactionCounter < this.options.reactions.length; reactionCounter++) {
+			
+                        // console.log('here');
+                        var reaction = this.options.reactions[reactionCounter];
+			var reactionCount = 0;
+			if (itemData.hasOwnProperty("reactions")) {
+                            reactionCount = itemData.reactions[reaction];
+			}
+			
+                        // console.log(reactionCounter);
+                        if (reactionCount) {
+                            if (reactionCounter < 3) {
+                                reactionCountTotalPos += reactionCount;
+                            } else {
+                                reactionCountTotalNeg += reactionCount;
                             }
-                            item.reactionCountTotalPos = reactionCountTotalPos;
-                            item.reactionCountTotalNeg = reactionCountTotalNeg;
-                            item.reactionCountTotal = reactionCountTotal;
-
-                            item.element.querySelector('.rev-reaction-menu-item-count-pos .rev-reaction-menu-item-count-inner').innerText = that.milliFormatter(reactionCountTotalPos);
-                            item.element.querySelector('.rev-reaction-menu-item-count-neg .rev-reaction-menu-item-count-inner').innerText = that.milliFormatter(reactionCountTotalNeg);
-
-                            reactionHtml += '<div ' + (!reactionCountTotal ? 'style="margin-left: 0;"' : '') + ' class="rev-reaction-count">'+ (reactionCountTotal ? reactionCountTotal : 'Be the first to react') +'</div>';
-
-                            item.element.querySelector('.rev-reactions-total-inner').innerHTML = reactionHtml;
+			    
+                            reactionCountTotal += reactionCount;
+                            reactionHtml += '<div style="z-index:'+ zIndex +';" class="rev-reaction rev-reaction-' + reaction + '">' +
+                                '<div class="rev-reaction-inner">' +
+                                '<div class="rev-reaction-icon rev-reaction-icon-' + reaction + '-full"></div>' +
+                                '</div>' +
+                                '</div>';
+                            zIndex--;
                         }
-
-                        revApi.xhr(that.options.host + '/api/v1/reactions/index.php?r='+ that.options.reaction_id +'&url=' + encodeURIComponent(itemData.url), function(data) {
-                            setUp(data);
-                        }, function() {
-                            setUp({d: false});
-                        });
                     }
+                    item.reactionCountTotalPos = reactionCountTotalPos;
+                    item.reactionCountTotalNeg = reactionCountTotalNeg;
+                    item.reactionCountTotal = reactionCountTotal;
 
-                    handleReactions(item, itemData);
+                    item.element.querySelector('.rev-reaction-menu-item-count-pos .rev-reaction-menu-item-count-inner').innerText = this.milliFormatter(reactionCountTotalPos);
+                    item.element.querySelector('.rev-reaction-menu-item-count-neg .rev-reaction-menu-item-count-inner').innerText = this.milliFormatter(reactionCountTotalNeg);
+
+                    reactionHtml += '<div ' + (!reactionCountTotal ? 'style="margin-left: 0;"' : '') + ' class="rev-reaction-count">'+ (reactionCountTotal ? reactionCountTotal : 'Be the first to react') +'</div>';
+
+                    item.element.querySelector('.rev-reactions-total-inner').innerHTML = reactionHtml;
                 }
             }
         }
