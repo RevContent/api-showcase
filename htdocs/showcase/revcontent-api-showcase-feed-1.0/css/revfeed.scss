@@ -1860,15 +1860,67 @@ $reactionMenu8Y: 13.5px;
             line-height: 16px;
         }
 
+        @keyframes anim-effect-novak {
+          0% {
+            opacity: 1;
+            transform: scale3d(0.1, 0.1, 1);
+          }
+          100% {
+            opacity: 0;
+            transform: scale3d(8, 8, 1);
+          }
+        }
+
         .rev-save {
+            position: relative;
+            display: inline-block;
+            margin: 1em;
+            padding: 0;
+            border: none;
+            background: none;
+            color: #286aab;
+            font-size: 1.4em;
+            overflow: visible;
+            -webkit-transition: color 0.7s;
+            transition: color 0.7s;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
             float: right;
+            margin: 0;
             width: 34px;
+            z-index: 10000;
 
             &.rev-save-active {
                 svg polygon {
                     fill: rgba(90, 90, 90, 0.25);
                 }
+
+                &::after {
+                  animation: anim-effect-novak 0.5s forwards;
+                }
             }
+
+            &.rev-save-active,
+            &:focus {
+              outline: none;
+            }
+
+            &::after {
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              margin: -35px 0 0 -35px;
+              width: 70px;
+              height: 70px;
+              border-radius: 50%;
+              content: "";
+              opacity: 0;
+              pointer-events: none;
+              background: rgba(111,148,182,0.25);
+            }
+
+            // &.rev-save-animation::after {
+            //   animation: anim-effect-novak 0.5s forwards;
+            // }
 
             svg polygon {
                 stroke: rgba(90,90,90,.86);

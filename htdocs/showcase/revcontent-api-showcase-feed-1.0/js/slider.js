@@ -838,16 +838,32 @@ Author: michael@revcontent.com
     }
 
     RevSlider.prototype.handleBookmarkAction = function(item) {
-
         var that = this;
-        var bookmark = item.element.querySelector('.rev-meta-inner .rev-save');
-
         var handleSave = function(bookmark) {
             revUtils.addEventListener(bookmark, revDetect.mobile() ? 'touchstart' : 'click', function(e) {
                 if (revUtils.hasClass(bookmark, 'rev-save-active')) {
                     revUtils.removeClass(bookmark, 'rev-save-active');
                 } else {
                     revUtils.addClass(bookmark, 'rev-save-active');
+
+                    if (that.options.window_width_enabled && item.index === 0) { // set overflows if window with for first element
+                        that.element.parentNode.style.overflow = 'visible';
+                        document.documentElement.style.overflow = 'hidden';
+                        document.body.style.overflow = 'hidden';
+
+                        var removeOverflow = function() {
+                            document.documentElement.style.overflow = 'visible';
+                            document.body.style.overflow = 'visible';
+                            that.element.parentNode.style.overflow = 'hidden';
+                            revUtils.removeEventListener(window, 'touchstart', removeOverflow);
+                        }
+
+                        revUtils.addEventListener(window, 'touchstart', removeOverflow);
+
+                        that.onEndAnimation(bookmark, function() {
+                            removeOverflow();
+                        });
+                    }
                     that.transitionLogin(item, 'bookmark');
 
                     //save bookmark
@@ -860,11 +876,47 @@ Author: michael@revcontent.com
                 }
                 e.preventDefault();
                 e.stopPropagation();
+
             }, {passive: false});
         }
-        handleSave(bookmark);
 
-    }
+        handleSave(item.element.querySelector('.rev-meta-inner .rev-save'));
+    };
+
+    RevSlider.prototype.onEndAnimation = function(el, callback) {
+        // modified from https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Animations/Detecting_CSS_animation_support
+        var animation = false,
+            animationstring = 'animationend',
+            domPrefixes = 'Webkit Moz O ms Khtml'.split(' '),
+            pfx  = '',
+            elem = document.createElement('div');
+
+        if( elem.style.animationName !== undefined ) { animation = true; }
+
+        if( animation === false ) {
+            for( var i = 0; i < domPrefixes.length; i++ ) {
+                if( elem.style[ domPrefixes[i] + 'AnimationName' ] !== undefined ) {
+                    pfx = domPrefixes[ i ];
+                    animationstring = pfx.toLowerCase() + 'AnimationEnd';
+                    animation = true;
+                    break;
+                }
+            }
+        }
+
+        var onEndCallbackFn = function( ev ) {
+            if( animation ) {
+                if( ev.target != this ) return;
+                this.removeEventListener( animationstring, onEndCallbackFn );
+            }
+            if( callback && typeof callback === 'function' ) { callback.call(); }
+        };
+        if( animation ) {
+            el.addEventListener( animationstring, onEndCallbackFn );
+        } else {
+            onEndCallbackFn();
+        }
+    };
 
     RevSlider.prototype.gridOptions = function() {
         return {
@@ -1131,7 +1183,7 @@ Author: michael@revcontent.com
 
                             if (image) {
                                 image.innerHTML = "<img src='https://graph.facebook.com/758080600/picture?type=square' />";
-                            } else {     
+                            } else {
                                 container.insertAdjacentHTML('afterbegin',"<img src='https://graph.facebook.com/758080600/picture?type=square' />");
                             }
 
@@ -1158,7 +1210,7 @@ Author: michael@revcontent.com
         return cell;
     };
 
-    
+
 
     RevSlider.prototype.getDisclosure = function() {
         return revDisclose.getDisclosure(this.options.disclosure_text, {
@@ -1415,19 +1467,19 @@ Author: michael@revcontent.com
                     var reactionCountTotalPos = 0;
                     var reactionCountTotalNeg = 0;
                     var zIndex = 100;
-		    
+
                     var positiveReactions = this.options.reactions.slice(0, 3);
                     var negativeReactions = this.options.reactions.slice(3)
-		    
+
                     for (var reactionCounter = 0; reactionCounter < this.options.reactions.length; reactionCounter++) {
-			
+
                         // console.log('here');
                         var reaction = this.options.reactions[reactionCounter];
 			var reactionCount = 0;
 			if (itemData.hasOwnProperty("reactions")) {
                             reactionCount = itemData.reactions[reaction];
 			}
-			
+
                         // console.log(reactionCounter);
                         if (reactionCount) {
                             if (reactionCounter < 3) {
@@ -1435,7 +1487,7 @@ Author: michael@revcontent.com
                             } else {
                                 reactionCountTotalNeg += reactionCount;
                             }
-			    
+
                             reactionCountTotal += reactionCount;
                             reactionHtml += '<div style="z-index:'+ zIndex +';" class="rev-reaction rev-reaction-' + reaction + '">' +
                                 '<div class="rev-reaction-inner">' +
