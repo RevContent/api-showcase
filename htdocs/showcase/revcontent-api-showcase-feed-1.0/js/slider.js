@@ -192,6 +192,9 @@ Author: michael@revcontent.com
         this.emitter.on('dialog_closed', function() {
             that.isAuthenticated(function(response) {
                 that.updateAuthElements();
+                if (response === true) {
+                    that.showPersonalizedTransition();
+                }
             });
         });
 
@@ -1126,6 +1129,7 @@ Author: michael@revcontent.com
 
                             button.style.display = "none";
                             headline.innerHTML = "One Last Step, Please enter a password:<br/><input type='text' class='rev-engpass'/><input type='button' value='Sign Up'/>";*/
+                            that.showPersonalizedTransition();
                         } else {
                             // TODO
                         }
@@ -1491,6 +1495,52 @@ Author: michael@revcontent.com
                 authBoxes[i].querySelector('.rev-auth-button-text').innerText = 'Continue with facebook';
             }
         }
+    };
+
+    RevSlider.prototype.closePersonalizedTransition = function(ev) {
+        document.body.style.overflow = this.bodyOverflow;
+        revUtils.removeClass(document.body, 'rev-blur');
+        document.body.removeChild(this.personalizedMask);
+        document.body.removeChild(this.personalizedContent);
+        this.grid.bindResize();
+        revUtils.removeEventListener(this.personalizedMask, revDetect.mobile() ? 'touchstart' : 'click', this.closePersonalizedTransitionMaskCb);
+        ev.stopPropagation();
+        ev.preventDefault();
+    };
+
+    RevSlider.prototype.showPersonalizedTransition = function() {
+
+        var that = this;
+        var show = function() {
+            revUtils.addClass(document.body, 'rev-blur');
+            that.grid.unbindResize();
+            document.body.style.overflow = 'hidden';
+            revUtils.addClass(document.body, 'rev-blur');
+            document.body.appendChild(that.personalizedMask);
+            document.body.appendChild(that.personalizedContent);
+
+            that.closePersonalizedTransitionMaskCb = function(ev) {
+                that.closePersonalizedTransition(ev);
+            }
+            revUtils.addEventListener(that.personalizedMask, revDetect.mobile() ? 'touchstart' : 'click', that.closePersonalizedTransitionMaskCb, {passive: false});
+        }
+
+        if (this.personalizedMask) {
+            show();
+            return;
+        }
+
+        this.bodyOverflow = revUtils.getComputedStyle(document.body, 'overflow');
+
+        this.personalizedMask = document.createElement('div');
+        this.personalizedMask.id = 'personalized-transition-mask';
+
+        this.personalizedContent = document.createElement('div')
+        this.personalizedContent.id = 'personalized-transition-wrapper';
+
+        this.personalizedContent.innerHTML = '<div id="personalized-transition-animation"></div><div id="personalized-transition-text">Gathering personalized content...</div>';
+
+        show();
     };
 
     RevSlider.prototype.fetchInterestsData = function(){
