@@ -1,6 +1,6 @@
 .feed-interests-carousel {
 
-  background: #ffffff;
+  background-color: transparent;
   font-family: 'Montserrat', sans-serif;
   box-sizing: border-box;
 
@@ -10,9 +10,8 @@
 
   &.is-dragging .carousel-cell.is-selected {
     opacity: 0.9;
-    box-shadow: 0 1px 7px 0 rgba(40, 160, 238, 0.8);
+    box-shadow: 0 1px 7px 0 rgba(24, 238, 67, 0.8);
   }
-
 
   .carousel-cell {
     width: 42%;
@@ -25,23 +24,27 @@
     text-align: left;
     opacity: 0.7;
     overflow: hidden;
+    box-shadow: 0 1px 1px 0 rgba(12, 12, 13, 0.15);
+    transition: opacity 0.5s;
 
     &.is-selected {
-      box-shadow: 0 1px 3px 0 rgba(12, 12, 13, 0.3);
-      border-radius: 5px;
+      opacity: 0.9;
+    }
+    &.selected-interest {
+
       opacity: 1.0;
     }
 
     .interest-title {
-      font-size: 9px!important;
+      font-size: 11px!important;
       line-height: 14px!important;
       min-height: 16px;
       height: 16px;
       margin: 0!important;
       padding: 0!important;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      font-weight: 900;
+      text-transform: capitalize;
+      letter-spacing: 0;
+      font-weight: 400;
       width: 80%;
       text-overflow: ellipsis;
       overflow: hidden;
@@ -49,9 +52,15 @@
       text-shadow: 0 0 1px rgba(0,0,0,0.6);
       transition: all 0.5s ease;
       position: absolute!important;
-      left: 16px;
-      bottom: 16px;
+      left: 12px;
+      bottom: 12px;
       z-index: 200;
+
+      &.light-mode {
+        color: #111111!important;
+        text-shadow: 0 0 1px rgba(100,100,100,0.6);
+
+      }
     }
 
     .cell-wrapper {

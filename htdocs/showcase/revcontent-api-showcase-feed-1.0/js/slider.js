@@ -1547,10 +1547,14 @@ Author: michael@revcontent.com
       // MOCK Data -- Replace with proper DB/service fetch
       // Return an array of Interest Objects.
       var interests = [];
-      interests[0] = { id: 100, people: 1043201, title: "Technology", slug: "technology", image: '', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
-      interests[1] = { id: 200, people: 1235111, title: "Advertising", slug: "advertising",image: '', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
-      interests[2] = { id: 300, people: 2599710, title: "Ethereum", slug: "ethereum", image: '', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
-      interests[2] = { id: 400, people: 2599710, title: "Bitcoin Cash", slug: "bch", image: '', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[0] = { id: 100, people: 1043201, title: "Technology", lightMode: false, slug: "technology", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/technology.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[1] = { id: 200, people: 1235111, title: "Advertising", lightMode: true, slug: "advertising",image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/advertising.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[2] = { id: 300, people: 2599710, title: "Ethereum", lightMode: false, slug: "ethereum", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/ethereum.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[3] = { id: 400, people: 2599710, title: "Bitcoin Cash", lightMode: false, slug: "bch", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/bch.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[4] = { id: 500, people: 3211233, title: "Cryptocurrency", lightMode: false, slug: "cryptocurrency", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/cryptocurrency.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[5] = { id: 600, people: 4211233, title: "Aerospace Engineering", lightMode: false, slug: "aerospace-engineering", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/aerospace-engineering.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[6] = { id: 700, people: 5211233, title: "Content Delivery", lightMode: false, slug: "cdn", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/cdn.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[7] = { id: 800, people: 6898300, title: "Literature", lightMode: false, slug: "literature", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/literature.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
 
 
       //this.interests.list = interests;
@@ -1596,10 +1600,10 @@ Author: michael@revcontent.com
             var the_cell = '' +
             // Interest Image should be stored as CSS by slug/name ID interest-' + interest.slug.toLowerCase() + '
             // $image property in interest object could be used as override if non-empty.
-            '<div class="carousel-cell interest-cell interest-' + interest.slug.toLowerCase() + ' selected-interest" data-people="' + interest.people + '" data-title="' + interest.title + '" data-interest="' + interest.slug.toLowerCase() + '">' +
+            '<div style="' + (interest.image != '' ? 'background:transparent url(' + interest.image + ') top left no-repeat;background-size:cover;' : '') + '" class="carousel-cell interest-cell interest-' + interest.slug.toLowerCase() + ' selected-interest" data-people="' + interest.people + '" data-title="' + interest.title + '" data-interest="' + interest.slug.toLowerCase() + '">' +
                 '<div class="cell-wrapper">' +
                     '<span class="selector ' + (interest.subscribed ? 'subscribed' : '') + '"></span>' +
-                    '<div class="interest-title">' + interest.title + '</div>' +
+                    '<div class="interest-title ' + (interest.lightMode ? ' light-mode' : '') + '">' + interest.title + '</div>' +
                 '</div>' +
             '</div>';
             interest_cells += the_cell;
