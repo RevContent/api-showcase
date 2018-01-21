@@ -151,7 +151,21 @@
 
 
 
+.rev-notify {
+  transition: all 0.5s ease;
 
+
+  &.rev-notify-alert {
+
+    &.rev-notify-alert--default {
+
+    }
+
+  }
+
+
+
+}
 
 
 

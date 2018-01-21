@@ -1554,7 +1554,10 @@ Author: michael@revcontent.com
       interests[4] = { id: 500, people: 3211233, title: "Cryptocurrency", lightMode: false, slug: "cryptocurrency", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/cryptocurrency.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
       interests[5] = { id: 600, people: 4211233, title: "Aerospace Engineering", lightMode: false, slug: "aerospace-engineering", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/aerospace-engineering.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
       interests[6] = { id: 700, people: 5211233, title: "Content Delivery", lightMode: false, slug: "cdn", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/cdn.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
-      interests[7] = { id: 800, people: 6898300, title: "Literature", lightMode: false, slug: "literature", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/literature.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[7] = { id: 800, people: 6898300, title: "Literature", lightMode: false, slug: "literature", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/literature.png', subscribed: false, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[8] = { id: 900, people: 2599710, title: "Basketball", lightMode: false, slug: "basketball", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/basketball.png', subscribed: false, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[9] = { id: 1000, people: 5211233, title: "Data Science", lightMode: false, slug: "data-science", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/data-science.png', subscribed: false, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
+      interests[10] = { id: 1001, people: 6079282, title: "Digital Arts", lightMode: false, slug: "digital-arts", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/digital-arts.png', subscribed: false, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
 
 
       //this.interests.list = interests;
@@ -1591,6 +1594,7 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.appendInterestsCarousel = function (grid) {
+        var that = this;
         this.interestsCarouselVisible = true;
         var interest_cells = '';
         var interests_data = this.fetchInterestsData();
@@ -1641,16 +1645,29 @@ Author: michael@revcontent.com
         });
 
         interests_flick.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) {
+            var target = event.target || event.srcElement;
             if ( !cellElement ) {
                 return;
             }
-            if(cellElement.classList.contains('selected-interest')){
-                cellElement.classList.remove('selected-interest');
-                cellElement.querySelectorAll('span.selector')[0].classList.remove('subscribed');
-            } else {
-                cellElement.classList.add('selected-interest');
-                cellElement.querySelectorAll('span.selector')[0].classList.add('subscribed');
+            if(target.classList.contains('selector')) {
+                if (cellElement.classList.contains('selected-interest')) {
+                    cellElement.classList.remove('selected-interest');
+                    cellElement.querySelectorAll('span.selector')[0].classList.remove('subscribed');
+                    // this.unsubscribeFromInterest();
+                    that.notify('Topic removed from your feed.', {label: 'continue', link: '#'});
+                } else {
+                    cellElement.classList.add('selected-interest');
+                    cellElement.querySelectorAll('span.selector')[0].classList.add('subscribed');
+                    // this.subscribeToInterest();
+                    that.notify('Topic added, new content available.', {label: 'continue', link: '#'});
+                }
             }
+
+            if(target.classList.contains('cell-wrapper')){
+                // Load an Explore Panel in "TOPIC" mode to show articles in that interest category...
+                // this.swipeToPanel('trending', target.getAttribute('data-slug'));
+            }
+
         });
 
         interests_flick.on( 'dragStart', function( event, pointer ) {
@@ -1828,6 +1845,33 @@ Author: michael@revcontent.com
                 years < 1.5 && template('year', 1) ||
                 template('years', years)
                 ) + templates.suffix;
+    };
+
+    RevSlider.prototype.notify = function(message, action){
+        if(!message){
+            return;
+        }
+        var notice_panel = document.getElementById('rev-notify-panel');
+        if(typeof notice_panel == 'object' && notice_panel != null){
+            notice_panel.remove();
+        }
+        var notice = document.createElement('div');
+        notice.id = 'rev-notify-panel';
+        notice.classList.add('rev-notify');
+        notice.classList.add('rev-notify-alert');
+        notice.classList.add('rev-notify-alert--default');
+        notice.innerHTML = '<p style="margin:0;padding:0"><a class="notice-action" href="' + (action.link || '#') + '" style="text-transform:uppercase;float:right;font-weight:bold;padding-left:8px;">' + action.label + '</a> ' + message + '</p>';
+        notice.setAttribute('style',';position:fixed;top:-48px;left:0;z-index:15000;width:100%;height:32px;line-height:32px;font-size:10px;font-family:"Montserrat";padding:0 9px;background-color:rgba(0,0,0,0.7);color:#ffffff;');
+
+        document.body.appendChild(notice);
+        notice.style.top = 0;
+        setTimeout(function() {
+            document.getElementById('rev-notify-panel').style.top = '-48px';
+            var notice_panel = document.getElementById('rev-notify-panel');
+            if(typeof notice_panel == 'object' && notice_panel != null){
+                notice_panel.remove();
+            }
+        }, 2000);
     };
 
     RevSlider.prototype.destroy = function() {
