@@ -392,6 +392,10 @@ $reactionMenu8Y: 13.5px;
         z-index: 1;
         font-weight: normal;
 
+        &.rev-content-row-0 {
+          padding-top: 0 !important;
+        }
+
         &.rev-content-breakpoint-lt-md {
             .rev-auth {
                 .rev-auth-headline {

@@ -359,10 +359,21 @@ AnyGrid.prototype._getItemLayoutPosition = function( item ) {
       className += ' rev-content-breakpoint-lt-' + item.greaterLessThanBreakPoints.lt[i];
     }
 
+    className += ' rev-content-row-' + (row);
+
     item.element.className = className;
 
 
     if (this.perRow === 1) {
+
+        this.rowCounter++;
+
+        if (this.rowCounter == this.rows[row].perRow) {
+            this.rowCounter = 0;
+            this.spanCounter = 0;
+            this.nextRow++;
+        }
+
         return {
             x: false,
             y: false
