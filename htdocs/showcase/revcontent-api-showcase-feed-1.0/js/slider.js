@@ -849,6 +849,14 @@ Author: michael@revcontent.com
                 } else {
                     revUtils.addClass(bookmark, 'rev-save-active');
                     that.transitionLogin(item, 'bookmark');
+
+                    //save bookmark
+                    var url = item.data.target_url;
+                    var title = item.data.headline;
+                    revApi.request( that.options.host + '/api/v1/engage/addbookmark.php?callback=cb&url=' + url + '&title=' + title, function(data) {
+                        return;
+                    });
+
                 }
                 e.preventDefault();
                 e.stopPropagation();
