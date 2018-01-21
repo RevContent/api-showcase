@@ -363,6 +363,8 @@ AnyGrid.prototype._getItemLayoutPosition = function( item ) {
 
     item.element.className = className;
 
+    item.index = this.index;
+
 
     if (this.perRow === 1) {
 
@@ -373,6 +375,8 @@ AnyGrid.prototype._getItemLayoutPosition = function( item ) {
             this.spanCounter = 0;
             this.nextRow++;
         }
+
+        this.index++;
 
         return {
             x: false,

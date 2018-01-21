@@ -177,6 +177,8 @@ Author: michael@revcontent.com
         this.innerWidget.dataPromise.then(function() {
             self.viewability().then(function() {
 
+                self.initCornerButton();
+
                 if (self.options.infinite) {
                     self.infinite();
                 }
@@ -194,6 +196,61 @@ Author: michael@revcontent.com
             console.log(e);
         });
     };
+
+    Feed.prototype.initCornerButton = function() {
+        this.buttonContainerElement = document.createElement('div');
+        this.buttonContainerElement.id = 'rev-corner-button-container';
+
+        this.buttonElement = document.createElement('a');
+        this.buttonElement.id = 'rev-corner-button';
+
+        var svg;
+
+        svg = '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'
+        this.buttonElement.classList.add('rev-corner-button-plus');
+
+        this.buttonElement.innerHTML = svg;
+
+        revUtils.append(this.buttonContainerElement, this.buttonElement);
+
+        this.buttonMenu = document.createElement('menu');
+        this.buttonMenu.className = 'rev-button-menu';
+
+        this.button1 = document.createElement('button');
+        this.button1.innerHTML = '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>';
+        this.button1.className = 'menu-button';
+        Waves.attach(this.button1, ['waves-circle', 'waves-float']);
+
+        this.button2 = document.createElement('button');
+        this.button2.innerHTML = '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>';
+        this.button2.className = 'menu-button';
+        Waves.attach(this.button2, ['waves-circle', 'waves-float']);
+
+        this.button3 = document.createElement('button');
+        this.button3.innerHTML = '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>';
+        this.button3.className = 'menu-button';
+        Waves.attach(this.button3, ['waves-circle', 'waves-float']);
+
+        revUtils.append(this.buttonMenu, this.button1);
+        revUtils.append(this.buttonMenu, this.button2);
+        revUtils.append(this.buttonMenu, this.button3);
+        revUtils.append(this.buttonContainerElement, this.buttonMenu);
+
+        Waves.attach(this.buttonElement, ['waves-circle', 'waves-float']);
+        Waves.init();
+
+        var that = this;
+        revUtils.addEventListener(this.buttonElement, revDetect.mobile() ? 'touchstart' : 'click', function() {
+            if (revUtils.hasClass(that.buttonContainerElement, 'visible')) {
+                revUtils.removeClass(that.buttonContainerElement, 'visible')
+            } else {
+                revUtils.addClass(that.buttonContainerElement, 'visible')
+            }
+        });
+
+        revUtils.append(document.body, this.buttonContainerElement);
+    };
+
 
     Feed.prototype.windowWidth = function() {
 
