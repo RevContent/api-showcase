@@ -379,7 +379,7 @@ Author: michael@revcontent.com
                 var request = function() {
                     var totaltime = new Date().getTime() - time;
 
-                    if (totaltime > 3000) { // stop after 3 seconds
+                    if (totaltime > 8000) { // stop after 3 seconds
                         reject();
                         return;
                     }
