@@ -1837,7 +1837,8 @@ Author: michael@revcontent.com
                 if(target.classList.contains('cell-wrapper')){
                     // Load an Explore Panel in "TOPIC" mode to show articles in that interest category...
                     // this.swipeToPanel('trending', target.getAttribute('data-slug'));
-                    that.appendSliderPanel(cellElement.getAttribute('data-title'), '<div style="padding:18px"><p><strong>Loading Topics...</strong><br />fetching your personalized content.</p></div>', 1);
+                    // -- DISABLE TOPIC "DIVE-IN" PANEL UNTIL OTHER FEATURES ARE COMPLETED
+                    //that.appendSliderPanel(cellElement.getAttribute('data-title'), '<div style="padding:18px"><p><strong>Loading Topics...</strong><br />fetching your personalized content.</p></div>', 1);
                 }
 
             });
