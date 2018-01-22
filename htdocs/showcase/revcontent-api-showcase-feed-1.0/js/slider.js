@@ -320,71 +320,77 @@ Author: michael@revcontent.com
     RevSlider.prototype.personalize = function() {
         var that = this;
 
-        var personalize = function() {
-            return new Promise(function(resolve, reject) {
-                that.personalized = true;
-                // TODO
-                // that.updateVideoItems(that.mockVideosAuthenticated);
+        var personalize = function(time) {
+            var starttime = new Date().getTime();
+            that.personalized = true;
 
-                var internalPersonalizedCount = 0;
-                for (var i = 0; i < that.grid.items.length; i++) {
-                    if (that.grid.items[i].type === 'internal') {
-                        internalPersonalizedCount++;
-                    }
+            // TODO
+            // that.updateVideoItems(that.mockVideosAuthenticated);
+
+            var internalPersonalizedCount = 0;
+            for (var i = 0; i < that.grid.items.length; i++) {
+                if (that.grid.items[i].type === 'internal') {
+                    internalPersonalizedCount++;
                 }
+            }
 
-                if (internalPersonalizedCount) {
-                    var internalURL = that.generateUrl(0, internalPersonalizedCount, false, false, true);
-                    revApi.request(internalURL, function(resp) {
+            if (internalPersonalizedCount) {
+                var internalURL = that.generateUrl(0, internalPersonalizedCount, false, false, true);
+                revApi.request(internalURL, function(resp) {
+                    var totaltime = ((new Date().getTime() - starttime) + time);
+
+                    var finishPersonalize = function() {
                         that.updateDisplayedItems(that.grid.items, [{
                             type: 'internal',
                             data: resp
                         }]);
-                    });
-                }
+                        that.closePersonalizedTransition();
+                    }
 
-                // TODO
-                // var sponsoredPersonalizedCount = 0;
-                // for (var i = 0; i < that.grid.items.length; i++) {
-                //     if (that.grid.items[i].type === 'sponsored') {
-                //         sponsoredPersonalizedCount++;
-                //     }
-                // }
+                    var mintime = 1500; // show for a minimum of 1.5s
+                    if (totaltime > mintime) {
+                        finishPersonalize();
+                    } else {
+                        setTimeout(function() {
+                            finishPersonalize();
+                        }, mintime - totaltime)
+                    }
+                });
+            }
 
-                // if (sponsoredPersonalizedCount && that.mockSponsoredPersonalized) {
-                //     data.push({
-                //         type: 'sponsored',
-                //         data: that.mockSponsoredPersonalized.slice(0, sponsoredPersonalizedCount)
-                //     });
-                // }
-            });
+            // TODO
+            // var sponsoredPersonalizedCount = 0;
+            // for (var i = 0; i < that.grid.items.length; i++) {
+            //     if (that.grid.items[i].type === 'sponsored') {
+            //         sponsoredPersonalizedCount++;
+            //     }
+            // }
+
+            // if (sponsoredPersonalizedCount && that.mockSponsoredPersonalized) {
+            //     data.push({
+            //         type: 'sponsored',
+            //         data: that.mockSponsoredPersonalized.slice(0, sponsoredPersonalizedCount)
+            //     });
+            // }
         }
 
         var requestInterests = function(time) {
             return new Promise(function(resolve, reject) {
                 var request = function() {
-                    var newtime = new Date().getTime();
+                    var totaltime = new Date().getTime() - time;
 
-                    if (newtime - time > 3000) { // stop after 3 seconds
+                    if (totaltime > 3000) { // stop after 3 seconds
                         reject();
                         return;
                     }
 
                     revApi.request( that.options.host + '/api/v1/engage/getinterests.php?', function(data) {
-                        if (!data.entities.length) { // test with && (newtime - time) < 1200
+                        if (!data.entities.length) { // test with && totaltime < 1200
                             setTimeout(function() {
                                 request();
                             }, 250);
                         } else {
-                            var timedifference = newtime - time;
-                            var mintime = 1500; // show for a minimum of 1.5s
-                            if (timedifference > mintime) {
-                                resolve();
-                            } else {
-                                setTimeout(function() {
-                                    resolve();
-                                }, timedifference - mintime)
-                            }
+                            resolve(totaltime);
                         }
                     });
                 }
@@ -392,9 +398,8 @@ Author: michael@revcontent.com
             });
         };
 
-        requestInterests(new Date().getTime()).then(function() {
-            that.closePersonalizedTransition();
-            personalize();
+        requestInterests(new Date().getTime()).then(function(time) {
+            personalize(time);
             // TODO animate in new content
         }, function() {
             // TODO display message that no personalized content
