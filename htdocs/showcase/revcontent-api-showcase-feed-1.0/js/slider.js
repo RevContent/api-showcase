@@ -193,7 +193,10 @@ Author: michael@revcontent.com
             that.isAuthenticated(function(response) {
                 that.updateAuthElements();
                 if (response === true) {
-                    that.showPersonalizedTransition();
+                    if (!that.personalized) {
+                        that.showPersonalizedTransition();
+                        that.personalize();
+                    }
                 }
             });
         });
@@ -311,6 +314,93 @@ Author: michael@revcontent.com
             if (response === true) {
                 that.updateAuthElements();
             }
+        });
+    };
+
+    RevSlider.prototype.personalize = function() {
+        var that = this;
+
+        var personalize = function() {
+            return new Promise(function(resolve, reject) {
+                that.personalized = true;
+                // TODO
+                // that.updateVideoItems(that.mockVideosAuthenticated);
+
+                var internalPersonalizedCount = 0;
+                for (var i = 0; i < that.grid.items.length; i++) {
+                    if (that.grid.items[i].type === 'internal') {
+                        internalPersonalizedCount++;
+                    }
+                }
+
+                if (internalPersonalizedCount) {
+                    var internalURL = that.generateUrl(0, internalPersonalizedCount, false, false, true);
+                    revApi.request(internalURL, function(resp) {
+                        that.updateDisplayedItems(that.grid.items, [{
+                            type: 'internal',
+                            data: resp
+                        }]);
+                    });
+                }
+
+                // TODO
+                // var sponsoredPersonalizedCount = 0;
+                // for (var i = 0; i < that.grid.items.length; i++) {
+                //     if (that.grid.items[i].type === 'sponsored') {
+                //         sponsoredPersonalizedCount++;
+                //     }
+                // }
+
+                // if (sponsoredPersonalizedCount && that.mockSponsoredPersonalized) {
+                //     data.push({
+                //         type: 'sponsored',
+                //         data: that.mockSponsoredPersonalized.slice(0, sponsoredPersonalizedCount)
+                //     });
+                // }
+            });
+        }
+
+        var requestInterests = function(time) {
+            return new Promise(function(resolve, reject) {
+                var request = function() {
+                    var newtime = new Date().getTime();
+
+                    if (newtime - time > 3000) { // stop after 3 seconds
+                        reject();
+                        return;
+                    }
+
+                    revApi.request( that.options.host + '/api/v1/engage/getinterests.php?', function(data) {
+                        if (!data.entities.length) { // test with && (newtime - time) < 1200
+                            setTimeout(function() {
+                                request();
+                            }, 250);
+                        } else {
+                            var timedifference = newtime - time;
+                            var mintime = 1500; // show for a minimum of 1.5s
+                            if (timedifference > mintime) {
+                                resolve();
+                            } else {
+                                setTimeout(function() {
+                                    resolve();
+                                }, timedifference - mintime)
+                            }
+                        }
+                    });
+                }
+                request();
+            });
+        };
+
+        requestInterests(new Date().getTime()).then(function() {
+            that.closePersonalizedTransition();
+            personalize();
+            // TODO animate in new content
+        }, function() {
+            // TODO display message that no personalized content
+            that.closePersonalizedTransition();
+        }).catch(function(e) {
+            console.log(e);
         });
     };
 
@@ -1192,7 +1282,10 @@ Author: michael@revcontent.com
 
                             button.style.display = "none";
                             headline.innerHTML = "One Last Step, Please enter a password:<br/><input type='text' class='rev-engpass'/><input type='button' value='Sign Up'/>";*/
-                            that.showPersonalizedTransition();
+                            if (!that.personalized) {
+                                that.showPersonalizedTransition();
+                                that.personalize();
+                            }
                         } else {
                             // TODO
                         }
@@ -1558,12 +1651,14 @@ Author: michael@revcontent.com
     RevSlider.prototype.closePersonalizedTransition = function(ev) {
         document.body.style.overflow = this.bodyOverflow;
         revUtils.removeClass(document.body, 'rev-blur');
-        document.body.removeChild(this.personalizedMask);
-        document.body.removeChild(this.personalizedContent);
+        revUtils.remove(this.personalizedMask);
+        revUtils.remove(this.personalizedContent);
         this.grid.bindResize();
         revUtils.removeEventListener(this.personalizedMask, revDetect.mobile() ? 'touchstart' : 'click', this.closePersonalizedTransitionMaskCb);
-        ev.stopPropagation();
-        ev.preventDefault();
+        if (ev) {
+            ev.stopPropagation();
+            ev.preventDefault();
+        }
     };
 
     RevSlider.prototype.showPersonalizedTransition = function() {
