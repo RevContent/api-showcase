@@ -218,17 +218,17 @@ Author: michael@revcontent.com
 
         this.button1 = document.createElement('button');
         this.button1.innerHTML = '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>';
-        this.button1.className = 'menu-button';
+        this.button1.className = 'menu-button menu-button-1';
         Waves.attach(this.button1, ['waves-circle', 'waves-float']);
 
         this.button2 = document.createElement('button');
         this.button2.innerHTML = '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>';
-        this.button2.className = 'menu-button';
+        this.button2.className = 'menu-button menu-button-2';
         Waves.attach(this.button2, ['waves-circle', 'waves-float']);
 
         this.button3 = document.createElement('button');
         this.button3.innerHTML = '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>';
-        this.button3.className = 'menu-button';
+        this.button3.className = 'menu-button menu-button-3';
         Waves.attach(this.button3, ['waves-circle', 'waves-float']);
 
         revUtils.append(this.buttonMenu, this.button1);
@@ -249,6 +249,15 @@ Author: michael@revcontent.com
         });
 
         revUtils.append(document.body, this.buttonContainerElement);
+
+        revUtils.addEventListener(this.button3, 'click', function(e) {
+            RevSlider.prototype.appendSliderPanel("Your Profile", "loading me here", "engage-profile-panel");
+        });
+
+        revUtils.addEventListener(this.button2, 'click', function(e) {
+            RevSlider.prototype.appendSliderPanel("Your Bookmarks", "loading me here", "engage-bookmarks-panel");
+        });
+
     };
 
 
