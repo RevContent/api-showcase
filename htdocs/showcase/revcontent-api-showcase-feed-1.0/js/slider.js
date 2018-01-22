@@ -1711,6 +1711,7 @@ Author: michael@revcontent.com
                 if(target.classList.contains('cell-wrapper')){
                     // Load an Explore Panel in "TOPIC" mode to show articles in that interest category...
                     // this.swipeToPanel('trending', target.getAttribute('data-slug'));
+                    that.appendSliderPanel(cellElement.getAttribute('data-title'), '<div style="padding:18px"><p><strong>Loading Topics...</strong><br />fetching your personalized content.</p></div>', 1);
                 }
 
             });
@@ -1806,6 +1807,54 @@ Author: michael@revcontent.com
                 //e.stopPropagation();
             }
         }, {passive: false});
+    };
+
+    RevSlider.prototype.appendSliderPanel = function(title, content, panelId) {
+        var sliderPanel = document.createElement('div');
+        if(document.getElementById('revfeed-panel') !== null) {
+            return;
+        }
+        sliderPanel.id = 'revfeed-panel';
+        sliderPanel.classList.add('revfeed-panel');
+        sliderPanel.classList.add('revfeed-panel--docked');
+        sliderPanel.innerHTML = '<div class="revfeed-slider-panel" data-panel="' + panelId +'"><div class="revfeed-panel-wrapper">' +
+            '<div class="revfeed-panel-title"><div id="revfeed-nav-back" class="revfeed-nav-back"><a id="revfeed-nav-back-link">&lt;</a></div>' + title + '</div>' +
+            '<div class="revfeed-panel-navigation">' +
+            '<ul>' +
+            '<li><a href="#" data-panel="1">Panel 01</a></li>' +
+            '<li><a href="#" data-panel="2">Panel 02</a></li>' +
+            '<li><a href="#" data-panel="3">Panel 03</a></li>' +
+            '</ul>' +
+            '<div style="clear:both"></div>' +
+            '</div>' +
+            '<div class="revfeed-panel-content">' + content + '</div>' +
+            '</div></div>';
+
+        document.body.prepend(sliderPanel);
+        var the_panel = document.getElementById('revfeed-panel');
+        var go_back = the_panel.querySelector('a#revfeed-nav-back-link');
+        if(go_back !== null && typeof go_back == "object") {
+            revUtils.addEventListener(go_back, 'click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                the_panel.classList.remove('revfeed-panel--activated');
+                the_panel.classList.add('revfeed-panel--docked');
+                setTimeout(function(){
+                    the_panel.remove();
+                }, 750);
+            }, {passive: false});
+        }
+
+        setTimeout(function(){
+            var the_panel = document.getElementById('revfeed-panel');
+            the_panel.classList.remove('revfeed-panel--docked');
+            the_panel.classList.add('revfeed-panel--activated');
+
+        }, 150);
+
+
+        return sliderPanel;
+
     };
 
     RevSlider.prototype.extractRootDomain = function(url) {
