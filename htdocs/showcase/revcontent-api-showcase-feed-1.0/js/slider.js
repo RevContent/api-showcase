@@ -347,7 +347,7 @@ Author: michael@revcontent.com
                         that.closePersonalizedTransition();
                     }
 
-                    var mintime = 1500; // show for a minimum of 1.5s
+                    var mintime = 5500; // show for a minimum of 5.5s
                     if (totaltime > mintime) {
                         finishPersonalize();
                     } else {
@@ -379,7 +379,7 @@ Author: michael@revcontent.com
                 var request = function() {
                     var totaltime = new Date().getTime() - time;
 
-                    if (totaltime > 8000) { // stop after 3 seconds
+                    if (totaltime > 8000) { // stop after 8 seconds
                         reject();
                         return;
                     }
@@ -388,7 +388,7 @@ Author: michael@revcontent.com
                         if (!data.entities.length) { // test with && totaltime < 1200
                             setTimeout(function() {
                                 request();
-                            }, 250);
+                            }, 2000);
                         } else {
                             resolve(totaltime);
                         }
@@ -1663,7 +1663,7 @@ Author: michael@revcontent.com
         revUtils.remove(this.personalizedMask);
         revUtils.remove(this.personalizedContent);
         this.grid.bindResize();
-        revUtils.removeEventListener(this.personalizedMask, revDetect.mobile() ? 'touchstart' : 'click', this.closePersonalizedTransitionMaskCb);
+        revUtils.removeEventListener(this.personalizedContent, revDetect.mobile() ? 'touchstart' : 'click', this.closePersonalizedTransitionCb);
         if (ev) {
             ev.stopPropagation();
             ev.preventDefault();
@@ -1681,10 +1681,10 @@ Author: michael@revcontent.com
             document.body.appendChild(that.personalizedMask);
             document.body.appendChild(that.personalizedContent);
 
-            that.closePersonalizedTransitionMaskCb = function(ev) {
+            that.closePersonalizedTransitionCb = function(ev) {
                 that.closePersonalizedTransition(ev);
             }
-            revUtils.addEventListener(that.personalizedMask, revDetect.mobile() ? 'touchstart' : 'click', that.closePersonalizedTransitionMaskCb, {passive: false});
+            revUtils.addEventListener(that.personalizedContent, revDetect.mobile() ? 'touchstart' : 'click', that.closePersonalizedTransitionCb, {passive: false});
         }
 
         if (this.personalizedMask) {
@@ -1697,12 +1697,34 @@ Author: michael@revcontent.com
         this.personalizedMask = document.createElement('div');
         this.personalizedMask.id = 'personalized-transition-mask';
 
-        this.personalizedContent = document.createElement('div')
+        this.personalizedContent = document.createElement('div');
         this.personalizedContent.id = 'personalized-transition-wrapper';
 
-        this.personalizedContent.innerHTML = '<div id="personalized-transition-animation"></div><div id="personalized-transition-text">Gathering personalized content...</div>';
+        var ucDomain = this.options.domain.charAt(0).toUpperCase() + this.options.domain.slice(1);
+
+        this.personalizedContent.innerHTML = '<div id="personalized-transition-animation"></div><div id="personalized-transition-text"><div>Analyzing ' + ucDomain + ' Articles</div></div>';
 
         show();
+
+        setTimeout(function() {
+            var personalizedTransitionText = that.personalizedContent.querySelector('#personalized-transition-text div');
+
+            var remove = function() {
+                that.onEndAnimation(personalizedTransitionText, function() {
+                    revUtils.removeClass(personalizedTransitionText, 'personalized-transition-text-animated');
+                });
+            };
+
+            revUtils.addClass(personalizedTransitionText, 'personalized-transition-text-animated');
+            personalizedTransitionText.innerHTML = 'Matching your interests to ' + ucDomain + ' content';
+            remove();
+
+            setTimeout(function() {
+                revUtils.addClass(personalizedTransitionText, 'personalized-transition-text-animated');
+                personalizedTransitionText.innerHTML = 'Preparing a personalized ' + ucDomain + ' experience for you';
+                remove();
+            }, 2500);
+        }, 2500);
     };
 
     RevSlider.prototype.subscribeToInterest = function(interestId){
