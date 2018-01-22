@@ -83,11 +83,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h3>Examples:</h3>
-                    <ul>
-                        <li><a href="/showcase/revcontent-api-showcase-feed-1.0/index.html">Default Layout</a> - 2 internal then 1 sponsored repeating</li>
-                        <li><a href="/showcase/revcontent-api-showcase-feed-1.0/demos/alt.html">Alternate layout</a> - 2 internal then 2x1 sponsored repeating</li>
-                    </ul>
+                   <h1>hola</h1>
                 </div>
             </div>
         </div>
@@ -347,6 +343,21 @@
                 quis consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
                 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
                 proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+                <div id="jsload_2ff711"></div>
+                <script type="text/javascript">
+                    (function() {
+                        var rcel = document.createElement("script");
+                        var referer="";try{if(referer=document.referrer,"undefined"==typeof referer)throw"undefined"}catch(exception){referer=document.location.href,(""==referer||"undefined"==typeof referer)&&(referer=document.URL)}referer=referer.substr(0,700);
+                        rcel.id = 'rc_' + Math.floor(Math.random() * 1000);
+                        rcel.type = 'text/javascript';
+                        rcel.src ="http://dv3-s4.revcontent.com/feed.js.php?uitm=1&w=80080&t=" + rcel.id + "&c=" + (new Date()).getTime() + "&width=" + (window.outerWidth || document.documentElement.clientWidth)+ "&referer="+referer;
+                        rcel.async = true;
+                        var rcds = document.getElementById("jsload_2ff711"); rcds.appendChild(rcel);
+                    })();
+                </script>
+
+
             </div>
             <div class="col-md-3">
                 <h3 class="redacted" style="margin-top: 0;">This is just a testing title</h3>
@@ -377,6 +388,8 @@
 
                 <h3 class="redacted">This is just a testing title</h3>
                 <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
+
+
             </div>
         </div>
 
@@ -397,34 +410,7 @@
 
    <!-- /. Fake Page Content -->
 
-    <script src="./js/feed.pkgd.js"></script>
-
-    <script>
-      new Feed({
-      "api_source": 'feed',
-      "host": '//dv3-s4.engage.im/',
-      "disclosure_about_src": '//trends.revcontent.com.cmaynard.revcontent.rcdev//engage-about.php',
-      "disclosure_interest_src": '//trends.revcontent.com.cmaynard.revcontent.rcdev//engage-interests.php',
-      "id": 'grid',
-      "api_key": 'dOlwx0QCTcdFigso7Tc87WXcZlgzVnMH4n36Clbr',
-      "user_ip": '3.0.0.1',
-      "widget_id": '80080',
-      "pub_id": '66340',
-      "domain": 'newsweek.com',
-      "comment_div": '',
-      "brand_logo": 'https://media-s4.engage.im/content/images/15164101432041549937.png',
-      "brand_logo_secondary": 'https://media-s4.engage.im/content%2Fimages%2F66340%2F1516410049_Screen+Shot+2018-01-19+at+8.03.14+PM.png',
-      "trending_utm": 'utm_source={widget_id}',
-      "view": "",
-      "keywords": "",
-      "css": "",
-      "initial_internal": 2,
-      "initial_sponsored": 1,
-      "internal": 2,
-      "sponsored": 1
-      });
-
-    </script>
+    
 
 </body>
 

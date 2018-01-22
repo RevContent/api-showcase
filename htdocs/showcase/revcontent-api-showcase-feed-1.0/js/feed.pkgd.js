@@ -14688,7 +14688,7 @@ Author: michael@revcontent.com
                     //save bookmark
                     var url = item.data.target_url;
                     var title = item.data.headline;
-                    revApi.request( that.options.host + '/api/v1/engage/addbookmark.php?callback=cb&url=' + url + '&title=' + title, function(data) {
+                    revApi.request( that.options.host + '/api/v1/engage/addbookmark.php?url=' + encodeURI(url) + '&title=' + encodeURI(title), function(data) {
                         return;
                     });
 
@@ -15286,6 +15286,18 @@ Author: michael@revcontent.com
                     item.element.querySelector('.rev-content-inner').appendChild(commentsElement);
                 }
 
+		var myReaction = '';
+		if (itemData.my_reaction) {
+		    myReaction = itemData.my_reaction;
+		    var likeReactionElement = item.element.querySelector('.rev-reaction-icon');
+		    likeReactionElement.setAttribute('data-active', 1);
+		    
+		    var icon = item.element.querySelector('.rev-reaction-like .rev-reaction-icon');
+                    revUtils.removeClass(icon, 'rev-reaction-icon-', true);
+                    revUtils.addClass(icon, 'rev-reaction-icon-' + myReaction);
+                    revUtils.addClass(icon, 'rev-reaction-icon-selected'); 
+                    revUtils.removeClass(item.element, 'rev-menu-active');
+		}
                 if (item.reactions) {
 		    var reactionHtml = '';
 
@@ -15330,7 +15342,11 @@ Author: michael@revcontent.com
                     item.element.querySelector('.rev-reaction-menu-item-count-pos .rev-reaction-menu-item-count-inner').innerText = this.milliFormatter(reactionCountTotalPos);
                     item.element.querySelector('.rev-reaction-menu-item-count-neg .rev-reaction-menu-item-count-inner').innerText = this.milliFormatter(reactionCountTotalNeg);
 
-                    reactionHtml += '<div ' + (!reactionCountTotal ? 'style="margin-left: 0;"' : '') + ' class="rev-reaction-count">'+ (reactionCountTotal ? reactionCountTotal : 'Be the first to react') +'</div>';
+		    if (myReaction) {
+			reactionHtml += '<div class="rev-reaction-count">'+ ((reactionCountTotal == 1) ? 'You reacted' : 'You and ' + (reactionCountTotal - 1) + ' others') + '</div>';
+		    } else {
+			reactionHtml += '<div ' + (!reactionCountTotal ? 'style="margin-left: 0;"' : '') + ' class="rev-reaction-count">'+ (reactionCountTotal ? reactionCountTotal : 'Be the first to react') +'</div>';
+		    }
 
                     item.element.querySelector('.rev-reactions-total-inner').innerHTML = reactionHtml;
                 }
@@ -15408,28 +15424,6 @@ Author: michael@revcontent.com
         show();
     };
 
-    RevSlider.prototype.fetchInterestsData = function(){
-      // MOCK Data -- Replace with proper DB/service fetch
-      // Return an array of Interest Objects.
-      var interests = [];
-      interests[0] = { id: 100, people: 1043201, title: "Technology", lightMode: false, slug: "technology", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/technology.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
-      interests[1] = { id: 200, people: 1235111, title: "Advertising", lightMode: true, slug: "advertising",image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/advertising.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
-      interests[2] = { id: 300, people: 2599710, title: "Ethereum", lightMode: false, slug: "ethereum", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/ethereum.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
-      interests[3] = { id: 400, people: 2599710, title: "Bitcoin Cash", lightMode: false, slug: "bch", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/bch.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
-      interests[4] = { id: 500, people: 3211233, title: "Cryptocurrency", lightMode: false, slug: "cryptocurrency", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/cryptocurrency.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
-      interests[5] = { id: 600, people: 4211233, title: "Aerospace Engineering", lightMode: false, slug: "aerospace-engineering", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/aerospace-engineering.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
-      interests[6] = { id: 700, people: 5211233, title: "Content Delivery", lightMode: false, slug: "cdn", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/cdn.png', subscribed: true, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
-      interests[7] = { id: 800, people: 6898300, title: "Literature", lightMode: false, slug: "literature", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/literature.png', subscribed: false, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
-      interests[8] = { id: 900, people: 2599710, title: "Basketball", lightMode: false, slug: "basketball", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/basketball.png', subscribed: false, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
-      interests[9] = { id: 1000, people: 5211233, title: "Data Science", lightMode: false, slug: "data-science", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/data-science.png', subscribed: false, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
-      interests[10] = { id: 1001, people: 6079282, title: "Digital Arts", lightMode: false, slug: "digital-arts", image: 'http://labs.e2-fx.com/showcase/revcontent-api-showcase-feed-1.0/img/interests/digital-arts.png', subscribed: false, taxonomy: '/full/interest/taxonomy', description: '', icon: ''};
-
-
-      //this.interests.list = interests;
-
-      return interests;
-    };
-
     RevSlider.prototype.subscribeToInterest = function(interestId){
         if(this.interests.subscribed_ids[interestId] == undefined) {
             this.interests.subscribed.push(this.interests.list[interestId]);
@@ -15459,91 +15453,99 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.appendInterestsCarousel = function (grid) {
+        
         var that = this;
         this.interestsCarouselVisible = true;
         var interest_cells = '';
-        var interests_data = this.fetchInterestsData();
-        var interests_count = interests_data.length;
-        for(var i=0;i<interests_count;i++){
-            var interest = interests_data[i];
-            var the_cell = '' +
-            // Interest Image should be stored as CSS by slug/name ID interest-' + interest.slug.toLowerCase() + '
-            // $image property in interest object could be used as override if non-empty.
-            '<div style="' + (interest.image != '' ? 'background:transparent url(' + interest.image + ') top left no-repeat;background-size:cover;' : '') + '" class="carousel-cell interest-cell interest-' + interest.slug.toLowerCase() + ' selected-interest" data-people="' + interest.people + '" data-title="' + interest.title + '" data-interest="' + interest.slug.toLowerCase() + '">' +
-                '<div class="cell-wrapper">' +
-                    '<span class="selector ' + (interest.subscribed ? 'subscribed' : '') + '"></span>' +
-                    '<div class="interest-title ' + (interest.lightMode ? ' light-mode' : '') + '">' + interest.title + '</div>' +
+
+        revApi.request( that.options.host + '/api/v1/engage/getinterests.php?cb=boom', function (data) {
+
+            var interests_data = data.interests;
+            var interests_count = 0; 
+
+            if (typeof interests_data !== 'undefined') {
+                interests_count = interests_data.length;
+            }
+
+            for(var i=0;i<interests_count;i++){
+                var interest = interests_data[i];
+                var the_cell = '' +
+                // Interest Image should be stored as CSS by slug/name ID interest-' + interest.slug.toLowerCase() + '
+                // $image property in interest object could be used as override if non-empty.
+                '<div style="' + (interest.thumbnail != '' ? 'background:transparent url(' + interest.thumbnail + ') top left no-repeat;background-size:cover;' : '') + '" class="carousel-cell interest-cell interest-' + interest.name.toLowerCase() + ' selected-interest"  data-title="' + interest.name + '" data-interest="' + interest.name.toLowerCase() + '">' +
+                    '<div class="cell-wrapper">' +
+                        '<span class="selector subscribed"></span>' +
+                        '<div class="interest-title ' + (interest.lightMode ? ' light-mode' : '') + '">' + interest.name + '</div>' +
+                    '</div>' +
+                '</div>';
+                interest_cells += the_cell;
+            }
+
+            var interestsCarousel = document.createElement('div');
+            interestsCarousel.className = 'rev-content';
+            interestsCarousel.innerHTML = '<div><h1 style="font-size:17px;padding-left:9px">Content You Love' +
+                '<small style="font-size:12px;font-weight:normal;padding-left:15px;color:#777777"><sup>SIMILAR TOPICS</sup></small>' +
+                '</h1>' +
+                '<div id="rev-feed-interests" class="feed-interests-carousel">' +
+
+                    interest_cells +
+
                 '</div>' +
-            '</div>';
-            interest_cells += the_cell;
-        }
+                '</div>';
 
-        var interestsCarousel = document.createElement('div');
-        interestsCarousel.className = 'rev-content';
-        interestsCarousel.innerHTML = '<div><h1 style="font-size:17px;padding-left:9px">Content You Love' +
-            '<small style="font-size:12px;font-weight:normal;padding-left:15px;color:#777777"><sup>SIMILAR TOPICS</sup></small>' +
-            '</h1>' +
-            '<div id="rev-feed-interests" class="feed-interests-carousel">' +
+            grid.element.appendChild(interestsCarousel);
 
-                interest_cells +
+            var interestsCarouselItemArr = grid.addItems([interestsCarousel]);
 
-            '</div>' +
-            '</div>';
+            grid.layoutItems(interestsCarouselItemArr, true);
 
-        grid.element.appendChild(interestsCarousel);
+            var carousel = interestsCarousel.querySelector('.feed-interests-carousel');
 
-        var interestsCarouselItemArr = grid.addItems([interestsCarousel]);
+            var interests_flick = new Flickity( carousel, {
+                wrapAround: false,
+                prevNextButtons: false,
+                pageDots: false,
+                adaptiveHeight: true,
+                freeScroll: true,
+                selectedAttraction: 0.15,
+                freeScrollFriction: 0.03,
+                initialIndex: 3
+            });
 
-        grid.layoutItems(interestsCarouselItemArr, true);
-
-        var carousel = interestsCarousel.querySelector('.feed-interests-carousel');
-
-        var interests_flick = new Flickity( carousel, {
-            wrapAround: false,
-            prevNextButtons: false,
-            pageDots: false,
-            adaptiveHeight: true,
-            freeScroll: true,
-            selectedAttraction: 0.15,
-            freeScrollFriction: 0.03,
-            initialIndex: 3
-        });
-
-        interests_flick.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) {
-            var target = event.target || event.srcElement;
-            if ( !cellElement ) {
-                return;
-            }
-            if(target.classList.contains('selector')) {
-                if (cellElement.classList.contains('selected-interest')) {
-                    cellElement.classList.remove('selected-interest');
-                    cellElement.querySelectorAll('span.selector')[0].classList.remove('subscribed');
-                    // this.unsubscribeFromInterest();
-                    that.notify('Topic removed from your feed.', {label: 'continue', link: '#'});
-                } else {
-                    cellElement.classList.add('selected-interest');
-                    cellElement.querySelectorAll('span.selector')[0].classList.add('subscribed');
-                    // this.subscribeToInterest();
-                    that.notify('Topic added, new content available.', {label: 'continue', link: '#'});
+            interests_flick.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) {
+                var target = event.target || event.srcElement;
+                if ( !cellElement ) {
+                    return;
                 }
-            }
+                if(target.classList.contains('selector')) {
+                    if (cellElement.classList.contains('selected-interest')) {
+                        cellElement.classList.remove('selected-interest');
+                        cellElement.querySelectorAll('span.selector')[0].classList.remove('subscribed');
+                        // this.unsubscribeFromInterest();
+                        that.notify('Topic removed from your feed.', {label: 'continue', link: '#'});
+                    } else {
+                        cellElement.classList.add('selected-interest');
+                        cellElement.querySelectorAll('span.selector')[0].classList.add('subscribed');
+                        // this.subscribeToInterest();
+                        that.notify('Topic added, new content available.', {label: 'continue', link: '#'});
+                    }
+                }
 
-            if(target.classList.contains('cell-wrapper')){
-                // Load an Explore Panel in "TOPIC" mode to show articles in that interest category...
-                // this.swipeToPanel('trending', target.getAttribute('data-slug'));
-            }
+                if(target.classList.contains('cell-wrapper')){
+                    // Load an Explore Panel in "TOPIC" mode to show articles in that interest category...
+                    // this.swipeToPanel('trending', target.getAttribute('data-slug'));
+                }
 
+            });
+
+            interests_flick.on( 'dragStart', function( event, pointer ) {
+                carousel.classList.add('is-dragging');
+            });
+
+            interests_flick.on( 'dragEnd', function( event, pointer ) {
+                carousel.classList.remove('is-dragging');
+            });
         });
-
-        interests_flick.on( 'dragStart', function( event, pointer ) {
-            carousel.classList.add('is-dragging');
-        });
-
-        interests_flick.on( 'dragEnd', function( event, pointer ) {
-            carousel.classList.remove('is-dragging');
-        });
-
-
     };
 
     RevSlider.prototype.appendExplorePanel = function(grid){
