@@ -789,9 +789,9 @@ return api;
 
   PowrApi.prototype.setVideoAutoplayOnFocus = function (play_on_focus) {
     if(play_on_focus && this.visibleListener == null) {
-      var element = document.getElementsByClassName("powr_embed");
-      if(element.length > 0) {
-        this.visibleListener = this.checkVisible.bind(this, element[0], this.playerState);
+      var element = document.getElementById(this.config.iframe_id);
+      if(element != null) {
+        this.visibleListener = this.checkVisible.bind(this, element, this.playerState);
         revUtils.addEventListener(window.parent, 'scroll', this.visibleListener);
       }
       this.log("added onfocus video autoplay listener");
