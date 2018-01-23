@@ -176,7 +176,7 @@
         <h2 class="redacted single-line">Try <a href="./autostream_trump.html">Donald Trump</a></h2>
 
       	<script type='text/javascript'>
-          document.write("<iframe id='powriframe_1' src='./iframe.html?" + urlObj.getParamsString() + "' width='600px' height='400px' allowfullscreen></iframe>");
+      	  document.write("<iframe class='powr_embed' id='powriframe_1' src='./iframe.html?" + urlObj.getParamsString() + "' width='600px' height='400px' allowfullscreen></iframe>");
       	</script>
 
         <p class="redacted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -490,27 +490,24 @@
   <script type='text/javascript'>
     var ivideo1 = null;
     $(function () {
-        var initPowrApi = function() {
-          ivideo1 = new PowrApi({
-              "iframe_id": 'powriframe_1'
+        var initPowrApi = function(obj) {
+          obj.addAdListener();
+
+          obj.addVideoEndListener(function () {
+              obj.setAdType(-1);
           });
 
-          ivideo1.addAdListener();
-
-          ivideo1.addVideoEndListener(function () {
-              ivideo1.setAdType(-1);
-          });
-          ivideo1.setVideoAutoplayOnFocus(true);
+          obj.setVideoAutoplayOnFocus(true);
         };
 
-        var messageListener = function(event) {
-            if(event.data === "player_ready") {
-                initPowrApi();
-                window.removeEventListener('message', messageListener, false);
+        var loop = setInterval(function() {
+          try {
+            if(ivideo1 == null) {
+              ivideo1 = new PowrApi({"iframe_id": 'powriframe_1'});
             }
-        };
-        window.addEventListener("message" , messageListener, false);
-
+            ivideo1.playerInit(loop, initPowrApi);
+          } catch(e) {}
+        }, 100);
       });
   </script>
 </body>
