@@ -26094,7 +26094,10 @@ if (!String.prototype.endsWithPowr) {
         dumbPlayer.setAttribute('width', this.getPlayerWidth() + 'px');
         dumbPlayer.setAttribute('height', this.getPlayerHeight() + 'px');
         dumbPlayer.setAttribute("controls", "true");
-        dumbPlayer.setAttribute("preload", "auto");
+        if(this.config.video_preload == null) {
+          this.config.video_preload = "auto";
+        }
+        dumbPlayer.setAttribute("preload", this.config.video_preload);
 
 	this.log("Setting up Video Element");
 	if (!this.autoplaySettings.autoplay) {
@@ -26108,11 +26111,7 @@ if (!String.prototype.endsWithPowr) {
         }
 
         var contentSrc = document.createElement('source');
-        if(this.mobile && (this.videos[0].mobile_url != null)) {
-          contentSrc.setAttribute('src', this.videos[0].mobile_url);
-        } else {
-          contentSrc.setAttribute('src', this.videos[0].sd_url);
-        }
+        contentSrc.setAttribute('src', this.getVideoFromRevolution(this.videos[0]));
         contentSrc.setAttribute('type', 'video/mp4');
         dumbPlayer.appendChild(contentSrc);
 
@@ -26246,11 +26245,7 @@ if (!String.prototype.endsWithPowr) {
       this.player.ima(this.options, this.bind(this, this.adsManagerLoadedCallback));
       this.player.ima.initializeAdDisplayContainer();
       // this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), playOnLoad);
-      if(this.mobile && (this.videos[this.currentContent].mobile_url != null)) {
-        this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].mobile_url, this.getAdsResponse(this.videos[this.currentContent]), playOnLoad);
-      } else {
-        this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].sd_url, this.getAdsResponse(this.videos[this.currentContent]), playOnLoad);
-      }
+      this.player.ima.setContentWithAdsResponse(this.getVideoFromRevolution(this.videos[this.currentContent]), this.getAdsResponse(this.videos[this.currentContent]), playOnLoad);
     	if (!this.autoplaySettings.autoplay) {
     	    this.player.poster(this.videos[this.currentContent].thumbnail);
     	}
@@ -26289,11 +26284,7 @@ if (!String.prototype.endsWithPowr) {
 	    this.adsPlayed = 0;
 
 	    this.player.ima.initializeAdDisplayContainer();
-      if(this.mobile && (this.videos[this.currentContent].mobile_url != null)) {
-        this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].mobile_url, this.getAdsResponse(this.videos[this.currentContent]), false);
-      } else {
-        this.player.ima.setContentWithAdsResponse(this.videos[this.currentContent].sd_url, this.getAdsResponse(this.videos[this.currentContent]), false);
-      }
+      this.player.ima.setContentWithAdsResponse(this.getVideoFromRevolution(this.videos[this.currentContent]), this.getAdsResponse(this.videos[this.currentContent]), false);
             // this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), false);
             var titleContent = this.videos[this.currentContent].title;
             this.titleDom.innerHTML = '<a target="_blank" href="' + this.getVideoLink(this.videos[this.currentContent]) + '">' + titleContent + "</a>";
@@ -27029,6 +27020,29 @@ if (!String.prototype.endsWithPowr) {
       this.log(e);
     }
   };
+
+  PowrVideo.prototype.getVideoFromRevolution = function(video) {
+    var url = video.sd_url;
+    if (this.mobile && video.mobile_url != null) {
+      url = video.mobile_url;
+    } else if(this.config.resolution != null) {
+      switch (this.config.resolution) {
+        case "hd": {
+          url = video.hd_url;
+          break;
+        }
+        case "mobile": {
+          if(video.mobile_url != null) url = video.mobile_url;
+          break;
+        }
+        case "sd":
+        default: {
+          url = video.sd_url;
+        }
+      }
+    }
+    return url;
+  }
 
     PowrVideo.setCookie = function(cname, cvalue, exminutes) {
 	var d = new Date();
