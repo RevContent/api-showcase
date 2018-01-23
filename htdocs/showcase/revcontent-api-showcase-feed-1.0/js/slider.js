@@ -272,7 +272,8 @@ Author: michael@revcontent.com
             subscribed: [],
             subscribed_ids: [],
             available: [],
-            recommended: []
+            recommended: [],
+            count: 0
         };
 
         this.getData();
@@ -385,7 +386,7 @@ Author: michael@revcontent.com
                     }
 
                     revApi.request( that.options.host + '/api/v1/engage/getinterests.php?', function(data) {
-                        if (!data.entities.length) { // test with && totaltime < 1200
+                        if (!data.subscribed || !data.subscribed.length) { // test with && totaltime < 1200
                             setTimeout(function() {
                                 request();
                             }, 2000);
@@ -1728,29 +1729,49 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.subscribeToInterest = function(interestId){
+        var that = this;
         if(this.interests.subscribed_ids[interestId] == undefined) {
-            this.interests.subscribed.push(this.interests.list[interestId]);
-            this.interests.subscribed_ids.push(interestId);
-            return interestId;
+            revApi.request(that.options.host + '/api/v1/engage/addinterest.php?id=' + interestId, function(subscribeResponse) {
+                if(!subscribeResponse.success || !subscribeResponse.length) {
+                    that.notify('Sorry, please try again.', {label: 'continue', link: '#'});
+                    return false;
+                }
+                that.interests.subscribed.push(that.interests.list[interestId]);
+                that.interests.subscribed_ids.push(interestId);
+                that.notify('Topic added, new content available.', {label: 'continue', link: '#'});
+                return interestId;
+            });
+
         } else {
+            that.notify('Sorry, please try again.', {label: 'continue', link: '#'});
             return false;
         }
     };
 
     RevSlider.prototype.unsubscribeFromInterest = function(interestId){
+        var that = this;
         if(this.interests.subscribed_ids[interestId] !== undefined) {
-            var revised_interests = [];
-            var revised_ids = [];
-            for(var i=0;i<this.interests.subscribed;i++){
-                if(this.interests.subscribed[i].id !== interestId){
-                    revised_interests.push(this.interests.subscribed[i]);
-                    revised_ids.push(this.interests.subscribed[i].id);
+            revApi.request(that.options.host + '/api/v1/engage/removeinterest.php?id=' + interestId, function(unsubscribeResponse) {
+                if(!unsubscribeResponse.success || !unsubscribeResponse.length) {
+                    that.notify('Sorry, please try again.', {label: 'continue', link: '#'});
+                    return false;
                 }
-            }
-            this.interests.subscribed = revised_interests;
-            this.interests.subscribed_ids = revised_ids;
-            return interestId;
+                var revised_interests = [];
+                var revised_ids = [];
+                for(var i=0;i<that.interests.subscribed;i++){
+                    if(that.interests.subscribed[i].id !== interestId){
+                        revised_interests.push(that.interests.subscribed[i]);
+                        revised_ids.push(that.interests.subscribed[i].id);
+                    }
+                }
+                that.interests.subscribed = revised_interests;
+                that.interests.subscribed_ids = revised_ids;
+                that.notify('Topic removed from your feed.', {label: 'continue', link: '#'});
+                return interestId;
+
+            });
         } else {
+            that.notify('Sorry, please try again.', {label: 'continue', link: '#'});
             return false;
         }
     };
@@ -1764,6 +1785,14 @@ Author: michael@revcontent.com
         revApi.request( that.options.host + '/api/v1/engage/getinterests.php?cb=boom', function (data) {
 
             var interests_data = data.interests;
+            that.interests = {
+                list: data.interests,
+                subscribed: [], //data.subscribed
+                subscribed_ids: [], //data.subscribed_ids
+                available: data.interests,
+                recomended: data.recommended,
+                count: data.interests.length // data.count
+            };
             var interests_count = 0; 
 
             if (typeof interests_data !== 'undefined') {
@@ -1824,20 +1853,21 @@ Author: michael@revcontent.com
                     if (cellElement.classList.contains('selected-interest')) {
                         cellElement.classList.remove('selected-interest');
                         cellElement.querySelectorAll('span.selector')[0].classList.remove('subscribed');
-                        // this.unsubscribeFromInterest();
-                        that.notify('Topic removed from your feed.', {label: 'continue', link: '#'});
+                        this.unsubscribeFromInterest();
+                        //that.notify('Topic removed from your feed.', {label: 'continue', link: '#'});
                     } else {
                         cellElement.classList.add('selected-interest');
                         cellElement.querySelectorAll('span.selector')[0].classList.add('subscribed');
-                        // this.subscribeToInterest();
-                        that.notify('Topic added, new content available.', {label: 'continue', link: '#'});
+                        this.subscribeToInterest();
+                        //that.notify('Topic added, new content available.', {label: 'continue', link: '#'});
                     }
                 }
 
                 if(target.classList.contains('cell-wrapper')){
                     // Load an Explore Panel in "TOPIC" mode to show articles in that interest category...
                     // this.swipeToPanel('trending', target.getAttribute('data-slug'));
-                    that.appendSliderPanel(cellElement.getAttribute('data-title'), '<div style="padding:18px"><p><strong>Loading Topics...</strong><br />fetching your personalized content.</p></div>', 1);
+                    // -- DISABLE TOPIC "DIVE-IN" PANEL UNTIL OTHER FEATURES ARE COMPLETED
+                    //that.appendSliderPanel(cellElement.getAttribute('data-title'), '<div style="padding:18px"><p><strong>Loading Topics...</strong><br />fetching your personalized content.</p></div>', 1);
                 }
 
             });
@@ -2066,10 +2096,11 @@ Author: michael@revcontent.com
                 ) + templates.suffix;
     };
 
-    RevSlider.prototype.notify = function(message, action){
+    RevSlider.prototype.notify = function(message, type, action){
         if(!message){
             return;
         }
+        if(!type){ type = 'info' };
         var notice_panel = document.getElementById('rev-notify-panel');
         if(typeof notice_panel == 'object' && notice_panel != null){
             notice_panel.remove();
