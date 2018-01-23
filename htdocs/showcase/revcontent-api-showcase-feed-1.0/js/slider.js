@@ -385,7 +385,7 @@ Author: michael@revcontent.com
                     }
 
                     revApi.request( that.options.host + '/api/v1/engage/getinterests.php?', function(data) {
-                        if (!data.entities.length) { // test with && totaltime < 1200
+                        if (!data.subscribed || !data.subscribed.length) { // test with && totaltime < 1200
                             setTimeout(function() {
                                 request();
                             }, 2000);
