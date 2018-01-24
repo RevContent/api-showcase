@@ -491,7 +491,7 @@ Author: michael@revcontent.com
 
             //  && i == patternTotal
             // @todo find replacement/correct var for patternTotal
-            if (!this.interestsCarouselVisible && i == 1) {
+            if (this.authenticated && (!this.interestsCarouselVisible && i == 1)) {
                 this.interestsCarouselVisible = true;
                 layoutItems = layoutItems.concat(this.appendInterestsCarousel(grid));
                 i--;
