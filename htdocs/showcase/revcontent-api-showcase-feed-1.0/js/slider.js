@@ -1862,10 +1862,10 @@ Author: michael@revcontent.com
                 var the_cell = '' +
                 // Interest Image should be stored as CSS by slug/name ID interest-' + interest.slug.toLowerCase() + '
                 // $image property in interest object could be used as override if non-empty.
-                '<div style="' + (interest.thumbnail != '' ? 'background:transparent url(' + interest.thumbnail + ') top left no-repeat;background-size:cover;' : '') + '" class="carousel-cell interest-cell interest-' + interest.name.toLowerCase() + ' selected-interest"  data-title="' + interest.name + '" data-interest="' + interest.name.toLowerCase() + '">' +
+                '<div style="' + (interest.image != '' ? 'background:transparent url(' + interest.image + ') top left no-repeat;background-size:cover;' : '') + '" class="carousel-cell interest-cell interest-' + interest.title.toLowerCase() + ' selected-interest"  data-title="' + interest.title + '" data-interest="' + interest.title.toLowerCase() + '">' +
                     '<div class="cell-wrapper">' +
                         '<span class="selector subscribed"></span>' +
-                        '<div class="interest-title ' + (interest.lightMode ? ' light-mode' : '') + '">' + interest.name + '</div>' +
+                        '<div class="interest-title ' + (interest.lightMode ? ' light-mode' : '') + '">' + interest.title + '</div>' +
                     '</div>' +
                 '</div>';
                 interest_cells += the_cell;
