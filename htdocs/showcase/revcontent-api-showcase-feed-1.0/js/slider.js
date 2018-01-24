@@ -491,7 +491,7 @@ Author: michael@revcontent.com
 
             //  && i == patternTotal
             // @todo find replacement/correct var for patternTotal
-            if (!this.interestsCarouselVisible && i == 1) {
+            if (this.authenticated && (!this.interestsCarouselVisible && i == 1)) {
                 this.interestsCarouselVisible = true;
                 layoutItems = layoutItems.concat(this.appendInterestsCarousel(grid));
                 i--;
@@ -558,14 +558,14 @@ Author: michael@revcontent.com
     }
 
     RevSlider.prototype.appendfeedAuthButton = function(grid) {
-        var feedAuthButton = document.createElement('div');
-        feedAuthButton.className = 'rev-content';
-        feedAuthButton.innerHTML = '<div class="rev-auth">' +
+        this.feedAuthButton = document.createElement('div');
+        this.feedAuthButton.className = 'rev-content';
+        this.feedAuthButton.innerHTML = '<div class="rev-auth">' +
         '<div class="rev-auth-box">' +
             '<div class="rev-auth-box-inner">' +
 
                 '<div class="rev-auth-headline">' +
-                    '<span class="rev-engage-type-txt">Hey there! Connect your account</span> <br /> <strong>and</strong> personalize your experience' +
+                    '<span class="rev-engage-type-txt">Hey there! Connect your account to<br /> surface personalized <strong>and</strong> relevant content!</span>' +
                 '</div>' +
 
                 '<div class="rev-auth-button">' +
@@ -579,11 +579,11 @@ Author: michael@revcontent.com
             '</div>' +
         '</div></div>';
 
-        grid.element.appendChild(feedAuthButton);
+        grid.element.appendChild(this.feedAuthButton);
 
-        revUtils.addEventListener(feedAuthButton.querySelector('.rev-auth-button'), 'click', this.authButtonHandler.bind(this, false));
+        revUtils.addEventListener(this.feedAuthButton.querySelector('.rev-auth-button'), 'click', this.authButtonHandler.bind(this, false));
 
-        return grid.addItems([feedAuthButton]);
+        return grid.addItems([this.feedAuthButton]);
     }
 
     RevSlider.prototype.handleReactionMenu = function(item) {
@@ -1313,41 +1313,46 @@ Author: michael@revcontent.com
 
         var popup = window.open(url, 'Login', 'resizable,width=600,height=800');
 
-        if (cell) {
-            var closedCheckInterval = setInterval(function() {
-                if (popup.closed) {
-                    that.isAuthenticated(function(response) {
-                        if (response === true) {
+        var closedCheckInterval = setInterval(function() {
+            if (popup.closed) {
+                that.isAuthenticated(function(response) {
+                    if (response === true) {
+                        if (cell) {
                             revUtils.removeClass(cell, 'rev-flipped');
-                            that.updateAuthElements();
-
-                            /* secondary auth page, deemed unnecessary for now
-                            var headline = cell.querySelector('.rev-auth-headline');
-                            var button = cell.querySelector('.rev-auth-button');
-                            var image = cell.querySelector('.rev-auth-site-logo');
-                            var container = cell.querySelector('.rev-auth-box');
-
-                            if (image) {
-                                image.innerHTML = "<img src='https://graph.facebook.com/758080600/picture?type=square' />";
-                            } else {
-                                container.insertAdjacentHTML('afterbegin',"<img src='https://graph.facebook.com/758080600/picture?type=square' />");
-                            }
-
-                            button.style.display = "none";
-                            headline.innerHTML = "One Last Step, Please enter a password:<br/><input type='text' class='rev-engpass'/><input type='button' value='Sign Up'/>";*/
-                            if (!that.personalized) {
-                                that.showPersonalizedTransition();
-                                that.personalize();
-                            }
-                        } else {
-                            // TODO
                         }
-                        revDisclose.postMessage();
-                    });
-                    clearInterval(closedCheckInterval);
-                }
-            }, 100);
-        }
+                        that.updateAuthElements();
+
+                        /* secondary auth page, deemed unnecessary for now
+                        var headline = cell.querySelector('.rev-auth-headline');
+                        var button = cell.querySelector('.rev-auth-button');
+                        var image = cell.querySelector('.rev-auth-site-logo');
+                        var container = cell.querySelector('.rev-auth-box');
+
+                        if (image) {
+                            image.innerHTML = "<img src='https://graph.facebook.com/758080600/picture?type=square' />";
+                        } else {
+                            container.insertAdjacentHTML('afterbegin',"<img src='https://graph.facebook.com/758080600/picture?type=square' />");
+                        }
+
+                        button.style.display = "none";
+                        headline.innerHTML = "One Last Step, Please enter a password:<br/><input type='text' class='rev-engpass'/><input type='button' value='Sign Up'/>";*/
+                        if (!that.personalized) {
+                            that.showPersonalizedTransition();
+                            that.personalize();
+                        }
+                    } else {
+                        if (!cell) { // logged out from inline auth button
+                            that.grid.remove(that.feedAuthButton);
+                            if (that.grid.perRow > 1) { // relayout if not single column
+                                that.grid.layout();
+                            }
+                        }
+                    }
+                    revDisclose.postMessage();
+                });
+                clearInterval(closedCheckInterval);
+            }
+        }, 100);
     }
 
     RevSlider.prototype.getDisclosure = function() {
@@ -1837,14 +1842,14 @@ Author: michael@revcontent.com
 
         revApi.request( that.options.host + '/api/v1/engage/getinterests.php?cb=boom', function (data) {
 
-            var interests_data = data.interests;
+            var interests_data = data.subscribed;
             that.interests = {
-                list: data.interests,
-                subscribed: [], //data.subscribed
-                subscribed_ids: [], //data.subscribed_ids
-                available: data.interests,
+                list: data.subscribed,
+                subscribed: data.subscribed, //data.subscribed
+                subscribed_ids: data.subscribed_ids, //data.subscribed_ids
+                available: data.subscribed,
                 recomended: data.recommended,
-                count: data.interests.length // data.count
+                count: data.subscribed.length // data.count
             };
             var interests_count = 0;
 
@@ -1857,10 +1862,10 @@ Author: michael@revcontent.com
                 var the_cell = '' +
                 // Interest Image should be stored as CSS by slug/name ID interest-' + interest.slug.toLowerCase() + '
                 // $image property in interest object could be used as override if non-empty.
-                '<div style="' + (interest.thumbnail != '' ? 'background:transparent url(' + interest.thumbnail + ') top left no-repeat;background-size:cover;' : '') + '" class="carousel-cell interest-cell interest-' + interest.name.toLowerCase() + ' selected-interest"  data-title="' + interest.name + '" data-interest="' + interest.name.toLowerCase() + '">' +
+                '<div style="' + (interest.image != '' ? 'background:transparent url(' + interest.image + ') top left no-repeat;background-size:cover;' : '') + '" class="carousel-cell interest-cell interest-' + interest.title.toLowerCase() + ' selected-interest"  data-title="' + interest.title + '" data-interest="' + interest.title.toLowerCase() + '">' +
                     '<div class="cell-wrapper">' +
                         '<span class="selector subscribed"></span>' +
-                        '<div class="interest-title ' + (interest.lightMode ? ' light-mode' : '') + '">' + interest.name + '</div>' +
+                        '<div class="interest-title ' + (interest.lightMode ? ' light-mode' : '') + '">' + interest.title + '</div>' +
                     '</div>' +
                 '</div>';
                 interest_cells += the_cell;
@@ -1925,8 +1930,8 @@ Author: michael@revcontent.com
                 carousel.classList.remove('is-dragging');
             });
 
-            if (this.grid.perRow > 1) { // relayout if not single column
-                this.grid.layout();
+            if (grid.perRow > 1) { // relayout if not single column
+                grid.layout();
             }
         });
 
