@@ -259,6 +259,7 @@ if (!String.prototype.endsWithPowr) {
         revUtils.append(this.element, imaScript);
 
         this.adListeners = Array();
+        this.player_ready = 0;
         window.addEventListener("message", this.receiveMessage.bind(this), false);
     };
 
@@ -500,12 +501,6 @@ if (!String.prototype.endsWithPowr) {
 	} else {
 	    this.playOverlay.show();
 	}
-
-  try {
-    window.parent.postMessage("player_ready", "*");
-  } catch (e) {
-    this.log("window.parent is null");
-  }
     };
 
     PowrVideo.prototype.onUpdate = function() {
@@ -1301,6 +1296,8 @@ if (!String.prototype.endsWithPowr) {
         } else if(data[0] === "end") {
           player.on('ended', this.videoEnd.bind(this, {"flag": "video_ended", "id": data[1], "source": event.source, "origin": event.origin}));
           response['msg'] = "added video end listener";
+        } else if(data[0] === "player_ready") {
+          response['msg'] = this.player_ready++;
         }
 
         response['flag'] = data[0];
