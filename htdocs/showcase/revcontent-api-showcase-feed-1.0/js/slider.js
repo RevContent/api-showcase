@@ -1695,6 +1695,10 @@ Author: michael@revcontent.com
 
                     item.element.querySelector('.rev-reactions-total-inner').innerHTML = reactionHtml;
                 }
+
+                if (item.type == 'internal' && itemData.bookmarked) {
+                    revUtils.addClass(item.element.querySelector('.rev-save'), 'rev-save-active');
+                }
             }
         }
 
