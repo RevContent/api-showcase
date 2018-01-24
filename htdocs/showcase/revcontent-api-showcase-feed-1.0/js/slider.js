@@ -1849,7 +1849,7 @@ Author: michael@revcontent.com
         interestsCarousel.className = 'rev-content';
         grid.element.appendChild(interestsCarousel);
 
-        revApi.request( that.options.host + '/api/v1/engage/getinterests.php?cb=boom', function (data) {
+        revApi.request( that.options.host + '/api/v1/engage/getinterests.php?', function (data) {
 
             var interests_data = data.subscribed;
             that.interests = {
