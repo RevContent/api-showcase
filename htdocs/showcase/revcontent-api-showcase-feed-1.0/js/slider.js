@@ -546,7 +546,9 @@ Author: michael@revcontent.com
             items[i].element.querySelector('.rev-reaction-bar').innerHTML = reactionHtml[i];
             this.handleShareAction(items[i]);
             this.handleReactionMenu(items[i]);
-            this.handleBookmarkAction(items[i]);
+            if (items[i].type == 'internal') {
+                this.handleBookmarkAction(items[i]);
+            }
         }
 
         return {
@@ -1003,7 +1005,13 @@ Author: michael@revcontent.com
             }, {passive: false});
         }
 
-        handleSave(item.element.querySelector('.rev-meta-inner .rev-save'));
+        var save = document.createElement('div');
+        save.className = 'rev-save';
+        save.innerHTML = '<?xml version="1.0" ?><svg contentScriptType="text/ecmascript" contentStyleType="text/css" preserveAspectRatio="xMidYMid meet" version="1.0" viewBox="0 0 60.000000 60.000000" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" zoomAndPan="magnify"><g><polygon fill="none" points="51.0,59.0 29.564941,45.130005 9.0,59.0 9.0,1.0 51.0,1.0" stroke="#231F20" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/></g></svg>'
+
+        revUtils.append(item.element.querySelector('.rev-meta-inner'), save);
+
+        handleSave(save);
     };
 
     RevSlider.prototype.onEndAnimation = function(el, callback) {
