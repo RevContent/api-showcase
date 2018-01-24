@@ -174,14 +174,20 @@ Author: michael@revcontent.com
             return;
         }
 
+        window.feedEasterEgg = function() {
+            revApi.request( self.options.host + '/api/v1/engage/profile.php?', function(data) {
+                self.initCornerButton(data);
+            });
+        };
+
         this.innerWidget.dataPromise.then(function() {
             self.viewability().then(function() {
 
-                if (self.innerWidget.authenticated) {
-                    revApi.request( self.options.host + '/api/v1/engage/profile.php?', function(data) {
-                        self.initCornerButton(data);
-                    });
-                }
+                // if (self.innerWidget.authenticated) {
+                //     revApi.request( self.options.host + '/api/v1/engage/profile.php?', function(data) {
+                //         self.initCornerButton(data);
+                //     });
+                // }
 
                 if (self.options.infinite) {
                     self.infinite();
