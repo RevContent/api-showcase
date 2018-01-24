@@ -1930,8 +1930,8 @@ Author: michael@revcontent.com
                 carousel.classList.remove('is-dragging');
             });
 
-            if (this.grid.perRow > 1) { // relayout if not single column
-                this.grid.layout();
+            if (grid.perRow > 1) { // relayout if not single column
+                grid.layout();
             }
         });
 
