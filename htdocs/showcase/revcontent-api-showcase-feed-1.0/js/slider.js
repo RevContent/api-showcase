@@ -965,7 +965,7 @@ Author: michael@revcontent.com
             revUtils.addEventListener(bookmark, revDetect.mobile() ? 'touchstart' : 'click', function(e) {
                 if (revUtils.hasClass(bookmark, 'rev-save-active')) {
                     revUtils.removeClass(bookmark, 'rev-save-active');
-                    revApi.request( that.options.host + '/api/v1/engage/removebookmark.php?url=' + encodeURI(url) + '&title=' + encodeURI(title), function(data) {
+                    revApi.request( that.options.host + '/api/v1/engage/removebookmark.php?url=' + encodeURI(item.data.target_url) + '&title=' + encodeURI(item.data.headline), function(data) {
                         return;
                     });
                 } else {
@@ -992,9 +992,7 @@ Author: michael@revcontent.com
                     that.transitionLogin(item, 'bookmark');
 
                     //save bookmark
-                    var url = item.data.target_url;
-                    var title = item.data.headline;
-                    revApi.request( that.options.host + '/api/v1/engage/addbookmark.php?url=' + encodeURI(url) + '&title=' + encodeURI(title), function(data) {
+                    revApi.request( that.options.host + '/api/v1/engage/addbookmark.php?url=' + encodeURI(item.data.target_url) + '&title=' + encodeURI(item.data.headline), function(data) {
                         return;
                     });
 
