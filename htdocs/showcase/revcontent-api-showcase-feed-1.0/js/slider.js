@@ -1842,7 +1842,7 @@ Author: michael@revcontent.com
 
         revApi.request( that.options.host + '/api/v1/engage/getinterests.php?cb=boom', function (data) {
 
-            var interests_data = data.interests;
+            var interests_data = data.subscribed;
             that.interests = {
                 list: data.subscribed,
                 subscribed: data.subscribed, //data.subscribed
