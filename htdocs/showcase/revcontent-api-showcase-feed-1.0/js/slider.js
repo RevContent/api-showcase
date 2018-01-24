@@ -251,21 +251,12 @@ Author: michael@revcontent.com
         // SWIPE Feature (Explore Panel)
         // this.appendExplorePanel(this.grid);
 
-        this.createCells(this.grid);
-
-        if (this.limit == 0) {
-            this.destroy();
-            return;
-        }
-
         this.grid.on('resize', function() {
             that.resize();
         });
 
         // inject:mock
         // endinject
-
-        this.authenticated = false;
 
         this.interests = {
             list: [],
@@ -275,6 +266,8 @@ Author: michael@revcontent.com
             recommended: [],
             count: 0
         };
+
+        this.authenticated = false;
 
         this.getData();
 
@@ -298,7 +291,8 @@ Author: michael@revcontent.com
             if (that.options.beacons) {
                 revApi.beacons.setPluginSource(that.options.api_source).attach();
             }
-        }, function() {
+        }, function(e) {
+            console.log(e);
             that.destroy();
         }).catch(function(e) {
             console.log(e);
@@ -307,15 +301,6 @@ Author: michael@revcontent.com
         this.offset = 0;
 
         this.appendElements();
-
-        this.authenticated = false;
-
-        var that = this;
-        this.isAuthenticated(function(response) {
-            if (response === true) {
-                that.updateAuthElements();
-            }
-        });
     };
 
     RevSlider.prototype.personalize = function() {
@@ -498,6 +483,7 @@ Author: michael@revcontent.com
         var share_b64 = '<a href="https://www.facebook.com/sharer/sharer.php?u='+ this.options.domain +'" target="_blank" class="rev-reaction rev-reaction-share"><div class="rev-reaction-icon rev-reaction-icon-share"></div></a>';
 
         var items = [];
+        var layoutItems = [];
         var reactionHtml = []; // don't want to store this massive string
 
         // TODO: make this a 2 step process. first append single element then get type, second add innerhtml
@@ -505,8 +491,16 @@ Author: michael@revcontent.com
 
             //  && i == patternTotal
             // @todo find replacement/correct var for patternTotal
-            if (this.authenticated && !this.interestsCarouselVisible) {
-                this.appendInterestsCarousel(grid);
+            if (!this.interestsCarouselVisible && i == 1) {
+                this.interestsCarouselVisible = true;
+                layoutItems = layoutItems.concat(this.appendInterestsCarousel(grid));
+                continue;
+            }
+
+            if (!this.authenticated && i == 1 && !this.feedAuthButtonVisible) {
+                this.feedAuthButtonVisible = true;
+                layoutItems = layoutItems.concat(this.appendfeedAuthButton(grid));
+                continue;
             }
 
             var element = this.createNewCell();
@@ -538,11 +532,12 @@ Author: michael@revcontent.com
             // this.handleShareAction(added[0]);
             // this.handleReactionMenu(added[0]);
 
+            layoutItems = layoutItems.concat(added);
             items = items.concat(added);
             limit++;
         }
 
-        grid.layoutItems(items, true);
+        grid.layoutItems(layoutItems, true);
 
         // strictly for perf
         for (var i = 0; i < items.length; i++) {
@@ -558,6 +553,35 @@ Author: michael@revcontent.com
             internalLimit: internalLimit,
             sponsoredLimit: sponsoredLimit
         }
+    }
+
+    RevSlider.prototype.appendfeedAuthButton = function(grid) {
+        var feedAuthButton = document.createElement('div');
+        feedAuthButton.className = 'rev-content';
+        feedAuthButton.innerHTML = '<div class="rev-auth">' +
+        '<div class="rev-auth-box">' +
+            '<div class="rev-auth-box-inner">' +
+
+                '<div class="rev-auth-headline">' +
+                    '<span class="rev-engage-type-txt">Hey there! Connect your account</span> <br /> <strong>and</strong> personalize your experience' +
+                '</div>' +
+
+                '<div class="rev-auth-button">' +
+                    '<div class="rev-auth-button-icon">' +
+                        '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 155.139 155.139" style="enable-background:new 0 0 155.139 155.139;" xml:space="preserve" class=""><g><g> <path id="f_1_" d="M89.584,155.139V84.378h23.742l3.562-27.585H89.584V39.184   c0-7.984,2.208-13.425,13.67-13.425l14.595-0.006V1.08C115.325,0.752,106.661,0,96.577,0C75.52,0,61.104,12.853,61.104,36.452   v20.341H37.29v27.585h23.814v70.761H89.584z" data-original="#000000" class="active-path" data-old_color="#ffffff" fill="#ffffff"/> </g></g> </svg>' +
+                    '</div>' +
+                    '<div class="rev-auth-button-text">' +
+                        'Personalize with facebook' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+        '</div></div>';
+
+        grid.element.appendChild(feedAuthButton);
+
+        revUtils.addEventListener(feedAuthButton.querySelector('.rev-auth-button'), 'click', this.authButtonHandler.bind(this, false));
+
+        return grid.addItems([feedAuthButton]);
     }
 
     RevSlider.prototype.handleReactionMenu = function(item) {
@@ -1265,15 +1289,29 @@ Author: michael@revcontent.com
         });
 
         var that = this;
+        revUtils.addEventListener(cell.querySelector('.rev-auth-button'), 'click', this.authButtonHandler.bind(this, cell));
+
+        /* secondary auth page, deemed unnecessary for now
         revUtils.addEventListener(cell.querySelector('.rev-auth-button'), 'click', function(e) {
-            if (that.authenticated) {
-                var url = that.options.host + "/feed.php?provider=facebook_engage&action=logout&w=" + that.options.widget_id + "&p=" + that.options.pub_id;
-            } else {
-                var url = that.options.host + "/feed.php?provider=facebook_engage&w=" + that.options.widget_id + "&p=" + that.options.pub_id;
-            }
+            //revUtils.removeClass(cell, 'rev-flipped');
+            //that.updateAuthElements();
+        });
+        */
 
-            var popup = window.open(url, 'Login', 'resizable,width=600,height=800');
+        return cell;
+    };
 
+    RevSlider.prototype.authButtonHandler = function(cell, e) {
+        var that = this;
+        if (that.authenticated) {
+            var url = that.options.host + "/feed.php?provider=facebook_engage&action=logout&w=" + that.options.widget_id + "&p=" + that.options.pub_id;
+        } else {
+            var url = that.options.host + "/feed.php?provider=facebook_engage&w=" + that.options.widget_id + "&p=" + that.options.pub_id;
+        }
+
+        var popup = window.open(url, 'Login', 'resizable,width=600,height=800');
+
+        if (cell) {
             var closedCheckInterval = setInterval(function() {
                 if (popup.closed) {
                     that.isAuthenticated(function(response) {
@@ -1307,19 +1345,8 @@ Author: michael@revcontent.com
                     clearInterval(closedCheckInterval);
                 }
             }, 100);
-        });
-
-        /* secondary auth page, deemed unnecessary for now
-        revUtils.addEventListener(cell.querySelector('.rev-auth-button'), 'click', function(e) {
-            //revUtils.removeClass(cell, 'rev-flipped');
-            //that.updateAuthElements();
-        });
-        */
-
-        return cell;
-    };
-
-
+        }
+    }
 
     RevSlider.prototype.getDisclosure = function() {
         return revDisclose.getDisclosure(this.options.disclosure_text, {
@@ -1384,50 +1411,69 @@ Author: michael@revcontent.com
             return this.dataPromise;
         }
 
-        var urls = [];
-
-        if (this.internalLimit > 0) {
-            var internalURL = this.generateUrl(0, this.internalLimit, false, false, true);
-            urls.push({
-                offset: 0,
-                limit: this.internalLimit,
-                url: internalURL,
-                type: 'internal'
-            });
-        }
-
-        if (this.sponsoredLimit > 0) {
-            // don't register multiple widget impressions
-            // var fill = urls.length > 0;
-            var sponsoredURL = this.generateUrl(0, this.sponsoredLimit, false, false, false);
-            urls.push({
-                offset: 0,
-                limit: this.sponsoredLimit,
-                url: sponsoredURL,
-                type: 'sponsored'
-            });
-        }
-
-        this.promises = [];
         var that = this;
-        for (var i = 0; i < urls.length; i++) {
-            this.promises.push(new Promise(function(resolve, reject) {
-                var url = urls[i];
 
-                revApi.request(url.url, function(resp) {
-                    if (!resp.length) {
-                        reject();
-                        return;
-                    }
-                    resolve({
-                        type: url.type,
-                        data: resp
-                    });
+        this.dataPromise = new Promise(function(resolve, reject) {
+            that.isAuthenticated(function(response) {
+                if (response === true) {
+                    that.updateAuthElements();
+                }
+
+                that.createCells(that.grid);
+
+                if (that.limit == 0) {
+                    that.destroy();
+                    reject();
+                    return;
+                }
+                resolve(response)
+            })
+        }).then(function(authenticated) { // data depending on auth
+
+            var urls = [];
+
+            if (that.internalLimit > 0) {
+                var internalURL = that.generateUrl(0, that.internalLimit, false, false, true);
+                urls.push({
+                    offset: 0,
+                    limit: that.internalLimit,
+                    url: internalURL,
+                    type: 'internal'
                 });
-            }));
-        }
+            }
 
-        this.dataPromise = Promise.all(this.promises);
+            if (that.sponsoredLimit > 0) {
+                // don't register multiple widget impressions
+                // var fill = urls.length > 0;
+                var sponsoredURL = that.generateUrl(0, that.sponsoredLimit, false, false, false);
+                urls.push({
+                    offset: 0,
+                    limit: that.sponsoredLimit,
+                    url: sponsoredURL,
+                    type: 'sponsored'
+                });
+            }
+
+            that.promises = [];
+            for (var i = 0; i < urls.length; i++) {
+                that.promises.push(new Promise(function(resolve, reject) {
+                    var url = urls[i];
+
+                    revApi.request(url.url, function(resp) {
+                        if (!resp.length) {
+                            reject();
+                            return;
+                        }
+                        resolve({
+                            type: url.type,
+                            data: resp
+                        });
+                    });
+                }));
+            }
+
+            return Promise.all(that.promises);
+        });
 
         return this.dataPromise;
     };
@@ -1441,7 +1487,7 @@ Author: michael@revcontent.com
         var itemTypes = {
             sponsored: [],
             internal: [],
-            header: []
+            undefined: [] // bootleg moonshine?
         }
 
         for (var i = 0; i < items.length; i++) {
@@ -1574,11 +1620,11 @@ Author: michael@revcontent.com
 		    myReaction = itemData.my_reaction;
 		    var likeReactionElement = item.element.querySelector('.rev-reaction-icon');
 		    likeReactionElement.setAttribute('data-active', 1);
-		    
+
 		    var icon = item.element.querySelector('.rev-reaction-like .rev-reaction-icon');
                     revUtils.removeClass(icon, 'rev-reaction-icon-', true);
                     revUtils.addClass(icon, 'rev-reaction-icon-' + myReaction);
-                    revUtils.addClass(icon, 'rev-reaction-icon-selected'); 
+                    revUtils.addClass(icon, 'rev-reaction-icon-selected');
                     revUtils.removeClass(item.element, 'rev-menu-active');
 		}
                 if (item.reactions) {
@@ -1780,10 +1826,12 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.appendInterestsCarousel = function (grid) {
-        
         var that = this;
-        this.interestsCarouselVisible = true;
         var interest_cells = '';
+
+        var interestsCarousel = document.createElement('div');
+        interestsCarousel.className = 'rev-content';
+        grid.element.appendChild(interestsCarousel);
 
         revApi.request( that.options.host + '/api/v1/engage/getinterests.php?cb=boom', function (data) {
 
@@ -1796,7 +1844,7 @@ Author: michael@revcontent.com
                 recomended: data.recommended,
                 count: data.interests.length // data.count
             };
-            var interests_count = 0; 
+            var interests_count = 0;
 
             if (typeof interests_data !== 'undefined') {
                 interests_count = interests_data.length;
@@ -1816,8 +1864,6 @@ Author: michael@revcontent.com
                 interest_cells += the_cell;
             }
 
-            var interestsCarousel = document.createElement('div');
-            interestsCarousel.className = 'rev-content';
             interestsCarousel.innerHTML = '<div><h1 style="font-size:17px;padding-left:9px">Content You Love' +
                 '<small style="font-size:12px;font-weight:normal;padding-left:15px;color:#777777"><sup>SIMILAR TOPICS</sup></small>' +
                 '</h1>' +
@@ -1827,12 +1873,6 @@ Author: michael@revcontent.com
 
                 '</div>' +
                 '</div>';
-
-            grid.element.appendChild(interestsCarousel);
-
-            var interestsCarouselItemArr = grid.addItems([interestsCarousel]);
-
-            grid.layoutItems(interestsCarouselItemArr, true);
 
             var carousel = interestsCarousel.querySelector('.feed-interests-carousel');
 
@@ -1882,7 +1922,13 @@ Author: michael@revcontent.com
             interests_flick.on( 'dragEnd', function( event, pointer ) {
                 carousel.classList.remove('is-dragging');
             });
+
+            if (this.grid.perRow > 1) { // relayout if not single column
+                this.grid.layout();
+            }
         });
+
+        return grid.addItems([interestsCarousel]);
     };
 
     RevSlider.prototype.appendExplorePanel = function(grid){
