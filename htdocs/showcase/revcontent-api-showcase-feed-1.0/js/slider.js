@@ -1631,20 +1631,21 @@ Author: michael@revcontent.com
                     item.element.querySelector('.rev-content-inner').appendChild(commentsElement);
                 }
 
-		var myReaction = '';
-		if (itemData.my_reaction) {
-		    myReaction = itemData.my_reaction;
-		    var likeReactionElement = item.element.querySelector('.rev-reaction-icon');
-		    likeReactionElement.setAttribute('data-active', 1);
+                var myReaction = '';
+                if (itemData.my_reaction) {
+                    myReaction = itemData.my_reaction;
+                    var likeReactionElement = item.element.querySelector('.rev-reaction-icon');
+                    likeReactionElement.setAttribute('data-active', 1);
 
-		    var icon = item.element.querySelector('.rev-reaction-like .rev-reaction-icon');
+                    var icon = item.element.querySelector('.rev-reaction-like .rev-reaction-icon');
                     revUtils.removeClass(icon, 'rev-reaction-icon-', true);
                     revUtils.addClass(icon, 'rev-reaction-icon-' + myReaction);
                     revUtils.addClass(icon, 'rev-reaction-icon-selected');
                     revUtils.removeClass(item.element, 'rev-menu-active');
-		}
+                }
+
                 if (item.reactions) {
-		    var reactionHtml = '';
+                    var reactionHtml = '';
 
                     var reactionCountTotal = 0;
                     var reactionCountTotalPos = 0;
@@ -1655,15 +1656,12 @@ Author: michael@revcontent.com
                     var negativeReactions = this.options.reactions.slice(3)
 
                     for (var reactionCounter = 0; reactionCounter < this.options.reactions.length; reactionCounter++) {
-
-                        // console.log('here');
                         var reaction = this.options.reactions[reactionCounter];
-			var reactionCount = 0;
-			if (itemData.hasOwnProperty("reactions")) {
+                        var reactionCount = 0;
+                        if (itemData.hasOwnProperty("reactions")) {
                             reactionCount = itemData.reactions[reaction];
-			}
+                        }
 
-                        // console.log(reactionCounter);
                         if (reactionCount) {
                             if (reactionCounter < 3) {
                                 reactionCountTotalPos += reactionCount;
@@ -1687,13 +1685,17 @@ Author: michael@revcontent.com
                     item.element.querySelector('.rev-reaction-menu-item-count-pos .rev-reaction-menu-item-count-inner').innerText = this.milliFormatter(reactionCountTotalPos);
                     item.element.querySelector('.rev-reaction-menu-item-count-neg .rev-reaction-menu-item-count-inner').innerText = this.milliFormatter(reactionCountTotalNeg);
 
-		    if (myReaction) {
-			reactionHtml += '<div class="rev-reaction-count">'+ ((reactionCountTotal == 1) ? 'You reacted' : 'You and ' + (reactionCountTotal - 1) + ' others') + '</div>';
-		    } else {
-			reactionHtml += '<div ' + (!reactionCountTotal ? 'style="margin-left: 0;"' : '') + ' class="rev-reaction-count">'+ (reactionCountTotal ? reactionCountTotal : 'Be the first to react') +'</div>';
-		    }
+                    if (myReaction) {
+                        reactionHtml += '<div class="rev-reaction-count">'+ ((reactionCountTotal == 1) ? 'You reacted' : 'You and ' + (reactionCountTotal - 1) + ' others') + '</div>';
+                    } else {
+                        reactionHtml += '<div ' + (!reactionCountTotal ? 'style="margin-left: 0;"' : '') + ' class="rev-reaction-count">'+ (reactionCountTotal ? reactionCountTotal : 'Be the first to react') +'</div>';
+                    }
 
                     item.element.querySelector('.rev-reactions-total-inner').innerHTML = reactionHtml;
+                }
+
+                if (item.type == 'internal' && itemData.bookmarked) {
+                    revUtils.addClass(item.element.querySelector('.rev-save'), 'rev-save-active');
                 }
             }
         }
@@ -1701,7 +1703,6 @@ Author: michael@revcontent.com
         if (this.grid.perRow > 1) { // relayout if not single column
             this.grid.layout();
         }
-
 
         if (this.removeItems.length) {
             this.emitter.emitEvent('removedItems', [this.removeItems]);
@@ -1795,7 +1796,11 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.subscribeToInterest = function(interestId){
         var that = this;
-        if(this.interests.subscribed_ids[interestId] == undefined) {
+        if(isNaN(interestId)){
+            that.notify('Sorry, please try again.', {label: 'continue', link: '#'});
+            return;
+        }
+        if(that.interests && that.interests.subscribed_ids[interestId] == undefined) {
             revApi.request(that.options.host + '/api/v1/engage/addinterest.php?id=' + interestId, function(subscribeResponse) {
                 if(!subscribeResponse.success || !subscribeResponse.length) {
                     that.notify('Sorry, please try again.', {label: 'continue', link: '#'});
@@ -1815,7 +1820,11 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.unsubscribeFromInterest = function(interestId){
         var that = this;
-        if(this.interests.subscribed_ids[interestId] !== undefined) {
+        if(isNaN(interestId)){
+            that.notify('Sorry, please try again.', {label: 'continue', link: '#'});
+            return;
+        }
+        if(that.interests && that.interests.subscribed_ids[interestId] !== undefined) {
             revApi.request(that.options.host + '/api/v1/engage/removeinterest.php?id=' + interestId, function(unsubscribeResponse) {
                 if(!unsubscribeResponse.success || !unsubscribeResponse.length) {
                     that.notify('Sorry, please try again.', {label: 'continue', link: '#'});
@@ -1871,7 +1880,7 @@ Author: michael@revcontent.com
                 var the_cell = '' +
                 // Interest Image should be stored as CSS by slug/name ID interest-' + interest.slug.toLowerCase() + '
                 // $image property in interest object could be used as override if non-empty.
-                '<div style="' + (interest.image != '' ? 'background:transparent url(' + interest.image + ') top left no-repeat;background-size:cover;' : '') + '" class="carousel-cell interest-cell interest-' + interest.title.toLowerCase() + ' selected-interest"  data-title="' + interest.title + '" data-interest="' + interest.title.toLowerCase() + '">' +
+                '<div style="' + (interest.image != '' ? 'background:transparent url(' + interest.image + ') top left no-repeat;background-size:cover;' : '') + '" class="carousel-cell interest-cell interest-' + interest.title.toLowerCase() + ' selected-interest"  data-id="' + interest.id + '" data-title="' + interest.title + '" data-interest="' + interest.title.toLowerCase() + '">' +
                     '<div class="cell-wrapper">' +
                         '<span class="selector subscribed"></span>' +
                         '<div class="interest-title ' + (interest.lightMode ? ' light-mode' : '') + '">' + interest.title + '</div>' +
@@ -1912,12 +1921,12 @@ Author: michael@revcontent.com
                     if (cellElement.classList.contains('selected-interest')) {
                         cellElement.classList.remove('selected-interest');
                         cellElement.querySelectorAll('span.selector')[0].classList.remove('subscribed');
-                        that.unsubscribeFromInterest();
+                        that.unsubscribeFromInterest(cellElement.getAttribute('data-id'));
                         //that.notify('Topic removed from your feed.', {label: 'continue', link: '#'});
                     } else {
                         cellElement.classList.add('selected-interest');
                         cellElement.querySelectorAll('span.selector')[0].classList.add('subscribed');
-                        that.subscribeToInterest();
+                        that.subscribeToInterest(cellElement.getAttribute('data-id'));
                         //that.notify('Topic added, new content available.', {label: 'continue', link: '#'});
                     }
                 }
