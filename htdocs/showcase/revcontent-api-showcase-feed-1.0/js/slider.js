@@ -939,6 +939,9 @@ Author: michael@revcontent.com
             revUtils.addEventListener(bookmark, revDetect.mobile() ? 'touchstart' : 'click', function(e) {
                 if (revUtils.hasClass(bookmark, 'rev-save-active')) {
                     revUtils.removeClass(bookmark, 'rev-save-active');
+                    revApi.request( that.options.host + '/api/v1/engage/removebookmark.php?url=' + encodeURI(url) + '&title=' + encodeURI(title), function(data) {
+                        return;
+                    });
                 } else {
                     revUtils.addClass(bookmark, 'rev-save-active');
 
