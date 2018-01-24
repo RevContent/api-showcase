@@ -1844,12 +1844,12 @@ Author: michael@revcontent.com
 
             var interests_data = data.interests;
             that.interests = {
-                list: data.interests,
-                subscribed: [], //data.subscribed
-                subscribed_ids: [], //data.subscribed_ids
-                available: data.interests,
+                list: data.subscribed,
+                subscribed: data.subscribed, //data.subscribed
+                subscribed_ids: data.subscribed_ids, //data.subscribed_ids
+                available: data.subscribed,
                 recomended: data.recommended,
-                count: data.interests.length // data.count
+                count: data.subscribed.length // data.count
             };
             var interests_count = 0;
 
