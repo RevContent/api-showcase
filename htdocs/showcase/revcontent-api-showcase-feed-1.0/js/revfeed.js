@@ -177,7 +177,8 @@ Author: michael@revcontent.com
         this.innerWidget.dataPromise.then(function() {
             self.viewability().then(function() {
 
-                self.initCornerButton();
+                // @todo: Corner Button (Feature)
+                //self.initCornerButton();
 
                 if (self.options.infinite) {
                     self.infinite();
