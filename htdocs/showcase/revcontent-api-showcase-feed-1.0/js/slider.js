@@ -1912,12 +1912,12 @@ Author: michael@revcontent.com
                     if (cellElement.classList.contains('selected-interest')) {
                         cellElement.classList.remove('selected-interest');
                         cellElement.querySelectorAll('span.selector')[0].classList.remove('subscribed');
-                        this.unsubscribeFromInterest();
+                        that.unsubscribeFromInterest();
                         //that.notify('Topic removed from your feed.', {label: 'continue', link: '#'});
                     } else {
                         cellElement.classList.add('selected-interest');
                         cellElement.querySelectorAll('span.selector')[0].classList.add('subscribed');
-                        this.subscribeToInterest();
+                        that.subscribeToInterest();
                         //that.notify('Topic added, new content available.', {label: 'continue', link: '#'});
                     }
                 }

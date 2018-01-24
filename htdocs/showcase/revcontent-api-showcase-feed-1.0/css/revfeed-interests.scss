@@ -99,15 +99,16 @@ $screen-xl: 1200px;
 
     .interest-title {
       font-size: 11px!important;
-      line-height: 14px!important;
+      line-height: 1.1em!important;
       min-height: 16px;
-      height: 16px;
+      height: auto;
+      max-height: 3.3em;
       margin: 0!important;
       padding: 0!important;
       text-transform: capitalize;
       letter-spacing: 0;
       font-weight: 400;
-      width: 80%;
+      width: 83%;
       text-overflow: ellipsis;
       overflow: hidden;
       color: #ffffff;
