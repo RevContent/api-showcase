@@ -571,9 +571,7 @@ Author: michael@revcontent.com
                 '</div>' +
 
                 '<div class="rev-auth-button">' +
-                    '<div class="rev-auth-button-icon">' +
-                        '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 155.139 155.139" style="enable-background:new 0 0 155.139 155.139;" xml:space="preserve" class=""><g><g> <path id="f_1_" d="M89.584,155.139V84.378h23.742l3.562-27.585H89.584V39.184   c0-7.984,2.208-13.425,13.67-13.425l14.595-0.006V1.08C115.325,0.752,106.661,0,96.577,0C75.52,0,61.104,12.853,61.104,36.452   v20.341H37.29v27.585h23.814v70.761H89.584z" data-original="#000000" class="active-path" data-old_color="#ffffff" fill="#ffffff"/> </g></g> </svg>' +
-                    '</div>' +
+                    this.revAuthButtonIconHtml() +
                     '<div class="rev-auth-button-text">' +
                         'Personalize with facebook' +
                     '</div>' +
@@ -1195,6 +1193,13 @@ Author: michael@revcontent.com
         }, true);
     };
 
+    // Don't dupe this svg
+    RevSlider.prototype.revAuthButtonIconHtml = function() {
+        return '<div class="rev-auth-button-icon">' +
+            '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 155.139 155.139" style="enable-background:new 0 0 155.139 155.139;" xml:space="preserve" class=""><g><g> <path id="f_1_" d="M89.584,155.139V84.378h23.742l3.562-27.585H89.584V39.184   c0-7.984,2.208-13.425,13.67-13.425l14.595-0.006V1.08C115.325,0.752,106.661,0,96.577,0C75.52,0,61.104,12.853,61.104,36.452   v20.341H37.29v27.585h23.814v70.761H89.584z" data-original="#000000" class="active-path" data-old_color="#ffffff" fill="#ffffff"/> </g></g> </svg>' +
+        '</div>';
+    };
+
     RevSlider.prototype.createNewCell = function() {
         var that = this;
 
@@ -1215,7 +1220,7 @@ Author: michael@revcontent.com
                                                         '<div class="rev-provider"></div>' +
                                                         '<div class="rev-date"></div>' +
                                                     '</div>' +
-                                                    '<div class="rev-save"><?xml version="1.0" ?><svg contentScriptType="text/ecmascript" contentStyleType="text/css" preserveAspectRatio="xMidYMid meet" version="1.0" viewBox="0 0 60.000000 60.000000" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" zoomAndPan="magnify"><g><polygon fill="none" points="51.0,59.0 29.564941,45.130005 9.0,59.0 9.0,1.0 51.0,1.0" stroke="#231F20" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/></g></svg></div>' +
+
                                                 '</div>' +
                                             '</div>' +
                                         '</div>' +
@@ -1251,9 +1256,7 @@ Author: michael@revcontent.com
                                     (this.authenticated ? 'Currently logged in!' : '<span class="rev-engage-type-txt">Almost Done! Login to save your reaction</span> <br /> <strong>and</strong> personalize your experience') +
                                 '</div>' +
                                 '<div class="rev-auth-button">' +
-                                    '<div class="rev-auth-button-icon">' +
-                                        '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 155.139 155.139" style="enable-background:new 0 0 155.139 155.139;" xml:space="preserve" class=""><g><g> <path id="f_1_" d="M89.584,155.139V84.378h23.742l3.562-27.585H89.584V39.184   c0-7.984,2.208-13.425,13.67-13.425l14.595-0.006V1.08C115.325,0.752,106.661,0,96.577,0C75.52,0,61.104,12.853,61.104,36.452   v20.341H37.29v27.585h23.814v70.761H89.584z" data-original="#000000" class="active-path" data-old_color="#ffffff" fill="#ffffff"/> </g></g> </svg>' +
-                                    '</div>' +
+                                    this.revAuthButtonIconHtml() +
                                     '<div class="rev-auth-button-text">' +
                                         (this.authenticated ? 'Log out' : 'Continue with facebook') +
                                     '</div>' +
