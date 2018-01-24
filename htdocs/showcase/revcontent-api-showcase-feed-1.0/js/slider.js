@@ -494,12 +494,14 @@ Author: michael@revcontent.com
             if (!this.interestsCarouselVisible && i == 1) {
                 this.interestsCarouselVisible = true;
                 layoutItems = layoutItems.concat(this.appendInterestsCarousel(grid));
+                i--;
                 continue;
             }
 
             if (!this.authenticated && i == 1 && !this.feedAuthButtonVisible) {
                 this.feedAuthButtonVisible = true;
                 layoutItems = layoutItems.concat(this.appendfeedAuthButton(grid));
+                i--;
                 continue;
             }
 
