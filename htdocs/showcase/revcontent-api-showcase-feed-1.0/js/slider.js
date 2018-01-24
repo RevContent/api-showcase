@@ -1796,7 +1796,11 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.subscribeToInterest = function(interestId){
         var that = this;
-        if(this.interests.subscribed_ids[interestId] == undefined) {
+        if(isNaN(interestId)){
+            that.notify('Sorry, please try again.', {label: 'continue', link: '#'});
+            return;
+        }
+        if(that.interests && that.interests.subscribed_ids[interestId] == undefined) {
             revApi.request(that.options.host + '/api/v1/engage/addinterest.php?id=' + interestId, function(subscribeResponse) {
                 if(!subscribeResponse.success || !subscribeResponse.length) {
                     that.notify('Sorry, please try again.', {label: 'continue', link: '#'});
@@ -1816,7 +1820,11 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.unsubscribeFromInterest = function(interestId){
         var that = this;
-        if(this.interests.subscribed_ids[interestId] !== undefined) {
+        if(isNaN(interestId)){
+            that.notify('Sorry, please try again.', {label: 'continue', link: '#'});
+            return;
+        }
+        if(that.interests && that.interests.subscribed_ids[interestId] !== undefined) {
             revApi.request(that.options.host + '/api/v1/engage/removeinterest.php?id=' + interestId, function(unsubscribeResponse) {
                 if(!unsubscribeResponse.success || !unsubscribeResponse.length) {
                     that.notify('Sorry, please try again.', {label: 'continue', link: '#'});
@@ -1872,7 +1880,7 @@ Author: michael@revcontent.com
                 var the_cell = '' +
                 // Interest Image should be stored as CSS by slug/name ID interest-' + interest.slug.toLowerCase() + '
                 // $image property in interest object could be used as override if non-empty.
-                '<div style="' + (interest.image != '' ? 'background:transparent url(' + interest.image + ') top left no-repeat;background-size:cover;' : '') + '" class="carousel-cell interest-cell interest-' + interest.title.toLowerCase() + ' selected-interest"  data-title="' + interest.title + '" data-interest="' + interest.title.toLowerCase() + '">' +
+                '<div style="' + (interest.image != '' ? 'background:transparent url(' + interest.image + ') top left no-repeat;background-size:cover;' : '') + '" class="carousel-cell interest-cell interest-' + interest.title.toLowerCase() + ' selected-interest"  data-id="' + interest.id + '" data-title="' + interest.title + '" data-interest="' + interest.title.toLowerCase() + '">' +
                     '<div class="cell-wrapper">' +
                         '<span class="selector subscribed"></span>' +
                         '<div class="interest-title ' + (interest.lightMode ? ' light-mode' : '') + '">' + interest.title + '</div>' +
@@ -1913,12 +1921,12 @@ Author: michael@revcontent.com
                     if (cellElement.classList.contains('selected-interest')) {
                         cellElement.classList.remove('selected-interest');
                         cellElement.querySelectorAll('span.selector')[0].classList.remove('subscribed');
-                        that.unsubscribeFromInterest();
+                        that.unsubscribeFromInterest(cellElement.getAttribute('data-id'));
                         //that.notify('Topic removed from your feed.', {label: 'continue', link: '#'});
                     } else {
                         cellElement.classList.add('selected-interest');
                         cellElement.querySelectorAll('span.selector')[0].classList.add('subscribed');
-                        that.subscribeToInterest();
+                        that.subscribeToInterest(cellElement.getAttribute('data-id'));
                         //that.notify('Topic added, new content available.', {label: 'continue', link: '#'});
                     }
                 }
