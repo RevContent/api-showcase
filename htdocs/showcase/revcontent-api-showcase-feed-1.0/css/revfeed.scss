@@ -1848,6 +1848,16 @@ $reactionMenu8Y: 13.5px;
     }
 }
 
+#rev-feed .rev-content .rev-reason {
+  font-size: 12px;
+  line-height: 16px;
+  padding-top: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: rgba(90,90,90,.86);
+}
+
 #rev-feed .rev-content .rev-meta {
     padding-top: 11px;
     margin-bottom: 10px;
@@ -1888,7 +1898,6 @@ $reactionMenu8Y: 13.5px;
             margin: 0;
             width: 34px;
             z-index: 10000;
-            margin-top: -12px;
 
             &.rev-save-active {
                 svg polygon {

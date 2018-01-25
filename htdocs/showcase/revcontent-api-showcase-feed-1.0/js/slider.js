@@ -1772,6 +1772,13 @@ Author: michael@revcontent.com
                 if (item.type == 'internal' && itemData.bookmarked) {
                     revUtils.addClass(item.element.querySelector('.rev-save'), 'rev-save-active');
                 }
+
+                if (itemData.reason) {
+                    var reason = document.createElement('div');
+                    reason.className = 'rev-reason';
+                    reason.innerHTML = itemData.reason;
+                    revUtils.prepend(item.element.querySelector('.rev-before-image'), reason);
+                }
             }
         }
 
