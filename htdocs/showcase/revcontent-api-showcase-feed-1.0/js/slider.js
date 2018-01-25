@@ -1881,23 +1881,24 @@ Author: michael@revcontent.com
     RevSlider.prototype.subscribeToInterest = function(interestId){
         var that = this;
         if(isNaN(interestId)){
-            that.notify('Sorry, please try again.', {label: 'continue', link: '#'});
+            that.notify('Invalid Category, please try again.', {label: 'continue', link: '#'});
             return;
         }
-        if(that.interests && that.interests.subscribed_ids.indexOf(interestId) !== -1) {
+        if(that.interests && that.interests.subscribed_ids.indexOf(interestId) == -1) {
             revApi.request(that.options.host + '/api/v1/engage/addinterest.php?id=' + interestId, function(subscribeResponse) {
-                if(!subscribeResponse.success || !subscribeResponse.length) {
+                if(!subscribeResponse.success || typeof subscribeResponse !== "object") {
                     that.notify('Preference not saved, try again.', {label: 'continue', link: '#'});
                     return false;
                 }
                 that.interests.subscribed.push(that.interests.list[interestId]);
                 that.interests.subscribed_ids.push(interestId);
+                that.interests.count = that.interests.subscribed_ids.length;
                 that.notify('Topic added, new content available.', {label: 'continue', link: '#'});
                 return interestId;
             });
 
         } else {
-            that.notify('Sorry, please try again.', {label: 'continue', link: '#'});
+            that.notify('API busy, please try again.', {label: 'continue', link: '#'});
             return false;
         }
     };
@@ -1905,31 +1906,33 @@ Author: michael@revcontent.com
     RevSlider.prototype.unsubscribeFromInterest = function(interestId){
         var that = this;
         if(isNaN(interestId)){
-            that.notify('Sorry, please try again.', {label: 'continue', link: '#'});
+            that.notify('Invalid Category, please try again.', {label: 'continue', link: '#'});
             return;
         }
         if(that.interests && that.interests.subscribed_ids.indexOf(interestId) !== -1) {
             revApi.request(that.options.host + '/api/v1/engage/removeinterest.php?id=' + interestId, function(unsubscribeResponse) {
-                if(!unsubscribeResponse.success || !unsubscribeResponse.length) {
+                if(!unsubscribeResponse.success || typeof unsubscribeResponse !== "object") {
                     that.notify('Operation cancelled, please try again.', {label: 'continue', link: '#'});
                     return false;
                 }
                 var revised_interests = [];
                 var revised_ids = [];
-                for(var i=0;i<that.interests.subscribed;i++){
-                    if(that.interests.subscribed[i].id !== interestId){
+                for(var i=0;i<that.interests.count;i++){
+                    if(that.interests.subscribed_ids[i] !== interestId){
                         revised_interests.push(that.interests.subscribed[i]);
-                        revised_ids.push(that.interests.subscribed[i].id);
+                        revised_ids.push(that.interests.subscribed_ids[i]);
                     }
                 }
+
                 that.interests.subscribed = revised_interests;
                 that.interests.subscribed_ids = revised_ids;
+                that.interests.count = revised_ids.length;
                 that.notify('Topic removed from your feed.', {label: 'continue', link: '#'});
                 return interestId;
 
             });
         } else {
-            that.notify('Sorry, please try again.', {label: 'continue', link: '#'});
+            that.notify('API busy, please try again.', {label: 'continue', link: '#'});
             return false;
         }
     };
@@ -2011,12 +2014,12 @@ Author: michael@revcontent.com
                     if (cellElement.classList.contains('selected-interest')) {
                         cellElement.classList.remove('selected-interest');
                         cellElement.querySelectorAll('span.selector')[0].classList.remove('subscribed');
-                        that.unsubscribeFromInterest(parseInt(cellElement.getAttribute('data-id')));
+                        that.unsubscribeFromInterest(parseInt(cellElement.getAttribute('data-id'), 10));
                         //that.notify('Topic removed from your feed.', {label: 'continue', link: '#'});
                     } else {
                         cellElement.classList.add('selected-interest');
                         cellElement.querySelectorAll('span.selector')[0].classList.add('subscribed');
-                        that.subscribeToInterest(parseInt(cellElement.getAttribute('data-id')));
+                        that.subscribeToInterest(parseInt(cellElement.getAttribute('data-id'), 10));
                         //that.notify('Topic added, new content available.', {label: 'continue', link: '#'});
                     }
                 }
@@ -2270,20 +2273,26 @@ Author: michael@revcontent.com
             notice_panel.remove();
         }
         var notice = document.createElement('div');
+        var notice_timeout = 0;
         notice.id = 'rev-notify-panel';
         notice.classList.add('rev-notify');
         notice.classList.add('rev-notify-alert');
         notice.classList.add('rev-notify-alert--default');
         notice.innerHTML = '<p style="margin:0;padding:0"><a class="notice-action" href="' + (action.link !== undefined ? action.link : '#') + '" style="text-transform:uppercase;float:right;font-weight:bold;padding-left:8px;" onclick="javascript:return false;">' + action.label + '</a> ' + message + '</p>';
-        notice.setAttribute('style',';position:fixed;top:-48px;left:0;z-index:15000;width:100%;height:32px;line-height:32px;font-size:10px;font-family:"Montserrat";padding:0 9px;background-color:rgba(0,0,0,0.7);color:#ffffff;');
+        notice.setAttribute('style','display:block;transition: all 0.5s ease-out;position:fixed;top:-48px;left:0;z-index:15000;width:100%;height:32px;line-height:32px;font-size:10px;font-family:"Montserrat";padding:0 9px;background-color:rgba(0,0,0,0.7);color:#ffffff;');
 
         document.body.appendChild(notice);
-        notice.style.top = 0;
-        setTimeout(function() {
-            document.getElementById('rev-notify-panel').style.top = '-48px';
+        setTimeout(function(){
+            notice.style.top = 0;
+        }, 504);
+        clearTimeout(notice_timeout);
+        notice_timeout = setTimeout(function() {
             var notice_panel = document.getElementById('rev-notify-panel');
             if(typeof notice_panel == 'object' && notice_panel != null){
-                notice_panel.remove();
+                notice_panel.style.top = '-48px';
+                setTimeout(function(){
+                    notice_panel.remove();
+                }, 550);
             }
         }, 2000);
     };
