@@ -1935,6 +1935,12 @@ Author: michael@revcontent.com
 
         revApi.request( that.options.host + '/api/v1/engage/getinterests.php?', function (data) {
 
+            if(typeof data !== "object" || (typeof data == "object" && data.subscribed.length == 0)) {
+                interestsCarousel.setAttribute('style','margin:0!important;padding:0!important;height:0;border:0');
+                interestsCarousel.classList.add('revcontent-carousel-is-empty revcontent-remove-element');
+                return;
+            }
+
             var interests_data = data.subscribed;
             that.interests = {
                 list: data.subscribed,
