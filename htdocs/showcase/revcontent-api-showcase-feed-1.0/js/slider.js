@@ -1682,6 +1682,7 @@ Author: michael@revcontent.com
                     commentButton.setAttribute('href', itemData.target_url + commentButton.getAttribute('href'));
                 }
 
+                revUtils.remove(item.element.querySelector('.rev-comments'));
                 if (itemData.comments && itemData.comments.length) {
 
                     var commentsElement = document.createElement('div');
