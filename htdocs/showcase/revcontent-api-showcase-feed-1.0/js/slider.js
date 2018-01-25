@@ -1708,20 +1708,27 @@ Author: michael@revcontent.com
                     item.element.querySelector('.rev-content-inner').appendChild(commentsElement);
                 }
 
-                var myReaction = '';
-                if (itemData.my_reaction) {
-                    myReaction = itemData.my_reaction;
+                if (item.reactions) {
+
+                    var myReaction = '';
+
                     var likeReactionElement = item.element.querySelector('.rev-reaction-icon');
-                    likeReactionElement.setAttribute('data-active', 1);
+                    likeReactionElement.removeAttribute('data-active');
 
                     var icon = item.element.querySelector('.rev-reaction-like .rev-reaction-icon');
                     revUtils.removeClass(icon, 'rev-reaction-icon-', true);
-                    revUtils.addClass(icon, 'rev-reaction-icon-' + myReaction);
-                    revUtils.addClass(icon, 'rev-reaction-icon-selected');
-                    revUtils.removeClass(item.element, 'rev-menu-active');
-                }
+                    revUtils.addClass(icon, 'rev-reaction-icon-love');
+                    revUtils.removeClass(icon, 'rev-reaction-icon-selected');
 
-                if (item.reactions) {
+                    if (itemData.my_reaction) {
+                        myReaction = itemData.my_reaction;
+                        likeReactionElement.setAttribute('data-active', 1);
+
+                        revUtils.addClass(icon, 'rev-reaction-icon-' + myReaction);
+                        revUtils.addClass(icon, 'rev-reaction-icon-selected');
+                        revUtils.removeClass(item.element, 'rev-menu-active');
+                    }
+
                     var reactionHtml = '';
 
                     var reactionCountTotal = 0;
@@ -1771,8 +1778,12 @@ Author: michael@revcontent.com
                     item.element.querySelector('.rev-reactions-total-inner').innerHTML = reactionHtml;
                 }
 
-                if (item.type == 'internal' && itemData.bookmarked) {
-                    revUtils.addClass(item.element.querySelector('.rev-save'), 'rev-save-active');
+                if (item.type == 'internal') {
+                    var save = item.element.querySelector('.rev-save')
+                    revUtils.removeClass(save, 'rev-save-active');
+                    if (itemData.bookmarked) {
+                        revUtils.addClass(save, 'rev-save-active');
+                    }
                 }
 
                 if (itemData.reason) {
