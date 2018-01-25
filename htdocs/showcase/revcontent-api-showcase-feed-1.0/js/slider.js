@@ -1778,8 +1778,12 @@ Author: michael@revcontent.com
                     item.element.querySelector('.rev-reactions-total-inner').innerHTML = reactionHtml;
                 }
 
-                if (item.type == 'internal' && itemData.bookmarked) {
-                    revUtils.addClass(item.element.querySelector('.rev-save'), 'rev-save-active');
+                if (item.type == 'internal') {
+                    var save = item.element.querySelector('.rev-save')
+                    revUtils.removeClass(save, 'rev-save-active');
+                    if (itemData.bookmarked) {
+                        revUtils.addClass(save, 'rev-save-active');
+                    }
                 }
 
                 if (itemData.reason) {
