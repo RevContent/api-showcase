@@ -1671,8 +1671,8 @@ Author: michael@revcontent.com
                 if (provider) {
                     if (item.type == 'sponsored') {
                         provider.innerHTML = itemData.brand ? itemData.brand : this.extractRootDomain(itemData.target_url);
-                    } else if (item.type == 'internal') {
-                        provider.innerHTML = itemData.author ? itemData.author : authors[Math.floor(Math.random() * authors.length)];
+                    } else if (item.type == 'internal' && itemData.author) {
+                        provider.innerHTML = itemData.author;
                     }
                 }
 
