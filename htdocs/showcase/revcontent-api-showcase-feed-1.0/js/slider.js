@@ -1800,10 +1800,10 @@ Author: michael@revcontent.com
             that.notify('Sorry, please try again.', {label: 'continue', link: '#'});
             return;
         }
-        if(that.interests && that.interests.subscribed_ids[interestId] == undefined) {
+        if(that.interests && that.interests.subscribed_ids.indexOf(interestId) !== -1) {
             revApi.request(that.options.host + '/api/v1/engage/addinterest.php?id=' + interestId, function(subscribeResponse) {
                 if(!subscribeResponse.success || !subscribeResponse.length) {
-                    that.notify('Sorry, please try again.', {label: 'continue', link: '#'});
+                    that.notify('Preference not saved, try again.', {label: 'continue', link: '#'});
                     return false;
                 }
                 that.interests.subscribed.push(that.interests.list[interestId]);
@@ -1824,10 +1824,10 @@ Author: michael@revcontent.com
             that.notify('Sorry, please try again.', {label: 'continue', link: '#'});
             return;
         }
-        if(that.interests && that.interests.subscribed_ids[interestId] !== undefined) {
+        if(that.interests && that.interests.subscribed_ids.indexOf(interestId) !== -1) {
             revApi.request(that.options.host + '/api/v1/engage/removeinterest.php?id=' + interestId, function(unsubscribeResponse) {
                 if(!unsubscribeResponse.success || !unsubscribeResponse.length) {
-                    that.notify('Sorry, please try again.', {label: 'continue', link: '#'});
+                    that.notify('Operation cancelled, please try again.', {label: 'continue', link: '#'});
                     return false;
                 }
                 var revised_interests = [];
@@ -1921,12 +1921,12 @@ Author: michael@revcontent.com
                     if (cellElement.classList.contains('selected-interest')) {
                         cellElement.classList.remove('selected-interest');
                         cellElement.querySelectorAll('span.selector')[0].classList.remove('subscribed');
-                        that.unsubscribeFromInterest(cellElement.getAttribute('data-id'));
+                        that.unsubscribeFromInterest(parseInt(cellElement.getAttribute('data-id')));
                         //that.notify('Topic removed from your feed.', {label: 'continue', link: '#'});
                     } else {
                         cellElement.classList.add('selected-interest');
                         cellElement.querySelectorAll('span.selector')[0].classList.add('subscribed');
-                        that.subscribeToInterest(cellElement.getAttribute('data-id'));
+                        that.subscribeToInterest(parseInt(cellElement.getAttribute('data-id')));
                         //that.notify('Topic added, new content available.', {label: 'continue', link: '#'});
                     }
                 }
@@ -2170,7 +2170,7 @@ Author: michael@revcontent.com
                 ) + templates.suffix;
     };
 
-    RevSlider.prototype.notify = function(message, type, action){
+    RevSlider.prototype.notify = function(message, action, type){
         if(!message){
             return;
         }
@@ -2184,7 +2184,7 @@ Author: michael@revcontent.com
         notice.classList.add('rev-notify');
         notice.classList.add('rev-notify-alert');
         notice.classList.add('rev-notify-alert--default');
-        notice.innerHTML = '<p style="margin:0;padding:0"><a class="notice-action" href="' + (action.link || '#') + '" style="text-transform:uppercase;float:right;font-weight:bold;padding-left:8px;">' + action.label + '</a> ' + message + '</p>';
+        notice.innerHTML = '<p style="margin:0;padding:0"><a class="notice-action" href="' + (action.link !== undefined ? action.link : '#') + '" style="text-transform:uppercase;float:right;font-weight:bold;padding-left:8px;" onclick="javascript:return false;">' + action.label + '</a> ' + message + '</p>';
         notice.setAttribute('style',';position:fixed;top:-48px;left:0;z-index:15000;width:100%;height:32px;line-height:32px;font-size:10px;font-family:"Montserrat";padding:0 9px;background-color:rgba(0,0,0,0.7);color:#ffffff;');
 
         document.body.appendChild(notice);
