@@ -192,6 +192,7 @@ Author: michael@revcontent.com
         this.emitter.on('dialog_closed', function() {
             that.isAuthenticated(function(response) {
                 that.updateAuthElements();
+                that.processQueue();
                 if (response === true) {
                     if (!that.personalized) {
                         that.showPersonalizedTransition();
@@ -269,6 +270,9 @@ Author: michael@revcontent.com
 
         this.authenticated = false;
 
+        this.queue = [];
+        this.queueRetries = 0;
+
         this.getData();
 
         var that = this;
@@ -333,7 +337,7 @@ Author: michael@revcontent.com
                         that.closePersonalizedTransition();
                     }
 
-                    var mintime = 5500; // show for a minimum of 5.5s
+                    var mintime = 7000; // show for a minimum of 7s
                     if (totaltime > mintime) {
                         finishPersonalize();
                     } else {
@@ -965,9 +969,19 @@ Author: michael@revcontent.com
             revUtils.addEventListener(bookmark, revDetect.mobile() ? 'touchstart' : 'click', function(e) {
                 if (revUtils.hasClass(bookmark, 'rev-save-active')) {
                     revUtils.removeClass(bookmark, 'rev-save-active');
-                    revApi.request( that.options.host + '/api/v1/engage/removebookmark.php?url=' + encodeURI(item.data.target_url) + '&title=' + encodeURI(item.data.headline), function(data) {
-                        return;
-                    });
+
+                    var url = that.options.host + '/api/v1/engage/removebookmark.php?url=' + encodeURI(item.data.target_url) + '&title=' + encodeURI(item.data.headline);
+
+                    if (that.authenticated) {
+                        revApi.request(url, function(data) {
+                            return;
+                        });
+                    } else {
+                        that.queue.push({
+                            type: 'bookmark',
+                            url: url
+                        });
+                    }
                 } else {
                     revUtils.addClass(bookmark, 'rev-save-active');
 
@@ -992,10 +1006,18 @@ Author: michael@revcontent.com
                     that.transitionLogin(item, 'bookmark');
 
                     //save bookmark
-                    revApi.request( that.options.host + '/api/v1/engage/addbookmark.php?url=' + encodeURI(item.data.target_url) + '&title=' + encodeURI(item.data.headline), function(data) {
-                        return;
-                    });
+                    var url = that.options.host + '/api/v1/engage/addbookmark.php?url=' + encodeURI(item.data.target_url) + '&title=' + encodeURI(item.data.headline);
 
+                    if (that.authenticated) {
+                        revApi.request( url, function(data) {
+                            return;
+                        });
+                    } else {
+                        that.queue.push({
+                            type: 'bookmark',
+                            url: url
+                        });
+                    }
                 }
                 e.preventDefault();
                 e.stopPropagation();
@@ -1010,6 +1032,58 @@ Author: michael@revcontent.com
         revUtils.append(item.element.querySelector('.rev-meta-inner'), save);
 
         handleSave(save);
+    };
+
+    RevSlider.prototype.processQueue = function() {
+        var that = this;
+
+        var retryQueue = function() {
+            if (that.queueRetries > 5) {
+                return; // that's it and that's all
+            }
+
+            setTimeout(function() {
+                if (that.queue.length) {
+                    that.processQueue();
+                    that.queueRetries++;
+                }
+            }, 5000);
+        }
+
+        var nextQueue = function(queue) {
+            return new Promise(function(resolve, reject) {
+                revApi.request(queue.url, function(resp) {
+                    if (resp.success == true) {
+                        var i = that.queue.indexOf(queue);
+                        if(i != -1) {
+                            that.queue.splice(i, 1);
+                        }
+                        that.queueRetries = 0;
+                        resolve();
+                    } else {
+                        reject();
+                    }
+                });
+            });
+        }
+
+        var test = function(queue) {
+            return sequence.then(function() {
+                return nextQueue(queue)
+            }, function() {
+                retryQueue();
+            }).catch(function(e) {
+                console.log(e);
+            });
+        }
+
+        var sequence = Promise.resolve();
+
+        for (var i = 0; i < this.queue.length; i++) {
+            sequence = test(this.queue[i])
+        };
+
+        return sequence;
     };
 
     RevSlider.prototype.onEndAnimation = function(el, callback) {
@@ -1330,6 +1404,7 @@ Author: michael@revcontent.com
                             revUtils.removeClass(cell, 'rev-flipped');
                         }
                         that.updateAuthElements();
+                        that.processQueue();
 
                         /* secondary auth page, deemed unnecessary for now
                         var headline = cell.querySelector('.rev-auth-headline');
@@ -1697,6 +1772,13 @@ Author: michael@revcontent.com
                 if (item.type == 'internal' && itemData.bookmarked) {
                     revUtils.addClass(item.element.querySelector('.rev-save'), 'rev-save-active');
                 }
+
+                if (itemData.reason) {
+                    var reason = document.createElement('div');
+                    reason.className = 'rev-reason';
+                    reason.innerHTML = itemData.reason;
+                    revUtils.prepend(item.element.querySelector('.rev-before-image'), reason);
+                }
             }
         }
 
@@ -1769,7 +1851,7 @@ Author: michael@revcontent.com
 
         var ucDomain = this.options.domain.charAt(0).toUpperCase() + this.options.domain.slice(1);
 
-        this.personalizedContent.innerHTML = '<div id="personalized-transition-animation"></div><div id="personalized-transition-text"><div>Analyzing ' + ucDomain + ' Articles</div></div>';
+        this.personalizedContent.innerHTML = '<div id="personalized-transition-animation"><div></div></div><div id="personalized-transition-text"><div>Analyzing ' + ucDomain + ' Articles</div></div>';
 
         show();
 
@@ -1859,6 +1941,12 @@ Author: michael@revcontent.com
         grid.element.appendChild(interestsCarousel);
 
         revApi.request( that.options.host + '/api/v1/engage/getinterests.php?', function (data) {
+
+            if(typeof data !== "object" || (typeof data == "object" && data.subscribed.length == 0)) {
+                interestsCarousel.setAttribute('style','margin:0!important;padding:0!important;height:0;border:0');
+                interestsCarousel.classList.add('revcontent-carousel-is-empty revcontent-remove-element');
+                return;
+            }
 
             var interests_data = data.subscribed;
             that.interests = {
