@@ -1624,7 +1624,8 @@ Author: michael@revcontent.com
                 var favicon = item.element.querySelector('.rev-headline-icon');
                 if (favicon) {
                     if (item.type == 'internal' && !itemData.author) {
-                        revUtils.remove(item.element.querySelector('.rev-before-image'));
+                        revUtils.addClass(item.element.querySelector('.rev-before-image'), 'rev-no-meta');
+                        revUtils.remove(item.element.querySelector('.rev-before-image .rev-meta'));
                     } else {
                         if (itemData.favicon_url) {
                             favicon.innerHTML = '<span class="rev-headline-icon-image" style="background-repeat:no-repeat;background-image:url('+ itemData.favicon_url +')' + '"></span>';

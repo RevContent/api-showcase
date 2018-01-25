@@ -1848,14 +1848,26 @@ $reactionMenu8Y: 13.5px;
     }
 }
 
-#rev-feed .rev-content .rev-reason {
-  font-size: 12px;
-  line-height: 16px;
-  padding-top: 4px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: rgba(90,90,90,.86);
+#rev-feed .rev-content {
+
+  .rev-before-image {
+
+    &.rev-no-meta {
+      .rev-reason {
+        padding-bottom: 4px;
+      }
+    }
+
+    .rev-reason {
+      font-size: 12px;
+      line-height: 16px;
+      padding-top: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: rgba(90,90,90,.86);
+    }
+  }
 }
 
 #rev-feed .rev-content .rev-meta {
