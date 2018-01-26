@@ -1252,7 +1252,7 @@ Author: michael@revcontent.com
             var pub_id = this.options.pub_id;
             pub_id = 3887;
 
-            revImage.innerHTML = '<iframe id="rc_video' + item.data.video_id + '" src="//video.powr.com/video.js.php?if=true&v=' + item.data.video_id + '&uid='+ pub_id +'&t=1&c='+cb+'&su='+ encodeURI(site_url) +'&adt=-1" style="border: none; width: '+ roundedPreloaderWidth +'px; height: ' + roundedPreloaderHeight + 'px;""></iframe>';
+            revImage.innerHTML = '<iframe id="rc_video' + item.data.video_id + '" src="//video.powr.com/video.js.php?if=true&v=' + item.data.video_id + '&uid='+ pub_id +'&t=1&c='+cb+'&su='+ encodeURI(site_url) +'&adt=-1&re=mobile&vp=metadata" style="border: none; width: '+ roundedPreloaderWidth +'px; height: ' + roundedPreloaderHeight + 'px;""></iframe>';
             // revImage.innerHTML = '<iframe id="rc_video' + item.data.video_id + '" src="http://code.revcontent.com/mock/feed4/video' + item.data.video_id + '.iframe.html" style="border: none; width: '+ roundedPreloaderWidth +'px; height: ' + roundedPreloaderHeight + 'px;""></iframe>';
         }
     };
