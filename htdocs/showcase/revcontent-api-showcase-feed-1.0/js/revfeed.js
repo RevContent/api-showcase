@@ -197,7 +197,7 @@ Author: michael@revcontent.com
                     self.registerView(self.viewed);
                 }
                 self.visibleListener = self.checkVisible.bind(self);
-                revUtils.addEventListener(window, 'scroll', self.visibleListener);
+                revUtils.addEventListener(window, revDetect.mobile() ? 'touchmove' : 'scroll', self.visibleListener);
             }, function() {
                 console.log('someething went wrong');
             });
@@ -432,33 +432,21 @@ Author: michael@revcontent.com
 
         this.scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
-        this.scrollListener = function() {
-            if (self.doing) {
-                return;
-            }
+        this.scrollListener = revUtils.throttle(function() {
 
             var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
             var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-            var height = self.innerWidget.grid.maxHeight
+            var height = self.element.offsetHeight;
             var top = self.innerWidget.grid.element.getBoundingClientRect().top;
             var bottom = self.innerWidget.grid.element.getBoundingClientRect().bottom;
 
             if (scrollTop >= self.scrollTop && bottom > 0 && (scrollTop + windowHeight) >= (top + scrollTop + height - self.options.buffer)) {
-                self.doing = true;
-
-                var moreRowCount = self.innerWidget.grid.nextRow + self.options.rows;
-
-                // var offset = self.innerWidget.limit;
-
-                // var count = 0;
-
-                // self.internalLimit = 0;
-                // self.sponsoredLimit = 0;
+                revUtils.removeEventListener(window, revDetect.mobile() ? 'touchmove' : 'scroll', self.scrollListener);
 
                 self.internalOffset = self.internalOffset ? self.internalOffset : self.innerWidget.internalLimit;
                 self.sponsoredOffset = self.sponsoredOffset ? self.sponsoredOffset : self.innerWidget.sponsoredLimit;
 
-                var rowData = self.innerWidget.createRows(self.innerWidget.grid, moreRowCount);
+                var rowData = self.innerWidget.createRows(self.innerWidget.grid, self.options.rows);
 
                 var urls = [];
 
@@ -497,10 +485,13 @@ Author: michael@revcontent.com
                     }));
                 }
 
+                setTimeout( function() {
+                    revUtils.addEventListener(window, revDetect.mobile() ? 'touchmove' : 'scroll', self.scrollListener);
+                }, 150); // give it a rest before going back
+
                 Promise.all(this.promises).then(function(data) {
                     self.innerWidget.updateDisplayedItems(rowData.items, data);
                     self.innerWidget.viewableItems = self.innerWidget.viewableItems.concat(rowData.items);
-                    self.doing = false; // TODO should this be moved up and out
                 }, function(e) {
                 }).catch(function(e) {
                     console.log(e);
@@ -508,11 +499,13 @@ Author: michael@revcontent.com
             }
 
             self.scrollTop = scrollTop;
-        }
+        }, 60);
+
+        revUtils.addEventListener(window, revDetect.mobile() ? 'touchmove' : 'scroll', this.scrollListener);
 
         this.innerWidget.emitter.on('removedItems', function(items) {
-            revUtils.removeEventListener(window, 'scroll', self.visibleListener);
-            revUtils.removeEventListener(window, 'scroll', self.scrollListener);
+            revUtils.removeEventListener(window, revDetect.mobile() ? 'touchmove' : 'scroll', self.visibleListener);
+            revUtils.removeEventListener(window, revDetect.mobile() ? 'touchmove' : 'scroll', self.scrollListener);
 
             var el = items[0].element;
             var remove = [el];
@@ -524,8 +517,6 @@ Author: michael@revcontent.com
 
             self.innerWidget.grid.layout();
         });
-
-        revUtils.addEventListener(window, 'scroll', this.scrollListener);
     };
 
     Feed.prototype.checkVisible = function() {
