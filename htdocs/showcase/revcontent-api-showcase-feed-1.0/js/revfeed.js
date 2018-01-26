@@ -197,7 +197,7 @@ Author: michael@revcontent.com
                     self.registerView(self.viewed);
                 }
                 self.visibleListener = self.checkVisible.bind(self);
-                revUtils.addEventListener(window, revDetect.mobile() ? 'touchmove' : 'scroll', self.visibleListener);
+                revUtils.addEventListener(window, 'scroll', self.visibleListener);
             }, function() {
                 console.log('someething went wrong');
             });
@@ -432,7 +432,7 @@ Author: michael@revcontent.com
 
         this.scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
-        this.scrollListener = revUtils.throttle(function() {
+        var scrollFunction = function() {
 
             var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
             var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
@@ -441,7 +441,7 @@ Author: michael@revcontent.com
             var bottom = self.innerWidget.grid.element.getBoundingClientRect().bottom;
 
             if (scrollTop >= self.scrollTop && bottom > 0 && (scrollTop + windowHeight) >= (top + scrollTop + height - self.options.buffer)) {
-                revUtils.removeEventListener(window, revDetect.mobile() ? 'touchmove' : 'scroll', self.scrollListener);
+                revUtils.removeEventListener(window, 'scroll', self.scrollListener);
 
                 self.internalOffset = self.internalOffset ? self.internalOffset : self.innerWidget.internalLimit;
                 self.sponsoredOffset = self.sponsoredOffset ? self.sponsoredOffset : self.innerWidget.sponsoredLimit;
@@ -486,7 +486,7 @@ Author: michael@revcontent.com
                 }
 
                 setTimeout( function() {
-                    revUtils.addEventListener(window, revDetect.mobile() ? 'touchmove' : 'scroll', self.scrollListener);
+                    revUtils.addEventListener(window, 'scroll', self.scrollListener);
                 }, 150); // give it a rest before going back
 
                 Promise.all(this.promises).then(function(data) {
@@ -499,13 +499,15 @@ Author: michael@revcontent.com
             }
 
             self.scrollTop = scrollTop;
-        }, 60);
+        };
 
-        revUtils.addEventListener(window, revDetect.mobile() ? 'touchmove' : 'scroll', this.scrollListener);
+        this.scrollListener = revUtils.throttle(scrollFunction, 60);
+
+        revUtils.addEventListener(window, 'scroll', this.scrollListener);
 
         this.innerWidget.emitter.on('removedItems', function(items) {
-            revUtils.removeEventListener(window, revDetect.mobile() ? 'touchmove' : 'scroll', self.visibleListener);
-            revUtils.removeEventListener(window, revDetect.mobile() ? 'touchmove' : 'scroll', self.scrollListener);
+            revUtils.removeEventListener(window, 'scroll', self.visibleListener);
+            revUtils.removeEventListener(window, 'scroll', self.scrollListener);
 
             var el = items[0].element;
             var remove = [el];
