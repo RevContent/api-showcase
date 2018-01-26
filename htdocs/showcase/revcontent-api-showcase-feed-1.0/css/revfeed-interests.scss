@@ -131,7 +131,7 @@ $screen-xl: 1200px;
         font-size: 16px!important;
         line-height: 16px!important;
         min-height: 16px;
-        height: 16px;
+        //height: 16px;
       }
 
       @include lg {
@@ -139,7 +139,7 @@ $screen-xl: 1200px;
         bottom: 16px;
         font-size: 18px!important;
         line-height: 18px!important;
-        height: 18px;
+        //height: 18px;
       }
 
       @include xl {
@@ -147,7 +147,7 @@ $screen-xl: 1200px;
         bottom: 18px;
         font-size: 20px!important;
         line-height: 20px!important;
-        height: 20px;
+        //height: 20px;
       }
 
       &.light-mode {
