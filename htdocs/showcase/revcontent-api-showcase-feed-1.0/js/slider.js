@@ -1786,6 +1786,7 @@ Author: michael@revcontent.com
                     }
                 }
 
+                revUtils.remove(item.element.querySelector('.rev-reason'));
                 if (itemData.reason) {
                     var reason = document.createElement('div');
                     reason.className = 'rev-reason';
