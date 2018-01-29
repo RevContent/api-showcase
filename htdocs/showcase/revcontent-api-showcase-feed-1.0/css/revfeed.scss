@@ -413,7 +413,7 @@ $reactionMenu8Y: 13.5px;
                 }
 
                 .rev-auth-terms {
-                    margin-top: 40px;
+                    margin-top: 30px;
                 }
             }
         }
@@ -1696,12 +1696,17 @@ $reactionMenu8Y: 13.5px;
             }
         }
 
-        .rev-auth-subline {
+        .rev-auth-subline, .rev-auth-buttonline {
             font-size: 12px;
             line-height: 12px;
             font-weight: 400;
             text-align: center;
             margin-top: 15px;
+        }
+
+        .rev-auth-buttonline {
+          line-height: 14px;
+          padding: 0 3px;
         }
     }
 }
@@ -1723,7 +1728,7 @@ $reactionMenu8Y: 13.5px;
         // background-color: #dbdbe4;
         background-color: #f2f2f2;
 
-        .rev-content-inner {
+        .rev-content-inner, .rev-reactions-total, .rev-comments, .rev-auth, .rev-auth-mask {
             border-radius: 0;
         }
     }
@@ -1791,7 +1796,8 @@ $reactionMenu8Y: 13.5px;
 }
 
 #rev-feed .rev-content:not(.rev-colspan-2) .rev-content-inner {
-    box-shadow: 0 2px 8px -4px black;
+    // box-shadow: 0 2px 8px -4px black;
+    box-shadow: 0 2px 5px -1px rgba(0, 0, 0, 0.36);
 }
 
 #rev-feed .rev-content:not(.rev-colspan-2),
