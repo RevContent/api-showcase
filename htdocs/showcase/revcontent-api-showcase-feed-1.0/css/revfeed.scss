@@ -1728,7 +1728,7 @@ $reactionMenu8Y: 13.5px;
         // background-color: #dbdbe4;
         background-color: #f2f2f2;
 
-        .rev-content-inner {
+        .rev-content-inner, .rev-reactions-total, .rev-comments, .rev-auth, .rev-auth-mask {
             border-radius: 0;
         }
     }
@@ -1796,7 +1796,8 @@ $reactionMenu8Y: 13.5px;
 }
 
 #rev-feed .rev-content:not(.rev-colspan-2) .rev-content-inner {
-    box-shadow: 0 2px 8px -4px black;
+    // box-shadow: 0 2px 8px -4px black;
+    box-shadow: 0 2px 5px -1px rgba(0, 0, 0, 0.36);
 }
 
 #rev-feed .rev-content:not(.rev-colspan-2),
