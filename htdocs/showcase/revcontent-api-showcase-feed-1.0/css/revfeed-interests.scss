@@ -112,12 +112,18 @@ $screen-xl: 1200px;
       text-overflow: ellipsis;
       overflow: hidden;
       color: #ffffff;
-      text-shadow: 0 0 1px rgba(0,0,0,0.6);
       transition: all 0.5s ease;
       position: absolute!important;
       left: 12px;
       bottom: 12px;
       z-index: 200;
+      font-variant-ligatures: none;
+      -webkit-font-variant-ligatures: none;
+      text-rendering: optimizeLegibility;
+      -moz-osx-font-smoothing: grayscale;
+      font-smoothing: antialiased;
+      -webkit-font-smoothing: antialiased;
+      text-shadow: rgba(0, 0, 0, .10) 0 0 1px;
 
       @include md {
         left: 14px;
@@ -125,7 +131,7 @@ $screen-xl: 1200px;
         font-size: 16px!important;
         line-height: 16px!important;
         min-height: 16px;
-        height: 16px;
+        //height: 16px;
       }
 
       @include lg {
@@ -133,7 +139,7 @@ $screen-xl: 1200px;
         bottom: 16px;
         font-size: 18px!important;
         line-height: 18px!important;
-        height: 18px;
+        //height: 18px;
       }
 
       @include xl {
@@ -141,7 +147,7 @@ $screen-xl: 1200px;
         bottom: 18px;
         font-size: 20px!important;
         line-height: 20px!important;
-        height: 20px;
+        //height: 20px;
       }
 
       &.light-mode {
@@ -157,10 +163,10 @@ $screen-xl: 1200px;
       border-radius: 4px;
       height: 100%;
       display: block;
-      background: -moz-linear-gradient(top, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0) 100%);
-      background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0) 100%);
-      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0) 100%);
-      //filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#a6000000', endColorstr='#00000000', GradientType=0);
+      background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%);
+      background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%);
+      background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%);
+      //filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6000000',GradientType=0 );
     }
 
     .selector {
