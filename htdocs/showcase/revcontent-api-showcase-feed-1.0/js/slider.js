@@ -568,7 +568,7 @@ Author: michael@revcontent.com
         this.feedAuthButton.className = 'rev-content';
         this.feedAuthButton.innerHTML = '<div class="rev-auth">' +
         '<div class="rev-auth-box">' +
-            '<div class="rev-auth-box-inner">' +
+            '<div class="rev-auth-box-inner" style="margin-bottom: 30px;">' +
 
                 '<div class="rev-auth-headline">' +
                     '<span class="rev-engage-type-txt">Hey there! Connect your account to<br /> surface personalized <strong>and</strong> relevant content!</span>' +
@@ -580,6 +580,8 @@ Author: michael@revcontent.com
                         'Personalize with facebook' +
                     '</div>' +
                 '</div>' +
+
+                '<div class="rev-auth-buttonline">Once personalized the content recommendations on this page will be based on the pages you\'ve liked and urls you\'ve shared on Facebook</div>' +
             '</div>' +
         '</div></div>';
 
@@ -1334,6 +1336,9 @@ Author: michael@revcontent.com
                                         (this.authenticated ? 'Log out' : 'Continue with facebook') +
                                     '</div>' +
                                 '</div>' +
+
+                                '<div class="rev-auth-buttonline">Once personalized the content recommendations on this page will be based on the pages you\'ve liked and urls you\'ve shared on Facebook</div>' +
+
                                 '<div class="rev-auth-terms">' +
                                     '<span>by signing up you agree to the <a href="#">Terms</a></span>' +
                                     // '<span>|</span>' +
