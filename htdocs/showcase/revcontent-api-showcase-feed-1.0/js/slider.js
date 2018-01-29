@@ -1965,7 +1965,8 @@ Author: michael@revcontent.com
 
             if(typeof data !== "object" || (typeof data == "object" && data.subscribed.length == 0)) {
                 interestsCarousel.setAttribute('style','margin:0!important;padding:0!important;height:0;border:0');
-                interestsCarousel.classList.add('revcontent-carousel-is-empty revcontent-remove-element');
+                interestsCarousel.classList.add('revcontent-carousel-is-empty');
+                interestsCarousel.classList.add('revcontent-remove-element');
                 return;
             }
 
