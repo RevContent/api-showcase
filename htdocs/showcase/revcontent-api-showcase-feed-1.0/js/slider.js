@@ -165,7 +165,8 @@ Author: michael@revcontent.com
             disclosure_about_src: '//trends.engage.im/engage-about.php',
             disclosure_about_height: 575,
             disclosure_interest_src: '//trends.engage.im/engage-interests.php',
-            disclosure_interest_height: 520
+            disclosure_interest_height: 520,
+            masonry_layout: false
         };
 
         // merge options

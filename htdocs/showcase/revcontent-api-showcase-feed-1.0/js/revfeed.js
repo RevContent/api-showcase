@@ -91,10 +91,11 @@ Author: michael@revcontent.com
             internal: 2,
             sponsored: 1,
             initial_internal: 2,
-            initial_sponsored: 1
+            initial_sponsored: 1,
+            masonry_layout: false
         };
 
-        if (opts.masonry_layout) {
+        if (opts.masonry_layout) { // they wan't masonry, provide a masonry per_row default
             defaults.per_row = {
                 xxs: 1,
                 xs: 1,
@@ -397,7 +398,8 @@ Author: michael@revcontent.com
             disclosure_about_height: this.options.disclosure_about_height,
             disclosure_interest_src: this.options.disclosure_interest_src,
             disclosure_interest_height: this.options.disclosure_interest_height,
-            breakpoints: this.options.breakpoints
+            breakpoints: this.options.breakpoints,
+            masonry_layout: this.options.masonry_layout
         });
     };
 
