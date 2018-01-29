@@ -1124,7 +1124,6 @@ Author: michael@revcontent.com
     RevSlider.prototype.gridOptions = function() {
         return {
             isInitLayout: false,
-            masonry: false,
             perRow: this.options.per_row,
             transitionDuration: this.options.transition_duration,
             isResizeBound: this.options.is_resize_bound,
@@ -1135,7 +1134,7 @@ Author: michael@revcontent.com
             rows: this.options.rows,
             stacked: this.options.stacked,
             removeVerticalGutters: true,
-            masonry: true,
+            masonry: this.options.masonry_layout,
             orderMasonry: false,
             itemBreakpoints: this.options.item_breakpoints,
             imageRatio: this.options.image_ratio
