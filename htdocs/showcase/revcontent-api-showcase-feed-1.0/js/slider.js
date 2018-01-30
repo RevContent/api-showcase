@@ -1793,7 +1793,7 @@ Author: michael@revcontent.com
 
                     if (myReaction) {
                         reactionHtml += '<div class="rev-reaction-count">'+ ((reactionCountTotal == 0) ? 'You reacted' : 'You and ' + Math.min(1, (reactionCountTotal - 1)) + ' others') + '</div>';
-                    } else if (reactionCountTotal) {
+                    } else {
                         reactionHtml += '<div ' + (!reactionCountTotal ? 'style="margin-left: 0;"' : '') + ' class="rev-reaction-count">'+ (reactionCountTotal ? reactionCountTotal : 'Be the first to react') +'</div>';
                     }
 
