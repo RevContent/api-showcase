@@ -1792,7 +1792,7 @@ Author: michael@revcontent.com
                     item.element.querySelector('.rev-reaction-menu-item-count-neg .rev-reaction-menu-item-count-inner').innerText = this.milliFormatter(reactionCountTotalNeg);
 
                     if (myReaction) {
-                        reactionHtml += '<div class="rev-reaction-count">'+ ((reactionCountTotal == 1) ? 'You reacted' : 'You and ' + (reactionCountTotal - 1) + ' others') + '</div>';
+                        reactionHtml += '<div class="rev-reaction-count">'+ ((reactionCountTotal == 0) ? 'You reacted' : 'You and ' + Math.min(1, (reactionCountTotal - 1)) + ' others') + '</div>';
                     } else {
                         reactionHtml += '<div ' + (!reactionCountTotal ? 'style="margin-left: 0;"' : '') + ' class="rev-reaction-count">'+ (reactionCountTotal ? reactionCountTotal : 'Be the first to react') +'</div>';
                     }
