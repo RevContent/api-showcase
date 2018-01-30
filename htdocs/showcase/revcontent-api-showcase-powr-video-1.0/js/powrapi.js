@@ -25,6 +25,9 @@
       this.adListeners = Array();
       this.endListeners = Array();
 
+      this.loop = null;
+      this.loopCallback = null;
+
       this.init();
   };
 
@@ -34,6 +37,14 @@
 
   PowrApi.prototype.ping = function() {
     this.window.postMessage("ping" + this.seperator + this.config.id, this.element.src);
+  }
+
+  PowrApi.prototype.playerInit = function(loop, func) {
+    if(this.loop == null) {
+      this.loop = loop;
+      this.loopCallback = func;
+    }
+    this.window.postMessage("player_ready" + this.seperator + this.config.id, this.element.src);
   }
 
   PowrApi.prototype.log = function() {
@@ -71,9 +82,9 @@
 
   PowrApi.prototype.setVideoAutoplayOnFocus = function (play_on_focus) {
     if(play_on_focus && this.visibleListener == null) {
-      var element = document.getElementsByClassName("powr_embed");
-      if(element.length > 0) {
-        this.visibleListener = this.checkVisible.bind(this, element[0], this.playerState);
+      var element = document.getElementById(this.config.iframe_id);
+      if(element != null) {
+        this.visibleListener = this.checkVisible.bind(this, element, this.playerState);
         revUtils.addEventListener(window.parent, 'scroll', this.visibleListener);
       }
       this.log("added onfocus video autoplay listener");
@@ -145,6 +156,11 @@
           this.log("adtype: " + data.msg);
         } else if(data.flag === "end") {
           this.log(data.msg);
+        } else if(data.flag === "player_ready" && data.msg == 0 && this.loop != null) {
+          clearInterval(this.loop);
+          this.loopCallback(this);
+          this.loop = null;
+          this.log(data.flag);
         }
       }
     } catch (e) {
