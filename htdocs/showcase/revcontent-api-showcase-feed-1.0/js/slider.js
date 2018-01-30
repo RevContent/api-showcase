@@ -386,6 +386,8 @@ Author: michael@revcontent.com
                     });
                 }
                 request();
+            }).catch(function(e) {
+                console.log(e);
             });
         };
 
@@ -646,7 +648,7 @@ Author: michael@revcontent.com
                         return;
                     });
 
-                    likeReactionElement.setAttribute('data-active', 1);
+                    likeReactionElement.setAttribute('data-active', iconName);
 
                     var icon = item.element.querySelector('.rev-reaction-like .rev-reaction-icon');
 
@@ -682,8 +684,10 @@ Author: michael@revcontent.com
 
                 var iconName = 'love';
 
-                if (parseInt(likeReactionElement.getAttribute('data-active'))) {
-                    likeReactionElement.setAttribute('data-active', 0);
+                if (likeReactionElement.getAttribute('data-active')) {
+                    iconName = likeReactionElement.getAttribute('data-active');
+
+                    likeReactionElement.removeAttribute('data-active');
 
                     revUtils.removeClass(likeReactionElement, 'rev-reaction-icon-', true);
                     revUtils.addClass(likeReactionElement, 'rev-reaction-icon-love');
@@ -693,7 +697,7 @@ Author: michael@revcontent.com
                     // var count = item.element.querySelector('.rev-reaction-count');
                     // count.innerHTML = count.innerHTML.split(' ')[2];
                 } else {
-                    likeReactionElement.setAttribute('data-active', 1);
+                    likeReactionElement.setAttribute('data-active', iconName);
                     revUtils.addClass(likeReactionElement, 'rev-reaction-icon-like');
 
                     revUtils.addClass(likeReactionElement, 'rev-reaction-icon-selected'); // TODO: this should not be needed
@@ -774,15 +778,18 @@ Author: michael@revcontent.com
                 revUtils.removeClass(item.element, 'rev-menu-active');
                 clearTimeout(that.likeReactionIconShowTimeout);
 
-                if (parseInt(likeReactionElement.getAttribute('data-active'))) {
-                    likeReactionElement.setAttribute('data-active', 0);
+                if (likeReactionElement.getAttribute('data-active')) {
+
+                    iconName = likeReactionElement.getAttribute('data-active');
+
+                    likeReactionElement.removeAttribute('data-active');
 
                     revUtils.removeClass(likeReactionElement, 'rev-reaction-icon-', true);
                     revUtils.addClass(likeReactionElement, 'rev-reaction-icon-love');
 
                     that.reactionCount(item, iconName, false);
                 } else {
-                    likeReactionElement.setAttribute('data-active', 1);
+                    likeReactionElement.setAttribute('data-active', iconName);
                     revUtils.addClass(likeReactionElement, 'rev-reaction-icon-like');
 
                     revUtils.addClass(likeReactionElement, 'rev-reaction-icon-selected'); // TODO: this should not be needed
@@ -831,7 +838,7 @@ Author: michael@revcontent.com
                         return;
                     });
 
-                    likeReactionElement.setAttribute('data-active', 1);
+                    likeReactionElement.setAttribute('data-active', iconName);
 
                     var icon = item.element.querySelector('.rev-reaction-like .rev-reaction-icon');
 
@@ -1073,6 +1080,8 @@ Author: michael@revcontent.com
                         reject();
                     }
                 });
+            }).catch(function(e) {
+                console.log(e);
             });
         }
 
@@ -1575,7 +1584,9 @@ Author: michael@revcontent.com
             }
 
             return Promise.all(that.promises);
-        });
+        }).catch(function(e) {
+            console.log(e);
+        });;
 
         return this.dataPromise;
     };
@@ -1733,7 +1744,7 @@ Author: michael@revcontent.com
 
                     if (itemData.my_reaction) {
                         myReaction = itemData.my_reaction;
-                        likeReactionElement.setAttribute('data-active', 1);
+                        likeReactionElement.setAttribute('data-active', myReaction);
 
                         revUtils.addClass(icon, 'rev-reaction-icon-' + myReaction);
                         revUtils.addClass(icon, 'rev-reaction-icon-selected');
