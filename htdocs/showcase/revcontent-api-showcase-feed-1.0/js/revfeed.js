@@ -201,6 +201,8 @@ Author: michael@revcontent.com
                 revUtils.addEventListener(window, 'scroll', self.visibleListener);
             }, function() {
                 console.log('someething went wrong');
+            }).catch(function(e) {
+                console.log(e);
             });
         }, function() {
         }).catch(function(e) {
