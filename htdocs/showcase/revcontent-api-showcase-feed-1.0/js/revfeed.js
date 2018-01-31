@@ -53,24 +53,21 @@ Author: michael@revcontent.com
             auto_scroll: true,
             rev_position: 'top_right',
             developer: false,
-            per_row: 6,
+            per_row: 1,
+            breakpoints: {
+                xxs: 0,
+                xs: 100,
+                sm: 549,
+                md: 550,
+                lg: 700,
+                xl: 1001,
+                xxl: 1500
+            },
             rows: 4,
             infinite: true,
-            column_spans: [
-                {
-                    selector: '.rev-content',
-                    spans: 6
-                },
-            ],
-            image_ratio: [
-                {
-                    selector: '.rev-content',
-                    ratio: '6:3'
-                }
-            ],
+            column_spans: [],
+            image_ratio: '6:3',
             internal_selector: false, // dynamic based on internal, sponsored, initial_internal and initial_sponsored options
-            meta_selector: '.rev-content',
-            reactions_selector: '.rev-content',
             headline_top_selector: false,
             // headline_icon_selector: '.rev-content:nth-child(4n+10), .rev-content:nth-child(4n+11)',
             // headline_icon_selector: '.rev-content',
@@ -94,8 +91,21 @@ Author: michael@revcontent.com
             internal: 2,
             sponsored: 1,
             initial_internal: 2,
-            initial_sponsored: 1
+            initial_sponsored: 1,
+            masonry_layout: false
         };
+
+        if (opts.masonry_layout) { // they wan't masonry, provide a masonry per_row default
+            defaults.per_row = {
+                xxs: 1,
+                xs: 1,
+                sm: 1,
+                md: 2,
+                lg: 2,
+                xl: 3,
+                xxl: 3
+            };
+        }
 
         // merge options
         this.options = revUtils.extend(defaults, opts);
@@ -165,8 +175,20 @@ Author: michael@revcontent.com
             return;
         }
 
+        window.feedEasterEgg = function() {
+            revApi.request( self.options.host + '/api/v1/engage/profile.php?', function(data) {
+                self.initCornerButton(data);
+            });
+        };
+
         this.innerWidget.dataPromise.then(function() {
             self.viewability().then(function() {
+
+                // if (self.innerWidget.authenticated) {
+                //     revApi.request( self.options.host + '/api/v1/engage/profile.php?', function(data) {
+                //         self.initCornerButton(data);
+                //     });
+                // }
 
                 if (self.options.infinite) {
                     self.infinite();
@@ -179,12 +201,128 @@ Author: michael@revcontent.com
                 revUtils.addEventListener(window, 'scroll', self.visibleListener);
             }, function() {
                 console.log('someething went wrong');
+            }).catch(function(e) {
+                console.log(e);
             });
         }, function() {
         }).catch(function(e) {
             console.log(e);
         });
     };
+
+    Feed.prototype.initCornerButton = function(data) {
+        this.buttonContainerElement = document.createElement('div');
+        this.buttonContainerElement.id = 'rev-corner-button-container';
+
+        this.buttonElement = document.createElement('a');
+        this.buttonElement.id = 'rev-corner-button';
+
+        this.buttonElement.innerHTML = '<img src="' + data.profile_url + '"/>';
+
+        // var svg;
+
+        // svg = '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'
+        // this.buttonElement.classList.add('rev-corner-button-plus');
+
+        // this.buttonElement.innerHTML = svg;
+
+        revUtils.append(this.buttonContainerElement, this.buttonElement);
+
+        // this.buttonMenu = document.createElement('menu');
+        // this.buttonMenu.className = 'rev-button-menu';
+
+        // this.button1 = document.createElement('button');
+        // this.button1.innerHTML = '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>';
+        // this.button1.className = 'menu-button menu-button-1';
+        // Waves.attach(this.button1, ['waves-circle', 'waves-float']);
+
+        // this.button2 = document.createElement('button');
+        // this.button2.innerHTML = '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>';
+        // this.button2.className = 'menu-button menu-button-2';
+        // Waves.attach(this.button2, ['waves-circle', 'waves-float']);
+
+        // this.button3 = document.createElement('button');
+        // this.button3.innerHTML = '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>';
+        // this.button3.className = 'menu-button menu-button-3';
+        // Waves.attach(this.button3, ['waves-circle', 'waves-float']);
+
+        // revUtils.append(this.buttonMenu, this.button1);
+        // revUtils.append(this.buttonMenu, this.button2);
+        // revUtils.append(this.buttonMenu, this.button3);
+        // revUtils.append(this.buttonContainerElement, this.buttonMenu);
+
+        Waves.attach(this.buttonElement, ['waves-circle', 'waves-float']);
+        Waves.init();
+
+        this.profileMask = document.createElement('div');
+        this.profileMask.id = 'profile-mask';
+
+        revUtils.addEventListener(this.profileMask, 'transitionend', function(ev) {
+            if (ev.propertyName === 'transform') {
+                if (!revUtils.hasClass(document.body, 'animate-user-profile')) {
+                    revUtils.removeClass(document.body, 'profile-mask-show');
+                }
+            }
+        });
+
+        var userProfile = document.createElement('div');
+        userProfile.id = 'rev-user-profile';
+
+        // TODO TBD
+        // revUtils.append(document.body, userProfile);
+        // revUtils.append(document.body, this.profileMask);
+
+        userProfile.innerHTML = '<div id="profile-image" style="background-image: url(' + data.profile_url + ')"></div>';
+
+        revUtils.addEventListener(userProfile, revDetect.mobile() ? 'touchstart' : 'click', function(ev) {
+            ev.preventDefault();
+        }, {passive: false});
+
+        revUtils.addEventListener(this.profileMask, revDetect.mobile() ? 'touchstart' : 'click', function(ev) {
+            revUtils.removeClass(document.body, 'animate-user-profile');
+        });
+
+        var that = this;
+        revUtils.addEventListener(this.buttonElement, revDetect.mobile() ? 'touchstart' : 'click', function(ev) {
+
+            if (!that.userProfileAppended) {
+                revUtils.append(document.body, userProfile);
+                revUtils.append(document.body, that.profileMask);
+                that.userProfileAppended = true;
+            }
+
+            // if (revUtils.hasClass(that.buttonContainerElement, 'visible')) {
+            //     revUtils.removeClass(that.buttonContainerElement, 'visible')
+            // } else {
+            //     revUtils.addClass(that.buttonContainerElement, 'visible')
+            // }
+
+            // that.innerWidget.grid.unbindResize();
+            // document.body.style.overflow = 'hidden';
+
+            revUtils.addClass(document.body, 'profile-mask-show');
+
+            setTimeout(function() {
+                if (revUtils.hasClass(document.body, 'animate-user-profile')) {
+                    revUtils.removeClass(document.body, 'animate-user-profile');
+                } else {
+                    revUtils.addClass(document.body, 'animate-user-profile');
+                }
+            });
+        });
+
+        revUtils.append(document.body, this.buttonContainerElement);
+
+        // revUtils.addEventListener(this.button3, 'click', function(e) {
+        //     RevSlider.prototype.appendSliderPanel("Your Profile", "loading me here", "engage-profile-panel");
+        // });
+
+        // revUtils.addEventListener(this.button2, 'click', function(e) {
+        //     RevSlider.prototype.appendSliderPanel("Your Bookmarks", "loading me here", "engage-bookmarks-panel");
+        // });
+
+    };
+
 
     Feed.prototype.windowWidth = function() {
 
@@ -256,15 +394,14 @@ Author: michael@revcontent.com
             keywords: this.options.keywords,
             developer: this.options.developer,
             internal_selector: this.options.internal_selector,
-            header_selector: this.options.header_selector,
-            reactions_selector: this.options.reactions_selector,
-            meta_selector: this.options.meta_selector,
             headline_top_selector: this.options.headline_top_selector,
             window_width_enabled: this.windowWidthEnabled,
             disclosure_about_src: this.options.disclosure_about_src,
             disclosure_about_height: this.options.disclosure_about_height,
             disclosure_interest_src: this.options.disclosure_interest_src,
-            disclosure_interest_height: this.options.disclosure_interest_height
+            disclosure_interest_height: this.options.disclosure_interest_height,
+            breakpoints: this.options.breakpoints,
+            masonry_layout: this.options.masonry_layout
         });
     };
 
@@ -299,45 +436,21 @@ Author: michael@revcontent.com
 
         this.scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
-        this.scrollListener = function() {
-            if (self.doing) {
-                return;
-            }
+        var scrollFunction = function() {
 
             var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
             var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-            var height = self.innerWidget.grid.maxHeight
+            var height = self.element.offsetHeight;
             var top = self.innerWidget.grid.element.getBoundingClientRect().top;
             var bottom = self.innerWidget.grid.element.getBoundingClientRect().bottom;
 
             if (scrollTop >= self.scrollTop && bottom > 0 && (scrollTop + windowHeight) >= (top + scrollTop + height - self.options.buffer)) {
-                self.doing = true;
-
-                var moreRowCount = self.innerWidget.grid.nextRow + self.options.rows;
-
-                // var offset = self.innerWidget.limit;
-
-                // var count = 0;
-
-                // self.internalLimit = 0;
-                // self.sponsoredLimit = 0;
+                revUtils.removeEventListener(window, 'scroll', self.scrollListener);
 
                 self.internalOffset = self.internalOffset ? self.internalOffset : self.innerWidget.internalLimit;
                 self.sponsoredOffset = self.sponsoredOffset ? self.sponsoredOffset : self.innerWidget.sponsoredLimit;
 
-                var rowData = self.innerWidget.createRows(self.innerWidget.grid, moreRowCount);
-
-                self.innerWidget.setUp(rowData.items);
-
-                self.innerWidget.getPadding(rowData.items, true);
-
-                self.innerWidget.setContentPadding(rowData.items);
-
-                self.innerWidget.setSize(rowData.items);
-
-                self.innerWidget.setUp(rowData.items);
-
-                self.innerWidget.grid.layout();
+                var rowData = self.innerWidget.createRows(self.innerWidget.grid, self.options.rows);
 
                 var urls = [];
 
@@ -367,25 +480,6 @@ Author: michael@revcontent.com
                 for (var i = 0; i < urls.length; i++) {
                     this.promises.push(new Promise(function(resolve, reject) {
                         var url = urls[i];
-
-                        // TODO - mock data
-                        // if (url.type == 'internal') {
-                        //     var resp = self.innerWidget.mockInternal[self.options.mock].slice(url.offset, url.offset + url.limit);
-                        //     resolve({
-                        //         type: url.type,
-                        //         data: resp
-                        //     });
-                        //     return;
-                        // }
-
-                        // if (url.type == 'sponsored') {
-                        //     var resp = self.innerWidget.mockSponsored[self.options.mock].slice(url.offset, url.offset + url.limit);
-                        //     resolve({
-                        //         type: url.type,
-                        //         data: resp
-                        //     });
-                        //     return;
-                        // }
                         revApi.request(url.url, function(resp) {
                             resolve({
                                 type: url.type,
@@ -395,10 +489,13 @@ Author: michael@revcontent.com
                     }));
                 }
 
+                setTimeout( function() {
+                    revUtils.addEventListener(window, 'scroll', self.scrollListener);
+                }, 150); // give it a rest before going back
+
                 Promise.all(this.promises).then(function(data) {
                     self.innerWidget.updateDisplayedItems(rowData.items, data);
                     self.innerWidget.viewableItems = self.innerWidget.viewableItems.concat(rowData.items);
-                    self.doing = false; // TODO should this be moved up and out
                 }, function(e) {
                 }).catch(function(e) {
                     console.log(e);
@@ -406,7 +503,11 @@ Author: michael@revcontent.com
             }
 
             self.scrollTop = scrollTop;
-        }
+        };
+
+        this.scrollListener = revUtils.throttle(scrollFunction, 60);
+
+        revUtils.addEventListener(window, 'scroll', this.scrollListener);
 
         this.innerWidget.emitter.on('removedItems', function(items) {
             revUtils.removeEventListener(window, 'scroll', self.visibleListener);
@@ -422,8 +523,6 @@ Author: michael@revcontent.com
 
             self.innerWidget.grid.layout();
         });
-
-        revUtils.addEventListener(window, 'scroll', this.scrollListener);
     };
 
     Feed.prototype.checkVisible = function() {
