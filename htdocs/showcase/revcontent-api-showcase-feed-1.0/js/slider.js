@@ -1238,7 +1238,7 @@ Author: michael@revcontent.com
     RevSlider.prototype.resizeImageCheck = function(items) {
         for (var i = 0; i < items.length; i++) {
             var revImage = items[i].element.querySelector('.rev-image');
-            if (items[i].preloaderHeight > parseInt(revImage.getAttribute('data-img-height')) ||  items[i].preloaderWidth > parseInt(revImage.getAttribute('data-img-width'))) {
+            if (revImage && (items[i].preloaderHeight > parseInt(revImage.getAttribute('data-img-height')) ||  items[i].preloaderWidth > parseInt(revImage.getAttribute('data-img-width')))) {
                 this.setImage(items[i], revImage);
             }
         }
