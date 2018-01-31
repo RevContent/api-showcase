@@ -1934,11 +1934,14 @@ $reactionMenu8Y: 13.5px;
             -webkit-transition: color 0.7s;
             transition: color 0.7s;
             -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-            float: right;
+            // float: right;
             margin: 0;
             width: 34px;
             height: 34px;
             z-index: 10000;
+            position: absolute;
+            top: 0;
+            right: 0;
 
             &.rev-save-active {
                 svg polygon {
@@ -1981,6 +1984,15 @@ $reactionMenu8Y: 13.5px;
     svg path {
         fill: #95a2ab !important;
     }
+
+    .rev-provider-date-container {
+      overflow: hidden;
+      display: inline-block;
+      max-width: 80%;
+      max-width: calc(100% - 41px);
+      padding-right: 32px;
+    }
+
     // padding: 4px 0 7px 4px;
     .rev-provider {
         margin-top: 0 !important;
