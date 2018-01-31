@@ -877,12 +877,7 @@ Author: michael@revcontent.com
     RevSlider.prototype.transitionLogin = function(item, engagetype) {
         var that = this;
         setTimeout(function() {
-            var headline = item.element.querySelector('.rev-auth-headline');
             var engagetxt = item.element.querySelector('.rev-engage-type-txt');
-            var lineHeight = parseInt(revUtils.getComputedStyle(headline, 'line-height'));
-            var height = parseInt(revUtils.getComputedStyle(headline, 'height'));
-            var fontSize = parseInt(revUtils.getComputedStyle(headline, 'font-size'));
-            var lines = height / lineHeight;
 
             if (engagetxt) {
                 if (engagetype == 'reaction') {
@@ -891,6 +886,12 @@ Author: michael@revcontent.com
                     engagetxt.innerHTML = 'Almost Done! Login to save your bookmark';
                 }
             }
+
+            var headline = item.element.querySelector('.rev-auth-headline');
+            var lineHeight = parseInt(revUtils.getComputedStyle(headline, 'line-height'));
+            var fontSize = parseInt(revUtils.getComputedStyle(headline, 'font-size'));
+            var height = parseInt(revUtils.getComputedStyle(headline, 'height'));
+            var lines = height / lineHeight;
 
             var fallback = 0; // just in case
             while(lines >= 3 && fallback < 100) {
@@ -905,6 +906,63 @@ Author: michael@revcontent.com
                 height = parseInt(revUtils.getComputedStyle(headline, 'height'));
 
                 lines = height / lineHeight;
+            }
+
+
+            // reduce margins based on vertical space
+            var revAuth = item.element.querySelector('.rev-auth');
+
+            var revAuthSiteLogo = item.element.querySelector('.rev-auth-site-logo');
+            var revAuthBoxInner = item.element.querySelector('.rev-auth-box-inner');
+
+            if ((revAuth.offsetHeight < (revAuthSiteLogo.offsetHeight + revAuthBoxInner.offsetHeight))) {
+                var sanity = 0;
+                var zeroed = [];
+
+                var subline = item.element.querySelector('.rev-auth-subline');
+                var button = item.element.querySelector('.rev-auth-button');
+                var buttonline = item.element.querySelector('.rev-auth-buttonline');
+                var terms = item.element.querySelector('.rev-auth-terms');
+
+                while ((sanity < 20) && (zeroed.length < 5) && (revAuth.offsetHeight < (revAuthSiteLogo.offsetHeight + revAuthBoxInner.offsetHeight))) {
+
+                    var sublineMarginTop = parseInt(revUtils.getComputedStyle(subline, 'margin-top'));
+                    if (sublineMarginTop > 1) {
+                        subline.style.marginTop = (sublineMarginTop - 1) + 'px';
+                    } else if(!zeroed.indexOf('subline')) {
+                        zeroed.push('subline');
+                    }
+
+                    var headlineMarginTop = parseInt(revUtils.getComputedStyle(headline, 'margin-top'));
+                    if (headlineMarginTop > 3) {
+                        headline.style.marginTop = (headlineMarginTop - 2) + 'px';
+                    } else if(!zeroed.indexOf('headline')) {
+                        zeroed.push('headline');
+                    }
+
+                    var buttonMarginTop = parseInt(revUtils.getComputedStyle(button, 'margin-top'));
+                    if (buttonMarginTop > 3) {
+                        button.style.marginTop = (buttonMarginTop - 2) + 'px';
+                    } else if(!zeroed.indexOf('button')) {
+                        zeroed.push('button');
+                    }
+
+                    var buttonlineMarginTop = parseInt(revUtils.getComputedStyle(buttonline, 'margin-top'));
+                    if (buttonlineMarginTop > 3) {
+                        buttonline.style.marginTop = (buttonlineMarginTop - 1) + 'px';
+                    } else if(!zeroed.indexOf('buttonline')) {
+                        zeroed.push('buttonline');
+                    }
+
+                    var termsMarginTop = parseInt(revUtils.getComputedStyle(terms, 'margin-top'));
+                    if (termsMarginTop > 1) {
+                        terms.style.marginTop = (termsMarginTop - 2) + 'px';
+                    } else if(!zeroed.indexOf('terms')) {
+                        zeroed.push('terms');
+                    }
+
+                    sanity++;
+                }
             }
 
             var logo = item.element.querySelector('.rev-auth-site-logo');

@@ -1587,16 +1587,19 @@ $reactionMenu8Y: 13.5px;
             .rev-auth-box-inner {
                 // min-width: 320px;
                 max-width: 420px;
-                margin-bottom: 3%;
+                padding-bottom: 3%;
+                // margin-bottom: 3%;
             }
 
             .rev-auth-site-logo {
                 max-height: 184px;
-                min-height: 40px;
+                min-height: 32px;
                 box-shadow: rgba(0, 0, 0, 0.3) 1px 1px 9px;
                 display: flex;
                 flex-grow: 1;
                 align-items: center;
+                margin-top: 3%;
+                top: 2px;
 
                 svg, img {
                     width: 100%;
