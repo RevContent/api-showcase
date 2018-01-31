@@ -953,7 +953,7 @@ $reactionMenu8Y: 13.5px;
                     position: relative;
                     cursor: pointer;
                     line-height: 24px;
-                    margin-left: 33px;
+                    margin-left: 4px;
 
                     display: inline-block;
 
@@ -1562,6 +1562,9 @@ $reactionMenu8Y: 13.5px;
             width: 35px!important;
             height: 35px;
             margin-left: auto;
+            position: absolute;
+            right: 0;
+            z-index: 10000000000;
 
             &:hover {
                 transform: scale(1.2)!important;
@@ -1666,6 +1669,7 @@ $reactionMenu8Y: 13.5px;
                 justify-content: space-around;
                 margin-top: 42px;
                 opacity: .8;
+                text-align: center;
                 a, span {
                     // color: #7c7c7d;
                     font-size: 14px;
@@ -1810,6 +1814,21 @@ $reactionMenu8Y: 13.5px;
         border-width: 1px;
 
         .rev-before-image, .rev-after-image, .rev-reactions, .rev-content-header, .rev-flip-front:after {
+            margin-left: 4px;
+            margin-right: 4px;
+        }
+        .rev-reactions-total, .rev-comments {
+            padding-left: 4px;
+            padding-right: 4px;
+        }
+        .rev-after-image {
+            margin-bottom: 4px;
+            padding: 9px 0;
+        }
+    }
+
+    &.rev-content-breakpoint-gt-xxs {
+        .rev-before-image, .rev-after-image, .rev-reactions, .rev-content-header, .rev-flip-front:after {
             margin-left: 8px;
             margin-right: 8px;
         }
@@ -1820,10 +1839,9 @@ $reactionMenu8Y: 13.5px;
         .rev-after-image {
             margin-bottom: 8px;
             padding: 9px 0;
-            // margin-left: 0;
-            // margin-right: 0;
         }
     }
+
     &.rev-content-breakpoint-gt-sm {
         .rev-before-image, .rev-after-image, .rev-reactions, .rev-content-header, .rev-flip-front:after {
             margin-left: 10px;
