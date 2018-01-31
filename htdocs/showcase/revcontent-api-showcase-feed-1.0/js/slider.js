@@ -915,7 +915,9 @@ Author: michael@revcontent.com
             var revAuthSiteLogo = item.element.querySelector('.rev-auth-site-logo');
             var revAuthBoxInner = item.element.querySelector('.rev-auth-box-inner');
 
-            if ((revAuth.offsetHeight < (revAuthSiteLogo.offsetHeight + revAuthBoxInner.offsetHeight))) {
+            var innerHeight = revAuthSiteLogo ? (revAuthSiteLogo.offsetHeight + revAuthBoxInner.offsetHeight) : revAuthBoxInner.offsetHeight;
+
+            if (revAuth.offsetHeight < innerHeight) {
                 var sanity = 0;
                 var zeroed = [];
 
@@ -924,7 +926,7 @@ Author: michael@revcontent.com
                 var buttonline = item.element.querySelector('.rev-auth-buttonline');
                 var terms = item.element.querySelector('.rev-auth-terms');
 
-                while ((sanity < 20) && (zeroed.length < 5) && (revAuth.offsetHeight < (revAuthSiteLogo.offsetHeight + revAuthBoxInner.offsetHeight))) {
+                while ((sanity < 20) && (zeroed.length < 5) && (revAuth.offsetHeight < innerHeight)) {
 
                     var sublineMarginTop = parseInt(revUtils.getComputedStyle(subline, 'margin-top'));
                     if (sublineMarginTop > 1) {
@@ -961,6 +963,7 @@ Author: michael@revcontent.com
                         zeroed.push('terms');
                     }
 
+                    innerHeight = revAuthSiteLogo ? (revAuthSiteLogo.offsetHeight + revAuthBoxInner.offsetHeight) : revAuthBoxInner.offsetHeight;
                     sanity++;
                 }
             }
