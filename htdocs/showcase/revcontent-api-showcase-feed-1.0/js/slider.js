@@ -1369,7 +1369,7 @@ Author: michael@revcontent.com
                                             '<div class="rev-meta">' +
                                                 '<div class="rev-meta-inner">' +
                                                     '<div class="rev-headline-icon-container"><div class="rev-headline-icon"></div></div>' +
-                                                    '<div class="rev-provider-date-container" style="overflow: hidden; display: inline-block">' +
+                                                    '<div class="rev-provider-date-container">' +
                                                         '<div class="rev-provider"></div>' +
                                                         '<div class="rev-date"></div>' +
                                                     '</div>' +
