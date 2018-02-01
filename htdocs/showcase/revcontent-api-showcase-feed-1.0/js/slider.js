@@ -1875,7 +1875,8 @@ Author: michael@revcontent.com
                     var reason = document.createElement('div');
                     reason.className = 'rev-reason';
                     reason.innerHTML = itemData.reason;
-                    revUtils.prepend(item.element.querySelector('.rev-before-image'), reason);
+                    reason.title = itemData.reason;
+                    revUtils.prepend(item.element.querySelector('.rev-ad-outer'), reason);
                 }
             }
         }
