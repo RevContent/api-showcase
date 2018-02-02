@@ -2080,8 +2080,8 @@ body.rev-blur > * {
 
   #personalized-transition-animation {
     position: absolute;
-    padding-top: 70%;
-    width: 70%;
+    padding-top: 50%;
+    width: 50%;
     z-index: 10001;
     top: 50%;
     transform: translateY(-50%);
@@ -2123,7 +2123,7 @@ body.rev-blur > * {
     top: 50%;
     transform: translateY(-50%);
     margin-top: 52%; //old browsers
-    margin-top: calc(35% + 32px);
+    margin-top: calc(25% + 32px);
 
     div {
       color: #1a3751;
@@ -2152,6 +2152,29 @@ body.rev-blur > * {
       width: 100%;
       margin-top: 162px;
       max-width: 560px;
+    }
+  }
+}
+
+@media all and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {
+  #personalized-transition-wrapper {
+    #personalized-transition-animation {
+      margin-left: -35%;
+    }
+    #personalized-transition-text {
+      margin-left: -50%;
+    }
+  }
+}
+
+@media all and (min-width: 510px) and (-ms-high-contrast: active), all and (min-width: 510px) and (-ms-high-contrast: none) {
+  #personalized-transition-wrapper {
+    #personalized-transition-animation {
+      margin-left: -130px;
+    }
+
+    #personalized-transition-text {
+      margin-left: -280px;
     }
   }
 }

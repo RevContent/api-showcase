@@ -1338,12 +1338,12 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.isAuthenticated = function(callback) {
         var that = this;
-        revApi.xhr(this.options.host + '/feed.php?provider=facebook_engage&action=connected', function(response) {
+        revApi.request(this.options.host + '/feed.php?provider=facebook_engage&action=connected', function(response) {
             that.authenticated = response.success;
             callback.call(this, that.authenticated);
         }, function() {
             callback.call(this, -1);
-        }, true);
+        });
     };
 
     // Don't dupe this svg
