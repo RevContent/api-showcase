@@ -9,7 +9,7 @@ services:
             - ./htdocs:/public
             - ./default.conf:/etc/nginx/conf.d/default.conf
         environment:
-          - VIRTUAL_HOST=api.dev
+          - VIRTUAL_HOST=api.localhost
         networks:
           - nginx-proxy
     php:
