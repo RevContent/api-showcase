@@ -2064,6 +2064,7 @@ body.rev-blur > * {
   width: 100%;
   background: #fff;
   filter: none !important;
+  z-index: 10000;
 }
 
 #personalized-transition-wrapper {
@@ -2071,7 +2072,7 @@ body.rev-blur > * {
   top: 0;
   filter: none !important;
   width: 100%;
-  z-index: 1000;
+  z-index: 100001;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -2157,6 +2158,11 @@ body.rev-blur > * {
 }
 
 @media all and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {
+
+  #personalized-transition-mask {
+    opacity: .75;
+  }
+
   #personalized-transition-wrapper {
     #personalized-transition-animation {
       margin-left: -35%;
