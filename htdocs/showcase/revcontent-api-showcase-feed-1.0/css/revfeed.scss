@@ -195,7 +195,10 @@ $reactionMenu8Y: 13.5px;
             user-select: none;
         }
         .rev-reaction-menu-container {
-            bottom: 30px !important;
+            // bottom: 30px !important;
+            bottom: 20px !important;
+            left: 28px !important;
+            padding-left: 0 !important;
         }
     }
 
@@ -1150,9 +1153,8 @@ $reactionMenu8Y: 13.5px;
                               // bottom: 30px;
                               // left: 20px;
                               bottom: -66px;
-                              left: 28px;
-                              width: 150px;
-                              height: 150px;
+                              left: 100%;
+                              padding-left: 8px;
                               border-radius: 50%;
                               z-index: 100000;
                               // top: -12px;
@@ -1161,6 +1163,12 @@ $reactionMenu8Y: 13.5px;
                               // left: 115px;
                               // top: 0;
                               z-index: 1000000000;
+
+                            .rev-reaction-menu-inner {
+                              width: 150px;
+                              height: 150px;
+                            }
+
                             .rev-reaction-menu-item {
                                 // background-color: #333;
                                 position: absolute;
