@@ -510,7 +510,8 @@ Author: michael@revcontent.com
 
             if (!this.authenticated && i == 1 && !this.feedAuthButtonVisible) {
                 this.feedAuthButtonVisible = true;
-                layoutItems = layoutItems.concat(this.appendfeedAuthButton(grid));
+                var feedAuthButton = this.appendfeedAuthButton(grid);
+                layoutItems = layoutItems.concat(feedAuthButton);
                 i--;
                 continue;
             }
@@ -551,6 +552,11 @@ Author: michael@revcontent.com
 
         grid.layoutItems(layoutItems, true);
 
+        if (feedAuthButton && feedAuthButton.length) {
+            this.resizeHeadlineLines(feedAuthButton[0].element.querySelector('.rev-auth-headline'));
+            // grid.layoutItems(layoutItems, true);
+        }
+
         // strictly for perf
         for (var i = 0; i < items.length; i++) {
             items[i].element.querySelector('.rev-reaction-bar').innerHTML = reactionHtml[i];
@@ -572,7 +578,8 @@ Author: michael@revcontent.com
     RevSlider.prototype.appendfeedAuthButton = function(grid) {
         this.feedAuthButton = document.createElement('div');
         this.feedAuthButton.className = 'rev-content';
-        this.feedAuthButton.innerHTML = '<div class="rev-content-inner"><div class="rev-auth">' +
+        // TODO: remove background: none hack. Only way to get button shadow to show
+        this.feedAuthButton.innerHTML = '<div class="rev-content-inner" style="background: none;"><div class="rev-auth-mask"></div><div class="rev-auth">' +
         '<div class="rev-auth-box">' +
             '<div class="rev-auth-box-inner" style="margin-bottom: 30px;">' +
 
@@ -877,6 +884,28 @@ Author: michael@revcontent.com
         }
     };
 
+    RevSlider.prototype.resizeHeadlineLines = function(headline) {
+        var lineHeight = parseInt(revUtils.getComputedStyle(headline, 'line-height'));
+        var fontSize = parseInt(revUtils.getComputedStyle(headline, 'font-size'));
+        var height = parseInt(revUtils.getComputedStyle(headline, 'height'));
+        var lines = height / lineHeight;
+
+        var fallback = 0; // just in case
+        while(lines >= 3 && fallback < 100) {
+            fallback++;
+
+            fontSize--;
+            lineHeight--;
+
+            headline.style.fontSize = fontSize + 'px';
+            headline.style.lineHeight = lineHeight + 'px';
+
+            height = parseInt(revUtils.getComputedStyle(headline, 'height'));
+
+            lines = height / lineHeight;
+        }
+    }
+
     RevSlider.prototype.transitionLogin = function(item, engagetype) {
         var that = this;
         setTimeout(function() {
@@ -891,26 +920,8 @@ Author: michael@revcontent.com
             }
 
             var headline = item.element.querySelector('.rev-auth-headline');
-            var lineHeight = parseInt(revUtils.getComputedStyle(headline, 'line-height'));
-            var fontSize = parseInt(revUtils.getComputedStyle(headline, 'font-size'));
-            var height = parseInt(revUtils.getComputedStyle(headline, 'height'));
-            var lines = height / lineHeight;
 
-            var fallback = 0; // just in case
-            while(lines >= 3 && fallback < 100) {
-                fallback++;
-
-                fontSize--;
-                lineHeight--;
-
-                headline.style.fontSize = fontSize + 'px';
-                headline.style.lineHeight = lineHeight + 'px';
-
-                height = parseInt(revUtils.getComputedStyle(headline, 'height'));
-
-                lines = height / lineHeight;
-            }
-
+            that.resizeHeadlineLines(headline);
 
             // reduce margins based on vertical space
             var revAuth = item.element.querySelector('.rev-auth');
