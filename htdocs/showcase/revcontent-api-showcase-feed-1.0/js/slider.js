@@ -570,7 +570,7 @@ Author: michael@revcontent.com
     RevSlider.prototype.appendfeedAuthButton = function(grid) {
         this.feedAuthButton = document.createElement('div');
         this.feedAuthButton.className = 'rev-content';
-        this.feedAuthButton.innerHTML = '<div class="rev-auth">' +
+        this.feedAuthButton.innerHTML = '<div class="rev-content-inner"><div class="rev-auth">' +
         '<div class="rev-auth-box">' +
             '<div class="rev-auth-box-inner" style="margin-bottom: 30px;">' +
 
@@ -593,7 +593,7 @@ Author: michael@revcontent.com
                     // '<a href="#">Privacy Policy</a>' +
                 '</div>' +
             '</div>' +
-        '</div></div>';
+        '</div></div></div>';
 
         grid.element.appendChild(this.feedAuthButton);
 
