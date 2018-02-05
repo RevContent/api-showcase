@@ -474,15 +474,17 @@ Author: michael@revcontent.com
                 '<div class="rev-reaction-menu">' +
                     '<div class="rev-reaction-icon rev-reaction-icon-love">' +
                         '<div class="rev-reaction-menu-container">' +
-                            '<div class="rev-reaction-menu-item rev-reaction-menu-item-count rev-reaction-menu-item-count-pos"><div class="rev-reaction-menu-item-count-inner"></div></div>' +
-                            '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="'+ this.options.reactions[0] +'"><div data-icon="' + this.options.reactions[0] + '" class="rev-reaction-menu-item-icon rev-reaction-menu-item-icon-' + this.options.reactions[0] + '"></div></div>' +
-                            '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[1] + '"><div data-icon="' + this.options.reactions[1] + '" class="rev-reaction-menu-item-icon rev-reaction-menu-item-icon-' + this.options.reactions[1] + '"></div></div>' +
-                            '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[2] + '"><div data-icon="' + this.options.reactions[2] + '" class="rev-reaction-menu-item-icon rev-reaction-menu-item-icon-' + this.options.reactions[2] + '"></div></div>' +
-                            '<div class="rev-reaction-menu-item rev-reaction-menu-item-count rev-reaction-menu-item-count-neg"><div class="rev-reaction-menu-item-count-inner"></div></div>' +
-                            '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[3] + '"><div data-icon="' + this.options.reactions[3] + '" class="rev-reaction-menu-item-icon rev-reaction-menu-item-icon-' + this.options.reactions[3] + '"></div></div>' +
-                            '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[4] + '"><div data-icon="' + this.options.reactions[4] + '" class="rev-reaction-menu-item-icon rev-reaction-menu-item-icon-' + this.options.reactions[4] + '"></div></div>' +
-                            '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[5] + '"><div data-icon="' + this.options.reactions[5] + '" class="rev-reaction-menu-item-icon rev-reaction-menu-item-icon-' + this.options.reactions[5] + '"></div></div>' +
-                            '<div class="rev-reaction-menu-mask"><div class="rev-reaction-menu-mask-inner">' + "<?xml version='1.0' ?><!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.1//EN'  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'><svg enable-background='new 0 0 24 24' height='24px' id='Layer_1' version='1.1' viewBox='0 0 24 24' width='24px' xml:space='preserve' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><g><polygon points='17.5,1 11,7.5 15,7.5 15,17.75 15,21.5 15,22.5 16,22.5 19,22.5 20,22.5 20,21.5 20,17.75 20,7.5 24,7.5  '/><polygon points='9,6.25 9,2.5 9,1.5 8,1.5 5,1.5 4,1.5 4,2.5 4,6.25 4,16.5 0,16.5 6.5,23 13,16.5 9,16.5  '/></g></svg>" + '</div></div>' +
+                            '<div class="rev-reaction-menu-inner">' +
+                                '<div class="rev-reaction-menu-item rev-reaction-menu-item-count rev-reaction-menu-item-count-pos"><div class="rev-reaction-menu-item-count-inner"></div></div>' +
+                                '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[4] + '"><div data-icon="' + this.options.reactions[4] + '" class="rev-reaction-menu-item-icon rev-reaction-menu-item-icon-' + this.options.reactions[4] + '"></div></div>' +
+                                '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[5] + '"><div data-icon="' + this.options.reactions[5] + '" class="rev-reaction-menu-item-icon rev-reaction-menu-item-icon-' + this.options.reactions[5] + '"></div></div>' +
+                                '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[3] + '"><div data-icon="' + this.options.reactions[3] + '" class="rev-reaction-menu-item-icon rev-reaction-menu-item-icon-' + this.options.reactions[3] + '"></div></div>' +
+                                '<div class="rev-reaction-menu-item rev-reaction-menu-item-count rev-reaction-menu-item-count-neg"><div class="rev-reaction-menu-item-count-inner"></div></div>' +
+                                '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[2] + '"><div data-icon="' + this.options.reactions[2] + '" class="rev-reaction-menu-item-icon rev-reaction-menu-item-icon-' + this.options.reactions[2] + '"></div></div>' +
+                                '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="'+ this.options.reactions[0] +'"><div data-icon="' + this.options.reactions[0] + '" class="rev-reaction-menu-item-icon rev-reaction-menu-item-icon-' + this.options.reactions[0] + '"></div></div>' +
+                                '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[1] + '"><div data-icon="' + this.options.reactions[1] + '" class="rev-reaction-menu-item-icon rev-reaction-menu-item-icon-' + this.options.reactions[1] + '"></div></div>' +
+                                '<div class="rev-reaction-menu-mask"><div class="rev-reaction-menu-mask-inner">' + "<?xml version='1.0' ?><!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.1//EN'  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'><svg enable-background='new 0 0 24 24' height='24px' id='Layer_1' version='1.1' viewBox='0 0 24 24' width='24px' xml:space='preserve' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><g><polygon points='17.5,1 11,7.5 15,7.5 15,17.75 15,21.5 15,22.5 16,22.5 19,22.5 20,22.5 20,21.5 20,17.75 20,7.5 24,7.5  '/><polygon points='9,6.25 9,2.5 9,1.5 8,1.5 5,1.5 4,1.5 4,2.5 4,6.25 4,16.5 0,16.5 6.5,23 13,16.5 9,16.5  '/></g></svg>" + '</div></div>' +
+                            '</div>' +
                         '</div>' +
                     '</div>' +
                 '</div>' +
@@ -508,7 +510,8 @@ Author: michael@revcontent.com
 
             if (!this.authenticated && i == 1 && !this.feedAuthButtonVisible) {
                 this.feedAuthButtonVisible = true;
-                layoutItems = layoutItems.concat(this.appendfeedAuthButton(grid));
+                var feedAuthButton = this.appendfeedAuthButton(grid);
+                layoutItems = layoutItems.concat(feedAuthButton);
                 i--;
                 continue;
             }
@@ -549,6 +552,11 @@ Author: michael@revcontent.com
 
         grid.layoutItems(layoutItems, true);
 
+        if (feedAuthButton && feedAuthButton.length) {
+            this.resizeHeadlineLines(feedAuthButton[0].element.querySelector('.rev-auth-headline'));
+            // grid.layoutItems(layoutItems, true);
+        }
+
         // strictly for perf
         for (var i = 0; i < items.length; i++) {
             items[i].element.querySelector('.rev-reaction-bar').innerHTML = reactionHtml[i];
@@ -570,7 +578,8 @@ Author: michael@revcontent.com
     RevSlider.prototype.appendfeedAuthButton = function(grid) {
         this.feedAuthButton = document.createElement('div');
         this.feedAuthButton.className = 'rev-content';
-        this.feedAuthButton.innerHTML = '<div class="rev-auth">' +
+        // TODO: remove background: none hack. Only way to get button shadow to show
+        this.feedAuthButton.innerHTML = '<div class="rev-content-inner" style="background: none;"><div class="rev-auth-mask"></div><div class="rev-auth">' +
         '<div class="rev-auth-box">' +
             '<div class="rev-auth-box-inner" style="margin-bottom: 30px;">' +
 
@@ -593,7 +602,7 @@ Author: michael@revcontent.com
                     // '<a href="#">Privacy Policy</a>' +
                 '</div>' +
             '</div>' +
-        '</div></div>';
+        '</div></div></div>';
 
         grid.element.appendChild(this.feedAuthButton);
 
@@ -875,6 +884,28 @@ Author: michael@revcontent.com
         }
     };
 
+    RevSlider.prototype.resizeHeadlineLines = function(headline) {
+        var lineHeight = parseInt(revUtils.getComputedStyle(headline, 'line-height'));
+        var fontSize = parseInt(revUtils.getComputedStyle(headline, 'font-size'));
+        var height = parseInt(revUtils.getComputedStyle(headline, 'height'));
+        var lines = height / lineHeight;
+
+        var fallback = 0; // just in case
+        while(lines >= 3 && fallback < 100) {
+            fallback++;
+
+            fontSize--;
+            lineHeight--;
+
+            headline.style.fontSize = fontSize + 'px';
+            headline.style.lineHeight = lineHeight + 'px';
+
+            height = parseInt(revUtils.getComputedStyle(headline, 'height'));
+
+            lines = height / lineHeight;
+        }
+    }
+
     RevSlider.prototype.transitionLogin = function(item, engagetype) {
         var that = this;
         setTimeout(function() {
@@ -889,26 +920,8 @@ Author: michael@revcontent.com
             }
 
             var headline = item.element.querySelector('.rev-auth-headline');
-            var lineHeight = parseInt(revUtils.getComputedStyle(headline, 'line-height'));
-            var fontSize = parseInt(revUtils.getComputedStyle(headline, 'font-size'));
-            var height = parseInt(revUtils.getComputedStyle(headline, 'height'));
-            var lines = height / lineHeight;
 
-            var fallback = 0; // just in case
-            while(lines >= 3 && fallback < 100) {
-                fallback++;
-
-                fontSize--;
-                lineHeight--;
-
-                headline.style.fontSize = fontSize + 'px';
-                headline.style.lineHeight = lineHeight + 'px';
-
-                height = parseInt(revUtils.getComputedStyle(headline, 'height'));
-
-                lines = height / lineHeight;
-            }
-
+            that.resizeHeadlineLines(headline);
 
             // reduce margins based on vertical space
             var revAuth = item.element.querySelector('.rev-auth');
