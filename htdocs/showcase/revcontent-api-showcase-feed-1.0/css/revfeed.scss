@@ -1341,7 +1341,7 @@ $reactionMenu8Y: 13.5px;
                                 transform: translate3d($reactionMenu2X - $reactionMenuTransitionDistance, $reactionMenu2Y + $reactionMenuTransitionDistance, 0);
 
                                 .rev-reaction-menu-item-icon:hover:after {
-                                    content: "Love";
+                                    content: "Sad";
                                 }
 
                                 .rev-reaction-menu-item-icon {
@@ -1353,7 +1353,7 @@ $reactionMenu8Y: 13.5px;
                                 transform: translate3d($reactionMenu3X - $reactionMenuTransitionDistance, $reactionMenu3Y, 0);
 
                                 .rev-reaction-menu-item-icon:hover:after {
-                                    content: "Exciting";
+                                    content: "Angry";
                                 }
 
                                 .rev-reaction-menu-item-icon {
@@ -1365,7 +1365,7 @@ $reactionMenu8Y: 13.5px;
                                 transform: translate3d($reactionMenu4X - $reactionMenuTransitionDistance, $reactionMenu4Y - $reactionMenuTransitionDistance, 0);
 
                                 .rev-reaction-menu-item-icon:hover:after {
-                                    content: "Interesting";
+                                    content: "Gross";
                                 }
 
                                 .rev-reaction-menu-item-icon {
@@ -1382,7 +1382,7 @@ $reactionMenu8Y: 13.5px;
                                 z-index: 1000000112;
 
                                 .rev-reaction-menu-item-icon:hover:after {
-                                    content: "Gross";
+                                    content: "Interesting";
                                 }
 
                                 .rev-reaction-menu-item-icon {
@@ -1394,7 +1394,7 @@ $reactionMenu8Y: 13.5px;
                                 z-index: 1000000111;
 
                                 .rev-reaction-menu-item-icon:hover:after {
-                                    content: "Sad";
+                                    content: "Love";
                                 }
 
                                 .rev-reaction-menu-item-icon {
@@ -1405,7 +1405,7 @@ $reactionMenu8Y: 13.5px;
                                 transform: translate3d($reactionMenu8X + $reactionMenuTransitionDistance, $reactionMenu8Y + $reactionMenuTransitionDistance, 0);
 
                                 .rev-reaction-menu-item-icon:hover:after {
-                                    content: "Angry";
+                                    content: "Exciting";
                                 }
 
                                 .rev-reaction-menu-item-icon {
