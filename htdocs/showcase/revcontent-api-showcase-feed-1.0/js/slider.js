@@ -1573,7 +1573,7 @@ Author: michael@revcontent.com
         }
 
         if (this.options.keywords) {
-            url += ('&keywords=' + this.options.keywords)
+            url += ('&keywords=' + encodeURI(this.options.keywords));
         }
 
         url += fill ? '&fill=true' : '';
