@@ -1726,7 +1726,7 @@ Author: michael@revcontent.com
                     } else {
                         if (itemData.favicon_url) {
 
-                            favicon.innerHTML = '<span class="rev-headline-icon-image" style="background-repeat:no-repeat;background-image:url('+ this.options.img_host +'/?url=' + itemData.favicon_url.replace('https://', 'http://') +'&op=noop)' + '"></span>';
+                            favicon.innerHTML = '<span class="rev-headline-icon-image" style="background-repeat:no-repeat;background-image:url('+ this.options.img_host +'/?url=' + itemData.favicon_url.replace('https://', 'http://') +'&op=noop&fmt=jpeg)' + '"></span>';
                         } else {
                             var iconInitialsWords = itemData.author ? itemData.author.replace(/\(|\)/g, '').split(' ') : itemData.brand.replace(/\(|\)/g, '').split(' ');
 
