@@ -597,7 +597,7 @@ Author: michael@revcontent.com
                 '<div class="rev-auth-buttonline">Once personalized the content recommendations on this page will be based on the pages you\'ve liked and urls you\'ve shared on Facebook</div>' +
 
                 '<div class="rev-auth-terms">' +
-                    '<span>by signing up you agree to the <a target="_blank" href="https://faq.revcontent.com/customer/en/portal/articles/2703838-revcontent-s-privacy-and-cookie-policy">Terms</a></span>' +
+                    '<span>by signing up you agree to the <a target="_blank" href="//www.engage.im/privacy.html">Terms</a></span>' +
                     // '<span>|</span>' +
                     // '<a href="#">Privacy Policy</a>' +
                 '</div>' +
@@ -1431,7 +1431,7 @@ Author: michael@revcontent.com
                                 '<div class="rev-auth-buttonline">Once personalized the content recommendations on this page will be based on the pages you\'ve liked and urls you\'ve shared on Facebook</div>' +
 
                                 '<div class="rev-auth-terms">' +
-                                    '<span>by signing up you agree to the <a target="_blank" href="https://faq.revcontent.com/customer/en/portal/articles/2703838-revcontent-s-privacy-and-cookie-policy">Terms</a></span>' +
+                                    '<span>by signing up you agree to the <a target="_blank" href="//www.engage.im/privacy.html">Terms</a></span>' +
                                     // '<span>|</span>' +
                                     // '<a href="#">Privacy Policy</a>' +
                                 '</div>' +
@@ -1726,7 +1726,7 @@ Author: michael@revcontent.com
                     } else {
                         if (itemData.favicon_url) {
 
-                            favicon.innerHTML = '<span class="rev-headline-icon-image" style="background-repeat:no-repeat;background-image:url('+ this.options.img_host +'/?url=' + itemData.favicon_url.replace('https://', 'http://') +'&op=noop)' + '"></span>';
+                            favicon.innerHTML = '<span class="rev-headline-icon-image" style="background-repeat:no-repeat;background-image:url('+ this.options.img_host +'/?url=' + itemData.favicon_url.replace('https://', 'http://') +'&op=noop&fmt=jpeg)' + '"></span>';
                         } else {
                             var iconInitialsWords = itemData.author ? itemData.author.replace(/\(|\)/g, '').split(' ') : itemData.brand.replace(/\(|\)/g, '').split(' ');
 
