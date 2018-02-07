@@ -1722,8 +1722,17 @@ Author: michael@revcontent.com
                         revUtils.remove(item.element.querySelector('.rev-before-image .rev-meta'));
                     } else {
                         if (itemData.favicon_url) {
+                            var imageUrl = this.options.img_host +'/?url=' + itemData.favicon_url.replace('https://', 'http://');
+                            // https://stackoverflow.com/a/1203361
+                            var imageFormat = itemData.favicon_url.substring(itemData.favicon_url.lastIndexOf('.')+1, itemData.favicon_url.length) || itemData.favicon_url
 
-                            favicon.innerHTML = '<span class="rev-headline-icon-image" style="background-repeat:no-repeat;background-image:url('+ this.options.img_host +'/?url=' + itemData.favicon_url.replace('https://', 'http://') +'&op=noop&fmt=jpeg)' + '"></span>';
+                            if (imageFormat == 'ico' ) {
+                                imageUrl += '&op=noop';
+                            } else if (item.type == 'internal') {
+                                imageUrl += '&fmt=jpeg';
+                            }
+
+                            favicon.innerHTML = '<span class="rev-headline-icon-image" style="background-repeat:no-repeat;background-image:url('+ imageUrl +')' + '"></span>';
                         } else {
                             var iconInitialsWords = itemData.author ? itemData.author.replace(/\(|\)/g, '').split(' ') : itemData.brand.replace(/\(|\)/g, '').split(' ');
 
