@@ -195,7 +195,10 @@ $reactionMenu8Y: 13.5px;
             user-select: none;
         }
         .rev-reaction-menu-container {
-            bottom: 30px !important;
+            // bottom: 30px !important;
+            bottom: 20px !important;
+            left: 28px !important;
+            padding-left: 0 !important;
         }
     }
 
@@ -416,6 +419,46 @@ $reactionMenu8Y: 13.5px;
                     margin-top: 30px;
                 }
             }
+        }
+
+        &.rev-content-breakpoint-lt-sm {
+
+          .rev-auth .rev-auth-box {
+            .rev-auth-button {
+                height: 40px;
+                margin-top: 22px;
+
+                &:before, &:after {
+                    z-index: -1;
+                    position: absolute;
+                    content: "";
+                    bottom: 15px;
+                    left: 10px;
+                    width: 50%;
+                    top: 8%;
+                    /* max-width: 300px; */
+                    background: transparent;
+                    box-shadow: 0 15px 10px rgba(0, 0, 0, 0.3);
+                    transform: rotate(-2deg);
+                }
+
+                &:after {
+                  transform: rotate(2deg);
+                  right: 10px;
+                  left: auto;
+                }
+
+                .rev-auth-button-icon {
+                    width: 32px;
+                    height: 32px;
+                }
+                .rev-auth-button-text {
+                    color: #fff;
+                    line-height: 40px;
+                    font-size: 14px;
+                }
+            }
+          }
         }
 
         a {
@@ -1150,9 +1193,8 @@ $reactionMenu8Y: 13.5px;
                               // bottom: 30px;
                               // left: 20px;
                               bottom: -66px;
-                              left: 28px;
-                              width: 150px;
-                              height: 150px;
+                              left: 100%;
+                              padding-left: 8px;
                               border-radius: 50%;
                               z-index: 100000;
                               // top: -12px;
@@ -1161,6 +1203,12 @@ $reactionMenu8Y: 13.5px;
                               // left: 115px;
                               // top: 0;
                               z-index: 1000000000;
+
+                            .rev-reaction-menu-inner {
+                              width: 150px;
+                              height: 150px;
+                            }
+
                             .rev-reaction-menu-item {
                                 // background-color: #333;
                                 position: absolute;
@@ -1293,7 +1341,7 @@ $reactionMenu8Y: 13.5px;
                                 transform: translate3d($reactionMenu2X - $reactionMenuTransitionDistance, $reactionMenu2Y + $reactionMenuTransitionDistance, 0);
 
                                 .rev-reaction-menu-item-icon:hover:after {
-                                    content: "Love";
+                                    content: "Sad";
                                 }
 
                                 .rev-reaction-menu-item-icon {
@@ -1305,7 +1353,7 @@ $reactionMenu8Y: 13.5px;
                                 transform: translate3d($reactionMenu3X - $reactionMenuTransitionDistance, $reactionMenu3Y, 0);
 
                                 .rev-reaction-menu-item-icon:hover:after {
-                                    content: "Exciting";
+                                    content: "Angry";
                                 }
 
                                 .rev-reaction-menu-item-icon {
@@ -1317,7 +1365,7 @@ $reactionMenu8Y: 13.5px;
                                 transform: translate3d($reactionMenu4X - $reactionMenuTransitionDistance, $reactionMenu4Y - $reactionMenuTransitionDistance, 0);
 
                                 .rev-reaction-menu-item-icon:hover:after {
-                                    content: "Interesting";
+                                    content: "Gross";
                                 }
 
                                 .rev-reaction-menu-item-icon {
@@ -1334,7 +1382,7 @@ $reactionMenu8Y: 13.5px;
                                 z-index: 1000000112;
 
                                 .rev-reaction-menu-item-icon:hover:after {
-                                    content: "Gross";
+                                    content: "Interesting";
                                 }
 
                                 .rev-reaction-menu-item-icon {
@@ -1346,7 +1394,7 @@ $reactionMenu8Y: 13.5px;
                                 z-index: 1000000111;
 
                                 .rev-reaction-menu-item-icon:hover:after {
-                                    content: "Sad";
+                                    content: "Love";
                                 }
 
                                 .rev-reaction-menu-item-icon {
@@ -1357,7 +1405,7 @@ $reactionMenu8Y: 13.5px;
                                 transform: translate3d($reactionMenu8X + $reactionMenuTransitionDistance, $reactionMenu8Y + $reactionMenuTransitionDistance, 0);
 
                                 .rev-reaction-menu-item-icon:hover:after {
-                                    content: "Angry";
+                                    content: "Exciting";
                                 }
 
                                 .rev-reaction-menu-item-icon {
@@ -1583,10 +1631,12 @@ $reactionMenu8Y: 13.5px;
             align-items: center;
             justify-content: flex-end;
             height: 100%;
+            padding: 0 3px;
 
             .rev-auth-box-inner {
                 // min-width: 320px;
                 max-width: 420px;
+                width: 100%;
                 padding-bottom: 3%;
                 // margin-bottom: 3%;
             }
@@ -1714,7 +1764,6 @@ $reactionMenu8Y: 13.5px;
 
         .rev-auth-buttonline {
           line-height: 14px;
-          padding: 0 3px;
         }
     }
 }
@@ -1877,24 +1926,15 @@ $reactionMenu8Y: 13.5px;
 }
 
 #rev-feed .rev-content {
-
-  .rev-before-image {
-
-    &.rev-no-meta {
-      .rev-reason {
-        padding-bottom: 4px;
-      }
-    }
-
-    .rev-reason {
-      font-size: 12px;
-      line-height: 16px;
-      padding-top: 4px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      color: rgba(90,90,90,.86);
-    }
+  .rev-reason {
+    font-size: 10px;
+    line-height: 14px;
+    padding-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: rgba(90,90,90,.86);
+    margin-left: 4px;
   }
 }
 
@@ -2073,6 +2113,7 @@ body.rev-blur > * {
   width: 100%;
   background: #fff;
   filter: none !important;
+  z-index: 10000;
 }
 
 #personalized-transition-wrapper {
@@ -2080,7 +2121,7 @@ body.rev-blur > * {
   top: 0;
   filter: none !important;
   width: 100%;
-  z-index: 1000;
+  z-index: 100001;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -2089,8 +2130,8 @@ body.rev-blur > * {
 
   #personalized-transition-animation {
     position: absolute;
-    padding-top: 70%;
-    width: 70%;
+    padding-top: 50%;
+    width: 50%;
     z-index: 10001;
     top: 50%;
     transform: translateY(-50%);
@@ -2132,7 +2173,7 @@ body.rev-blur > * {
     top: 50%;
     transform: translateY(-50%);
     margin-top: 52%; //old browsers
-    margin-top: calc(35% + 32px);
+    margin-top: calc(25% + 32px);
 
     div {
       color: #1a3751;
@@ -2161,6 +2202,34 @@ body.rev-blur > * {
       width: 100%;
       margin-top: 162px;
       max-width: 560px;
+    }
+  }
+}
+
+@media all and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {
+
+  #personalized-transition-mask {
+    opacity: .75;
+  }
+
+  #personalized-transition-wrapper {
+    #personalized-transition-animation {
+      margin-left: -35%;
+    }
+    #personalized-transition-text {
+      margin-left: -50%;
+    }
+  }
+}
+
+@media all and (min-width: 510px) and (-ms-high-contrast: active), all and (min-width: 510px) and (-ms-high-contrast: none) {
+  #personalized-transition-wrapper {
+    #personalized-transition-animation {
+      margin-left: -130px;
+    }
+
+    #personalized-transition-text {
+      margin-left: -280px;
     }
   }
 }
