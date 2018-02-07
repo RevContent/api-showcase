@@ -92,7 +92,8 @@ Author: michael@revcontent.com
             sponsored: 1,
             initial_internal: 2,
             initial_sponsored: 1,
-            masonry_layout: false
+            masonry_layout: false,
+            img_host: 'https://img.engage.im',
         };
 
         if (opts.masonry_layout) { // they wan't masonry, provide a masonry per_row default
@@ -401,7 +402,8 @@ Author: michael@revcontent.com
             disclosure_interest_src: this.options.disclosure_interest_src,
             disclosure_interest_height: this.options.disclosure_interest_height,
             breakpoints: this.options.breakpoints,
-            masonry_layout: this.options.masonry_layout
+            masonry_layout: this.options.masonry_layout,
+            img_host: this.options.img_host
         });
     };
 

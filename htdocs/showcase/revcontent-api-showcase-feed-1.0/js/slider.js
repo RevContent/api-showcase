@@ -76,6 +76,7 @@ Author: michael@revcontent.com
             ],
             url: 'https://trends.revcontent.com/api/v1/',
             host: 'https://trends.revcontent.com',
+            img_host: 'https://img.engage.im',
             headline_size: 3,
             max_headline: false,
             min_headline_height: 17,
@@ -473,15 +474,17 @@ Author: michael@revcontent.com
                 '<div class="rev-reaction-menu">' +
                     '<div class="rev-reaction-icon rev-reaction-icon-love">' +
                         '<div class="rev-reaction-menu-container">' +
-                            '<div class="rev-reaction-menu-item rev-reaction-menu-item-count rev-reaction-menu-item-count-pos"><div class="rev-reaction-menu-item-count-inner"></div></div>' +
-                            '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="'+ this.options.reactions[0] +'"><div data-icon="' + this.options.reactions[0] + '" class="rev-reaction-menu-item-icon rev-reaction-menu-item-icon-' + this.options.reactions[0] + '"></div></div>' +
-                            '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[1] + '"><div data-icon="' + this.options.reactions[1] + '" class="rev-reaction-menu-item-icon rev-reaction-menu-item-icon-' + this.options.reactions[1] + '"></div></div>' +
-                            '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[2] + '"><div data-icon="' + this.options.reactions[2] + '" class="rev-reaction-menu-item-icon rev-reaction-menu-item-icon-' + this.options.reactions[2] + '"></div></div>' +
-                            '<div class="rev-reaction-menu-item rev-reaction-menu-item-count rev-reaction-menu-item-count-neg"><div class="rev-reaction-menu-item-count-inner"></div></div>' +
-                            '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[3] + '"><div data-icon="' + this.options.reactions[3] + '" class="rev-reaction-menu-item-icon rev-reaction-menu-item-icon-' + this.options.reactions[3] + '"></div></div>' +
-                            '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[4] + '"><div data-icon="' + this.options.reactions[4] + '" class="rev-reaction-menu-item-icon rev-reaction-menu-item-icon-' + this.options.reactions[4] + '"></div></div>' +
-                            '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[5] + '"><div data-icon="' + this.options.reactions[5] + '" class="rev-reaction-menu-item-icon rev-reaction-menu-item-icon-' + this.options.reactions[5] + '"></div></div>' +
-                            '<div class="rev-reaction-menu-mask"><div class="rev-reaction-menu-mask-inner">' + "<?xml version='1.0' ?><!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.1//EN'  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'><svg enable-background='new 0 0 24 24' height='24px' id='Layer_1' version='1.1' viewBox='0 0 24 24' width='24px' xml:space='preserve' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><g><polygon points='17.5,1 11,7.5 15,7.5 15,17.75 15,21.5 15,22.5 16,22.5 19,22.5 20,22.5 20,21.5 20,17.75 20,7.5 24,7.5  '/><polygon points='9,6.25 9,2.5 9,1.5 8,1.5 5,1.5 4,1.5 4,2.5 4,6.25 4,16.5 0,16.5 6.5,23 13,16.5 9,16.5  '/></g></svg>" + '</div></div>' +
+                            '<div class="rev-reaction-menu-inner">' +
+                                '<div class="rev-reaction-menu-item rev-reaction-menu-item-count rev-reaction-menu-item-count-pos"><div class="rev-reaction-menu-item-count-inner"></div></div>' +
+                                '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[4] + '"><div data-icon="' + this.options.reactions[4] + '" class="rev-reaction-menu-item-icon rev-reaction-menu-item-icon-' + this.options.reactions[4] + '"></div></div>' +
+                                '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[5] + '"><div data-icon="' + this.options.reactions[5] + '" class="rev-reaction-menu-item-icon rev-reaction-menu-item-icon-' + this.options.reactions[5] + '"></div></div>' +
+                                '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[3] + '"><div data-icon="' + this.options.reactions[3] + '" class="rev-reaction-menu-item-icon rev-reaction-menu-item-icon-' + this.options.reactions[3] + '"></div></div>' +
+                                '<div class="rev-reaction-menu-item rev-reaction-menu-item-count rev-reaction-menu-item-count-neg"><div class="rev-reaction-menu-item-count-inner"></div></div>' +
+                                '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[2] + '"><div data-icon="' + this.options.reactions[2] + '" class="rev-reaction-menu-item-icon rev-reaction-menu-item-icon-' + this.options.reactions[2] + '"></div></div>' +
+                                '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="'+ this.options.reactions[0] +'"><div data-icon="' + this.options.reactions[0] + '" class="rev-reaction-menu-item-icon rev-reaction-menu-item-icon-' + this.options.reactions[0] + '"></div></div>' +
+                                '<div class="rev-reaction-menu-item rev-reaction-tip" data-icon="' + this.options.reactions[1] + '"><div data-icon="' + this.options.reactions[1] + '" class="rev-reaction-menu-item-icon rev-reaction-menu-item-icon-' + this.options.reactions[1] + '"></div></div>' +
+                                '<div class="rev-reaction-menu-mask"><div class="rev-reaction-menu-mask-inner">' + "<?xml version='1.0' ?><!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.1//EN'  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'><svg enable-background='new 0 0 24 24' height='24px' id='Layer_1' version='1.1' viewBox='0 0 24 24' width='24px' xml:space='preserve' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><g><polygon points='17.5,1 11,7.5 15,7.5 15,17.75 15,21.5 15,22.5 16,22.5 19,22.5 20,22.5 20,21.5 20,17.75 20,7.5 24,7.5  '/><polygon points='9,6.25 9,2.5 9,1.5 8,1.5 5,1.5 4,1.5 4,2.5 4,6.25 4,16.5 0,16.5 6.5,23 13,16.5 9,16.5  '/></g></svg>" + '</div></div>' +
+                            '</div>' +
                         '</div>' +
                     '</div>' +
                 '</div>' +
@@ -507,7 +510,8 @@ Author: michael@revcontent.com
 
             if (!this.authenticated && i == 1 && !this.feedAuthButtonVisible) {
                 this.feedAuthButtonVisible = true;
-                layoutItems = layoutItems.concat(this.appendfeedAuthButton(grid));
+                var feedAuthButton = this.appendfeedAuthButton(grid);
+                layoutItems = layoutItems.concat(feedAuthButton);
                 i--;
                 continue;
             }
@@ -548,6 +552,11 @@ Author: michael@revcontent.com
 
         grid.layoutItems(layoutItems, true);
 
+        if (feedAuthButton && feedAuthButton.length) {
+            this.resizeHeadlineLines(feedAuthButton[0].element.querySelector('.rev-auth-headline'));
+            // grid.layoutItems(layoutItems, true);
+        }
+
         // strictly for perf
         for (var i = 0; i < items.length; i++) {
             items[i].element.querySelector('.rev-reaction-bar').innerHTML = reactionHtml[i];
@@ -569,7 +578,8 @@ Author: michael@revcontent.com
     RevSlider.prototype.appendfeedAuthButton = function(grid) {
         this.feedAuthButton = document.createElement('div');
         this.feedAuthButton.className = 'rev-content';
-        this.feedAuthButton.innerHTML = '<div class="rev-auth">' +
+        // TODO: remove background: none hack. Only way to get button shadow to show
+        this.feedAuthButton.innerHTML = '<div class="rev-content-inner" style="background: none;"><div class="rev-auth-mask"></div><div class="rev-auth">' +
         '<div class="rev-auth-box">' +
             '<div class="rev-auth-box-inner" style="margin-bottom: 30px;">' +
 
@@ -587,12 +597,12 @@ Author: michael@revcontent.com
                 '<div class="rev-auth-buttonline">Once personalized the content recommendations on this page will be based on the pages you\'ve liked and urls you\'ve shared on Facebook</div>' +
 
                 '<div class="rev-auth-terms">' +
-                    '<span>by signing up you agree to the <a target="_blank" href="https://faq.revcontent.com/customer/en/portal/articles/2703838-revcontent-s-privacy-and-cookie-policy">Terms</a></span>' +
+                    '<span>by signing up you agree to the <a target="_blank" href="//www.engage.im/privacy.html">Terms</a></span>' +
                     // '<span>|</span>' +
                     // '<a href="#">Privacy Policy</a>' +
                 '</div>' +
             '</div>' +
-        '</div></div>';
+        '</div></div></div>';
 
         grid.element.appendChild(this.feedAuthButton);
 
@@ -874,6 +884,28 @@ Author: michael@revcontent.com
         }
     };
 
+    RevSlider.prototype.resizeHeadlineLines = function(headline) {
+        var lineHeight = parseInt(revUtils.getComputedStyle(headline, 'line-height'));
+        var fontSize = parseInt(revUtils.getComputedStyle(headline, 'font-size'));
+        var height = parseInt(revUtils.getComputedStyle(headline, 'height'));
+        var lines = height / lineHeight;
+
+        var fallback = 0; // just in case
+        while(lines >= 3 && fallback < 100) {
+            fallback++;
+
+            fontSize--;
+            lineHeight--;
+
+            headline.style.fontSize = fontSize + 'px';
+            headline.style.lineHeight = lineHeight + 'px';
+
+            height = parseInt(revUtils.getComputedStyle(headline, 'height'));
+
+            lines = height / lineHeight;
+        }
+    }
+
     RevSlider.prototype.transitionLogin = function(item, engagetype) {
         var that = this;
         setTimeout(function() {
@@ -888,26 +920,8 @@ Author: michael@revcontent.com
             }
 
             var headline = item.element.querySelector('.rev-auth-headline');
-            var lineHeight = parseInt(revUtils.getComputedStyle(headline, 'line-height'));
-            var fontSize = parseInt(revUtils.getComputedStyle(headline, 'font-size'));
-            var height = parseInt(revUtils.getComputedStyle(headline, 'height'));
-            var lines = height / lineHeight;
 
-            var fallback = 0; // just in case
-            while(lines >= 3 && fallback < 100) {
-                fallback++;
-
-                fontSize--;
-                lineHeight--;
-
-                headline.style.fontSize = fontSize + 'px';
-                headline.style.lineHeight = lineHeight + 'px';
-
-                height = parseInt(revUtils.getComputedStyle(headline, 'height'));
-
-                lines = height / lineHeight;
-            }
-
+            that.resizeHeadlineLines(headline);
 
             // reduce margins based on vertical space
             var revAuth = item.element.querySelector('.rev-auth');
@@ -1334,12 +1348,12 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.isAuthenticated = function(callback) {
         var that = this;
-        revApi.xhr(this.options.host + '/feed.php?provider=facebook_engage&action=connected', function(response) {
+        revApi.request(this.options.host + '/feed.php?provider=facebook_engage&action=connected', function(response) {
             that.authenticated = response.success;
             callback.call(this, that.authenticated);
         }, function() {
             callback.call(this, -1);
-        }, true);
+        });
     };
 
     // Don't dupe this svg
@@ -1365,7 +1379,7 @@ Author: michael@revcontent.com
                                             '<div class="rev-meta">' +
                                                 '<div class="rev-meta-inner">' +
                                                     '<div class="rev-headline-icon-container"><div class="rev-headline-icon"></div></div>' +
-                                                    '<div class="rev-provider-date-container" style="overflow: hidden; display: inline-block">' +
+                                                    '<div class="rev-provider-date-container">' +
                                                         '<div class="rev-provider"></div>' +
                                                         '<div class="rev-date"></div>' +
                                                     '</div>' +
@@ -1414,7 +1428,7 @@ Author: michael@revcontent.com
                                 '<div class="rev-auth-buttonline">Once personalized the content recommendations on this page will be based on the pages you\'ve liked and urls you\'ve shared on Facebook</div>' +
 
                                 '<div class="rev-auth-terms">' +
-                                    '<span>by signing up you agree to the <a target="_blank" href="https://faq.revcontent.com/customer/en/portal/articles/2703838-revcontent-s-privacy-and-cookie-policy">Terms</a></span>' +
+                                    '<span>by signing up you agree to the <a target="_blank" href="//www.engage.im/privacy.html">Terms</a></span>' +
                                     // '<span>|</span>' +
                                     // '<a href="#">Privacy Policy</a>' +
                                 '</div>' +
@@ -1556,7 +1570,7 @@ Author: michael@revcontent.com
         }
 
         if (this.options.keywords) {
-            url += ('&keywords=' + this.options.keywords)
+            url += ('&keywords=' + encodeURI(this.options.keywords));
         }
 
         url += fill ? '&fill=true' : '';
@@ -1704,11 +1718,12 @@ Author: michael@revcontent.com
                 var favicon = item.element.querySelector('.rev-headline-icon');
                 if (favicon) {
                     if (item.type == 'internal' && !itemData.author) {
-                        revUtils.addClass(item.element.querySelector('.rev-before-image'), 'rev-no-meta');
+                        revUtils.addClass(item.element, 'rev-no-meta');
                         revUtils.remove(item.element.querySelector('.rev-before-image .rev-meta'));
                     } else {
                         if (itemData.favicon_url) {
-                            favicon.innerHTML = '<span class="rev-headline-icon-image" style="background-repeat:no-repeat;background-image:url('+ itemData.favicon_url +')' + '"></span>';
+
+                            favicon.innerHTML = '<span class="rev-headline-icon-image" style="background-repeat:no-repeat;background-image:url('+ this.options.img_host +'/?url=' + itemData.favicon_url.replace('https://', 'http://') +'&op=noop&fmt=jpeg)' + '"></span>';
                         } else {
                             var iconInitialsWords = itemData.author ? itemData.author.replace(/\(|\)/g, '').split(' ') : itemData.brand.replace(/\(|\)/g, '').split(' ');
 
@@ -1872,7 +1887,8 @@ Author: michael@revcontent.com
                     var reason = document.createElement('div');
                     reason.className = 'rev-reason';
                     reason.innerHTML = itemData.reason;
-                    revUtils.prepend(item.element.querySelector('.rev-before-image'), reason);
+                    reason.title = itemData.reason;
+                    revUtils.prepend(item.element.querySelector('.rev-ad-outer'), reason);
                 }
             }
         }
