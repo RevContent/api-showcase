@@ -169,6 +169,68 @@ Author: michael@revcontent.com
             masonry_layout: false
         };
 
+        this.mockComments = {
+            espn: [
+                {
+                    name: "Eric Gundel",
+                    icon: "https://uxpowered.com/products/pixeladmin/v232/html_demo/assets/demo/avatars/3.jpg",
+                    comment: "Sale, Pomeranz, Fister. With his inability to pitch deep Pomeranz should either go 2 or 4 so that he is right before or after Sale. Only Fister's performance gives him a credible argument for going ahead of him so holding off until Game 4 is silly. Fister also has been going deep so he is the logical guy to follow Pomeranz."
+                },
+                {
+                    name: "Daniel Canny",
+                    icon: "https://uxpowered.com/products/pixeladmin/v232/html_demo/assets/demo/avatars/5.jpg",
+                    comment: "I want no part of Price in these playoffs. Even if he was piching well right now and not on the DL. I think it should go Sale, Pomeranz 1-2 with Fister and Porcello as the 3/4 in some order. Pomeranz has earned the 2 spot. I like Fister but let' see what everybody thinks when someone roughs him up for 7 or 8 runs in 2 innings-which I predict will happen before the end of the season. It's an interesting call but I hope the Sox shut Price down. Make him earn that 30 million next year."
+                },
+                {
+                    name: "Vinnie Bredice",
+                    icon: "https://uxpowered.com/products/pixeladmin/v232/html_demo/assets/demo/avatars/4.jpg",
+                    comment: "It's bad enough the Yankees replica jerseys have the player last names on the back of them, now this? Chief for Ellsbury??? When has anyone ever heard him called Chief??? And A-A-Ron for Hicks??? When just about everyone on the team and his manager call him Hicksy? A lot of these nicknames sound forced or contrived. Glad to see that Gardner refused a nickname and went with his last name. Just a dumb idea all around and another way for MLB to suck the almighty dollar away from the fans."
+                },
+                {
+                    name: "Michael Rinella",
+                    icon: "https://uxpowered.com/products/pixeladmin/v232/html_demo/assets/demo/avatars/3.jpg",
+                    comment: "What is it with today's players oblique strains? Nobody and I mean nobody went on the DL with a flippin' oblique anything thirty or forty years ago."
+                },
+                {
+                    name: "Lee Fogel",
+                    icon: "https://uxpowered.com/products/pixeladmin/v232/html_demo/assets/demo/avatars/1.jpg",
+                    comment: "People ridiculed his signing but he put dollars in pockets and butts in seats. And, although he didn't blow anyone away, his results overall were better than just about anyone figured he would put up."
+                },
+                {
+                    name: "Dennis Lio",
+                    icon: "https://uxpowered.com/products/pixeladmin/v232/html_demo/assets/demo/avatars/2.jpg",
+                    comment: "When jealousy rears its ugly head in the realm of baseball, it is a terrible thing. Tim Tebow is what baseball is all about."
+                }
+            ],
+            newsweek: [
+                {
+                    name: "Katona Johnson",
+                    icon: "https://scontent-mia3-2.xx.fbcdn.net/v/t1.0-1/p48x48/14457545_561653840701620_6308988878381143782_n.jpg?oh=3f72461276b7e15a0327dbce2f793eae&oe=5A5A2304",
+                    comment: "All she is showing is that she has not grown into womanhood yet. She still depends on her daddy. Remember she has not gone on her own. She has never really held a job outside her father's structure. Look at Jared, he looks like he has not had a separate thought from this family. She needs to leave DC and find her way to maturity. I bet Tiffany is more independent, smarter because her mother had total control of her upbringing."
+                },
+                {
+                    name: "Nancy Clifford",
+                    icon: "https://scontent-mia3-2.xx.fbcdn.net/v/t1.0-1/p48x48/13873033_10153831008331732_6356865474546752624_n.jpg?oh=41532f41615c9a4e6f6e9ecb78ba01aa&oe=5A4CC060",
+                    comment: "If trump was. not A thief and traitor we might give him a chance. He is destroying our country and reputation. RESIGN if he can't take it. What will he do when he goes to jail for treason"
+                },
+                {
+                    name: "Chelsea Doors",
+                    icon: "https://scontent-mia3-2.xx.fbcdn.net/v/t1.0-1/p48x48/21314293_1470408896387318_2143304306498232083_n.jpg?oh=483e3672928841df361285a486c74f7c&oe=5A47239F",
+                    comment: "Great place to buy Over Priced Polyester made in sweat shops throughout Asia, even though her daddy's administration celebrates \"Made in America Week\"."
+                },
+                {
+                    name: "John W Bletsch",
+                    icon: "https://scontent-mia3-2.xx.fbcdn.net/v/t1.0-1/p48x48/15698201_10207747359346750_4195257972201186511_n.jpg?oh=e5f37eccae878608529da6f7128aaffa&oe=5A5429AA",
+                    comment: "Again, it all depends upon whom is surveyed. Try a random survey and you will find that Michelle (Michael) Obama is roundly disliked for her faux haughty air and pretentious attitude while she is spending $millions of taxpayers' dollars as though her own on opulent affairs and vacations monthly. Truly an attitude of lottery rich trailer trash using her race to force acceptance among the moneyed elete."
+                },
+                {
+                    name: "Palin Smith",
+                    icon: "https://scontent-mia3-2.xx.fbcdn.net/v/t1.0-1/p48x48/17352341_10210518225049889_2739499951961938623_n.jpg?oh=4fb96860c3aaadfa83d6aeb9941ccbcd&oe=5A4E8A95",
+                    comment: "If Melania was black she would get a 98% approval rating.....if her hubby was a Democrat."
+                }
+            ]
+         };
+
         // merge options
         this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
 
@@ -486,7 +548,8 @@ Author: michael@revcontent.com
                     '</div>' +
                 '</div>' +
             '</div>';
-        var comment_b64 = '<a href="#' + (this.options.comment_div ? this.options.comment_div : this.options.feed_id) + '" class="rev-reaction rev-reaction-comment"><div class="rev-reaction-icon rev-reaction-icon-comment"></div></a>';
+        var comment_b64 = '<a class="rev-reaction rev-reaction-comment"><div class="rev-reaction-icon rev-reaction-icon-comment"></div></a>';
+        //var comment_b64 = '<a href="#' + (this.options.comment_div ? this.options.comment_div : this.options.feed_id) + '" class="rev-reaction rev-reaction-comment"><div class="rev-reaction-icon rev-reaction-icon-comment"></div></a>';
         var share_b64 = '<a href="https://www.facebook.com/sharer/sharer.php?u='+ this.options.domain +'" target="_blank" class="rev-reaction rev-reaction-share"><div class="rev-reaction-icon rev-reaction-icon-share"></div></a>';
 
         var items = [];
@@ -1324,7 +1387,7 @@ Author: michael@revcontent.com
             revImage.style.backgroundImage = 'url('+ image +')';
             // revImage.innerHTML = '<img src=" ' + image + ' " />';
         } else {
-	    var cb = new Date().getTime();
+        var cb = new Date().getTime();
             var site_url = document.location.href;
             site_url = "http://www.newsweek.com/government-shutdown-latest-all-you-need-know-negs-go-limit-785236";
             var pub_id = this.options.pub_id;
@@ -1762,34 +1825,192 @@ Author: michael@revcontent.com
                 var commentButton = item.element.querySelector('.rev-reaction-comment');
 
                 if (commentButton) {
-                    commentButton.setAttribute('href', itemData.target_url + commentButton.getAttribute('href'));
+                    //commentButton.setAttribute('href', itemData.target_url + commentButton.getAttribute('href'));
+                    commentButton.target_url = itemData.target_url;
+
+                    revUtils.addEventListener(commentButton, 'click', function(ev) {
+                        handleComments(ev.currentTarget.target_url);
+                    });
                 }
 
-                revUtils.remove(item.element.querySelector('.rev-comments'));
-                if (itemData.comments && itemData.comments.length) {
+                //why?
+                //revUtils.remove(item.element.querySelector('.rev-comments'));
 
-                    var commentsElement = document.createElement('div');
-                    revUtils.addClass(commentsElement, 'rev-comments');
-                    revUtils.addClass(commentsElement, 'rev-has-comments');
+                var setHtml = function(el,data) {
 
-                    var commentHtml = '';
+                    var commentDetailsHeaderElement = document.createElement('div');
+                    revUtils.addClass(commentDetailsHeaderElement, 'rev-comment-detail-header');
 
-                    var comment = itemData.comments[0];
+                    commentDetailsHeaderElement.innerHTML = '<a class="close-detail" style="float:right;">close</a>';
 
-                    commentHtml += '<div class="rev-comment">' +
-                            '<div class="rev-comment-image" style="background-image:url('+ (comment.comment_author_img) +')"></div>' +
-                            '<div class="rev-comment-text">' +
-                                '<span class="rev-comment-author">' + (comment.comment_author) + '</span>' +
-                                ' · ' +
-                                '<span class="rev-comment-date">' + this.timeAgo(itemData.comment_time, true) + '</span>  ' + comment.comment +
-                            '</div>' +
-                        '</div>' +
-                        '</div>';
+                    el.appendChild(commentDetailsHeaderElement);
 
-                    commentsElement.innerHTML = commentHtml;
+                    revUtils.addEventListener(el.querySelector('.close-detail'), 'click', function(ev) {
+                        el.remove();
+                        revUtils.removeClass(document.body, 'modal-open');
+                    });
 
-                    item.element.querySelector('.rev-content-inner').appendChild(commentsElement);
-                }
+                    //make el for comments
+                    var commentFeedElement = document.createElement('div');
+                    revUtils.addClass(commentFeedElement, 'rev-comment-feed');
+
+                    //append comments
+                    el.appendChild(commentFeedElement);
+
+
+                    //populate comment feed
+
+                    var feedHTML = '<ul class="comments-list">';
+
+                    for (var key in data) {
+                       if (data.hasOwnProperty(key)) {
+                          var top_level_comment = data[key];
+                          var hasReplies = (top_level_comment.hasOwnProperty('replies') && top_level_comment.replies !== null);
+
+                            feedHTML += '<li class="' + (hasReplies ? 'has-children' : '')  + '">';
+                            feedHTML += '<div class="post__author author vcard inline-items">';
+                            feedHTML += '<img src="' + top_level_comment.author_avatar + '" alt="author">';
+                            feedHTML += '<div class="author-date">';
+                            feedHTML += '<a class="h6 post__author-name fn" href="#">' + top_level_comment.author + '</a>';
+                            feedHTML += '<div class="post__date">';
+                            feedHTML += '<time class="published" datetime="' + top_level_comment.date + '">';
+                            feedHTML += '1 hour ago';
+                            feedHTML += '</time>';
+                            feedHTML += '</div>';//post__date
+                            feedHTML += '</div>';//author-date
+                            feedHTML += '</div>';//post__author
+                            feedHTML += '<p>' + top_level_comment.comment_body + '</p>';
+                            feedHTML += '<a href="#" class="reply">Reply</a>';
+
+                            //loop replies
+                            if (hasReplies) {
+                                feedHTML += '<ul class="children">';
+                                for (var key in top_level_comment.replies) {
+                                   if (top_level_comment.replies.hasOwnProperty(key)) {
+                                      var reply = top_level_comment.replies[key];
+
+                                        feedHTML += '<li>';
+                                        feedHTML += '<div class="post__author author vcard inline-items">';
+                                        feedHTML += '<img src="' + reply.author_avatar + '" alt="author">';
+                                        feedHTML += '<div class="author-date">';
+                                        feedHTML += '<a class="h6 post__author-name fn" href="#">' + reply.author + '</a>';
+                                        feedHTML += '<div class="post__date">';
+                                        feedHTML += '<time class="published" datetime="' + reply.date + '">';
+                                        feedHTML += '1 hour ago';
+                                        feedHTML += '</time>';
+                                        feedHTML += '</div>';//post__date
+                                        feedHTML += '</div>';//author-date
+                                        feedHTML += '</div>';//post__author
+                                        feedHTML += '<p>' + reply.comment_body + '</p>';
+                                        feedHTML += '</li>';
+                                    }
+                                }
+                                feedHTML += '</ul>';
+                            }
+
+                            feedHTML += '</li>';
+                       }
+                    }
+
+                    feedHTML += '</ul>';
+
+                    commentFeedElement.innerHTML = feedHTML;
+
+
+                    //make el and append textbox
+
+                    var commentBoxElement = document.createElement('div');
+
+                    revUtils.addClass(commentBoxElement, 'rev-comment-box');
+
+                    var commentBoxHtml = '<div class="rev-comment-box" style="padding: 8px;background: #fafbfd;border-top: 1px solid #e6ecf5;">' +
+                            '<img src="https://relayfm.s3.amazonaws.com/uploads/user/avatar/4/user_avatar_mykehurley_artwork.png" alt="author" style="width: 24px;height: 24px;float:left;border-radius: 24px;position: absolute;top: 50%;margin-top: -14px;">' +
+                            '<div class="comment-input" style="padding: 0px 0 0 34px;">' +
+                            '<textarea id="comment_input" type="text" placeholder="Leave a Comment" style="height: 30px;width: 100%;border-radius: 4px;border: 1px solid #e6ecf5;padding: 4px 40px 4px 10px;cursor: text;"></textarea>' +
+                            '<a id="submit_comment">send</a>' +
+                            '</div><div class="clearfix" style="clear: both;"></div></div>';
+
+                    commentBoxElement.innerHTML = commentBoxHtml;
+                    el.appendChild(commentBoxElement);
+
+                    var text = document.getElementById("comment_input");
+                    revUtils.addEventListener(text, 'keyup', function(ev) {
+                        el.querySelector('#submit_comment').style.display = 'inline-block';
+
+                        console.log(text.scrollHeight);
+                        if (text.scrollHeight < 88) {
+                            text.style.height = (text.scrollHeight + 2) + "px";
+                        }
+
+                    });
+
+                };
+
+                var handleComments = function(target_url) {
+                    console.log(target_url);
+
+                    //create comment overlay div for mobile only
+                    if (revDetect.mobile()) {
+                        var commentDetailsElement = document.createElement('div');
+                        commentDetailsElement.id = 'rev-comment-detail';
+                        //add class to make it slide
+
+                        revApi.xhr('http://www.mocky.io/v2/5a7324b6310000e307a1d509', function(data) {
+                            setHtml(commentDetailsElement,data);
+                        });
+
+                        document.body.appendChild(commentDetailsElement);
+                        revUtils.addClass(document.body, 'modal-open');
+                    }
+
+
+
+                    //xhr for comment data
+
+                };
+
+                var mockComment = true;
+                var that = this;
+
+                            if ( (mockComment && item.type == 'internal') || (itemData.comments && itemData.comments.length)) {
+
+                                var commentsElement = document.createElement('div');
+                                revUtils.addClass(commentsElement, 'rev-comments');
+                                revUtils.addClass(commentsElement, 'rev-has-comments');
+
+                                var commentHtml = '';
+
+                                var comment = mockComment ? that.mockComments.espn[Math.floor(Math.random()*that.mockComments.espn.length)] : itemData.comments[0];
+
+                                commentHtml += '<div class="rev-comment">' +
+                                        '<div class="rev-comment-image" style="background-image:url('+ (mockComment ? comment.icon : comment.comment_author_img) +')">' +
+                                            // '<?xml version="1.0" ?><!DOCTYPE svg  PUBLIC "-//W3C//DTD SVG 1.1//EN"  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" version="1.1" viewBox="0 0 4335 4335" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><style type="text/css"> <![CDATA[.fil0 {fill:black} ]]> </style></defs><g id="Layer_x0020_1"><path class="fil0" d="M2121 179c1065,0 1929,864 1929,1929 0,1065 -864,1929 -1929,1929 -1065,0 -1929,-864 -1929,-1929 0,-1065 864,-1929 1929,-1929zm1059 3099c-92,-307 -377,-1047 -982,-1047 -21,0 -40,1 -59,2 -19,-1 -38,-2 -59,-2 -622,0 -906,783 -989,1072 -335,-289 -548,-718 -548,-1195 0,-872 707,-1578 1578,-1578 872,0 1578,707 1578,1578 0,464 -200,881 -519,1170zm-1053 408c4,-4 8,-8 12,-13 4,4 8,8 12,12 -8,0 -16,0 -24,0zm12 -2806c293,0 530,269 530,601 0,332 -237,601 -530,601 -293,0 -530,-269 -530,-601 0,-332 237,-601 530,-601z"/></g></svg>' +
+                                        '</div>' +
+                                        '<div class="rev-comment-text">' +
+                                            '<span class="rev-comment-author">' + (mockComment ? comment.name : comment.comment_author) + '</span>' +
+                                            ' ?? ' +
+                                            '<span class="rev-comment-date">' + that.timeAgo(itemData.comment_time, true) + '</span>  ' + comment.comment +
+                                        '</div>' +
+                                    '</div>' +
+                                    '</div>';
+
+                                commentsElement.innerHTML = commentHtml;
+
+                                item.element.querySelector('.rev-content-inner').appendChild(commentsElement);
+                            }
+
+                            var commentBoxElement = document.createElement('div');
+                                revUtils.addClass(commentBoxElement, 'rev-comment-box');
+
+                                var commentBoxHtml = '<div class="rev-comment-box" style="padding: 8px;background: #fafbfd;border-top: 1px solid #e6ecf5;">' +
+                                        '<img src="https://relayfm.s3.amazonaws.com/uploads/user/avatar/4/user_avatar_mykehurley_artwork.png" alt="author" style="width: 24px;height: 24px;float:left;border-radius: 24px;">' +
+                                        '<div class="comment-input" style="padding: 0px 0 0 34px;">' +
+                                        '<input type="text" placeholder="Leave a Comment" style="height: 30px;width: 100%;border-radius: 4px;border: 1px solid #e6ecf5;padding: 0 10px;cursor: text;">' +
+                                        '</div><div class="clearfix" style="clear: both;"></div></div>';
+
+                                commentBoxElement.innerHTML = commentBoxHtml;
+
+                                item.element.querySelector('.rev-content-inner').appendChild(commentBoxElement);
 
                 if (item.reactions) {
 
