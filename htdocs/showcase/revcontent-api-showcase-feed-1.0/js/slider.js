@@ -1801,7 +1801,7 @@ Author: michael@revcontent.com
                             '<div class="rev-comment-image" style="background-image:url('+ (comment.comment_author_img) +')"></div>' +
                             '<div class="rev-comment-text">' +
                                 '<span class="rev-comment-author">' + (comment.comment_author) + '</span>' +
-                                ' ?? ' +
+                                ' &middot; ' +
                                 '<span class="rev-comment-date">' + this.timeAgo(itemData.comment_time, true) + '</span>  ' + comment.comment +
                             '</div>' +
                         '</div>' +
