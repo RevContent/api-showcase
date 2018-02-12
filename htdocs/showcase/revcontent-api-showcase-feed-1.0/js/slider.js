@@ -1732,7 +1732,7 @@ Author: michael@revcontent.com
                                 imageUrl += '&fmt=jpeg';
                             }
 
-                            favicon.innerHTML = '<span class="rev-headline-icon-image" style="background-repeat:no-repeat;background-image:url('+ imageUrl +')' + '"></span>';
+                            favicon.innerHTML = '<span class="rev-headline-icon-image" style="background-image:url('+ imageUrl +')' + '"></span>';
                         } else {
                             var iconInitialsWords = itemData.author ? itemData.author.replace(/\(|\)/g, '').split(' ') : itemData.brand.replace(/\(|\)/g, '').split(' ');
 
@@ -1801,7 +1801,7 @@ Author: michael@revcontent.com
                             '<div class="rev-comment-image" style="background-image:url('+ (comment.comment_author_img) +')"></div>' +
                             '<div class="rev-comment-text">' +
                                 '<span class="rev-comment-author">' + (comment.comment_author) + '</span>' +
-                                ' · ' +
+                                ' ?? ' +
                                 '<span class="rev-comment-date">' + this.timeAgo(itemData.comment_time, true) + '</span>  ' + comment.comment +
                             '</div>' +
                         '</div>' +
