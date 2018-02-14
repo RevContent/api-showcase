@@ -1550,7 +1550,17 @@ Author: michael@revcontent.com
          return this.serializedQueryParams;
     };
 
-    RevSlider.prototype.generateUrl = function(offset, count, empty, viewed, internal, below_article, fill) {
+    RevSlider.prototype.getIgnoreList = function(data){
+        var list = [];
+        for(var i in data){
+            if(data[i].document_id){
+                list.push(data[i]);
+            }
+        }
+        return list;
+    }
+
+    RevSlider.prototype.generateUrl = function(offset, count, empty, viewed, internal, below_article, fill, ignoreList) {
         var url = (this.options.host ? this.options.host + '/api/v1/' : this.options.url) +
         '?api_key=' + this.options.api_key +
         this.getSerializedQueryParams() +
@@ -1567,6 +1577,10 @@ Author: michael@revcontent.com
 
         if (internal) {
             url += '&show_comments=1';
+        }
+
+        if(ignoreList){
+            url+="&doc_ids="+ignoreList.join(",");
         }
 
         if (this.options.keywords) {
@@ -1616,6 +1630,7 @@ Author: michael@revcontent.com
             var urls = [];
 
             if (that.internalLimit > 0) {
+
                 var internalURL = that.generateUrl(0, that.internalLimit, false, false, true);
                 urls.push({
                     offset: 0,
