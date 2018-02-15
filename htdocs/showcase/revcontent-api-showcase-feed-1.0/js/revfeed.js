@@ -457,7 +457,6 @@ Author: michael@revcontent.com
                 var urls = [];
 
                 if (rowData.internalLimit > 0) {
-                    var list = self.innerWidget.getIgnoreList(self.innerWidget.grid.items);
                     var internalURL = self.innerWidget.generateUrl(self.internalOffset, rowData.internalLimit, false, false, true);
                     urls.push({
                         offset: self.internalOffset,
