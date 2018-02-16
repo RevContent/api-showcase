@@ -1554,8 +1554,8 @@ Author: michael@revcontent.com
         var list = [];
         if(data) {
             for (var i in data) {
-                if (data[i].document_id) {
-                    list.push(data[i]);
+                if (data[i].data.document_id) {
+                    list.push(data[i].data.document_id);
                 }
             }
         }
