@@ -1554,7 +1554,7 @@ Author: michael@revcontent.com
         var list = [];
         if(data) {
             for (var i in data) {
-                if (data[i].data.doc_id) {
+                if (data[i].data && data[i].data.doc_id) {
                     list.push(data[i].data.doc_id);
                 }
             }
