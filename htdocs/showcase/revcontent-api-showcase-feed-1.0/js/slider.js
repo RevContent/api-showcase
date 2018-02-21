@@ -1724,8 +1724,10 @@ Author: michael@revcontent.com
 
                 if (item.type == 'internal') {
                     anchor.removeAttribute('target');
+                    anchor.removeAttribute('rel');
                 } else {
                     anchor.setAttribute('target', '_blank');
+                    anchor.setAttribute('rel', 'nofollow');
                 }
 
                 this.setImage(item, item.element.querySelector('.rev-image'));
