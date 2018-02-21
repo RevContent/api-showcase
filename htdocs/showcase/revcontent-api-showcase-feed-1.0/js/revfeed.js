@@ -516,49 +516,23 @@ Author: michael@revcontent.com
                         console.log('*************Feed', e);
                     }
                 }).then(function(rowData) {
-                    var urls = [];
 
-                    if (rowData.internalLimit > 0) {
-                        var internalURL = self.innerWidget.generateUrl(self.internalOffset, rowData.internalLimit, false, false, true);
-                        urls.push({
-                            offset: self.internalOffset,
-                            limit: rowData.internalLimit,
-                            url: internalURL,
-                            type: 'internal'
-                        });
-                        self.internalOffset += rowData.internalLimit;
-                    }
+                    console.log(rowData);
 
-                    if (rowData.sponsoredLimit > 0) {
-                        var sponsoredURL = self.innerWidget.generateUrl(self.sponsoredOffset, rowData.sponsoredLimit, false, false, false);
-                        urls.push({
-                            offset: self.sponsoredOffset,
-                            limit: rowData.sponsoredLimit,
-                            url: sponsoredURL,
-                            type: 'sponsored'
-                        });
-                        self.sponsoredOffset += rowData.sponsoredLimit;
-                    }
+                    self.internalOffset += rowData.internalLimit;
 
-                    var promises = [];
-                    for (var i = 0; i < urls.length; i++) {
-                        promises.push(new Promise(function(resolve, reject) {
-                            var url = urls[i];
-                            revApi.request(url.url, function(resp) {
-                                resolve({
-                                    type: url.type,
-                                    data: resp
-                                });
-                            });
-                        }));
-                    }
+                    self.sponsoredOffset += rowData.sponsoredLimit;
 
-                    return Promise.all(promises).then(function(data) {
-                        return Promise.resolve({rowData: rowData, data: data});
+                    return new Promise(function(resolve, reject) {
+                        revApi.request(self.innerWidget.generateUrl(self.internalOffset, rowData.internalLimit, self.sponsoredOffset, rowData.sponsoredLimit), function(data) {
+                            if (!data.length) {
+                                reject();
+                                return;
+                            }
+                            resolve({rowData: rowData, data: data});
+                        })
                     });
-
                 }).then(function(data) {
-
                     var tryToUpdateDisplayedItems = function() {
                         try {
                             self.innerWidget.updateDisplayedItems(data.rowData.items, data.data);
