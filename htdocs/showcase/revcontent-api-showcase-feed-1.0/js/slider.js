@@ -277,35 +277,6 @@ Author: michael@revcontent.com
 
         this.getData();
 
-        var that = this;
-
-        if (this.grid.perRow > 1) { // if more than one row relayout when font loads
-            if (typeof FontFaceObserver !== 'undefined') {
-                var fontNormal = new FontFaceObserver('Montserrat');
-                var fontBold = new FontFaceObserver('Montserrat', { weight: 500 });
-
-                Promise.all([fontNormal.load(), fontBold.load()]).then(function () {
-                    that.grid.layout();
-                }).catch(function(e) {
-                    console.log(e);
-                });
-            }
-        }
-
-        this.dataPromise.then(function(data) {
-            that.updateDisplayedItems(that.grid.items, data);
-            if (that.options.beacons) {
-                revApi.beacons.setPluginSource(that.options.api_source).attach();
-            }
-        }, function(e) {
-            console.log(e);
-            that.destroy();
-        }).catch(function(e) {
-            console.log(e);
-        });
-
-        this.offset = 0;
-
         this.appendElements();
     };
 
@@ -439,33 +410,14 @@ Author: michael@revcontent.com
         revUtils.addClass(this.containerElement, 'rev-slider-row-' + this.grid.nextRow);
     };
 
-    RevSlider.prototype.createCells = function(grid) {
-        var i = 0; // just in case
-        this.limit = 0;
-        this.internalLimit = 0;
-        this.sponsoredLimit = 0;
-        this.visibleLimit = 0;
-
-        var rowData = this.createRows(grid, this.options.rows, true);
-
-        this.viewableItems = rowData.items;
-        this.limit = rowData.limit;
-        this.internalLimit = rowData.internalLimit;
-        this.sponsoredLimit = rowData.sponsoredLimit;
-    };
-
     RevSlider.prototype.milliFormatter = function(value) {
         return value > 999 ? (value/1000).toFixed(1) + 'k' : value
     }
 
-    RevSlider.prototype.createRows = function(grid, rows, initial) {
-        var i = 0; // just in case
+    RevSlider.prototype.createRows = function(grid) {
         var limit = 0;
         var internalLimit = 0;
         var sponsoredLimit = 0;
-        var itemsArr = [];
-        var rowLen = rows.length;
-        // this.visibleLimit = 0;
 
         var total = this.options.rows * grid.perRow;
 
@@ -1550,18 +1502,6 @@ Author: michael@revcontent.com
          return this.serializedQueryParams;
     };
 
-    RevSlider.prototype.getIgnoreList = function(data){
-        var list = [];
-        if(data) {
-            for (var i in data) {
-                if (data[i].data && data[i].data.doc_id) {
-                    list.push(data[i].data.doc_id);
-                }
-            }
-        }
-        return list;
-    }
-
     RevSlider.prototype.generateUrl = function(offset, count, empty, viewed, internal, below_article, fill) {
         var url = (this.options.host ? this.options.host + '/api/v1/' : this.options.url) +
         '?api_key=' + this.options.api_key +
@@ -1579,10 +1519,6 @@ Author: michael@revcontent.com
 
         if (internal) {
             url += '&show_comments=1';
-
-            var ignoreList = this.getIgnoreList(this.grid.items);
-            url+="&doc_ids="+ignoreList.join(",");
-
         }
 
         if (this.options.keywords) {
@@ -1613,42 +1549,57 @@ Author: michael@revcontent.com
         var that = this;
 
         this.dataPromise = new Promise(function(resolve, reject) {
+
+            var tryToCreateRows = function(response) {
+                try {
+                    var rowData = that.createRows(that.grid);
+                    resolve({authenticated: response, rowData: rowData});
+                } catch (e) {
+                    // TODO test
+                    while(that.grid.items.length) {
+                        var popped = that.grid.items.pop();
+                        popped.remove();
+                    }
+
+                    setTimeout(function() {
+                        tryToCreateRows(response);
+                    }, 100);
+                }
+            }
+
             that.isAuthenticated(function(response) {
-                if (response === true) {
-                    that.updateAuthElements();
-                }
 
-                that.createCells(that.grid);
+                try {
+                    if (response === true) {
+                        that.updateAuthElements();
+                    }
 
-                if (that.limit == 0) {
-                    that.destroy();
+                    tryToCreateRows(response);
+                } catch (e) {
+                    console.log('*************Feed', e);
                     reject();
-                    return;
                 }
-                resolve(response)
-            })
-        }).then(function(authenticated) { // data depending on auth
-
+            });
+        }).then(function(data) {
             var urls = [];
 
-            if (that.internalLimit > 0) {
-
-                var internalURL = that.generateUrl(0, that.internalLimit, false, false, true);
+            if (data.rowData.internalLimit > 0) {
+                var internalURL = that.generateUrl(0, data.rowData.internalLimit, false, false, true);
                 urls.push({
                     offset: 0,
-                    limit: that.internalLimit,
+                    limit: data.rowData.internalLimit,
                     url: internalURL,
                     type: 'internal'
                 });
             }
 
-            if (that.sponsoredLimit > 0) {
+            if (data.rowData.sponsoredLimit > 0) {
                 // don't register multiple widget impressions
                 // var fill = urls.length > 0;
-                var sponsoredURL = that.generateUrl(0, that.sponsoredLimit, false, false, false);
+                var sponsoredURL = that.generateUrl(0, data.rowData.sponsoredLimit, false, false, false);
                 urls.push({
                     offset: 0,
-                    limit: that.sponsoredLimit,
+                    limit: data.rowData.sponsoredLimit,
                     url: sponsoredURL,
                     type: 'sponsored'
                 });
@@ -1672,10 +1623,34 @@ Author: michael@revcontent.com
                 }));
             }
 
-            return Promise.all(that.promises);
+            return Promise.all(that.promises).then(function(apiData) {
+                data.data = apiData;
+                return Promise.resolve(data);
+            });
+        }, function() {
+            return false;
         }).catch(function(e) {
             console.log(e);
-        });;
+        }).then(function(data) {
+            var tryToUpdateDisplayedItems = function() {
+                try {
+                    that.updateDisplayedItems(that.grid.items, data.data);
+                    that.viewableItems = data.rowData.items;
+                    return Promise.resolve(data);
+                } catch (e) {
+                    setTimeout(function() {
+                        tryToUpdateDisplayedItems();
+                    }, 100)
+                }
+            }
+
+            return tryToUpdateDisplayedItems();
+
+        }, function(e) {
+            that.destroy();
+        }).catch(function(e) {
+            console.log('*************Feed', e);
+        });
 
         return this.dataPromise;
     };
@@ -1757,7 +1732,7 @@ Author: michael@revcontent.com
                                 imageUrl += '&fmt=jpeg';
                             }
 
-                            favicon.innerHTML = '<span class="rev-headline-icon-image" style="background-image:url('+ imageUrl +')' + '"></span>';
+                            favicon.innerHTML = '<span class="rev-headline-icon-image" style="background-repeat:no-repeat;background-image:url('+ imageUrl +')' + '"></span>';
                         } else {
                             var iconInitialsWords = itemData.author ? itemData.author.replace(/\(|\)/g, '').split(' ') : itemData.brand.replace(/\(|\)/g, '').split(' ');
 
@@ -1928,7 +1903,21 @@ Author: michael@revcontent.com
         }
 
         if (this.grid.perRow > 1) { // relayout if not single column
-            this.grid.layout();
+            if (!this.fontsLoaded && typeof FontFaceObserver !== 'undefined') { // first time wait for the fonts to load
+                var fontNormal = new FontFaceObserver('Montserrat');
+                var fontBold = new FontFaceObserver('Montserrat', { weight: 500 });
+                var that = this;
+                Promise.all([fontNormal.load(), fontBold.load()]).then(function () {
+                    that.grid.layout();
+                }, function() {
+                    that.grid.layout();
+                }).catch(function(e) {
+                    that.grid.layout();
+                });
+                this.fontsLoaded = true;
+            } else {
+                this.grid.layout();
+            }
         }
 
         if (this.removeItems.length) {
@@ -2021,7 +2010,7 @@ Author: michael@revcontent.com
         }, 2500);
     };
 
-    RevSlider.prototype.subscribeToInterest = function(interestId){
+    RevSlider.prototype.subscribeToInterest = function(interestId) {
         var that = this;
         if(isNaN(interestId)){
             that.notify('Invalid Category, please try again.', {label: 'continue', link: '#'});
@@ -2046,7 +2035,7 @@ Author: michael@revcontent.com
         }
     };
 
-    RevSlider.prototype.unsubscribeFromInterest = function(interestId){
+    RevSlider.prototype.unsubscribeFromInterest = function(interestId) {
         var that = this;
         if(isNaN(interestId)){
             that.notify('Invalid Category, please try again.', {label: 'continue', link: '#'});

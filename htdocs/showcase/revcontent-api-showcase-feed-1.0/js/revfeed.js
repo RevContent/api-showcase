@@ -172,6 +172,21 @@ Author: michael@revcontent.com
 
         var self = this;
 
+        this.innerWidget.emitter.on('removedItems', function(items) {
+            self.removed = true;
+
+            revUtils.removeEventListener(window, 'scroll', self.visibleListener);
+            revUtils.removeEventListener(window, 'scroll', self.scrollListener);
+
+            for (var i = 0; i < items.length; i++) {
+                var index = self.innerWidget.grid.items.indexOf(items[i]);
+                var removed = self.innerWidget.grid.items.splice(index, 1);
+                removed[0].remove();
+            }
+
+            self.innerWidget.grid.layout();
+        });
+
         if (!this.innerWidget.dataPromise) {
             return;
         }
@@ -182,7 +197,11 @@ Author: michael@revcontent.com
             });
         };
 
-        this.innerWidget.dataPromise.then(function() {
+        this.innerWidget.dataPromise.then(function(data) {
+
+            self.internalOffset = data.rowData.internalLimit;
+            self.sponsoredOffset = data.rowData.sponsoredLimit;
+
             self.viewability().then(function() {
 
                 // if (self.innerWidget.authenticated) {
@@ -201,13 +220,13 @@ Author: michael@revcontent.com
                 self.visibleListener = self.checkVisible.bind(self);
                 revUtils.addEventListener(window, 'scroll', self.visibleListener);
             }, function() {
-                console.log('someething went wrong');
+                console.log('*************Feed', 'something went wrong');
             }).catch(function(e) {
-                console.log(e);
+                console.log('*************Feed', e);
             });
         }, function() {
         }).catch(function(e) {
-            console.log(e);
+            console.log('*************Feed', e);
         });
     };
 
@@ -438,7 +457,14 @@ Author: michael@revcontent.com
 
         this.scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
+        // this.testRetry = 0;
+
         var scrollFunction = function() {
+
+            if (self.removed) {
+                revUtils.removeEventListener(window, 'scroll', self.scrollListener);
+                return;
+            }
 
             var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
             var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
@@ -449,59 +475,105 @@ Author: michael@revcontent.com
             if (scrollTop >= self.scrollTop && bottom > 0 && (scrollTop + windowHeight) >= (top + scrollTop + height - self.options.buffer)) {
                 revUtils.removeEventListener(window, 'scroll', self.scrollListener);
 
-                self.internalOffset = self.internalOffset ? self.internalOffset : self.innerWidget.internalLimit;
-                self.sponsoredOffset = self.sponsoredOffset ? self.sponsoredOffset : self.innerWidget.sponsoredLimit;
+                var promise = new Promise(function(resolve, reject) {
 
-                var rowData = self.innerWidget.createRows(self.innerWidget.grid, self.options.rows);
+                    var tryToCreateRows = function(retries) {
+                        try {
+                            var beforeItemCount = self.innerWidget.grid.items.length;
 
-                var urls = [];
+                            var rowData = self.innerWidget.createRows(self.innerWidget.grid, self.options.rows);
 
-                if (rowData.internalLimit > 0) {
-                    var internalURL = self.innerWidget.generateUrl(self.internalOffset, rowData.internalLimit, false, false, true);
-                    urls.push({
-                        offset: self.internalOffset,
-                        limit: rowData.internalLimit,
-                        url: internalURL,
-                        type: 'internal'
-                    });
-                    self.internalOffset += rowData.internalLimit;
-                }
+                            // if (self.testRetry > 0 && retries != 3) { // TEST
+                            //     throw new Error('Whoops!');
+                            // }
 
-                if (rowData.sponsoredLimit > 0) {
-                    var sponsoredURL = self.innerWidget.generateUrl(self.sponsoredOffset, rowData.sponsoredLimit, false, false, false);
-                    urls.push({
-                        offset: self.sponsoredOffset,
-                        limit: rowData.sponsoredLimit,
-                        url: sponsoredURL,
-                        type: 'sponsored'
-                    });
-                    self.sponsoredOffset += rowData.sponsoredLimit;
-                }
+                            setTimeout( function() {
+                                if (!self.removed) {
+                                    revUtils.addEventListener(window, 'scroll', self.scrollListener);
+                                }
+                            }, 150); // give it a rest before going back
 
-                this.promises = [];
-                for (var i = 0; i < urls.length; i++) {
-                    this.promises.push(new Promise(function(resolve, reject) {
-                        var url = urls[i];
-                        revApi.request(url.url, function(resp) {
-                            resolve({
-                                type: url.type,
-                                data: resp
-                            });
+                            resolve(rowData);
+                        } catch (e) { // remove items and try again
+                            // remove items TODO: wrap this in try
+                            var remove = self.innerWidget.grid.items.length - beforeItemCount;
+                            for (var i = 0; i < remove; i++) {
+                                var popped = self.innerWidget.grid.items.pop();
+                                popped.remove();
+                            }
+                            // try again
+                            if (retries > 0) {
+                                setTimeout(function() {
+                                    tryToCreateRows((retries - 1));
+                                }, 100);
+                            }
+                        }
+                    }
+
+                    try {
+                        tryToCreateRows(10); // retry 10 times
+                    } catch (e) {
+                        console.log('*************Feed', e);
+                    }
+                }).then(function(rowData) {
+                    var urls = [];
+
+                    if (rowData.internalLimit > 0) {
+                        var internalURL = self.innerWidget.generateUrl(self.internalOffset, rowData.internalLimit, false, false, true);
+                        urls.push({
+                            offset: self.internalOffset,
+                            limit: rowData.internalLimit,
+                            url: internalURL,
+                            type: 'internal'
                         });
-                    }));
-                }
+                        self.internalOffset += rowData.internalLimit;
+                    }
 
-                setTimeout( function() {
-                    revUtils.addEventListener(window, 'scroll', self.scrollListener);
-                }, 150); // give it a rest before going back
+                    if (rowData.sponsoredLimit > 0) {
+                        var sponsoredURL = self.innerWidget.generateUrl(self.sponsoredOffset, rowData.sponsoredLimit, false, false, false);
+                        urls.push({
+                            offset: self.sponsoredOffset,
+                            limit: rowData.sponsoredLimit,
+                            url: sponsoredURL,
+                            type: 'sponsored'
+                        });
+                        self.sponsoredOffset += rowData.sponsoredLimit;
+                    }
 
-                Promise.all(this.promises).then(function(data) {
-                    self.innerWidget.updateDisplayedItems(rowData.items, data);
-                    self.innerWidget.viewableItems = self.innerWidget.viewableItems.concat(rowData.items);
-                }, function(e) {
-                }).catch(function(e) {
-                    console.log(e);
-                });
+                    var promises = [];
+                    for (var i = 0; i < urls.length; i++) {
+                        promises.push(new Promise(function(resolve, reject) {
+                            var url = urls[i];
+                            revApi.request(url.url, function(resp) {
+                                resolve({
+                                    type: url.type,
+                                    data: resp
+                                });
+                            });
+                        }));
+                    }
+
+                    return Promise.all(promises).then(function(data) {
+                        return Promise.resolve({rowData: rowData, data: data});
+                    });
+
+                }).then(function(data) {
+
+                    var tryToUpdateDisplayedItems = function() {
+                        try {
+                            self.innerWidget.updateDisplayedItems(data.rowData.items, data.data);
+                            self.innerWidget.viewableItems = self.innerWidget.viewableItems.concat(data.rowData.items);
+                            return Promise.resolve(data);
+                        } catch (e) {
+                            setTimeout(function() {
+                                tryToUpdateDisplayedItems();
+                            }, 100)
+                        }
+                    }
+
+                    return tryToUpdateDisplayedItems();
+                })
+                // self.testRetry++;
             }
 
             self.scrollTop = scrollTop;
@@ -510,21 +582,6 @@ Author: michael@revcontent.com
         this.scrollListener = revUtils.throttle(scrollFunction, 60);
 
         revUtils.addEventListener(window, 'scroll', this.scrollListener);
-
-        this.innerWidget.emitter.on('removedItems', function(items) {
-            revUtils.removeEventListener(window, 'scroll', self.visibleListener);
-            revUtils.removeEventListener(window, 'scroll', self.scrollListener);
-
-            var el = items[0].element;
-            var remove = [el];
-            while (el= el.nextSibling) {
-                remove.push(el);
-            }
-
-            self.innerWidget.grid.remove(remove);
-
-            self.innerWidget.grid.layout();
-        });
     };
 
     Feed.prototype.checkVisible = function() {
