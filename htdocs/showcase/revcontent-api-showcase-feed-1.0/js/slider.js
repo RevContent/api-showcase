@@ -1722,6 +1722,12 @@ Author: michael@revcontent.com
                 anchor.setAttribute('href', url);
                 anchor.title = itemData.headline;
 
+                if (item.type == 'internal') {
+                    anchor.removeAttribute('target');
+                } else {
+                    anchor.setAttribute('target', '_blank');
+                }
+
                 this.setImage(item, item.element.querySelector('.rev-image'));
 
                 var headline = item.element.querySelector('.rev-headline');
