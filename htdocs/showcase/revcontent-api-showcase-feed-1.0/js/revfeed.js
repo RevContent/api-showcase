@@ -589,7 +589,7 @@ Author: michael@revcontent.com
 
         // params += 'id=' + encodeURIComponent(this.options.id); // debug/test
 
-        var params = 'view=' + encodeURIComponent(this.options.view);
+        var params = 'view=' + this.options.view;
 
         for (var i = 0; i < viewed.length; i++) {
             params += '&' + encodeURIComponent('p[]') + '=' + viewed[i].viewIndex;
