@@ -158,6 +158,8 @@ Author: michael@revcontent.com
 
     Feed.prototype.init = function() {
         this.emitter = new EventEmitter();
+        this.internalOffset = 0;
+        this.sponsoredOffset =0;
 
         this.element = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
 
@@ -175,6 +177,8 @@ Author: michael@revcontent.com
         if (!this.innerWidget.dataPromise) {
             return;
         }
+
+
 
         window.feedEasterEgg = function() {
             revApi.request( self.options.host + '/api/v1/engage/profile.php?', function(data) {
@@ -348,6 +352,7 @@ Author: michael@revcontent.com
     };
 
     Feed.prototype.createInnerWidget = function() {
+        var that = this;
         this.innerWidget = new RevSlider({
             mock: this.options.mock,
             api_source:   this.options.api_source,
@@ -358,6 +363,7 @@ Author: michael@revcontent.com
             pub_id:       this.options.pub_id,
             widget_id:    this.options.widget_id,
             domain:       this.options.domain,
+            topic_id:     this.options.topic_id,
             overlay_icons: this.options.overlay_icons, // pass in custom icons or overrides
             image_overlay: this.options.image_overlay, // pass key value object { content_type: icon }
             image_overlay_position: this.options.image_overlay_position, // center, top_left, top_right, bottom_right, bottom_left
@@ -404,6 +410,13 @@ Author: michael@revcontent.com
             breakpoints: this.options.breakpoints,
             masonry_layout: this.options.masonry_layout,
             img_host: this.options.img_host
+        },{
+            "refresh":function(topicId){
+                that.options.topic_id = topicId;
+                that.internalOffset = 0;
+                that.sponsoredOffset = 0;
+                that.createInnerWidget();
+            }
         });
     };
 

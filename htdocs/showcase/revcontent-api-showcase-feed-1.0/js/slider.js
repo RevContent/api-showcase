@@ -20,7 +20,7 @@ Author: michael@revcontent.com
 }( window, function factory(window, revUtils, revDetect, revApi, revDisclose) {
 'use strict';
 
-    var RevSlider = function(opts) {
+    var RevSlider = function(opts,handles) {
 
         var defaults = {
             impression_tracker: [],
@@ -172,6 +172,7 @@ Author: michael@revcontent.com
 
         // merge options
         this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
+        this.handlers = handles;
 
         // store options
         revUtils.storeUserOptions(this.options);
@@ -230,6 +231,7 @@ Author: michael@revcontent.com
 
         this.element = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
         this.element.style.width = '100%';
+        this.element.innerHTML="";
 
         revUtils.append(this.containerElement, this.innerContainerElement);
 
@@ -501,9 +503,9 @@ Author: michael@revcontent.com
 
             //  && i == patternTotal
             // @todo find replacement/correct var for patternTotal
-            if (this.authenticated && (!this.interestsCarouselVisible && i == 1)) {
+            if (!this.interestsCarouselVisible && i == 1) {
                 this.interestsCarouselVisible = true;
-                layoutItems = layoutItems.concat(this.appendInterestsCarousel(grid));
+                layoutItems = layoutItems.concat(this.appendInterestsCarousel(grid,this.authenticated));
                 i--;
                 continue;
             }
@@ -1562,6 +1564,12 @@ Author: michael@revcontent.com
         return list;
     }
 
+    RevSlider.prototype.reloadWidget = function(topicId){
+        if(this.handlers && this.handlers.refresh){
+            this.handlers.refresh(topicId);
+        }
+    };
+
     RevSlider.prototype.generateUrl = function(offset, count, empty, viewed, internal, below_article, fill) {
         var url = (this.options.host ? this.options.host + '/api/v1/' : this.options.url) +
         '?api_key=' + this.options.api_key +
@@ -1577,11 +1585,16 @@ Author: michael@revcontent.com
         '&sponsored_offset=' + (internal ? 0 : offset) +
         '&internal_offset=' + (internal ? offset : 0);
 
+        var topicId = this.options.topic_id;
+        if(topicId && topicId>0){
+            url +="&topic_id="+topicId;
+        }
+
         if (internal) {
             url += '&show_comments=1';
 
             var ignoreList = this.getIgnoreList(this.grid.items);
-            url+="&doc_ids="+ignoreList.join(",");
+            url +="&doc_ids="+ignoreList.join(",");
 
         }
 
@@ -2072,7 +2085,13 @@ Author: michael@revcontent.com
         }
     };
 
-    RevSlider.prototype.appendInterestsCarousel = function (grid) {
+    RevSlider.prototype.capitalize = function (str) {
+
+        return str.charAt(0).toUpperCase() + str.slice(1);
+
+    };
+
+    RevSlider.prototype.appendInterestsCarousel = function (grid,isLoggedin) {
         var that = this;
         var interest_cells = '';
 
@@ -2080,7 +2099,7 @@ Author: michael@revcontent.com
         interestsCarousel.className = 'rev-content';
         grid.element.appendChild(interestsCarousel);
 
-        revApi.request( that.options.host + '/api/v1/engage/getinterests.php?', function (data) {
+        revApi.request( that.options.host + '/api/v1/engage/getinterests.php?auth='+isLoggedin+"&d="+that.options.domain, function (data) {
 
             if(typeof data !== "object" || (typeof data == "object" && data.subscribed.length == 0)) {
                 interestsCarousel.setAttribute('style','margin:0!important;padding:0!important;height:0;border:0');
@@ -2118,8 +2137,14 @@ Author: michael@revcontent.com
                 interest_cells += the_cell;
             }
 
-            interestsCarousel.innerHTML = '<div><h1 style="font-size:17px;padding-left:9px">Content You Love' +
-                '<small style="font-size:12px;font-weight:normal;padding-left:15px;color:#777777"><sup>SIMILAR TOPICS</sup></small>' +
+            var cTitle = "Trending";
+            var cSubtitle = "On "+that.capitalize(that.extractRootDomain(window.location.href));
+            if(isLoggedin){
+                cTitle = "Content You Love";
+                cSubtitle = "SIMILAR TOPICS";
+            }
+            interestsCarousel.innerHTML = '<div><h1 style="font-size:17px;padding-left:9px">' + cTitle +
+                '<small style="font-size:12px;font-weight:normal;padding-left:15px;color:#777777"><sup>'+cSubtitle+'</sup></small>' +
                 '</h1>' +
                 '<div id="rev-feed-interests" class="feed-interests-carousel">' +
 
@@ -2160,7 +2185,9 @@ Author: michael@revcontent.com
                     }
                 }
 
-                if(target.classList.contains('cell-wrapper')){
+                if(target.classList.contains('cell-wrapper') || target.classList.contains('interest-title')){
+
+                    that.reloadWidget(parseInt(cellElement.getAttribute('data-id'), 10));
                     // Load an Explore Panel in "TOPIC" mode to show articles in that interest category...
                     // this.swipeToPanel('trending', target.getAttribute('data-slug'));
                     // -- DISABLE TOPIC "DIVE-IN" PANEL UNTIL OTHER FEATURES ARE COMPLETED
