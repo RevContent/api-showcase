@@ -1375,13 +1375,13 @@ Author: michael@revcontent.com
                     '<div class="rev-ad">' +
                         '<div class="rev-ad-container">' +
                             '<div class="rev-ad-outer">' +
-                                '<a href="" target="_blank">' +
+
                                     '<div class="rev-ad-inner">' +
                                         '<div class="rev-before-image">' +
                                             '<div class="rev-meta">' +
                                                 '<div class="rev-meta-inner">' +
-                                                    '<div class="rev-headline-icon-container"><div class="rev-headline-icon"></div></div>' +
-                                                    '<div class="rev-provider-date-container">' +
+                                                    '<div class="rev-headline-icon-container" style="cursor:pointer"><div class="rev-headline-icon"></div></div>' +
+                                                    '<div class="rev-provider-date-container" style="cursor:pointer">' +
                                                         '<div class="rev-provider"></div>' +
                                                         '<div class="rev-date"></div>' +
                                                     '</div>' +
@@ -1389,7 +1389,7 @@ Author: michael@revcontent.com
                                                 '</div>' +
                                             '</div>' +
                                         '</div>' +
-
+            '<a href="" target="_blank">' +
                                         '<div class="rev-image"></div>' +
 
                                         '<div class="rev-after-image">' +
@@ -1564,9 +1564,15 @@ Author: michael@revcontent.com
         return list;
     }
 
-    RevSlider.prototype.reloadWidget = function(topicId){
-        if(this.handlers && this.handlers.refresh){
-            this.handlers.refresh(topicId);
+    RevSlider.prototype.loadTopicFeed = function(topicId){
+        if(this.handlers && this.handlers.loadTopicFeed){
+            this.handlers.loadTopicFeed(topicId);
+        }
+    };
+
+    RevSlider.prototype.loadAuthorFeed = function(authorName){
+        if(this.handlers && this.handlers.loadAuthorFeed){
+            this.handlers.loadAuthorFeed(authorName);
         }
     };
 
@@ -1585,16 +1591,23 @@ Author: michael@revcontent.com
         '&sponsored_offset=' + (internal ? 0 : offset) +
         '&internal_offset=' + (internal ? offset : 0);
 
-        var topicId = this.options.topic_id;
-        if(topicId && topicId>0){
-            url +="&topic_id="+topicId;
-        }
+
+
 
         if (internal) {
             url += '&show_comments=1';
 
             var ignoreList = this.getIgnoreList(this.grid.items);
             url +="&doc_ids="+ignoreList.join(",");
+            var topicId = this.options.topic_id;
+            if(topicId && topicId>0){
+                url +="&topic_id="+topicId;
+            }
+            var authorName = this.options.author_name;
+            if(authorName && authorName.length>0){
+                url +="&author_name="+encodeURI(authorName);
+            }
+
 
         }
 
@@ -1698,7 +1711,7 @@ Author: michael@revcontent.com
         //     this.destroy();
         //     return;
         // }
-
+        var that = this;
         var itemTypes = {
             sponsored: [],
             internal: [],
@@ -1807,6 +1820,14 @@ Author: michael@revcontent.com
                         provider.innerHTML = itemData.brand ? itemData.brand : this.extractRootDomain(itemData.target_url);
                     } else if (item.type == 'internal' && itemData.author) {
                         provider.innerHTML = itemData.author;
+                        var authorElement = item.element.querySelector(".rev-provider-date-container");
+                        var authorImage = item.element.querySelector(".rev-headline-icon-container");
+                        var handle = (function(a){ return function(){
+                            that.loadAuthorFeed(a);}
+                        })(itemData.author);
+                        revUtils.addEventListener(authorElement, 'click',handle);
+                        revUtils.addEventListener(authorImage, 'click',handle);
+
                     }
                 }
 
@@ -2130,15 +2151,15 @@ Author: michael@revcontent.com
                 // $image property in interest object could be used as override if non-empty.
                 '<div style="' + (interest.image != '' ? 'background:transparent url(' + interest.image + ') top left no-repeat;background-size:cover;' : '') + '" class="carousel-cell interest-cell interest-' + interest.title.toLowerCase() + ' selected-interest"  data-id="' + interest.id + '" data-title="' + interest.title + '" data-interest="' + interest.title.toLowerCase() + '">' +
                     '<div class="cell-wrapper">' +
-                        '<span class="selector subscribed"></span>' +
+                    (that.authenticated?'<span class="selector subscribed"></span>':'') +
                         '<div class="interest-title ' + (interest.lightMode ? ' light-mode' : '') + '">' + interest.title + '</div>' +
                     '</div>' +
                 '</div>';
                 interest_cells += the_cell;
             }
 
-            var cTitle = "Trending";
-            var cSubtitle = "On "+that.capitalize(that.extractRootDomain(window.location.href));
+            var cTitle = "Trending On "+that.capitalize(that.extractRootDomain(window.location.href));;
+            var cSubtitle = "";
             if(isLoggedin){
                 cTitle = "Content You Love";
                 cSubtitle = "SIMILAR TOPICS";
@@ -2185,9 +2206,11 @@ Author: michael@revcontent.com
                     }
                 }
 
+
+
                 if(target.classList.contains('cell-wrapper') || target.classList.contains('interest-title')){
 
-                    that.reloadWidget(parseInt(cellElement.getAttribute('data-id'), 10));
+                    that.loadTopicFeed(parseInt(cellElement.getAttribute('data-id'), 10));
                     // Load an Explore Panel in "TOPIC" mode to show articles in that interest category...
                     // this.swipeToPanel('trending', target.getAttribute('data-slug'));
                     // -- DISABLE TOPIC "DIVE-IN" PANEL UNTIL OTHER FEATURES ARE COMPLETED

@@ -94,6 +94,7 @@ Author: michael@revcontent.com
             initial_sponsored: 1,
             masonry_layout: false,
             img_host: 'https://img.engage.im',
+            author_name:''
         };
 
         if (opts.masonry_layout) { // they wan't masonry, provide a masonry per_row default
@@ -409,15 +410,26 @@ Author: michael@revcontent.com
             disclosure_interest_height: this.options.disclosure_interest_height,
             breakpoints: this.options.breakpoints,
             masonry_layout: this.options.masonry_layout,
-            img_host: this.options.img_host
+            img_host: this.options.img_host,
+            author_name: this.options.author_name
         },{
-            "refresh":function(topicId){
+            "loadTopicFeed":function(topicId){
+                that.options.author_name = '';
                 that.options.topic_id = topicId;
                 that.internalOffset = 0;
                 that.sponsoredOffset = 0;
                 that.createInnerWidget();
                 that.infinite();
+            },
+            "loadAuthorFeed":function(authorName){
+                that.options.author_name = authorName;
+                that.options.topic_id = -1;
+                that.internalOffset = 0;
+                that.sponsoredOffset = 0;
+                that.createInnerWidget();
+                that.infinite();
             }
+
         });
     };
 
