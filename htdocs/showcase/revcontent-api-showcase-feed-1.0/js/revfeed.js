@@ -426,6 +426,7 @@ Author: michael@revcontent.com
             breakpoints: this.options.breakpoints,
             masonry_layout: this.options.masonry_layout,
             img_host: this.options.img_host,
+            view: this.options.view,
             user: this.options.user,
             content: this.options.content,
             columns: this.options.columns
