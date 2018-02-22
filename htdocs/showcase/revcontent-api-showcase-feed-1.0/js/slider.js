@@ -167,7 +167,10 @@ Author: michael@revcontent.com
             disclosure_about_height: 575,
             disclosure_interest_src: '//trends.engage.im/engage-interests.php',
             disclosure_interest_height: 520,
-            masonry_layout: false
+            masonry_layout: false,
+            user: null,
+            content: [],
+            columns: 1
         };
 
         // merge options
@@ -270,7 +273,7 @@ Author: michael@revcontent.com
             count: 0
         };
 
-        this.authenticated = false;
+        this.authenticated = this.options.user ? true : null;
 
         this.queue = [];
         this.queueRetries = 0;
@@ -305,10 +308,7 @@ Author: michael@revcontent.com
                     var totaltime = ((new Date().getTime() - starttime) + time);
 
                     var finishPersonalize = function() {
-                        that.updateDisplayedItems(that.grid.items, [{
-                            type: 'internal',
-                            data: resp
-                        }]);
+                        that.updateDisplayedItems(that.grid.items, resp, true);
                         that.closePersonalizedTransition();
                     }
 
@@ -527,7 +527,7 @@ Author: michael@revcontent.com
             internalLimit: internalLimit,
             sponsoredLimit: sponsoredLimit
         }
-    }
+    };
 
     RevSlider.prototype.appendfeedAuthButton = function(grid) {
         this.feedAuthButton = document.createElement('div');
@@ -1171,7 +1171,7 @@ Author: michael@revcontent.com
     RevSlider.prototype.gridOptions = function() {
         return {
             isInitLayout: false,
-            perRow: this.options.per_row,
+            perRow: this.options.columns,
             transitionDuration: this.options.transition_duration,
             isResizeBound: this.options.is_resize_bound,
             adjustGutter: true,
@@ -1557,10 +1557,10 @@ Author: michael@revcontent.com
 
         this.dataPromise = new Promise(function(resolve, reject) {
 
-            var tryToCreateRows = function(response) {
+            var tryToCreateRows = function(authenticated, retries) {
                 try {
                     var rowData = that.createRows(that.grid);
-                    resolve({authenticated: response, rowData: rowData});
+                    resolve({authenticated: authenticated, rowData: rowData});
                 } catch (e) {
                     // TODO test
                     while(that.grid.items.length) {
@@ -1568,35 +1568,49 @@ Author: michael@revcontent.com
                         popped.remove();
                     }
 
-                    setTimeout(function() {
-                        tryToCreateRows(response);
-                    }, 100);
+                    if (retries > 0) {
+                        setTimeout(function() {
+                            tryToCreateRows(authenticated, (retries - 1));
+                        }, 100);
+                    }
                 }
             }
 
-            that.isAuthenticated(function(response) {
-
+            var initAuthenticated = function(authenticated) {
                 try {
-                    if (response === true) {
+                    if (authenticated === true) {
                         that.updateAuthElements();
                     }
 
-                    tryToCreateRows(response);
+                    tryToCreateRows(authenticated, 10);
                 } catch (e) {
                     console.log('*************Feed', e);
                     reject();
                 }
-            });
+            }
+
+            if (that.authenticated === null) {
+                that.isAuthenticated(function(authenticated) {
+                    initAuthenticated(authenticated);
+                });
+            } else {
+                initAuthenticated(that.authenticated);
+            }
         }).then(function(data) {
             return new Promise(function(resolve, reject) {
-                revApi.request(that.generateUrl(0, data.rowData.internalLimit, 0, data.rowData.sponsoredLimit), function(apiData) {
-                    if (!apiData.length) {
-                        reject();
-                        return;
-                    }
-                    data.data = apiData;
+                if (that.options.content.length) {
+                    data.data = that.options.content;
                     resolve(data);
-                })
+                } else {
+                    revApi.request(that.generateUrl(0, data.rowData.internalLimit, 0, data.rowData.sponsoredLimit), function(apiData) {
+                        if (!apiData.length) {
+                            reject();
+                            return;
+                        }
+                        data.data = apiData;
+                        resolve(data);
+                    });
+                }
             });
         }, function() {
             return false;
@@ -1605,8 +1619,7 @@ Author: michael@revcontent.com
         }).then(function(data) {
             var tryToUpdateDisplayedItems = function() {
                 try {
-                    that.updateDisplayedItems(that.grid.items, data.data);
-                    that.viewableItems = data.rowData.items;
+                    that.viewableItems = that.updateDisplayedItems(data.rowData.items, data.data);
                     return Promise.resolve(data);
                 } catch (e) {
                     setTimeout(function() {
@@ -1851,8 +1864,7 @@ Author: michael@revcontent.com
         }
     };
 
-
-    RevSlider.prototype.updateDisplayedItems = function(items, data) {
+    RevSlider.prototype.updateDisplayedItems = function(items, data, passive) {
         // if (!this.data.length) { // if no data remove the container and call it a day
         //     this.destroy();
         //     return;
@@ -1865,6 +1877,7 @@ Author: michael@revcontent.com
         }
 
         var removeItems = [];
+        var viewableItems = [];
 
         itemloop:
         for (var i = 0; i < items.length; i++) {
@@ -1872,9 +1885,10 @@ Author: michael@revcontent.com
             if (item.type) {
                 for (var j = 0; j < data.length; j++) {
                     if (item.type == data[j].type) {
-                        item.viewIndex = j;
+                        item.viewIndex = i;
                         item.data = data[j];
                         this.updateDisplayedItem(item);
+                        viewableItems.push(item);
                         data.splice(j, 1);
                         continue itemloop;
                     }
@@ -1901,9 +1915,11 @@ Author: michael@revcontent.com
             }
         }
 
-        if (removeItems.length) {
+        if (removeItems.length && passive !== true) {
             this.emitter.emitEvent('removedItems', [removeItems]);
         }
+
+        return viewableItems;
     };
 
     RevSlider.prototype.updateAuthElements = function() {

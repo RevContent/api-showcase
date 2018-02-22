@@ -94,6 +94,10 @@ Author: michael@revcontent.com
             initial_sponsored: 1,
             masonry_layout: false,
             img_host: 'https://img.engage.im',
+            user: null,
+            content: [],
+            columns: 1,
+            view: false
         };
 
         if (opts.masonry_layout) { // they wan't masonry, provide a masonry per_row default
@@ -175,7 +179,6 @@ Author: michael@revcontent.com
         this.innerWidget.emitter.on('removedItems', function(items) {
             self.removed = true;
 
-            revUtils.removeEventListener(window, 'scroll', self.visibleListener);
             revUtils.removeEventListener(window, 'scroll', self.scrollListener);
 
             for (var i = 0; i < items.length; i++) {
@@ -210,14 +213,14 @@ Author: michael@revcontent.com
                 //     });
                 // }
 
-                if (self.options.infinite) {
+                if (self.options.infinite && !self.removed) {
                     self.infinite();
                 }
 
                 if (self.viewed.length) {
                     self.registerView(self.viewed);
                 }
-                self.visibleListener = self.checkVisible.bind(self);
+                self.visibleListener = revUtils.throttle(self.checkVisible.bind(self), 30);
                 revUtils.addEventListener(window, 'scroll', self.visibleListener);
             }, function() {
                 console.log('*************Feed', 'something went wrong');
@@ -422,7 +425,10 @@ Author: michael@revcontent.com
             disclosure_interest_height: this.options.disclosure_interest_height,
             breakpoints: this.options.breakpoints,
             masonry_layout: this.options.masonry_layout,
-            img_host: this.options.img_host
+            img_host: this.options.img_host,
+            user: this.options.user,
+            content: this.options.content,
+            columns: this.options.columns
         });
     };
 
@@ -517,8 +523,6 @@ Author: michael@revcontent.com
                     }
                 }).then(function(rowData) {
 
-                    console.log(rowData);
-
                     self.internalOffset += rowData.internalLimit;
 
                     self.sponsoredOffset += rowData.sponsoredLimit;
@@ -535,8 +539,8 @@ Author: michael@revcontent.com
                 }).then(function(data) {
                     var tryToUpdateDisplayedItems = function() {
                         try {
-                            self.innerWidget.updateDisplayedItems(data.rowData.items, data.data);
-                            self.innerWidget.viewableItems = self.innerWidget.viewableItems.concat(data.rowData.items);
+                            var viewableItems = self.innerWidget.updateDisplayedItems(data.rowData.items, data.data);
+                            self.innerWidget.viewableItems = self.innerWidget.viewableItems.concat(viewableItems);
                             return Promise.resolve(data);
                         } catch (e) {
                             setTimeout(function() {
@@ -567,9 +571,9 @@ Author: michael@revcontent.com
                     if(index != -1) {
                         self.innerWidget.viewableItems.splice(index, 1);
 
-                        // if (!self.viewable.length) {
-                        //     revUtils.removeEventListener(window, 'scroll', self.visibleListener);
-                        // }
+                        if (!self.innerWidget.viewableItems.length && self.removed) {
+                            revUtils.removeEventListener(window, 'scroll', self.visibleListener);
+                        }
                         self.registerView([item]);
                     }
                 }
@@ -579,17 +583,13 @@ Author: michael@revcontent.com
 
     Feed.prototype.registerView = function(viewed) {
 
-        var view = viewed[0].data.view;
-
-        if (!view) { // safety first, if the first one doesn't have data none should
+        if (!this.options.view) { // safety first, if the first one doesn't have data none should
             return;
         }
 
-        // var params = 'api_source=' + (viewed[0].initial ? 'ba_' : '') + this.options.api_source;
-
         // params += 'id=' + encodeURIComponent(this.options.id); // debug/test
 
-        var params = 'view=' + view;
+        var params = 'view=' + encodeURIComponent(this.options.view);
 
         for (var i = 0; i < viewed.length; i++) {
             params += '&' + encodeURIComponent('p[]') + '=' + viewed[i].viewIndex;

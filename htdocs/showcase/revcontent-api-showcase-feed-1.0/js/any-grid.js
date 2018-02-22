@@ -382,7 +382,7 @@ AnyGrid.prototype._getItemLayoutPosition = function( item ) {
             x: false,
             y: false
         }
-    } else if (this.options.masonry) {
+    } else { // masonry
         item.getSize();
 
         var column = this.index % this.columns.length;
