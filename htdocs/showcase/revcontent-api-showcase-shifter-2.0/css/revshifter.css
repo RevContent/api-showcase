@@ -42,6 +42,8 @@ body.rev-shifter-no-transform #rev-shifter.rev-shifter {
     background: #fff;
     padding: 5px;
     z-index: 100;
+    overflow-y: auto;
+    max-height: 29vh;
 }
 
 #rev-shifter.rev-shifter.bottom {
