@@ -583,13 +583,15 @@ Author: michael@revcontent.com
 
     Feed.prototype.registerView = function(viewed) {
 
-        if (!this.options.view) { // safety first, if the first one doesn't have data none should
+        var view = viewed[0].view;
+
+        if (!view) { // safety first, if the first one doesn't have data none should
             return;
         }
 
         // params += 'id=' + encodeURIComponent(this.options.id); // debug/test
 
-        var params = 'view=' + this.options.view;
+        var params = 'view=' + view;
 
         for (var i = 0; i < viewed.length; i++) {
             params += '&' + encodeURIComponent('p[]') + '=' + viewed[i].viewIndex;
