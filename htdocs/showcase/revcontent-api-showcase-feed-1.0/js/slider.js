@@ -1375,7 +1375,7 @@ Author: michael@revcontent.com
                     '<div class="rev-ad">' +
                         '<div class="rev-ad-container">' +
                             '<div class="rev-ad-outer">' +
-
+                                '<a href="" target="_blank">' +
                                     '<div class="rev-ad-inner">' +
                                         '<div class="rev-before-image">' +
                                             '<div class="rev-meta">' +
@@ -1389,7 +1389,7 @@ Author: michael@revcontent.com
                                                 '</div>' +
                                             '</div>' +
                                         '</div>' +
-            '<a href="" target="_blank">' +
+
                                         '<div class="rev-image"></div>' +
 
                                         '<div class="rev-after-image">' +
@@ -1822,11 +1822,14 @@ Author: michael@revcontent.com
                         provider.innerHTML = itemData.author;
                         var authorElement = item.element.querySelector(".rev-provider-date-container");
                         var authorImage = item.element.querySelector(".rev-headline-icon-container");
-                        var handle = (function(a){ return function(){
-                            that.loadAuthorFeed(a);}
+                        var handle = (function(a){ return function(e){
+                            e.stopPropagation();
+                            e.preventDefault();
+                            that.loadAuthorFeed(a);
+                        }
                         })(itemData.author);
-                        revUtils.addEventListener(authorElement, 'click',handle);
-                        revUtils.addEventListener(authorImage, 'click',handle);
+                        revUtils.addEventListener(authorElement, 'click',handle,{passive:false});
+                        revUtils.addEventListener(authorImage, 'click',handle,{passive:false});
 
                     }
                 }
