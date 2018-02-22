@@ -416,6 +416,7 @@ Author: michael@revcontent.com
                 that.internalOffset = 0;
                 that.sponsoredOffset = 0;
                 that.createInnerWidget();
+                that.infinite();
             }
         });
     };
@@ -542,7 +543,7 @@ Author: michael@revcontent.com
 
     Feed.prototype.checkVisible = function() {
         var self = this;
-        for (var i = 0; i < this.innerWidget.viewableItems.length; i++) {
+        for (var i = 0; this.innerWidget.viewableItems && i < this.innerWidget.viewableItems.length; i++) {
             revUtils.checkVisibleItem(this.innerWidget.viewableItems[i], function(viewed, item) {
                 if (viewed) {
                     var index = self.innerWidget.viewableItems.indexOf(item);
