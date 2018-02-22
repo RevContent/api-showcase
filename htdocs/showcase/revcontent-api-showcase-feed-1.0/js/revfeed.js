@@ -529,7 +529,7 @@ Author: michael@revcontent.com
 
                     return new Promise(function(resolve, reject) {
                         revApi.request(self.innerWidget.generateUrl(self.internalOffset, rowData.internalLimit, self.sponsoredOffset, rowData.sponsoredLimit), function(data) {
-                            if (!data.length) {
+                            if (!data.content.length) {
                                 reject();
                                 return;
                             }

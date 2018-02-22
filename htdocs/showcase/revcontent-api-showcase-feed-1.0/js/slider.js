@@ -1598,12 +1598,13 @@ Author: michael@revcontent.com
             }
         }).then(function(data) {
             return new Promise(function(resolve, reject) {
-                if (that.options.content.length) {
-                    data.data = that.options.content;
+                if (that.options.content.length && that.options.view) {
+                    data.data = { content: that.options.content, view: that.options.view };
                     resolve(data);
                 } else {
                     revApi.request(that.generateUrl(0, data.rowData.internalLimit, 0, data.rowData.sponsoredLimit), function(apiData) {
-                        if (!apiData.length) {
+
+                        if (!apiData.content.length) {
                             reject();
                             return;
                         }
@@ -1870,6 +1871,8 @@ Author: michael@revcontent.com
         //     return;
         // }
 
+        var view = data.view;
+
         var itemTypes = {
             sponsored: [],
             internal: [],
@@ -1883,13 +1886,14 @@ Author: michael@revcontent.com
         for (var i = 0; i < items.length; i++) {
             var item = items[i];
             if (item.type) {
-                for (var j = 0; j < data.length; j++) {
-                    if (item.type == data[j].type) {
+                for (var j = 0; j < data.content.length; j++) {
+                    if (item.type == data.content[j].type) {
+                        item.view = view;
                         item.viewIndex = i;
-                        item.data = data[j];
+                        item.data = data.content[j];
                         this.updateDisplayedItem(item);
                         viewableItems.push(item);
-                        data.splice(j, 1);
+                        data.content.splice(j, 1);
                         continue itemloop;
                     }
                 }
