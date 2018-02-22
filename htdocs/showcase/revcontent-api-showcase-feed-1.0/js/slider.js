@@ -2167,7 +2167,7 @@ Author: michael@revcontent.com
                 cTitle = "Content You Love";
                 cSubtitle = "SIMILAR TOPICS";
             }
-            interestsCarousel.innerHTML = '<div><h1 style="font-size:17px;padding-left:9px">' + cTitle +
+            interestsCarousel.innerHTML = '<div><h1 style="font-size:17px;">' + cTitle +
                 '<small style="font-size:12px;font-weight:normal;padding-left:15px;color:#777777"><sup>'+cSubtitle+'</sup></small>' +
                 '</h1>' +
                 '<div id="rev-feed-interests" class="feed-interests-carousel">' +
