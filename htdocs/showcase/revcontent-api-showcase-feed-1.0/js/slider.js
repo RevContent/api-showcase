@@ -1557,10 +1557,10 @@ Author: michael@revcontent.com
 
         this.dataPromise = new Promise(function(resolve, reject) {
 
-            var tryToCreateRows = function(authenticated, retries) {
+            var tryToCreateRows = function(retries) {
                 try {
                     var rowData = that.createRows(that.grid);
-                    resolve({authenticated: authenticated, rowData: rowData});
+                    resolve({authenticated: that.authenticated, rowData: rowData});
                 } catch (e) {
                     // TODO test
                     while(that.grid.items.length) {
@@ -1570,19 +1570,19 @@ Author: michael@revcontent.com
 
                     if (retries > 0) {
                         setTimeout(function() {
-                            tryToCreateRows(authenticated, (retries - 1));
+                            tryToCreateRows((retries - 1));
                         }, 100);
                     }
                 }
             }
 
-            var initAuthenticated = function(authenticated) {
+            var initAuthenticated = function() {
                 try {
-                    if (authenticated === true) {
+                    if (that.authenticated === true) {
                         that.updateAuthElements();
                     }
 
-                    tryToCreateRows(authenticated, 10);
+                    tryToCreateRows(10);
                 } catch (e) {
                     console.log('*************Feed', e);
                     reject();
@@ -1591,10 +1591,10 @@ Author: michael@revcontent.com
 
             if (that.authenticated === null) {
                 that.isAuthenticated(function(authenticated) {
-                    initAuthenticated(authenticated);
+                    initAuthenticated();
                 });
             } else {
-                initAuthenticated(that.authenticated);
+                initAuthenticated();
             }
         }).then(function(data) {
             return new Promise(function(resolve, reject) {
