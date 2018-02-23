@@ -528,11 +528,6 @@ Author: michael@revcontent.com
                         console.log('*************Feed', e);
                     }
                 }).then(function(rowData) {
-
-                    self.internalOffset += rowData.internalLimit;
-
-                    self.sponsoredOffset += rowData.sponsoredLimit;
-
                     return new Promise(function(resolve, reject) {
                         revApi.request(self.innerWidget.generateUrl(self.internalOffset, rowData.internalLimit, self.sponsoredOffset, rowData.sponsoredLimit), function(data) {
                             if (!data.content.length) {
@@ -547,6 +542,10 @@ Author: michael@revcontent.com
                         try {
                             var itemTypes = self.innerWidget.updateDisplayedItems(data.rowData.items, data.data);
                             self.viewableItems = self.viewableItems.concat(itemTypes.viewableItems);
+
+                            self.internalOffset += data.rowData.internalLimit;
+                            self.sponsoredOffset += data.rowData.sponsoredLimit;
+
                             return Promise.resolve(data);
                         } catch (e) {
                             if (retries > 0) {
