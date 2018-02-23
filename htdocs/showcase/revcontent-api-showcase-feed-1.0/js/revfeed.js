@@ -122,7 +122,7 @@ Author: michael@revcontent.com
             if (this.options.initial_sponsored || this.options.sponsored) { // we have sponsored, determine what should be internal
 
                 for (var i = 1; i <= this.options.initial_internal; i++) { // initial internal using nth-child
-                    this.options.internal_selector += '.rev-content:nth-child('+ i +'),';
+                    this.options.internal_selector += 'article:nth-of-type('+ i +'),';
                 }
 
                 // internal starts up again
@@ -130,16 +130,16 @@ Author: michael@revcontent.com
 
                 if (this.options.sponsored) { // pattern for sponsored based on internal
                     for (var i = 1; i <= this.options.internal; i++) {
-                        this.options.internal_selector += '.rev-content:nth-child('+ (this.options.internal + this.options.sponsored) +'n + '+ start +'),';
+                        this.options.internal_selector += 'article:nth-of-type('+ (this.options.internal + this.options.sponsored) +'n + '+ start +'),';
                         start++;
                     }
                 } else if (this.options.initial_sponsored) { // only inital sponsored so everything after start will be internal
-                    this.options.internal_selector += '.rev-content:nth-child(n+'+ start +'),';
+                    this.options.internal_selector += 'article:nth-of-type(n+'+ start +'),';
                 }
                 // trim comma
                 this.options.internal_selector = this.options.internal_selector.slice(0, -1);
             } else { // everything is internal
-                this.options.internal_selector = '.rev-content';
+                this.options.internal_selector = 'article';
             }
         }
 

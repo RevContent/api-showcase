@@ -1403,7 +1403,7 @@ Author: michael@revcontent.com
 
         '</div>';
 
-        var cell = document.createElement('div');
+        var cell = document.createElement('article');
         cell.className = 'rev-content';
         cell.innerHTML = html;
 
