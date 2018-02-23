@@ -161,8 +161,6 @@ Author: michael@revcontent.com
     };
 
     Feed.prototype.init = function() {
-        this.emitter = new EventEmitter();
-
         this.element = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
 
         this.containerElement = document.createElement('div');
@@ -201,6 +199,13 @@ Author: michael@revcontent.com
         };
 
         this.innerWidget.dataPromise.then(function(data) {
+
+            self.viewableItems = [];
+            for (var i = 0; i < data.rowData.items.length; i++) {
+                if (data.rowData.items[i].view) {
+                    self.viewableItems.push(data.rowData.items[i]);
+                }
+            }
 
             self.internalOffset = data.rowData.internalLimit;
             self.sponsoredOffset = data.rowData.sponsoredLimit;
@@ -439,18 +444,18 @@ Author: michael@revcontent.com
         var self = this;
 
         return new Promise(function(resolve, reject) {
-            var total = self.innerWidget.viewableItems.length;
+            var total = self.viewableItems.length;
             var count = 0;
-            for (var i = 0; i < self.innerWidget.viewableItems.length; i++) {
-                revUtils.checkVisibleItem(self.innerWidget.viewableItems[i], function(viewed, item) {
+            for (var i = 0; i < self.viewableItems.length; i++) {
+                revUtils.checkVisibleItem(self.viewableItems[i], function(viewed, item) {
                     count++;
                     if (count == total) {
                         resolve();
                     }
                     if (viewed) {
-                        var index = self.innerWidget.viewableItems.indexOf(item);
+                        var index = self.viewableItems.indexOf(item);
                         if(index != -1) {
-                            self.innerWidget.viewableItems.splice(index, 1);
+                            self.viewableItems.splice(index, 1);
                         }
                         self.viewed.push(item);
                     }
@@ -538,19 +543,21 @@ Author: michael@revcontent.com
                         })
                     });
                 }).then(function(data) {
-                    var tryToUpdateDisplayedItems = function() {
+                    var tryToUpdateDisplayedItems = function(retries) {
                         try {
-                            var viewableItems = self.innerWidget.updateDisplayedItems(data.rowData.items, data.data);
-                            self.innerWidget.viewableItems = self.innerWidget.viewableItems.concat(viewableItems);
+                            var itemTypes = self.innerWidget.updateDisplayedItems(data.rowData.items, data.data);
+                            self.viewableItems = self.viewableItems.concat(itemTypes.viewableItems);
                             return Promise.resolve(data);
                         } catch (e) {
-                            setTimeout(function() {
-                                tryToUpdateDisplayedItems();
-                            }, 100)
+                            if (retries > 0) {
+                                setTimeout(function() {
+                                    tryToUpdateDisplayedItems((retries - 1));
+                                }, 100)
+                            }
                         }
                     }
 
-                    return tryToUpdateDisplayedItems();
+                    return tryToUpdateDisplayedItems(10);
                 })
                 // self.testRetry++;
             }
@@ -565,14 +572,14 @@ Author: michael@revcontent.com
 
     Feed.prototype.checkVisible = function() {
         var self = this;
-        for (var i = 0; i < this.innerWidget.viewableItems.length; i++) {
-            revUtils.checkVisibleItem(this.innerWidget.viewableItems[i], function(viewed, item) {
+        for (var i = 0; i < this.viewableItems.length; i++) {
+            revUtils.checkVisibleItem(this.viewableItems[i], function(viewed, item) {
                 if (viewed) {
-                    var index = self.innerWidget.viewableItems.indexOf(item);
+                    var index = self.viewableItems.indexOf(item);
                     if(index != -1) {
-                        self.innerWidget.viewableItems.splice(index, 1);
+                        self.viewableItems.splice(index, 1);
 
-                        if (!self.innerWidget.viewableItems.length && self.removed) {
+                        if (!self.viewableItems.length && self.removed) {
                             revUtils.removeEventListener(window, 'scroll', self.visibleListener);
                         }
                         self.registerView([item]);

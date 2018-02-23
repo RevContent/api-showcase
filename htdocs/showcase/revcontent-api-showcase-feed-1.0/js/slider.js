@@ -1599,6 +1599,7 @@ Author: michael@revcontent.com
         }).then(function(data) {
             return new Promise(function(resolve, reject) {
                 if (that.options.content.length && that.options.view) {
+                    data.initial_content_mode = true;
                     data.data = { content: that.options.content, view: that.options.view };
                     resolve(data);
                 } else {
@@ -1618,19 +1619,78 @@ Author: michael@revcontent.com
         }).catch(function(e) {
             console.log(e);
         }).then(function(data) {
-            var tryToUpdateDisplayedItems = function() {
+
+            var tryToUpdateDisplayedItems = function(retries, items, data, passive) {
                 try {
-                    that.viewableItems = that.updateDisplayedItems(data.rowData.items, data.data);
-                    return Promise.resolve(data);
+                    return Promise.resolve(that.updateDisplayedItems(items, data, passive));
                 } catch (e) {
-                    setTimeout(function() {
-                        tryToUpdateDisplayedItems();
-                    }, 100)
+                    console.log('*************Feed', e);
+                    if (retries > 0) {
+                        setTimeout(function() {
+                            tryToUpdateDisplayedItems((retries - 1));
+                        }, 100)
+                    }
                 }
             }
 
-            return tryToUpdateDisplayedItems();
+            return new Promise(function(resolve, reject) {
 
+                if (data.initial_content_mode) {
+                    // update passive and retry if not matching
+                    tryToUpdateDisplayedItems(10, data.rowData.items, data.data, true).then(function(itemTypes) {
+
+                        if (itemTypes.removeItems.length) { // try to fill any discrepencies
+
+                            var actualInternalOffset = 0;
+                            var actualSponsoredOffset = 0;
+
+                            var missInternalCount = 0;
+                            var missSponsoredCount = 0;
+
+                            for (var i = 0; i < itemTypes.viewableItems.length; i++) {
+                                switch(itemTypes.viewableItems[i].type) {
+                                    case 'internal':
+                                        actualInternalOffset++;
+                                        break;
+                                    case 'sponsored':
+                                        actualSponsoredOffset++;
+                                        break;
+                                }
+                            }
+
+                            for (var i = 0; i < itemTypes.removeItems.length; i++) {
+                                switch(itemTypes.removeItems[i].type) {
+                                    case 'internal':
+                                        missInternalCount++;
+                                        break;
+                                    case 'sponsored':
+                                        missSponsoredCount++;
+                                        break;
+                                }
+                            }
+
+                            revApi.request(that.generateUrl(actualInternalOffset, missInternalCount, actualSponsoredOffset, missSponsoredCount), function(apiData) {
+
+                                if (!apiData.content.length) {
+                                    reject();
+                                    return;
+                                };
+
+                                tryToUpdateDisplayedItems(10, itemTypes.removeItems, apiData).then(function() {
+                                    resolve(data);
+                                })
+                            });
+                        } else {
+                            resolve(data);
+                        }
+
+                    })
+                } else {
+                    tryToUpdateDisplayedItems(10, data.rowData.items, data.data).then(function() {
+                        resolve(data);
+                    });
+                }
+            })
         }, function(e) {
             that.destroy();
         }).catch(function(e) {
@@ -1872,6 +1932,7 @@ Author: michael@revcontent.com
         // }
 
         var view = data.view;
+        var content = data.content;
 
         var itemTypes = {
             sponsored: [],
@@ -1886,14 +1947,14 @@ Author: michael@revcontent.com
         for (var i = 0; i < items.length; i++) {
             var item = items[i];
             if (item.type) {
-                for (var j = 0; j < data.content.length; j++) {
-                    if (item.type == data.content[j].type) {
+                for (var j = 0; j < content.length; j++) {
+                    if (item.type == content[j].type) {
                         item.view = view;
                         item.viewIndex = i;
-                        item.data = data.content[j];
+                        item.data = content[j];
                         this.updateDisplayedItem(item);
                         viewableItems.push(item);
-                        data.content.splice(j, 1);
+                        content.splice(j, 1);
                         continue itemloop;
                     }
                 }
@@ -1923,7 +1984,10 @@ Author: michael@revcontent.com
             this.emitter.emitEvent('removedItems', [removeItems]);
         }
 
-        return viewableItems;
+        return {
+            viewableItems: viewableItems,
+            removeItems: removeItems
+        }
     };
 
     RevSlider.prototype.updateAuthElements = function() {
