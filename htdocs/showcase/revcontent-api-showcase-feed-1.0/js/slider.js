@@ -233,6 +233,13 @@ Author: michael@revcontent.com
         this.element.style.width = '100%';
         this.element.innerHTML="";
 
+        if(this.options.history_stack.length>0){
+            var back = document.createElement('button');
+            back.innerHTML = "Back";
+            this.containerElement.appendChild(back);
+            revUtils.addEventListener(back,'click',this.handlers.back);
+        }
+
         revUtils.append(this.containerElement, this.innerContainerElement);
 
         revUtils.append(this.innerContainerElement, this.innerElement);

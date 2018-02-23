@@ -97,6 +97,9 @@ Author: michael@revcontent.com
             author_name:''
         };
 
+
+        this.historyStack = [];
+
         if (opts.masonry_layout) { // they wan't masonry, provide a masonry per_row default
             defaults.per_row = {
                 xxs: 1,
@@ -329,6 +332,32 @@ Author: michael@revcontent.com
 
     };
 
+    Feed.prototype.pushHistory = function(){
+        this.historyStack.push([{
+            author_name:this.options.author_name,
+            topic_id:this.options.topic_id
+        }]);
+    };
+
+    Feed.prototype.loadFromHistory = function(){
+        if(this.historyStack.length>0){
+            var item = this.historyStack.pop();
+            if(item.topic_id>0){
+                this.innerWidget.loadTopicFeed(item.topic_id,true);
+            }
+            else if(item.author_name && item.author_name.length>0){
+                this.innerWidget.loadAuthorFeed(item.author_name, true);
+            }else{
+                this.options.author_name ='';
+                this.options.topic_id = -1;
+                this.internalOffset = 0;
+                this.sponsoredOffset = 0;
+                this.createInnerWidget();
+                this.infinite();
+            }
+
+        }
+    };
 
     Feed.prototype.windowWidth = function() {
 
@@ -411,23 +440,32 @@ Author: michael@revcontent.com
             breakpoints: this.options.breakpoints,
             masonry_layout: this.options.masonry_layout,
             img_host: this.options.img_host,
-            author_name: this.options.author_name
+            author_name: this.options.author_name,
+            history_stack:that.historyStack
         },{
-            "loadTopicFeed":function(topicId){
+            "loadTopicFeed":function(topicId, withoutHistory){
+                if(!withoutHistory) that.pushHistory();
                 that.options.author_name = '';
                 that.options.topic_id = topicId;
                 that.internalOffset = 0;
                 that.sponsoredOffset = 0;
                 that.createInnerWidget();
                 that.infinite();
+
+
             },
-            "loadAuthorFeed":function(authorName){
+            "loadAuthorFeed":function(authorName, withoutHistory){
+                if(!withoutHistory) that.pushHistory();
                 that.options.author_name = authorName;
                 that.options.topic_id = -1;
                 that.internalOffset = 0;
                 that.sponsoredOffset = 0;
                 that.createInnerWidget();
                 that.infinite();
+
+            },
+            "back":function () {
+                that.loadFromHistory();
             }
 
         });
