@@ -53,7 +53,7 @@ Author: michael@revcontent.com
             auto_scroll: true,
             rev_position: 'top_right',
             developer: false,
-            per_row: 1,
+            columns: 1,
             breakpoints: {
                 xxs: 0,
                 xs: 100,
@@ -96,21 +96,8 @@ Author: michael@revcontent.com
             img_host: 'https://img.engage.im',
             user: null,
             content: [],
-            columns: 1,
             view: false
         };
-
-        if (opts.masonry_layout) { // they wan't masonry, provide a masonry per_row default
-            defaults.per_row = {
-                xxs: 1,
-                xs: 1,
-                sm: 1,
-                md: 2,
-                lg: 2,
-                xl: 3,
-                xxl: 3
-            };
-        }
 
         // merge options
         this.options = revUtils.extend(defaults, opts);

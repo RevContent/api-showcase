@@ -53,7 +53,7 @@ Author: michael@revcontent.com
                 xl: 2,
                 xxl: 2
             },
-            per_row: {
+            columns: {
                 xxs: 1,
                 xs: 2,
                 sm: 3,
@@ -169,8 +169,7 @@ Author: michael@revcontent.com
             disclosure_interest_height: 520,
             masonry_layout: false,
             user: null,
-            content: [],
-            columns: 1
+            content: []
         };
 
         // merge options
