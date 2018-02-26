@@ -215,3 +215,9 @@ Pass user_ip to API
 ```
 user_ip: false
 ```
+
+###wrapper_id
+Existing outermost page container div
+```
+wrapper_id: 'global_wrapper'
+```
