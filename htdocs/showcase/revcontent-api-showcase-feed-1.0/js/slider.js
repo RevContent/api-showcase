@@ -510,14 +510,14 @@ Author: michael@revcontent.com
 
             //  && i == patternTotal
             // @todo find replacement/correct var for patternTotal
-            if (!this.interestsCarouselVisible && i == 1) {
+            if (!this.interestsCarouselVisible && i == 3) {
                 this.interestsCarouselVisible = true;
                 layoutItems = layoutItems.concat(this.appendInterestsCarousel(grid,this.authenticated));
                 i--;
                 continue;
             }
 
-            if (!this.authenticated && i == 1 && !this.feedAuthButtonVisible) {
+            if (!this.authenticated && i == 3 && !this.feedAuthButtonVisible) {
                 this.feedAuthButtonVisible = true;
                 var feedAuthButton = this.appendfeedAuthButton(grid);
                 layoutItems = layoutItems.concat(feedAuthButton);
@@ -2168,7 +2168,7 @@ Author: michael@revcontent.com
                 interest_cells += the_cell;
             }
 
-            var cTitle = "Trending On "+that.capitalize(that.extractRootDomain(window.location.href));;
+            var cTitle = "Trending topics on "+that.capitalize(that.extractRootDomain(window.location.href));;
             var cSubtitle = "";
             if(isLoggedin){
                 cTitle = "Content You Love";
