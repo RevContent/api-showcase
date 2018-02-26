@@ -237,10 +237,10 @@ Author: michael@revcontent.com
 
             var header = document.createElement('div');
             if(this.options.topic_id>0){
-                header.innerHTML="<h3>"+this.options.topic_title+"</h3>";
+                header.innerHTML="<h3>"+this.options.topic_title+" Articles</h3>";
             }
             if(this.options.author_name && this.options.author_name.length>0){
-                header.innerHTML="<h3>"+this.options.author_name+"</h3>";
+                header.innerHTML="<h3>Articles By "+this.options.author_name+"</h3>";
             }
             this.containerElement.appendChild(header);
             var back = document.createElement('button');
