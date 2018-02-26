@@ -2159,13 +2159,23 @@ Author: michael@revcontent.com
                 count: data.subscribed.length // data.count
             };
             var interests_count = 0;
-
+            var initialIndex = 3;
+            var topicFeed = that.options.topic_id>0;
             if (typeof interests_data !== 'undefined') {
+                if(topicFeed) {
+                    interests_data = interests_data.filter(function (t) {
+                        return t.id != that.options.topic_id;
+                    });
+                }
                 interests_count = interests_data.length;
+                if(topicFeed && interests_count>=6){
+                    initialIndex = 6;
+                }
             }
 
             for(var i=0;i<interests_count;i++){
                 var interest = interests_data[i];
+
                 var the_cell = '' +
                 // Interest Image should be stored as CSS by slug/name ID interest-' + interest.slug.toLowerCase() + '
                 // $image property in interest object could be used as override if non-empty.
@@ -2204,7 +2214,7 @@ Author: michael@revcontent.com
                 freeScroll: true,
                 selectedAttraction: 0.15,
                 freeScrollFriction: 0.03,
-                initialIndex: 3
+                initialIndex: initialIndex
             });
 
             interests_flick.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) {
