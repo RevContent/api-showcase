@@ -517,7 +517,7 @@ Author: michael@revcontent.com
                 continue;
             }
 
-            if (!this.authenticated && i == 3 && !this.feedAuthButtonVisible) {
+            if (!this.authenticated && i == 1 && !this.feedAuthButtonVisible) {
                 this.feedAuthButtonVisible = true;
                 var feedAuthButton = this.appendfeedAuthButton(grid);
                 layoutItems = layoutItems.concat(feedAuthButton);
