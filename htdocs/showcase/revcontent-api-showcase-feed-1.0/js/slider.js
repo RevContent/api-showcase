@@ -234,6 +234,15 @@ Author: michael@revcontent.com
         this.element.innerHTML="";
 
         if(this.options.history_stack.length>0){
+
+            var header = document.createElement('div');
+            if(this.options.topic_id>0){
+                header.innerHTML="<h3>"+this.options.topic_title+"</h3>";
+            }
+            if(this.options.author_name && this.options.author_name.length>0){
+                header.innerHTML="<h3>"+this.options.author_name+"</h3>";
+            }
+            this.containerElement.appendChild(header);
             var back = document.createElement('button');
             back.innerHTML = "Back";
             this.containerElement.appendChild(back);
@@ -1571,9 +1580,10 @@ Author: michael@revcontent.com
         return list;
     }
 
-    RevSlider.prototype.loadTopicFeed = function(topicId){
+    RevSlider.prototype.loadTopicFeed = function(topicId, topicTitle){
         if(this.handlers && this.handlers.loadTopicFeed){
-            this.handlers.loadTopicFeed(topicId);
+            this.options.topic_title = topicTitle;
+            this.handlers.loadTopicFeed(topicId,topicTitle);
         }
     };
 
@@ -2220,7 +2230,8 @@ Author: michael@revcontent.com
 
                 if(target.classList.contains('cell-wrapper') || target.classList.contains('interest-title')){
 
-                    that.loadTopicFeed(parseInt(cellElement.getAttribute('data-id'), 10));
+                    that.loadTopicFeed(parseInt(cellElement.getAttribute('data-id'), 10),
+                        cellElement.getAttribute('data-title'));
                     // Load an Explore Panel in "TOPIC" mode to show articles in that interest category...
                     // this.swipeToPanel('trending', target.getAttribute('data-slug'));
                     // -- DISABLE TOPIC "DIVE-IN" PANEL UNTIL OTHER FEATURES ARE COMPLETED

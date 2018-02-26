@@ -94,7 +94,8 @@ Author: michael@revcontent.com
             initial_sponsored: 1,
             masonry_layout: false,
             img_host: 'https://img.engage.im',
-            author_name:''
+            author_name:'',
+            topic_title:''
         };
 
 
@@ -335,7 +336,8 @@ Author: michael@revcontent.com
     Feed.prototype.pushHistory = function(){
         this.historyStack.push([{
             author_name:this.options.author_name,
-            topic_id:this.options.topic_id
+            topic_id:this.options.topic_id,
+            topic_title:this.options.topic_title
         }]);
     };
 
@@ -343,7 +345,7 @@ Author: michael@revcontent.com
         if(this.historyStack.length>0){
             var item = this.historyStack.pop();
             if(item.topic_id>0){
-                this.innerWidget.loadTopicFeed(item.topic_id,true);
+                this.innerWidget.loadTopicFeed(item.topic_id,item.topic_title,true);
             }
             else if(item.author_name && item.author_name.length>0){
                 this.innerWidget.loadAuthorFeed(item.author_name, true);
@@ -441,12 +443,14 @@ Author: michael@revcontent.com
             masonry_layout: this.options.masonry_layout,
             img_host: this.options.img_host,
             author_name: this.options.author_name,
-            history_stack:that.historyStack
+            history_stack:that.historyStack,
+            topic_title:this.options.topic_title
         },{
-            "loadTopicFeed":function(topicId, withoutHistory){
+            "loadTopicFeed":function(topicId, topicTitle, withoutHistory){
                 if(!withoutHistory) that.pushHistory();
                 that.options.author_name = '';
                 that.options.topic_id = topicId;
+                that.options.topic_title = topicTitle;
                 that.internalOffset = 0;
                 that.sponsoredOffset = 0;
                 that.createInnerWidget();
