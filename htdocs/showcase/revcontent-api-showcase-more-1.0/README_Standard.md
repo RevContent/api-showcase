@@ -95,3 +95,9 @@ Use an alternate API url
 ```
 url: 'https://trends.revcontent.com/api/v1/'
 ```
+
+###wrapper_id
+Existing outermost page container div
+```
+wrapper_id: 'global_wrapper'
+```
