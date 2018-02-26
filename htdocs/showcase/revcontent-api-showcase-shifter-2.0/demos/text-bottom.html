@@ -9,12 +9,12 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>RevMore Example</title>
+    <title>RevShifter Example</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="../css/bootstrap.css" rel="stylesheet">
 
-    <link href="css/style.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -36,7 +36,7 @@
 <body>
 
     <!-- Navigation -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-inverse" role="navigation">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -71,57 +71,40 @@
     </nav>
 
     <!-- Fake Page Content -->
-    <div id="global_wrapper" class="container">
-
-        <div class="alert alert-danger" role="alert">This example is designed for a mobile device, but will display on desktop.</div>
-
+    <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">RevMore
+                <h1 class="page-header">RevShifter
                     <small>Revcontent Native API</small>
                 </h1>
             </div>
         </div>
 
+        <div class="container">
             <div class="row">
                 <div class="col-md-12">
                     <h3>Examples:</h3>
                     <ul>
-                        <li><a href="/showcase/revcontent-api-showcase-more-1.0/index.html">Slider Widget</a></li>
-                        <li><a href="/showcase/revcontent-api-showcase-more-1.0/standard.html">Standard Widget</a></li>
+                        <li><a href="/showcase/revcontent-api-showcase-shifter-2.0/index.html">Default</a></li>
+                        <li><a href="/showcase/revcontent-api-showcase-shifter-2.0/demos/height.html">Image Height</a> - Set the height of the Shifter images.</li>
+                        <li><a href="/showcase/revcontent-api-showcase-shifter-2.0/demos/load.html">On Load</a> - Displays the shifter on page load.</li>
+                        <li><a href="/showcase/revcontent-api-showcase-shifter-2.0/demos/scroll.html">Scroll Direction</a> - reverse the scroll direction, showing when scrolling up.</li>
+                        <li><a href="/showcase/revcontent-api-showcase-shifter-2.0/demos/scroll-disabled.html">Disable Scrolling</a> - manually show Shifter or use the show_on_load option. Disabling scrolling forces the page to shift down to prevent overlaying content.</li>
+                        <li><a href="/showcase/revcontent-api-showcase-shifter-2.0/demos/top.html">Top</a> - Show the shifter on the top of the page.</li>
+                        <li><a href="/showcase/revcontent-api-showcase-shifter-2.0/demos/top-scroll-disabled.html">Top Disable Scrolling</a> - Show the shifter on the top of the page and disable scrolling. Show with show_on_load: true</li>
+                        <li><a href="/showcase/revcontent-api-showcase-shifter-2.0/demos/hide-on-show-transition.html">Hide on Show Transition</a> - Setting this to false will prevent the Shifter from hiding while it is showing</li>
+                        <li><a href="/showcase/revcontent-api-showcase-shifter-2.0/demos/touch-simulation.html">Touch Simulation</a> - Simulate touch when the shifter shows to indicate touch support.</li>
+                        <li><a href="/showcase/revcontent-api-showcase-shifter-2.0/demos/visible-selector.html">Visible Selector</a> - Show when first element from provided selector is visible.</li>
                     </ul>
                 </div>
             </div>
+        </div>
+
+        <br /><br />
 
         <div class="row">
             <div class="col-md-8">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                <div id="top-id"></div>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <img alt="" src="http://placehold.it/750x500" class="img-responsive">
             </div>
             <div class="col-md-4">
                 <h3>This is just a testing title</h3>
@@ -151,22 +134,22 @@
                     <li>Adipiscing Elit</li>
                 </ul>
             </div>
-
-            <div class="col-md-12">
-                <br /><hr /><br />
-                <div id="rcjsload_a122d7"></div>
-                <script type="text/javascript">
-                (function() {
-                var referer="";try{if(referer=document.referrer,"undefined"==typeof referer)throw"undefined"}catch(exception){referer=document.location.href,(""==referer||"undefined"==typeof referer)&&(referer=document.URL)}referer=referer.substr(0,700);
-                var rcel = document.createElement("script");
-                rcel.id = 'rc_' + Math.floor(Math.random() * 1000);
-                rcel.type = 'text/javascript';
-                rcel.src = "//trends.revcontent.com/serve.js.php?empty=1&w=22701&t="+rcel.id+"&c="+(new Date()).getTime()+"&width="+(window.outerWidth || document.documentElement.clientWidth)+"&referer="+referer;
-                rcel.async = true;
-                var rcds = document.getElementById("rcjsload_a122d7"); rcds.appendChild(rcel);
-
-                })();
-                </script>
+        </div>
+        <br /><hr /><br />
+        <div class="row">
+            <div class="col-md-8">
+                <img alt="" src="http://placehold.it/750x500" class="img-responsive">
+            </div>
+            <div class="col-md-4">
+                <h3>This is just a testing title</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
+                <h3>Project Details</h3>
+                <ul>
+                    <li>Lorem Ipsum</li>
+                    <li>Dolor Sit Amet</li>
+                    <li>Consectetur</li>
+                    <li>Adipiscing Elit</li>
+                </ul>
             </div>
         </div>
 
@@ -183,13 +166,16 @@
     </div>
    <!-- /. Fake Page Content -->
 
-    <script src="/build/revmore-standard.min.js"></script>
+    <script src="/build/revshifter.min.js"></script>
 
     <script>
-        var more = new RevMore({
-            top_id: 'top-id',
-            widget_id : 22701,
-            wrapper_id : 'global_wrapper'
+        var shifter = new RevShifter({
+            api_key : '3eeb00d786e9a77bbd630595ae0be7e9aa7aff3b',
+            pub_id : 945,
+            widget_id : 6181,
+            domain : 'apiexamples.powr.com',
+            testing: true,
+            text_right: false
         });
     </script>
 
