@@ -1588,7 +1588,7 @@ Author: michael@revcontent.com
                     tryToCreateRows(10);
                 } catch (e) {
                     console.log('*************Feed', e);
-                    reject();
+                    reject(new Error("Feed - getData tryToCreateRows"));
                 }
             }
 
@@ -1609,7 +1609,7 @@ Author: michael@revcontent.com
                     revApi.request(that.generateUrl(0, data.rowData.internalLimit, 0, data.rowData.sponsoredLimit), function(apiData) {
 
                         if (!apiData.content.length) {
-                            reject();
+                            reject(new Error("Feed - getData no data"));
                             return;
                         }
                         data.data = apiData;
@@ -1617,10 +1617,6 @@ Author: michael@revcontent.com
                     });
                 }
             });
-        }, function() {
-            return false;
-        }).catch(function(e) {
-            console.log(e);
         }).then(function(data) {
 
             var tryToUpdateDisplayedItems = function(retries, items, data, passive) {
@@ -1675,7 +1671,7 @@ Author: michael@revcontent.com
                             revApi.request(that.generateUrl(actualInternalOffset, missInternalCount, actualSponsoredOffset, missSponsoredCount), function(apiData) {
 
                                 if (!apiData.content.length) {
-                                    reject();
+                                    reject(new Error("Feed - getData no extra data"));
                                     return;
                                 };
 
@@ -1694,10 +1690,10 @@ Author: michael@revcontent.com
                     });
                 }
             })
+        }).then(function(data) {
+            return data;
         }, function(e) {
-            that.destroy();
-        }).catch(function(e) {
-            console.log('*************Feed', e);
+            throw new Error(e);
         });
 
         return this.dataPromise;
