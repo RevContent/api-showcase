@@ -96,7 +96,8 @@ Author: michael@revcontent.com
             img_host: 'https://img.engage.im',
             user: null,
             content: [],
-            view: false
+            view: false,
+            test: false
         };
 
         // merge options
@@ -421,7 +422,8 @@ Author: michael@revcontent.com
             view: this.options.view,
             user: this.options.user,
             content: this.options.content,
-            columns: this.options.columns
+            columns: this.options.columns,
+            test: this.options.test
         });
     };
 
@@ -579,7 +581,7 @@ Author: michael@revcontent.com
 
         var view = viewed[0].view;
 
-        if (!view) { // safety first, if the first one doesn't have data none should
+        if (!view || this.options.test) { // safety first, if the first one doesn't have data none should
             return;
         }
 
