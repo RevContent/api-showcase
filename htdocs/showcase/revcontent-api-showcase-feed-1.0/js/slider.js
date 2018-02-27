@@ -1548,6 +1548,8 @@ Author: michael@revcontent.com
             url += '&empty=1';
         }
 
+        url += '&fill=1';
+
         return url;
     };
 
