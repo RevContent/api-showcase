@@ -412,6 +412,12 @@ if (!String.prototype.endsWithPowr) {
             nativeControlForTouch: false
         });
 
+      if (this.autoplaySettings.autoplay && !this.autoplaySettings.audio) {
+	    this.log("Setting player muted");
+	    this.player.muted(true);
+        }
+
+
         this.currentContent = 0;
 
         this.player.logobrand({
