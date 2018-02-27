@@ -1544,6 +1544,10 @@ Author: michael@revcontent.com
         url += this.options.user_ip ? ('&user_ip=' + this.options.user_ip) : '';
         url += this.options.user_agent ? ('&user_agent=' + this.options.user_agent) : '';
 
+        if (this.options.test) {
+            url += '&empty=1';
+        }
+
         return url;
     };
 
