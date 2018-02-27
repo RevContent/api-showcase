@@ -220,7 +220,9 @@ Author: michael@revcontent.com
             }).catch(function(e) {
                 console.log('*************Feed', e);
             });
-        }, function() {
+        }, function(e) {
+            self.innerWidget.destroy();
+            console.log('*************Feed', e);
         }).catch(function(e) {
             console.log('*************Feed', e);
         });
