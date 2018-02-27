@@ -334,17 +334,17 @@ Author: michael@revcontent.com
     };
 
     Feed.prototype.pushHistory = function(){
-        this.historyStack.push([{
+        this.historyStack.push({
             author_name:this.options.author_name,
             topic_id:this.options.topic_id,
             topic_title:this.options.topic_title
-        }]);
+        });
     };
 
     Feed.prototype.loadFromHistory = function(){
         if(this.historyStack.length>0){
             var item = this.historyStack.pop();
-            if(item.topic_id>0){
+            if(item.topic_id && item.topic_id>0){
                 this.innerWidget.loadTopicFeed(item.topic_id,item.topic_title,true);
             }
             else if(item.author_name && item.author_name.length>0){

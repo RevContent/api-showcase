@@ -1580,16 +1580,17 @@ Author: michael@revcontent.com
         return list;
     }
 
-    RevSlider.prototype.loadTopicFeed = function(topicId, topicTitle){
+    RevSlider.prototype.loadTopicFeed = function(topicId, topicTitle, history){
         if(this.handlers && this.handlers.loadTopicFeed){
             this.options.topic_title = topicTitle;
-            this.handlers.loadTopicFeed(topicId,topicTitle);
+            this.options.topic_id = topicId;
+            this.handlers.loadTopicFeed(topicId,topicTitle,history);
         }
     };
 
-    RevSlider.prototype.loadAuthorFeed = function(authorName){
+    RevSlider.prototype.loadAuthorFeed = function(authorName,history){
         if(this.handlers && this.handlers.loadAuthorFeed){
-            this.handlers.loadAuthorFeed(authorName);
+            this.handlers.loadAuthorFeed(authorName,history);
         }
     };
 
