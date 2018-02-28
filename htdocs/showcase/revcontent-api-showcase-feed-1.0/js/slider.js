@@ -1856,6 +1856,7 @@ Author: michael@revcontent.com
         }
 
         var provider = item.element.querySelector('.rev-provider');
+        var that = this;
         if (provider) {
             if (item.type == 'sponsored') {
                 provider.innerHTML = itemData.brand ? itemData.brand : this.extractRootDomain(itemData.target_url);
