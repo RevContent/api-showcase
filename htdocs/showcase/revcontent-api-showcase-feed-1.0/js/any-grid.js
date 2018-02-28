@@ -163,14 +163,10 @@ AnyGrid.prototype._resetLayout = function(check) {
         this.perRow = parseInt(this.options.perRow);
     }
 
-    if (this.options.masonry) {
-      this.columns = [];
-      this.rows = {};
-      for (var i = 0; i < this.perRow; i++) {
-          this.columns[i] = 0;
-      }
-    } else {
-      this.columns = {};
+    this.columns = [];
+    this.rows = {};
+    for (var i = 0; i < this.perRow; i++) {
+        this.columns[i] = 0;
     }
 
     this.rowCount = this.options.rows[this.breakPoint] ? this.options.rows[this.breakPoint] : this.options.rows;
@@ -382,7 +378,7 @@ AnyGrid.prototype._getItemLayoutPosition = function( item ) {
             x: false,
             y: false
         }
-    } else if (this.options.masonry) {
+    } else { // masonry
         item.getSize();
 
         var column = this.index % this.columns.length;
