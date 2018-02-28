@@ -13,7 +13,7 @@ body {
     z-index: 2147483640;
 }
 
-#rev-more-wrapper {
+#rev-more-wrapper, .rev-more-wrapper {
     margin-bottom: 20px;
     overflow: hidden;
 }

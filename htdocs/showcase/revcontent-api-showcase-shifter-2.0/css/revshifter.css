@@ -24,6 +24,8 @@ body.rev-shifter-no-transform #rev-shifter.rev-shifter {
     transition-property: transform, height;
     box-shadow: none;
     line-height: 0;
+    max-height: 29vh;
+    overflow-y: auto;
 }
 
 #rev-shifter #rev-slider .rev-head {

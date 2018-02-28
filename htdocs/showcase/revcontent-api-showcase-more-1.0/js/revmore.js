@@ -34,6 +34,7 @@ RevMore({
         top_id: false,
         watch_top_id_interval: 500, // time in ms to watch the top_id position change
         id: false,
+        wrapper_id: '',
         url: 'https://trends.revcontent.com/api/v1/',
         distance: 500,
         unlock_text: 'Read More...',
@@ -166,13 +167,21 @@ RevMore({
 
         // create the elements
         this.createElements = function() {
-            this.wrapper = document.createElement("div");
-            this.wrapper.id = "rev-more-wrapper";
-            while (document.body.firstChild) {
-                this.wrapper.appendChild(document.body.firstChild);
+            if (this.options.wrapper_id !== '') {
+                var wrapper_obj = document.getElementById(this.options.wrapper_id);
+                if (wrapper_obj != undefined) {
+                    this.wrapper = wrapper_obj;
+                    revUtils.addClass(this.wrapper, 'rev-more-wrapper');
+                }
             }
-            document.body.appendChild(this.wrapper);
-
+            if (this.wrapper == undefined) {
+                this.wrapper = document.createElement("div");
+                this.wrapper.id = "rev-more-wrapper";
+                while (document.body.firstChild) {
+                    this.wrapper.appendChild(document.body.firstChild);
+                }
+                document.body.appendChild(this.wrapper);
+            }
             this.element = document.createElement('div');
             this.element.id = 'rev-more';
             this.element.innerHTML = '<div style="height:' + this.options.gradient_height + 'px; top:-'+ this.options.gradient_height +'px" id="rev-more-gradient"></div>';

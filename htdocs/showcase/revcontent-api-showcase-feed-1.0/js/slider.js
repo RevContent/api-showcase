@@ -1780,6 +1780,14 @@ Author: michael@revcontent.com
                 anchor.setAttribute('href', url);
                 anchor.title = itemData.headline;
 
+                if (item.type == 'internal') {
+                    anchor.removeAttribute('target');
+                    anchor.removeAttribute('rel');
+                } else {
+                    anchor.setAttribute('target', '_blank');
+                    anchor.setAttribute('rel', 'nofollow');
+                }
+
                 this.setImage(item, item.element.querySelector('.rev-image'));
 
                 var headline = item.element.querySelector('.rev-headline');
