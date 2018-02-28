@@ -394,6 +394,8 @@ $reactionMenu8Y: 13.5px;
         perspective: 1000px;
         z-index: 1;
         font-weight: normal;
+        float: none !important;
+        display: block !important;
 
         &.rev-content-row-0 {
           padding-top: 0 !important;
