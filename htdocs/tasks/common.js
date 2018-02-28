@@ -78,7 +78,6 @@ gulp.task('build', ['minifycss', 'embedcss'], function(cb) {
             gulp.src(config[widget].build),
             concat(filePrefix + widget +'.pkgd.js'),
             gulp.dest('./build/files/' + widget),
-
             uglify({
                 mangle: true
             }).on('error', function (err) {
