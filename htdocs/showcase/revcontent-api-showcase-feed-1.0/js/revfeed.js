@@ -581,15 +581,23 @@ Author: michael@revcontent.com
 
     Feed.prototype.registerView = function(viewed) {
 
+        for (var i = 0; i < viewed.length; i++) {
+            viewed[i].anchor.setAttribute('href', viewed[i].anchor.getAttribute('href') + '&viewed=1');
+        }
+
         var view = viewed[0].view;
 
-        if (!view || this.options.test) { // safety first, if the first one doesn't have data none should
+        if (!view) { // safety first, if the first one doesn't have data none should
             return;
         }
 
         // params += 'id=' + encodeURIComponent(this.options.id); // debug/test
 
         var params = 'view=' + view;
+
+        if (this.options.test) { // if test pass empty to view
+            params += '&empty=1';
+        }
 
         for (var i = 0; i < viewed.length; i++) {
             params += '&' + encodeURIComponent('p[]') + '=' + viewed[i].viewIndex;

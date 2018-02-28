@@ -1714,20 +1714,21 @@ Author: michael@revcontent.com
         // item.viewIndex = j;
         // item.data = itemData;
 
-        var anchor = item.element.querySelector('a');
+        item.item.anchor = item.element.querySelector('a');
+
         var url = itemData.url;
         if (itemData.type == 'internal' && this.options.trending_utm) {
             url += ('&' + this.options.trending_utm);
         }
-        anchor.setAttribute('href', url);
-        anchor.title = itemData.headline;
+        item.anchor.setAttribute('href', url);
+        item.anchor.title = itemData.headline;
 
         if (item.type == 'internal') {
-            anchor.removeAttribute('target');
-            anchor.removeAttribute('rel');
+            item.anchor.removeAttribute('target');
+            item.anchor.removeAttribute('rel');
         } else {
-            anchor.setAttribute('target', '_blank');
-            anchor.setAttribute('rel', 'nofollow');
+            item.anchor.setAttribute('target', '_blank');
+            item.anchor.setAttribute('rel', 'nofollow');
         }
 
         this.setImage(item, item.element.querySelector('.rev-image'));
