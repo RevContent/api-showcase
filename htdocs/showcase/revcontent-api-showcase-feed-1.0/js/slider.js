@@ -1714,7 +1714,7 @@ Author: michael@revcontent.com
         // item.viewIndex = j;
         // item.data = itemData;
 
-        item.item.anchor = item.element.querySelector('a');
+        item.anchor = item.element.querySelector('a');
 
         var url = itemData.url;
         if (itemData.type == 'internal' && this.options.trending_utm) {
