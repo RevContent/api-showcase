@@ -259,7 +259,7 @@ Author: michael@revcontent.com
 
             this.containerElement.style.paddingTop = '48px';
 
-            back.setAttribute('style','overflow:hidden;transition: all 0.4s;box-shadow: 0 1px 4px 0 rgba(12, 12, 13, 0.1);position:absolute;z-index:5000;left:' + left_pos + ';top:' + top_pos + ';margin-bottom: 9px;display: block;width: ' + grid_width + ';height: 40px;line-height: 40px;background-color:#fdfdfd;color:#777777;font-size:12px;');
+            back.setAttribute('style','overflow:hidden;transition: none;box-shadow: 0 1px 4px 0 rgba(12, 12, 13, 0.1);position:absolute;z-index:5000;left:' + left_pos + ';top:' + top_pos + ';margin-bottom: 9px;display: block;width: ' + grid_width + ';height: 40px;line-height: 40px;background-color:#fdfdfd;color:#777777;font-size:12px;');
             back.setAttribute('id','go-back-bar');
             back.classList.add('go-back-bar');
 
@@ -291,8 +291,6 @@ Author: michael@revcontent.com
                         direction = 'down';
                     }
 
-
-
                     if(grid_rect.top <= 0) {
                         var fix_ts = 0;
                         var fix_ts2 = 0;
@@ -301,14 +299,14 @@ Author: michael@revcontent.com
                             back.style.top = ((-1 * grid_rect.top)) + 'px';
                             back.classList.remove('no-shadow');
                             if(direction == 'up') {
-                                back.style.opacity = '0';
+                                //back.style.opacity = '0';
                             } else {
-                                clearTimeout(fix_ts2);
-                                fix_ts2 = setTimeout(function() {
-                                    back.style.opacity = '1';
-                                }, 1500);
+                                //clearTimeout(fix_ts2);
+                                //fix_ts2 = setTimeout(function() {
+                                    //back.style.opacity = '1';
+                                //}, 1500);
                             }
-                        }, 400);
+                        }, 0);
 
                     } else {
                         back.style.top = 0;
@@ -319,17 +317,17 @@ Author: michael@revcontent.com
                         clearTimeout(reset_ts);
                         reset_ts = setTimeout(function() {
                             if(direction == 'up') {
-                                back.style.opacity = '0';
+                                //back.style.opacity = '0';
                             } else {
-                                clearTimeout(reset_ts2);
-                                reset_ts2 = setTimeout(function() {
-                                    back.style.opacity = '1';
-                                }, 1500);
+                                //clearTimeout(reset_ts2);
+                                //reset_ts2 = setTimeout(function() {
+                                //back.style.opacity = '1';
+                                //}, 1500);
                             }
 
-                        }, 700);
+                        }, 0);
                     }
-                }, 1000);
+                }, 300);
             }, { passive: true });
 
             revUtils.addEventListener(back.querySelector('.feed-back-button'),'click',this.handlers.back);
