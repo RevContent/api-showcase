@@ -1768,6 +1768,16 @@ $reactionMenu8Y: 13.5px;
           line-height: 14px;
         }
     }
+
+
+  .no-shadow {
+    box-shadow: none!important;
+  }
+
+  .no-transition {
+    transition: none!important;
+  }
+
 }
 
 #rev-feed #rev-slider2 .rev-content.rev-colspan-2 {

@@ -252,15 +252,83 @@ Author: michael@revcontent.com
             //var menu_icon = '<span style="margin: 9px 9px 0 9px;width:18px;height:18px;display:block;background:transparent url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMiA1MTI7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iNTEycHgiIGhlaWdodD0iNTEycHgiPgo8bGluZWFyR3JhZGllbnQgaWQ9IlNWR0lEXzFfIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAiIHkxPSIyNTgiIHgyPSI1MTIiIHkyPSIyNTgiIGdyYWRpZW50VHJhbnNmb3JtPSJtYXRyaXgoMSAwIDAgLTEgMCA1MTQpIj4KCTxzdG9wIG9mZnNldD0iMCIgc3R5bGU9InN0b3AtY29sb3I6IzAwRjJGRSIvPgoJPHN0b3Agb2Zmc2V0PSIwLjAyMSIgc3R5bGU9InN0b3AtY29sb3I6IzAzRUZGRSIvPgoJPHN0b3Agb2Zmc2V0PSIwLjI5MyIgc3R5bGU9InN0b3AtY29sb3I6IzI0RDJGRSIvPgoJPHN0b3Agb2Zmc2V0PSIwLjU1NCIgc3R5bGU9InN0b3AtY29sb3I6IzNDQkRGRSIvPgoJPHN0b3Agb2Zmc2V0PSIwLjc5NiIgc3R5bGU9InN0b3AtY29sb3I6IzRBQjBGRSIvPgoJPHN0b3Agb2Zmc2V0PSIxIiBzdHlsZT0ic3RvcC1jb2xvcjojNEZBQ0ZFIi8+CjwvbGluZWFyR3JhZGllbnQ+CjxwYXRoIHN0eWxlPSJmaWxsOnVybCgjU1ZHSURfMV8pOyIgZD0iTTQzOCwxNDhINzRjLTQwLjgwNCwwLTc0LTMzLjE5Ni03NC03NFMzMy4xOTYsMCw3NCwwaDM2NGM0MC44MDQsMCw3NCwzMy4xOTYsNzQsNzQgIFM0NzguODA0LDE0OCw0MzgsMTQ4eiBNNzQsNDBjLTE4Ljc0OCwwLTM0LDE1LjI1Mi0zNCwzNHMxNS4yNTIsMzQsMzQsMzRoMzY0YzE4Ljc0OCwwLDM0LTE1LjI1MiwzNC0zNHMtMTUuMjUyLTM0LTM0LTM0SDc0eiAgIE00MzgsMzMwSDc0Yy00MC44MDQsMC03NC0zMy4xOTYtNzQtNzRzMzMuMTk2LTc0LDc0LTc0aDM2NGM0MC44MDQsMCw3NCwzMy4xOTYsNzQsNzRTNDc4LjgwNCwzMzAsNDM4LDMzMHogTTc0LDIyMiAgYy0xOC43NDgsMC0zNCwxNS4yNTItMzQsMzRzMTUuMjUyLDM0LDM0LDM0aDM2NGMxOC43NDgsMCwzNC0xNS4yNTIsMzQtMzRzLTE1LjI1Mi0zNC0zNC0zNEg3NHogTTUxMiw0MzhjMC00MC44MDQtMzMuMTk2LTc0LTc0LTc0ICBINzRjLTQwLjgwNCwwLTc0LDMzLjE5Ni03NCw3NHMzMy4xOTYsNzQsNzQsNzRoMjY0YzExLjA0NiwwLDIwLTguOTU0LDIwLTIwcy04Ljk1NC0yMC0yMC0yMEg3NGMtMTguNzQ4LDAtMzQtMTUuMjUyLTM0LTM0ICBzMTUuMjUyLTM0LDM0LTM0aDM2NGMxOC43NDgsMCwzNCwxNS4yNTIsMzQsMzRzLTE1LjI1MiwzNC0zNCwzNGMtMTEuMDQ2LDAtMjAsOC45NTQtMjAsMjBzOC45NTQsMjAsMjAsMjAgIEM0NzguODA0LDUxMiw1MTIsNDc4LjgwNCw1MTIsNDM4eiIvPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8L3N2Zz4K) top left no-repeat;background-size:contain"></span>';
             var menu_icon = '';
 
-            back.setAttribute('style','box-shadow: 0 1px 4px 0 rgba(12, 12, 13, 0.1);position:fixed;z-index:5000;width:100vh;left:0;top:0;margin-bottom: 9px;display: block;width: 100%;height: 40px;line-height: 40px;background-color:#fdfdfd;color:#777777;font-size:12px;');
-            back.innerHTML = '<div style="display:flex;flex-direction:row;">' +
-                    '<div class="feed-header-back"><button style="background-color:#d6d6d6;border:0;margin:0;border-right:1.0px solid #d3d3d3;display:block;width:40px;height:40px;text-align:center;font-weight: bold;font-size:32px" class="feed-back-button" name="feed-back-button" value="">' + back_icon + '</button></div>' +
-                    '<div class="feed-header-logo" style="width:32px;"><img src="' + this.options.brand_logo_secondary + '" alt="Newsweek.com Feed" style="max-width:100%;margin: 0 9px;" /></div>' +
-                    '<div class="feed-header-title" style="width:100%;padding-left:18px;text-overflow:ellipsis;overflow:hidden;text-align-center;color:#676767;font-size:14px;letter-spacing: 0px;font-weight:normal;"><span>' + this.options.topic_title + '</span></div>' +
-                    '<div class="feed-header-opions" style="min-width:auto;text-align:center;">' + menu_icon + '</div>' +
+            var left_pos = 'auto';
+            var grid_rect = this.containerElement.getBoundingClientRect();
+            var top_pos = grid_rect.top;
+            var grid_width = this.containerElement.clientWidth > 0 ?  this.containerElement.clientWidth  + 'px' : '100%';
 
-            '</div>';
+            this.containerElement.style.paddingTop = '48px';
+
+            back.setAttribute('style','overflow:hidden;transition: none;box-shadow: 0 1px 4px 0 rgba(12, 12, 13, 0.1);position:absolute;z-index:5000;left:' + left_pos + ';top:' + top_pos + ';margin-bottom: 9px;display: block;width: ' + grid_width + ';height: 40px;line-height: 40px;background-color:#fdfdfd;color:#777777;font-size:12px;');
+            back.setAttribute('id','go-back-bar');
+            back.classList.add('go-back-bar');
+
+            var header_logo = '';
+            if(this.options.brand_logo_secondary){
+                header_logo = '<img src="' + this.options.brand_logo_secondary + '" alt="Newsweek.com Feed" style="max-width:100%;margin: 0 9px;" />';
+            }
+
+            back.innerHTML = '<div style="display:flex;flex-direction:row;">' +
+                '<div class="feed-header-back"><button style="background-color:#d6d6d6;border:0;margin:0;border-right:1.0px solid #d3d3d3;display:block;width:40px;height:40px;text-align:center;font-weight: bold;font-size:32px" class="feed-back-button" name="feed-back-button" value="">' + back_icon + '</button></div>' +
+                '<div class="feed-header-logo" style="width:32px;">' + header_logo + '</div>' +
+                '<div class="feed-header-title" style="width:100%;padding-left:18px;text-overflow:ellipsis;overflow:hidden;text-align-center;color:#676767;font-size:14px;letter-spacing: 0px;font-weight:normal;"><span>' + this.options.topic_title + '</span></div>' +
+                '<div class="feed-header-opions" style="min-width:auto;text-align:center;">' + menu_icon + '</div>' +
+
+                '</div>';
+
             this.containerElement.appendChild(back);
+
+            window.addEventListener('scroll', function() {
+                var pos_1 = window.pageYOffset;
+                setTimeout(function(){
+                    var pos_2 = window.pageYOffset;
+                    var direction = 'down';
+                    var grid_rect = that.containerElement.getBoundingClientRect();
+
+                    if(pos_2 < pos_1) {
+                        direction = 'up';
+                    } else {
+                        direction = 'down';
+                    }
+
+                    if(grid_rect.top <= 0) {
+                        var fix_ts = 0;
+                        var fix_ts2 = 0;
+                        clearTimeout(fix_ts);
+                        fix_ts = setTimeout(function() {
+                            back.style.top = ((-1 * grid_rect.top)) + 'px';
+                            back.classList.remove('no-shadow');
+                            if(direction == 'up') {
+                                //back.style.opacity = '0';
+                            } else {
+                                //clearTimeout(fix_ts2);
+                                //fix_ts2 = setTimeout(function() {
+                                    //back.style.opacity = '1';
+                                //}, 1500);
+                            }
+                        }, 0);
+
+                    } else {
+                        back.style.top = 0;
+                        var reset_ts = 0;
+                        var reset_ts2 = 0;
+                        back.classList.add('no-shadow');
+
+                        clearTimeout(reset_ts);
+                        reset_ts = setTimeout(function() {
+                            if(direction == 'up') {
+                                //back.style.opacity = '0';
+                            } else {
+                                //clearTimeout(reset_ts2);
+                                //reset_ts2 = setTimeout(function() {
+                                //back.style.opacity = '1';
+                                //}, 1500);
+                            }
+
+                        }, 0);
+                    }
+                }, 300);
+            }, { passive: true });
 
             revUtils.addEventListener(back.querySelector('.feed-back-button'),'click',this.handlers.back);
         }
