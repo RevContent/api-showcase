@@ -20,7 +20,7 @@ Author: michael@revcontent.com
 }( window, function factory(window, revUtils, revDetect, revApi, revDisclose) {
 'use strict';
 
-    var RevSlider = function(opts,handles) {
+    var RevSlider = function(opts) {
 
         var defaults = {
             impression_tracker: [],
@@ -86,7 +86,6 @@ Author: michael@revcontent.com
             wrap_reverse: true, //currently the only supported option
             show_padding: true,
             pages: 4,
-            row_pages: false, // use rows for page count, overrides pages option
             text_right: false,
             text_right_height: 100,
             transition_duration: 0,
@@ -117,13 +116,10 @@ Author: michael@revcontent.com
             ad_overlay: false, // pass key value object { content_type: icon }
             ad_overlay_position: 'bottom_right', // center, top_left, top_right, bottom_right, bottom_left
             query_params: false,
-            register_views: true, // manage views or false to let someone else do it
             user_ip: false,
             user_agent: false,
             css: '',
             disable_pagination: false,
-            register_impressions: true,
-            visible_rows: false,
             column_spans: false,
             pagination_dots_vertical: false,
             stacked: false,
@@ -169,12 +165,13 @@ Author: michael@revcontent.com
             disclosure_interest_height: 520,
             masonry_layout: false,
             user: null,
-            content: []
+            content: [],
+            history_stack: [],
+            emitter: false
         };
 
         // merge options
         this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
-        this.handlers = handles;
 
         // store options
         revUtils.storeUserOptions(this.options);
@@ -231,108 +228,9 @@ Author: michael@revcontent.com
         var gridElement = document.createElement('div');
         gridElement.id = 'rev-slider-grid';
 
-        this.element = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
+        this.element = this.options.element ? this.options.element : document.getElementById(this.options.id);
         this.element.style.width = '100%';
         this.element.innerHTML="";
-
-        if(this.options.history_stack.length>0){
-
-            var header = document.createElement('div');
-            //if(this.options.topic_id>0){
-            //    header.innerHTML="<h3>"+this.options.topic_title+" Articles</h3>";
-            //}
-            if(this.options.author_name && this.options.author_name.length>0){
-                header.innerHTML="<h3>Articles By "+this.options.author_name+"</h3>";
-            }
-            this.containerElement.appendChild(header);
-
-            var back = document.createElement('div');
-            var e_icon = '<span style="margin: 6px 2px 0 2px;width:24px;height:24px;display:block;background: transparent url(data:image/png;base64,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) top left no-repeat;background-size:contain"></span>';
-            var back_icon = '<span style="width:16px;height:16px;display:block;cursor:pointer;background: transparent url(data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgNTEyLjA1NiA1MTIuMDU2IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIuMDU2IDUxMi4wNTY7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgY2xhc3M9IiI+PGc+PGc+Cgk8Zz4KCQk8cGF0aCBkPSJNNDM0LjE2LDI0NC4yMjVjLTUxLjk2OC01My44NjctMTI2LjIyOS04Mi4xNTUtMjIwLjg0My04NC4wOTZWNjQuMDIyYzAtNC4zMDktMi42MDMtOC4yMTMtNi41OTItOS44NTYgICAgYy0zLjk4OS0xLjYyMS04LjU1NS0wLjc0Ny0xMS42MDUsMi4zMDRsLTE5MiwxOTJjLTQuMTYsNC4xNi00LjE2LDEwLjkyMywwLDE1LjA4M2wxOTIsMTkyYzMuMDUxLDMuMDcyLDcuNjU5LDMuOTg5LDExLjYyNywyLjMwNCAgICBjMy45ODktMS42NDMsNi41OTItNS41NDcsNi41OTItOS44NTZ2LTk1LjkxNWMyMTQuMzM2LDMuMTE1LDI3OC4zMTUsMTAwLjU2NSwyNzguOTMzLDEwMS41MjVjMS45ODQsMy4yLDUuNDQsNS4wNTYsOS4wNjcsNS4wNTYgICAgYzAuODk2LDAsMS44MTMtMC4xMjgsMi43MzEtMC4zNjNjNC41NDQtMS4yMTYsNy43NjUtNS4yMjcsNy45MzYtOS45NDFDNTEyLjE1NSw0NDMuNTQyLDUxNS4zMzMsMzI4LjM4NSw0MzQuMTYsMjQ0LjIyNXoiIGRhdGEtb3JpZ2luYWw9IiMwMDAwMDAiIGNsYXNzPSJhY3RpdmUtcGF0aCIgc3R5bGU9ImZpbGw6I0ZGRkZGRiIgZGF0YS1vbGRfY29sb3I9IiNmZmZmZmYiPjwvcGF0aD4KCTwvZz4KPC9nPjwvZz4gPC9zdmc+) top left no-repeat;background-size:contain;">&nbsp;</span>';
-            //var menu_icon = '<span style="margin: 9px 9px 0 9px;width:18px;height:18px;display:block;background:transparent url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMiA1MTI7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iNTEycHgiIGhlaWdodD0iNTEycHgiPgo8bGluZWFyR3JhZGllbnQgaWQ9IlNWR0lEXzFfIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAiIHkxPSIyNTgiIHgyPSI1MTIiIHkyPSIyNTgiIGdyYWRpZW50VHJhbnNmb3JtPSJtYXRyaXgoMSAwIDAgLTEgMCA1MTQpIj4KCTxzdG9wIG9mZnNldD0iMCIgc3R5bGU9InN0b3AtY29sb3I6IzAwRjJGRSIvPgoJPHN0b3Agb2Zmc2V0PSIwLjAyMSIgc3R5bGU9InN0b3AtY29sb3I6IzAzRUZGRSIvPgoJPHN0b3Agb2Zmc2V0PSIwLjI5MyIgc3R5bGU9InN0b3AtY29sb3I6IzI0RDJGRSIvPgoJPHN0b3Agb2Zmc2V0PSIwLjU1NCIgc3R5bGU9InN0b3AtY29sb3I6IzNDQkRGRSIvPgoJPHN0b3Agb2Zmc2V0PSIwLjc5NiIgc3R5bGU9InN0b3AtY29sb3I6IzRBQjBGRSIvPgoJPHN0b3Agb2Zmc2V0PSIxIiBzdHlsZT0ic3RvcC1jb2xvcjojNEZBQ0ZFIi8+CjwvbGluZWFyR3JhZGllbnQ+CjxwYXRoIHN0eWxlPSJmaWxsOnVybCgjU1ZHSURfMV8pOyIgZD0iTTQzOCwxNDhINzRjLTQwLjgwNCwwLTc0LTMzLjE5Ni03NC03NFMzMy4xOTYsMCw3NCwwaDM2NGM0MC44MDQsMCw3NCwzMy4xOTYsNzQsNzQgIFM0NzguODA0LDE0OCw0MzgsMTQ4eiBNNzQsNDBjLTE4Ljc0OCwwLTM0LDE1LjI1Mi0zNCwzNHMxNS4yNTIsMzQsMzQsMzRoMzY0YzE4Ljc0OCwwLDM0LTE1LjI1MiwzNC0zNHMtMTUuMjUyLTM0LTM0LTM0SDc0eiAgIE00MzgsMzMwSDc0Yy00MC44MDQsMC03NC0zMy4xOTYtNzQtNzRzMzMuMTk2LTc0LDc0LTc0aDM2NGM0MC44MDQsMCw3NCwzMy4xOTYsNzQsNzRTNDc4LjgwNCwzMzAsNDM4LDMzMHogTTc0LDIyMiAgYy0xOC43NDgsMC0zNCwxNS4yNTItMzQsMzRzMTUuMjUyLDM0LDM0LDM0aDM2NGMxOC43NDgsMCwzNC0xNS4yNTIsMzQtMzRzLTE1LjI1Mi0zNC0zNC0zNEg3NHogTTUxMiw0MzhjMC00MC44MDQtMzMuMTk2LTc0LTc0LTc0ICBINzRjLTQwLjgwNCwwLTc0LDMzLjE5Ni03NCw3NHMzMy4xOTYsNzQsNzQsNzRoMjY0YzExLjA0NiwwLDIwLTguOTU0LDIwLTIwcy04Ljk1NC0yMC0yMC0yMEg3NGMtMTguNzQ4LDAtMzQtMTUuMjUyLTM0LTM0ICBzMTUuMjUyLTM0LDM0LTM0aDM2NGMxOC43NDgsMCwzNCwxNS4yNTIsMzQsMzRzLTE1LjI1MiwzNC0zNCwzNGMtMTEuMDQ2LDAtMjAsOC45NTQtMjAsMjBzOC45NTQsMjAsMjAsMjAgIEM0NzguODA0LDUxMiw1MTIsNDc4LjgwNCw1MTIsNDM4eiIvPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8L3N2Zz4K) top left no-repeat;background-size:contain"></span>';
-            var menu_icon = '';
-
-            var left_pos = 'auto';
-            var grid_rect = this.containerElement.getBoundingClientRect();
-            var top_pos = grid_rect.top;
-            var grid_width = this.containerElement.clientWidth > 0 ?  this.containerElement.clientWidth  + 'px' : '100%';
-
-            this.containerElement.style.paddingTop = '48px';
-
-            back.setAttribute('style','overflow:hidden;transition: none;box-shadow: 0 1px 4px 0 rgba(12, 12, 13, 0.1);position:absolute;z-index:5000;left:' + left_pos + ';top:' + top_pos + ';margin-bottom: 9px;display: block;width: ' + grid_width + ';height: 40px;line-height: 40px;background-color:#fdfdfd;color:#777777;font-size:12px;');
-            back.setAttribute('id','go-back-bar');
-            back.classList.add('go-back-bar');
-
-            var header_logo = '';
-            if(this.options.brand_logo_secondary){
-                header_logo = '<img src="' + this.options.brand_logo_secondary + '" alt="Newsweek.com Feed" style="max-width:100%;margin: 0 9px;" />';
-            }
-
-            back.innerHTML = '<div style="display:flex;flex-direction:row;">' +
-                '<div class="feed-header-back"><button style="background-color:#d6d6d6;border:0;margin:0;border-right:1.0px solid #d3d3d3;display:block;width:40px;height:40px;text-align:center;font-weight: bold;font-size:32px" class="feed-back-button" name="feed-back-button" value="">' + back_icon + '</button></div>' +
-                '<div class="feed-header-logo" style="width:32px;">' + header_logo + '</div>' +
-                '<div class="feed-header-title" style="width:100%;padding-left:18px;text-overflow:ellipsis;overflow:hidden;text-align-center;color:#676767;font-size:14px;letter-spacing: 0px;font-weight:normal;"><span>' + this.options.topic_title + '</span></div>' +
-                '<div class="feed-header-opions" style="min-width:auto;text-align:center;">' + menu_icon + '</div>' +
-
-                '</div>';
-
-            this.containerElement.appendChild(back);
-
-            window.addEventListener('scroll', function() {
-                var pos_1 = window.pageYOffset;
-                setTimeout(function(){
-                    var pos_2 = window.pageYOffset;
-                    var direction = 'down';
-                    var grid_rect = that.containerElement.getBoundingClientRect();
-
-                    if(pos_2 < pos_1) {
-                        direction = 'up';
-                    } else {
-                        direction = 'down';
-                    }
-
-                    if(grid_rect.top <= 0) {
-                        var fix_ts = 0;
-                        var fix_ts2 = 0;
-                        clearTimeout(fix_ts);
-                        fix_ts = setTimeout(function() {
-                            back.style.top = ((-1 * grid_rect.top)) + 'px';
-                            back.classList.remove('no-shadow');
-                            if(direction == 'up') {
-                                //back.style.opacity = '0';
-                            } else {
-                                //clearTimeout(fix_ts2);
-                                //fix_ts2 = setTimeout(function() {
-                                    //back.style.opacity = '1';
-                                //}, 1500);
-                            }
-                        }, 0);
-
-                    } else {
-                        back.style.top = 0;
-                        var reset_ts = 0;
-                        var reset_ts2 = 0;
-                        back.classList.add('no-shadow');
-
-                        clearTimeout(reset_ts);
-                        reset_ts = setTimeout(function() {
-                            if(direction == 'up') {
-                                //back.style.opacity = '0';
-                            } else {
-                                //clearTimeout(reset_ts2);
-                                //reset_ts2 = setTimeout(function() {
-                                //back.style.opacity = '1';
-                                //}, 1500);
-                            }
-
-                        }, 0);
-                    }
-                }, 300);
-            }, { passive: true });
-
-            revUtils.addEventListener(back.querySelector('.feed-back-button'),'click',this.handlers.back);
-        }
-
         revUtils.append(this.containerElement, this.innerContainerElement);
 
         revUtils.append(this.innerContainerElement, this.innerElement);
@@ -576,6 +474,7 @@ Author: michael@revcontent.com
             var added = grid.addItems([element]);
 
             added[0].reactions = true; // everything has reactions
+            added[0].handlers = [];
 
             // var reactionsContainer = document.createElement('div');
 
@@ -1431,10 +1330,12 @@ Author: michael@revcontent.com
                                         '<div class="rev-before-image">' +
                                             '<div class="rev-meta">' +
                                                 '<div class="rev-meta-inner">' +
-                                                    '<div class="rev-headline-icon-container" style="cursor:pointer"><div class="rev-headline-icon"></div></div>' +
-                                                    '<div class="rev-provider-date-container" style="cursor:pointer">' +
-                                                        '<div class="rev-provider"></div>' +
-                                                        '<div class="rev-date"></div>' +
+                                                    '<div class="rev-feed-link" data-type="author">' +
+                                                        '<div class="rev-headline-icon-container" style="cursor:pointer"><div class="rev-headline-icon"></div></div>' +
+                                                        '<div class="rev-provider-date-container" style="cursor:pointer">' +
+                                                            '<div class="rev-provider"></div>' +
+                                                            '<div class="rev-date"></div>' +
+                                                        '</div>' +
                                                     '</div>' +
 
                                                 '</div>' +
@@ -1615,21 +1516,20 @@ Author: michael@revcontent.com
         return list;
     };
 
+    RevSlider.prototype.loadTopicFeed = function(topicId, topicTitle, withoutHistory){
+        this.options.emitter.emitEvent('createFeed', ['topic', {
+            topicId: topicId,
+            topicTitle: topicTitle,
+            withoutHistory: withoutHistory
+        }]);
+    }
 
-    RevSlider.prototype.loadTopicFeed = function(topicId, topicTitle, history){
-        if(this.handlers && this.handlers.loadTopicFeed){
-            this.options.topic_title = topicTitle;
-            this.options.topic_id = topicId;
-            this.handlers.loadTopicFeed(topicId,topicTitle,history);
-        }
-    };
-
-    RevSlider.prototype.loadAuthorFeed = function(authorName,history){
-        if(this.handlers && this.handlers.loadAuthorFeed){
-            this.handlers.loadAuthorFeed(authorName,history);
-        }
-    };
-
+    RevSlider.prototype.loadAuthorFeed = function(authorName, withoutHistory){
+        this.options.emitter.emitEvent('createFeed', ['author', {
+            authorName: authorName,
+            withoutHistory: withoutHistory
+        }]);
+    }
 
     RevSlider.prototype.generateUrl = function(internalOffset, internalCount, sponsoredOffset, sponsoredCount) {
         var url = (this.options.host ? this.options.host + '/api/v1/' : this.options.url) +
@@ -1650,17 +1550,17 @@ Author: michael@revcontent.com
             url += '&show_comments=1';
 
             var ignoreList = this.getIgnoreList(this.grid.items);
-            url +="&doc_ids="+ignoreList.join(",");
+            url += '&doc_ids=' + ignoreList.join(",");
+
             var topicId = this.options.topic_id;
-            if(topicId && topicId>0){
-                url +="&topic_id="+topicId;
+            if(topicId && topicId > 0) {
+                url += "&topic_id=" + topicId;
             }
+
             var authorName = this.options.author_name;
-            if(authorName && authorName.length>0){
-                url +="&author_name="+encodeURI(authorName);
+            if(authorName && authorName.length>0) {
+                url += '&author_name=' + encodeURI(authorName);
             }
-
-
         }
 
         if (this.options.keywords) {
@@ -1832,6 +1732,11 @@ Author: michael@revcontent.com
         // var item = itemTypes[dataType][j];
         var itemData = item.data;
 
+        for (var i = 0; i < item.handlers.length; i++) {
+            var handler = item.handlers[i];
+            revUtils.removeEventListener(handler.el, handler.type, handler.handle);
+        }
+
         if (!itemData) {
             return;
             // continue;
@@ -1930,18 +1835,6 @@ Author: michael@revcontent.com
                 provider.innerHTML = itemData.brand ? itemData.brand : this.extractRootDomain(itemData.target_url);
             } else if (item.type == 'internal' && itemData.author) {
                 provider.innerHTML = itemData.author;
-
-                var authorElement = item.element.querySelector(".rev-provider-date-container");
-                var authorImage = item.element.querySelector(".rev-headline-icon-container");
-                var handle = (function(a){ return function(e){
-                    e.stopPropagation();
-                    e.preventDefault();
-                    that.loadAuthorFeed(a);
-                }
-                })(itemData.author);
-                revUtils.addEventListener(authorElement, 'click',handle,{passive:false});
-                revUtils.addEventListener(authorImage, 'click',handle,{passive:false});
-
             }
         }
 
@@ -2057,22 +1950,55 @@ Author: michael@revcontent.com
         }
 
         revUtils.remove(item.element.querySelector('.rev-reason'));
-        if (itemData.reason_topic_id>0) {
+
+        if (itemData.reason_topic_id > 0) {
             var reason = document.createElement('div');
             var t = document.createElement("span");
-            t.setAttribute("style","cursor:pointer;")
+            t.setAttribute('style', 'cursor:pointer;');
+            t.setAttribute('data-type', 'topic');
+            t.className = 'rev-feed-link';
             t.innerHTML = "<strong>"+itemData.reason_topic+"</strong>";
-            revUtils.addEventListener(t,'click',(function(item){
-                return function() { that.loadTopicFeed(item.reason_topic_id,item.reason_topic); };
-            })(itemData));
-            var txt = "Recommended because you are interested in ";
+
+            var txt = 'Recommended because you are interested in ';
             reason.className = 'rev-reason';
             reason.innerHTML = txt;
-            reason.title = txt+itemData.reason_topic;
+            reason.title = txt + itemData.reason_topic;
             reason.appendChild(t);
             revUtils.prepend(item.element.querySelector('.rev-ad-outer'), reason);
         }
+
+
+        // feed links
+        var feedLinks = item.element.querySelectorAll('.rev-feed-link');
+        for (var i = 0; i < feedLinks.length; i++) {
+            var clickHandle = this.handleFeedLink.bind(this, feedLinks[i].getAttribute('data-type'), itemData);
+            item.handlers.push({
+                el: feedLinks[i],
+                type: 'click',
+                handle: clickHandle
+            })
+            revUtils.addEventListener(feedLinks[i], 'click', clickHandle, {passive:false});
+        }
     };
+
+    RevSlider.prototype.handleFeedLink = function(type, itemData, e) {
+        if (e) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+
+        switch (type) {
+            case 'author':
+                this.loadAuthorFeed(itemData.author);
+                break;
+            case 'topic':
+                this.loadTopicFeed(itemData.reason_topic_id, itemData.reason_topic)
+                break;
+            default:
+                // TODO
+                break;
+        }
+    }
 
     RevSlider.prototype.updateDisplayedItems = function(items, data, passive) {
         // if (!this.data.length) { // if no data remove the container and call it a day
@@ -2130,7 +2056,7 @@ Author: michael@revcontent.com
         }
 
         if (removeItems.length && passive !== true) {
-            this.emitter.emitEvent('removedItems', [removeItems]);
+            this.options.emitter.emitEvent('removedItems', [removeItems]);
         }
 
         return {
@@ -2379,7 +2305,7 @@ Author: michael@revcontent.com
                 if ( !cellElement ) {
                     return;
                 }
-                if(target.classList.contains('selector')) {
+                if (target.classList.contains('selector')) {
                     if (cellElement.classList.contains('selected-interest')) {
                         cellElement.classList.remove('selected-interest');
                         cellElement.querySelectorAll('span.selector')[0].classList.remove('subscribed');
@@ -2393,12 +2319,12 @@ Author: michael@revcontent.com
                     }
                 }
 
+                if (target.classList.contains('cell-wrapper') || target.classList.contains('interest-title')) {
 
-
-                if(target.classList.contains('cell-wrapper') || target.classList.contains('interest-title')){
-
-                    that.loadTopicFeed(parseInt(cellElement.getAttribute('data-id'), 10),
-                        cellElement.getAttribute('data-title'));
+                    that.handleFeedLink('topic', {
+                        reason_topic_id: parseInt(cellElement.getAttribute('data-id'), 10),
+                        reason_topic: cellElement.getAttribute('data-title')
+                    });
                     // Load an Explore Panel in "TOPIC" mode to show articles in that interest category...
                     // this.swipeToPanel('trending', target.getAttribute('data-slug'));
                     // -- DISABLE TOPIC "DIVE-IN" PANEL UNTIL OTHER FEATURES ARE COMPLETED

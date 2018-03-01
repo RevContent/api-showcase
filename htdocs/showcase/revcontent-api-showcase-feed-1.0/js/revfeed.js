@@ -53,6 +53,7 @@ Author: michael@revcontent.com
             auto_scroll: true,
             rev_position: 'top_right',
             developer: false,
+            disable_pagination: true,
             columns: 1,
             breakpoints: {
                 xxs: 0,
@@ -99,10 +100,11 @@ Author: michael@revcontent.com
             user: null,
             content: [],
             view: false,
-            test: false
+            test: false,
+            emitter: new EventEmitter(),
+            history_stack: []
         };
 
-        this.historyStack = [];
         // merge options
         this.options = revUtils.extend(defaults, opts);
 
@@ -162,11 +164,9 @@ Author: michael@revcontent.com
 
         this.windowWidth();
 
-        this.createInnerWidget();
-
         var self = this;
 
-        this.innerWidget.emitter.on('removedItems', function(items) {
+        this.options.emitter.on('removedItems', function(items) {
             self.removed = true;
 
             revUtils.removeEventListener(window, 'scroll', self.scrollListener);
@@ -180,16 +180,57 @@ Author: michael@revcontent.com
             self.innerWidget.grid.layout();
         });
 
+        this.options.emitter.on('createFeed', function(type, data) {
+            if (!data.withoutHistory) {
+                self.pushHistory();
+            }
+
+            // initial
+            var total = self.options.rows * self.innerWidget.grid.perRow;
+
+            while(self.innerWidget.grid.items.length > total) {
+                var popped = self.innerWidget.grid.items.pop();
+                popped.remove();
+            }
+
+            self.internalOffset = 0;
+            self.sponsoredOffset = 0;
+
+            switch (type) {
+                case 'author':
+                    self.options.author_name = data.authorName;
+                    self.options.topic_id = -1;
+                    break;
+                case 'topic':
+                    self.options.author_name = '';
+                    self.options.topic_id = data.topicId;
+                    self.options.topic_title = data.topicTitle;
+                    break;
+                default:
+                    self.options.author_name ='';
+                    self.options.topic_id = -1;
+                    break;
+            }
+
+            self.innerWidget.options = revUtils.extend(self.innerWidget.options, self.options);
+
+            var internalURL = self.innerWidget.generateUrl(0, self.innerWidget.grid.items.length, 0, 0);
+
+            revApi.request(internalURL, function(resp) {
+                self.innerWidget.updateDisplayedItems(self.innerWidget.grid.items, resp, true);
+            });
+
+            self.navBar();
+        });
+
+        this.innerWidget = this.createInnerWidget(this.containerElement, this.options);
+
         if (!this.innerWidget.dataPromise) {
             return;
         }
 
-
-
         window.feedEasterEgg = function() {
-            revApi.request( self.options.host + '/api/v1/engage/profile.php?', function(data) {
-                self.initCornerButton(data);
-            });
+            self.initCornerButton();
         };
 
         this.innerWidget.dataPromise.then(function(data) {
@@ -234,14 +275,19 @@ Author: michael@revcontent.com
         });
     };
 
-    Feed.prototype.initCornerButton = function(data) {
+    Feed.prototype.initCornerButton = function() {
+
+        if (!this.options.user) {
+            return;
+        }
+
         this.buttonContainerElement = document.createElement('div');
         this.buttonContainerElement.id = 'rev-corner-button-container';
 
         this.buttonElement = document.createElement('a');
         this.buttonElement.id = 'rev-corner-button';
 
-        this.buttonElement.innerHTML = '<img src="' + data.profile_url + '"/>';
+        this.buttonElement.innerHTML = '<img src="' + this.options.user.profile_url + '"/>';
 
         // var svg;
 
@@ -296,7 +342,7 @@ Author: michael@revcontent.com
         // revUtils.append(document.body, userProfile);
         // revUtils.append(document.body, this.profileMask);
 
-        userProfile.innerHTML = '<div id="profile-image" style="background-image: url(' + data.profile_url + ')"></div>';
+        userProfile.innerHTML = '<div id="profile-image" style="background-image: url(' + this.options.user.profile_url + ')"></div>';
 
         revUtils.addEventListener(userProfile, revDetect.mobile() ? 'touchstart' : 'click', function(ev) {
             ev.preventDefault();
@@ -347,38 +393,140 @@ Author: michael@revcontent.com
 
     };
 
+    Feed.prototype.navBar = function() {
+        var existingHeader = this.innerWidget.containerElement.querySelector('.rev-nav-header');
+        var header = existingHeader ? existingHeader : document.createElement('div');
+        header.className = 'rev-nav-header';
+        //if(this.options.topic_id>0){
+        //    header.innerHTML="<h3>"+this.options.topic_title+" Articles</h3>";
+        //}
+
+        if(this.options.author_name && this.options.author_name.length>0){
+            header.innerHTML="<h3>Articles By "+this.options.author_name+"</h3>";
+        }
+
+        var existingBack = this.innerWidget.containerElement.querySelector('.go-back-bar');
+        var back = existingBack ? existingBack : document.createElement('div');
+        var e_icon = '<span style="margin: 6px 2px 0 2px;width:24px;height:24px;display:block;background: transparent url(data:image/png;base64,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) top left no-repeat;background-size:contain"></span>';
+        var back_icon = '<span style="width:16px;height:16px;display:block;cursor:pointer;background: transparent url(data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgNTEyLjA1NiA1MTIuMDU2IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIuMDU2IDUxMi4wNTY7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgY2xhc3M9IiI+PGc+PGc+Cgk8Zz4KCQk8cGF0aCBkPSJNNDM0LjE2LDI0NC4yMjVjLTUxLjk2OC01My44NjctMTI2LjIyOS04Mi4xNTUtMjIwLjg0My04NC4wOTZWNjQuMDIyYzAtNC4zMDktMi42MDMtOC4yMTMtNi41OTItOS44NTYgICAgYy0zLjk4OS0xLjYyMS04LjU1NS0wLjc0Ny0xMS42MDUsMi4zMDRsLTE5MiwxOTJjLTQuMTYsNC4xNi00LjE2LDEwLjkyMywwLDE1LjA4M2wxOTIsMTkyYzMuMDUxLDMuMDcyLDcuNjU5LDMuOTg5LDExLjYyNywyLjMwNCAgICBjMy45ODktMS42NDMsNi41OTItNS41NDcsNi41OTItOS44NTZ2LTk1LjkxNWMyMTQuMzM2LDMuMTE1LDI3OC4zMTUsMTAwLjU2NSwyNzguOTMzLDEwMS41MjVjMS45ODQsMy4yLDUuNDQsNS4wNTYsOS4wNjcsNS4wNTYgICAgYzAuODk2LDAsMS44MTMtMC4xMjgsMi43MzEtMC4zNjNjNC41NDQtMS4yMTYsNy43NjUtNS4yMjcsNy45MzYtOS45NDFDNTEyLjE1NSw0NDMuNTQyLDUxNS4zMzMsMzI4LjM4NSw0MzQuMTYsMjQ0LjIyNXoiIGRhdGEtb3JpZ2luYWw9IiMwMDAwMDAiIGNsYXNzPSJhY3RpdmUtcGF0aCIgc3R5bGU9ImZpbGw6I0ZGRkZGRiIgZGF0YS1vbGRfY29sb3I9IiNmZmZmZmYiPjwvcGF0aD4KCTwvZz4KPC9nPjwvZz4gPC9zdmc+) top left no-repeat;background-size:contain;">&nbsp;</span>';
+        //var menu_icon = '<span style="margin: 9px 9px 0 9px;width:18px;height:18px;display:block;background:transparent url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMiA1MTI7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iNTEycHgiIGhlaWdodD0iNTEycHgiPgo8bGluZWFyR3JhZGllbnQgaWQ9IlNWR0lEXzFfIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAiIHkxPSIyNTgiIHgyPSI1MTIiIHkyPSIyNTgiIGdyYWRpZW50VHJhbnNmb3JtPSJtYXRyaXgoMSAwIDAgLTEgMCA1MTQpIj4KCTxzdG9wIG9mZnNldD0iMCIgc3R5bGU9InN0b3AtY29sb3I6IzAwRjJGRSIvPgoJPHN0b3Agb2Zmc2V0PSIwLjAyMSIgc3R5bGU9InN0b3AtY29sb3I6IzAzRUZGRSIvPgoJPHN0b3Agb2Zmc2V0PSIwLjI5MyIgc3R5bGU9InN0b3AtY29sb3I6IzI0RDJGRSIvPgoJPHN0b3Agb2Zmc2V0PSIwLjU1NCIgc3R5bGU9InN0b3AtY29sb3I6IzNDQkRGRSIvPgoJPHN0b3Agb2Zmc2V0PSIwLjc5NiIgc3R5bGU9InN0b3AtY29sb3I6IzRBQjBGRSIvPgoJPHN0b3Agb2Zmc2V0PSIxIiBzdHlsZT0ic3RvcC1jb2xvcjojNEZBQ0ZFIi8+CjwvbGluZWFyR3JhZGllbnQ+CjxwYXRoIHN0eWxlPSJmaWxsOnVybCgjU1ZHSURfMV8pOyIgZD0iTTQzOCwxNDhINzRjLTQwLjgwNCwwLTc0LTMzLjE5Ni03NC03NFMzMy4xOTYsMCw3NCwwaDM2NGM0MC44MDQsMCw3NCwzMy4xOTYsNzQsNzQgIFM0NzguODA0LDE0OCw0MzgsMTQ4eiBNNzQsNDBjLTE4Ljc0OCwwLTM0LDE1LjI1Mi0zNCwzNHMxNS4yNTIsMzQsMzQsMzRoMzY0YzE4Ljc0OCwwLDM0LTE1LjI1MiwzNC0zNHMtMTUuMjUyLTM0LTM0LTM0SDc0eiAgIE00MzgsMzMwSDc0Yy00MC44MDQsMC03NC0zMy4xOTYtNzQtNzRzMzMuMTk2LTc0LDc0LTc0aDM2NGM0MC44MDQsMCw3NCwzMy4xOTYsNzQsNzRTNDc4LjgwNCwzMzAsNDM4LDMzMHogTTc0LDIyMiAgYy0xOC43NDgsMC0zNCwxNS4yNTItMzQsMzRzMTUuMjUyLDM0LDM0LDM0aDM2NGMxOC43NDgsMCwzNC0xNS4yNTIsMzQtMzRzLTE1LjI1Mi0zNC0zNC0zNEg3NHogTTUxMiw0MzhjMC00MC44MDQtMzMuMTk2LTc0LTc0LTc0ICBINzRjLTQwLjgwNCwwLTc0LDMzLjE5Ni03NCw3NHMzMy4xOTYsNzQsNzQsNzRoMjY0YzExLjA0NiwwLDIwLTguOTU0LDIwLTIwcy04Ljk1NC0yMC0yMC0yMEg3NGMtMTguNzQ4LDAtMzQtMTUuMjUyLTM0LTM0ICBzMTUuMjUyLTM0LDM0LTM0aDM2NGMxOC43NDgsMCwzNCwxNS4yNTIsMzQsMzRzLTE1LjI1MiwzNC0zNCwzNGMtMTEuMDQ2LDAtMjAsOC45NTQtMjAsMjBzOC45NTQsMjAsMjAsMjAgIEM0NzguODA0LDUxMiw1MTIsNDc4LjgwNCw1MTIsNDM4eiIvPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8L3N2Zz4K) top left no-repeat;background-size:contain"></span>';
+        var menu_icon = '';
+
+        var left_pos = 'auto';
+        var grid_rect = this.innerWidget.containerElement.getBoundingClientRect();
+        var top_pos = grid_rect.top;
+        top_pos = 0; // TODO
+        var grid_width = this.innerWidget.containerElement.clientWidth > 0 ?  this.innerWidget.containerElement.clientWidth  + 'px' : '100%';
+
+        this.innerWidget.containerElement.style.paddingTop = '48px';
+
+        back.setAttribute('style','overflow:hidden;transition: none;box-shadow: 0 1px 4px 0 rgba(12, 12, 13, 0.1);position:absolute;z-index:5000;left:' + left_pos + ';top:' + top_pos + ';margin-bottom: 9px;display: block;width: ' + grid_width + ';height: 40px;line-height: 40px;background-color:#fdfdfd;color:#777777;font-size:12px;');
+        back.setAttribute('id','go-back-bar');
+        back.classList.add('go-back-bar');
+
+        var header_logo = '';
+        if(this.options.brand_logo_secondary){
+            header_logo = '<img src="' + this.options.brand_logo_secondary + '" alt="Newsweek.com Feed" style="max-width:100%;margin: 0 9px;" />';
+        }
+
+        back.innerHTML = '<div style="display:flex;flex-direction:row;">' +
+            '<div class="feed-header-back"><button style="background-color:#d6d6d6;border:0;margin:0;border-right:1.0px solid #d3d3d3;display:block;width:40px;height:40px;text-align:center;font-weight: bold;font-size:32px" class="feed-back-button" name="feed-back-button" value="">' + back_icon + '</button></div>' +
+            '<div class="feed-header-logo" style="width:32px;">' + header_logo + '</div>' +
+            '<div class="feed-header-title" style="width:100%;padding-left:18px;text-overflow:ellipsis;overflow:hidden;text-align-center;color:#676767;font-size:14px;letter-spacing: 0px;font-weight:normal;"><span>' + this.options.topic_title + '</span></div>' +
+            '<div class="feed-header-opions" style="min-width:auto;text-align:center;">' + menu_icon + '</div>' +
+
+            '</div>';
+
+        // this.innerWidget.containerElement.appendChild(back);
+
+        this.innerWidget.head.insertAdjacentElement('afterend', back);
+        this.innerWidget.head.insertAdjacentElement('afterend', header);
+
+        var that = this;
+
+        window.addEventListener('scroll', function() {
+            var pos_1 = window.pageYOffset;
+            setTimeout(function(){
+                var pos_2 = window.pageYOffset;
+                var direction = 'down';
+                var grid_rect = that.innerWidget.containerElement.getBoundingClientRect();
+
+                if(pos_2 < pos_1) {
+                    direction = 'up';
+                } else {
+                    direction = 'down';
+                }
+
+                if(grid_rect.top <= 0) {
+                    var fix_ts = 0;
+                    var fix_ts2 = 0;
+                    clearTimeout(fix_ts);
+                    fix_ts = setTimeout(function() {
+                        back.style.top = ((-1 * grid_rect.top)) + 'px';
+                        back.classList.remove('no-shadow');
+                        if(direction == 'up') {
+                            //back.style.opacity = '0';
+                        } else {
+                            //clearTimeout(fix_ts2);
+                            //fix_ts2 = setTimeout(function() {
+                                //back.style.opacity = '1';
+                            //}, 1500);
+                        }
+                    }, 0);
+
+                } else {
+                    back.style.top = 0;
+                    var reset_ts = 0;
+                    var reset_ts2 = 0;
+                    back.classList.add('no-shadow');
+
+                    clearTimeout(reset_ts);
+                    reset_ts = setTimeout(function() {
+                        if(direction == 'up') {
+                            //back.style.opacity = '0';
+                        } else {
+                            //clearTimeout(reset_ts2);
+                            //reset_ts2 = setTimeout(function() {
+                            //back.style.opacity = '1';
+                            //}, 1500);
+                        }
+
+                    }, 0);
+                }
+            }, 300);
+        }, { passive: true });
+
+        revUtils.addEventListener(back.querySelector('.feed-back-button'),'click',this.loadFromHistory.bind(this));
+    };
+
     Feed.prototype.pushHistory = function(){
-        this.historyStack.push({
+        this.options.history_stack.push({
             author_name:this.options.author_name,
             topic_id:this.options.topic_id,
             topic_title:this.options.topic_title
         });
     };
 
-    Feed.prototype.loadFromHistory = function(){
-        if(this.historyStack.length>0){
-            var item = this.historyStack.pop();
-            if(item.topic_id && item.topic_id>0){
+    Feed.prototype.loadFromHistory = function() {
+        if (this.options.history_stack.length > 0) {
+            var item = this.options.history_stack.pop();
+            if (item.topic_id && item.topic_id > 0) {
                 this.innerWidget.loadTopicFeed(item.topic_id,item.topic_title,true);
             }
-            else if(item.author_name && item.author_name.length>0){
+            else if (item.author_name && item.author_name.length > 0) {
                 this.innerWidget.loadAuthorFeed(item.author_name, true);
-            }else{
-                this.options.author_name ='';
-                this.options.topic_id = -1;
-                this.internalOffset = 0;
-                this.sponsoredOffset = 0;
-                this.createInnerWidget();
-                this.infinite();
+            } else {
+                this.options.emitter.emitEvent('createFeed', ['default', {
+                    withoutHistory: true
+                }]);
             }
-
         }
     };
 
     Feed.prototype.windowWidth = function() {
 
         if (this.options.window_width_devices && revDetect.show(this.options.window_width_devices)) {
-            this.windowWidthEnabled = true;
+            this.options.window_width_enabled = true;
 
             var that = this;
 
@@ -397,101 +545,9 @@ Author: michael@revcontent.com
         }
     };
 
-    Feed.prototype.createInnerWidget = function() {
-        var that = this;
-        this.innerWidget = new RevSlider({
-            mock: this.options.mock,
-            api_source:   this.options.api_source,
-            element:      [this.containerElement],
-            url:          this.options.url,
-            host:          this.options.host,
-            api_key:      this.options.api_key,
-            pub_id:       this.options.pub_id,
-            widget_id:    this.options.widget_id,
-            domain:       this.options.domain,
-            topic_id:     this.options.topic_id,
-            overlay_icons: this.options.overlay_icons, // pass in custom icons or overrides
-            image_overlay: this.options.image_overlay, // pass key value object { content_type: icon }
-            image_overlay_position: this.options.image_overlay_position, // center, top_left, top_right, bottom_right, bottom_left
-            ad_overlay: this.options.ad_overlay, // pass key value object { content_type: icon }
-            ad_overlay_position: this.options.ad_overlay_position, // center, top_left, top_right, bottom_right, bottom_left
-            rev_position: this.options.rev_position,
-            header:       this.options.header,
-            per_row:      this.options.per_row,
-            rows:         this.options.rows,
-            buttons:      this.options.buttons,
-            multipliers:  this.options.multipliers,
-            css:          this.options.css,
-            column_spans: this.options.column_spans,
-            image_ratio:  this.options.image_ratio,
-            headline_icon_selector:  this.options.headline_icon_selector,
-            headline_size: this.options.headline_size,
-            max_headline: this.options.max_headline,
-            disclosure_text: this.options.disclosure_text,
-            query_params: this.options.query_params,
-            user_ip:      this.options.user_ip,
-            user_agent:   this.options.user_agent,
-            disable_pagination: true,
-            // pagination_dots: true,
-            // pagination_dots_vertical: true,
-            register_impressions: false,
-            register_views: false,
-            row_pages: true,
-            visible_rows: 1,
-            brand_logo: this.options.brand_logo,
-            brand_logo_secondary: this.options.brand_logo_secondary,
-            comment_div: this.options.comment_div,
-            reaction_id: this.options.reaction_id,
-            mobile_image_optimize: this.options.mobile_image_optimize,
-            trending_utm: this.options.trending_utm,
-            keywords: this.options.keywords,
-            developer: this.options.developer,
-            internal_selector: this.options.internal_selector,
-            headline_top_selector: this.options.headline_top_selector,
-            window_width_enabled: this.windowWidthEnabled,
-            disclosure_about_src: this.options.disclosure_about_src,
-            disclosure_about_height: this.options.disclosure_about_height,
-            disclosure_interest_src: this.options.disclosure_interest_src,
-            disclosure_interest_height: this.options.disclosure_interest_height,
-            breakpoints: this.options.breakpoints,
-            masonry_layout: this.options.masonry_layout,
-            img_host: this.options.img_host,
-            author_name: this.options.author_name,
-            history_stack:that.historyStack,
-            topic_title:this.options.topic_title,
-            view: this.options.view,
-            user: this.options.user,
-            content: this.options.content,
-            columns: this.options.columns,
-            test: this.options.test
-        },{
-            "loadTopicFeed":function(topicId, topicTitle, withoutHistory){
-                if(!withoutHistory) that.pushHistory();
-                that.options.author_name = '';
-                that.options.topic_id = topicId;
-                that.options.topic_title = topicTitle;
-                that.internalOffset = 0;
-                that.sponsoredOffset = 0;
-                that.createInnerWidget();
-                that.infinite();
-
-
-            },
-            "loadAuthorFeed":function(authorName, withoutHistory){
-                if(!withoutHistory) that.pushHistory();
-                that.options.author_name = authorName;
-                that.options.topic_id = -1;
-                that.internalOffset = 0;
-                that.sponsoredOffset = 0;
-                that.createInnerWidget();
-                that.infinite();
-
-            },
-            "back":function () {
-                that.loadFromHistory();
-            }
-
-        });
+    Feed.prototype.createInnerWidget = function(element, options) {
+        options.element = element;
+        return new RevSlider(options);
     };
 
     Feed.prototype.viewability = function() {
