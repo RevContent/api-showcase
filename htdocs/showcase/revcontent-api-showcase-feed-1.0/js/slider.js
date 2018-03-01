@@ -1752,7 +1752,7 @@ Author: michael@revcontent.com
                 if (itemData.favicon_url) {
                     var imageUrl = this.options.img_host +'/?url=' + itemData.favicon_url.replace('https://', 'http://');
                     // https://stackoverflow.com/a/1203361
-                    var imageFormat = itemData.favicon_url.substring(itemData.favicon_url.lastIndexOf('.')+1, itemData.favicon_url.length) || itemData.favicon_url
+                    var imageFormat = itemData.favicon_url.substring(itemData.favicon_url.lastIndexOf('.')+1, itemData.favicon_url.length) || itemData.favicon_url;
 
                     if (imageFormat == 'ico' ) {
                         imageUrl += '&op=noop';
@@ -1809,46 +1809,46 @@ Author: michael@revcontent.com
         }
 
         var commentButton = item.element.querySelector('.rev-reaction-comment');
-                if (commentButton) {
-                    commentButton.itemData = itemData;
-                    revUtils.addEventListener(commentButton, 'click', function(ev) {
-                        that.handleComments(this.itemData, false);
-                    });
-                }
-
-                //remove any existing comment ui so it doesnt dupe on personalization
-                revUtils.remove(item.element.querySelector('.rev-comments'));
-                revUtils.remove(item.element.querySelector('.rev-comment-box'));
-
-                //remove all this once we have real comments
-                //var mockComment = true;
-                var that = this;
-
-                var commentsULElement = document.createElement('ul');
-                revUtils.addClass(commentsULElement, 'comments-list');
-                item.element.querySelector('.rev-content-inner').appendChild(commentsULElement);
-
-                this.setFeaturedComment(item, commentsULElement);
-                
-                var commentBoxElement = document.createElement('div');
-                    revUtils.addClass(commentBoxElement, 'rev-comment-box');
-
-                var commentBoxHtml = '<div class="rev-comment-box" style="padding: 8px;background: #fafbfd;border-top: 1px solid #e6ecf5;">' +
-                            '<img src="https://relayfm.s3.amazonaws.com/uploads/user/avatar/4/user_avatar_mykehurley_artwork.png" alt="author" style="width: 24px;height: 24px;float:left;border-radius: 24px;">' +
-                            '<div class="comment-input" style="padding: 0px 0 0 34px;">' +
-                            '<input type="text" placeholder="Leave a Comment" style="height: 30px;width: 100%;border-radius: 4px;border: 1px solid #e6ecf5;padding: 0 10px;cursor: text;">' +
-                            '</div><div class="clearfix" style="clear: both;"></div></div>';
-
-                commentBoxElement.innerHTML = commentBoxHtml;
-
-                commentBoxElement.itemData = itemData;
-
-                revUtils.addEventListener(commentBoxElement, 'click', function(ev) {
-                    that.handleComments(this.itemData, true);
-                });
-
-                item.element.querySelector('.rev-content-inner').appendChild(commentBoxElement);
+        if (commentButton) {
+            commentButton.itemData = itemData;
+            revUtils.addEventListener(commentButton, 'click', function(ev) {
+                that.handleComments(this.itemData, false);
+            });
         }
+
+        //remove any existing comment ui so it doesnt dupe on personalization
+        revUtils.remove(item.element.querySelector('.rev-comments'));
+        revUtils.remove(item.element.querySelector('.rev-comment-box'));
+
+        //remove all this once we have real comments
+        //var mockComment = true;
+        var that = this;
+
+        var commentsULElement = document.createElement('ul');
+        revUtils.addClass(commentsULElement, 'comments-list');
+        item.element.querySelector('.rev-content-inner').appendChild(commentsULElement);
+
+        this.setFeaturedComment(item, commentsULElement);
+        
+        var commentBoxElement = document.createElement('div');
+            revUtils.addClass(commentBoxElement, 'rev-comment-box');
+
+        var commentBoxHtml = '<div class="rev-comment-box" style="padding: 8px;background: #fafbfd;border-top: 1px solid #e6ecf5;">' +
+                    '<img src="https://relayfm.s3.amazonaws.com/uploads/user/avatar/4/user_avatar_mykehurley_artwork.png" alt="author" style="width: 24px;height: 24px;float:left;border-radius: 24px;">' +
+                    '<div class="comment-input" style="padding: 0px 0 0 34px;">' +
+                    '<input type="text" placeholder="Leave a Comment" style="height: 30px;width: 100%;border-radius: 4px;border: 1px solid #e6ecf5;padding: 0 10px;cursor: text;">' +
+                    '</div><div class="clearfix" style="clear: both;"></div></div>';
+
+        commentBoxElement.innerHTML = commentBoxHtml;
+
+        commentBoxElement.itemData = itemData;
+
+        revUtils.addEventListener(commentBoxElement, 'click', function(ev) {
+            that.handleComments(this.itemData, true);
+        });
+
+        item.element.querySelector('.rev-content-inner').appendChild(commentBoxElement);
+        
 
         if (item.reactions) {
 
@@ -1879,7 +1879,7 @@ Author: michael@revcontent.com
             var zIndex = 100;
 
             var positiveReactions = this.options.reactions.slice(0, 3);
-            var negativeReactions = this.options.reactions.slice(3)
+            var negativeReactions = this.options.reactions.slice(3);
 
             for (var reactionCounter = 0; reactionCounter < this.options.reactions.length; reactionCounter++) {
                 var reaction = this.options.reactions[reactionCounter];
@@ -1922,7 +1922,7 @@ Author: michael@revcontent.com
         }
 
         if (item.type == 'internal') {
-            var save = item.element.querySelector('.rev-save')
+            var save = item.element.querySelector('.rev-save');
             revUtils.removeClass(save, 'rev-save-active');
             if (itemData.bookmarked) {
                 revUtils.addClass(save, 'rev-save-active');
