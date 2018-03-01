@@ -2785,3 +2785,9 @@ body.animate-user-profile #profile-mask {
 .rd-loading {
     color: #00a8ff !important;
 }
+.carousel-cell{
+  cursor:pointer;
+}
+.carousel-cell:active{
+  cursor:move;
+}
