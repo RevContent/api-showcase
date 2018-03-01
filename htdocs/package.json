@@ -25,7 +25,7 @@
     "yargs": "latest",
     "pump": "latest",
     "gulp-notify": "~2",
-    "gulp-sass": "~2.3.1"
+    "gulp-sass": "~3"
   },
   "dependencies": {
     "mobile-detect": "~1",

@@ -35,13 +35,14 @@ RevMore({
             'phone', 'tablet', 'desktop'
         ],
         distance: 500,
+        wrapper_id: '',
         gradient_height: 60,
         hide_selectors: false,
         query_params: false,
         top_id: false,
         unlock_text: 'Read More...',
         url: 'trends.revcontent.com',
-        watch_top_id_interval: 500 // time in ms to watch the top_id position change,
+        watch_top_id_interval: 500, // time in ms to watch the top_id position change,
         developer: false
     };
 
@@ -124,12 +125,21 @@ RevMore({
 
         // create the elements
         this.createElements = function() {
-            this.wrapper = document.createElement("div");
-            this.wrapper.id = "rev-more-wrapper";
-            while (document.body.firstChild) {
-                this.wrapper.appendChild(document.body.firstChild);
+            if (this.options.wrapper_id !== '') {
+                var wrapper_obj = document.getElementById(this.options.wrapper_id);
+                if (wrapper_obj != undefined) {
+                    this.wrapper = wrapper_obj;
+                    revUtils.addClass(this.wrapper, 'rev-more-wrapper');
+                }
             }
-            document.body.appendChild(this.wrapper);
+            if (this.wrapper == undefined) {
+                this.wrapper = document.createElement("div");
+                this.wrapper.id = "rev-more-wrapper";
+                while (document.body.firstChild) {
+                    this.wrapper.appendChild(document.body.firstChild);
+                }
+                document.body.appendChild(this.wrapper);
+            }
 
             this.element = document.createElement('div');
             this.element.id = 'rev-more';

@@ -53,7 +53,7 @@ Author: michael@revcontent.com
             auto_scroll: true,
             rev_position: 'top_right',
             developer: false,
-            per_row: 1,
+            columns: 1,
             breakpoints: {
                 xxs: 0,
                 xs: 100,
@@ -92,20 +92,13 @@ Author: michael@revcontent.com
             sponsored: 1,
             initial_internal: 2,
             initial_sponsored: 1,
-            masonry_layout: false
+            masonry_layout: false,
+            img_host: 'https://img.engage.im',
+            user: null,
+            content: [],
+            view: false,
+            test: false
         };
-
-        if (opts.masonry_layout) { // they wan't masonry, provide a masonry per_row default
-            defaults.per_row = {
-                xxs: 1,
-                xs: 1,
-                sm: 1,
-                md: 2,
-                lg: 2,
-                xl: 3,
-                xxl: 3
-            };
-        }
 
         // merge options
         this.options = revUtils.extend(defaults, opts);
@@ -117,7 +110,7 @@ Author: michael@revcontent.com
             if (this.options.initial_sponsored || this.options.sponsored) { // we have sponsored, determine what should be internal
 
                 for (var i = 1; i <= this.options.initial_internal; i++) { // initial internal using nth-child
-                    this.options.internal_selector += '.rev-content:nth-child('+ i +'),';
+                    this.options.internal_selector += 'article:nth-of-type('+ i +'),';
                 }
 
                 // internal starts up again
@@ -125,16 +118,16 @@ Author: michael@revcontent.com
 
                 if (this.options.sponsored) { // pattern for sponsored based on internal
                     for (var i = 1; i <= this.options.internal; i++) {
-                        this.options.internal_selector += '.rev-content:nth-child('+ (this.options.internal + this.options.sponsored) +'n + '+ start +'),';
+                        this.options.internal_selector += 'article:nth-of-type('+ (this.options.internal + this.options.sponsored) +'n + '+ start +'),';
                         start++;
                     }
                 } else if (this.options.initial_sponsored) { // only inital sponsored so everything after start will be internal
-                    this.options.internal_selector += '.rev-content:nth-child(n+'+ start +'),';
+                    this.options.internal_selector += 'article:nth-of-type(n+'+ start +'),';
                 }
                 // trim comma
                 this.options.internal_selector = this.options.internal_selector.slice(0, -1);
             } else { // everything is internal
-                this.options.internal_selector = '.rev-content';
+                this.options.internal_selector = 'article';
             }
         }
 
@@ -156,8 +149,6 @@ Author: michael@revcontent.com
     };
 
     Feed.prototype.init = function() {
-        this.emitter = new EventEmitter();
-
         this.element = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
 
         this.containerElement = document.createElement('div');
@@ -171,6 +162,20 @@ Author: michael@revcontent.com
 
         var self = this;
 
+        this.innerWidget.emitter.on('removedItems', function(items) {
+            self.removed = true;
+
+            revUtils.removeEventListener(window, 'scroll', self.scrollListener);
+
+            for (var i = 0; i < items.length; i++) {
+                var index = self.innerWidget.grid.items.indexOf(items[i]);
+                var removed = self.innerWidget.grid.items.splice(index, 1);
+                removed[0].remove();
+            }
+
+            self.innerWidget.grid.layout();
+        });
+
         if (!this.innerWidget.dataPromise) {
             return;
         }
@@ -181,7 +186,18 @@ Author: michael@revcontent.com
             });
         };
 
-        this.innerWidget.dataPromise.then(function() {
+        this.innerWidget.dataPromise.then(function(data) {
+
+            self.viewableItems = [];
+            for (var i = 0; i < data.rowData.items.length; i++) {
+                if (data.rowData.items[i].view) {
+                    self.viewableItems.push(data.rowData.items[i]);
+                }
+            }
+
+            self.internalOffset = data.rowData.internalLimit;
+            self.sponsoredOffset = data.rowData.sponsoredLimit;
+
             self.viewability().then(function() {
 
                 // if (self.innerWidget.authenticated) {
@@ -190,23 +206,25 @@ Author: michael@revcontent.com
                 //     });
                 // }
 
-                if (self.options.infinite) {
+                if (self.options.infinite && !self.removed) {
                     self.infinite();
                 }
 
                 if (self.viewed.length) {
                     self.registerView(self.viewed);
                 }
-                self.visibleListener = self.checkVisible.bind(self);
+                self.visibleListener = revUtils.throttle(self.checkVisible.bind(self), 30);
                 revUtils.addEventListener(window, 'scroll', self.visibleListener);
             }, function() {
-                console.log('someething went wrong');
+                console.log('*************Feed', 'something went wrong');
             }).catch(function(e) {
-                console.log(e);
+                console.log('*************Feed', e);
             });
-        }, function() {
+        }, function(e) {
+            self.innerWidget.destroy();
+            console.log('*************Feed', e);
         }).catch(function(e) {
-            console.log(e);
+            console.log('*************Feed', e);
         });
     };
 
@@ -401,7 +419,13 @@ Author: michael@revcontent.com
             disclosure_interest_src: this.options.disclosure_interest_src,
             disclosure_interest_height: this.options.disclosure_interest_height,
             breakpoints: this.options.breakpoints,
-            masonry_layout: this.options.masonry_layout
+            masonry_layout: this.options.masonry_layout,
+            img_host: this.options.img_host,
+            view: this.options.view,
+            user: this.options.user,
+            content: this.options.content,
+            columns: this.options.columns,
+            test: this.options.test
         });
     };
 
@@ -411,18 +435,18 @@ Author: michael@revcontent.com
         var self = this;
 
         return new Promise(function(resolve, reject) {
-            var total = self.innerWidget.viewableItems.length;
+            var total = self.viewableItems.length;
             var count = 0;
-            for (var i = 0; i < self.innerWidget.viewableItems.length; i++) {
-                revUtils.checkVisibleItem(self.innerWidget.viewableItems[i], function(viewed, item) {
+            for (var i = 0; i < self.viewableItems.length; i++) {
+                revUtils.checkVisibleItem(self.viewableItems[i], function(viewed, item) {
                     count++;
                     if (count == total) {
                         resolve();
                     }
                     if (viewed) {
-                        var index = self.innerWidget.viewableItems.indexOf(item);
+                        var index = self.viewableItems.indexOf(item);
                         if(index != -1) {
-                            self.innerWidget.viewableItems.splice(index, 1);
+                            self.viewableItems.splice(index, 1);
                         }
                         self.viewed.push(item);
                     }
@@ -436,7 +460,14 @@ Author: michael@revcontent.com
 
         this.scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
+        // this.testRetry = 0;
+
         var scrollFunction = function() {
+
+            if (self.removed) {
+                revUtils.removeEventListener(window, 'scroll', self.scrollListener);
+                return;
+            }
 
             var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
             var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
@@ -447,59 +478,78 @@ Author: michael@revcontent.com
             if (scrollTop >= self.scrollTop && bottom > 0 && (scrollTop + windowHeight) >= (top + scrollTop + height - self.options.buffer)) {
                 revUtils.removeEventListener(window, 'scroll', self.scrollListener);
 
-                self.internalOffset = self.internalOffset ? self.internalOffset : self.innerWidget.internalLimit;
-                self.sponsoredOffset = self.sponsoredOffset ? self.sponsoredOffset : self.innerWidget.sponsoredLimit;
+                var promise = new Promise(function(resolve, reject) {
 
-                var rowData = self.innerWidget.createRows(self.innerWidget.grid, self.options.rows);
+                    var tryToCreateRows = function(retries) {
+                        try {
+                            var beforeItemCount = self.innerWidget.grid.items.length;
 
-                var urls = [];
+                            var rowData = self.innerWidget.createRows(self.innerWidget.grid, self.options.rows);
 
-                if (rowData.internalLimit > 0) {
-                    var internalURL = self.innerWidget.generateUrl(self.internalOffset, rowData.internalLimit, false, false, true);
-                    urls.push({
-                        offset: self.internalOffset,
-                        limit: rowData.internalLimit,
-                        url: internalURL,
-                        type: 'internal'
+                            // if (self.testRetry > 0 && retries != 3) { // TEST
+                            //     throw new Error('Whoops!');
+                            // }
+
+                            setTimeout( function() {
+                                if (!self.removed) {
+                                    revUtils.addEventListener(window, 'scroll', self.scrollListener);
+                                }
+                            }, 150); // give it a rest before going back
+
+                            resolve(rowData);
+                        } catch (e) { // remove items and try again
+                            // remove items TODO: wrap this in try
+                            var remove = self.innerWidget.grid.items.length - beforeItemCount;
+                            for (var i = 0; i < remove; i++) {
+                                var popped = self.innerWidget.grid.items.pop();
+                                popped.remove();
+                            }
+                            // try again
+                            if (retries > 0) {
+                                setTimeout(function() {
+                                    tryToCreateRows((retries - 1));
+                                }, 100);
+                            }
+                        }
+                    }
+
+                    try {
+                        tryToCreateRows(10); // retry 10 times
+                    } catch (e) {
+                        console.log('*************Feed', e);
+                    }
+                }).then(function(rowData) {
+                    return new Promise(function(resolve, reject) {
+                        revApi.request(self.innerWidget.generateUrl(self.internalOffset, rowData.internalLimit, self.sponsoredOffset, rowData.sponsoredLimit), function(data) {
+                            if (!data.content.length) {
+                                reject();
+                                return;
+                            }
+                            resolve({rowData: rowData, data: data});
+                        })
                     });
-                    self.internalOffset += rowData.internalLimit;
-                }
+                }).then(function(data) {
+                    var tryToUpdateDisplayedItems = function(retries) {
+                        try {
+                            var itemTypes = self.innerWidget.updateDisplayedItems(data.rowData.items, data.data);
+                            self.viewableItems = self.viewableItems.concat(itemTypes.viewableItems);
 
-                if (rowData.sponsoredLimit > 0) {
-                    var sponsoredURL = self.innerWidget.generateUrl(self.sponsoredOffset, rowData.sponsoredLimit, false, false, false);
-                    urls.push({
-                        offset: self.sponsoredOffset,
-                        limit: rowData.sponsoredLimit,
-                        url: sponsoredURL,
-                        type: 'sponsored'
-                    });
-                    self.sponsoredOffset += rowData.sponsoredLimit;
-                }
+                            self.internalOffset += data.rowData.internalLimit;
+                            self.sponsoredOffset += data.rowData.sponsoredLimit;
 
-                this.promises = [];
-                for (var i = 0; i < urls.length; i++) {
-                    this.promises.push(new Promise(function(resolve, reject) {
-                        var url = urls[i];
-                        revApi.request(url.url, function(resp) {
-                            resolve({
-                                type: url.type,
-                                data: resp
-                            });
-                        });
-                    }));
-                }
+                            return Promise.resolve(data);
+                        } catch (e) {
+                            if (retries > 0) {
+                                setTimeout(function() {
+                                    tryToUpdateDisplayedItems((retries - 1));
+                                }, 100)
+                            }
+                        }
+                    }
 
-                setTimeout( function() {
-                    revUtils.addEventListener(window, 'scroll', self.scrollListener);
-                }, 150); // give it a rest before going back
-
-                Promise.all(this.promises).then(function(data) {
-                    self.innerWidget.updateDisplayedItems(rowData.items, data);
-                    self.innerWidget.viewableItems = self.innerWidget.viewableItems.concat(rowData.items);
-                }, function(e) {
-                }).catch(function(e) {
-                    console.log(e);
-                });
+                    return tryToUpdateDisplayedItems(10);
+                })
+                // self.testRetry++;
             }
 
             self.scrollTop = scrollTop;
@@ -508,35 +558,20 @@ Author: michael@revcontent.com
         this.scrollListener = revUtils.throttle(scrollFunction, 60);
 
         revUtils.addEventListener(window, 'scroll', this.scrollListener);
-
-        this.innerWidget.emitter.on('removedItems', function(items) {
-            revUtils.removeEventListener(window, 'scroll', self.visibleListener);
-            revUtils.removeEventListener(window, 'scroll', self.scrollListener);
-
-            var el = items[0].element;
-            var remove = [el];
-            while (el= el.nextSibling) {
-                remove.push(el);
-            }
-
-            self.innerWidget.grid.remove(remove);
-
-            self.innerWidget.grid.layout();
-        });
     };
 
     Feed.prototype.checkVisible = function() {
         var self = this;
-        for (var i = 0; i < this.innerWidget.viewableItems.length; i++) {
-            revUtils.checkVisibleItem(this.innerWidget.viewableItems[i], function(viewed, item) {
+        for (var i = 0; i < this.viewableItems.length; i++) {
+            revUtils.checkVisibleItem(this.viewableItems[i], function(viewed, item) {
                 if (viewed) {
-                    var index = self.innerWidget.viewableItems.indexOf(item);
+                    var index = self.viewableItems.indexOf(item);
                     if(index != -1) {
-                        self.innerWidget.viewableItems.splice(index, 1);
+                        self.viewableItems.splice(index, 1);
 
-                        // if (!self.viewable.length) {
-                        //     revUtils.removeEventListener(window, 'scroll', self.visibleListener);
-                        // }
+                        if (!self.viewableItems.length && self.removed) {
+                            revUtils.removeEventListener(window, 'scroll', self.visibleListener);
+                        }
                         self.registerView([item]);
                     }
                 }
@@ -546,17 +581,23 @@ Author: michael@revcontent.com
 
     Feed.prototype.registerView = function(viewed) {
 
-        var view = viewed[0].data.view;
+        for (var i = 0; i < viewed.length; i++) {
+            viewed[i].anchor.setAttribute('href', viewed[i].anchor.getAttribute('href') + '&viewed=1');
+        }
+
+        var view = viewed[0].view;
 
         if (!view) { // safety first, if the first one doesn't have data none should
             return;
         }
 
-        // var params = 'api_source=' + (viewed[0].initial ? 'ba_' : '') + this.options.api_source;
-
         // params += 'id=' + encodeURIComponent(this.options.id); // debug/test
 
         var params = 'view=' + view;
+
+        if (this.options.test) { // if test pass empty to view
+            params += '&empty=1';
+        }
 
         for (var i = 0; i < viewed.length; i++) {
             params += '&' + encodeURIComponent('p[]') + '=' + viewed[i].viewIndex;
