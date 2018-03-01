@@ -1989,11 +1989,19 @@ Author: michael@revcontent.com
         }
 
         revUtils.remove(item.element.querySelector('.rev-reason'));
-        if (itemData.reason) {
+        if (itemData.reason_topic_id>0) {
             var reason = document.createElement('div');
+            var t = document.createElement("span");
+            t.setAttribute("style","cursor:pointer;")
+            t.innerHTML = "<strong>"+itemData.reason_topic+"</strong>";
+            revUtils.addEventListener(t,'click',(function(item){
+                return function() { that.loadTopicFeed(item.reason_topic_id,item.reason_topic); };
+            })(itemData));
+            var txt = "Recommended because you are interested in ";
             reason.className = 'rev-reason';
-            reason.innerHTML = itemData.reason;
-            reason.title = itemData.reason;
+            reason.innerHTML = txt;
+            reason.title = txt+itemData.reason_topic;
+            reason.appendChild(t);
             revUtils.prepend(item.element.querySelector('.rev-ad-outer'), reason);
         }
     };
