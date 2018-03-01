@@ -429,10 +429,18 @@ Author: michael@revcontent.com
             header_logo = '<img src="' + this.options.brand_logo_secondary + '" alt="Newsweek.com Feed" style="max-width:100%;margin: 0 9px;" />';
         }
 
+        var title = "";
+        if(this.options.topic_id>0){
+            title = this.options.topic_title;
+        }
+        if(this.options.author_name && this.options.author_name.length>0){
+            title = "Articles by "+this.options.author_name;
+        }
+
         back.innerHTML = '<div style="display:flex;flex-direction:row;">' +
             '<div class="feed-header-back"><button style="background-color:#d6d6d6;border:0;margin:0;border-right:1.0px solid #d3d3d3;display:block;width:40px;height:40px;text-align:center;font-weight: bold;font-size:32px" class="feed-back-button" name="feed-back-button" value="">' + back_icon + '</button></div>' +
             '<div class="feed-header-logo" style="width:32px;">' + header_logo + '</div>' +
-            '<div class="feed-header-title" style="width:100%;padding-left:18px;text-overflow:ellipsis;overflow:hidden;text-align-center;color:#676767;font-size:14px;letter-spacing: 0px;font-weight:normal;"><span>' + this.options.topic_title + '</span></div>' +
+            '<div class="feed-header-title" style="width:100%;padding-left:18px;text-overflow:ellipsis;overflow:hidden;text-align-center;color:#676767;font-size:14px;letter-spacing: 0px;font-weight:normal;"><span>' + title + '</span></div>' +
             '<div class="feed-header-opions" style="min-width:auto;text-align:center;">' + menu_icon + '</div>' +
 
             '</div>';
