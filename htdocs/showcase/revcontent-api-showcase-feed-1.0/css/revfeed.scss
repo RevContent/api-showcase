@@ -1461,7 +1461,7 @@ $reactionMenu8Y: 13.5px;
 
 
         .rev-comments {
-            background: #f6f7f9;
+            background: #fafbfd;
             border-top: 1px solid #e5e5e5;
             border-top-color: #e5e5e5;
             border-bottom-right-radius: $card-border-radius;
@@ -2716,6 +2716,7 @@ body.animate-user-profile #profile-mask {
 }
 
 //RC Comments
+#rev-reply-detail,
 #rev-comment-detail {
     width: 100%;
     height: 100%;
@@ -2733,6 +2734,7 @@ body.animate-user-profile #profile-mask {
     border-bottom: 1px solid #ccc;
 }
 
+#rev-reply-detail .rev-comment-box,
 #rev-comment-detail .rev-comment-box {
   position: absolute;
   bottom: 0;
@@ -2740,6 +2742,7 @@ body.animate-user-profile #profile-mask {
   right: 0;
 }
 
+#rev-reply-detail .rev-comment-feed,
 #rev-comment-detail .rev-comment-feed {
   height: 100%;
   background: #fdfdfd;
@@ -2851,7 +2854,15 @@ body.animate-user-profile #profile-mask {
       color: #ff5e3a; }
 
       .post__author {
-  margin-bottom: 20px; }
+  margin-bottom: 5px; }
+  .post__date {
+    margin-top: -5px;
+  }
+  .post__date time {
+    font-size: 11px;
+    color: #777777;
+  }
+
   .post__author img {
     width: 40px;
     height: 40px;
@@ -2872,7 +2883,10 @@ body.animate-user-profile #profile-mask {
     z-index: 999;
     right: 15px;
     top: 50%;
-    margin-top: -12px;
+    margin-top: -10px;
+    width: 16px;
+    height: 16px;
+    margin-right: 2px;
 }
 
 body.modal-open {
@@ -2920,3 +2934,253 @@ body.modal-open {
     transform: rotate(360deg);
   }
 }
+#rev-reply-detail,
+#rev-comment-detail {
+  transform: translateX(200%);
+  -webkit-transform: translateX(200%);
+}
+#reply_slider {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: blue;
+    transform: translateX(-100%);
+    -webkit-transform: translateX(-100%);
+}
+#reply_slider.comment-slide-in {
+  position: fixed;
+  top: 0;
+  z-index: 9999;
+}
+
+.comment-slide-in {
+    animation: slide-in 0.5s forwards;
+    -webkit-animation: comment-slide-in 0.5s forwards;
+}
+
+.comment-slide-out {
+    animation: slide-out 0.5s forwards;
+    -webkit-animation: comment-slide-out 0.5s forwards;
+}
+    
+@keyframes comment-slide-in {
+    100% { transform: translateX(0%); }
+}
+
+@-webkit-keyframes comment-slide-in {
+    100% { -webkit-transform: translateX(0%); }
+}
+    
+@keyframes comment-slide-out {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(200%); }
+}
+
+@-webkit-keyframes comment-slide-out {
+    0% { -webkit-transform: translateX(0%); }
+    100% { -webkit-transform: translateX(200%); }
+}
+
+.rev-comment-tools {
+  position: relative;
+}
+
+.rev-comment-tools a.reply {
+    display: inline-block;
+    margin-right: 10px;
+    font-size: 11px;
+}
+
+.rev-comment-tools span.rev-comment-likes-count {
+    font-size: 11px;
+    display: inline-block;
+    margin-right: 8px;
+    color: #888da8;
+}
+
+.rev-comment-tools a.rev-comment-like {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-right: 12px;
+    position: relative;
+    top: 1px;
+}
+
+.rev-comment-tools a.rev-comment-dislike {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    position: absolute;
+    top: 4px;
+}
+
+
+
+#comment_authbox {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 9999;
+    background: #fff;
+    padding: 15px;
+}
+
+.rev-auth {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  height: 100%;
+  border-top-right-radius: 4;
+  border-top-left-radius: 4;
+  color: #80808c;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  height: 100%;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+  color: #222;
+  text-shadow: 1px 1px rgba(255, 255, 255, 0.15);
+}
+.rev-auth .rev-auth-close-button {
+  display: inline-block;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out !important;
+  width: 35px !important;
+  height: 35px;
+  margin-left: auto;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  z-index: 10000000000;
+}
+.rev-auth .rev-auth-close-button:hover {
+  transform: scale(1.2) !important;
+}
+.rev-auth .rev-auth-close-button svg {
+  fill: #bdbdbd;
+  width: 100%;
+  height: 100%;
+}
+.rev-auth .rev-auth-box {
+  flex-direction: initial;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+}
+.rev-auth .rev-auth-box .rev-auth-box-inner {
+  max-width: 420px;
+  padding-bottom: 3%;
+}
+.rev-auth .rev-auth-box .rev-auth-site-logo {
+  max-height: 184px;
+  min-height: 32px;
+  box-shadow: rgba(0, 0, 0, 0.3) 1px 1px 9px;
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  margin-top: 3%;
+  top: 2px;
+}
+.rev-auth .rev-auth-box .rev-auth-site-logo svg, .rev-auth .rev-auth-box .rev-auth-site-logo img {
+  width: 100%;
+}
+.rev-auth .rev-auth-box .rev-auth-headline {
+  text-align: center;
+  font-size: 18px;
+  line-height: 18px;
+  margin-top: 22px;
+  font-size: 20px;
+  line-height: 26px;
+}
+.rev-auth .rev-auth-box .rev-auth-button {
+  height: 50px;
+  line-height: 0;
+  display: flex;
+  justify-content: center;
+  background-color: #3A559F;
+  cursor: pointer;
+  margin-top: 32px;
+  border-radius: 4px;
+  max-width: 295px;
+  margin-left: auto;
+  margin-right: auto;
+  text-shadow: none;
+  position: relative;
+  align-items: flex-end;
+}
+.rev-auth .rev-auth-box .rev-auth-button:before, .rev-auth .rev-auth-box .rev-auth-button:after {
+  z-index: -1;
+  position: absolute;
+  content: "";
+  bottom: 15px;
+  left: 10px;
+  width: 50%;
+  top: 8%;
+  /* max-width: 300px; */
+  background: transparent;
+  box-shadow: 0 15px 10px rgba(0, 0, 0, 0.3);
+  transform: rotate(-2deg);
+}
+.rev-auth .rev-auth-box .rev-auth-button:after {
+  transform: rotate(2deg);
+  right: 10px;
+  left: auto;
+}
+.rev-auth .rev-auth-box .rev-auth-button .rev-auth-button-icon {
+  width: 42px;
+  height: 42px;
+  background-color: #3A559F;
+}
+.rev-auth .rev-auth-box .rev-auth-button .rev-auth-button-text {
+  color: #fff;
+  line-height: 50px;
+  padding-left: 5px;
+  padding-right: 20px;
+  font-size: 16px;
+}
+.rev-auth .rev-auth-box .rev-auth-terms {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 42px;
+  opacity: .8;
+  text-align: center;
+}
+.rev-auth .rev-auth-box .rev-auth-terms a, .rev-auth .rev-auth-box .rev-auth-terms span {
+  font-size: 14px;
+  line-height: 14px;
+  letter-spacing: .7px;
+  font-weight: 300;
+}
+.rev-auth .rev-auth-box .rev-auth-terms a {
+  cursor: pointer;
+}
+.rev-auth .rev-auth-box .rev-auth-terms a:hover {
+  text-decoration: underline;
+}
+.rev-auth .rev-auth-box .rev-auth-headline {
+  text-align: center;
+  font-size: 16px;
+  line-height: 22px;
+  font-size: 20px;
+  line-height: 26px;
+  margin-top: 32px;
+}
+.rev-auth .rev-auth-box .rev-auth-headline strong {
+  font-weight: 500;
+}
+.rev-auth .rev-auth-subline, .rev-auth .rev-auth-buttonline {
+  font-size: 12px;
+  line-height: 12px;
+  font-weight: 400;
+  text-align: center;
+  margin-top: 15px;
+}
+.rev-auth .rev-auth-buttonline {
+  line-height: 14px;
+  padding: 0 3px;
+}
+
+.overflow-hidden {overflow: hidden;}

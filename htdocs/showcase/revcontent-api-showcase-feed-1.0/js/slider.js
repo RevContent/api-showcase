@@ -166,74 +166,13 @@ Author: michael@revcontent.com
             disclosure_about_height: 575,
             disclosure_interest_src: '//trends.engage.im/engage-interests.php',
             disclosure_interest_height: 520,
-            masonry_layout: false
+            masonry_layout: false,
+            initial_comments_limit: 1
         };
-
-        this.mockComments = {
-            espn: [
-                {
-                    name: "Eric Gundel",
-                    icon: "https://uxpowered.com/products/pixeladmin/v232/html_demo/assets/demo/avatars/3.jpg",
-                    comment: "Sale, Pomeranz, Fister. With his inability to pitch deep Pomeranz should either go 2 or 4 so that he is right before or after Sale. Only Fister's performance gives him a credible argument for going ahead of him so holding off until Game 4 is silly. Fister also has been going deep so he is the logical guy to follow Pomeranz."
-                },
-                {
-                    name: "Daniel Canny",
-                    icon: "https://uxpowered.com/products/pixeladmin/v232/html_demo/assets/demo/avatars/5.jpg",
-                    comment: "I want no part of Price in these playoffs. Even if he was piching well right now and not on the DL. I think it should go Sale, Pomeranz 1-2 with Fister and Porcello as the 3/4 in some order. Pomeranz has earned the 2 spot. I like Fister but let' see what everybody thinks when someone roughs him up for 7 or 8 runs in 2 innings-which I predict will happen before the end of the season. It's an interesting call but I hope the Sox shut Price down. Make him earn that 30 million next year."
-                },
-                {
-                    name: "Vinnie Bredice",
-                    icon: "https://uxpowered.com/products/pixeladmin/v232/html_demo/assets/demo/avatars/4.jpg",
-                    comment: "It's bad enough the Yankees replica jerseys have the player last names on the back of them, now this? Chief for Ellsbury??? When has anyone ever heard him called Chief??? And A-A-Ron for Hicks??? When just about everyone on the team and his manager call him Hicksy? A lot of these nicknames sound forced or contrived. Glad to see that Gardner refused a nickname and went with his last name. Just a dumb idea all around and another way for MLB to suck the almighty dollar away from the fans."
-                },
-                {
-                    name: "Michael Rinella",
-                    icon: "https://uxpowered.com/products/pixeladmin/v232/html_demo/assets/demo/avatars/3.jpg",
-                    comment: "What is it with today's players oblique strains? Nobody and I mean nobody went on the DL with a flippin' oblique anything thirty or forty years ago."
-                },
-                {
-                    name: "Lee Fogel",
-                    icon: "https://uxpowered.com/products/pixeladmin/v232/html_demo/assets/demo/avatars/1.jpg",
-                    comment: "People ridiculed his signing but he put dollars in pockets and butts in seats. And, although he didn't blow anyone away, his results overall were better than just about anyone figured he would put up."
-                },
-                {
-                    name: "Dennis Lio",
-                    icon: "https://uxpowered.com/products/pixeladmin/v232/html_demo/assets/demo/avatars/2.jpg",
-                    comment: "When jealousy rears its ugly head in the realm of baseball, it is a terrible thing. Tim Tebow is what baseball is all about."
-                }
-            ],
-            newsweek: [
-                {
-                    name: "Katona Johnson",
-                    icon: "https://scontent-mia3-2.xx.fbcdn.net/v/t1.0-1/p48x48/14457545_561653840701620_6308988878381143782_n.jpg?oh=3f72461276b7e15a0327dbce2f793eae&oe=5A5A2304",
-                    comment: "All she is showing is that she has not grown into womanhood yet. She still depends on her daddy. Remember she has not gone on her own. She has never really held a job outside her father's structure. Look at Jared, he looks like he has not had a separate thought from this family. She needs to leave DC and find her way to maturity. I bet Tiffany is more independent, smarter because her mother had total control of her upbringing."
-                },
-                {
-                    name: "Nancy Clifford",
-                    icon: "https://scontent-mia3-2.xx.fbcdn.net/v/t1.0-1/p48x48/13873033_10153831008331732_6356865474546752624_n.jpg?oh=41532f41615c9a4e6f6e9ecb78ba01aa&oe=5A4CC060",
-                    comment: "If trump was. not A thief and traitor we might give him a chance. He is destroying our country and reputation. RESIGN if he can't take it. What will he do when he goes to jail for treason"
-                },
-                {
-                    name: "Chelsea Doors",
-                    icon: "https://scontent-mia3-2.xx.fbcdn.net/v/t1.0-1/p48x48/21314293_1470408896387318_2143304306498232083_n.jpg?oh=483e3672928841df361285a486c74f7c&oe=5A47239F",
-                    comment: "Great place to buy Over Priced Polyester made in sweat shops throughout Asia, even though her daddy's administration celebrates \"Made in America Week\"."
-                },
-                {
-                    name: "John W Bletsch",
-                    icon: "https://scontent-mia3-2.xx.fbcdn.net/v/t1.0-1/p48x48/15698201_10207747359346750_4195257972201186511_n.jpg?oh=e5f37eccae878608529da6f7128aaffa&oe=5A5429AA",
-                    comment: "Again, it all depends upon whom is surveyed. Try a random survey and you will find that Michelle (Michael) Obama is roundly disliked for her faux haughty air and pretentious attitude while she is spending $millions of taxpayers' dollars as though her own on opulent affairs and vacations monthly. Truly an attitude of lottery rich trailer trash using her race to force acceptance among the moneyed elete."
-                },
-                {
-                    name: "Palin Smith",
-                    icon: "https://scontent-mia3-2.xx.fbcdn.net/v/t1.0-1/p48x48/17352341_10210518225049889_2739499951961938623_n.jpg?oh=4fb96860c3aaadfa83d6aeb9941ccbcd&oe=5A4E8A95",
-                    comment: "If Melania was black she would get a 98% approval rating.....if her hubby was a Democrat."
-                }
-            ]
-         };
 
         // merge options
         this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
-
+        
         // store options
         revUtils.storeUserOptions(this.options);
 
@@ -1721,6 +1660,7 @@ Author: michael@revcontent.com
         //     return;
         // }
 
+
         var itemTypes = {
             sponsored: [],
             internal: [],
@@ -1823,216 +1763,46 @@ Author: michael@revcontent.com
                 }
 
                 var commentButton = item.element.querySelector('.rev-reaction-comment');
-
                 if (commentButton) {
-                    //commentButton.setAttribute('href', itemData.target_url + commentButton.getAttribute('href'));
-                    commentButton.target_url = itemData.target_url;
-
+                    commentButton.itemData = itemData;
                     revUtils.addEventListener(commentButton, 'click', function(ev) {
-                        handleComments(ev.currentTarget.target_url);
+                        that.handleComments(this.itemData, false);
                     });
                 }
 
-                //why?
-                //revUtils.remove(item.element.querySelector('.rev-comments'));
+                //remove any existing comment ui so it doesnt dupe on personalization
+                revUtils.remove(item.element.querySelector('.rev-comments'));
+                revUtils.remove(item.element.querySelector('.rev-comment-box'));
 
-                var setHtml = function(el,data) {
-
-
-                    //populate comment feed
-
-                    var feedHTML = '<ul class="comments-list">';
-
-                    for (var key in data) {
-                       if (data.hasOwnProperty(key)) {
-                          var top_level_comment = data[key];
-                          var hasReplies = (top_level_comment.hasOwnProperty('replies') && top_level_comment.replies !== null);
-
-                          var myDate = new Date(top_level_comment.date).toLocaleString();
-
-                            feedHTML += '<li class="' + (hasReplies ? 'has-children' : '')  + '">';
-                            feedHTML += '<div class="post__author author vcard inline-items">';
-                            feedHTML += '<img src="' + top_level_comment.author_avatar + '" alt="author">';
-                            feedHTML += '<div class="author-date">';
-                            feedHTML += '<a class="h6 post__author-name fn" href="#">' + top_level_comment.author + '</a>';
-                            feedHTML += '<div class="post__date">';
-                            feedHTML += '<time class="published" datetime="' + top_level_comment.date + '">';
-                            feedHTML +=  that.timeAgo(myDate, true) + ' ago';
-                            feedHTML += '</time>';
-                            feedHTML += '</div>';//post__date
-                            feedHTML += '</div>';//author-date
-                            feedHTML += '</div>';//post__author
-                            feedHTML += '<p>' + top_level_comment.comment_body + '</p>';
-                            feedHTML += '<a href="#" class="reply">Reply</a>';
-
-                            //loop replies
-                            if (hasReplies) {
-                                feedHTML += '<ul class="children">';
-                                for (var key in top_level_comment.replies) {
-                                   if (top_level_comment.replies.hasOwnProperty(key)) {
-                                      var reply = top_level_comment.replies[key];
-
-                                      var myDate = new Date(reply.date).toLocaleString();
-
-                                        feedHTML += '<li>';
-                                        feedHTML += '<div class="post__author author vcard inline-items">';
-                                        feedHTML += '<img src="' + reply.author_avatar + '" alt="author">';
-                                        feedHTML += '<div class="author-date">';
-                                        feedHTML += '<a class="h6 post__author-name fn" href="#">' + reply.author + '</a>';
-                                        feedHTML += '<div class="post__date">';
-                                        feedHTML += '<time class="published" datetime="' + myDate + '">';
-                                        feedHTML +=  that.timeAgo(myDate, true) + ' ago';
-                                        feedHTML += '</time>';
-                                        feedHTML += '</div>';//post__date
-                                        feedHTML += '</div>';//author-date
-                                        feedHTML += '</div>';//post__author
-                                        feedHTML += '<p>' + reply.comment_body + '</p>';
-                                        feedHTML += '</li>';
-                                    }
-                                }
-                                feedHTML += '</ul>';
-                            }
-
-                            feedHTML += '</li>';
-                       }
-                    }
-
-                    feedHTML += '</ul>';
-
-                    el.innerHTML = feedHTML;
-
-                    el.scrollTop = el.scrollHeight;
-
-                };
-
-                var handleComments = function(target_url, focus) {
-                    console.log(target_url);
-
-                    //create comment overlay div for mobile only
-                    if (revDetect.mobile()) {
-                        var commentDetailsElement = document.createElement('div');
-                        commentDetailsElement.id = 'rev-comment-detail';
-
-
-                        document.body.appendChild(commentDetailsElement);
-                        revUtils.addClass(document.body, 'modal-open');
-
-                        var commentDetailsHeaderElement = document.createElement('div');
-                        revUtils.addClass(commentDetailsHeaderElement, 'rev-comment-detail-header');
-
-                        commentDetailsHeaderElement.innerHTML = '<a class="close-detail" style="float:right;">close</a>';
-
-                        commentDetailsElement.appendChild(commentDetailsHeaderElement);
-
-                        revUtils.addEventListener(commentDetailsElement.querySelector('.close-detail'), 'click', function(ev) {
-                            commentDetailsElement.remove();
-                            revUtils.removeClass(document.body, 'modal-open');
-                        });
-
-                        //create feed container
-                        var commentFeedElement = document.createElement('div');
-                        revUtils.addClass(commentFeedElement, 'rev-comment-feed');
-
-                        var commentFeedLoader = document.createElement('div');
-                        revUtils.addClass(commentFeedLoader, 'rev-comment-feed-loading');
-
-                        //add loader
-                        commentFeedElement.appendChild(commentFeedLoader);
-
-                        //append comments
-                        commentDetailsElement.appendChild(commentFeedElement);
-
-                        //get feed html
-                        revApi.xhr('http://www.mocky.io/v2/5a7b3a3d3000004b3128be1e', function(data) {
-                            setHtml(commentFeedElement, data);
-                        });
-
-                        var commentBoxElement = document.createElement('div');
-
-                        revUtils.addClass(commentBoxElement, 'rev-comment-box');
-
-                        var commentBoxHtml = '<div class="rev-comment-box" style="padding: 8px;background: #fafbfd;border-top: 1px solid #e6ecf5;">' +
-                                '<img src="https://relayfm.s3.amazonaws.com/uploads/user/avatar/4/user_avatar_mykehurley_artwork.png" alt="author" style="width: 24px;height: 24px;float:left;border-radius: 24px;position: absolute;top: 50%;margin-top: -14px;">' +
-                                '<div class="comment-input" style="padding: 0px 0 0 34px;">' +
-                                '<textarea id="comment_input" type="text" placeholder="Leave a Comment" style="height: 30px;width: 100%;border-radius: 4px;border: 1px solid #e6ecf5;padding: 4px 40px 4px 10px;cursor: text;"></textarea>' +
-                                '<a id="submit_comment">send</a>' +
-                                '</div><div class="clearfix" style="clear: both;"></div></div>';
-
-                        commentBoxElement.innerHTML = commentBoxHtml;
-                        commentDetailsElement.appendChild(commentBoxElement);
-
-                        var text = document.getElementById("comment_input");
-
-                        if (focus) {
-                            text.focus();
-                        }
-
-                        revUtils.addEventListener(text, 'keyup', function(ev) {
-                            commentDetailsElement.querySelector('#submit_comment').style.display = 'inline-block';
-
-                            console.log(text.scrollHeight);
-                            if (text.scrollHeight < 88) {
-                                text.style.height = (text.scrollHeight + 2) + "px";
-                            }
-
-                        });
-
-
-                    } else {
-
-
-                    }
-
-                };
-
-                var mockComment = true;
+                //remove all this once we have real comments
+                //var mockComment = true;
                 var that = this;
 
-                            if ( (mockComment && item.type == 'internal') || (itemData.comments && itemData.comments.length)) {
+                var commentsULElement = document.createElement('ul');
+                revUtils.addClass(commentsULElement, 'comments-list');
+                item.element.querySelector('.rev-content-inner').appendChild(commentsULElement);
 
-                                var commentsElement = document.createElement('div');
-                                revUtils.addClass(commentsElement, 'rev-comments');
-                                revUtils.addClass(commentsElement, 'rev-has-comments');
+                this.setFeaturedComment(item, commentsULElement);
+                
+                var commentBoxElement = document.createElement('div');
+                    revUtils.addClass(commentBoxElement, 'rev-comment-box');
 
-                                var commentHtml = '';
+                var commentBoxHtml = '<div class="rev-comment-box" style="padding: 8px;background: #fafbfd;border-top: 1px solid #e6ecf5;">' +
+                            '<img src="https://relayfm.s3.amazonaws.com/uploads/user/avatar/4/user_avatar_mykehurley_artwork.png" alt="author" style="width: 24px;height: 24px;float:left;border-radius: 24px;">' +
+                            '<div class="comment-input" style="padding: 0px 0 0 34px;">' +
+                            '<input type="text" placeholder="Leave a Comment" style="height: 30px;width: 100%;border-radius: 4px;border: 1px solid #e6ecf5;padding: 0 10px;cursor: text;">' +
+                            '</div><div class="clearfix" style="clear: both;"></div></div>';
 
-                                var comment = mockComment ? that.mockComments.espn[Math.floor(Math.random()*that.mockComments.espn.length)] : itemData.comments[0];
+                commentBoxElement.innerHTML = commentBoxHtml;
 
-                                commentHtml += '<div class="rev-comment">' +
-                                        '<div class="rev-comment-image" style="background-image:url('+ (mockComment ? comment.icon : comment.comment_author_img) +')">' +
-                                            // '<?xml version="1.0" ?><!DOCTYPE svg  PUBLIC "-//W3C//DTD SVG 1.1//EN"  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" version="1.1" viewBox="0 0 4335 4335" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><style type="text/css"> <![CDATA[.fil0 {fill:black} ]]> </style></defs><g id="Layer_x0020_1"><path class="fil0" d="M2121 179c1065,0 1929,864 1929,1929 0,1065 -864,1929 -1929,1929 -1065,0 -1929,-864 -1929,-1929 0,-1065 864,-1929 1929,-1929zm1059 3099c-92,-307 -377,-1047 -982,-1047 -21,0 -40,1 -59,2 -19,-1 -38,-2 -59,-2 -622,0 -906,783 -989,1072 -335,-289 -548,-718 -548,-1195 0,-872 707,-1578 1578,-1578 872,0 1578,707 1578,1578 0,464 -200,881 -519,1170zm-1053 408c4,-4 8,-8 12,-13 4,4 8,8 12,12 -8,0 -16,0 -24,0zm12 -2806c293,0 530,269 530,601 0,332 -237,601 -530,601 -293,0 -530,-269 -530,-601 0,-332 237,-601 530,-601z"/></g></svg>' +
-                                        '</div>' +
-                                        '<div class="rev-comment-text">' +
-                                            '<span class="rev-comment-author">' + (mockComment ? comment.name : comment.comment_author) + '</span>' +
-                                            ' ?? ' +
-                                            '<span class="rev-comment-date">' + that.timeAgo(itemData.comment_time, true) + '</span>  ' + comment.comment +
-                                        '</div>' +
-                                    '</div>' +
-                                    '</div>';
+                commentBoxElement.itemData = itemData;
 
-                                commentsElement.innerHTML = commentHtml;
+                revUtils.addEventListener(commentBoxElement, 'click', function(ev) {
+                    that.handleComments(this.itemData, true);
+                });
 
-                                item.element.querySelector('.rev-content-inner').appendChild(commentsElement);
-                            }
+                item.element.querySelector('.rev-content-inner').appendChild(commentBoxElement);
 
-                            var commentBoxElement = document.createElement('div');
-                                revUtils.addClass(commentBoxElement, 'rev-comment-box');
-
-                                var commentBoxHtml = '<div class="rev-comment-box" style="padding: 8px;background: #fafbfd;border-top: 1px solid #e6ecf5;">' +
-                                        '<img src="https://relayfm.s3.amazonaws.com/uploads/user/avatar/4/user_avatar_mykehurley_artwork.png" alt="author" style="width: 24px;height: 24px;float:left;border-radius: 24px;">' +
-                                        '<div class="comment-input" style="padding: 0px 0 0 34px;">' +
-                                        '<input type="text" placeholder="Leave a Comment" style="height: 30px;width: 100%;border-radius: 4px;border: 1px solid #e6ecf5;padding: 0 10px;cursor: text;">' +
-                                        '</div><div class="clearfix" style="clear: both;"></div></div>';
-
-                                commentBoxElement.innerHTML = commentBoxHtml;
-
-                                commentBoxElement.target_url = itemData.target_url;
-
-                                revUtils.addEventListener(commentBoxElement, 'click', function(ev) {
-                                    handleComments(ev.currentTarget.target_url, true);
-                                });
-
-                                item.element.querySelector('.rev-content-inner').appendChild(commentBoxElement);
 
                 if (item.reactions) {
 
@@ -2121,6 +1891,7 @@ Author: michael@revcontent.com
                     revUtils.prepend(item.element.querySelector('.rev-before-image'), reason);
                 }
             }
+
         }
 
         if (this.grid.perRow > 1) { // relayout if not single column
@@ -2148,7 +1919,8 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.closePersonalizedTransition = function(ev) {
-        document.body.style.overflow = this.bodyOverflow;
+        //document.body.style.overflow = this.bodyOverflow;
+        revUtils.removeClass(document.body, 'overflow-hidden');
         revUtils.removeClass(document.body, 'rev-blur');
         revUtils.remove(this.personalizedMask);
         revUtils.remove(this.personalizedContent);
@@ -2166,8 +1938,9 @@ Author: michael@revcontent.com
         var show = function() {
             revUtils.addClass(document.body, 'rev-blur');
             that.grid.unbindResize();
-            document.body.style.overflow = 'hidden';
+            //document.body.style.overflow = 'hidden';
             revUtils.addClass(document.body, 'rev-blur');
+            revUtils.addClass(document.body, 'overflow-hidden');
             document.body.appendChild(that.personalizedMask);
             document.body.appendChild(that.personalizedContent);
 
@@ -2649,6 +2422,421 @@ Author: michael@revcontent.com
         if (typeof this.options.destroy === 'function') {
             this.options.destroy();
         }
+    };
+
+    RevSlider.prototype.setCommentHTML = function(comment_data, includeReplies) {
+        var that = this;
+        var includeReplies = typeof includeReplies  === 'undefined' ? false : includeReplies;
+        
+        console.log("setCommentHTML running");
+        var hasReplies = (comment_data.hasOwnProperty('replies') && comment_data.replies !== null);
+        var isReply = (comment_data.hasOwnProperty('parent_id') && comment_data.parent_id !== null);
+        var myDate = new Date(comment_data.date).toLocaleString();
+
+        var li = document.createElement("li");
+        if (hasReplies && includeReplies) revUtils.addClass(li, 'has-children');
+
+        var post_author_div = document.createElement("div");
+        revUtils.addClass(post_author_div, 'post__author');
+        revUtils.addClass(post_author_div, 'author');
+        revUtils.addClass(post_author_div, 'vcard');
+        revUtils.addClass(post_author_div, 'inline-items');
+        post_author_div.innerHTML = '<img src="' + comment_data.author_avatar + '" alt="author">' +
+                                    '<div class="author-date">' +
+                                        '<a class="h6 post__author-name fn" href="#">' + comment_data.author + '</a>' +
+                                        '<div class="post__date">' +
+                                            '<time class="published" datetime="' + comment_data.date + '">' + that.timeAgo(myDate, true) + ' ago </time>' +
+                                        '</div>' +
+                                    '</div>';
+        li.appendChild(post_author_div);
+
+        var comment_body = document.createElement("p");
+        comment_body.innerHTML = comment_data.comment_body;
+        li.appendChild(comment_body);
+
+        var commentToolBox = document.createElement("div");
+        revUtils.addClass(commentToolBox,'rev-comment-tools');
+
+        if (!isReply) {
+        var comment_reply_btn = document.createElement("a");
+            revUtils.addClass(comment_reply_btn, 'reply');
+            comment_reply_btn.innerText = "Reply";
+            commentToolBox.appendChild(comment_reply_btn);
+
+            revUtils.addEventListener(comment_reply_btn, 'click', function(ev) {
+                that.handleComments(comment_data, false, "158228bf-3dc4-416c-91ab-5c15a640097f");
+            });
+
+        }
+
+        if (comment_data.likes > 0) {
+        var comment_likes_count = document.createElement("span");
+            revUtils.addClass(comment_likes_count, 'rev-comment-likes-count');
+            comment_likes_count.innerText = comment_data.likes + " likes";
+            commentToolBox.appendChild(comment_likes_count);
+        }
+
+        var comment_like = document.createElement("a");
+            revUtils.addClass(comment_like, 'rev-comment-like');
+            comment_like.innerHTML = '<svg aria-hidden="true" data-prefix="fas" data-icon="thumbs-up" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-thumbs-up fa-w-16 fa-5x"><path fill="#a5a5a5" d="M104 224H24c-13.255 0-24 10.745-24 24v240c0 13.255 10.745 24 24 24h80c13.255 0 24-10.745 24-24V248c0-13.255-10.745-24-24-24zM64 472c-13.255 0-24-10.745-24-24s10.745-24 24-24 24 10.745 24 24-10.745 24-24 24zM384 81.452c0 42.416-25.97 66.208-33.277 94.548h101.723c33.397 0 59.397 27.746 59.553 58.098.084 17.938-7.546 37.249-19.439 49.197l-.11.11c9.836 23.337 8.237 56.037-9.308 79.469 8.681 25.895-.069 57.704-16.382 74.757 4.298 17.598 2.244 32.575-6.148 44.632C440.202 511.587 389.616 512 346.839 512l-2.845-.001c-48.287-.017-87.806-17.598-119.56-31.725-15.957-7.099-36.821-15.887-52.651-16.178-6.54-.12-11.783-5.457-11.783-11.998v-213.77c0-3.2 1.282-6.271 3.558-8.521 39.614-39.144 56.648-80.587 89.117-113.111 14.804-14.832 20.188-37.236 25.393-58.902C282.515 39.293 291.817 0 312 0c24 0 72 8 72 81.452z" class=""></path></svg>';
+            commentToolBox.appendChild(comment_like);
+
+        var comment_dislike = document.createElement("a");
+            revUtils.addClass(comment_dislike, 'rev-comment-dislike');
+            comment_dislike.innerHTML = '<svg aria-hidden="true" data-prefix="fas" data-icon="thumbs-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-thumbs-down fa-w-16 fa-5x"><path fill="#a5a5a5" d="M0 56v240c0 13.255 10.745 24 24 24h80c13.255 0 24-10.745 24-24V56c0-13.255-10.745-24-24-24H24C10.745 32 0 42.745 0 56zm40 200c0-13.255 10.745-24 24-24s24 10.745 24 24-10.745 24-24 24-24-10.745-24-24zm272 256c-20.183 0-29.485-39.293-33.931-57.795-5.206-21.666-10.589-44.07-25.393-58.902-32.469-32.524-49.503-73.967-89.117-113.111a11.98 11.98 0 0 1-3.558-8.521V59.901c0-6.541 5.243-11.878 11.783-11.998 15.831-.29 36.694-9.079 52.651-16.178C256.189 17.598 295.709.017 343.995 0h2.844c42.777 0 93.363.413 113.774 29.737 8.392 12.057 10.446 27.034 6.148 44.632 16.312 17.053 25.063 48.863 16.382 74.757 17.544 23.432 19.143 56.132 9.308 79.469l.11.11c11.893 11.949 19.523 31.259 19.439 49.197-.156 30.352-26.157 58.098-59.553 58.098H350.723C358.03 364.34 384 388.132 384 430.548 384 504 336 512 312 512z" class=""></path></svg>';
+            commentToolBox.appendChild(comment_dislike);
+
+        li.appendChild(commentToolBox);
+
+        if (hasReplies && includeReplies) {
+            var replies_ul = document.createElement("ul");
+            revUtils.addClass(replies_ul, 'children');
+
+            for (var key in comment_data.replies) {
+                if (comment_data.replies.hasOwnProperty(key)) {
+                    var reply_li = that.setCommentHTML.call(this, comment_data.replies[key]);
+                    replies_ul.appendChild(reply_li);
+                }
+            }
+
+            li.appendChild(replies_ul);
+        }
+
+        return li;
+    };
+
+    RevSlider.prototype.setFeaturedComment = function(item,commentULElement) {
+        var that = this;
+
+        revApi.xhr('http://www.mocky.io/v2/5a85f8b33100005200253187', function(data) {
+            //insert more comments
+            var count = 0;
+            for (var key in data) {
+                if (count >= that.options.initial_comments_limit) {return;}
+                if (data.hasOwnProperty(key)) {
+                    var comment_li = that.setCommentHTML(data[key]);
+                    //commentULElement.appendChild(comment_li);
+                    commentULElement.insertBefore(comment_li, commentULElement.childNodes[count]);
+                    count++;
+                }
+            }
+
+        });
+
+    };
+
+    //triggered by clicking comment button or input on feed item
+    RevSlider.prototype.handleComments = function(itemData, focus, replyingTo) {
+        var that = this;
+        
+        //gulp wont let us use argument defaults (breaks the build)
+        replyingTo = typeof replyingTo  === 'undefined' ? null : replyingTo;
+        var isReplyMode = replyingTo !== null;
+
+        //create comment overlay div for mobile only
+        if (revDetect.mobile()) {
+            var commentDetailsElement = document.createElement('div');
+
+            commentDetailsElement.id = 'rev-comment-detail';
+
+            document.body.appendChild(commentDetailsElement);
+            revUtils.addClass(document.body, 'modal-open');
+
+            var commentDetailsHeaderElement = document.createElement('div');
+            revUtils.addClass(commentDetailsHeaderElement, 'rev-comment-detail-header');
+
+            commentDetailsHeaderElement.innerHTML = '<a class="close-detail" style="float: left;width: 20px;height: 20px;">' +
+                                                        '<svg aria-hidden="true" data-prefix="fas" data-icon="arrow-left" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="svg-inline--fa fa-arrow-left fa-w-14" style="font-size: 48px;color: red;">' +
+                                                            '<path fill="#28a2f9" d="M229.9 473.899l19.799-19.799c4.686-4.686 4.686-12.284 0-16.971L94.569 282H436c6.627 0 12-5.373 12-12v-28c0-6.627-5.373-12-12-12H94.569l155.13-155.13c4.686-4.686 4.686-12.284 0-16.971L229.9 38.101c-4.686-4.686-12.284-4.686-16.971 0L3.515 247.515c-4.686 4.686-4.686 12.284 0 16.971L212.929 473.9c4.686 4.686 12.284 4.686 16.971-.001z" class=""></path>' +
+                                                        '</svg>' +
+                                                    '</a>';
+
+            if (isReplyMode) {
+                commentDetailsElement.id = 'rev-reply-detail';
+                commentDetailsHeaderElement.innerHTML += '<span style="text-align:center;width: 100%;display: block;font-size: 16px;margin-left: -14px;font-weight: bold;">Replies</span>';
+                history.pushState({engage: 'comment_reply'}, null, "#comment-reply");
+            } else {
+                commentDetailsElement.id = 'rev-comment-detail';
+                commentDetailsHeaderElement.innerHTML += '<div class="rev-headline" style="margin: 0 7px 0 27px;font-size: 12px;font-weight: bold;text-align: center;line-height: 12px;max-height: 25px;overflow: hidden;">' + itemData.headline + '</div>';
+                history.pushState({engage: 'comment'}, null, "#comment");
+            }
+
+            commentDetailsElement.appendChild(commentDetailsHeaderElement);
+
+            revUtils.addEventListener(commentDetailsElement.querySelector('.close-detail'), 'click', function(ev) {
+                revUtils.removeClass(commentDetailsElement, 'comment-slide-in');
+                revUtils.addClass(commentDetailsElement, 'comment-slide-out');
+                var func = function(){commentDetailsElement.remove();};
+                setTimeout(func, 500);
+                revUtils.removeClass(document.body, 'modal-open');
+                history.back();
+            });
+
+            //create feed container
+            var commentFeedElement = document.createElement('div');
+            revUtils.addClass(commentFeedElement, 'rev-comment-feed');
+
+            var commentFeedLoader = document.createElement('div');
+            revUtils.addClass(commentFeedLoader, 'rev-comment-feed-loading');
+
+            var commentFeedUL = document.createElement('ul');
+            revUtils.addClass(commentFeedUL, 'comments-list');
+            commentFeedUL.id = "comments-list";
+
+            //add loader
+            commentFeedElement.appendChild(commentFeedLoader);
+
+            //append comments
+            commentDetailsElement.appendChild(commentFeedElement);
+
+            //get initial feed items
+            revApi.xhr('http://www.mocky.io/v2/5a7b3a3d3000004b3128be1e?mocky-delay=300ms', function(data) {
+
+                for (var key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        var comment_li = that.setCommentHTML(data[key], true);
+                        commentFeedUL.appendChild(comment_li);
+                    }
+                }
+
+                //remove loader
+                commentFeedElement.removeChild(commentFeedLoader);
+                //add UL
+                commentFeedElement.appendChild(commentFeedUL);
+                //scroll to bottom of comments list
+                commentFeedElement.scrollTop = commentFeedElement.scrollHeight;
+
+                var showmorebtn = document.createElement('a');
+                revUtils.addClass(showmorebtn, 'show_more');
+                showmorebtn.style = "text-align: center;padding: 6px;background: #28a2f9; color:#fff;border-radius: 33px;margin: 5px auto 0px;width: 200px;display: block;";
+
+                showmorebtn.innerText = "Load previous comments";
+                commentFeedUL.insertBefore(showmorebtn, commentFeedUL.childNodes[0]);
+
+                 revUtils.addEventListener(showmorebtn, 'click', function(ev) {
+                    revApi.xhr('http://www.mocky.io/v2/5a85f8b33100005200253187', function(data) {
+                        //insert more comments
+                        var count = 0;
+                        for (var key in data) {
+                            if (data.hasOwnProperty(key)) {
+                                var comment_li = that.setCommentHTML(data[key]);
+                                commentFeedUL.insertBefore(comment_li, commentFeedUL.childNodes[count]);
+                                count++;
+                            }
+                        }
+
+                        //keep scroll position after injecting html
+                        showmorebtn.scrollIntoView(true);
+                        showmorebtn.parentNode.removeChild(showmorebtn);
+
+                    });
+                });
+
+            });
+
+            var commentBoxElement = document.createElement('div');
+            revUtils.addClass(commentBoxElement, 'rev-comment-box');
+            commentBoxElement.style = 'padding: 8px;background: #fafbfd;border-top: 1px solid #e6ecf5;'; //add this to css file
+
+            var commentUserAvatar = document.createElement('img');
+            commentUserAvatar.src = 'https://hostelhops.com/img/profile/user/facebook-default.png?1508323045';
+            commentUserAvatar.style = 'width: 24px;height: 24px;float:left;border-radius: 24px;position: absolute;top: 50%;margin-top: -14px;';
+            commentBoxElement.appendChild(commentUserAvatar);
+
+            var commentInputWrapElement = document.createElement('div');
+            revUtils.addClass(commentInputWrapElement, 'comment-input');
+            commentInputWrapElement.style = 'padding: 0px 0 0 34px;';
+            commentBoxElement.appendChild(commentInputWrapElement);
+
+
+            var commentInputHiddenTxtElement = document.createElement('div');
+            commentInputHiddenTxtElement.id = "hidden_text_size";
+            commentInputHiddenTxtElement.style = 'min-height: 30px;width: 100%;border-radius: 4px;border: 1px solid #e6ecf5;padding: 4px 40px 4px 10px;position: absolute;z-index: -20;';
+            commentInputWrapElement.appendChild(commentInputHiddenTxtElement);
+
+            var commentTextAreaElement = document.createElement('textarea');
+            commentTextAreaElement.id = 'comment_input';
+            commentTextAreaElement.placeholder = isReplyMode ? 'Write a reply...' : 'Write a comment...';
+            commentTextAreaElement.style = 'resize: none;height: 30px;width: 100%;border-radius: 4px;border: 1px solid #e6ecf5;padding: 4px 40px 4px 10px;cursor: text;';
+            commentInputWrapElement.appendChild(commentTextAreaElement);
+
+            var submitCommentBtn = document.createElement('a');
+            submitCommentBtn.id = 'submit_comment';
+            submitCommentBtn.style = 'display:none;';
+            submitCommentBtn.innerHTML = '<svg aria-hidden="true" data-prefix="fas" data-icon="paper-plane" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-paper-plane fa-w-16 fa-3x"><path fill="#28a2f9" d="M476 3.2L12.5 270.6c-18.1 10.4-15.8 35.6 2.2 43.2L121 358.4l287.3-253.2c5.5-4.9 13.3 2.6 8.6 8.3L176 407v80.5c0 23.6 28.5 32.9 42.5 15.8L282 426l124.6 52.2c14.2 6 30.4-2.9 33-18.2l72-432C515 7.8 493.3-6.8 476 3.2z" class=""></path></svg>';
+            commentInputWrapElement.appendChild(submitCommentBtn);
+
+            var clearfix = document.createElement('div');
+            clearfix.style = 'clear: both;';
+            commentBoxElement.appendChild(clearfix);
+            commentDetailsElement.appendChild(commentBoxElement);
+
+            if (isReplyMode) {
+                var ReplyDetailsElement = commentDetailsElement;
+            }
+
+            if (focus) {
+                commentTextAreaElement.focus();
+            }
+
+            //Adjust comment textarea height, 1 - 4 lines
+            revUtils.addEventListener(commentTextAreaElement, 'keyup', function(ev) {
+                submitCommentBtn.style.display = 'inline-block';
+                commentInputHiddenTxtElement.innerText = commentTextAreaElement.value;
+                if (commentInputHiddenTxtElement.scrollHeight < 88) {
+                    commentTextAreaElement.style.height = (commentInputHiddenTxtElement.scrollHeight + 2) + "px";
+                }
+            });
+
+            revUtils.addEventListener(submitCommentBtn, 'click', function(ev){
+                that.isAuthenticated(function(response){
+
+                    var submitcomment = function(){
+                        //submit comment
+                        var data = {};
+                        //fake data to insert fake comment until we have an api
+                        data.comment_body = String(commentTextAreaElement.value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+                        data.parent_id = null;
+                        data.date = Date.now();
+                        data.author = "John Lemp";
+                        data.author_avatar = "https://media.licdn.com/dms/image/C4E03AQEZq3I5SCWFZg/profile-displayphoto-shrink_200_200/0?e=1524427200&v=alpha&t=DCZhIK4drF_WAY8Pphc-iJ9VCEIEguE-KeJdgYhX2mM"
+                        data.likes = 0;
+
+                        //send comment xhr
+                        // revApi.xhr('http://www.mocky.io/v2/5a7b3a3d3000004b3128be1e?mocky-delay=300ms', function(data) {
+
+                        // });
+
+                        var newCommentElement = that.setCommentHTML(data);
+                        commentFeedUL.appendChild(newCommentElement);
+
+                        commentTextAreaElement.value = "";
+                        commentFeedElement.scrollTop = commentFeedElement.scrollHeight;
+                    };
+
+                    if (response) {
+                        submitcomment();
+
+                    } else {
+
+                        //request auth
+                        var authbox = document.createElement('div');
+                        authbox.id = 'comment_authbox';
+                        revUtils.addClass(authbox,'rev-auth');
+                        authbox.innerHTML = '<div class="rev-auth-box">' +
+                            '<a class="rev-auth-close-button">' +
+                                '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>' +
+                            '</a>' +
+                            '<div class="rev-auth-box-inner">' +
+                                '<div class="rev-auth-subline">'+ that.getDisclosure() +'</div>' +
+                                '<div class="rev-auth-headline">' +
+                                    '<span class="rev-engage-type-txt">Almost Done! Login to save your comment</span> <br /> <strong>and</strong> personalize your experience' +
+                                '</div>' +
+                                '<div class="rev-auth-button">' +
+                                    that.revAuthButtonIconHtml() +
+                                    '<div class="rev-auth-button-text">' +
+                                        'Continue with facebook' +
+                                    '</div>' +
+                                '</div>' +
+
+                                '<div class="rev-auth-buttonline">Once personalized the content recommendations on this page will be based on the pages you\'ve liked and urls you\'ve shared on Facebook</div>' +
+
+                                '<div class="rev-auth-terms">' +
+                                    '<span>by signing up you agree to the <a target="_blank" href="https://faq.revcontent.com/customer/en/portal/articles/2703838-revcontent-s-privacy-and-cookie-policy">Terms</a></span>' +
+                                    // '<span>|</span>' +
+                                    // '<a href="#">Privacy Policy</a>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>';
+
+                        document.body.appendChild(authbox);
+                        history.pushState({engage: 'auth'}, "Login to save your comment", "#login");
+
+                        revUtils.addEventListener(authbox.querySelector('.rev-auth-button'), 'click', function(){
+
+                            var url = that.options.host + "/feed.php?provider=facebook_engage&w=" + that.options.widget_id + "&p=" + that.options.pub_id;
+                            var popup = window.open(url, 'Login', 'resizable,width=600,height=800');
+
+                            var closedCheckInterval = setInterval(function() {
+                                if (popup.closed) {
+                                    that.isAuthenticated(function(response) {
+
+                                        if (response === true) {
+                                            authbox.remove();
+
+                                            that.updateAuthElements();
+                                            that.processQueue();
+
+                                            if (!that.personalized) {
+                                                that.showPersonalizedTransition();
+                                                that.personalize();
+                                            }
+
+                                            //post comment
+                                            submitcomment();
+
+                                        }
+                                        revDisclose.postMessage();
+                                    });
+                                    clearInterval(closedCheckInterval);
+                                }
+                            }, 100);
+
+
+                        });
+
+                        revUtils.addEventListener(authbox.querySelector('.rev-auth-close-button'), 'click', function(ev) {
+                            revUtils.removeClass(authbox, 'comment-slide-in');
+                            revUtils.addClass(authbox, 'comment-slide-out');
+                            var func = function(){authbox.remove();};
+                            setTimeout(func, 500);
+                            //history.back();
+                        });
+
+                    }
+                });
+            });
+
+            revUtils.addClass(commentDetailsElement, 'comment-slide-in');
+
+            
+            window.onpopstate = function(event) {
+                
+                var authbox = document.getElementById('comment_authbox');
+                var reply_window = document.getElementById('rev-reply-detail');
+                var comment_window = document.getElementById('rev-comment-detail');
+                
+                if (authbox === null) {
+
+                    if (reply_window !== null) {
+                        console.log("yes, we need to remove the reply window");
+                        revUtils.removeClass(reply_window, 'comment-slide-in');
+                        revUtils.addClass(reply_window, 'comment-slide-out');
+                        var func = function(){reply_window.remove();};
+                        setTimeout(func, 500);
+                    } else if (comment_window !== null){
+                        console.log("we need to remove the comment window");
+                        revUtils.removeClass(comment_window, 'comment-slide-in');
+                        revUtils.addClass(comment_window, 'comment-slide-out');
+                        var func = function(){comment_window.remove();};
+                        setTimeout(func, 500);
+                        revUtils.removeClass(document.body, 'modal-open');
+                    }
+
+                } else {
+                    revUtils.removeClass(authbox, 'comment-slide-in');
+                    revUtils.addClass(authbox, 'comment-slide-out');
+                    var func = function(){authbox.remove();};
+                    setTimeout(func, 500);
+                }
+            
+            };
+
+        } else {
+            //not mobile
+            console.log("not mobile");
+        }
+
     };
 
     return RevSlider;
