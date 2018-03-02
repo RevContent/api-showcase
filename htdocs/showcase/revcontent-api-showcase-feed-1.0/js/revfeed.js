@@ -188,9 +188,22 @@ Author: michael@revcontent.com
             // initial
             var total = self.options.rows * self.innerWidget.grid.perRow;
 
-            while(self.innerWidget.grid.items.length > total) {
-                var popped = self.innerWidget.grid.items.pop();
-                popped.remove();
+            // remove any elements beyond initial count
+            var removeItems = [];
+            var removeCount = 0;
+            for (var i = 0; i < self.innerWidget.grid.items.length; i++) {
+                if (self.innerWidget.grid.items[i].type) {
+                    if (removeCount >= total) {
+                        removeItems.push(self.innerWidget.grid.items[i]);
+                    }
+                    removeCount++
+                }
+            }
+
+            for (var i = 0; i < removeItems.length; i++) {
+                var index = self.innerWidget.grid.items.indexOf(removeItems[i]);
+                var removed = self.innerWidget.grid.items.splice(index, 1);
+                removed[0].remove();
             }
 
             self.internalOffset = 0;
