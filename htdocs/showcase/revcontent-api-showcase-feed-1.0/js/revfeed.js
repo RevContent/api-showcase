@@ -212,6 +212,7 @@ Author: michael@revcontent.com
                     break;
             }
 
+            // TODO - yikes
             self.innerWidget.options = revUtils.extend(self.innerWidget.options, self.options);
 
             var internalURL = self.innerWidget.generateUrl(0, self.innerWidget.grid.items.length, 0, 0);
