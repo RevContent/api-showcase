@@ -218,6 +218,7 @@ Author: michael@revcontent.com
 
             revApi.request(internalURL, function(resp) {
                 self.innerWidget.updateDisplayedItems(self.innerWidget.grid.items, resp, true);
+                self.innerWidget.containerElement.scrollIntoView(true);
             });
 
             self.navBar();
