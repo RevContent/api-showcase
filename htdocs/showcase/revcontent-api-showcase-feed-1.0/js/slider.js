@@ -2228,6 +2228,16 @@ Author: michael@revcontent.com
             return;
         }
 
+        var title = "Trending topics on " + this.capitalize(this.extractRootDomain(window.location.href));
+        var sub = '';
+        if (this.authenticated) {
+            title = 'Content You Love';
+            sub = 'SIMILAR TOPICS';
+        }
+
+        this.interestsCarouselItem.header.querySelector('h1 span').innerText = title;
+        this.interestsCarouselItem.header.querySelector('h1 small sup').innerText = sub;
+
         var interests_data = data.subscribed;
         this.interests = {
             list: data.subscribed,
@@ -2283,7 +2293,7 @@ Author: michael@revcontent.com
         this.interestsCarouselItem.flickity.select(initialIndex, false, true);
     };
 
-    RevSlider.prototype.appendInterestsCarousel = function (grid, isLoggedin) {
+    RevSlider.prototype.appendInterestsCarousel = function (grid) {
         var that = this;
 
         var interestsCarouselElement = document.createElement('div');
@@ -2295,24 +2305,22 @@ Author: michael@revcontent.com
 
         this.interestsCarouselItem = added[0];
 
-        revApi.request( that.options.host + '/api/v1/engage/getinterests.php?auth=' + isLoggedin + "&d=" + that.options.domain, function (data) {
-
-            var cTitle = "Trending topics on " + that.capitalize(that.extractRootDomain(window.location.href));
-            var cSubtitle = '';
-            if (isLoggedin) {
-                cTitle = 'Content You Love';
-                cSubtitle = 'SIMILAR TOPICS';
-            }
+        revApi.request( that.options.host + '/api/v1/engage/getinterests.php?d=' + that.options.domain, function (data) {
+            var interestsCarouselContainer = document.createElement('div');
+            interestsCarouselContainer.className = 'rev-carousel-container';
 
             var interestsCarouselHeader = document.createElement('h1');
-            interestsCarouselHeader.innerHTML = '<h1 style="font-size:17px;">' + cTitle + '<small style="font-size:12px;font-weight:normal;padding-left:15px;color:#777777"><sup>'+cSubtitle+'</sup></small></h1>'
+            interestsCarouselHeader.innerHTML = '<h1><span></span><small><sup></sup></small></h1>';
 
             var interestsCarouselFlickity = document.createElement('div');
             interestsCarouselFlickity.id = 'rev-feed-interests';
             interestsCarouselFlickity.className = 'feed-interests-carousel';
 
-            revUtils.append(that.interestsCarouselItem.element, interestsCarouselHeader);
-            revUtils.append(that.interestsCarouselItem.element, interestsCarouselFlickity);
+            that.interestsCarouselItem.header = interestsCarouselHeader;
+
+            revUtils.append(that.interestsCarouselItem.element, interestsCarouselContainer);
+            revUtils.append(interestsCarouselContainer, interestsCarouselHeader);
+            revUtils.append(interestsCarouselContainer, interestsCarouselFlickity);
 
             that.interestsCarouselItem.flickity = new Flickity( interestsCarouselFlickity, {
                 wrapAround: false,
