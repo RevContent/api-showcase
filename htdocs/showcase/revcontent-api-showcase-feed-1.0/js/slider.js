@@ -2311,6 +2311,8 @@ Author: michael@revcontent.com
             interestsCarouselFlickity.id = 'rev-feed-interests';
             interestsCarouselFlickity.className = 'feed-interests-carousel';
 
+            that.interestsCarouselItem.header = interestsCarouselHeader; // prop
+
             revUtils.append(that.interestsCarouselItem.element, interestsCarouselHeader);
             revUtils.append(that.interestsCarouselItem.element, interestsCarouselFlickity);
 
