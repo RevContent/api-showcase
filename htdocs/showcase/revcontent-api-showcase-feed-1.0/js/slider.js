@@ -283,9 +283,11 @@ Author: michael@revcontent.com
     RevSlider.prototype.personalize = function() {
         var that = this;
 
-        var personalize = function(time) {
+        var personalize = function(data) {
             var starttime = new Date().getTime();
             that.personalized = true;
+
+            that.updateInterestsCarousel(data.data);
 
             // TODO
             // that.updateVideoItems(that.mockVideosAuthenticated);
@@ -302,7 +304,7 @@ Author: michael@revcontent.com
                 var internalURL = that.generateUrl(0, internalPersonalizedCount, 0, 0);
 
                 revApi.request(internalURL, function(resp) {
-                    var totaltime = ((new Date().getTime() - starttime) + time);
+                    data.totaltime = ((new Date().getTime() - starttime) + data.totaltime);
 
                     var finishPersonalize = function() {
                         that.updateDisplayedItems(that.grid.items, resp, true);
@@ -310,12 +312,12 @@ Author: michael@revcontent.com
                     }
 
                     var mintime = 7000; // show for a minimum of 7s
-                    if (totaltime > mintime) {
+                    if (data.totaltime > mintime) {
                         finishPersonalize();
                     } else {
                         setTimeout(function() {
                             finishPersonalize();
-                        }, mintime - totaltime)
+                        }, mintime - data.totaltime)
                     }
                 });
             }
@@ -352,7 +354,10 @@ Author: michael@revcontent.com
                                 request();
                             }, 2000);
                         } else {
-                            resolve(totaltime);
+                            resolve({
+                                totaltime: totaltime,
+                                data: data
+                            });
                         }
                     });
                 }
@@ -362,8 +367,8 @@ Author: michael@revcontent.com
             });
         };
 
-        requestInterests(new Date().getTime()).then(function(time) {
-            personalize(time);
+        requestInterests(new Date().getTime()).then(function(data) {
+            personalize(data);
             // TODO animate in new content
         }, function() {
             // TODO display message that no personalized content
@@ -2210,86 +2215,114 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.capitalize = function (str) {
-
         return str.charAt(0).toUpperCase() + str.slice(1);
-
     };
 
-    RevSlider.prototype.appendInterestsCarousel = function (grid,isLoggedin) {
+
+    RevSlider.prototype.updateInterestsCarousel = function(data) {
+
+        if(typeof data !== "object" || (typeof data == "object" && data.subscribed.length == 0)) {
+            this.interestsCarouselItem.element.setAttribute('style','margin:0!important;padding:0!important;height:0;border:0');
+            this.interestsCarouselItem.element.classList.add('revcontent-carousel-is-empty');
+            this.interestsCarouselItem.element.classList.add('revcontent-remove-element');
+            return;
+        }
+
+        var title = "Trending topics on " + this.capitalize(this.extractRootDomain(window.location.href));
+        var sub = '';
+        if (this.authenticated) {
+            title = 'Content You Love';
+            sub = 'SIMILAR TOPICS';
+        }
+
+        this.interestsCarouselItem.header.querySelector('h1 span').innerText = title;
+        this.interestsCarouselItem.header.querySelector('h1 small sup').innerText = sub;
+
+        var interests_data = data.subscribed;
+        this.interests = {
+            list: data.subscribed,
+            subscribed: data.subscribed, //data.subscribed
+            subscribed_ids: data.subscribed_ids, //data.subscribed_ids
+            available: data.subscribed,
+            //recomended: data.recommended,
+            count: data.subscribed.length // data.count
+        };
+
+        var interests_count = 0;
+        var initialIndex = 3;
+        var topicFeed = this.options.topic_id > 0;
+        if (typeof interests_data !== 'undefined') {
+            if (topicFeed) {
+                interests_data = interests_data.filter(function (t) {
+                    return t.id != this.options.topic_id;
+                });
+            }
+            interests_count = interests_data.length;
+            if (topicFeed && interests_count >= 6) {
+                initialIndex = 6;
+            }
+        }
+
+        var cells = [];
+
+        for (var i=0; i < interests_count; i++) {
+            var interest = interests_data[i];
+
+            var cell = document.createElement('div');
+            cell.setAttribute('style', interest.image != '' ? 'background:transparent url(' + interest.image + ') top left no-repeat;background-size:cover;' : '');
+            cell.setAttribute('data-id', interest.id);
+            cell.setAttribute('data-title', interest.title);
+            cell.setAttribute('data-interest', interest.title.toLowerCase());
+
+            cell.className = 'carousel-cell interest-cell interest-' + interest.title.toLowerCase() + ' selected-interest';
+
+            cell.innerHTML = '<div class="cell-wrapper">' +
+                (this.authenticated?'<span class="selector subscribed"></span>':'') +
+                    '<div class="interest-title ' + (interest.lightMode ? ' light-mode' : '') + '">' + interest.title + '</div>' +
+                '</div>';
+
+            cells.push(cell);
+        }
+
+        this.interestsCarouselItem.flickity.remove(this.interestsCarouselItem.element.querySelectorAll('.carousel-cell'));
+
+        this.interestsCarouselItem.flickity.append(cells);
+
+        this.interestsCarouselItem.flickity.reposition();
+
+        this.interestsCarouselItem.flickity.select(initialIndex, false, true);
+    };
+
+    RevSlider.prototype.appendInterestsCarousel = function (grid) {
         var that = this;
-        var interest_cells = '';
 
-        var interestsCarousel = document.createElement('div');
-        interestsCarousel.className = 'rev-content';
-        grid.element.appendChild(interestsCarousel);
+        var interestsCarouselElement = document.createElement('div');
+        interestsCarouselElement.className = 'rev-content';
 
-        revApi.request( that.options.host + '/api/v1/engage/getinterests.php?auth='+isLoggedin+"&d="+that.options.domain, function (data) {
+        grid.element.appendChild(interestsCarouselElement);
 
-            if(typeof data !== "object" || (typeof data == "object" && data.subscribed.length == 0)) {
-                interestsCarousel.setAttribute('style','margin:0!important;padding:0!important;height:0;border:0');
-                interestsCarousel.classList.add('revcontent-carousel-is-empty');
-                interestsCarousel.classList.add('revcontent-remove-element');
-                return;
-            }
+        var added = grid.addItems([interestsCarouselElement]);
 
-            var interests_data = data.subscribed;
-            that.interests = {
-                list: data.subscribed,
-                subscribed: data.subscribed, //data.subscribed
-                subscribed_ids: data.subscribed_ids, //data.subscribed_ids
-                available: data.subscribed,
-                //recomended: data.recommended,
-                count: data.subscribed.length // data.count
-            };
-            var interests_count = 0;
-            var initialIndex = 3;
-            var topicFeed = that.options.topic_id>0;
-            if (typeof interests_data !== 'undefined') {
-                if(topicFeed) {
-                    interests_data = interests_data.filter(function (t) {
-                        return t.id != that.options.topic_id;
-                    });
-                }
-                interests_count = interests_data.length;
-                if(topicFeed && interests_count>=6){
-                    initialIndex = 6;
-                }
-            }
+        this.interestsCarouselItem = added[0];
 
-            for(var i=0;i<interests_count;i++){
-                var interest = interests_data[i];
+        revApi.request( that.options.host + '/api/v1/engage/getinterests.php?d=' + that.options.domain, function (data) {
+            var interestsCarouselContainer = document.createElement('div');
+            interestsCarouselContainer.className = 'rev-carousel-container';
 
-                var the_cell = '' +
-                // Interest Image should be stored as CSS by slug/name ID interest-' + interest.slug.toLowerCase() + '
-                // $image property in interest object could be used as override if non-empty.
-                '<div style="' + (interest.image != '' ? 'background:transparent url(' + interest.image + ') top left no-repeat;background-size:cover;' : '') + '" class="carousel-cell interest-cell interest-' + interest.title.toLowerCase() + ' selected-interest"  data-id="' + interest.id + '" data-title="' + interest.title + '" data-interest="' + interest.title.toLowerCase() + '">' +
-                    '<div class="cell-wrapper">' +
-                    (that.authenticated?'<span class="selector subscribed"></span>':'') +
-                        '<div class="interest-title ' + (interest.lightMode ? ' light-mode' : '') + '">' + interest.title + '</div>' +
-                    '</div>' +
-                '</div>';
-                interest_cells += the_cell;
-            }
+            var interestsCarouselHeader = document.createElement('h1');
+            interestsCarouselHeader.innerHTML = '<h1><span></span><small><sup></sup></small></h1>';
 
-            var cTitle = "Trending topics on "+that.capitalize(that.extractRootDomain(window.location.href));;
-            var cSubtitle = "";
-            if(isLoggedin){
-                cTitle = "Content You Love";
-                cSubtitle = "SIMILAR TOPICS";
-            }
-            interestsCarousel.innerHTML = '<div><h1 style="font-size:17px;">' + cTitle +
-                '<small style="font-size:12px;font-weight:normal;padding-left:15px;color:#777777"><sup>'+cSubtitle+'</sup></small>' +
-                '</h1>' +
-                '<div id="rev-feed-interests" class="feed-interests-carousel">' +
+            var interestsCarouselFlickity = document.createElement('div');
+            interestsCarouselFlickity.id = 'rev-feed-interests';
+            interestsCarouselFlickity.className = 'feed-interests-carousel';
 
-                    interest_cells +
+            that.interestsCarouselItem.header = interestsCarouselHeader;
 
-                '</div>' +
-                '</div>';
+            revUtils.append(that.interestsCarouselItem.element, interestsCarouselContainer);
+            revUtils.append(interestsCarouselContainer, interestsCarouselHeader);
+            revUtils.append(interestsCarouselContainer, interestsCarouselFlickity);
 
-            var carousel = interestsCarousel.querySelector('.feed-interests-carousel');
-
-            var interests_flick = new Flickity( carousel, {
+            that.interestsCarouselItem.flickity = new Flickity( interestsCarouselFlickity, {
                 wrapAround: false,
                 prevNextButtons: false,
                 pageDots: false,
@@ -2297,10 +2330,11 @@ Author: michael@revcontent.com
                 freeScroll: true,
                 selectedAttraction: 0.15,
                 freeScrollFriction: 0.03,
-                initialIndex: initialIndex
             });
 
-            interests_flick.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) {
+            that.updateInterestsCarousel(data);
+
+            that.interestsCarouselItem.flickity.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) {
                 var target = event.target || event.srcElement;
                 if ( !cellElement ) {
                     return;
@@ -2333,12 +2367,12 @@ Author: michael@revcontent.com
 
             });
 
-            interests_flick.on( 'dragStart', function( event, pointer ) {
-                carousel.classList.add('is-dragging');
+            that.interestsCarouselItem.flickity.on( 'dragStart', function( event, pointer ) {
+                interestsCarouselFlickity.classList.add('is-dragging');
             });
 
-            interests_flick.on( 'dragEnd', function( event, pointer ) {
-                carousel.classList.remove('is-dragging');
+            that.interestsCarouselItem.flickity.on( 'dragEnd', function( event, pointer ) {
+                interestsCarouselFlickity.classList.remove('is-dragging');
             });
 
             if (grid.perRow > 1) { // relayout if not single column
@@ -2346,7 +2380,7 @@ Author: michael@revcontent.com
             }
         });
 
-        return grid.addItems([interestsCarousel]);
+        return added;
     };
 
     RevSlider.prototype.appendExplorePanel = function(grid){
