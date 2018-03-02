@@ -515,7 +515,7 @@ Author: michael@revcontent.com
             }, 300);
         }, { passive: true });
 
-        revUtils.addEventListener(back.querySelector('.feed-back-button'),'click',this.loadFromHistory.bind(this));
+        revUtils.addEventListener(back.querySelector('.feed-back-button'), revDetect.mobile() ? 'touchstart' : 'click', this.loadFromHistory.bind(this));
     };
 
     Feed.prototype.pushHistory = function(){
