@@ -452,6 +452,11 @@ Author: michael@revcontent.com
 
         var that = this;
 
+        revUtils.addEventListener(window, 'resize', function(){
+            var grid_rect = that.innerWidget.containerElement.getBoundingClientRect();
+            back.style.width = grid_rect.width + 'px';
+        });
+
         window.addEventListener('scroll', function() {
             var pos_1 = window.pageYOffset;
             setTimeout(function(){
