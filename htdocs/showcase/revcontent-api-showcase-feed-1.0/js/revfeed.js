@@ -417,9 +417,9 @@ Author: michael@revcontent.com
         //    header.innerHTML="<h3>"+this.options.topic_title+" Articles</h3>";
         //}
 
-        if(this.options.author_name && this.options.author_name.length>0){
-            header.innerHTML="<h3>Articles By "+this.options.author_name+"</h3>";
-        }
+        //if(this.options.author_name && this.options.author_name.length>0){
+        //    header.innerHTML="<h3>Articles By "+this.options.author_name+"</h3>";
+        //}
 
         var existingBack = this.innerWidget.containerElement.querySelector('.go-back-bar');
         var back = existingBack ? existingBack : document.createElement('div');
