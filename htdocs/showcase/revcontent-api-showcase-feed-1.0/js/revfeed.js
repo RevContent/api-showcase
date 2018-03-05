@@ -450,17 +450,21 @@ Author: michael@revcontent.com
         }
 
         var title = "";
+        var author_initials = '';
         if(this.options.topic_id>0){
             title = this.options.topic_title;
         }
         if(this.options.author_name && this.options.author_name.length>0){
             title = "Articles by "+this.options.author_name;
+            var ai = this.options.author_name.split(' ');
+            author_initials = ai[0].charAt(0) + ' ' + ai[1].charAt(0);
+            header_logo = '<span style="display:block;margin-left:9px;width:24px;height:24px;border-radius:24px;text-align:center;font-size:11px;background-color:#ffffff;color:#222222;letter-spacing:-1px;line-height:24px;margin-top:8px;">' + author_initials + '</span>';
         }
 
         back.innerHTML = '<div style="display:flex;flex-direction:row;">' +
             '<div class="feed-header-back"><button style="background-color:#444444;border:0;margin:0;border-right:1.0px solid #484848;display:block;width:40px;height:40px;text-align:center;font-weight: bold;font-size:32px" class="feed-back-button" name="feed-back-button" value="">' + back_icon + '</button></div>' +
             '<div class="feed-header-logo" style="width:32px;">' + header_logo + '</div>' +
-            '<div class="feed-header-title" style="white-space:nowrap;width:95%;padding-left:18px;text-overflow:ellipsis;overflow:hidden;text-align-center;color:#ffffff;font-size:14px;letter-spacing: 0px;font-weight:normal;"><span>' + title + '</span></div>' +
+            '<div class="feed-header-title" style="white-space:nowrap;width:95%;padding-left:18px;text-overflow:ellipsis;overflow:hidden;text-align-center;color:#ffffff;font-size:14px;letter-spacing: 0;font-weight:normal;"><span>' + title + '</span></div>' +
             '<div class="feed-header-options" style="min-width:auto;text-align:center;">' + e_icon + '</div>' +
 
             '</div>';
