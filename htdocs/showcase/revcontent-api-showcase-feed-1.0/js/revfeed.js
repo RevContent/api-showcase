@@ -446,7 +446,7 @@ Author: michael@revcontent.com
 
         var header_logo = '';
         if(this.options.brand_logo_secondary){
-            header_logo = '<img src="' + this.options.brand_logo_secondary + '" alt="Newsweek.com Feed" style="max-width:100%;margin: 0 9px;" />';
+            header_logo = '<img src="' + this.options.brand_logo_secondary + '" alt="" style="max-width:100%;margin: 0 9px;" />';
         }
 
         var title = "";
