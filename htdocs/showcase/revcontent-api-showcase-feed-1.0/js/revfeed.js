@@ -101,7 +101,7 @@ Author: michael@revcontent.com
             content: [],
             view: false,
             test: false,
-            emitter: new EventEmitter(),
+            emitter: new EvEmitter(),
             history_stack: []
         };
 
