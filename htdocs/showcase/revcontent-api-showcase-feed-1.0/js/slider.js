@@ -1976,12 +1976,18 @@ Author: michael@revcontent.com
         // feed links
         var feedLinks = item.element.querySelectorAll('.rev-feed-link');
         for (var i = 0; i < feedLinks.length; i++) {
+            var sponsored_check = item.element.querySelector('.rev-date');
+            if(sponsored_check !== null){
+                if(sponsored_check.textContent.toLowerCase() == 'sponsored') {
+                    continue;
+                }
+            }
             var clickHandle = this.handleFeedLink.bind(this, feedLinks[i].getAttribute('data-type'), itemData);
             item.handlers.push({
                 el: feedLinks[i],
                 type: 'click',
                 handle: clickHandle
-            })
+            });
             revUtils.addEventListener(feedLinks[i], 'click', clickHandle, {passive:false});
         }
     };
