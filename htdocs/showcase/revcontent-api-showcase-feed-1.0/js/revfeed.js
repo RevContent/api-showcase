@@ -457,7 +457,7 @@ Author: michael@revcontent.com
         if(this.options.author_name && this.options.author_name.length>0){
             title = "Articles by "+this.options.author_name;
             var ai = this.options.author_name.split(' ');
-            author_initials = ai[0].charAt(0) + ' ' + ai[1].charAt(0);
+            author_initials = ai[0].charAt(0) + ' ' + (ai.length > 2 ? ai[2].charAt(0) : ai[1].charAt(0));
             header_logo = '<span style="display:block;margin-left:9px;width:24px;height:24px;border-radius:24px;text-align:center;font-size:11px;background-color:#ffffff;color:#222222;letter-spacing:-1px;line-height:24px;margin-top:8px;">' + author_initials + '</span>';
         }
 
