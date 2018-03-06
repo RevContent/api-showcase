@@ -187,7 +187,7 @@ Author: michael@revcontent.com
 
         var that = this;
 
-        this.emitter = new EventEmitter();
+        this.emitter = new EvEmitter();
 
         revDisclose.setEmitter(this.emitter);
 
