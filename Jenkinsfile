@@ -41,8 +41,8 @@ node {
 import json
 
 with open('./cloudfront.json') as cf_file:
-  cf = json.load(cf_file)['Distribution']
-  cf['DistributionConfig']['Origins']['Items'][0]['OriginPath'] = '/${BRANCH_NAME}/${BUILD_ID}'
+  cf = json.load(cf_file)['Distribution']['DistributionConfig']
+  cf['Origins']['Items'][0]['OriginPath'] = '/${BRANCH_NAME}/${BUILD_ID}'
 
 with open('./cloudfront.json', 'w') as cf_file:
   json.dump(cf, cf_file)
