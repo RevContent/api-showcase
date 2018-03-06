@@ -12,8 +12,6 @@
     "hammerjs": "~2",
     "fontfaceobserver" : "~2",
     "flickity": "~2",
-    "flickity-as-nav-for": "~2",
-    "flickity-imagesloaded": "~2",
     "ev-emitter": "~1",
     "tap-listener": "^2.0.0",
     "unidragger": "^2.2.3",
