@@ -59,7 +59,7 @@ with open('./cloudfront.json', 'w') as cf_file:
   stage("Clearing CDN") {
 
     // slackSend channel: 'test', message: 'Labs ' + BRANCH_NAME + ' ' + BUILD_ID + ': Clearing CDN.'
-    sh 'aws cloudfront create-invalidation --id E1GBG7FZ0VP3CL --paths "*"'
+    sh 'aws cloudfront create-invalidation --id E1GBG7FZ0VP3CL --paths "/*"'
     // slackSend channel: 'test', message: 'Labs ' + BRANCH_NAME + ' ' + BUILD_ID + ': Deploy Complete.'
 
   }
