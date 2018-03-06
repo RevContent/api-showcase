@@ -33,7 +33,7 @@ node {
     def exec = """
     aws cloudfront get-distribution --id E1GBG7FZ0VP3CL > cloudfront.json
     sed -i 's#\\("OriginPath": "\\).*\\("\\),#\\1/${BRANCH_NAME}/${BUILD_ID}\\2,#g' cloudfront.json
-    cat cloudfront.json
+    aws cloudfront update-distribution --id E1GBG7FZ0VP3CL --distribution-config file://./cloudfront.json
     """
 
     sh exec    
@@ -43,7 +43,7 @@ node {
   stage("Clearing CDN") {
 
     slackSend channel: 'test', message: 'Labs ' + BRANCH_NAME + ' ' + BUILD_ID + ': Clearing CDN.'
-    sh 'aws cloudfront update-distribution --id E1GBG7FZ0VP3CL --paths "*"'
+    sh 'aws cloudfront create-invalidation --id E1GBG7FZ0VP3CL --paths "*"'
     slackSend channel: 'test', message: 'Labs ' + BRANCH_NAME + ' ' + BUILD_ID + ': Deploy Complete.'
 
   }
