@@ -11,21 +11,21 @@ node {
       returnStdout: true
     ).trim()
 
-    slackSend channel: 'test', message: 'Labs ' + BUILD_ID + ': Deploying to S3. ```' + commit + '```\n' + JOB_URL
+    slackSend channel: 'test', message: 'Labs ' + BRANCH_NAME + ' ' + BUILD_ID + ': Deploying to S3. ```' + commit + '```\n' + JOB_URL
     s3Upload acl: 'PublicRead', bucket: 'revcontent-labs', excludePathPattern: '**/*.sh', file: 'htdocs/', path: BUILD_ID
 
   }
 
   stage("Updating Cloudfront Path") {
 
-    slackSend channel: 'test', message: 'Labs ' + BUILD_ID + ': Updating Cloudfront Path.'
+    slackSend channel: 'test', message: 'Labs ' + BRANCH_NAME + ' ' + BUILD_ID + ': Updating Cloudfront Path.'
 
   }
 
   stage("Clearing CDN") {
 
-    slackSend channel: 'test', message: 'Labs ' + BUILD_ID + ': Clearing CDN.'
-    slackSend channel: 'test', message: 'Labs ' + BUILD_ID + ': Deploy Complete.'
+    slackSend channel: 'test', message: 'Labs ' + BRANCH_NAME + ' ' + BUILD_ID + ': Clearing CDN.'
+    slackSend channel: 'test', message: 'Labs ' + BRANCH_NAME + ' ' + BUILD_ID + ': Deploy Complete.'
 
   }
 
