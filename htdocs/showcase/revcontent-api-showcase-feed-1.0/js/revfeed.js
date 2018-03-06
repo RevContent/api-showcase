@@ -234,7 +234,10 @@ Author: michael@revcontent.com
                 self.innerWidget.updateDisplayedItems(self.innerWidget.grid.items, resp, true);
             });
 
-            self.innerWidget.containerElement.scrollIntoView(true); // don't wait, scroll now
+            setTimeout(function() { // wait a tick ENG-263
+                self.innerWidget.containerElement.scrollIntoView(true);
+            });
+
 
             self.navBar();
         });
