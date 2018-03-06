@@ -1,0 +1,123 @@
+{
+    "Distribution": {
+        "Status": "Deployed",
+        "DomainName": "d2knt72iy03l69.cloudfront.net",
+        "InProgressInvalidationBatches": 0,
+        "DistributionConfig": {
+            "Comment": "",
+            "CacheBehaviors": {
+                "Quantity": 0
+            },
+            "IsIPV6Enabled": true,
+            "Logging": {
+                "Bucket": "revcontent-logs.s3.amazonaws.com",
+                "Prefix": "cloudfront/revcontent-labs",
+                "Enabled": true,
+                "IncludeCookies": false
+            },
+            "WebACLId": "",
+            "Origins": {
+                "Items": [
+                    {
+                        "S3OriginConfig": {
+                            "OriginAccessIdentity": "origin-access-identity/cloudfront/E36G9K3BUHBDYF"
+                        },
+                        "OriginPath": "/s3-integration/34",
+                        "CustomHeaders": {
+                            "Quantity": 0
+                        },
+                        "Id": "revcontent-labs-13",
+                        "DomainName": "revcontent-labs.s3.amazonaws.com"
+                    }
+                ],
+                "Quantity": 1
+            },
+            "DefaultRootObject": "",
+            "PriceClass": "PriceClass_All",
+            "Enabled": true,
+            "DefaultCacheBehavior": {
+                "TrustedSigners": {
+                    "Enabled": false,
+                    "Quantity": 0
+                },
+                "LambdaFunctionAssociations": {
+                    "Quantity": 0
+                },
+                "TargetOriginId": "revcontent-labs-13",
+                "ViewerProtocolPolicy": "allow-all",
+                "ForwardedValues": {
+                    "Headers": {
+                        "Quantity": 0
+                    },
+                    "Cookies": {
+                        "Forward": "none"
+                    },
+                    "QueryStringCacheKeys": {
+                        "Quantity": 0
+                    },
+                    "QueryString": false
+                },
+                "MaxTTL": 31536000,
+                "SmoothStreaming": false,
+                "DefaultTTL": 86400,
+                "AllowedMethods": {
+                    "Items": [
+                        "HEAD",
+                        "GET"
+                    ],
+                    "CachedMethods": {
+                        "Items": [
+                            "HEAD",
+                            "GET"
+                        ],
+                        "Quantity": 2
+                    },
+                    "Quantity": 2
+                },
+                "MinTTL": 0,
+                "Compress": true
+            },
+            "CallerReference": "1520349426139",
+            "ViewerCertificate": {
+                "CloudFrontDefaultCertificate": true,
+                "MinimumProtocolVersion": "TLSv1",
+                "CertificateSource": "cloudfront"
+            },
+            "CustomErrorResponses": {
+                "Items": [
+                    {
+                        "ErrorCode": 403,
+                        "ResponsePagePath": "/index.html",
+                        "ResponseCode": "200",
+                        "ErrorCachingMinTTL": 300
+                    },
+                    {
+                        "ErrorCode": 404,
+                        "ResponsePagePath": "/index.html",
+                        "ResponseCode": "200",
+                        "ErrorCachingMinTTL": 300
+                    }
+                ],
+                "Quantity": 2
+            },
+            "HttpVersion": "http2",
+            "Restrictions": {
+                "GeoRestriction": {
+                    "RestrictionType": "none",
+                    "Quantity": 0
+                }
+            },
+            "Aliases": {
+                "Quantity": 0
+            }
+        },
+        "ActiveTrustedSigners": {
+            "Enabled": false,
+            "Quantity": 0
+        },
+        "LastModifiedTime": "2018-03-06T18:47:26.531Z",
+        "Id": "E1GBG7FZ0VP3CL",
+        "ARN": "arn:aws:cloudfront::899615638805:distribution/E1GBG7FZ0VP3CL"
+    },
+    "ETag": "E2XYH88CX54GTZ"
+}
