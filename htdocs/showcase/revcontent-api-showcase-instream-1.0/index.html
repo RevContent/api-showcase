@@ -12,9 +12,9 @@
     <title>RevInStream Example</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="../css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap.css" rel="stylesheet">
 
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -85,10 +85,10 @@
                 <div class="col-md-12">
                     <h3>Examples:</h3>
                     <ul>
-                        <li>Example 1: <a href="/showcase/revcontent-api-showcase-instream-1.0/index.php">Border and box shadow</a></li>
-                        <li>Example 2: <a href="/showcase/revcontent-api-showcase-instream-1.0/demos/example-2.php">Video icon overlay with thin font</a></li>
-                        <li>Example 3: <a href="/showcase/revcontent-api-showcase-instream-1.0/demos/example-3.php">Link button</a></li>
-                        <li>Example 4: <a href="/showcase/revcontent-api-showcase-instream-1.0/demos/example-4.php">Headline/provider border and margin</a></li>
+                        <li>Example 1: <a href="/showcase/revcontent-api-showcase-instream-1.0/index.html">Border and box shadow</a></li>
+                        <li>Example 2: <a href="/showcase/revcontent-api-showcase-instream-1.0/demos/example-2.html">Video icon overlay with thin font</a></li>
+                        <li>Example 3: <a href="/showcase/revcontent-api-showcase-instream-1.0/demos/example-3.html">Link button</a></li>
+                        <li>Example 4: <a href="/showcase/revcontent-api-showcase-instream-1.0/demos/example-4.html">Headline/provider border and margin</a></li>
                     </ul>
                 </div>
             </div>
@@ -98,6 +98,7 @@
 
         <div class="row">
             <div class="col-md-9">
+
                 <div class="redacted-image redacted-image-50"></div>
 
                 <br />
@@ -326,14 +327,24 @@
 
     <!--
     RAW CSS
-    #rev-instream .rev-headline-brand {
+    #rev-instream .rev-ad {
+        padding-bottom: 8px !important;
+    }
+    #rev-instream .rev-sponsored.bottom-right {
+        margin-top: 0px !important;
+    }
+    #rev-instream .rev-ad-container {
         border: 1px solid #ccc;
         box-shadow: 0 2px 8px -4px black;
-        padding: 16px 8px !important;
-        margin-top: -14px !important;
-        background: #fff;
-        margin-left: 14px !important;
-        margin-right: 14px !important;
+        padding-bottom: 20px !important;
+    }
+
+    #rev-instream .rev-headline {
+        margin-top: 4% !important;
+    }
+
+    #rev-instream .rev-provider {
+        margin-top: 5px !important;
     }
     -->
 
@@ -345,9 +356,10 @@
             widget_id : 6181,
             domain : 'apiexamples.powr.com',
             multipliers: {
+                padding: 5,
                 margin: -2
             },
-            css: '#rev-instream .rev-headline-brand {border: 1px solid #ccc; box-shadow: 0 2px 8px -4px black; padding: 16px 8px !important; margin-top: -14px !important; background: #fff; margin-left: 14px !important; margin-right: 14px !important; }'
+            css: '#rev-instream .rev-ad {padding-bottom: 8px !important; } #rev-instream .rev-sponsored.bottom-right {margin-top: 0px !important; } #rev-instream .rev-ad-container {border: 1px solid #ccc; box-shadow: 0 2px 8px -4px black; padding-bottom: 20px !important; } #rev-instream .rev-headline {margin-top: 4% !important; } #rev-instream .rev-provider {margin-top: 5px !important; }'
         });
     </script>
 
