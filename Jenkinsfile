@@ -38,7 +38,6 @@ node {
     sh 'aws cloudfront get-distribution --id E1GBG7FZ0VP3CL > cloudfront.json'
 
     def cf   = readJSON file:'cloudfront.json'
-    echo cf
     def etag = cf.ETag
 
     sh """#!/usr/bin/env python
