@@ -29,9 +29,11 @@ node {
   stage("Updating Cloudfront Path") {
 
     slackSend channel: 'test', message: 'Labs ' + BRANCH_NAME + ' ' + BUILD_ID + ': Updating Cloudfront Path.'
-    sh "aws cloudfront get-distribution --id E1GBG7FZ0VP3CL > cloudfront.json"
-    sh "sed -i 's\#\("OriginPath": "\).*\("\),\#\1/${BRANCH_NAME}/${BUILD_ID}\2\#g' cloudfront.json"
-    sh "cat cloudfront.json"
+    sh """
+    aws cloudfront get-distribution --id E1GBG7FZ0VP3CL > cloudfront.json
+    sed -i 's#\("OriginPath": "\).*\("\),#\1/${BRANCH_NAME}/${BUILD_ID}\2#g' cloudfront.json
+    cat cloudfront.json
+    """
     
     
   }
