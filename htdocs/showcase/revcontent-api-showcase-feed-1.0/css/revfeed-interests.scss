@@ -74,19 +74,27 @@ $screen-xl: 1200px;
     box-shadow: 0 1px 1px 0 rgba(12, 12, 13, 0.15);
     transition: opacity 0.5s;
 
+    @include sm {
+      height: 120px;
+      width: 26%;
+    }
+
     @include md {
       font-size: 12px;
-      height: 160px;
+      height: 120px;
+      width: 26%;
     }
 
     @include lg {
       font-size: 14px;
-      height: 180px;
+      height: 140px;
+      width: 26%;
     }
 
     @include xl {
       font-size: 14px;
-      height: 180px;
+      height: 140px;
+      width: 22%;
     }
 
     &.is-selected {
@@ -128,8 +136,8 @@ $screen-xl: 1200px;
       @include md {
         left: 14px;
         bottom: 14px;
-        font-size: 16px!important;
-        line-height: 16px!important;
+        font-size: 14px!important;
+        line-height: 14px!important;
         min-height: 16px;
         //height: 16px;
       }
@@ -137,16 +145,16 @@ $screen-xl: 1200px;
       @include lg {
         left: 16px;
         bottom: 16px;
-        font-size: 18px!important;
-        line-height: 18px!important;
+        font-size: 14px!important;
+        line-height: 14px!important;
         //height: 18px;
       }
 
       @include xl {
         left: 18px;
         bottom: 18px;
-        font-size: 20px!important;
-        line-height: 20px!important;
+        font-size: 14px!important;
+        line-height: 14px!important;
         //height: 20px;
       }
 
