@@ -187,7 +187,7 @@ Author: michael@revcontent.com
 
         var that = this;
 
-        this.emitter = new EventEmitter();
+        this.emitter = new EvEmitter();
 
         revDisclose.setEmitter(this.emitter);
 
@@ -2259,8 +2259,9 @@ Author: michael@revcontent.com
         var topicFeed = this.options.topic_id > 0;
         if (typeof interests_data !== 'undefined') {
             if (topicFeed) {
+                var that = this;
                 interests_data = interests_data.filter(function (t) {
-                    return t.id != this.options.topic_id;
+                    return t.id != that.options.topic_id;
                 });
             }
             interests_count = interests_data.length;
