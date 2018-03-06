@@ -32,7 +32,7 @@ node {
 
     def exec = """
     aws cloudfront get-distribution --id E1GBG7FZ0VP3CL > cloudfront.json
-    sed -i 's#\\("OriginPath": "\\).*\\("\\),#\1/${BRANCH_NAME}/${BUILD_ID}\2#g' cloudfront.json
+    sed -i 's#\\("OriginPath": "\\).*\\("\\),#\\1/${BRANCH_NAME}/${BUILD_ID}\\2#g' cloudfront.json
     cat cloudfront.json
     """
 
