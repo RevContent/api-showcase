@@ -556,11 +556,10 @@ Author: michael@revcontent.com
     };
 
     Feed.prototype.loadFromHistory = function() {
-        console.log(this.options.history_stack);
         if (this.options.history_stack.length > 0) {
             var item = this.options.history_stack.pop();
             if(this.options.history_stack.length == 0){
-                this.clear_history();
+                this.clearHistory();
             }
             if (item.topic_id && item.topic_id > 0) {
                 this.innerWidget.loadTopicFeed(item.topic_id,item.topic_title,true);
@@ -574,11 +573,11 @@ Author: michael@revcontent.com
             }
 
         } else {
-            this.clear_history();
+            this.clearHistory();
         }
     };
 
-    Feed.prototype.clear_history = function(){
+    Feed.prototype.clearHistory = function(){
         var existing_back = this.innerWidget.containerElement.querySelector('.go-back-bar');
         if(existing_back !== null){
             existing_back.remove();
@@ -598,10 +597,11 @@ Author: michael@revcontent.com
             });
 
             var setElementWindowWidth = function() {
-                revUtils.transformCss(that.element, 'none');
+                // ENG-261, why is transform applied to whole grid on load?
+                //revUtils.transformCss(that.element, 'none');
                 that.element.style.width = document.body.offsetWidth + 'px';
                 that.element.style.overflow = 'hidden';
-                revUtils.transformCss(that.element, 'translateX(-' + that.element.getBoundingClientRect().left + 'px)');
+                //revUtils.transformCss(that.element, 'translateX(-' + that.element.getBoundingClientRect().left + 'px)');
             };
 
             setElementWindowWidth();
