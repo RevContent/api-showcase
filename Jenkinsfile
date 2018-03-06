@@ -30,13 +30,25 @@ node {
 
     slackSend channel: 'test', message: 'Labs ' + BRANCH_NAME + ' ' + BUILD_ID + ': Updating Cloudfront Path.'
 
-    def exec = """
-    aws cloudfront get-distribution --id E1GBG7FZ0VP3CL > cloudfront.json
-    sed -i 's#\\("OriginPath": "\\).*\\("\\),#\\1/${BRANCH_NAME}/${BUILD_ID}\\2,#g' cloudfront.json
-    aws cloudfront update-distribution --id E1GBG7FZ0VP3CL --distribution-config file://./cloudfront.json
-    """
+    /* Ok, we need to talk about some stupid here Amazon. Make me download a format that never translates well to bash
+       (JSON) break out of the encapsulating object (Distribution), only to modify a single nested paramater that
+       I can't be the only one modifying. Why the fuck isn't this part of your CLI API via a shortcut and I had to
+       write Python for a trivial task? */
 
-    sh exec    
+    sh 'aws cloudfront get-distribution --id E1GBG7FZ0VP3CL > cloudfront.json'
+    sh """#!/usr/bin/env python
+
+import json
+
+with open('./cloudfront.json') as cf_file:
+  cf = json.load(cf_file)['Distribution']
+  cf['DistributionConfig']['Origins']['Items'][0]['OriginPath'] = '/${BRANCH_NAME}/${BUILD_ID}'
+
+with open("./cloudfront.json") as cf_file:
+  json.dump(cf, cf_file)
+
+"""
+    sh 'aws cloudfront update-distribution --id E1GBG7FZ0VP3CL --distribution-config file://./cloudfront.json'
     
   }
 
