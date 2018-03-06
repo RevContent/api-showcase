@@ -6,7 +6,7 @@ node {
 
   stage("Pushing data to S3.") {
 
-    s3Upload acl: 'PublicRead', bucket: 'revcontent-labs', excludePathPattern: '*.sh', includePathPattern: 'htdocs/', path: BUILD_ID, workingDir: ''
+    s3Upload acl: 'PublicRead', bucket: 'revcontent-labs', excludePathPattern: '**/*.sh', includePathPattern: '**/*', path: BUILD_ID, workingDir: 'htdocs'
 
   }
 
