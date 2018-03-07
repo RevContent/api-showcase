@@ -1952,6 +1952,18 @@ Author: michael@revcontent.com
             if (itemData.bookmarked) {
                 revUtils.addClass(save, 'rev-save-active');
             }
+
+            // feed links
+            var feedLinks = item.element.querySelectorAll('.rev-feed-link');
+            for (var i = 0; i < feedLinks.length; i++) {
+                var clickHandle = this.handleFeedLink.bind(this, feedLinks[i].getAttribute('data-type'), itemData);
+                item.handlers.push({
+                    el: feedLinks[i],
+                    type: 'click',
+                    handle: clickHandle
+                });
+                revUtils.addEventListener(feedLinks[i], 'click', clickHandle, {passive:false});
+            }
         }
 
         revUtils.remove(item.element.querySelector('.rev-reason'));
@@ -1970,22 +1982,6 @@ Author: michael@revcontent.com
             reason.title = txt + itemData.reason_topic;
             reason.appendChild(t);
             revUtils.prepend(item.element.querySelector('.rev-ad-outer'), reason);
-        }
-
-
-        // feed links
-        var feedLinks = item.element.querySelectorAll('.rev-feed-link');
-        for (var i = 0; i < feedLinks.length; i++) {
-            if(item.type.toLowerCase() !== "internal"){
-                continue;
-            }
-            var clickHandle = this.handleFeedLink.bind(this, feedLinks[i].getAttribute('data-type'), itemData);
-            item.handlers.push({
-                el: feedLinks[i],
-                type: 'click',
-                handle: clickHandle
-            });
-            revUtils.addEventListener(feedLinks[i], 'click', clickHandle, {passive:false});
         }
     };
 
