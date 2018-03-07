@@ -76,15 +76,17 @@ Author: michael@revcontent.com
                 return;
             }
             if (target.classList.contains('selector')) {
+                var interestId = parseInt(cellElement.getAttribute('data-id'), 10);
                 if (cellElement.classList.contains('selected-interest')) {
                     cellElement.classList.remove('selected-interest');
                     cellElement.querySelectorAll('span.selector')[0].classList.remove('subscribed');
-                    that.unsubscribeFromInterest(parseInt(cellElement.getAttribute('data-id'), 10));
+
+                    that.options.emitter.emitEvent('updateInterstsSubscription', ['unsubscribe', interestId]);
                     //that.notify('Topic removed from your feed.', {label: 'continue', link: '#'});
                 } else {
                     cellElement.classList.add('selected-interest');
                     cellElement.querySelectorAll('span.selector')[0].classList.add('subscribed');
-                    that.subscribeToInterest(parseInt(cellElement.getAttribute('data-id'), 10));
+                    that.options.emitter.emitEvent('updateInterstsSubscription', ['subscribe', interestId]);
                     //that.notify('Topic added, new content available.', {label: 'continue', link: '#'});
                 }
             }
@@ -126,14 +128,6 @@ Author: michael@revcontent.com
         this.header.querySelector('h1 small sup').innerText = sub;
 
         var interests_data = data.subscribed;
-        this.interests = {
-            list: data.subscribed,
-            subscribed: data.subscribed, //data.subscribed
-            subscribed_ids: data.subscribed_ids, //data.subscribed_ids
-            available: data.subscribed,
-            //recomended: data.recommended,
-            count: data.subscribed.length // data.count
-        };
 
         var interests_count = 0;
         var initialIndex = 3;

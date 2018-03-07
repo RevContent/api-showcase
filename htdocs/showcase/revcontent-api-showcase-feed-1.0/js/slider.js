@@ -208,6 +208,10 @@ Author: michael@revcontent.com
             that.handleFeedLink(type, data);
         });
 
+        this.emitter.on('updateInterstsSubscription', function(type, data) {
+            that.updateInterstsSubscription(type, data);
+        });
+
         this.data = [];
         this.displayedItems = [];
 
@@ -2158,6 +2162,17 @@ Author: michael@revcontent.com
         }, 2500);
     };
 
+    RevSlider.prototype.updateInterstsSubscription = function(type, data) {
+        switch(type) {
+            case 'subscribe':
+                this.subscribeToInterest(data);
+                break;
+            case 'unsubscribe':
+                this.unsubscribeFromInterest(data);
+                break;
+        }
+    };
+
     RevSlider.prototype.subscribeToInterest = function(interestId) {
         var that = this;
         if(isNaN(interestId)){
@@ -2230,6 +2245,16 @@ Author: michael@revcontent.com
         this.interestsCarouselItem = added[0];
 
         revApi.request( that.options.host + '/api/v1/engage/getinterests.php?d=' + that.options.domain, function (data) {
+
+            that.interests = {
+                list: data.subscribed,
+                subscribed: data.subscribed, //data.subscribed
+                subscribed_ids: data.subscribed_ids, //data.subscribed_ids
+                available: data.subscribed,
+                //recomended: data.recommended,
+                count: data.subscribed.length // data.count
+            };
+
 
             that.interestsCarouselItem.carousel = new EngageInterestsCarousel({
                 item: that.interestsCarouselItem,
