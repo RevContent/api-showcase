@@ -484,70 +484,52 @@ Author: michael@revcontent.com
             back.style.width = grid_rect.width + 'px';
         });
 
-        window.addEventListener('scroll', function() {
-            var pos_1 = window.pageYOffset;
-            setTimeout(function(){
-                var pos_2 = window.pageYOffset;
-                var direction = 'down';
-                var grid_rect = that.innerWidget.containerElement.getBoundingClientRect();
+        //window.addEventListener('scroll', function() {
+        //}, { passive: true });
 
-                if(pos_2 < pos_1) {
-                    direction = 'up';
-                } else {
-                    direction = 'down';
-                }
-
-                if(grid_rect.top <= 0) {
-                    var fix_ts = 0;
-                    var fix_ts2 = 0;
-                    clearTimeout(fix_ts);
-                    fix_ts = setTimeout(function() {
-                        //back.style.top = ((-1 * grid_rect.top)) + 'px';
-                        var fixed_head = document.querySelector('.page-header.shrink.fixed');
-                        var top_offset = 0;
-                        if(fixed_head !== null){
-                            top_offset = parseInt(fixed_head.clientHeight);
-                        }
-                        back.style.position = 'fixed';
-                        back.style.width = grid_rect.width + 'px';
-                        back.style.top = 0 + top_offset + 'px';
-                        back.classList.remove('no-shadow');
-                        if(direction == 'up') {
-                            //back.style.opacity = '0';
-                        } else {
-                            //clearTimeout(fix_ts2);
-                            //fix_ts2 = setTimeout(function() {
-                                //back.style.opacity = '1';
-                            //}, 1500);
-                        }
-                    }, 0);
-
-                } else {
-                    back.style.top = 0;
-                    back.style.position = 'static';
-                    back.style.width = '100%';
-                    //that.containerElement.querySelector('.rev-head').style.display = 'none';
-                    var reset_ts = 0;
-                    var reset_ts2 = 0;
-                    back.classList.add('no-shadow');
-
-                    clearTimeout(reset_ts);
-                    reset_ts = setTimeout(function() {
-                        if(direction == 'up') {
-                            //back.style.opacity = '0';
-                        } else {
-                            //clearTimeout(reset_ts2);
-                            //reset_ts2 = setTimeout(function() {
-                            //back.style.opacity = '1';
-                            //}, 1500);
-                        }
-
-                    }, 0);
-                }
-            }, 300);
-        }, { passive: true });
+        revUtils.addEventListener(window, 'scroll', function(){
+            that.navbarScrollListener(that, back);
+        });
 
         revUtils.addEventListener(back.querySelector('.feed-back-button'), revDetect.mobile() ? 'touchstart' : 'click', this.loadFromHistory.bind(this));
+    };
+
+    Feed.prototype.navbarScrollListener = function(that, back){
+        var pos_1 = window.pageYOffset;
+        setTimeout(function(){
+            var pos_2 = window.pageYOffset;
+            var direction = 'down';
+            var grid_rect = that.innerWidget.containerElement.getBoundingClientRect();
+
+            if(pos_2 < pos_1) {
+                direction = 'up';
+            }
+
+            if(grid_rect.top <= 0) {
+                that.enterFlushedState(that.element);
+                var fix_ts = 0;
+                clearTimeout(fix_ts);
+                fix_ts = setTimeout(function() {
+                    var fixed_head = document.querySelector('.page-header.shrink.fixed');
+                    var top_offset = 0;
+                    if(fixed_head !== null){
+                        top_offset = parseInt(fixed_head.clientHeight);
+                    }
+                    back.style.position = 'fixed';
+                    back.style.width = grid_rect.width + 'px';
+                    back.style.top = 0 + top_offset + 'px';
+                    back.classList.remove('no-shadow');
+                    clearTimeout(fix_ts);
+                }, 0);
+
+            } else {
+                that.leaveFlushedState(that.element);
+                back.style.top = 0;
+                back.style.position = 'static';
+                back.style.width = '100%';
+                back.classList.add('no-shadow');
+            }
+        }, 300);
     };
 
     Feed.prototype.pushHistory = function(){
@@ -609,6 +591,28 @@ Author: michael@revcontent.com
 
             setElementWindowWidth();
         }
+    };
+
+    Feed.prototype.enterFlushedState  = function(grid){
+        if(grid.classList.contains('is-flushed')) { return; }
+        var grid_rect = this.element.getBoundingClientRect();
+        grid.querySelector('div#go-back-bar').style.width = grid_rect.width + 'px';
+        grid.style.backgroundColor = '#ffffff';
+        grid.style.marginLeft = '-' + grid_rect.left + 'px';
+        grid.style.marginRight = '-' + grid_rect.left + 'px';
+        grid.classList.add("is-flushed");
+        window.dispatchEvent(new Event('resize'));
+    };
+
+    Feed.prototype.leaveFlushedState = function(grid){
+        if(!grid.classList.contains('is-flushed')) { return; }
+        grid.classList.remove("is-flushed");
+        grid.querySelector('div#go-back-bar').style.width = '100%';
+        grid.style.backgroundColor = 'transparent';
+        grid.style.marginLeft = 0;
+        grid.style.marginRight = 0;
+        grid.style.width = 'auto';
+        window.dispatchEvent(new Event('resize'));
     };
 
     Feed.prototype.createInnerWidget = function(element, options) {
