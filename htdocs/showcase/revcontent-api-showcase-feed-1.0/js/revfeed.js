@@ -162,7 +162,8 @@ Author: michael@revcontent.com
 
         revUtils.append(this.element, this.containerElement);
 
-        this.windowWidth();
+        // ENG-269, do not enforce window width mode at init... (causes clipping)
+        //this.windowWidth();
 
         var self = this;
 
@@ -623,7 +624,6 @@ Author: michael@revcontent.com
         grid.style.backgroundColor = 'transparent';
         grid.style.marginLeft = 0;
         grid.style.marginRight = 0;
-        grid.style.width = 'auto';
         window.dispatchEvent(new Event('resize'));
     };
 
@@ -667,11 +667,6 @@ Author: michael@revcontent.com
 
         var scrollFunction = function() {
 
-            if (self.removed) {
-                revUtils.removeEventListener(window, 'scroll', self.scrollListener);
-                return;
-            }
-
             var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
             var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
             var height = self.element.offsetHeight;
@@ -682,6 +677,11 @@ Author: michael@revcontent.com
                 self.enterFlushedState(self.element);
             } else {
                 self.leaveFlushedState(self.element);
+            }
+
+            if (self.removed) {
+                revUtils.removeEventListener(window, 'scroll', self.scrollListener);
+                return;
             }
 
             if (scrollTop >= self.scrollTop && bottom > 0 && (scrollTop + windowHeight) >= (top + scrollTop + height - self.options.buffer)) {
