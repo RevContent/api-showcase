@@ -507,9 +507,6 @@ Author: michael@revcontent.com
             }
 
             if(grid_rect.top <= 0) {
-                if (that.options.window_width_devices && revDetect.show(that.options.window_width_devices)) {
-                    that.enterFlushedState(that.element);
-                }
                 var fix_ts = 0;
                 clearTimeout(fix_ts);
                 fix_ts = setTimeout(function() {
@@ -522,17 +519,20 @@ Author: michael@revcontent.com
                     back.style.width = grid_rect.width + 'px';
                     back.style.top = 0 + top_offset + 'px';
                     back.classList.remove('no-shadow');
+                    if (that.options.window_width_devices && revDetect.show(that.options.window_width_devices)) {
+                        that.enterFlushedState(that.element);
+                    }
                     clearTimeout(fix_ts);
                 }, 0);
 
             } else {
-                if (that.options.window_width_devices && revDetect.show(that.options.window_width_devices)) {
-                    that.leaveFlushedState(that.element);
-                }
                 back.style.top = 0;
                 back.style.position = 'static';
                 back.style.width = '100%';
                 back.classList.add('no-shadow');
+                if (that.options.window_width_devices && revDetect.show(that.options.window_width_devices)) {
+                    that.leaveFlushedState(that.element);
+                }
             }
         }, 300);
     };
@@ -561,7 +561,6 @@ Author: michael@revcontent.com
                     withoutHistory: true
                 }]);
             }
-
         } else {
             this.clearHistory();
         }
