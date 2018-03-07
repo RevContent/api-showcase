@@ -1950,6 +1950,24 @@ Author: michael@revcontent.com
             item.element.querySelector('.rev-reactions-total-inner').innerHTML = reactionHtml;
         }
 
+        revUtils.remove(item.element.querySelector('.rev-reason'));
+
+        if (itemData.reason_topic_id > 0) {
+            var reason = document.createElement('div');
+            var t = document.createElement("span");
+            t.setAttribute('style', 'cursor:pointer;');
+            t.setAttribute('data-type', 'topic');
+            t.className = 'rev-feed-link';
+            t.innerHTML = "<strong>"+itemData.reason_topic+"</strong>";
+
+            var txt = 'Recommended because you are interested in ';
+            reason.className = 'rev-reason';
+            reason.innerHTML = txt;
+            reason.title = txt + itemData.reason_topic;
+            reason.appendChild(t);
+            revUtils.prepend(item.element.querySelector('.rev-ad-outer'), reason);
+        }
+
         if (item.type == 'internal') {
             var save = item.element.querySelector('.rev-save')
             revUtils.removeClass(save, 'rev-save-active');
@@ -1968,24 +1986,6 @@ Author: michael@revcontent.com
                 });
                 revUtils.addEventListener(feedLinks[i], 'click', clickHandle, {passive:false});
             }
-        }
-
-        revUtils.remove(item.element.querySelector('.rev-reason'));
-
-        if (itemData.reason_topic_id > 0) {
-            var reason = document.createElement('div');
-            var t = document.createElement("span");
-            t.setAttribute('style', 'cursor:pointer;');
-            t.setAttribute('data-type', 'topic');
-            t.className = 'rev-feed-link';
-            t.innerHTML = "<strong>"+itemData.reason_topic+"</strong>";
-
-            var txt = 'Recommended because you are interested in ';
-            reason.className = 'rev-reason';
-            reason.innerHTML = txt;
-            reason.title = txt + itemData.reason_topic;
-            reason.appendChild(t);
-            revUtils.prepend(item.element.querySelector('.rev-ad-outer'), reason);
         }
     };
 
