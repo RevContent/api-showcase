@@ -9,6 +9,11 @@ properties([
   buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5'))
 ])
 
+if(BRANCH_NAME == "master") {
+  CFID = "E1GBG7FZ0VP3CL"
+} else {
+  CFID = "E6LFF4BBCLHCL"
+}
 
 node {
 
@@ -35,7 +40,7 @@ node {
        I can't be the only one modifying. Why the fuck isn't this part of your CLI API via a shortcut and I had to
        write Python for a trivial task? And seriously, what's with the ETAG shit? All this to update a path? */
 
-    sh 'aws cloudfront get-distribution --id E1GBG7FZ0VP3CL > cloudfront.json'
+    sh 'aws cloudfront get-distribution --id ' + CFID + ' > cloudfront.json'
 
     def cf   = readJSON file:'cloudfront.json'
     def etag = cf.ETag
@@ -52,14 +57,14 @@ with open('./cloudfront.json', 'w') as cf_file:
   json.dump(cf, cf_file)
 
 """
-    sh 'aws cloudfront update-distribution --id E1GBG7FZ0VP3CL --distribution-config file://./cloudfront.json --if-match ' + etag
+    sh 'aws cloudfront update-distribution --id ' + CFID + ' --distribution-config file://./cloudfront.json --if-match ' + etag
     
   }
 
   stage("Clearing CDN") {
 
     slackSend channel: 'test', message: 'Labs ' + BRANCH_NAME + ' ' + BUILD_ID + ': Clearing CDN.'
-    sh 'aws cloudfront create-invalidation --distribution-id E1GBG7FZ0VP3CL --paths "/*"'
+    sh 'aws cloudfront create-invalidation --distribution-id ' + CFID + ' --paths "/*"'
     slackSend channel: 'test', message: 'Labs ' + BRANCH_NAME + ' ' + BUILD_ID + ': Deploy Complete.'
 
   }
