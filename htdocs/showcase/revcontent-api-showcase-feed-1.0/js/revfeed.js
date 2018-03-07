@@ -601,7 +601,10 @@ Author: michael@revcontent.com
     Feed.prototype.enterFlushedState  = function(grid){
         if(grid.classList.contains('is-flushed')) { return; }
         var grid_rect = this.element.getBoundingClientRect();
-        grid.querySelector('div#go-back-bar').style.width = grid_rect.width + 'px';
+        var back = grid.querySelector('div#go-back-bar');
+        if(this.options.history_stack.length > 0 && back !== null) {
+            back.style.width = grid_rect.width + 'px';
+        }
         grid.style.backgroundColor = '#ffffff';
         grid.style.marginLeft = '-' + grid_rect.left + 'px';
         grid.style.marginRight = '-' + grid_rect.left + 'px';
@@ -613,7 +616,10 @@ Author: michael@revcontent.com
     Feed.prototype.leaveFlushedState = function(grid){
         if(!grid.classList.contains('is-flushed')) { return; }
         grid.classList.remove("is-flushed");
-        grid.querySelector('div#go-back-bar').style.width = '100%';
+        var back = grid.querySelector('div#go-back-bar');
+        if(this.options.history_stack.length > 0 && back !== null) {
+            grid.querySelector('div#go-back-bar').style.width = '100%';
+        }
         grid.style.backgroundColor = 'transparent';
         grid.style.marginLeft = 0;
         grid.style.marginRight = 0;
@@ -671,6 +677,12 @@ Author: michael@revcontent.com
             var height = self.element.offsetHeight;
             var top = self.innerWidget.grid.element.getBoundingClientRect().top;
             var bottom = self.innerWidget.grid.element.getBoundingClientRect().bottom;
+
+            if(top <= 0 && (self.options.window_width_devices && revDetect.show(self.options.window_width_devices))) {
+                self.enterFlushedState(self.element);
+            } else {
+                self.leaveFlushedState(self.element);
+            }
 
             if (scrollTop >= self.scrollTop && bottom > 0 && (scrollTop + windowHeight) >= (top + scrollTop + height - self.options.buffer)) {
                 revUtils.removeEventListener(window, 'scroll', self.scrollListener);
