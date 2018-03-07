@@ -162,7 +162,8 @@ Author: michael@revcontent.com
 
         revUtils.append(this.element, this.containerElement);
 
-        this.windowWidth();
+        // ENG-269, do not enforce window width mode at init... (causes clipping)
+        //this.windowWidth();
 
         var self = this;
 
@@ -460,7 +461,7 @@ Author: michael@revcontent.com
         if(this.options.author_name && this.options.author_name.length>0){
             title = "Articles by "+this.options.author_name;
             var ai = this.options.author_name.split(' ');
-            author_initials = ai[0].charAt(0) + ' ' + (ai.length > 2 ? ai[2].charAt(0) : ai[1].charAt(0));
+            author_initials = ai[0].charAt(0) + ' ' + (ai.length == 3 ? ai[2].charAt(0) : ai[1].charAt(0));
             header_logo = '<span style="display:block;margin-left:9px;width:24px;height:24px;border-radius:24px;text-align:center;font-size:11px;background-color:#ffffff;color:#222222;letter-spacing:-1px;line-height:24px;margin-top:8px;">' + author_initials + '</span>';
         }
 
@@ -484,70 +485,56 @@ Author: michael@revcontent.com
             back.style.width = grid_rect.width + 'px';
         });
 
-        window.addEventListener('scroll', function() {
-            var pos_1 = window.pageYOffset;
-            setTimeout(function(){
-                var pos_2 = window.pageYOffset;
-                var direction = 'down';
-                var grid_rect = that.innerWidget.containerElement.getBoundingClientRect();
+        //window.addEventListener('scroll', function() {
+        //}, { passive: true });
 
-                if(pos_2 < pos_1) {
-                    direction = 'up';
-                } else {
-                    direction = 'down';
-                }
-
-                if(grid_rect.top <= 0) {
-                    var fix_ts = 0;
-                    var fix_ts2 = 0;
-                    clearTimeout(fix_ts);
-                    fix_ts = setTimeout(function() {
-                        //back.style.top = ((-1 * grid_rect.top)) + 'px';
-                        var fixed_head = document.querySelector('.page-header.shrink.fixed');
-                        var top_offset = 0;
-                        if(fixed_head !== null){
-                            top_offset = parseInt(fixed_head.clientHeight);
-                        }
-                        back.style.position = 'fixed';
-                        back.style.width = grid_rect.width + 'px';
-                        back.style.top = 0 + top_offset + 'px';
-                        back.classList.remove('no-shadow');
-                        if(direction == 'up') {
-                            //back.style.opacity = '0';
-                        } else {
-                            //clearTimeout(fix_ts2);
-                            //fix_ts2 = setTimeout(function() {
-                                //back.style.opacity = '1';
-                            //}, 1500);
-                        }
-                    }, 0);
-
-                } else {
-                    back.style.top = 0;
-                    back.style.position = 'static';
-                    back.style.width = '100%';
-                    //that.containerElement.querySelector('.rev-head').style.display = 'none';
-                    var reset_ts = 0;
-                    var reset_ts2 = 0;
-                    back.classList.add('no-shadow');
-
-                    clearTimeout(reset_ts);
-                    reset_ts = setTimeout(function() {
-                        if(direction == 'up') {
-                            //back.style.opacity = '0';
-                        } else {
-                            //clearTimeout(reset_ts2);
-                            //reset_ts2 = setTimeout(function() {
-                            //back.style.opacity = '1';
-                            //}, 1500);
-                        }
-
-                    }, 0);
-                }
-            }, 300);
-        }, { passive: true });
+        revUtils.addEventListener(window, 'scroll', function(){
+            that.navbarScrollListener(that, back);
+        });
 
         revUtils.addEventListener(back.querySelector('.feed-back-button'), revDetect.mobile() ? 'touchstart' : 'click', this.loadFromHistory.bind(this));
+    };
+
+    Feed.prototype.navbarScrollListener = function(that, back){
+        var pos_1 = window.pageYOffset;
+        setTimeout(function(){
+            var pos_2 = window.pageYOffset;
+            var direction = 'down';
+            var grid_rect = that.innerWidget.containerElement.getBoundingClientRect();
+
+            if(pos_2 < pos_1) {
+                direction = 'up';
+            }
+
+            if(grid_rect.top <= 0) {
+                var fix_ts = 0;
+                clearTimeout(fix_ts);
+                fix_ts = setTimeout(function() {
+                    var fixed_head = document.querySelector('.page-header.shrink.fixed');
+                    var top_offset = 0;
+                    if(fixed_head !== null){
+                        top_offset = parseInt(fixed_head.clientHeight);
+                    }
+                    back.style.position = 'fixed';
+                    back.style.width = grid_rect.width + 'px';
+                    back.style.top = 0 + top_offset + 'px';
+                    back.classList.remove('no-shadow');
+                    if (that.options.window_width_devices && revDetect.show(that.options.window_width_devices)) {
+                        that.enterFlushedState(that.element);
+                    }
+                    clearTimeout(fix_ts);
+                }, 0);
+
+            } else {
+                back.style.top = 0;
+                back.style.position = 'static';
+                back.style.width = '100%';
+                back.classList.add('no-shadow');
+                if (that.options.window_width_devices && revDetect.show(that.options.window_width_devices)) {
+                    that.leaveFlushedState(that.element);
+                }
+            }
+        }, 300);
     };
 
     Feed.prototype.pushHistory = function(){
@@ -574,7 +561,6 @@ Author: michael@revcontent.com
                     withoutHistory: true
                 }]);
             }
-
         } else {
             this.clearHistory();
         }
@@ -601,6 +587,7 @@ Author: michael@revcontent.com
 
             var setElementWindowWidth = function() {
                 // ENG-261, why is transform applied to whole grid on load?
+                // ENG-269, using "flushed" state until transform method is stable.
                 //revUtils.transformCss(that.element, 'none');
                 that.element.style.width = document.body.offsetWidth + 'px';
                 that.element.style.overflow = 'hidden';
@@ -609,6 +596,34 @@ Author: michael@revcontent.com
 
             setElementWindowWidth();
         }
+    };
+
+    Feed.prototype.enterFlushedState  = function(grid){
+        if(grid.classList.contains('is-flushed')) { return; }
+        var grid_rect = this.element.getBoundingClientRect();
+        var back = grid.querySelector('div#go-back-bar');
+        if(back !== null) {
+            back.style.width = grid_rect.width + 'px';
+        }
+        grid.style.backgroundColor = '#ffffff';
+        grid.style.marginLeft = '-' + grid_rect.left + 'px';
+        grid.style.marginRight = '-' + grid_rect.left + 'px';
+        grid.style.overflow = 'hidden';
+        grid.classList.add("is-flushed");
+        window.dispatchEvent(new Event('resize'));
+    };
+
+    Feed.prototype.leaveFlushedState = function(grid){
+        if(!grid.classList.contains('is-flushed')) { return; }
+        grid.classList.remove("is-flushed");
+        var back = grid.querySelector('div#go-back-bar');
+        if(back !== null) {
+            grid.querySelector('div#go-back-bar').style.width = '100%';
+        }
+        grid.style.backgroundColor = 'transparent';
+        grid.style.marginLeft = 0;
+        grid.style.marginRight = 0;
+        window.dispatchEvent(new Event('resize'));
     };
 
     Feed.prototype.createInnerWidget = function(element, options) {
@@ -651,16 +666,22 @@ Author: michael@revcontent.com
 
         var scrollFunction = function() {
 
-            if (self.removed) {
-                revUtils.removeEventListener(window, 'scroll', self.scrollListener);
-                return;
-            }
-
             var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
             var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
             var height = self.element.offsetHeight;
             var top = self.innerWidget.grid.element.getBoundingClientRect().top;
             var bottom = self.innerWidget.grid.element.getBoundingClientRect().bottom;
+
+            if(top <= 0 && (self.options.window_width_devices && revDetect.show(self.options.window_width_devices))) {
+                self.enterFlushedState(self.element);
+            } else {
+                self.leaveFlushedState(self.element);
+            }
+
+            if (self.removed) {
+                revUtils.removeEventListener(window, 'scroll', self.scrollListener);
+                return;
+            }
 
             if (scrollTop >= self.scrollTop && bottom > 0 && (scrollTop + windowHeight) >= (top + scrollTop + height - self.options.buffer)) {
                 revUtils.removeEventListener(window, 'scroll', self.scrollListener);
