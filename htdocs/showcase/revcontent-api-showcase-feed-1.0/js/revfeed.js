@@ -603,7 +603,7 @@ Author: michael@revcontent.com
         if(grid.classList.contains('is-flushed')) { return; }
         var grid_rect = this.element.getBoundingClientRect();
         var back = grid.querySelector('div#go-back-bar');
-        if(this.options.history_stack.length > 0 && back !== null) {
+        if(back !== null) {
             back.style.width = grid_rect.width + 'px';
         }
         grid.style.backgroundColor = '#ffffff';
@@ -618,7 +618,7 @@ Author: michael@revcontent.com
         if(!grid.classList.contains('is-flushed')) { return; }
         grid.classList.remove("is-flushed");
         var back = grid.querySelector('div#go-back-bar');
-        if(this.options.history_stack.length > 0 && back !== null) {
+        if(back !== null) {
             grid.querySelector('div#go-back-bar').style.width = '100%';
         }
         grid.style.backgroundColor = 'transparent';
