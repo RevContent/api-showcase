@@ -25,8 +25,8 @@ Author: michael@revcontent.com
                 xl: 6,
                 xxl: 7
             },
-            cell_margin: 5,
-            next_width_percentage: 5,
+            cell_margin: 8, // TODO make this relative to container
+            next_width_percentage: 20,
             next_width: false,
             item: false
         };
@@ -56,16 +56,16 @@ Author: michael@revcontent.com
 
         // create flickity
         this.flickity = new Flickity( this.flickityContainer, {
-            // wrapAround: true
             wrapAround: false,
             prevNextButtons: false,
             pageDots: false,
             adaptiveHeight: true,
-            freeScroll: false,
+            freeScroll: true,
+            // freeScroll: false,
             selectedAttraction: 0.15,
             freeScrollFriction: 0.03,
-            cellAlign: 'left',
-            percentPosition: false,
+            // cellAlign: 'left',
+            percentPosition: false
         });
 
         var that = this;
@@ -157,7 +157,7 @@ Author: michael@revcontent.com
 
             var cell = document.createElement('div');
             cell.style.width = this.columnWidth + 'px';
-            cell.style.marginRight = this.margin + 'px';
+            cell.style.marginRight = this.options.cell_margin + 'px';
             if (interest.image) {
                 cell.style.background = 'transparent url(' + interest.image + ') top left no-repeat';
                 cell.style.backgroundSize = 'cover';
