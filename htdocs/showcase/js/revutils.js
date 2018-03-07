@@ -611,6 +611,40 @@ utils.docReady = function(fn) {
     }
 }
 
+utils.capitalize = function (str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+utils.extractRootDomain = function(url) {
+    if (!url) {
+        return '';
+    }
+    var domain;
+    //find & remove protocol (http, ftp, etc.) and get hostname
+
+    if (url.indexOf("://") > -1) {
+        domain = url.split('/')[2];
+    }
+    else {
+        domain = url.split('/')[0];
+    }
+
+    //find & remove port number
+    domain = domain.split(':')[0];
+    //find & remove "?"
+    domain = domain.split('?')[0];
+
+    var splitArr = domain.split('.'),
+        arrLen = splitArr.length;
+
+    //extracting the root domain here
+    if (arrLen > 2) {
+        domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1];
+    }
+    return domain;
+};
+
+
 // -----  ----- //
 return utils;
 
