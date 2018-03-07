@@ -85,10 +85,10 @@
                 <div class="col-md-12">
                     <h3>Examples:</h3>
                     <ul>
-                        <li>Example 1: <a href="/showcase/revcontent-api-showcase-instream-1.0/index.php">Border and box shadow</a></li>
-                        <li>Example 2: <a href="/showcase/revcontent-api-showcase-instream-1.0/demos/example-2.php">Video icon overlay with thin font</a></li>
-                        <li>Example 3: <a href="/showcase/revcontent-api-showcase-instream-1.0/demos/example-3.php">Link button</a></li>
-                        <li>Example 4: <a href="/showcase/revcontent-api-showcase-instream-1.0/demos/example-4.php">Headline/provider border and margin</a></li>
+                        <li>Example 1: <a href="/showcase/revcontent-api-showcase-instream-1.0/index.html">Border and box shadow</a></li>
+                        <li>Example 2: <a href="/showcase/revcontent-api-showcase-instream-1.0/demos/example-2.html">Video icon overlay with thin font</a></li>
+                        <li>Example 3: <a href="/showcase/revcontent-api-showcase-instream-1.0/demos/example-3.html">Link button</a></li>
+                        <li>Example 4: <a href="/showcase/revcontent-api-showcase-instream-1.0/demos/example-4.html">Headline/provider border and margin</a></li>
                     </ul>
                 </div>
             </div>
@@ -98,6 +98,7 @@
 
         <div class="row">
             <div class="col-md-9">
+
                 <div class="redacted-image redacted-image-50"></div>
 
                 <br />
@@ -309,9 +310,9 @@
         <footer>
             <div class="row">
                 <div class="col-lg-12">
-                    <p class="redacted pull-left">Copyright &copy; Your Website 2015</p>
-                    <p style="margin-left: 30px;" class="redacted pull-left">Copyright &copy; Your Website 2015</p>
-                    <p class="redacted pull-right">Copyright &copy; Your Website 2015</p>
+                    <p class="redacted pull-left">Some text</p>
+                    <p style="margin-left: 30px;" class="redacted pull-left">&copy;<script>document.write(new Date().getFullYear())</script>, Revcontent All Rights Reserved.</p>
+                    <p class="redacted pull-right">Some additional text here</p>
                 </div>
             </div>
             <!-- /.row -->
@@ -326,14 +327,17 @@
 
     <!--
     RAW CSS
-    #rev-instream .rev-headline-brand {
-        border: 1px solid #ccc;
-        box-shadow: 0 2px 8px -4px black;
-        padding: 16px 8px !important;
-        margin-top: -14px !important;
-        background: #fff;
-        margin-left: 14px !important;
-        margin-right: 14px !important;
+    #rev-instream .rev-headline {
+        margin-top: 4% !important;
+    }
+
+    #rev-instream .rev-headline h3 {
+        line-height: 26px !important;
+        font-size: 18px !important;
+    }
+
+    #rev-instream .rev-provider {
+        margin-top: 10px !important;
     }
     -->
 
@@ -345,9 +349,11 @@
             widget_id : 6181,
             domain : 'apiexamples.powr.com',
             multipliers: {
+                padding: 5,
                 margin: -2
             },
-            css: '#rev-instream .rev-headline-brand {border: 1px solid #ccc; box-shadow: 0 2px 8px -4px black; padding: 16px 8px !important; margin-top: -14px !important; background: #fff; margin-left: 14px !important; margin-right: 14px !important; }'
+            link_button: true,
+            css: '#rev-instream .rev-headline {margin-top: 4% !important; } #rev-instream .rev-headline h3 {line-height: 26px !important; font-size: 18px !important; } #rev-instream .rev-provider {margin-top: 10px !important; }'
         });
     </script>
 
