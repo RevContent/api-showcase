@@ -171,7 +171,7 @@ Author: michael@revcontent.com
         };
 
         // merge options
-        this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
+        this.options = revUtils.extend(defaults, opts);
 
         // store options
         revUtils.storeUserOptions(this.options);
@@ -202,6 +202,10 @@ Author: michael@revcontent.com
                     }
                 }
             });
+        });
+
+        this.emitter.on('feedLink', function(type, data) {
+            that.handleFeedLink(type, data);
         });
 
         this.data = [];
@@ -287,7 +291,7 @@ Author: michael@revcontent.com
             var starttime = new Date().getTime();
             that.personalized = true;
 
-            that.updateInterestsCarousel(data.data);
+            that.interestsCarouselItem.carousel.update(data.data, that.authenticated);
 
             // TODO
             // that.updateVideoItems(that.mockVideosAuthenticated);
@@ -1837,7 +1841,7 @@ Author: michael@revcontent.com
         var that = this;
         if (provider) {
             if (item.type == 'sponsored') {
-                provider.innerHTML = itemData.brand ? itemData.brand : this.extractRootDomain(itemData.target_url);
+                provider.innerHTML = itemData.brand ? itemData.brand : revUtils.extractRootDomain(itemData.target_url);
             } else if (item.type == 'internal' && itemData.author) {
                 provider.innerHTML = itemData.author;
             }
@@ -2213,86 +2217,6 @@ Author: michael@revcontent.com
         }
     };
 
-    RevSlider.prototype.capitalize = function (str) {
-        return str.charAt(0).toUpperCase() + str.slice(1);
-    };
-
-
-    RevSlider.prototype.updateInterestsCarousel = function(data) {
-
-        if(typeof data !== "object" || (typeof data == "object" && data.subscribed.length == 0)) {
-            this.interestsCarouselItem.element.setAttribute('style','margin:0!important;padding:0!important;height:0;border:0');
-            this.interestsCarouselItem.element.classList.add('revcontent-carousel-is-empty');
-            this.interestsCarouselItem.element.classList.add('revcontent-remove-element');
-            return;
-        }
-
-        var title = "Trending topics on " + this.capitalize(this.extractRootDomain(window.location.href));
-        var sub = '';
-        if (this.authenticated) {
-            title = 'Content You Love';
-            sub = 'SIMILAR TOPICS';
-        }
-
-        this.interestsCarouselItem.header.querySelector('h1 span').innerText = title;
-        this.interestsCarouselItem.header.querySelector('h1 small sup').innerText = sub;
-
-        var interests_data = data.subscribed;
-        this.interests = {
-            list: data.subscribed,
-            subscribed: data.subscribed, //data.subscribed
-            subscribed_ids: data.subscribed_ids, //data.subscribed_ids
-            available: data.subscribed,
-            //recomended: data.recommended,
-            count: data.subscribed.length // data.count
-        };
-
-        var interests_count = 0;
-        var initialIndex = 3;
-        var topicFeed = this.options.topic_id > 0;
-        if (typeof interests_data !== 'undefined') {
-            if (topicFeed) {
-                var that = this;
-                interests_data = interests_data.filter(function (t) {
-                    return t.id != that.options.topic_id;
-                });
-            }
-            interests_count = interests_data.length;
-            if (topicFeed && interests_count >= 6) {
-                initialIndex = 6;
-            }
-        }
-
-        var cells = [];
-
-        for (var i=0; i < interests_count; i++) {
-            var interest = interests_data[i];
-
-            var cell = document.createElement('div');
-            cell.setAttribute('style', interest.image != '' ? 'background:transparent url(' + interest.image + ') top left no-repeat;background-size:cover;' : '');
-            cell.setAttribute('data-id', interest.id);
-            cell.setAttribute('data-title', interest.title);
-            cell.setAttribute('data-interest', interest.title.toLowerCase());
-
-            cell.className = 'carousel-cell interest-cell interest-' + interest.title.toLowerCase() + ' selected-interest';
-
-            cell.innerHTML = '<div class="cell-wrapper">' +
-                (this.authenticated?'<span class="selector subscribed"></span>':'') +
-                    '<div class="interest-title ' + (interest.lightMode ? ' light-mode' : '') + '">' + interest.title + '</div>' +
-                '</div>';
-
-            cells.push(cell);
-        }
-
-        this.interestsCarouselItem.flickity.remove(this.interestsCarouselItem.element.querySelectorAll('.carousel-cell'));
-
-        this.interestsCarouselItem.flickity.append(cells);
-
-        this.interestsCarouselItem.flickity.reposition();
-
-        this.interestsCarouselItem.flickity.select(initialIndex, false, true);
-    };
-
     RevSlider.prototype.appendInterestsCarousel = function (grid) {
         var that = this;
 
@@ -2306,74 +2230,13 @@ Author: michael@revcontent.com
         this.interestsCarouselItem = added[0];
 
         revApi.request( that.options.host + '/api/v1/engage/getinterests.php?d=' + that.options.domain, function (data) {
-            var interestsCarouselContainer = document.createElement('div');
-            interestsCarouselContainer.className = 'rev-carousel-container';
 
-            var interestsCarouselHeader = document.createElement('h1');
-            interestsCarouselHeader.innerHTML = '<h1><span></span><small><sup></sup></small></h1>';
-
-            var interestsCarouselFlickity = document.createElement('div');
-            interestsCarouselFlickity.id = 'rev-feed-interests';
-            interestsCarouselFlickity.className = 'feed-interests-carousel';
-
-            that.interestsCarouselItem.header = interestsCarouselHeader;
-
-            revUtils.append(that.interestsCarouselItem.element, interestsCarouselContainer);
-            revUtils.append(interestsCarouselContainer, interestsCarouselHeader);
-            revUtils.append(interestsCarouselContainer, interestsCarouselFlickity);
-
-            that.interestsCarouselItem.flickity = new Flickity( interestsCarouselFlickity, {
-                wrapAround: false,
-                prevNextButtons: false,
-                pageDots: false,
-                adaptiveHeight: true,
-                freeScroll: true,
-                selectedAttraction: 0.15,
-                freeScrollFriction: 0.03,
+            that.interestsCarouselItem.carousel = new EngageInterestsCarousel({
+                item: that.interestsCarouselItem,
+                emitter: that.emitter
             });
 
-            that.updateInterestsCarousel(data);
-
-            that.interestsCarouselItem.flickity.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) {
-                var target = event.target || event.srcElement;
-                if ( !cellElement ) {
-                    return;
-                }
-                if (target.classList.contains('selector')) {
-                    if (cellElement.classList.contains('selected-interest')) {
-                        cellElement.classList.remove('selected-interest');
-                        cellElement.querySelectorAll('span.selector')[0].classList.remove('subscribed');
-                        that.unsubscribeFromInterest(parseInt(cellElement.getAttribute('data-id'), 10));
-                        //that.notify('Topic removed from your feed.', {label: 'continue', link: '#'});
-                    } else {
-                        cellElement.classList.add('selected-interest');
-                        cellElement.querySelectorAll('span.selector')[0].classList.add('subscribed');
-                        that.subscribeToInterest(parseInt(cellElement.getAttribute('data-id'), 10));
-                        //that.notify('Topic added, new content available.', {label: 'continue', link: '#'});
-                    }
-                }
-
-                if (target.classList.contains('cell-wrapper') || target.classList.contains('interest-title')) {
-
-                    that.handleFeedLink('topic', {
-                        reason_topic_id: parseInt(cellElement.getAttribute('data-id'), 10),
-                        reason_topic: cellElement.getAttribute('data-title')
-                    });
-                    // Load an Explore Panel in "TOPIC" mode to show articles in that interest category...
-                    // this.swipeToPanel('trending', target.getAttribute('data-slug'));
-                    // -- DISABLE TOPIC "DIVE-IN" PANEL UNTIL OTHER FEATURES ARE COMPLETED
-                    //that.appendSliderPanel(cellElement.getAttribute('data-title'), '<div style="padding:18px"><p><strong>Loading Topics...</strong><br />fetching your personalized content.</p></div>', 1);
-                }
-
-            });
-
-            that.interestsCarouselItem.flickity.on( 'dragStart', function( event, pointer ) {
-                interestsCarouselFlickity.classList.add('is-dragging');
-            });
-
-            that.interestsCarouselItem.flickity.on( 'dragEnd', function( event, pointer ) {
-                interestsCarouselFlickity.classList.remove('is-dragging');
-            });
+            that.interestsCarouselItem.carousel.update(data, that.authenticated);
 
             if (grid.perRow > 1) { // relayout if not single column
                 grid.layout();
@@ -2512,35 +2375,6 @@ Author: michael@revcontent.com
 
         return sliderPanel;
 
-    };
-
-    RevSlider.prototype.extractRootDomain = function(url) {
-        if (!url) {
-            return '';
-        }
-        var domain;
-        //find & remove protocol (http, ftp, etc.) and get hostname
-
-        if (url.indexOf("://") > -1) {
-            domain = url.split('/')[2];
-        }
-        else {
-            domain = url.split('/')[0];
-        }
-
-        //find & remove port number
-        domain = domain.split(':')[0];
-        //find & remove "?"
-        domain = domain.split('?')[0];
-
-        var splitArr = domain.split('.'),
-            arrLen = splitArr.length;
-
-        //extracting the root domain here
-        if (arrLen > 2) {
-            domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1];
-        }
-        return domain;
     };
 
     RevSlider.prototype.timeAgo = function(time, output) {

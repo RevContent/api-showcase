@@ -192,10 +192,13 @@ Author: michael@revcontent.com
             // remove any elements beyond initial count
             var removeItems = [];
             var removeCount = 0;
+            var updateItems = 0;
             for (var i = 0; i < self.innerWidget.grid.items.length; i++) {
                 if (self.innerWidget.grid.items[i].type) {
                     if (removeCount >= total) {
                         removeItems.push(self.innerWidget.grid.items[i]);
+                    } else {
+                        updateItems++;
                     }
                     removeCount++
                 }
@@ -229,11 +232,13 @@ Author: michael@revcontent.com
             // TODO - yikes
             self.innerWidget.options = revUtils.extend(self.innerWidget.options, self.options);
 
-            var internalURL = self.innerWidget.generateUrl(0, self.innerWidget.grid.items.length, 0, 0);
+            if (updateItems > 0) {
+                var internalURL = self.innerWidget.generateUrl(0, updateItems, 0, 0);
 
-            revApi.request(internalURL, function(resp) {
-                self.innerWidget.updateDisplayedItems(self.innerWidget.grid.items, resp, true);
-            });
+                revApi.request(internalURL, function(resp) {
+                    self.innerWidget.updateDisplayedItems(self.innerWidget.grid.items, resp, true);
+                });
+            }
 
             setTimeout(function() { // wait a tick ENG-263
                 self.innerWidget.containerElement.scrollIntoView(true);
