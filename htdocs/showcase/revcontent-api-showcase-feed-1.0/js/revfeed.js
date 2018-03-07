@@ -506,7 +506,9 @@ Author: michael@revcontent.com
             }
 
             if(grid_rect.top <= 0) {
-                that.enterFlushedState(that.element);
+                if (that.options.window_width_devices && revDetect.show(that.options.window_width_devices)) {
+                    that.enterFlushedState(that.element);
+                }
                 var fix_ts = 0;
                 clearTimeout(fix_ts);
                 fix_ts = setTimeout(function() {
@@ -523,7 +525,9 @@ Author: michael@revcontent.com
                 }, 0);
 
             } else {
-                that.leaveFlushedState(that.element);
+                if (that.options.window_width_devices && revDetect.show(that.options.window_width_devices)) {
+                    that.leaveFlushedState(that.element);
+                }
                 back.style.top = 0;
                 back.style.position = 'static';
                 back.style.width = '100%';
@@ -583,6 +587,7 @@ Author: michael@revcontent.com
 
             var setElementWindowWidth = function() {
                 // ENG-261, why is transform applied to whole grid on load?
+                // ENG-269, using "flushed" state until transform method is stable.
                 //revUtils.transformCss(that.element, 'none');
                 that.element.style.width = document.body.offsetWidth + 'px';
                 that.element.style.overflow = 'hidden';
@@ -600,6 +605,7 @@ Author: michael@revcontent.com
         grid.style.backgroundColor = '#ffffff';
         grid.style.marginLeft = '-' + grid_rect.left + 'px';
         grid.style.marginRight = '-' + grid_rect.left + 'px';
+        grid.style.overflow = 'hidden';
         grid.classList.add("is-flushed");
         window.dispatchEvent(new Event('resize'));
     };
