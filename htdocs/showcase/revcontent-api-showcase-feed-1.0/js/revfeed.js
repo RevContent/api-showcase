@@ -93,6 +93,7 @@ Author: michael@revcontent.com
             initial_internal: 2,
             initial_sponsored: 1,
             masonry_layout: false,
+            display_limit: 0,
             img_host: 'https://img.engage.im',
             user: null,
             content: [],
@@ -188,6 +189,10 @@ Author: michael@revcontent.com
 
         this.innerWidget.dataPromise.then(function(data) {
 
+            if (!self.options.infinite && self.options.display_limit) {
+                self.initLoadMore();
+            }
+
             self.viewableItems = [];
             for (var i = 0; i < data.rowData.items.length; i++) {
                 if (data.rowData.items[i].view) {
@@ -226,6 +231,35 @@ Author: michael@revcontent.com
         }).catch(function(e) {
             console.log('*************Feed', e);
         });
+    };
+
+    Feed.prototype.initLoadMore = function() {
+        this.loadMoreContainer = document.createElement('div');
+        this.loadMoreContainer.className = 'rev-loadmore-button';
+
+        this.loadMoreButton = document.createElement('div');
+        this.loadMoreButton.className = 'rev-loadmore-button-text';
+        this.loadMoreButton.innerHTML = 'Show More Content';
+
+        revUtils.addEventListener(this.loadMoreContainer, 'click', this.loadMoreButtonHandler.bind(this));
+
+        revUtils.append(this.loadMoreContainer, this.loadMoreButton);
+        revUtils.append(this.innerWidget.containerElement, this.loadMoreContainer);
+    };
+
+    Feed.prototype.loadMoreButtonHandler = function(ev) {
+        var self = this;
+
+        self.loadMoreButton.innerHTML = 'Loading...';
+
+        self.loadContent()
+            .then(function(data) {
+                self.loadMoreButton.innerHTML = 'Show More Content';
+
+                return data;
+            }).catch(function (error) {
+                revUtils.remove(self.loadMoreContainer);
+            });
     };
 
     Feed.prototype.initCornerButton = function(data) {
@@ -420,6 +454,7 @@ Author: michael@revcontent.com
             disclosure_interest_height: this.options.disclosure_interest_height,
             breakpoints: this.options.breakpoints,
             masonry_layout: this.options.masonry_layout,
+            display_limit: this.options.display_limit,
             img_host: this.options.img_host,
             view: this.options.view,
             user: this.options.user,
@@ -478,77 +513,13 @@ Author: michael@revcontent.com
             if (scrollTop >= self.scrollTop && bottom > 0 && (scrollTop + windowHeight) >= (top + scrollTop + height - self.options.buffer)) {
                 revUtils.removeEventListener(window, 'scroll', self.scrollListener);
 
-                var promise = new Promise(function(resolve, reject) {
-
-                    var tryToCreateRows = function(retries) {
-                        try {
-                            var beforeItemCount = self.innerWidget.grid.items.length;
-
-                            var rowData = self.innerWidget.createRows(self.innerWidget.grid, self.options.rows);
-
-                            // if (self.testRetry > 0 && retries != 3) { // TEST
-                            //     throw new Error('Whoops!');
-                            // }
-
-                            setTimeout( function() {
-                                if (!self.removed) {
-                                    revUtils.addEventListener(window, 'scroll', self.scrollListener);
-                                }
-                            }, 150); // give it a rest before going back
-
-                            resolve(rowData);
-                        } catch (e) { // remove items and try again
-                            // remove items TODO: wrap this in try
-                            var remove = self.innerWidget.grid.items.length - beforeItemCount;
-                            for (var i = 0; i < remove; i++) {
-                                var popped = self.innerWidget.grid.items.pop();
-                                popped.remove();
-                            }
-                            // try again
-                            if (retries > 0) {
-                                setTimeout(function() {
-                                    tryToCreateRows((retries - 1));
-                                }, 100);
-                            }
+                self.loadContent(function() {
+                    setTimeout(function() {
+                        if (!self.removed) {
+                            revUtils.addEventListener(window, 'scroll', self.scrollListener);
                         }
-                    }
-
-                    try {
-                        tryToCreateRows(10); // retry 10 times
-                    } catch (e) {
-                        console.log('*************Feed', e);
-                    }
-                }).then(function(rowData) {
-                    return new Promise(function(resolve, reject) {
-                        revApi.request(self.innerWidget.generateUrl(self.internalOffset, rowData.internalLimit, self.sponsoredOffset, rowData.sponsoredLimit), function(data) {
-                            if (!data.content.length) {
-                                reject();
-                                return;
-                            }
-                            resolve({rowData: rowData, data: data});
-                        })
-                    });
-                }).then(function(data) {
-                    var tryToUpdateDisplayedItems = function(retries) {
-                        try {
-                            var itemTypes = self.innerWidget.updateDisplayedItems(data.rowData.items, data.data);
-                            self.viewableItems = self.viewableItems.concat(itemTypes.viewableItems);
-
-                            self.internalOffset += data.rowData.internalLimit;
-                            self.sponsoredOffset += data.rowData.sponsoredLimit;
-
-                            return Promise.resolve(data);
-                        } catch (e) {
-                            if (retries > 0) {
-                                setTimeout(function() {
-                                    tryToUpdateDisplayedItems((retries - 1));
-                                }, 100)
-                            }
-                        }
-                    }
-
-                    return tryToUpdateDisplayedItems(10);
-                })
+                    }, 150); // give it a rest before going back
+                });
                 // self.testRetry++;
             }
 
@@ -558,6 +529,82 @@ Author: michael@revcontent.com
         this.scrollListener = revUtils.throttle(scrollFunction, 60);
 
         revUtils.addEventListener(window, 'scroll', this.scrollListener);
+    };
+
+    Feed.prototype.loadContent = function(rowsCreatedCallback) {
+        var self = this;
+
+        var promise = new Promise(function(resolve, reject) {
+
+            var tryToCreateRows = function(retries) {
+                try {
+                    var beforeItemCount = self.innerWidget.grid.items.length;
+
+                    var rowData = self.innerWidget.createRows(self.innerWidget.grid, self.options.rows);
+
+                    // if (self.testRetry > 0 && retries != 3) { // TEST
+                    //     throw new Error('Whoops!');
+                    // }
+
+                    if (typeof rowsCreatedCallback === "function") {
+                        callback(options);
+                    }
+
+                    resolve(rowData);
+                } catch (e) { // remove items and try again
+                    // remove items TODO: wrap this in try
+                    var remove = self.innerWidget.grid.items.length - beforeItemCount;
+                    for (var i = 0; i < remove; i++) {
+                        var popped = self.innerWidget.grid.items.pop();
+                        popped.remove();
+                    }
+                    // try again
+                    if (retries > 0) {
+                        setTimeout(function() {
+                            tryToCreateRows((retries - 1));
+                        }, 100);
+                    }
+                }
+            };
+
+            try {
+                tryToCreateRows(10); // retry 10 times
+            } catch (e) {
+                console.log('*************Feed', e);
+            }
+        }).then(function(rowData) {
+            return new Promise(function(resolve, reject) {
+                revApi.request(self.innerWidget.generateUrl(self.internalOffset, rowData.internalLimit, self.sponsoredOffset, rowData.sponsoredLimit), function(data) {
+                    if (!data.content.length) {
+                        reject();
+                        return;
+                    }
+                    resolve({rowData: rowData, data: data});
+                })
+            });
+        }).then(function(data) {
+            var tryToUpdateDisplayedItems = function(retries) {
+                try {
+                    var itemTypes = self.innerWidget.updateDisplayedItems(data.rowData.items, data.data);
+                    self.viewableItems = self.viewableItems.concat(itemTypes.viewableItems);
+
+                    self.internalOffset += data.rowData.internalLimit;
+                    self.sponsoredOffset += data.rowData.sponsoredLimit;
+
+                    return Promise.resolve(data);
+                } catch (e) {
+                    if (retries > 0) {
+                        setTimeout(function() {
+                            tryToUpdateDisplayedItems((retries - 1));
+                        }, 100)
+                    }
+                }
+            };
+
+            return tryToUpdateDisplayedItems(10);
+        });
+
+        return promise;
     };
 
     Feed.prototype.checkVisible = function() {

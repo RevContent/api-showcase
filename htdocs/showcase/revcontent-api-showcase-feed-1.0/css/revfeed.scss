@@ -1927,6 +1927,50 @@ $reactionMenu8Y: 13.5px;
     }
 }
 
+#rev-feed #rev-slider2 .rev-loadmore-button {
+  height: 50px;
+  line-height: 0;
+  display: flex;
+  justify-content: center;
+  background-color: #3A559F;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  text-shadow: none;
+  position: relative;
+  align-items: flex-end;
+
+  &:before, &:after {
+    z-index: -1;
+    position: absolute;
+    content: "";
+    bottom: 15px;
+    left: 10px;
+    width: 50%;
+    top: 8%;
+    /* max-width: 300px; */
+    background: transparent;
+    box-shadow: 0 15px 10px rgba(0, 0, 0, 0.3);
+    transform: rotate(-2deg);
+  }
+
+  &:after {
+    transform: rotate(2deg);
+    right: 10px;
+    left: auto;
+  }
+
+  .rev-loadmore-button-text {
+    color: #fff;
+    line-height: 50px;
+    padding-left: 5px;
+    padding-right: 20px;
+    font-size: 16px;
+  }
+}
+
 #rev-feed .rev-content {
   .rev-reason {
     font-size: 10px;
