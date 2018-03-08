@@ -1589,16 +1589,12 @@ $reactionMenu8Y: 13.5px;
     }
 
     .rev-auth {
-        display: flex;
         width: 100%;
-        flex-direction: column;
         height: 100%;
         border-top-right-radius: $card-border-radius;
         border-top-left-radius: $card-border-radius;
         color: #80808c;
-        display: flex;
         width: 100%;
-        flex-direction: column;
         height: 100%;
         border-top-right-radius: 4px;
         border-top-left-radius: 4px;
@@ -1768,6 +1764,16 @@ $reactionMenu8Y: 13.5px;
           line-height: 14px;
         }
     }
+
+
+  .no-shadow {
+    box-shadow: none!important;
+  }
+
+  .no-transition {
+    transition: none!important;
+  }
+
 }
 
 #rev-feed #rev-slider2 .rev-content.rev-colspan-2 {
@@ -1947,6 +1953,10 @@ $reactionMenu8Y: 13.5px;
         height: 34px;
         line-height: 0;
 
+        .rev-feed-link {
+          margin-right: 32px;
+        }
+
         .rev-meta-content {
             overflow: hidden;
             line-height: 16px;
@@ -2032,7 +2042,6 @@ $reactionMenu8Y: 13.5px;
       display: inline-block;
       max-width: 80%;
       max-width: calc(100% - 41px);
-      padding-right: 32px;
     }
 
     // padding: 4px 0 7px 4px;
@@ -2456,6 +2465,18 @@ body.animate-user-profile #profile-mask {
   }
 }
 
+.rev-carousel-container {
+  h1 {
+    font-size: 17px;
+  }
+  small {
+    font-size: 12px;
+    font-weight: normal;
+    padding-left: 15px;
+    color: #777777
+  }
+}
+
 // #rev-feed .rev-content .rev-meta .rev-provider {
 //     font-size: 13px;
 //     line-height: 18px;
@@ -2784,4 +2805,10 @@ body.animate-user-profile #profile-mask {
 
 .rd-loading {
     color: #00a8ff !important;
+}
+.carousel-cell{
+  cursor:pointer;
+}
+.carousel-cell:active{
+  cursor:move;
 }
