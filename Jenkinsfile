@@ -10,9 +10,11 @@ properties([
 ])
 
 if(BRANCH_NAME == "master") {
-  CFID = "E1GBG7FZ0VP3CL"
+  CFID  = "E1GBG7FZ0VP3CL"
+  SLACK = "push-p0"
 } else {
-  CFID = "E6LFF4BBCLHCL"
+  CFID  = "E6LFF4BBCLHCL"
+  SLACK = "push-s0"
 }
 
 node {
@@ -26,14 +28,14 @@ node {
       returnStdout: true
     ).trim()
 
-    slackSend channel: 'test', message: 'Labs ' + BRANCH_NAME + ' ' + BUILD_ID + ': Deploying to S3. ```' + commit + '```\n' + JOB_URL
+    slackSend channel: SLACK, message: 'Labs ' + BRANCH_NAME + ' ' + BUILD_ID + ': Deploying to S3. ```' + commit + '```\n' + JOB_URL
     s3Upload acl: 'PublicRead', bucket: 'revcontent-labs', excludePathPattern: '**/*.sh', file: 'htdocs/', path: BRANCH_NAME + "/" + BUILD_ID
 
   }
 
   stage("Updating Cloudfront Path") {
 
-    slackSend channel: 'test', message: 'Labs ' + BRANCH_NAME + ' ' + BUILD_ID + ': Updating Cloudfront Path.'
+    slackSend channel: SLACK, message: 'Labs ' + BRANCH_NAME + ' ' + BUILD_ID + ': Updating Cloudfront Path.'
 
     /* Ok, we need to talk about some stupid here Amazon. Make me download a format that never translates well to bash
        (JSON) break out of the encapsulating object (Distribution), only to modify a single nested paramater that
@@ -63,9 +65,9 @@ with open('./cloudfront.json', 'w') as cf_file:
 
   stage("Clearing CDN") {
 
-    slackSend channel: 'test', message: 'Labs ' + BRANCH_NAME + ' ' + BUILD_ID + ': Clearing CDN.'
+    slackSend channel: SLACK, message: 'Labs ' + BRANCH_NAME + ' ' + BUILD_ID + ': Clearing CDN.'
     sh 'aws cloudfront create-invalidation --distribution-id ' + CFID + ' --paths "/*"'
-    slackSend channel: 'test', message: 'Labs ' + BRANCH_NAME + ' ' + BUILD_ID + ': Deploy Complete.'
+    slackSend channel: SLACK, message: 'Labs ' + BRANCH_NAME + ' ' + BUILD_ID + ': Deploy Complete.'
 
   }
 
