@@ -175,9 +175,9 @@ Author: michael@revcontent.com
                     var removed = self.innerWidget.grid.items.splice(index, 1);
                     removed[0].remove();
                 }
-
-                self.innerWidget.grid.layout();
             }
+
+            self.innerWidget.grid.layout();
         });
 
         this.options.emitter.on('createFeed', function(type, data) {
@@ -225,7 +225,7 @@ Author: michael@revcontent.com
             }
 
             // add up to initial if its a new gridsky
-            if (data.withoutHistory && updateItems < total) {
+            if (updateItems < total) {
                 var rowData = self.innerWidget.createRows(self.innerWidget.grid, (total - updateItems));
                 sponsoredLimit += rowData.sponsoredLimit;
                 internalLimit += rowData.internalLimit;
@@ -273,6 +273,11 @@ Author: michael@revcontent.com
                         self.options.emitter.emitEvent('removedItems');
                         self.innerWidget.notify('Oh no! This is somewhat embarrassing. We don\'t have content for that ' + revUtils.capitalize(type) + '. Please go back or try a different ' + revUtils.capitalize(type) + '.', {label: 'continue', link: '#'}, 'info', true);
                         return;
+                    }
+
+                    if (self.removed) { // if feed ended reinit infinite
+                        self.removed = false;
+                        self.infinite();
                     }
 
                     self.innerWidget.updateDisplayedItems(self.innerWidget.grid.items, resp);
@@ -603,11 +608,6 @@ Author: michael@revcontent.com
             }
         } else {
             this.clearHistory();
-        }
-
-        if (this.removed) { // if feed ended reinit infinite
-            this.removed = false;
-            this.infinite();
         }
     };
 
