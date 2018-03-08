@@ -154,7 +154,7 @@ Author: michael@revcontent.com
     };
 
     Feed.prototype.init = function() {
-
+        var self = this;
         this.element = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
 
         this.containerElement = document.createElement('div');
@@ -162,10 +162,7 @@ Author: michael@revcontent.com
 
         revUtils.append(this.element, this.containerElement);
 
-        // ENG-269, do not enforce window width mode at init... (causes clipping)
-        //this.windowWidth();
-
-        var self = this;
+        self.windowWidth();
 
         this.options.emitter.on('removedItems', function(items) {
             self.removed = true;
@@ -524,9 +521,9 @@ Author: michael@revcontent.com
                     back.style.width = grid_rect.width + 'px';
                     back.style.top = 0 + top_offset + 'px';
                     back.classList.remove('no-shadow');
-                    if (that.options.window_width_devices && revDetect.show(that.options.window_width_devices)) {
-                        that.enterFlushedState(that.element);
-                    }
+                    //if (that.options.window_width_devices && revDetect.show(that.options.window_width_devices)) {
+                    //    that.enterFlushedState(that.element);
+                    //}
                     clearTimeout(fix_ts);
                 }, 0);
 
@@ -535,9 +532,9 @@ Author: michael@revcontent.com
                 back.style.position = 'static';
                 back.style.width = '100%';
                 back.classList.add('no-shadow');
-                if (that.options.window_width_devices && revDetect.show(that.options.window_width_devices)) {
-                    that.leaveFlushedState(that.element);
-                }
+                //if (that.options.window_width_devices && revDetect.show(that.options.window_width_devices)) {
+                //    that.leaveFlushedState(that.element);
+                //}
             }
         }, 300);
     };
@@ -591,11 +588,12 @@ Author: michael@revcontent.com
             });
 
             var setElementWindowWidth = function() {
-                // ENG-261, why is transform applied to whole grid on load?
-                // ENG-269, using "flushed" state until transform method is stable.
+                // ENG-261/ENG-269 Using "Flushed" state and margin changes instead of transform (for now)
+                // NOTE: Use of transform on outer grid will break "fixed" positioning of child elements.
                 //revUtils.transformCss(that.element, 'none');
                 that.element.style.width = document.body.offsetWidth + 'px';
                 that.element.style.overflow = 'hidden';
+                that.enterFlushedState(that.element);
                 //revUtils.transformCss(that.element, 'translateX(-' + that.element.getBoundingClientRect().left + 'px)');
             };
 
@@ -606,9 +604,9 @@ Author: michael@revcontent.com
     Feed.prototype.enterFlushedState  = function(grid){
         if(grid.classList.contains('is-flushed')) { return; }
         this.options.window_width_enabled = true;
-        if(!this.innerWidget.containerElement.classList.contains('rev-slider-window-width')) {
-            revUtils.addClass(this.innerWidget.containerElement, 'rev-slider-window-width');
-        }
+        //if(!this.innerWidget.containerElement.classList.contains('rev-slider-window-width')) {
+        //    revUtils.addClass(this.innerWidget.containerElement, 'rev-slider-window-width');
+        //}
         var grid_rect = this.element.getBoundingClientRect();
         var back = grid.querySelector('div#go-back-bar');
         if(back !== null) {
@@ -625,7 +623,7 @@ Author: michael@revcontent.com
     Feed.prototype.leaveFlushedState = function(grid){
         if(!grid.classList.contains('is-flushed')) { return; }
         this.options.window_width_enabled = false;
-        revUtils.removeClass(this.innerWidget.containerElement, 'rev-slider-window-width');
+        //revUtils.removeClass(this.innerWidget.containerElement, 'rev-slider-window-width');
         grid.classList.remove("is-flushed");
         var back = grid.querySelector('div#go-back-bar');
         if(back !== null) {
