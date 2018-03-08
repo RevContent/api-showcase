@@ -162,6 +162,8 @@ Author: michael@revcontent.com
 
         revUtils.append(this.element, this.containerElement);
 
+        self.windowWidth();
+
         this.options.emitter.on('removedItems', function(items) {
             self.removed = true;
 
@@ -244,8 +246,6 @@ Author: michael@revcontent.com
         });
 
         this.innerWidget = this.createInnerWidget(this.containerElement, this.options);
-
-        self.windowWidth();
 
         if (!this.innerWidget.dataPromise) {
             return;
@@ -604,9 +604,9 @@ Author: michael@revcontent.com
     Feed.prototype.enterFlushedState  = function(grid){
         if(grid.classList.contains('is-flushed')) { return; }
         this.options.window_width_enabled = true;
-        if(!this.innerWidget.containerElement.classList.contains('rev-slider-window-width')) {
-            revUtils.addClass(this.innerWidget.containerElement, 'rev-slider-window-width');
-        }
+        //if(!this.innerWidget.containerElement.classList.contains('rev-slider-window-width')) {
+        //    revUtils.addClass(this.innerWidget.containerElement, 'rev-slider-window-width');
+        //}
         var grid_rect = this.element.getBoundingClientRect();
         var back = grid.querySelector('div#go-back-bar');
         if(back !== null) {
@@ -623,7 +623,7 @@ Author: michael@revcontent.com
     Feed.prototype.leaveFlushedState = function(grid){
         if(!grid.classList.contains('is-flushed')) { return; }
         this.options.window_width_enabled = false;
-        revUtils.removeClass(this.innerWidget.containerElement, 'rev-slider-window-width');
+        //revUtils.removeClass(this.innerWidget.containerElement, 'rev-slider-window-width');
         grid.classList.remove("is-flushed");
         var back = grid.querySelector('div#go-back-bar');
         if(back !== null) {
