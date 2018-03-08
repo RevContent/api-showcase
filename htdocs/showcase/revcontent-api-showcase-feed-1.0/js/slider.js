@@ -86,7 +86,6 @@ Author: michael@revcontent.com
             wrap_reverse: true, //currently the only supported option
             show_padding: true,
             pages: 4,
-            row_pages: false, // use rows for page count, overrides pages option
             text_right: false,
             text_right_height: 100,
             transition_duration: 0,
@@ -117,13 +116,10 @@ Author: michael@revcontent.com
             ad_overlay: false, // pass key value object { content_type: icon }
             ad_overlay_position: 'bottom_right', // center, top_left, top_right, bottom_right, bottom_left
             query_params: false,
-            register_views: true, // manage views or false to let someone else do it
             user_ip: false,
             user_agent: false,
             css: '',
             disable_pagination: false,
-            register_impressions: true,
-            visible_rows: false,
             column_spans: false,
             pagination_dots_vertical: false,
             stacked: false,
@@ -170,11 +166,13 @@ Author: michael@revcontent.com
             masonry_layout: false,
             display_limit: 0,
             user: null,
-            content: []
+            content: [],
+            history_stack: [],
+            emitter: false
         };
 
         // merge options
-        this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
+        this.options = revUtils.extend(defaults, opts);
 
         // store options
         revUtils.storeUserOptions(this.options);
@@ -190,7 +188,7 @@ Author: michael@revcontent.com
 
         var that = this;
 
-        this.emitter = new EventEmitter();
+        this.emitter = new EvEmitter();
 
         revDisclose.setEmitter(this.emitter);
 
@@ -205,6 +203,14 @@ Author: michael@revcontent.com
                     }
                 }
             });
+        });
+
+        this.emitter.on('feedLink', function(type, data) {
+            that.handleFeedLink(type, data);
+        });
+
+        this.emitter.on('updateInterstsSubscription', function(type, data) {
+            that.updateInterstsSubscription(type, data);
         });
 
         this.data = [];
@@ -231,9 +237,9 @@ Author: michael@revcontent.com
         var gridElement = document.createElement('div');
         gridElement.id = 'rev-slider-grid';
 
-        this.element = this.options.element ? this.options.element[0] : document.getElementById(this.options.id);
+        this.element = this.options.element ? this.options.element : document.getElementById(this.options.id);
         this.element.style.width = '100%';
-
+        this.element.innerHTML="";
         revUtils.append(this.containerElement, this.innerContainerElement);
 
         revUtils.append(this.innerContainerElement, this.innerElement);
@@ -286,9 +292,11 @@ Author: michael@revcontent.com
     RevSlider.prototype.personalize = function() {
         var that = this;
 
-        var personalize = function(time) {
+        var personalize = function(data) {
             var starttime = new Date().getTime();
             that.personalized = true;
+
+            that.interestsCarouselItem.carousel.update(data.data, that.authenticated);
 
             // TODO
             // that.updateVideoItems(that.mockVideosAuthenticated);
@@ -305,7 +313,7 @@ Author: michael@revcontent.com
                 var internalURL = that.generateUrl(0, internalPersonalizedCount, 0, 0);
 
                 revApi.request(internalURL, function(resp) {
-                    var totaltime = ((new Date().getTime() - starttime) + time);
+                    data.totaltime = ((new Date().getTime() - starttime) + data.totaltime);
 
                     var finishPersonalize = function() {
                         that.updateDisplayedItems(that.grid.items, resp, true);
@@ -313,12 +321,12 @@ Author: michael@revcontent.com
                     }
 
                     var mintime = 7000; // show for a minimum of 7s
-                    if (totaltime > mintime) {
+                    if (data.totaltime > mintime) {
                         finishPersonalize();
                     } else {
                         setTimeout(function() {
                             finishPersonalize();
-                        }, mintime - totaltime)
+                        }, mintime - data.totaltime)
                     }
                 });
             }
@@ -355,7 +363,10 @@ Author: michael@revcontent.com
                                 request();
                             }, 2000);
                         } else {
-                            resolve(totaltime);
+                            resolve({
+                                totaltime: totaltime,
+                                data: data
+                            });
                         }
                     });
                 }
@@ -365,8 +376,8 @@ Author: michael@revcontent.com
             });
         };
 
-        requestInterests(new Date().getTime()).then(function(time) {
-            personalize(time);
+        requestInterests(new Date().getTime()).then(function(data) {
+            personalize(data);
             // TODO animate in new content
         }, function() {
             // TODO display message that no personalized content
@@ -455,9 +466,9 @@ Author: michael@revcontent.com
 
             //  && i == patternTotal
             // @todo find replacement/correct var for patternTotal
-            if (this.authenticated && (!this.interestsCarouselVisible && i == 1)) {
+            if (!this.interestsCarouselVisible && i == 3) {
                 this.interestsCarouselVisible = true;
-                layoutItems = layoutItems.concat(this.appendInterestsCarousel(grid));
+                layoutItems = layoutItems.concat(this.appendInterestsCarousel(grid,this.authenticated));
                 i--;
                 continue;
             }
@@ -477,6 +488,7 @@ Author: michael@revcontent.com
             var added = grid.addItems([element]);
 
             added[0].reactions = true; // everything has reactions
+            added[0].handlers = [];
 
             // var reactionsContainer = document.createElement('div');
 
@@ -1332,10 +1344,12 @@ Author: michael@revcontent.com
                                         '<div class="rev-before-image">' +
                                             '<div class="rev-meta">' +
                                                 '<div class="rev-meta-inner">' +
-                                                    '<div class="rev-headline-icon-container"><div class="rev-headline-icon"></div></div>' +
-                                                    '<div class="rev-provider-date-container">' +
-                                                        '<div class="rev-provider"></div>' +
-                                                        '<div class="rev-date"></div>' +
+                                                    '<div class="rev-feed-link" data-type="author">' +
+                                                        '<div class="rev-headline-icon-container" style="cursor:pointer"><div class="rev-headline-icon"></div></div>' +
+                                                        '<div class="rev-provider-date-container" style="cursor:pointer">' +
+                                                            '<div class="rev-provider"></div>' +
+                                                            '<div class="rev-date"></div>' +
+                                                        '</div>' +
                                                     '</div>' +
 
                                                 '</div>' +
@@ -1516,6 +1530,21 @@ Author: michael@revcontent.com
         return list;
     };
 
+    RevSlider.prototype.loadTopicFeed = function(topicId, topicTitle, withoutHistory){
+        this.options.emitter.emitEvent('createFeed', ['topic', {
+            topicId: topicId,
+            topicTitle: topicTitle,
+            withoutHistory: withoutHistory
+        }]);
+    }
+
+    RevSlider.prototype.loadAuthorFeed = function(authorName, withoutHistory){
+        this.options.emitter.emitEvent('createFeed', ['author', {
+            authorName: authorName,
+            withoutHistory: withoutHistory
+        }]);
+    }
+
     RevSlider.prototype.generateUrl = function(internalOffset, internalCount, sponsoredOffset, sponsoredCount) {
         var url = (this.options.host ? this.options.host + '/api/v1/' : this.options.url) +
         '?api_key=' + this.options.api_key +
@@ -1535,7 +1564,17 @@ Author: michael@revcontent.com
             url += '&show_comments=1';
 
             var ignoreList = this.getIgnoreList(this.grid.items);
-            url+="&doc_ids="+ignoreList.join(",");
+            url += '&doc_ids=' + ignoreList.join(",");
+
+            var topicId = this.options.topic_id;
+            if(topicId && topicId > 0) {
+                url += "&topic_id=" + topicId;
+            }
+
+            var authorName = this.options.author_name;
+            if(authorName && authorName.length>0) {
+                url += '&author_name=' + encodeURI(authorName);
+            }
         }
 
         if (this.options.keywords) {
@@ -1641,11 +1680,11 @@ Author: michael@revcontent.com
                     // update passive and retry if not matching
                     tryToUpdateDisplayedItems(10, data.rowData.items, data.data, true).then(function(itemTypes) {
 
+
                         if (itemTypes.removeItems.length) { // try to fill any discrepencies
 
                             var actualInternalOffset = 0;
                             var actualSponsoredOffset = 0;
-
                             var missInternalCount = 0;
                             var missSponsoredCount = 0;
 
@@ -1706,6 +1745,11 @@ Author: michael@revcontent.com
     RevSlider.prototype.updateDisplayedItem = function(item) {
         // var item = itemTypes[dataType][j];
         var itemData = item.data;
+
+        for (var i = 0; i < item.handlers.length; i++) {
+            var handler = item.handlers[i];
+            revUtils.removeEventListener(handler.el, handler.type, handler.handle);
+        }
 
         if (!itemData) {
             return;
@@ -1799,9 +1843,10 @@ Author: michael@revcontent.com
         }
 
         var provider = item.element.querySelector('.rev-provider');
+        var that = this;
         if (provider) {
             if (item.type == 'sponsored') {
-                provider.innerHTML = itemData.brand ? itemData.brand : this.extractRootDomain(itemData.target_url);
+                provider.innerHTML = itemData.brand ? itemData.brand : revUtils.extractRootDomain(itemData.target_url);
             } else if (item.type == 'internal' && itemData.author) {
                 provider.innerHTML = itemData.author;
             }
@@ -1910,23 +1955,63 @@ Author: michael@revcontent.com
             item.element.querySelector('.rev-reactions-total-inner').innerHTML = reactionHtml;
         }
 
+        revUtils.remove(item.element.querySelector('.rev-reason'));
+
+        if (itemData.reason_topic_id > 0) {
+            var reason = document.createElement('div');
+            var t = document.createElement("span");
+            t.setAttribute('style', 'cursor:pointer;');
+            t.setAttribute('data-type', 'topic');
+            t.className = 'rev-feed-link';
+            t.innerHTML = "<strong>"+itemData.reason_topic+"</strong>";
+
+            var txt = 'Recommended because you are interested in ';
+            reason.className = 'rev-reason';
+            reason.innerHTML = txt;
+            reason.title = txt + itemData.reason_topic;
+            reason.appendChild(t);
+            revUtils.prepend(item.element.querySelector('.rev-ad-outer'), reason);
+        }
+
         if (item.type == 'internal') {
             var save = item.element.querySelector('.rev-save')
             revUtils.removeClass(save, 'rev-save-active');
             if (itemData.bookmarked) {
                 revUtils.addClass(save, 'rev-save-active');
             }
-        }
 
-        revUtils.remove(item.element.querySelector('.rev-reason'));
-        if (itemData.reason) {
-            var reason = document.createElement('div');
-            reason.className = 'rev-reason';
-            reason.innerHTML = itemData.reason;
-            reason.title = itemData.reason;
-            revUtils.prepend(item.element.querySelector('.rev-ad-outer'), reason);
+            // feed links
+            var feedLinks = item.element.querySelectorAll('.rev-feed-link');
+            for (var i = 0; i < feedLinks.length; i++) {
+                var clickHandle = this.handleFeedLink.bind(this, feedLinks[i].getAttribute('data-type'), itemData);
+                item.handlers.push({
+                    el: feedLinks[i],
+                    type: 'click',
+                    handle: clickHandle
+                });
+                revUtils.addEventListener(feedLinks[i], 'click', clickHandle, {passive:false});
+            }
         }
     };
+
+    RevSlider.prototype.handleFeedLink = function(type, itemData, e) {
+        if (e) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+
+        switch (type) {
+            case 'author':
+                this.loadAuthorFeed(itemData.author);
+                break;
+            case 'topic':
+                this.loadTopicFeed(itemData.reason_topic_id, itemData.reason_topic)
+                break;
+            default:
+                // TODO
+                break;
+        }
+    }
 
     RevSlider.prototype.updateDisplayedItems = function(items, data, passive) {
         // if (!this.data.length) { // if no data remove the container and call it a day
@@ -1984,7 +2069,7 @@ Author: michael@revcontent.com
         }
 
         if (removeItems.length && passive !== true) {
-            this.emitter.emitEvent('removedItems', [removeItems]);
+            this.options.emitter.emitEvent('removedItems', [removeItems]);
         }
 
         return {
@@ -2078,6 +2163,17 @@ Author: michael@revcontent.com
         }, 2500);
     };
 
+    RevSlider.prototype.updateInterstsSubscription = function(type, data) {
+        switch(type) {
+            case 'subscribe':
+                this.subscribeToInterest(data);
+                break;
+            case 'unsubscribe':
+                this.unsubscribeFromInterest(data);
+                break;
+        }
+    };
+
     RevSlider.prototype.subscribeToInterest = function(interestId) {
         var that = this;
         if(isNaN(interestId)){
@@ -2139,22 +2235,18 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.appendInterestsCarousel = function (grid) {
         var that = this;
-        var interest_cells = '';
 
-        var interestsCarousel = document.createElement('div');
-        interestsCarousel.className = 'rev-content';
-        grid.element.appendChild(interestsCarousel);
+        var interestsCarouselElement = document.createElement('div');
+        interestsCarouselElement.className = 'rev-content';
 
-        revApi.request( that.options.host + '/api/v1/engage/getinterests.php?', function (data) {
+        grid.element.appendChild(interestsCarouselElement);
 
-            if(typeof data !== "object" || (typeof data == "object" && data.subscribed.length == 0)) {
-                interestsCarousel.setAttribute('style','margin:0!important;padding:0!important;height:0;border:0');
-                interestsCarousel.classList.add('revcontent-carousel-is-empty');
-                interestsCarousel.classList.add('revcontent-remove-element');
-                return;
-            }
+        var added = grid.addItems([interestsCarouselElement]);
 
-            var interests_data = data.subscribed;
+        this.interestsCarouselItem = added[0];
+
+        revApi.request( that.options.host + '/api/v1/engage/getinterests.php?d=' + that.options.domain, function (data) {
+
             that.interests = {
                 list: data.subscribed,
                 subscribed: data.subscribed, //data.subscribed
@@ -2163,91 +2255,21 @@ Author: michael@revcontent.com
                 //recomended: data.recommended,
                 count: data.subscribed.length // data.count
             };
-            var interests_count = 0;
 
-            if (typeof interests_data !== 'undefined') {
-                interests_count = interests_data.length;
-            }
 
-            for(var i=0;i<interests_count;i++){
-                var interest = interests_data[i];
-                var the_cell = '' +
-                // Interest Image should be stored as CSS by slug/name ID interest-' + interest.slug.toLowerCase() + '
-                // $image property in interest object could be used as override if non-empty.
-                '<div style="' + (interest.image != '' ? 'background:transparent url(' + interest.image + ') top left no-repeat;background-size:cover;' : '') + '" class="carousel-cell interest-cell interest-' + interest.title.toLowerCase() + ' selected-interest"  data-id="' + interest.id + '" data-title="' + interest.title + '" data-interest="' + interest.title.toLowerCase() + '">' +
-                    '<div class="cell-wrapper">' +
-                        '<span class="selector subscribed"></span>' +
-                        '<div class="interest-title ' + (interest.lightMode ? ' light-mode' : '') + '">' + interest.title + '</div>' +
-                    '</div>' +
-                '</div>';
-                interest_cells += the_cell;
-            }
-
-            interestsCarousel.innerHTML = '<div><h1 style="font-size:17px;padding-left:9px">Content You Love' +
-                '<small style="font-size:12px;font-weight:normal;padding-left:15px;color:#777777"><sup>SIMILAR TOPICS</sup></small>' +
-                '</h1>' +
-                '<div id="rev-feed-interests" class="feed-interests-carousel">' +
-
-                    interest_cells +
-
-                '</div>' +
-                '</div>';
-
-            var carousel = interestsCarousel.querySelector('.feed-interests-carousel');
-
-            var interests_flick = new Flickity( carousel, {
-                wrapAround: false,
-                prevNextButtons: false,
-                pageDots: false,
-                adaptiveHeight: true,
-                freeScroll: true,
-                selectedAttraction: 0.15,
-                freeScrollFriction: 0.03,
-                initialIndex: 3
+            that.interestsCarouselItem.carousel = new EngageInterestsCarousel({
+                item: that.interestsCarouselItem,
+                emitter: that.emitter
             });
 
-            interests_flick.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) {
-                var target = event.target || event.srcElement;
-                if ( !cellElement ) {
-                    return;
-                }
-                if(target.classList.contains('selector')) {
-                    if (cellElement.classList.contains('selected-interest')) {
-                        cellElement.classList.remove('selected-interest');
-                        cellElement.querySelectorAll('span.selector')[0].classList.remove('subscribed');
-                        that.unsubscribeFromInterest(parseInt(cellElement.getAttribute('data-id'), 10));
-                        //that.notify('Topic removed from your feed.', {label: 'continue', link: '#'});
-                    } else {
-                        cellElement.classList.add('selected-interest');
-                        cellElement.querySelectorAll('span.selector')[0].classList.add('subscribed');
-                        that.subscribeToInterest(parseInt(cellElement.getAttribute('data-id'), 10));
-                        //that.notify('Topic added, new content available.', {label: 'continue', link: '#'});
-                    }
-                }
-
-                if(target.classList.contains('cell-wrapper')){
-                    // Load an Explore Panel in "TOPIC" mode to show articles in that interest category...
-                    // this.swipeToPanel('trending', target.getAttribute('data-slug'));
-                    // -- DISABLE TOPIC "DIVE-IN" PANEL UNTIL OTHER FEATURES ARE COMPLETED
-                    //that.appendSliderPanel(cellElement.getAttribute('data-title'), '<div style="padding:18px"><p><strong>Loading Topics...</strong><br />fetching your personalized content.</p></div>', 1);
-                }
-
-            });
-
-            interests_flick.on( 'dragStart', function( event, pointer ) {
-                carousel.classList.add('is-dragging');
-            });
-
-            interests_flick.on( 'dragEnd', function( event, pointer ) {
-                carousel.classList.remove('is-dragging');
-            });
+            that.interestsCarouselItem.carousel.update(data, that.authenticated);
 
             if (grid.perRow > 1) { // relayout if not single column
                 grid.layout();
             }
         });
 
-        return grid.addItems([interestsCarousel]);
+        return added;
     };
 
     RevSlider.prototype.appendExplorePanel = function(grid){
@@ -2379,35 +2401,6 @@ Author: michael@revcontent.com
 
         return sliderPanel;
 
-    };
-
-    RevSlider.prototype.extractRootDomain = function(url) {
-        if (!url) {
-            return '';
-        }
-        var domain;
-        //find & remove protocol (http, ftp, etc.) and get hostname
-
-        if (url.indexOf("://") > -1) {
-            domain = url.split('/')[2];
-        }
-        else {
-            domain = url.split('/')[0];
-        }
-
-        //find & remove port number
-        domain = domain.split(':')[0];
-        //find & remove "?"
-        domain = domain.split('?')[0];
-
-        var splitArr = domain.split('.'),
-            arrLen = splitArr.length;
-
-        //extracting the root domain here
-        if (arrLen > 2) {
-            domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1];
-        }
-        return domain;
     };
 
     RevSlider.prototype.timeAgo = function(time, output) {
