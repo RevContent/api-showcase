@@ -163,20 +163,6 @@ Author: michael@revcontent.com
 
         var self = this;
 
-        this.innerWidget.emitter.on('removedItems', function(items) {
-            self.removed = true;
-
-            revUtils.removeEventListener(window, 'scroll', self.scrollListener);
-
-            for (var i = 0; i < items.length; i++) {
-                var index = self.innerWidget.grid.items.indexOf(items[i]);
-                var removed = self.innerWidget.grid.items.splice(index, 1);
-                removed[0].remove();
-            }
-
-            self.innerWidget.grid.layout();
-        });
-
         if (!this.innerWidget.dataPromise) {
             return;
         }
@@ -190,7 +176,7 @@ Author: michael@revcontent.com
         this.innerWidget.dataPromise.then(function(data) {
 
             if (!self.options.infinite && self.options.display_limit) {
-                self.initLoadMore();
+                self.loadMore();
             }
 
             self.viewableItems = [];
@@ -231,35 +217,6 @@ Author: michael@revcontent.com
         }).catch(function(e) {
             console.log('*************Feed', e);
         });
-    };
-
-    Feed.prototype.initLoadMore = function() {
-        this.loadMoreContainer = document.createElement('div');
-        this.loadMoreContainer.className = 'rev-loadmore-button';
-
-        this.loadMoreButton = document.createElement('div');
-        this.loadMoreButton.className = 'rev-loadmore-button-text';
-        this.loadMoreButton.innerHTML = 'Show More Content';
-
-        revUtils.addEventListener(this.loadMoreContainer, 'click', this.loadMoreButtonHandler.bind(this));
-
-        revUtils.append(this.loadMoreContainer, this.loadMoreButton);
-        revUtils.append(this.innerWidget.containerElement, this.loadMoreContainer);
-    };
-
-    Feed.prototype.loadMoreButtonHandler = function(ev) {
-        var self = this;
-
-        self.loadMoreButton.innerHTML = 'Loading...';
-
-        self.loadContent()
-            .then(function(data) {
-                self.loadMoreButton.innerHTML = 'Show More Content';
-
-                return data;
-            }).catch(function (error) {
-                revUtils.remove(self.loadMoreContainer);
-            });
     };
 
     Feed.prototype.initCornerButton = function(data) {
@@ -490,12 +447,52 @@ Author: michael@revcontent.com
         });
     };
 
+    Feed.prototype.loadMore = function() {
+        var self = this;
+
+        self.loadMoreContainer = document.createElement('div');
+        self.loadMoreContainer.className = 'rev-loadmore-button';
+
+        self.loadMoreButton = document.createElement('div');
+        self.loadMoreButton.className = 'rev-loadmore-button-text';
+        self.loadMoreButton.innerHTML = 'Show More Content';
+
+        revUtils.append(self.loadMoreContainer, self.loadMoreButton);
+        revUtils.append(self.innerWidget.containerElement, self.loadMoreContainer);
+
+        self.loadMoreListener = function() {
+            self.loadMoreButton.innerHTML = 'Loading...';
+            revUtils.removeEventListener(self.loadMoreContainer, 'click', self.loadMoreListener);
+
+            var beforeItemCount = self.innerWidget.grid.items.length;
+
+            self
+                .promiseCreateBlankCards(self)
+                .then(self.promiseFetchCardDataRetry)
+                .then(self.promiseUpdateCardData)
+                .then(function(input) {
+                    self.loadMoreButton.innerHTML = 'Show More Content';
+                    revUtils.addEventListener(self.loadMoreContainer, 'click', self.loadMoreListener);
+
+                    return input;
+                })
+                .catch(function (error) {
+                    revUtils.remove(self.loadMoreContainer);
+
+                    self.catchRemoveBlankCards(self, beforeItemCount, error);
+                })
+                .catch(function (error) {
+                    console.log('*************Feed', error);
+                });
+        };
+
+        revUtils.addEventListener(self.loadMoreContainer, 'click', self.loadMoreListener);
+    };
+
     Feed.prototype.infinite = function() {
         var self = this;
 
         this.scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-
-        // this.testRetry = 0;
 
         var scrollFunction = function() {
 
@@ -513,14 +510,21 @@ Author: michael@revcontent.com
             if (scrollTop >= self.scrollTop && bottom > 0 && (scrollTop + windowHeight) >= (top + scrollTop + height - self.options.buffer)) {
                 revUtils.removeEventListener(window, 'scroll', self.scrollListener);
 
-                self.loadContent(function() {
-                    setTimeout(function() {
-                        if (!self.removed) {
-                            revUtils.addEventListener(window, 'scroll', self.scrollListener);
-                        }
-                    }, 150); // give it a rest before going back
-                });
-                // self.testRetry++;
+                var beforeItemCount = self.innerWidget.grid.items.length;
+
+                self
+                    .promiseCreateBlankCards(self)
+                    .then(self.promiseFetchCardDataRetry)
+                    .then(self.thenAddScrollListener)
+                    .then(self.promiseUpdateCardData)
+                    .catch(function (error) {
+                        revUtils.removeEventListener(window, 'scroll', self.scrollListener);
+
+                        self.catchRemoveBlankCards(self, beforeItemCount, error);
+                    })
+                    .catch(function (error) {
+                        console.log('*************Feed', error);
+                    });
             }
 
             self.scrollTop = scrollTop;
@@ -531,80 +535,97 @@ Author: michael@revcontent.com
         revUtils.addEventListener(window, 'scroll', this.scrollListener);
     };
 
-    Feed.prototype.loadContent = function(rowsCreatedCallback) {
-        var self = this;
-
-        var promise = new Promise(function(resolve, reject) {
-
-            var tryToCreateRows = function(retries) {
-                try {
-                    var beforeItemCount = self.innerWidget.grid.items.length;
-
-                    var rowData = self.innerWidget.createRows(self.innerWidget.grid, self.options.rows);
-
-                    // if (self.testRetry > 0 && retries != 3) { // TEST
-                    //     throw new Error('Whoops!');
-                    // }
-
-                    if (typeof rowsCreatedCallback === "function") {
-                        callback(options);
-                    }
-
-                    resolve(rowData);
-                } catch (e) { // remove items and try again
-                    // remove items TODO: wrap this in try
-                    var remove = self.innerWidget.grid.items.length - beforeItemCount;
-                    for (var i = 0; i < remove; i++) {
-                        var popped = self.innerWidget.grid.items.pop();
-                        popped.remove();
-                    }
-                    // try again
-                    if (retries > 0) {
-                        setTimeout(function() {
-                            tryToCreateRows((retries - 1));
-                        }, 100);
-                    }
-                }
-            };
-
-            try {
-                tryToCreateRows(10); // retry 10 times
-            } catch (e) {
-                console.log('*************Feed', e);
+    Feed.prototype.thenAddScrollListener = function(input) {
+        // give it a rest before going back
+        setTimeout(function () {
+            if (!input.self.removed) {
+                revUtils.addEventListener(window, 'scroll', input.self.scrollListener);
             }
-        }).then(function(rowData) {
-            return new Promise(function(resolve, reject) {
-                revApi.request(self.innerWidget.generateUrl(self.internalOffset, rowData.internalLimit, self.sponsoredOffset, rowData.sponsoredLimit), function(data) {
-                    if (!data.content.length) {
-                        reject();
-                        return;
-                    }
-                    resolve({rowData: rowData, data: data});
-                })
-            });
-        }).then(function(data) {
-            var tryToUpdateDisplayedItems = function(retries) {
-                try {
-                    var itemTypes = self.innerWidget.updateDisplayedItems(data.rowData.items, data.data);
-                    self.viewableItems = self.viewableItems.concat(itemTypes.viewableItems);
+        }, 150);
 
-                    self.internalOffset += data.rowData.internalLimit;
-                    self.sponsoredOffset += data.rowData.sponsoredLimit;
+        return input;
+    };
 
-                    return Promise.resolve(data);
-                } catch (e) {
-                    if (retries > 0) {
-                        setTimeout(function() {
-                            tryToUpdateDisplayedItems((retries - 1));
-                        }, 100)
-                    }
+    Feed.prototype.catchRemoveBlankCards = function(self, beforeItemCount, error) {
+        self.removed = true;
+
+        var remove = self.innerWidget.grid.items.length - beforeItemCount;
+
+        for (var i = 0; i < remove; i++) {
+            var popped = self.innerWidget.grid.items.pop();
+            popped.remove();
+        }
+
+        self.innerWidget.grid.layout();
+
+        throw error;
+    };
+
+    Feed.prototype.promiseCreateBlankCards = function(self) {
+        return new Promise(function(resolve, reject) {
+            var rowData = self.innerWidget.createRows(self.innerWidget.grid, self.options.rows);
+
+            resolve({self: self, rowData: rowData});
+        });
+    };
+
+    Feed.prototype.promiseFetchCardDataRetry = function(input) {
+        return input.self.promiseRetry(function() {
+            return input.self.promiseFetchCardData(input);
+        }, 3, 100);
+    };
+
+    Feed.prototype.promiseFetchCardData = function(input) {
+        return new Promise(function(resolve, reject) {
+            var self = input.self;
+            var rowData = input.rowData;
+
+            revApi.request(self.innerWidget.generateUrl(self.internalOffset, rowData.internalLimit, self.sponsoredOffset, rowData.sponsoredLimit), function(data) {
+                // reject if we don't have any content or not enough content
+                if (!data.content.length || data.content.length !== (rowData.internalLimit + rowData.sponsoredLimit)) {
+                    reject();
+                    return;
+                }
+
+                resolve({self: self, rowData: rowData, data: data});
+            })
+        });
+    };
+
+    Feed.prototype.promiseUpdateCardData = function(input) {
+        return new Promise(function(resolve, reject) {
+            var self = input.self;
+            var rowData = input.rowData;
+            var data = input.data;
+
+            var itemTypes = self.innerWidget.updateDisplayedItems(rowData.items, data);
+            self.viewableItems = self.viewableItems.concat(itemTypes.viewableItems);
+
+            self.internalOffset += rowData.internalLimit;
+            self.sponsoredOffset += rowData.sponsoredLimit;
+
+            resolve({self: self, rowData: rowData, data: data});
+        });
+    };
+
+    Feed.prototype.promiseRetry = function(fn, times, delay) {
+        return new Promise(function(resolve, reject){
+            var error;
+
+            var attempt = function() {
+                if (times === 0) {
+                    reject(error);
+                } else {
+                    fn().then(resolve)
+                        .catch(function(e){
+                            times--;
+                            error = e;
+                            setTimeout(function(){attempt()}, delay);
+                        });
                 }
             };
-
-            return tryToUpdateDisplayedItems(10);
+            attempt();
         });
-
-        return promise;
     };
 
     Feed.prototype.checkVisible = function() {
