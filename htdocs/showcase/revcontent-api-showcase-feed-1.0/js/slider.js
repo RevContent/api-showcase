@@ -283,6 +283,9 @@ Author: michael@revcontent.com
         this.queue = [];
         this.queueRetries = 0;
 
+        this.internalOffset = 0;
+        this.sponsoredOffset = 0;
+
         this.getData();
 
         this.appendElements();
@@ -1647,7 +1650,7 @@ Author: michael@revcontent.com
                     data.data = { content: that.options.content, view: that.options.view };
                     resolve(data);
                 } else {
-                    revApi.request(that.generateUrl(0, data.rowData.internalLimit, 0, data.rowData.sponsoredLimit), function(apiData) {
+                    revApi.request(that.generateUrl(that.internalOffset, data.rowData.internalLimit, that.sponsoredOffset, data.rowData.sponsoredLimit), function(apiData) {
 
                         if (!apiData.content.length) {
                             reject(new Error("Feed - getData no data"));
@@ -2036,6 +2039,14 @@ Author: michael@revcontent.com
             if (item.type) {
                 for (var j = 0; j < content.length; j++) {
                     if (item.type == content[j].type) {
+                        switch(item.type) {
+                            case 'internal':
+                                this.internalOffset++
+                                break;
+                            case 'sponsored':
+                                this.sponsoredOffset++;
+                                break;
+                        }
                         item.view = view;
                         item.viewIndex = i;
                         item.data = content[j];
