@@ -169,16 +169,20 @@ Author: michael@revcontent.com
 
             revUtils.removeEventListener(window, 'scroll', self.scrollListener);
 
-            for (var i = 0; i < items.length; i++) {
-                var index = self.innerWidget.grid.items.indexOf(items[i]);
-                var removed = self.innerWidget.grid.items.splice(index, 1);
-                removed[0].remove();
-            }
+            if (items) {
+                for (var i = 0; i < items.length; i++) {
+                    var index = self.innerWidget.grid.items.indexOf(items[i]);
+                    var removed = self.innerWidget.grid.items.splice(index, 1);
+                    removed[0].remove();
+                }
 
-            self.innerWidget.grid.layout();
+                self.innerWidget.grid.layout();
+            }
         });
 
         this.options.emitter.on('createFeed', function(type, data) {
+            self.innerWidget.removeNotify(); // remove notify if present
+
             if (!data.withoutHistory) {
                 self.pushHistory();
             }
@@ -190,12 +194,25 @@ Author: michael@revcontent.com
             var removeItems = [];
             var removeCount = 0;
             var updateItems = 0;
+
+            var sponsoredLimit = 0;
+            var internalLimit = 0;
+
             for (var i = 0; i < self.innerWidget.grid.items.length; i++) {
                 if (self.innerWidget.grid.items[i].type) {
                     if (removeCount >= total) {
                         removeItems.push(self.innerWidget.grid.items[i]);
                     } else {
                         updateItems++;
+
+                        switch(self.innerWidget.grid.items[i].type) {
+                            case 'internal':
+                                internalLimit++;
+                                break;
+                            case 'sponsored':
+                                sponsoredLimit++;
+                                break;
+                        };
                     }
                     removeCount++
                 }
@@ -207,8 +224,16 @@ Author: michael@revcontent.com
                 removed[0].remove();
             }
 
-            self.internalOffset = 0;
-            self.sponsoredOffset = 0;
+            // add up to initial if its a new gridsky
+            if (data.withoutHistory && updateItems < total) {
+                var rowData = self.innerWidget.createRows(self.innerWidget.grid, (total - updateItems));
+                sponsoredLimit += rowData.sponsoredLimit;
+                internalLimit += rowData.internalLimit;
+                updateItems += rowData.items.length;
+            }
+
+            self.innerWidget.internalOffset = 0;
+            self.innerWidget.sponsoredOffset = 0;
 
             switch (type) {
                 case 'author':
@@ -230,17 +255,33 @@ Author: michael@revcontent.com
             self.innerWidget.options = revUtils.extend(self.innerWidget.options, self.options);
 
             if (updateItems > 0) {
-                var internalURL = self.innerWidget.generateUrl(0, updateItems, 0, 0);
+                var internalURL = self.innerWidget.generateUrl(0, internalLimit, 0, sponsoredLimit);
 
                 revApi.request(internalURL, function(resp) {
-                    self.innerWidget.updateDisplayedItems(self.innerWidget.grid.items, resp, true);
+
+                    var internalCount = 0;
+
+                    if (resp.content) {
+                        for (var i = 0; i < resp.content.length; i++) {
+                            if (resp.content[i].type === 'internal') {
+                                internalCount++;
+                            }
+                        }
+                    }
+
+                    if (!internalCount) { // if not content stop infinite scroll and get out
+                        self.options.emitter.emitEvent('removedItems');
+                        self.innerWidget.notify('Oh no! This is somewhat embarrassing. We don\'t have content for that ' + revUtils.capitalize(type) + '. Please go back or try a different ' + revUtils.capitalize(type) + '.', {label: 'continue', link: '#'}, 'info', true);
+                        return;
+                    }
+
+                    self.innerWidget.updateDisplayedItems(self.innerWidget.grid.items, resp);
                 });
             }
 
             setTimeout(function() { // wait a tick ENG-263
                 self.innerWidget.containerElement.scrollIntoView(true);
             });
-
 
             self.navBar();
         });
@@ -263,9 +304,6 @@ Author: michael@revcontent.com
                     self.viewableItems.push(data.rowData.items[i]);
                 }
             }
-
-            self.internalOffset = data.rowData.internalLimit;
-            self.sponsoredOffset = data.rowData.sponsoredLimit;
 
             self.viewability().then(function() {
 
@@ -566,6 +604,11 @@ Author: michael@revcontent.com
         } else {
             this.clearHistory();
         }
+
+        if (this.removed) { // if feed ended reinit infinite
+            this.removed = false;
+            this.infinite();
+        }
     };
 
     Feed.prototype.clearHistory = function(){
@@ -693,6 +736,7 @@ Author: michael@revcontent.com
             }
 
             if (scrollTop >= self.scrollTop && bottom > 0 && (scrollTop + windowHeight) >= (top + scrollTop + height - self.options.buffer)) {
+
                 revUtils.removeEventListener(window, 'scroll', self.scrollListener);
 
                 var promise = new Promise(function(resolve, reject) {
@@ -737,11 +781,7 @@ Author: michael@revcontent.com
                     }
                 }).then(function(rowData) {
                     return new Promise(function(resolve, reject) {
-                        revApi.request(self.innerWidget.generateUrl(self.internalOffset, rowData.internalLimit, self.sponsoredOffset, rowData.sponsoredLimit), function(data) {
-                            if (!data.content.length) {
-                                reject();
-                                return;
-                            }
+                        revApi.request(self.innerWidget.generateUrl(self.innerWidget.internalOffset, rowData.internalLimit, self.innerWidget.sponsoredOffset, rowData.sponsoredLimit), function(data) {
                             resolve({rowData: rowData, data: data});
                         })
                     });
@@ -750,9 +790,6 @@ Author: michael@revcontent.com
                         try {
                             var itemTypes = self.innerWidget.updateDisplayedItems(data.rowData.items, data.data);
                             self.viewableItems = self.viewableItems.concat(itemTypes.viewableItems);
-
-                            self.internalOffset += data.rowData.internalLimit;
-                            self.sponsoredOffset += data.rowData.sponsoredLimit;
 
                             return Promise.resolve(data);
                         } catch (e) {
@@ -765,7 +802,9 @@ Author: michael@revcontent.com
                     }
 
                     return tryToUpdateDisplayedItems(10);
-                })
+                }).catch(function(e) {
+                    console.log('*************Feed', e);
+                });
                 // self.testRetry++;
             }
 
