@@ -429,12 +429,12 @@ Author: michael@revcontent.com
         return value > 999 ? (value/1000).toFixed(1) + 'k' : value
     }
 
-    RevSlider.prototype.createRows = function(grid) {
+    RevSlider.prototype.createRows = function(grid, total) {
         var limit = 0;
         var internalLimit = 0;
         var sponsoredLimit = 0;
 
-        var total = this.options.rows * grid.perRow;
+        var total = total ? total : this.options.rows * grid.perRow;
 
         // reactions
         var like_b64 = '<div class="rev-reaction rev-reaction-like">' +
@@ -2467,7 +2467,7 @@ Author: michael@revcontent.com
                 ) + templates.suffix;
     };
 
-    RevSlider.prototype.notify = function(message, action, type){
+    RevSlider.prototype.notify = function(message, action, type, keep) {
         if(!message){
             return;
         }
@@ -2490,16 +2490,21 @@ Author: michael@revcontent.com
             notice.style.top = 0;
         }, 504);
         clearTimeout(notice_timeout);
-        notice_timeout = setTimeout(function() {
-            var notice_panel = document.getElementById('rev-notify-panel');
-            if(typeof notice_panel == 'object' && notice_panel != null){
-                notice_panel.style.top = '-48px';
-                setTimeout(function(){
-                    notice_panel.remove();
-                }, 550);
-            }
-        }, 2000);
+
+        if (!keep) {
+            notice_timeout = setTimeout(this.removeNotify, 2000);
+        }
     };
+
+    RevSlider.prototype.removeNotify = function() {
+        var notice_panel = document.getElementById('rev-notify-panel');
+        if(typeof notice_panel == 'object' && notice_panel != null){
+            notice_panel.style.top = '-48px';
+            setTimeout(function(){
+                notice_panel.remove();
+            }, 550);
+        }
+    }
 
     RevSlider.prototype.destroy = function() {
         this.grid.remove();
