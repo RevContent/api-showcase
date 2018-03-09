@@ -168,7 +168,8 @@ Author: michael@revcontent.com
             user: null,
             content: [],
             history_stack: [],
-            emitter: false
+            emitter: false,
+            contextual_last_sort: []
         };
 
         // merge options
@@ -283,6 +284,8 @@ Author: michael@revcontent.com
 
         this.queue = [];
         this.queueRetries = 0;
+
+        this.contextual_last_sort = this.options.contextual_last_sort;
 
         this.getData();
 
@@ -1575,6 +1578,8 @@ Author: michael@revcontent.com
             if(authorName && authorName.length>0) {
                 url += '&author_name=' + encodeURI(authorName);
             }
+
+            url += '&contextual_last_sort=' + encodeURIComponent(this.contextual_last_sort.join(','));
         }
 
         if (this.options.keywords) {
