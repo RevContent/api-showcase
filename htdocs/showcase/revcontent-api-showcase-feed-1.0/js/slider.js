@@ -1997,10 +1997,17 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.handleFeedLink = function(type, itemData, e) {
+
+        if (this.preventFeedLinkClick) {
+            return;
+        }
+
         if (e) {
             e.stopPropagation();
             e.preventDefault();
         }
+
+        this.preventFeedLinkClick = true;
 
         switch (type) {
             case 'author':

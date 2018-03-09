@@ -286,6 +286,8 @@ Author: michael@revcontent.com
 
             setTimeout(function() { // wait a tick ENG-263
                 self.innerWidget.containerElement.scrollIntoView(true);
+                // allow feed link clicks again
+                self.innerWidget.preventFeedLinkClick = false;
             });
 
             self.navBar();
