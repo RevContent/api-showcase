@@ -684,20 +684,20 @@ Author: michael@revcontent.com
         window.dispatchEvent(new Event('resize'));
     };
 
-    Feed.prototype.leaveFlushedState = function(grid){
-        if(!grid.classList.contains('is-flushed')) { return; }
-        this.options.window_width_enabled = false;
-        //revUtils.removeClass(this.innerWidget.containerElement, 'rev-slider-window-width');
-        grid.classList.remove("is-flushed");
-        var back = grid.querySelector('div#go-back-bar');
-        if(back !== null) {
-            grid.querySelector('div#go-back-bar').style.width = '100%';
-        }
-        grid.style.backgroundColor = 'transparent';
-        grid.style.marginLeft = 0;
-        grid.style.marginRight = 0;
-        window.dispatchEvent(new Event('resize'));
-    };
+    // Feed.prototype.leaveFlushedState = function(grid){
+    //     if(!grid.classList.contains('is-flushed')) { return; }
+    //     this.options.window_width_enabled = false;
+    //     //revUtils.removeClass(this.innerWidget.containerElement, 'rev-slider-window-width');
+    //     grid.classList.remove("is-flushed");
+    //     var back = grid.querySelector('div#go-back-bar');
+    //     if(back !== null) {
+    //         grid.querySelector('div#go-back-bar').style.width = '100%';
+    //     }
+    //     grid.style.backgroundColor = 'transparent';
+    //     grid.style.marginLeft = 0;
+    //     grid.style.marginRight = 0;
+    //     window.dispatchEvent(new Event('resize'));
+    // };
 
     Feed.prototype.createInnerWidget = function(element, options) {
         options.element = element;
@@ -745,11 +745,11 @@ Author: michael@revcontent.com
             var top = self.innerWidget.grid.element.getBoundingClientRect().top;
             var bottom = self.innerWidget.grid.element.getBoundingClientRect().bottom;
 
-            if(top <= 0 && (self.options.window_width_devices && revDetect.show(self.options.window_width_devices))) {
-                self.enterFlushedState(self.element);
-            } else {
-                self.leaveFlushedState(self.element);
-            }
+            // if(top <= 0 && (self.options.window_width_devices && revDetect.show(self.options.window_width_devices))) {
+            //     self.enterFlushedState(self.element);
+            // } else {
+            //     self.leaveFlushedState(self.element);
+            // }
 
             if (self.removed) {
                 revUtils.removeEventListener(window, 'scroll', self.scrollListener);
