@@ -556,12 +556,16 @@ Author: michael@revcontent.com
                 clearTimeout(fix_ts);
                 fix_ts = setTimeout(function() {
                     var fixed_head = document.querySelector('.page-header.shrink.fixed');
+                    var fixed_head2 = document.querySelector('.page-header.fixed');
                     // ENG-285 Need to improve fixed element detection for better cross-site support.
                     // for now these classes are site specific...
                     var fixed_video = document.querySelector('.videocontent-wrapper.mStickyPlayer');
                     var top_offset = 0;
                     if (fixed_head) {
                         top_offset = parseInt(fixed_head.clientHeight);
+                    }
+                    if (fixed_head2) {
+                        top_offset = parseInt(fixed_head2.clientHeight);
                     }
                     if (fixed_video) {
                         top_offset = parseInt(fixed_video.clientHeight);
@@ -612,6 +616,7 @@ Author: michael@revcontent.com
                 this.options.emitter.emitEvent('createFeed', ['default', {
                     withoutHistory: true
                 }]);
+                //this.clearHistory();
             }
         } else {
             this.clearHistory();
