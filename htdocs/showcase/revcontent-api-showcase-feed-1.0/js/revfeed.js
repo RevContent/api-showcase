@@ -606,6 +606,14 @@ Author: michael@revcontent.com
     };
 
     Feed.prototype.loadFromHistory = function(backBar, backButton) {
+        var that = this;
+        if(this.element.classList.contains('is-loading')) {
+            return;
+        }
+        this.element.classList.add('is-loading');
+        this.element.style.pointerEvents = 'none';
+        this.element.style.transition = 'all 0.8s';
+        this.element.style.opacity = 0.7;
         if (this.options.history_stack.length > 0) {
             var item = this.options.history_stack.pop();
             if(this.options.history_stack.length == 0){
@@ -625,6 +633,14 @@ Author: michael@revcontent.com
         } else {
             this.clearHistory(backBar, backButton);
         }
+
+        var refreshTimeout = setTimeout(function(){
+            that.element.classList.remove('is-loading');
+            that.element.style.pointerEvents = 'auto';
+            that.element.style.transition = 'none';
+            that.element.style.opacity = 1;
+            clearTimeout(refreshTimeout);
+        }, 800);
     };
 
     Feed.prototype.clearHistory = function(backBar, backButton) {
