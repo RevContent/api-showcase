@@ -541,7 +541,7 @@ Author: michael@revcontent.com
 
         var backButton = back.querySelector('.feed-back-button');
 
-        revUtils.addEventListener(backButton, revDetect.mobile() ? 'touchstart' : 'click', this.loadFromHistory.bind(this, existingBack, backButton));
+        revUtils.addEventListener(backButton, revDetect.mobile() ? 'touchstart' : 'click', this.loadFromHistory.bind(this, back, backButton));
     };
 
     Feed.prototype.navbarScrollListener = function(that, back){
@@ -628,7 +628,7 @@ Author: michael@revcontent.com
                 this.options.emitter.emitEvent('createFeed', ['default', {
                     withoutHistory: true
                 }]);
-                //this.clearHistory();
+                this.clearHistory(backBar, backButton);
             }
         } else {
             this.clearHistory(backBar, backButton);
@@ -644,7 +644,13 @@ Author: michael@revcontent.com
     };
 
     Feed.prototype.clearHistory = function(backBar, backButton) {
+        this.detachBackBar(backBar, backButton);
+        this.options.history_stack = [];
+    };
+
+    Feed.prototype.detachBackBar = function(backBar, backButton) {
         if (backBar) {
+            backBar.style.pointerEvents = 'none';
             if (revDetect.mobile()) {
                 revUtils.addEventListener(backButton, 'touchend', function() {
                     setTimeout(function() {
@@ -655,7 +661,6 @@ Author: michael@revcontent.com
                 backBar.remove();
             }
         }
-        this.options.history_stack = [];
     };
 
     Feed.prototype.windowWidth = function() {
