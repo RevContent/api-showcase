@@ -537,7 +537,9 @@ Author: michael@revcontent.com
             that.navbarScrollListener(that, back);
         });
 
-        revUtils.addEventListener(back.querySelector('.feed-back-button'), revDetect.mobile() ? 'touchstart' : 'click', this.loadFromHistory.bind(this));
+        var backButton = back.querySelector('.feed-back-button');
+
+        revUtils.addEventListener(backButton, revDetect.mobile() ? 'touchstart' : 'click', this.loadFromHistory.bind(this, existingBack, backButton));
     };
 
     Feed.prototype.navbarScrollListener = function(that, back){
@@ -601,11 +603,11 @@ Author: michael@revcontent.com
         });
     };
 
-    Feed.prototype.loadFromHistory = function() {
+    Feed.prototype.loadFromHistory = function(backBar, backButton) {
         if (this.options.history_stack.length > 0) {
             var item = this.options.history_stack.pop();
             if(this.options.history_stack.length == 0){
-                this.clearHistory();
+                this.clearHistory(backBar, backButton);
             }
             if (item.topic_id && item.topic_id > 0) {
                 this.innerWidget.loadTopicFeed(item.topic_id,item.topic_title,true);
@@ -619,14 +621,21 @@ Author: michael@revcontent.com
                 //this.clearHistory();
             }
         } else {
-            this.clearHistory();
+            this.clearHistory(backBar, backButton);
         }
     };
 
-    Feed.prototype.clearHistory = function(){
-        var existing_back = this.innerWidget.containerElement.querySelector('.go-back-bar');
-        if(existing_back !== null){
-            existing_back.remove();
+    Feed.prototype.clearHistory = function(backBar, backButton) {
+        if (backBar) {
+            if (revDetect.mobile()) {
+                revUtils.addEventListener(backButton, 'touchend', function() {
+                    setTimeout(function() {
+                        backBar.remove(); // wait a tick
+                    });
+                });
+            } else {
+                backBar.remove();
+            }
         }
         this.options.history_stack = [];
     };
