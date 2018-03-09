@@ -539,7 +539,9 @@ Author: michael@revcontent.com
             that.navbarScrollListener(that, back);
         });
 
-        revUtils.addEventListener(back.querySelector('.feed-back-button'), revDetect.mobile() ? 'touchstart' : 'click', this.loadFromHistory.bind(this));
+        var backButton = back.querySelector('.feed-back-button');
+
+        revUtils.addEventListener(backButton, revDetect.mobile() ? 'touchstart' : 'click', this.loadFromHistory.bind(this, existingBack, backButton));
     };
 
     Feed.prototype.navbarScrollListener = function(that, back){
@@ -603,11 +605,11 @@ Author: michael@revcontent.com
         });
     };
 
-    Feed.prototype.loadFromHistory = function() {
+    Feed.prototype.loadFromHistory = function(backBar, backButton) {
         if (this.options.history_stack.length > 0) {
             var item = this.options.history_stack.pop();
             if(this.options.history_stack.length == 0){
-                this.clearHistory();
+                this.clearHistory(backBar, backButton);
             }
             if (item.topic_id && item.topic_id > 0) {
                 this.innerWidget.loadTopicFeed(item.topic_id,item.topic_title,true);
@@ -621,14 +623,21 @@ Author: michael@revcontent.com
                 //this.clearHistory();
             }
         } else {
-            this.clearHistory();
+            this.clearHistory(backBar, backButton);
         }
     };
 
-    Feed.prototype.clearHistory = function(){
-        var existing_back = this.innerWidget.containerElement.querySelector('.go-back-bar');
-        if(existing_back !== null){
-            existing_back.remove();
+    Feed.prototype.clearHistory = function(backBar, backButton) {
+        if (backBar) {
+            if (revDetect.mobile()) {
+                revUtils.addEventListener(backButton, 'touchend', function() {
+                    setTimeout(function() {
+                        backBar.remove(); // wait a tick
+                    });
+                });
+            } else {
+                backBar.remove();
+            }
         }
         this.options.history_stack = [];
     };
@@ -677,20 +686,20 @@ Author: michael@revcontent.com
         window.dispatchEvent(new Event('resize'));
     };
 
-    Feed.prototype.leaveFlushedState = function(grid){
-        if(!grid.classList.contains('is-flushed')) { return; }
-        this.options.window_width_enabled = false;
-        //revUtils.removeClass(this.innerWidget.containerElement, 'rev-slider-window-width');
-        grid.classList.remove("is-flushed");
-        var back = grid.querySelector('div#go-back-bar');
-        if(back !== null) {
-            grid.querySelector('div#go-back-bar').style.width = '100%';
-        }
-        grid.style.backgroundColor = 'transparent';
-        grid.style.marginLeft = 0;
-        grid.style.marginRight = 0;
-        window.dispatchEvent(new Event('resize'));
-    };
+    // Feed.prototype.leaveFlushedState = function(grid){
+    //     if(!grid.classList.contains('is-flushed')) { return; }
+    //     this.options.window_width_enabled = false;
+    //     //revUtils.removeClass(this.innerWidget.containerElement, 'rev-slider-window-width');
+    //     grid.classList.remove("is-flushed");
+    //     var back = grid.querySelector('div#go-back-bar');
+    //     if(back !== null) {
+    //         grid.querySelector('div#go-back-bar').style.width = '100%';
+    //     }
+    //     grid.style.backgroundColor = 'transparent';
+    //     grid.style.marginLeft = 0;
+    //     grid.style.marginRight = 0;
+    //     window.dispatchEvent(new Event('resize'));
+    // };
 
     Feed.prototype.createInnerWidget = function(element, options) {
         options.element = element;
@@ -738,11 +747,11 @@ Author: michael@revcontent.com
             var top = self.innerWidget.grid.element.getBoundingClientRect().top;
             var bottom = self.innerWidget.grid.element.getBoundingClientRect().bottom;
 
-            if(top <= 0 && (self.options.window_width_devices && revDetect.show(self.options.window_width_devices))) {
-                self.enterFlushedState(self.element);
-            } else {
-                self.leaveFlushedState(self.element);
-            }
+            // if(top <= 0 && (self.options.window_width_devices && revDetect.show(self.options.window_width_devices))) {
+            //     self.enterFlushedState(self.element);
+            // } else {
+            //     self.leaveFlushedState(self.element);
+            // }
 
             if (self.removed) {
                 revUtils.removeEventListener(window, 'scroll', self.scrollListener);
