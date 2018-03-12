@@ -849,7 +849,6 @@ Author: michael@revcontent.com
             }
 
             if (scrollTop >= self.scrollTop && bottom > 0 && (scrollTop + windowHeight) >= (top + scrollTop + height - self.options.buffer)) {
-
                 revUtils.removeEventListener(window, 'scroll', self.scrollListener);
 
                 var beforeItemCount = self.innerWidget.grid.items.length;
@@ -922,7 +921,7 @@ Author: michael@revcontent.com
             var self = input.self;
             var rowData = input.rowData;
 
-            revApi.request(self.innerWidget.generateUrl(self.internalOffset, rowData.internalLimit, self.sponsoredOffset, rowData.sponsoredLimit), function(data) {
+            revApi.request(self.innerWidget.generateUrl(self.innerWidget.internalOffset, rowData.internalLimit, self.innerWidget.sponsoredOffset, rowData.sponsoredLimit), function(data) {
                 // reject if we don't have any content or not enough content
                 if (!data.content.length || data.content.length !== (rowData.internalLimit + rowData.sponsoredLimit)) {
                     reject();
@@ -943,9 +942,6 @@ Author: michael@revcontent.com
             self.innerWidget.contextual_last_sort = data.contextual_last_sort;
             var itemTypes = self.innerWidget.updateDisplayedItems(rowData.items, data);
             self.viewableItems = self.viewableItems.concat(itemTypes.viewableItems);
-
-            self.internalOffset += rowData.internalLimit;
-            self.sponsoredOffset += rowData.sponsoredLimit;
 
             resolve({self: self, rowData: rowData, data: data});
         });
