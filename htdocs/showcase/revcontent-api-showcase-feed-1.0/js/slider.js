@@ -285,6 +285,9 @@ Author: michael@revcontent.com
         this.queue = [];
         this.queueRetries = 0;
 
+        this.internalOffset = 0;
+        this.sponsoredOffset = 0;
+
         this.contextual_last_sort = this.options.contextual_last_sort;
 
         this.getData();
@@ -430,12 +433,12 @@ Author: michael@revcontent.com
         return value > 999 ? (value/1000).toFixed(1) + 'k' : value
     }
 
-    RevSlider.prototype.createRows = function(grid) {
+    RevSlider.prototype.createRows = function(grid, total) {
         var limit = 0;
         var internalLimit = 0;
         var sponsoredLimit = 0;
 
-        var total = this.options.display_limit > 0 ? this.options.display_limit : this.options.rows * grid.perRow;
+        var total = this.options.display_limit > 0 ? this.options.display_limit : total ? total : this.options.rows * grid.perRow;
 
         // reactions
         var like_b64 = '<div class="rev-reaction rev-reaction-like">' +
@@ -1653,7 +1656,7 @@ Author: michael@revcontent.com
                     data.data = { content: that.options.content, view: that.options.view };
                     resolve(data);
                 } else {
-                    revApi.request(that.generateUrl(0, data.rowData.internalLimit, 0, data.rowData.sponsoredLimit), function(apiData) {
+                    revApi.request(that.generateUrl(that.internalOffset, data.rowData.internalLimit, that.sponsoredOffset, data.rowData.sponsoredLimit), function(apiData) {
 
                         if (!apiData.content.length) {
                             reject(new Error("Feed - getData no data"));
@@ -2042,6 +2045,14 @@ Author: michael@revcontent.com
             if (item.type) {
                 for (var j = 0; j < content.length; j++) {
                     if (item.type == content[j].type) {
+                        switch(item.type) {
+                            case 'internal':
+                                this.internalOffset++
+                                break;
+                            case 'sponsored':
+                                this.sponsoredOffset++;
+                                break;
+                        }
                         item.view = view;
                         item.viewIndex = i;
                         item.data = content[j];
@@ -2462,7 +2473,7 @@ Author: michael@revcontent.com
                 ) + templates.suffix;
     };
 
-    RevSlider.prototype.notify = function(message, action, type){
+    RevSlider.prototype.notify = function(message, action, type, keep) {
         if(!message){
             return;
         }
@@ -2485,16 +2496,21 @@ Author: michael@revcontent.com
             notice.style.top = 0;
         }, 504);
         clearTimeout(notice_timeout);
-        notice_timeout = setTimeout(function() {
-            var notice_panel = document.getElementById('rev-notify-panel');
-            if(typeof notice_panel == 'object' && notice_panel != null){
-                notice_panel.style.top = '-48px';
-                setTimeout(function(){
-                    notice_panel.remove();
-                }, 550);
-            }
-        }, 2000);
+
+        if (!keep) {
+            notice_timeout = setTimeout(this.removeNotify, 2000);
+        }
     };
+
+    RevSlider.prototype.removeNotify = function() {
+        var notice_panel = document.getElementById('rev-notify-panel');
+        if(typeof notice_panel == 'object' && notice_panel != null){
+            notice_panel.style.top = '-48px';
+            setTimeout(function(){
+                notice_panel.remove();
+            }, 550);
+        }
+    }
 
     RevSlider.prototype.destroy = function() {
         this.grid.remove();

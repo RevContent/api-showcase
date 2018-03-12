@@ -171,16 +171,20 @@ Author: michael@revcontent.com
 
             revUtils.removeEventListener(window, 'scroll', self.scrollListener);
 
-            for (var i = 0; i < items.length; i++) {
-                var index = self.innerWidget.grid.items.indexOf(items[i]);
-                var removed = self.innerWidget.grid.items.splice(index, 1);
-                removed[0].remove();
+            if (items) {
+                for (var i = 0; i < items.length; i++) {
+                    var index = self.innerWidget.grid.items.indexOf(items[i]);
+                    var removed = self.innerWidget.grid.items.splice(index, 1);
+                    removed[0].remove();
+                }
             }
 
             self.innerWidget.grid.layout();
         });
 
         this.options.emitter.on('createFeed', function(type, data) {
+            self.innerWidget.removeNotify(); // remove notify if present
+
             if (!data.withoutHistory) {
                 self.pushHistory();
             }
@@ -192,12 +196,25 @@ Author: michael@revcontent.com
             var removeItems = [];
             var removeCount = 0;
             var updateItems = 0;
+
+            var sponsoredLimit = 0;
+            var internalLimit = 0;
+
             for (var i = 0; i < self.innerWidget.grid.items.length; i++) {
                 if (self.innerWidget.grid.items[i].type) {
                     if (removeCount >= total) {
                         removeItems.push(self.innerWidget.grid.items[i]);
                     } else {
                         updateItems++;
+
+                        switch(self.innerWidget.grid.items[i].type) {
+                            case 'internal':
+                                internalLimit++;
+                                break;
+                            case 'sponsored':
+                                sponsoredLimit++;
+                                break;
+                        };
                     }
                     removeCount++
                 }
@@ -209,8 +226,16 @@ Author: michael@revcontent.com
                 removed[0].remove();
             }
 
-            self.internalOffset = 0;
-            self.sponsoredOffset = 0;
+            // add up to initial if its a new gridsky
+            if (updateItems < total) {
+                var rowData = self.innerWidget.createRows(self.innerWidget.grid, (total - updateItems));
+                sponsoredLimit += rowData.sponsoredLimit;
+                internalLimit += rowData.internalLimit;
+                updateItems += rowData.items.length;
+            }
+
+            self.innerWidget.internalOffset = 0;
+            self.innerWidget.sponsoredOffset = 0;
 
             switch (type) {
                 case 'author':
@@ -232,17 +257,38 @@ Author: michael@revcontent.com
             self.innerWidget.options = revUtils.extend(self.innerWidget.options, self.options);
 
             if (updateItems > 0) {
-                var internalURL = self.innerWidget.generateUrl(0, updateItems, 0, 0);
+                var internalURL = self.innerWidget.generateUrl(0, internalLimit, 0, sponsoredLimit);
 
                 revApi.request(internalURL, function(resp) {
-                    self.innerWidget.updateDisplayedItems(self.innerWidget.grid.items, resp, true);
+
+                    var internalCount = 0;
+
+                    if (resp.content) {
+                        for (var i = 0; i < resp.content.length; i++) {
+                            if (resp.content[i].type === 'internal') {
+                                internalCount++;
+                            }
+                        }
+                    }
+
+                    if (!internalCount) { // if not content stop infinite scroll and get out
+                        self.options.emitter.emitEvent('removedItems');
+                        self.innerWidget.notify('Oh no! This is somewhat embarrassing. We don\'t have content for that ' + revUtils.capitalize(type) + '. Please go back or try a different ' + revUtils.capitalize(type) + '.', {label: 'continue', link: '#'}, 'info', true);
+                        return;
+                    }
+
+                    if (self.removed) { // if feed ended reinit infinite
+                        self.removed = false;
+                        self.infinite();
+                    }
+
+                    self.innerWidget.updateDisplayedItems(self.innerWidget.grid.items, resp);
                 });
             }
 
             setTimeout(function() { // wait a tick ENG-263
                 self.innerWidget.containerElement.scrollIntoView(true);
             });
-
 
             self.navBar();
         });
@@ -269,9 +315,6 @@ Author: michael@revcontent.com
                     self.viewableItems.push(data.rowData.items[i]);
                 }
             }
-
-            self.internalOffset = data.rowData.internalLimit;
-            self.sponsoredOffset = data.rowData.sponsoredLimit;
 
             self.viewability().then(function() {
 
@@ -519,9 +562,20 @@ Author: michael@revcontent.com
                 clearTimeout(fix_ts);
                 fix_ts = setTimeout(function() {
                     var fixed_head = document.querySelector('.page-header.shrink.fixed');
+                    var fixed_head2 = document.querySelector('.page-header.fixed');
+                    // ENG-285 Need to improve fixed element detection for better cross-site support.
+                    // for now these classes are site specific...
+                    var fixed_video = document.querySelector('.videocontent-wrapper.mStickyPlayer');
                     var top_offset = 0;
-                    if(fixed_head !== null){
+                    if (fixed_head) {
                         top_offset = parseInt(fixed_head.clientHeight);
+                    }
+                    if (fixed_head2) {
+                        top_offset = parseInt(fixed_head2.clientHeight);
+                    }
+                    if (fixed_video) {
+                        top_offset = parseInt(fixed_video.clientHeight);
+                        fixed_video.style.zIndex = '20000';
                     }
                     back.style.position = 'fixed';
                     back.style.width = grid_rect.width + 'px';
@@ -568,6 +622,7 @@ Author: michael@revcontent.com
                 this.options.emitter.emitEvent('createFeed', ['default', {
                     withoutHistory: true
                 }]);
+                //this.clearHistory();
             }
         } else {
             this.clearHistory();
@@ -794,6 +849,7 @@ Author: michael@revcontent.com
             }
 
             if (scrollTop >= self.scrollTop && bottom > 0 && (scrollTop + windowHeight) >= (top + scrollTop + height - self.options.buffer)) {
+
                 revUtils.removeEventListener(window, 'scroll', self.scrollListener);
 
                 var beforeItemCount = self.innerWidget.grid.items.length;
@@ -887,7 +943,6 @@ Author: michael@revcontent.com
             self.innerWidget.contextual_last_sort = data.contextual_last_sort;
             var itemTypes = self.innerWidget.updateDisplayedItems(rowData.items, data);
             self.viewableItems = self.viewableItems.concat(itemTypes.viewableItems);
-
 
             self.internalOffset += rowData.internalLimit;
             self.sponsoredOffset += rowData.sponsoredLimit;
