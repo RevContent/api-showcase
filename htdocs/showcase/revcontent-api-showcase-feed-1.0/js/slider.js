@@ -2498,7 +2498,7 @@ Author: michael@revcontent.com
                 e.preventDefault();
                 e.stopPropagation();
                 notice.remove();
-            });
+            }, {passive: true});
         }
 
         document.body.appendChild(notice);
