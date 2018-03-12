@@ -178,14 +178,15 @@ Author: michael@revcontent.com
             }
 
             self.innerWidget.grid.layout();
+
+            if (self.options.history_stack.length > 0) {
+                self.options.history_stack.pop();
+            }
+            self.navBar();
         });
 
         this.options.emitter.on('createFeed', function(type, data) {
             self.innerWidget.removeNotify(); // remove notify if present
-
-            if (!data.withoutHistory) {
-                self.pushHistory();
-            }
 
             // initial
             var total = self.options.rows * self.innerWidget.grid.perRow;
@@ -237,18 +238,28 @@ Author: michael@revcontent.com
 
             switch (type) {
                 case 'author':
+                    self.options.topic_type = type;
                     self.options.author_name = data.authorName;
                     self.options.topic_id = -1;
+                    self.options.topic_title = '';
                     break;
                 case 'topic':
+                    self.options.topic_type = type;
                     self.options.author_name = '';
                     self.options.topic_id = data.topicId;
                     self.options.topic_title = data.topicTitle;
                     break;
                 default:
+                    self.options.topic_type = 'default';
                     self.options.author_name ='';
                     self.options.topic_id = -1;
                     break;
+            }
+
+
+            // History Stack
+            if (!data.withoutHistory) {
+                self.pushHistory();
             }
 
             // TODO - yikes
@@ -271,7 +282,7 @@ Author: michael@revcontent.com
 
                     if (!internalCount) { // if not content stop infinite scroll and get out
                         self.options.emitter.emitEvent('removedItems');
-                        self.innerWidget.notify('Oh no! This is somewhat embarrassing. We don\'t have content for that ' + revUtils.capitalize(type) + '. Please go back or try a different ' + revUtils.capitalize(type) + '.', {label: 'continue', link: '#'}, 'info', true);
+                        self.innerWidget.notify('Oh no! This is somewhat embarrassing. We don\'t have content for that ' + revUtils.capitalize(type) + '. Please go back or try a different ' + revUtils.capitalize(type) + '.', {label: 'continue', link: '#'}, 'info', false);
                         return;
                     }
 
@@ -281,6 +292,9 @@ Author: michael@revcontent.com
                     }
 
                     self.innerWidget.updateDisplayedItems(self.innerWidget.grid.items, resp);
+
+                    self.navBar();
+
                 });
             }
 
@@ -288,9 +302,10 @@ Author: michael@revcontent.com
                 self.innerWidget.containerElement.scrollIntoView(true);
                 // allow feed link clicks again
                 self.innerWidget.preventFeedLinkClick = false;
+
+                self.navBar();
             });
 
-            self.navBar();
         });
 
         this.innerWidget = this.createInnerWidget(this.containerElement, this.options);
@@ -462,8 +477,14 @@ Author: michael@revcontent.com
 
     Feed.prototype.navBar = function() {
         if(this.options.history_stack.length == 0){
+            var existingBack = this.innerWidget.containerElement.querySelector('.go-back-bar');
+            if (existingBack){
+                this.detachBackBar(existingBack, existingBack.querySelector('button'));
+            }
             return;
         }
+
+        var activePage = this.options.history_stack[this.options.history_stack.length-1];
         var existingHeader = this.innerWidget.containerElement.querySelector('.rev-nav-header');
         var header = existingHeader ? existingHeader : document.createElement('div');
         header.className = 'rev-nav-header';
@@ -491,7 +512,7 @@ Author: michael@revcontent.com
 
         this.innerWidget.containerElement.style.paddingTop = '48px';
 
-        back.setAttribute('style','overflow:hidden;transition: none;-moz-transition: none;-webkit-transition: none;-o-transition: none;box-shadow: 0 1px 4px 0 rgba(12, 12, 13, 0.5);position:static;z-index:5000;left:' + left_pos + ';top:' + top_pos + ';margin-bottom: 9px;display: block;width: ' + grid_width + ';height: 40px;line-height: 40px;background-color:rgba(0,0,0,0.83);color:#dddddd;font-size:12px;');
+        back.setAttribute('style','overflow:hidden;transition: none;-moz-transition: none;-webkit-transition: none;-o-transition: none;box-shadow: 0 1px 4px 0 rgba(12, 12, 13, 0.5);position:static;z-index:5000;left:' + left_pos + ';top:' + top_pos + ';margin-bottom: 0;display: block;width: ' + grid_width + ';height: 40px;line-height: 40px;background-color:rgba(0,0,0,0.83);color:#dddddd;font-size:12px;');
         back.setAttribute('id','go-back-bar');
         back.classList.add('go-back-bar');
 
@@ -502,14 +523,17 @@ Author: michael@revcontent.com
 
         var title = "";
         var author_initials = '';
-        if(this.options.topic_id>0){
+
+        if(activePage.type == "topic"){
             title = this.options.topic_title;
         }
-        if(this.options.author_name && this.options.author_name.length>0){
-            title = "Articles by "+this.options.author_name;
-            var ai = this.options.author_name.split(' ');
-            author_initials = ai[0].charAt(0) + ' ' + (ai.length == 3 ? ai[2].charAt(0) : ai[1].charAt(0));
-            header_logo = '<span style="display:block;margin-left:9px;width:24px;height:24px;border-radius:24px;text-align:center;font-size:11px;background-color:#ffffff;color:#222222;letter-spacing:-1px;line-height:24px;margin-top:8px;">' + author_initials + '</span>';
+        else if (activePage.type == "author"){
+            if(activePage.author_name){
+                title = "Articles by " + activePage.author_name;
+                var ai = activePage.author_name.split(' ');
+                author_initials = ai[0].charAt(0) + ' ' + (ai.length == 3 ? ai[2].charAt(0) : ai[1].charAt(0));
+                header_logo = '<span style="display:block;margin-left:9px;width:24px;height:24px;border-radius:24px;text-align:center;font-size:11px;background-color:#ffffff;color:#222222;letter-spacing:-1px;line-height:24px;margin-top:8px;">' + author_initials + '</span>';
+            }
         }
 
         back.innerHTML = '<div style="display:flex;flex-direction:row;">' +
@@ -608,6 +632,10 @@ Author: michael@revcontent.com
                     notice.style.top = 0;
                     notice.style.position = 'static';
                     notice.style.width = '100%';
+                    notice.style.marginBottom = '9px';
+                    back.style.marginBottom = 0;
+                } else {
+                    back.style.marginBottom = '9px';
                 }
 
                 //if (that.options.window_width_devices && revDetect.show(that.options.window_width_devices)) {
@@ -618,39 +646,65 @@ Author: michael@revcontent.com
     };
 
     Feed.prototype.pushHistory = function(){
+
+        if (this.options.topic_type == "author") {
+            if(this.options.history_stack.length > 0){
+                if (this.options.author_name.toLowerCase() == this.options.history_stack[this.options.history_stack.length-1].author_name.toLowerCase()) {
+                    return;
+                }
+            }
+        }
+
+        if (this.options.topic_type == "topic"){
+            if(this.options.history_stack.length > 0){
+                if (this.options.topic_id == this.options.history_stack[this.options.history_stack.length-1].topic_id) {
+                    return;
+                }
+            }
+        }
+
         this.options.history_stack.push({
+            type: this.options.topic_type,
             author_name:this.options.author_name,
             topic_id:this.options.topic_id,
             topic_title:this.options.topic_title
         });
+
     };
 
     Feed.prototype.loadFromHistory = function(backBar, backButton) {
+        //alert("here!");
         var that = this;
-        if(this.element.classList.contains('is-loading')) {
+        if(this.element.classList.contains('is-loading') || this.options.history_stack.length == 0) {
             return;
         }
         this.element.classList.add('is-loading');
         this.element.style.pointerEvents = 'none';
         this.element.style.transition = 'all 0.8s';
         this.element.style.opacity = 0.7;
-        if (this.options.history_stack.length > 0) {
+        if (this.options.history_stack.length > 1) {
             var item = this.options.history_stack.pop();
             if(this.options.history_stack.length == 0){
                 this.clearHistory(backBar, backButton);
+            } else {
+                item = this.options.history_stack.pop();
             }
-            if (item.topic_id && item.topic_id > 0) {
-                this.innerWidget.loadTopicFeed(item.topic_id,item.topic_title,true);
+            if (item.type == "topic" && !isNaN(item.topic_id)) {
+                this.innerWidget.loadTopicFeed(item.topic_id,item.topic_title, false);
             }
-            else if (item.author_name && item.author_name.length > 0) {
-                this.innerWidget.loadAuthorFeed(item.author_name, true);
+            else if (item.type == "author" && item.author_name.length > 0) {
+                this.innerWidget.loadAuthorFeed(item.author_name, false);
             } else {
                 this.options.emitter.emitEvent('createFeed', ['default', {
                     withoutHistory: true
                 }]);
                 this.clearHistory(backBar, backButton);
             }
+
         } else {
+            this.options.emitter.emitEvent('createFeed', ['default', {
+                withoutHistory: true
+            }]);
             this.clearHistory(backBar, backButton);
         }
 

@@ -2498,17 +2498,25 @@ Author: michael@revcontent.com
                 e.preventDefault();
                 e.stopPropagation();
                 notice.remove();
-            }, {passive: true});
+            }, {passive: false});
         }
 
-        this.containerElement.querySelector('.rev-head').after(notice);
+        var revHead = this.containerElement.querySelector('.rev-head');
+        var existingBack = this.containerElement.querySelector('.go-back-bar');
+
+        if(existingBack) {
+            existingBack.after(notice);
+        } else {
+            revHead.after(notice);
+        }
+
         setTimeout(function(){
             notice.style.top = 0;
         }, 504);
         clearTimeout(notice_timeout);
 
         if (!keep) {
-            notice_timeout = setTimeout(this.removeNotify, 2000);
+            notice_timeout = setTimeout(this.removeNotify, 6000);
         }
     };
 
