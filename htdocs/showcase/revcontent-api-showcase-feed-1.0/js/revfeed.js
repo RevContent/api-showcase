@@ -565,6 +565,9 @@ Author: michael@revcontent.com
                     // for now these classes are site specific...
                     var fixed_video = document.querySelector('.videocontent-wrapper.mStickyPlayer');
                     var top_offset = 0;
+
+                    var notice = that.element.querySelector('div#rev-notify-panel');
+
                     if (fixed_head) {
                         top_offset = parseInt(fixed_head.clientHeight);
                     }
@@ -579,6 +582,14 @@ Author: michael@revcontent.com
                     back.style.width = grid_rect.width + 'px';
                     back.style.top = 0 + top_offset + 'px';
                     back.classList.remove('no-shadow');
+
+                    if (notice) {
+                        notice.style.position = 'fixed';
+                        notice.style.left = 'auto';
+                        notice.style.top = 0 + (top_offset + back.clientHeight) + 'px';
+                        notice.style.width = grid_rect.width + 'px';
+                    }
+
                     //if (that.options.window_width_devices && revDetect.show(that.options.window_width_devices)) {
                     //    that.enterFlushedState(that.element);
                     //}
@@ -590,6 +601,15 @@ Author: michael@revcontent.com
                 back.style.position = 'static';
                 back.style.width = '100%';
                 back.classList.add('no-shadow');
+
+                var notice = that.element.querySelector('div#rev-notify-panel');
+
+                if (notice) {
+                    notice.style.top = 0;
+                    notice.style.position = 'static';
+                    notice.style.width = '100%';
+                }
+
                 //if (that.options.window_width_devices && revDetect.show(that.options.window_width_devices)) {
                 //    that.leaveFlushedState(that.element);
                 //}
