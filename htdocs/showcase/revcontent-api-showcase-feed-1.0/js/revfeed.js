@@ -97,7 +97,11 @@ Author: michael@revcontent.com
             user: null,
             content: [],
             view: false,
-            test: false
+            test: false,
+            comment_truncate_length: 500,
+            reply_truncate_length: 100,
+            comment_truncate_length_mobile: 500,
+            reply_truncate_length_mobile: 100
         };
 
         // merge options
@@ -425,7 +429,14 @@ Author: michael@revcontent.com
             user: this.options.user,
             content: this.options.content,
             columns: this.options.columns,
-            test: this.options.test
+            test: this.options.test,
+            env: this.options.env,
+            jwt: this.options.jwt,
+            comment_truncate_length: this.options.comment_truncate_length,
+            reply_truncate_length: this.options.reply_truncate_length,
+            comment_truncate_length_mobile: this.options.comment_truncate_length_mobile,
+            reply_truncate_length_mobile: this.options.reply_truncate_length_mobile,
+            comments_enabled: this.options.comments_enabled
         });
     };
 

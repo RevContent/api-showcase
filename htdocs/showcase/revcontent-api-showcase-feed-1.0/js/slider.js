@@ -168,14 +168,18 @@ Author: michael@revcontent.com
             disclosure_interest_src: '//trends.engage.im/engage-interests.php',
             disclosure_interest_height: 520,
             masonry_layout: false,
-            initial_comments_limit: 1,
+            initial_comments_limit_mobile: 1,
+            initial_comments_limit: 3,
             user: null,
-            content: []
+            content: [],
+            comments_enabled: false,
+            //actions_api_url: 'https://api.engage.im/' + opts.env + '/actions/'
+            actions_api_url: 'http://internal-s2-engage-api-2132250872.us-east-1.elb.amazonaws.com/actions/',
         };
 
         // merge options
         this.options = revUtils.extend(defaults, revUtils.deprecateOptions(opts));
-        
+
         // store options
         revUtils.storeUserOptions(this.options);
 
@@ -209,6 +213,8 @@ Author: michael@revcontent.com
 
         this.data = [];
         this.displayedItems = [];
+
+        this.feedItems = {};
 
         this.containerElement = document.createElement('div');
         this.containerElement.id = 'rev-slider2';
@@ -443,8 +449,13 @@ Author: michael@revcontent.com
                     '</div>' +
                 '</div>' +
             '</div>';
-        var comment_b64 = '<a class="rev-reaction rev-reaction-comment"><div class="rev-reaction-icon rev-reaction-icon-comment"></div></a>';
-        //var comment_b64 = '<a href="#' + (this.options.comment_div ? this.options.comment_div : this.options.feed_id) + '" class="rev-reaction rev-reaction-comment"><div class="rev-reaction-icon rev-reaction-icon-comment"></div></a>';
+
+        if (this.options.comments_enabled) {
+            var comment_b64 = '<a class="rev-reaction rev-reaction-comment"><div class="rev-reaction-icon rev-reaction-icon-comment"></div></a>';        
+        } else {
+            var comment_b64 = '<a href="#' + (this.options.comment_div ? this.options.comment_div : this.options.feed_id) + '" class="rev-reaction rev-reaction-comment"><div class="rev-reaction-icon rev-reaction-icon-comment"></div></a>';
+        }
+      
         var share_b64 = '<a href="https://www.facebook.com/sharer/sharer.php?u='+ this.options.domain +'" target="_blank" class="rev-reaction rev-reaction-share"><div class="rev-reaction-icon rev-reaction-icon-share"></div></a>';
 
         var items = [];
@@ -472,7 +483,8 @@ Author: michael@revcontent.com
             }
 
             var element = this.createNewCell();
-            // items.push(item);
+            
+            //items.push(item);
             grid.element.appendChild(element);
 
             var added = grid.addItems([element]);
@@ -493,15 +505,10 @@ Author: michael@revcontent.com
                 revUtils.addClass(element.querySelector('.rev-reactions'), 'rev-reactions-single');
             }
 
-            // reactionsContainer.innerHTML = '<div class="rev-reaction-bar">' + reactionHtml + '</div>';
-            // revUtils.addClass(reactionsContainer, 'rev-reactions');
-            // element.querySelector('.rev-content-inner').appendChild(reactionsContainer);
-
-            // this.handleShareAction(added[0]);
-            // this.handleReactionMenu(added[0]);
-
             layoutItems = layoutItems.concat(added);
             items = items.concat(added);
+            
+
             limit++;
         }
 
@@ -1399,6 +1406,7 @@ Author: michael@revcontent.com
             '</div>' +
 
             '<div class="rev-reactions-total">' +
+                '<div class="rev-comment-count"></div>' +
                 '<div class="rev-reactions-total-inner">' +
             '</div>' +
 
@@ -1432,7 +1440,7 @@ Author: michael@revcontent.com
 
         return cell;
     };
-
+    RevSlider.prototype.afterAuth = false;
     RevSlider.prototype.authButtonHandler = function(cell, e) {
         var that = this;
         if (that.authenticated) {
@@ -1471,6 +1479,12 @@ Author: michael@revcontent.com
                             that.showPersonalizedTransition();
                             that.personalize();
                         }
+
+                        //if commenting
+                        if (typeof that.afterAuth === "function") {
+                            that.afterAuth();
+                        }
+
                     } else {
                         if (!cell) { // logged out from inline auth button
                             that.grid.remove(that.feedAuthButton);
@@ -1705,7 +1719,7 @@ Author: michael@revcontent.com
 
 
     RevSlider.prototype.updateDisplayedItem = function(item) {
-        // var item = itemTypes[dataType][j];
+
         var itemData = item.data;
 
         if (!itemData) {
@@ -1808,47 +1822,118 @@ Author: michael@revcontent.com
             }
         }
 
-        var commentButton = item.element.querySelector('.rev-reaction-comment');
-        if (commentButton) {
-            commentButton.itemData = itemData;
-            revUtils.addEventListener(commentButton, 'click', function(ev) {
-                that.handleComments(this.itemData, false);
-            });
-        }
-
         //remove any existing comment ui so it doesnt dupe on personalization
         revUtils.remove(item.element.querySelector('.rev-comments'));
         revUtils.remove(item.element.querySelector('.rev-comment-box'));
+        revUtils.remove(item.element.querySelector('.comments-list'));
 
-        //remove all this once we have real comments
-        //var mockComment = true;
         var that = this;
 
         var commentsULElement = document.createElement('ul');
         revUtils.addClass(commentsULElement, 'comments-list');
         item.element.querySelector('.rev-content-inner').appendChild(commentsULElement);
 
-        this.setFeaturedComment(item, commentsULElement);
         
-        var commentBoxElement = document.createElement('div');
-            revUtils.addClass(commentBoxElement, 'rev-comment-box');
+        if (item.type !== 'sponsored') {
+            this.setFeaturedComment(item, commentsULElement);
+            //add item to array for later access
+            this.feedItems[itemData.uid] = item; 
+        }
+            
+        //dont show comment input on sponsored
+        if (item.type !== 'sponsored' && this.options.comments_enabled) {
 
-        var commentBoxHtml = '<div class="rev-comment-box" style="padding: 8px;background: #fafbfd;border-top: 1px solid #e6ecf5;">' +
-                    '<img src="https://relayfm.s3.amazonaws.com/uploads/user/avatar/4/user_avatar_mykehurley_artwork.png" alt="author" style="width: 24px;height: 24px;float:left;border-radius: 24px;">' +
-                    '<div class="comment-input" style="padding: 0px 0 0 34px;">' +
-                    '<input type="text" placeholder="Leave a Comment" style="height: 30px;width: 100%;border-radius: 4px;border: 1px solid #e6ecf5;padding: 0 10px;cursor: text;">' +
-                    '</div><div class="clearfix" style="clear: both;"></div></div>';
+            var commentBoxElement = this.createCommentInput("comment");
+            var submitCommentBtn = commentBoxElement.querySelector('.comment-submit-button');
+            var commentTextAreaElement = commentBoxElement.querySelector('.comment-textarea');
 
-        commentBoxElement.innerHTML = commentBoxHtml;
+            commentBoxElement.itemData = itemData;
 
-        commentBoxElement.itemData = itemData;
+            var commentButton = item.element.querySelector('.rev-reaction-comment');
+            if (commentButton) {
+                commentButton.itemData = itemData;
+                revUtils.addEventListener(commentButton, 'click', function(ev) {
+                    that.handleComments(this.itemData, false);
+                    commentTextAreaElement.focus();
+                });
+            }
 
-        revUtils.addEventListener(commentBoxElement, 'click', function(ev) {
-            that.handleComments(this.itemData, true);
-        });
+            var commentCountElement = item.element.querySelector('.rev-comment-count');
+            
+            if (commentCountElement) {
+                commentCountElement.itemData = itemData;
+                revUtils.addEventListener(commentCountElement, 'click', function(ev) {
+                    if (revDetect.mobile()) {
+                        that.handleComments(this.itemData, false);
+                    } else {
+                        commentTextAreaElement.focus();
+                    }
+                });
+            }
 
-        item.element.querySelector('.rev-content-inner').appendChild(commentBoxElement);
-        
+            if (revDetect.mobile()) {
+                revUtils.addEventListener(commentBoxElement, 'click', function(ev) {
+                    that.handleComments(this.itemData, true);
+                });    
+            }
+            
+            item.element.querySelector('.rev-content-inner').appendChild(commentBoxElement);
+
+            revUtils.addEventListener(submitCommentBtn, 'click', function(ev){
+                revUtils.addClass(this, 'novak-animate');
+
+                var callbackFn = function() {
+                    //create comment inline on desktop
+                    var submitted_comment_data = that.submitComment(commentTextAreaElement.value, itemData.target_url, null, function(data,error){
+                        if (typeof data === "number" && data === 201) {
+                                //for some reason we are getting dual responses, one with the payload and one with the http code
+                            return;
+                        }
+
+                        if (error) {
+                            //currently only want to show error for bad words, but gathering the error msg from response for later use
+                            var errorMsg = JSON.parse(data.responseText);
+                            var httpStatus = data.status;
+                            if (httpStatus === 406) {
+                                //bad word
+                                that.displayError(commentBoxElement,"Oops! We've detected a <b>bad word</b> in your comment, Please update your response before submitting.");    
+                            }
+                            return;
+                        }
+                        var commentUL = item.element.querySelector(".comments-list");
+                        var newCommentElement = that.setCommentHTML(data,false,false,itemData.uid);
+                        commentUL.appendChild(newCommentElement);
+                        commentTextAreaElement.value = "";
+                        var e = document.createEvent('HTMLEvents');
+                        e.initEvent("keyup", false, true);
+                        commentTextAreaElement.dispatchEvent(e);
+
+                        //update count
+                        var countEl = that.getClosestParent(newCommentElement, '.rev-content-inner').querySelector('.rev-reactions-total > .rev-comment-count');
+                        var currentCount = countEl.getAttribute('data-count') * 1;
+                        
+                        countEl.setAttribute('data-count', currentCount + 1);
+                        countEl.innerText = (currentCount + 1) + ' comment' + ((currentCount + 1) !== 1 ? 's' : '');
+
+                        //update feed item
+                        //that.updateDisplayedItem(that.feedItems[itemData.uid]);
+                    });
+                };
+
+                if (that.authenticated) {
+                    callbackFn();
+                } else {
+                    revUtils.removeClass(document.querySelector('.rev-flipped'), 'rev-flipped');
+                    revUtils.addClass(item.element, 'rev-flipped');
+                    item.element.scrollIntoView({ behavior: 'smooth', block: "start" });
+
+                    //store users comment for after auth
+                    that.afterAuth = callbackFn;
+                }
+
+            });
+
+        }
 
         if (item.reactions) {
 
@@ -2526,16 +2611,26 @@ Author: michael@revcontent.com
         }
     };
 
-    RevSlider.prototype.setCommentHTML = function(comment_data, includeReplies) {
+    RevSlider.prototype.setCommentHTML = function(comment_data, includeReplies, truncate, uid) {
+    
         var that = this;
         var includeReplies = typeof includeReplies  === 'undefined' ? false : includeReplies;
-        
-        console.log("setCommentHTML running");
+
         var hasReplies = (comment_data.hasOwnProperty('replies') && comment_data.replies !== null);
-        var isReply = (comment_data.hasOwnProperty('parent_id') && comment_data.parent_id !== null);
-        var myDate = new Date(comment_data.date).toLocaleString();
+        var isReply = (comment_data.hasOwnProperty('comment_id') && comment_data.comment_id !== null);
+        var isLegacyComment = comment_data.user.id === "legacy";
+
+        //remove this when we have real user info
+        //var user_id = "108007533351537";
+        var commentOwner = false;
+
+        if (that.options.user !== null && that.options.user.hasOwnProperty("user_id")) {
+            commentOwner = comment_data.user.id === that.options.user.user_id;
+        }
 
         var li = document.createElement("li");
+        li.id = "comment-" + comment_data.id;// + '_' + Date.now();
+
         if (hasReplies && includeReplies) revUtils.addClass(li, 'has-children');
 
         var post_author_div = document.createElement("div");
@@ -2543,125 +2638,325 @@ Author: michael@revcontent.com
         revUtils.addClass(post_author_div, 'author');
         revUtils.addClass(post_author_div, 'vcard');
         revUtils.addClass(post_author_div, 'inline-items');
-        post_author_div.innerHTML = '<img src="' + comment_data.author_avatar + '" alt="author">' +
+        var time = that.timeAgo(comment_data.created, true);
+        post_author_div.innerHTML = '<img src="' + comment_data.user.data.picture.data.url + '" alt="author">' +
                                     '<div class="author-date">' +
-                                        '<a class="h6 post__author-name fn" href="#">' + comment_data.author + '</a>' +
+                                        '<a class="h6 post__author-name fn" href="#">' + comment_data.user.data.name + '</a>' +
                                         '<div class="post__date">' +
-                                            '<time class="published" datetime="' + comment_data.date + '">' + that.timeAgo(myDate, true) + ' ago </time>' +
+                                            '<time class="published" datetime="' + comment_data.created + '"><span>' + time + (time !== 'yesterday' ? ' ago' : '') + '</span></time>' +
                                         '</div>' +
                                     '</div>';
         li.appendChild(post_author_div);
 
+
+        if (commentOwner) {
+
+            var deleteCommentElement = document.createElement("a");
+            revUtils.addClass(deleteCommentElement, 'comment-delete-button');
+            deleteCommentElement.innerText = "delete";
+            post_author_div.querySelector('time').appendChild(deleteCommentElement);
+
+            revUtils.addEventListener(deleteCommentElement, 'click', function() {
+               that.deleteComment(comment_data.id, li, uid);
+            });
+
+        }
+
         var comment_body = document.createElement("p");
-        comment_body.innerHTML = comment_data.comment_body;
+        comment_body.innerHTML = comment_data.comment || comment_data.reply;
+
+        if (typeof truncate === "number") {
+            
+            var comment_length = isReply ? comment_data.reply.length : comment_data.comment.length;
+
+            if (comment_length > truncate) {
+                comment_body.style = "display:none;";
+                var comment_body_truncated = document.createElement("p");
+                comment_body_truncated.innerHTML = isReply ? comment_data.reply.trunc(truncate) : comment_data.comment.trunc(truncate);
+                
+                var readMoreCommentElement = document.createElement("a");
+                revUtils.addClass(readMoreCommentElement, 'comment-read-more');
+                readMoreCommentElement.innerText = "read more";
+                comment_body_truncated.appendChild(readMoreCommentElement);
+                li.appendChild(comment_body_truncated);
+
+                revUtils.addEventListener(readMoreCommentElement, 'click', function() {
+                   this.parentNode.style = "display:none;";
+                   this.parentNode.nextSibling.style = "display:block;";
+                });
+            }
+        }
+
         li.appendChild(comment_body);
+        li.setAttribute('data-type', isReply ? 'reply' : 'comment');
 
         var commentToolBox = document.createElement("div");
         revUtils.addClass(commentToolBox,'rev-comment-tools');
 
-        if (!isReply) {
+        if (!isReply && !isLegacyComment) {
         var comment_reply_btn = document.createElement("a");
             revUtils.addClass(comment_reply_btn, 'reply');
             comment_reply_btn.innerText = "Reply";
             commentToolBox.appendChild(comment_reply_btn);
 
             revUtils.addEventListener(comment_reply_btn, 'click', function(ev) {
-                that.handleComments(comment_data, false, "158228bf-3dc4-416c-91ab-5c15a640097f");
+                that.handleComments(comment_data, true, comment_data.id, uid);
             });
 
         }
 
-        if (comment_data.likes > 0) {
+        if (comment_data.up_votes > 0) {
         var comment_likes_count = document.createElement("span");
             revUtils.addClass(comment_likes_count, 'rev-comment-likes-count');
-            comment_likes_count.innerText = comment_data.likes + " likes";
+            comment_likes_count.innerText = comment_data.up_votes + " likes";
             commentToolBox.appendChild(comment_likes_count);
         }
 
-        var comment_like = document.createElement("a");
-            revUtils.addClass(comment_like, 'rev-comment-like');
-            comment_like.innerHTML = '<svg aria-hidden="true" data-prefix="fas" data-icon="thumbs-up" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-thumbs-up fa-w-16 fa-5x"><path fill="#a5a5a5" d="M104 224H24c-13.255 0-24 10.745-24 24v240c0 13.255 10.745 24 24 24h80c13.255 0 24-10.745 24-24V248c0-13.255-10.745-24-24-24zM64 472c-13.255 0-24-10.745-24-24s10.745-24 24-24 24 10.745 24 24-10.745 24-24 24zM384 81.452c0 42.416-25.97 66.208-33.277 94.548h101.723c33.397 0 59.397 27.746 59.553 58.098.084 17.938-7.546 37.249-19.439 49.197l-.11.11c9.836 23.337 8.237 56.037-9.308 79.469 8.681 25.895-.069 57.704-16.382 74.757 4.298 17.598 2.244 32.575-6.148 44.632C440.202 511.587 389.616 512 346.839 512l-2.845-.001c-48.287-.017-87.806-17.598-119.56-31.725-15.957-7.099-36.821-15.887-52.651-16.178-6.54-.12-11.783-5.457-11.783-11.998v-213.77c0-3.2 1.282-6.271 3.558-8.521 39.614-39.144 56.648-80.587 89.117-113.111 14.804-14.832 20.188-37.236 25.393-58.902C282.515 39.293 291.817 0 312 0c24 0 72 8 72 81.452z" class=""></path></svg>';
-            commentToolBox.appendChild(comment_like);
-
-        var comment_dislike = document.createElement("a");
-            revUtils.addClass(comment_dislike, 'rev-comment-dislike');
-            comment_dislike.innerHTML = '<svg aria-hidden="true" data-prefix="fas" data-icon="thumbs-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-thumbs-down fa-w-16 fa-5x"><path fill="#a5a5a5" d="M0 56v240c0 13.255 10.745 24 24 24h80c13.255 0 24-10.745 24-24V56c0-13.255-10.745-24-24-24H24C10.745 32 0 42.745 0 56zm40 200c0-13.255 10.745-24 24-24s24 10.745 24 24-10.745 24-24 24-24-10.745-24-24zm272 256c-20.183 0-29.485-39.293-33.931-57.795-5.206-21.666-10.589-44.07-25.393-58.902-32.469-32.524-49.503-73.967-89.117-113.111a11.98 11.98 0 0 1-3.558-8.521V59.901c0-6.541 5.243-11.878 11.783-11.998 15.831-.29 36.694-9.079 52.651-16.178C256.189 17.598 295.709.017 343.995 0h2.844c42.777 0 93.363.413 113.774 29.737 8.392 12.057 10.446 27.034 6.148 44.632 16.312 17.053 25.063 48.863 16.382 74.757 17.544 23.432 19.143 56.132 9.308 79.469l.11.11c11.893 11.949 19.523 31.259 19.439 49.197-.156 30.352-26.157 58.098-59.553 58.098H350.723C358.03 364.34 384 388.132 384 430.548 384 504 336 512 312 512z" class=""></path></svg>';
-            commentToolBox.appendChild(comment_dislike);
-
-        li.appendChild(commentToolBox);
-
-        if (hasReplies && includeReplies) {
-            var replies_ul = document.createElement("ul");
-            revUtils.addClass(replies_ul, 'children');
-
-            for (var key in comment_data.replies) {
-                if (comment_data.replies.hasOwnProperty(key)) {
-                    var reply_li = that.setCommentHTML.call(this, comment_data.replies[key]);
-                    replies_ul.appendChild(reply_li);
+        if (!isLegacyComment) {
+            var comment_like = document.createElement("a");
+                revUtils.addClass(comment_like, 'rev-comment-like');
+                if (this.options.hasOwnProperty("jwt") && comment_data.vote.vote === "up") {
+                    revUtils.addClass(comment_like, 'selected');
                 }
+                comment_like.innerHTML = '<svg aria-hidden="true" data-prefix="fas" data-icon="thumbs-up" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-thumbs-up fa-w-16 fa-5x"><path d="M104 224H24c-13.255 0-24 10.745-24 24v240c0 13.255 10.745 24 24 24h80c13.255 0 24-10.745 24-24V248c0-13.255-10.745-24-24-24zM64 472c-13.255 0-24-10.745-24-24s10.745-24 24-24 24 10.745 24 24-10.745 24-24 24zM384 81.452c0 42.416-25.97 66.208-33.277 94.548h101.723c33.397 0 59.397 27.746 59.553 58.098.084 17.938-7.546 37.249-19.439 49.197l-.11.11c9.836 23.337 8.237 56.037-9.308 79.469 8.681 25.895-.069 57.704-16.382 74.757 4.298 17.598 2.244 32.575-6.148 44.632C440.202 511.587 389.616 512 346.839 512l-2.845-.001c-48.287-.017-87.806-17.598-119.56-31.725-15.957-7.099-36.821-15.887-52.651-16.178-6.54-.12-11.783-5.457-11.783-11.998v-213.77c0-3.2 1.282-6.271 3.558-8.521 39.614-39.144 56.648-80.587 89.117-113.111 14.804-14.832 20.188-37.236 25.393-58.902C282.515 39.293 291.817 0 312 0c24 0 72 8 72 81.452z" class=""></path></svg>';
+                commentToolBox.appendChild(comment_like);
+
+            var comment_dislike = document.createElement("a");
+                revUtils.addClass(comment_dislike, 'rev-comment-dislike');
+                if (this.options.hasOwnProperty("jwt") && comment_data.vote.vote === "down") {
+                    revUtils.addClass(comment_dislike, 'selected');
+                }
+                comment_dislike.innerHTML = '<svg aria-hidden="true" data-prefix="fas" data-icon="thumbs-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-thumbs-down fa-w-16 fa-5x"><path d="M0 56v240c0 13.255 10.745 24 24 24h80c13.255 0 24-10.745 24-24V56c0-13.255-10.745-24-24-24H24C10.745 32 0 42.745 0 56zm40 200c0-13.255 10.745-24 24-24s24 10.745 24 24-10.745 24-24 24-24-10.745-24-24zm272 256c-20.183 0-29.485-39.293-33.931-57.795-5.206-21.666-10.589-44.07-25.393-58.902-32.469-32.524-49.503-73.967-89.117-113.111a11.98 11.98 0 0 1-3.558-8.521V59.901c0-6.541 5.243-11.878 11.783-11.998 15.831-.29 36.694-9.079 52.651-16.178C256.189 17.598 295.709.017 343.995 0h2.844c42.777 0 93.363.413 113.774 29.737 8.392 12.057 10.446 27.034 6.148 44.632 16.312 17.053 25.063 48.863 16.382 74.757 17.544 23.432 19.143 56.132 9.308 79.469l.11.11c11.893 11.949 19.523 31.259 19.439 49.197-.156 30.352-26.157 58.098-59.553 58.098H350.723C358.03 364.34 384 388.132 384 430.548 384 504 336 512 312 512z" class=""></path></svg>';
+                commentToolBox.appendChild(comment_dislike);
+
+            li.appendChild(commentToolBox);
+
+
+        
+            //comment voting, remove event handlers as soon as a valid vote is initiated
+            var upvote = function() {
+                that.handleVotes(comment_data, 'up', comment_like, li, function(){
+                    revUtils.removeEventListener(comment_like, 'click', upvote);
+                    revUtils.addClass(comment_like, 'novak-animate');
+
+                    //revUtils.removeClass(comment_dislike, 'rev-comment-disliked');
+                });
+            };
+
+            var downvote = function() {
+                that.handleVotes(comment_data, 'down', comment_dislike, li, function(){
+                    revUtils.removeEventListener(comment_dislike, 'click', downvote);
+                    revUtils.addClass(comment_dislike, 'novak-animate');
+
+                    //revUtils.removeClass(comment_like, 'rev-comment-liked');
+                });
+            };
+
+            //comment voting, only add listener on non-current vote
+            if (comment_data.vote.vote !== "up") {
+                revUtils.addEventListener(comment_like, 'click', upvote);
+            }
+            if (comment_data.vote.vote !== "down") {
+                revUtils.addEventListener(comment_dislike, 'click', downvote);
             }
 
-            li.appendChild(replies_ul);
+            if (hasReplies && includeReplies) {
+                var replies_ul = document.createElement("ul");
+                revUtils.addClass(replies_ul, 'children');
+                var truncate = revDetect.mobile() ? this.options.reply_truncate_length_mobile : this.options.reply_truncate_length;
+
+                for (var key in comment_data.replies) {
+                    if (comment_data.replies.hasOwnProperty(key)) {
+                        var reply_li = that.setCommentHTML.call(this, comment_data.replies[key],false,truncate,uid);
+                        reply_li.setAttribute('data-type', 'reply');
+                        replies_ul.appendChild(reply_li);
+                    }
+                }
+
+                li.appendChild(replies_ul);
+            }
         }
 
         return li;
     };
 
     RevSlider.prototype.setFeaturedComment = function(item,commentULElement) {
+        
         var that = this;
+        var commentCountElement = item.element.querySelector('.rev-comment-count');
 
-        revApi.xhr('http://www.mocky.io/v2/5a85f8b33100005200253187', function(data) {
-            //insert more comments
-            var count = 0;
-            for (var key in data) {
-                if (count >= that.options.initial_comments_limit) {return;}
-                if (data.hasOwnProperty(key)) {
-                    var comment_li = that.setCommentHTML(data[key]);
-                    //commentULElement.appendChild(comment_li);
-                    commentULElement.insertBefore(comment_li, commentULElement.childNodes[count]);
-                    count++;
-                }
+        if (that.options.comments_enabled) {
+
+            var params = {
+                sort: 'desc',
+                start: 0,
+                count: 5000,
+                url: item.data.target_url
+            };
+
+            var options = {};
+            if (that.options.hasOwnProperty("jwt")) {
+                options.jwt = that.options.jwt;
             }
 
-        });
+            var max = revDetect.mobile() ? that.options.initial_comments_limit_mobile : that.options.initial_comments_limit;
+            var truncate = revDetect.mobile() ? that.options.comment_truncate_length_mobile : that.options.comment_truncate_length;
+
+            var queryString = Object.keys(params).map(function(key) {
+                return key + '=' + params[key];
+            }).join('&');
+
+            revApi.xhr(that.options.actions_api_url + 'comments?' + queryString, function(data) {
+                var total = Object.keys(data).length;
+                //api returned no data, read response code
+                if (typeof data === "number" && data === 204) {
+                    //possible no comments ui here
+                    commentCountElement.innerText = '0 comments';
+                
+                    //no comments so use legacy if we have it 
+                    if (item.data.comments && item.data.comments.length) {
+                        commentCountElement.innerText = '1 comment';
+                        //map legacy data
+                        var legacyData = {
+                            comment: item.data.comments[0].comment,
+                            created: item.data.comment_time,
+                            user:{
+                                id:"legacy",
+                                data: {
+                                    name: item.data.comments[0].comment_author,
+                                    picture: {
+                                        data: {
+                                            url: item.data.comments[0].comment_author_img
+                                        }
+                                    }
+                                }
+                            }
+                        };
+                    
+                        var legacyCommentLi = that.setCommentHTML(legacyData);
+                        commentULElement.appendChild(legacyCommentLi);
+                    }
+
+                    return false;
+
+                }
+
+                var commentULElementFULL = document.createElement("ul");
+                revUtils.addClass(commentULElementFULL, 'comments-list');
+                revUtils.addClass(commentULElementFULL, 'comments-list-scroll');
+
+                var count = 0;
+                for (var key in data) {
+                
+                    if (data.hasOwnProperty(key)) {
+                        var comment_li_full = that.setCommentHTML(data[key],true, truncate,item.data.uid);
+                        commentULElementFULL.insertBefore(comment_li_full, commentULElementFULL.childNodes[0]);
+                     
+                    if (max >= count + 1) {
+                        var comment_li = that.setCommentHTML(data[key],true, truncate,item.data.uid);
+                        commentULElement.insertBefore(comment_li, commentULElement.childNodes[0]);
+                     }
+
+                    if (data[key].replies !== null) {
+                        total += Object.keys(data[key].replies).length;
+                    }
+
+                     count++;
+                    }
+                }
+            
+                commentCountElement.innerText = total + ' comment' + (total !== 1 ? 's' : '');
+                commentCountElement.setAttribute('data-count', total);
+
+                if (!revDetect.mobile() && total > max) {
+                    var showmoreLi = document.createElement('li');
+                    var showmorebtn = document.createElement('a');
+                    revUtils.addClass(showmorebtn, 'show_more');
+                    showmorebtn.style = "text-align: center;padding: 6px;background: #28a2f9; color:#fff;border-radius: 33px;margin: 5px auto 0px;width: 200px;display: block;position: absolute;z-index: 99;left: 50%;top: 5px;margin-left: -100px;";
+                    showmorebtn.innerText = "Load previous comments";
+
+                    showmoreLi.appendChild(showmorebtn);
+
+                    commentULElement.insertBefore(showmoreLi, commentULElement.childNodes[0]);
+
+                    revUtils.addEventListener(showmorebtn, 'click', function(ev) {
+
+                        commentULElement.parentNode.replaceChild(commentULElementFULL,commentULElement);
+                        //keep scroll position after injecting html
+                        //showmorebtn.scrollIntoView(true);
+                        showmorebtn.parentNode.removeChild(showmorebtn);
+
+                        if (that.grid.perRow > 1) {
+                            that.grid.layout();
+                        }
+                    });
+                }
+            
+                if (that.grid.perRow > 1) {
+                    that.grid.layout();
+                }
+
+            },null,false,options);
+
+        } //if enabled
 
     };
 
     //triggered by clicking comment button or input on feed item
-    RevSlider.prototype.handleComments = function(itemData, focus, replyingTo) {
+    RevSlider.prototype.handleComments = function(itemData, focus, replyingTo, uid) {
         var that = this;
-        
+
         //gulp wont let us use argument defaults (breaks the build)
         replyingTo = typeof replyingTo  === 'undefined' ? null : replyingTo;
+        uid = typeof uid  === 'undefined' ? itemData.uid : uid;
         var isReplyMode = replyingTo !== null;
 
         //create comment overlay div for mobile only
         if (revDetect.mobile()) {
-            var commentDetailsElement = document.createElement('div');
-
-            commentDetailsElement.id = 'rev-comment-detail';
-
-            document.body.appendChild(commentDetailsElement);
-            revUtils.addClass(document.body, 'modal-open');
+            
 
             var commentDetailsHeaderElement = document.createElement('div');
             revUtils.addClass(commentDetailsHeaderElement, 'rev-comment-detail-header');
 
             commentDetailsHeaderElement.innerHTML = '<a class="close-detail" style="float: left;width: 20px;height: 20px;">' +
                                                         '<svg aria-hidden="true" data-prefix="fas" data-icon="arrow-left" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="svg-inline--fa fa-arrow-left fa-w-14" style="font-size: 48px;color: red;">' +
-                                                            '<path fill="#28a2f9" d="M229.9 473.899l19.799-19.799c4.686-4.686 4.686-12.284 0-16.971L94.569 282H436c6.627 0 12-5.373 12-12v-28c0-6.627-5.373-12-12-12H94.569l155.13-155.13c4.686-4.686 4.686-12.284 0-16.971L229.9 38.101c-4.686-4.686-12.284-4.686-16.971 0L3.515 247.515c-4.686 4.686-4.686 12.284 0 16.971L212.929 473.9c4.686 4.686 12.284 4.686 16.971-.001z" class=""></path>' +
+                                                            '<path d="M229.9 473.899l19.799-19.799c4.686-4.686 4.686-12.284 0-16.971L94.569 282H436c6.627 0 12-5.373 12-12v-28c0-6.627-5.373-12-12-12H94.569l155.13-155.13c4.686-4.686 4.686-12.284 0-16.971L229.9 38.101c-4.686-4.686-12.284-4.686-16.971 0L3.515 247.515c-4.686 4.686-4.686 12.284 0 16.971L212.929 473.9c4.686 4.686 12.284 4.686 16.971-.001z" class=""></path>' +
                                                         '</svg>' +
                                                     '</a>';
 
             if (isReplyMode) {
+                var commentDetailsElement = document.getElementById('rev-reply-detail') || document.createElement('div');
                 commentDetailsElement.id = 'rev-reply-detail';
+
                 commentDetailsHeaderElement.innerHTML += '<span style="text-align:center;width: 100%;display: block;font-size: 16px;margin-left: -14px;font-weight: bold;">Replies</span>';
                 history.pushState({engage: 'comment_reply'}, null, "#comment-reply");
             } else {
+                var commentDetailsElement = document.getElementById('rev-comment-detail') || document.createElement('div');
                 commentDetailsElement.id = 'rev-comment-detail';
+
                 commentDetailsHeaderElement.innerHTML += '<div class="rev-headline" style="margin: 0 7px 0 27px;font-size: 12px;font-weight: bold;text-align: center;line-height: 12px;max-height: 25px;overflow: hidden;">' + itemData.headline + '</div>';
                 history.pushState({engage: 'comment'}, null, "#comment");
             }
+
+
+            
+
+            // commentDetailsElement.id = 'rev-comment-detail';
+
+            document.body.appendChild(commentDetailsElement);
+            revUtils.addClass(document.body, 'modal-open');
+
+            
+
+            // if (isReplyMode) {
+            //     commentDetailsElement.id = 'rev-reply-detail';
+            //     commentDetailsHeaderElement.innerHTML += '<span style="text-align:center;width: 100%;display: block;font-size: 16px;margin-left: -14px;font-weight: bold;">Replies</span>';
+            //     history.pushState({engage: 'comment_reply'}, null, "#comment-reply");
+            // } else {
+            //     commentDetailsElement.id = 'rev-comment-detail';
+            //     commentDetailsHeaderElement.innerHTML += '<div class="rev-headline" style="margin: 0 7px 0 27px;font-size: 12px;font-weight: bold;text-align: center;line-height: 12px;max-height: 25px;overflow: hidden;">' + itemData.headline + '</div>';
+            //     history.pushState({engage: 'comment'}, null, "#comment");
+            // }
 
             commentDetailsElement.appendChild(commentDetailsHeaderElement);
 
@@ -2691,13 +2986,41 @@ Author: michael@revcontent.com
             //append comments
             commentDetailsElement.appendChild(commentFeedElement);
 
-            //get initial feed items
-            revApi.xhr('http://www.mocky.io/v2/5a7b3a3d3000004b3128be1e?mocky-delay=300ms', function(data) {
+            //get initial comments
+            var params = {
+                sort: 'asc',
+                start: 0,
+                count: 200,
+                url: itemData.target_url,
+                comment_id: replyingTo
+            };
+            
+            var options = {};
+            if (that.options.hasOwnProperty("jwt")) {
+                options.jwt = that.options.jwt;
+            }
+
+            var queryString = Object.keys(params).map(function(key) {
+                return key + '=' + params[key];
+            }).join('&');
+
+            var comment_type = isReplyMode ? 'replies' : 'comments';
+
+            revApi.xhr(that.options.actions_api_url + comment_type + '?' + queryString, function(data) {
+
+                var truncate = isReplyMode ? that.options.reply_truncate_length_mobile : that.options.comment_truncate_length_mobile;
+                
+                //api returned no data, read response code
+                if (typeof data === "number" && data === 204) {
+                    //possible UI for no comments
+                }
 
                 for (var key in data) {
                     if (data.hasOwnProperty(key)) {
-                        var comment_li = that.setCommentHTML(data[key], true);
+                        
+                        var comment_li = that.setCommentHTML(data[key], true, truncate, uid);
                         commentFeedUL.appendChild(comment_li);
+                        
                     }
                 }
 
@@ -2708,70 +3031,23 @@ Author: michael@revcontent.com
                 //scroll to bottom of comments list
                 commentFeedElement.scrollTop = commentFeedElement.scrollHeight;
 
-                var showmorebtn = document.createElement('a');
-                revUtils.addClass(showmorebtn, 'show_more');
-                showmorebtn.style = "text-align: center;padding: 6px;background: #28a2f9; color:#fff;border-radius: 33px;margin: 5px auto 0px;width: 200px;display: block;";
-
-                showmorebtn.innerText = "Load previous comments";
-                commentFeedUL.insertBefore(showmorebtn, commentFeedUL.childNodes[0]);
-
-                 revUtils.addEventListener(showmorebtn, 'click', function(ev) {
-                    revApi.xhr('http://www.mocky.io/v2/5a85f8b33100005200253187', function(data) {
-                        //insert more comments
-                        var count = 0;
-                        for (var key in data) {
-                            if (data.hasOwnProperty(key)) {
-                                var comment_li = that.setCommentHTML(data[key]);
-                                commentFeedUL.insertBefore(comment_li, commentFeedUL.childNodes[count]);
-                                count++;
-                            }
-                        }
-
-                        //keep scroll position after injecting html
-                        showmorebtn.scrollIntoView(true);
-                        showmorebtn.parentNode.removeChild(showmorebtn);
-
-                    });
-                });
-
-            });
-
-            var commentBoxElement = document.createElement('div');
-            revUtils.addClass(commentBoxElement, 'rev-comment-box');
-            commentBoxElement.style = 'padding: 8px;background: #fafbfd;border-top: 1px solid #e6ecf5;'; //add this to css file
-
-            var commentUserAvatar = document.createElement('img');
-            commentUserAvatar.src = 'https://hostelhops.com/img/profile/user/facebook-default.png?1508323045';
-            commentUserAvatar.style = 'width: 24px;height: 24px;float:left;border-radius: 24px;position: absolute;top: 50%;margin-top: -14px;';
-            commentBoxElement.appendChild(commentUserAvatar);
-
-            var commentInputWrapElement = document.createElement('div');
-            revUtils.addClass(commentInputWrapElement, 'comment-input');
-            commentInputWrapElement.style = 'padding: 0px 0 0 34px;';
-            commentBoxElement.appendChild(commentInputWrapElement);
-
-
-            var commentInputHiddenTxtElement = document.createElement('div');
-            commentInputHiddenTxtElement.id = "hidden_text_size";
-            commentInputHiddenTxtElement.style = 'min-height: 30px;width: 100%;border-radius: 4px;border: 1px solid #e6ecf5;padding: 4px 40px 4px 10px;position: absolute;z-index: -20;';
-            commentInputWrapElement.appendChild(commentInputHiddenTxtElement);
-
-            var commentTextAreaElement = document.createElement('textarea');
-            commentTextAreaElement.id = 'comment_input';
-            commentTextAreaElement.placeholder = isReplyMode ? 'Write a reply...' : 'Write a comment...';
-            commentTextAreaElement.style = 'resize: none;height: 30px;width: 100%;border-radius: 4px;border: 1px solid #e6ecf5;padding: 4px 40px 4px 10px;cursor: text;';
-            commentInputWrapElement.appendChild(commentTextAreaElement);
-
-            var submitCommentBtn = document.createElement('a');
-            submitCommentBtn.id = 'submit_comment';
-            submitCommentBtn.style = 'display:none;';
-            submitCommentBtn.innerHTML = '<svg aria-hidden="true" data-prefix="fas" data-icon="paper-plane" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-paper-plane fa-w-16 fa-3x"><path fill="#28a2f9" d="M476 3.2L12.5 270.6c-18.1 10.4-15.8 35.6 2.2 43.2L121 358.4l287.3-253.2c5.5-4.9 13.3 2.6 8.6 8.3L176 407v80.5c0 23.6 28.5 32.9 42.5 15.8L282 426l124.6 52.2c14.2 6 30.4-2.9 33-18.2l72-432C515 7.8 493.3-6.8 476 3.2z" class=""></path></svg>';
-            commentInputWrapElement.appendChild(submitCommentBtn);
-
+            },function(){
+                //if loading comments api fails, do so gracefully
+                commentFeedElement.removeChild(commentFeedLoader);
+                var noComments = document.createElement("p");
+                noComments.innerText = "No Comments";
+                commentFeedElement.appendChild(noComments);
+            },false, options);
+            
+            var commentBoxElement = this.createCommentInput("comment");
             var clearfix = document.createElement('div');
             clearfix.style = 'clear: both;';
             commentBoxElement.appendChild(clearfix);
             commentDetailsElement.appendChild(commentBoxElement);
+
+            var commentTextAreaElement = commentBoxElement.querySelector('.comment-textarea');
+            var commentInputHiddenTxtElement = commentBoxElement.querySelector('.hidden_text_size');
+            var submitCommentBtn = commentBoxElement.querySelector('.comment-submit-button');
 
             if (isReplyMode) {
                 var ReplyDetailsElement = commentDetailsElement;
@@ -2781,143 +3057,66 @@ Author: michael@revcontent.com
                 commentTextAreaElement.focus();
             }
 
-            //Adjust comment textarea height, 1 - 4 lines
-            revUtils.addEventListener(commentTextAreaElement, 'keyup', function(ev) {
-                submitCommentBtn.style.display = 'inline-block';
-                commentInputHiddenTxtElement.innerText = commentTextAreaElement.value;
-                if (commentInputHiddenTxtElement.scrollHeight < 88) {
-                    commentTextAreaElement.style.height = (commentInputHiddenTxtElement.scrollHeight + 2) + "px";
-                }
-            });
-
             revUtils.addEventListener(submitCommentBtn, 'click', function(ev){
-                that.isAuthenticated(function(response){
+                revUtils.addClass(this, 'novak-animate');
+                
+                    
+                    var submitFn = function() {
+                        var submitted_comment_data = that.submitComment(commentTextAreaElement.value, itemData.target_url, replyingTo, function(data,error){
+                            
+                            if (typeof data === "number" && data === 201) {
+                                //for some reason we are getting dual responses, one with the payload and one with the http code
+                                return;
+                            }
 
-                    var submitcomment = function(){
-                        //submit comment
-                        var data = {};
-                        //fake data to insert fake comment until we have an api
-                        data.comment_body = String(commentTextAreaElement.value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-                        data.parent_id = null;
-                        data.date = Date.now();
-                        data.author = "John Lemp";
-                        data.author_avatar = "https://media.licdn.com/dms/image/C4E03AQEZq3I5SCWFZg/profile-displayphoto-shrink_200_200/0?e=1524427200&v=alpha&t=DCZhIK4drF_WAY8Pphc-iJ9VCEIEguE-KeJdgYhX2mM"
-                        data.likes = 0;
+                            if (error) {
+                                //currently only want to show error for bad words, but gathering the error msg from response for later use
+                                var errorMsg = JSON.parse(data.responseText);
+                                var httpStatus = data.status;
+                                if (httpStatus === 406) {
+                                    //bad word
+                                    that.displayError(commentBoxElement,"Oops! We've detected a <b>bad word</b> in your comment, Please update your response before submitting.");    
+                                }
+                                return;
+                            }
+                            var truncate = isReplyMode ? that.options.reply_truncate_length_mobile : that.options.comment_truncate_length_mobile;
+                            var newCommentElement = that.setCommentHTML(data,false,truncate,uid);
+                            commentFeedUL.appendChild(newCommentElement);
+                            commentTextAreaElement.value = "";
+                            commentFeedElement.scrollTop = commentFeedElement.scrollHeight;
 
-                        //send comment xhr
-                        // revApi.xhr('http://www.mocky.io/v2/5a7b3a3d3000004b3128be1e?mocky-delay=300ms', function(data) {
-
-                        // });
-
-                        var newCommentElement = that.setCommentHTML(data);
-                        commentFeedUL.appendChild(newCommentElement);
-
-                        commentTextAreaElement.value = "";
-                        commentFeedElement.scrollTop = commentFeedElement.scrollHeight;
+                            that.updateDisplayedItem(that.feedItems[uid]);
+                            
+                        });
                     };
 
-                    if (response) {
-                        submitcomment();
-
+                    if (that.authenticated) {
+                        submitFn();
                     } else {
-
-                        //request auth
-                        var authbox = document.createElement('div');
-                        authbox.id = 'comment_authbox';
-                        revUtils.addClass(authbox,'rev-auth');
-                        authbox.innerHTML = '<div class="rev-auth-box">' +
-                            '<a class="rev-auth-close-button">' +
-                                '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>' +
-                            '</a>' +
-                            '<div class="rev-auth-box-inner">' +
-                                '<div class="rev-auth-subline">'+ that.getDisclosure() +'</div>' +
-                                '<div class="rev-auth-headline">' +
-                                    '<span class="rev-engage-type-txt">Almost Done! Login to save your comment</span> <br /> <strong>and</strong> personalize your experience' +
-                                '</div>' +
-                                '<div class="rev-auth-button">' +
-                                    that.revAuthButtonIconHtml() +
-                                    '<div class="rev-auth-button-text">' +
-                                        'Continue with facebook' +
-                                    '</div>' +
-                                '</div>' +
-
-                                '<div class="rev-auth-buttonline">Once personalized the content recommendations on this page will be based on the pages you\'ve liked and urls you\'ve shared on Facebook</div>' +
-
-                                '<div class="rev-auth-terms">' +
-                                    '<span>by signing up you agree to the <a target="_blank" href="https://faq.revcontent.com/customer/en/portal/articles/2703838-revcontent-s-privacy-and-cookie-policy">Terms</a></span>' +
-                                    // '<span>|</span>' +
-                                    // '<a href="#">Privacy Policy</a>' +
-                                '</div>' +
-                            '</div>' +
-                        '</div>';
-
-                        document.body.appendChild(authbox);
-                        history.pushState({engage: 'auth'}, "Login to save your comment", "#login");
-
-                        revUtils.addEventListener(authbox.querySelector('.rev-auth-button'), 'click', function(){
-
-                            var url = that.options.host + "/feed.php?provider=facebook_engage&w=" + that.options.widget_id + "&p=" + that.options.pub_id;
-                            var popup = window.open(url, 'Login', 'resizable,width=600,height=800');
-
-                            var closedCheckInterval = setInterval(function() {
-                                if (popup.closed) {
-                                    that.isAuthenticated(function(response) {
-
-                                        if (response === true) {
-                                            authbox.remove();
-
-                                            that.updateAuthElements();
-                                            that.processQueue();
-
-                                            if (!that.personalized) {
-                                                that.showPersonalizedTransition();
-                                                that.personalize();
-                                            }
-
-                                            //post comment
-                                            submitcomment();
-
-                                        }
-                                        revDisclose.postMessage();
-                                    });
-                                    clearInterval(closedCheckInterval);
-                                }
-                            }, 100);
-
-
-                        });
-
-                        revUtils.addEventListener(authbox.querySelector('.rev-auth-close-button'), 'click', function(ev) {
-                            revUtils.removeClass(authbox, 'comment-slide-in');
-                            revUtils.addClass(authbox, 'comment-slide-out');
-                            var func = function(){authbox.remove();};
-                            setTimeout(func, 500);
-                            //history.back();
-                        });
-
+                        that.commentDetailAuth(submitFn);
                     }
-                });
+                
+
+
             });
 
             revUtils.addClass(commentDetailsElement, 'comment-slide-in');
 
-            
+
             window.onpopstate = function(event) {
-                
+
                 var authbox = document.getElementById('comment_authbox');
                 var reply_window = document.getElementById('rev-reply-detail');
                 var comment_window = document.getElementById('rev-comment-detail');
-                
+
                 if (authbox === null) {
 
                     if (reply_window !== null) {
-                        console.log("yes, we need to remove the reply window");
                         revUtils.removeClass(reply_window, 'comment-slide-in');
                         revUtils.addClass(reply_window, 'comment-slide-out');
                         var func = function(){reply_window.remove();};
                         setTimeout(func, 500);
                     } else if (comment_window !== null){
-                        console.log("we need to remove the comment window");
                         revUtils.removeClass(comment_window, 'comment-slide-in');
                         revUtils.addClass(comment_window, 'comment-slide-out');
                         var func = function(){comment_window.remove();};
@@ -2931,15 +3130,420 @@ Author: michael@revcontent.com
                     var func = function(){authbox.remove();};
                     setTimeout(func, 500);
                 }
-            
+
             };
 
         } else {
             //not mobile
-            console.log("not mobile");
+
+            if (isReplyMode) {
+                //inject reply comment box below comment
+                var commentLi = document.getElementById("comment-" + replyingTo);
+                var commentBoxElement = commentLi.querySelector(".rev-comment-box");
+
+                //if comment box exists, just focus it
+                if (commentBoxElement !== null) {
+                    var submitCommentBtn = commentBoxElement.querySelector('.comment-submit-button');
+                    var commentTextAreaElement = commentBoxElement.querySelector('.comment-textarea');
+                    commentTextAreaElement.focus();
+                } else {
+                    var commentBoxElement = this.createCommentInput("reply");
+                    var submitCommentBtn = commentBoxElement.querySelector('.comment-submit-button');
+                    var commentTextAreaElement = commentBoxElement.querySelector('.comment-textarea');
+                
+                    commentLi.appendChild(commentBoxElement);
+                    commentTextAreaElement.focus();
+                }
+
+                revUtils.addEventListener(submitCommentBtn, 'click', function(ev){
+                    revUtils.addClass(this, 'novak-animate');
+                    
+                    if (that.authenticated) {
+                        var submitted_comment_data = that.submitComment(commentTextAreaElement.value, null, replyingTo, function(data){
+                            if (typeof data === "number" && data === 201) {
+                                //for some reason we are getting dual responses, one with the payload and one with the http code
+                                return;
+                            }
+                            var newCommentElement = that.setCommentHTML(data,false,that.options.reply_truncate_length,itemData.uid);
+                            
+                            //if child ul exists, append li to it, else create ul
+                            var childUL = commentLi.querySelector("ul");
+                            if (childUL == null) {
+                                childUL = document.createElement("ul");
+                                revUtils.addClass(childUL, 'children');
+                                commentLi.appendChild(childUL);
+                            }
+                            childUL.appendChild(newCommentElement);
+
+                            commentBoxElement.remove();
+                            //commentTextAreaElement.value = "";
+                            // var e = document.createEvent('HTMLEvents');
+                            // e.initEvent("keyup", false, true);
+                            // commentTextAreaElement.dispatchEvent(e);
+                        });
+                    } 
+                });
+                
+
+            } else {
+                //not reply mode
+
+            }
         }
 
     };
+
+    
+    RevSlider.prototype.handleVotes = function(comment_data, vote_type, vote_button, comment_li, callback) {
+        var that = this;
+        var oldComment = comment_li;
+        var currentTime = Date.now()/1000;
+        var hasExistingVote = (comment_data.vote.vote && comment_data.vote.vote !== vote_type);
+
+        if ( (currentTime - comment_data.vote.created) < 1 ) {
+            //voting too fast
+            return false;
+        }
+
+        if (comment_data.vote.vote && comment_data.vote.vote === vote_type) {
+            //already voted this type
+            //this shouldnt be hit, but just in case
+            return false;
+        }
+
+        if( callback && typeof callback === 'function' ) { callback.call(); }//remove event handler
+
+        //promise
+        var canIAddNewVote = new Promise(
+            function (resolve, reject) {
+                if (hasExistingVote) {
+                    //remove existing vote first
+                    revApi.xhr(that.options.actions_api_url + 'vote/remove/' + comment_data.vote.id, function(data) {
+                        if (vote_type === "up") {
+                            comment_data.down_votes = comment_data.down_votes - 1;
+                        } else {
+                            comment_data.up_votes = comment_data.up_votes - 1;
+                        }
+                        //old vote removed, continue
+                        resolve();
+
+                    },null,false,{method:'DELETE', jwt:that.options.jwt});
+                } else {
+                    //no existing vote, go ahead
+                    resolve();
+                }
+            }
+        );
+
+
+        // call promise
+        var tryToVote = function () {
+            canIAddNewVote
+                .then(function (fulfilled) {
+                    //add new vote
+                    var options = {};
+                    var data = {
+                        action_id: comment_data.id,
+                        type: comment_data.hasOwnProperty("comment_id") ? 'reply' : 'comment',
+                        vote: vote_type
+                    };
+                    options.data = JSON.stringify(data);
+                    options.method = "POST";
+                    options.jwt = that.options.jwt;
+
+                    revApi.xhr(that.options.actions_api_url + 'vote/add', function(data) {
+
+                        if (vote_type === "down") {
+                            comment_data.down_votes = comment_data.down_votes + 1;
+                        } else {
+                            comment_data.up_votes = comment_data.up_votes + 1;
+                        }
+
+                        comment_data.vote.action_id = data.action_id;
+                        comment_data.vote.created = currentTime;
+                        comment_data.vote.id = data.id;
+                        comment_data.vote.type = data.type;
+                        comment_data.vote.vote = data.vote;
+
+                        //replace comment with new data (includeReplies)
+                        
+                        var truncate = revDetect.mobile() ? that.options.comment_truncate_length_mobile : that.options.comment_truncate_length;
+
+                          var newComment = that.setCommentHTML(comment_data, false, truncate);
+                          var current_replies = oldComment.querySelector("ul.children");
+                          if (current_replies !== null) {
+                            newComment.appendChild(current_replies);
+                          }
+                          oldComment.parentNode.replaceChild(newComment, oldComment);
+                    },null,false,options);
+                })
+                .catch(function (error) {
+                    console.log(error.message);
+                });
+        };
+
+        if (that.authenticated) {
+            tryToVote();
+        } else {
+            if (revDetect.mobile()) {
+                that.commentDetailAuth(tryToVote);
+            } else {
+                var articleEl = that.getClosestParent(comment_li, 'article');
+                revUtils.removeClass(document.querySelector('.rev-flipped'), 'rev-flipped');
+                revUtils.addClass(articleEl, 'rev-flipped');
+
+                articleEl.scrollIntoView({ behavior: 'smooth', block: "start" });
+            }
+            //store users vote for after auth
+            that.afterAuth = tryToVote;
+        }
+        
+    };
+
+    RevSlider.prototype.commentDetailAuth = function(callback){
+        
+        var that = this;
+        var authbox = document.createElement('div');
+        authbox.id = 'comment_authbox';
+        revUtils.addClass(authbox,'rev-auth');
+        authbox.innerHTML = '<div class="rev-auth-box">' +
+            '<a class="rev-auth-close-button">' +
+                '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>' +
+            '</a>' +
+            '<div class="rev-auth-box-inner">' +
+                '<div class="rev-auth-subline">'+ that.getDisclosure() +'</div>' +
+                '<div class="rev-auth-headline">' +
+                    '<span class="rev-engage-type-txt">Almost Done! Login to save your comment</span> <br /> <strong>and</strong> personalize your experience' +
+                '</div>' +
+                '<div class="rev-auth-button">' +
+                    that.revAuthButtonIconHtml() +
+                    '<div class="rev-auth-button-text">' +
+                        'Continue with facebook' +
+                    '</div>' +
+                '</div>' +
+
+                '<div class="rev-auth-buttonline">Once personalized the content recommendations on this page will be based on the pages you\'ve liked and urls you\'ve shared on Facebook</div>' +
+
+                '<div class="rev-auth-terms">' +
+                    '<span>by signing up you agree to the <a target="_blank" href="https://faq.revcontent.com/customer/en/portal/articles/2703838-revcontent-s-privacy-and-cookie-policy">Terms</a></span>' +
+                    // '<span>|</span>' +
+                    // '<a href="#">Privacy Policy</a>' +
+                '</div>' +
+            '</div>' +
+        '</div>';
+
+        document.body.appendChild(authbox);
+        history.pushState({engage: 'auth'}, "Login to save your comment", "#login");
+
+        revUtils.addEventListener(authbox.querySelector('.rev-auth-button'), 'click', function(){
+
+            var url = that.options.host + "/feed.php?provider=facebook_engage&w=" + that.options.widget_id + "&p=" + that.options.pub_id;
+            var popup = window.open(url, 'Login', 'resizable,width=600,height=800');
+
+            var closedCheckInterval = setInterval(function() {
+                if (popup.closed) {
+                    that.isAuthenticated(function(response) {
+
+                        if (response === true) {
+                            authbox.remove();
+
+                            that.updateAuthElements();
+                            that.processQueue();
+
+                            if (!that.personalized) {
+                                that.showPersonalizedTransition();
+                                that.personalize();
+                            }
+
+                            //post comment
+                            if( callback && typeof callback === 'function' ) { callback.call(); }
+
+                        }
+                        revDisclose.postMessage();
+                    });
+                    clearInterval(closedCheckInterval);
+                }
+            }, 100);
+
+
+        });
+
+        revUtils.addEventListener(authbox.querySelector('.rev-auth-close-button'), 'click', function(ev) {
+            revUtils.removeClass(authbox, 'comment-slide-in');
+            revUtils.addClass(authbox, 'comment-slide-out');
+            var func = function(){authbox.remove();};
+            setTimeout(func, 500);
+            //history.back();
+        });
+    };
+
+
+    RevSlider.prototype.deleteComment = function(comment_id, comment_el, uid) {
+        var that = this;
+        var mode = comment_el.getAttribute("data-type");
+        revApi.xhr(this.options.actions_api_url + mode + '/delete/' + comment_id, function(data) {
+            
+            if (!revDetect.mobile()) {
+                //update count
+                var countEl = that.getClosestParent(comment_el, '.rev-content-inner').querySelector('.rev-reactions-total > .rev-comment-count');
+                var currentCount = countEl.getAttribute('data-count');
+                
+                countEl.setAttribute('data-count', currentCount - 1);
+                countEl.innerText = (currentCount - 1) + ' comment' + ((currentCount - 1) !== 1 ? 's' : '');
+            }
+
+            //remove comment from ui
+            revUtils.remove(comment_el);
+            //update feed item
+            //that.updateDisplayedItem(that.feedItems[uid]);
+
+        },null,false,{method:'DELETE', jwt: that.options.jwt});
+    };
+
+    RevSlider.prototype.submitComment = function(comment, url, comment_id, callback) {
+        
+        if (comment === "") {
+            return false;
+        }
+        url = (typeof url === "undefined") ? null : url;
+
+        var that = this;
+        var options = {};
+        var data = {};
+        var isReplyMode = (url === null && comment_id !== null);
+
+              
+        data.comment = String(comment).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        data.url = url;
+
+        if (isReplyMode) {
+            data.comment_id = comment_id;
+            data.reply = data.comment;
+        }
+
+        options.data = JSON.stringify(data);
+        options.method = "POST";
+        options.jwt = that.options.jwt;
+
+        //send comment xhr
+        var comment_type = isReplyMode ? 'reply' : 'comment';
+        var newData;
+        revApi.xhr(that.options.actions_api_url + comment_type + '/create', function(response) {
+            if( callback && typeof callback === 'function' ) { callback.call(this, response); }
+        },function(response){
+            if( callback && typeof callback === 'function' ) { callback.call(this, response,true); }
+            if (response.status === 406) {
+                //Bad Word
+                //if( callback && typeof callback === 'function' ) { callback.call(this, response,true); }
+            }
+        },false,options);
+
+    };
+
+    RevSlider.prototype.createCommentInput = function(mode){
+        //mode = comment or reply
+        var commentBoxElement = document.createElement('div');
+        revUtils.addClass(commentBoxElement, 'rev-comment-box');
+        commentBoxElement.style = 'padding: 8px;background: #fafbfd;border-top: 1px solid #e6ecf5;'; //add this to css file
+
+        var commentUserAvatar = document.createElement('img');
+        revUtils.addClass(commentUserAvatar, 'comment-avatar');
+        commentUserAvatar.src = typeof this.authenticated && this.options.user !== null && this.options.user.hasOwnProperty("profile_url") ? this.options.user.profile_url : 'https://hostelhops.com/img/profile/user/facebook-default.png?1508323045';
+        commentBoxElement.appendChild(commentUserAvatar);
+
+        var commentInputWrapElement = document.createElement('div');
+        revUtils.addClass(commentInputWrapElement, 'comment-input');
+        commentInputWrapElement.style = 'padding: 0px 0 0 34px;';
+        commentBoxElement.appendChild(commentInputWrapElement);
+
+
+        var commentInputHiddenTxtElement = document.createElement('div');
+        revUtils.addClass(commentInputHiddenTxtElement, 'hidden_text_size');
+        commentInputHiddenTxtElement.style = 'min-height: 30px;width: 100%;border-radius: 4px;padding: 4px 70px 4px 10px;position: absolute;z-index: -2000;border: 0 none;color: #ffffff00;user-select: none;';
+        commentInputWrapElement.appendChild(commentInputHiddenTxtElement);
+
+        var commentTextAreaElement = document.createElement('textarea');
+        revUtils.addClass(commentTextAreaElement, 'comment-textarea');
+        //commentTextAreaElement.placeholder = 'Write a ' + mode  + '...';
+        commentTextAreaElement.placeholder = 'Engage in this discussion!';
+        commentInputWrapElement.appendChild(commentTextAreaElement);
+
+        var submitCommentBtn = document.createElement('a');
+        revUtils.addClass(submitCommentBtn, 'comment-submit-button');
+        submitCommentBtn.style = 'display:none;';
+        submitCommentBtn.innerHTML = '<svg aria-hidden="true" data-prefix="fas" data-icon="paper-plane" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-paper-plane fa-w-16 fa-3x"><path d="M476 3.2L12.5 270.6c-18.1 10.4-15.8 35.6 2.2 43.2L121 358.4l287.3-253.2c5.5-4.9 13.3 2.6 8.6 8.3L176 407v80.5c0 23.6 28.5 32.9 42.5 15.8L282 426l124.6 52.2c14.2 6 30.4-2.9 33-18.2l72-432C515 7.8 493.3-6.8 476 3.2z" class=""></path></svg>';
+        commentInputWrapElement.appendChild(submitCommentBtn);
+
+        var clearfix = document.createElement('div');
+        clearfix.style = 'clear: both;';
+        commentBoxElement.appendChild(clearfix);
+
+        //Adjust comment textarea height, 1 - 4 lines
+        revUtils.addEventListener(commentTextAreaElement, 'keyup', function(ev) {
+            submitCommentBtn.style.display = 'inline-block';
+            commentInputHiddenTxtElement.innerText = commentTextAreaElement.value;
+            if (commentInputHiddenTxtElement.scrollHeight < 88) {
+                commentTextAreaElement.style.height = (commentInputHiddenTxtElement.scrollHeight + 2) + "px";
+            }
+        });
+
+        return commentBoxElement;
+    };
+
+    RevSlider.prototype.updateTimeAgo = function(mode){
+        var times = document.querySelectorAll('time.published'), i;
+        for (i = 0; i < times.length; ++i) {
+            var newTimeStr = RevSlider.prototype.timeAgo(times[i].getAttribute("datetime"));
+            times[i].querySelector("span").innerText = newTimeStr + (newTimeStr !== 'yesterday' ? ' ago' : '');
+        }
+    };
+
+    RevSlider.prototype.getClosestParent = function (elem, selector) {
+        // Element.matches() polyfill
+        if (!Element.prototype.matches) {
+            Element.prototype.matches =
+                Element.prototype.matchesSelector ||
+                Element.prototype.mozMatchesSelector ||
+                Element.prototype.msMatchesSelector ||
+                Element.prototype.oMatchesSelector ||
+                Element.prototype.webkitMatchesSelector ||
+                function(s) {
+                    var matches = (this.document || this.ownerDocument).querySelectorAll(s),
+                        i = matches.length;
+                    while (--i >= 0 && matches.item(i) !== this) {}
+                    return i > -1;
+                };
+        }
+
+        // Get the closest matching element
+        for ( ; elem && elem !== document; elem = elem.parentNode ) {
+            if ( elem.matches( selector ) ) return elem;
+        }
+        return null;
+
+    };
+
+    RevSlider.prototype.displayError = function(element, error){
+        var errorEl = document.createElement('div');
+        revUtils.addClass(errorEl, 'comment-error-notification');
+        revUtils.addClass(errorEl, 'fade-out');
+        revUtils.addClass(errorEl, 'is-paused');
+        errorEl.innerHTML = error;
+        
+        element.insertBefore(errorEl,element.childNodes[0]);
+
+        var tO = setTimeout(function(){
+            revUtils.removeClass(errorEl, 'is-paused');
+        },6000);
+        var tO2 = setTimeout(function(){
+            errorEl.remove();
+        },7000);
+    };
+
+    String.prototype.trunc = String.prototype.trunc ||
+      function(n){
+          return (this.length > n) ? this.substr(0, n-1) + '&hellip;&nbsp;&nbsp;' : this;
+      };
 
     return RevSlider;
 }));

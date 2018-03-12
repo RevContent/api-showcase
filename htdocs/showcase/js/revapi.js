@@ -35,20 +35,34 @@ api.request = function(url, success, failure, JSONPCallback) {
     }
 };
 
-api.xhr = function(url, success, failure, withCredentials) {
-    var request = new XMLHttpRequest();
+api.xhr = function(url, success, failure, withCredentials, opts) {
+    var defaults = {
+        method: "GET"
+    };
+    var options = revUtils.extend(defaults, opts);
+     var request = new XMLHttpRequest();
 
     if (withCredentials) {
         request.withCredentials = true;
+    }   
+
+    request.open(options.method, url, true);
+    
+    if (options.hasOwnProperty("jwt")) {
+        var authtoken = 'Bearer ' + options.jwt;
+        //var authtoken = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOm51bGwsImV4cCI6bnVsbCwiYXVkIjoiIiwic3ViIjoiIiwidXNlciI6IjEwMTU2ODYwNDMwMDk0NTU0In0.MCazKhwOUS9MrphUjCWXHYI1ICwgs8BLlnbEK0RrcRs';
+        //request.setRequestHeader('authorization','Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOm51bGwsImV4cCI6bnVsbCwiYXVkIjoiIiwic3ViIjoiIiwidXNlciI6IjEwMTU2ODYwNDMwMDk0NTU0In0.MCazKhwOUS9MrphUjCWXHYI1ICwgs8BLlnbEK0RrcRs'); //randy
+        //request.setRequestHeader('authorization','Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOm51bGwsImV4cCI6bnVsbCwiYXVkIjoiIiwic3ViIjoiIiwidXNlciI6IjEwODAwNzUzMzM1MTUzNyJ9.twpF2H3duLRPWtfP4oidciyhokCFgFjnd0oSYd_m85I');
+        request.setRequestHeader('authorization', authtoken);
     }
-
-    request.open('GET', url + this.getReferer(), true);
-
+    
     request.onload = function() {
         if (request.status >= 200 && request.status < 400) {
             try {
                 success(JSON.parse(request.responseText));
-            } catch(e) { }
+            } catch(e) {
+                success(request.status);
+            }
         } else if(failure) {
             failure(request);
         }
@@ -60,7 +74,12 @@ api.xhr = function(url, success, failure, withCredentials) {
         }
     };
 
-    request.send();
+    if (options.method === "POST" && options.hasOwnProperty('data')) {
+        request.send(options.data);
+    } else {
+        request.send();    
+    }
+    
 };
 
 api.getReferer = function() {
