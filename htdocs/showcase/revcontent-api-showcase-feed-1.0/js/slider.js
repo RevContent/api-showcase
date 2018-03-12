@@ -2492,11 +2492,14 @@ Author: michael@revcontent.com
         notice.innerHTML = '<p style="margin:0;padding:0;"><a class="notice-action" href="' + (action.link !== undefined ? action.link : '#') + '" style="color:#ffffff;text-transform:uppercase;float:right;font-weight:bold;padding:2px 8px;border-radius:8px;margin-left:5px;background-color:rgba(0,0,0,0.8)" onclick="javascript:return false;">' + action.label + '</a> ' + message + '</p>';
         notice.setAttribute('style','display:block;transition: all 0.5s ease-out;position:fixed;top:-48px;left:0;z-index:15000;width:100%;min-height:32px;line-height:16px;font-size:10px;font-family:"Montserrat";padding:8px 9px;background-color:rgba(0,0,0,0.7);color:#ffffff;');
 
-        revUtils.addEventListener(notice.querySelector('.notice-action'), 'click', function(e){
-            e.preventDefault();
-            e.stopPropagation();
-            notice.remove();
-        });
+        var noticeAction = notice.querySelector('.notice-action');
+        if (noticeAction) {
+            revUtils.addEventListener(noticeAction, 'click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                notice.remove();
+            });
+        }
 
         document.body.appendChild(notice);
         setTimeout(function(){
