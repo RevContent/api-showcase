@@ -305,10 +305,6 @@ Author: michael@revcontent.com
 
         this.innerWidget.dataPromise.then(function(data) {
 
-            if (!self.options.infinite && self.options.display_limit) {
-                self.loadMore();
-            }
-
             self.viewableItems = [];
             for (var i = 0; i < data.rowData.items.length; i++) {
                 if (data.rowData.items[i].view) {
@@ -324,8 +320,8 @@ Author: michael@revcontent.com
                 //     });
                 // }
 
-                if (self.options.infinite && !self.removed) {
-                    self.infinite();
+                if (!self.removed) {
+                    self.options.infinite ? self.infinite() : self.loadMore();
                 }
 
                 if (self.viewed.length) {
