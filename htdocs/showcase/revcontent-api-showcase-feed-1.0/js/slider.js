@@ -497,7 +497,6 @@ Author: michael@revcontent.com
 
             var element = this.createNewCell();
             
-            //items.push(item);
             grid.element.appendChild(element);
 
             var added = grid.addItems([element]);
@@ -1874,8 +1873,6 @@ Author: michael@revcontent.com
         revUtils.remove(item.element.querySelector('.rev-comment-box'));
         revUtils.remove(item.element.querySelector('.comments-list'));
 
-        var that = this;
-
         var commentsULElement = document.createElement('ul');
         revUtils.addClass(commentsULElement, 'comments-list');
         item.element.querySelector('.rev-content-inner').appendChild(commentsULElement);
@@ -2643,23 +2640,23 @@ Author: michael@revcontent.com
         }
     };
 
-    RevSlider.prototype.setCommentHTML = function(comment_data, includeReplies, truncate, uid) {
+    RevSlider.prototype.setCommentHTML = function(commentData, includeReplies, truncate, uid) {
     
         var that = this;
         var includeReplies = typeof includeReplies  === 'undefined' ? false : includeReplies;
 
-        var hasReplies = (comment_data.hasOwnProperty('replies') && comment_data.replies !== null);
-        var isReply = (comment_data.hasOwnProperty('comment_id') && comment_data.comment_id !== null);
-        var isLegacyComment = comment_data.user.id === "legacy";
+        var hasReplies = (commentData.hasOwnProperty('replies') && commentData.replies !== null);
+        var isReply = (commentData.hasOwnProperty('comment_id') && commentData.comment_id !== null);
+        var isLegacyComment = commentData.user.id === "legacy";
 
         var commentOwner = false;
 
         if (that.options.user !== null && that.options.user.hasOwnProperty("user_id")) {
-            commentOwner = comment_data.user.id === that.options.user.user_id;
+            commentOwner = commentData.user.id === that.options.user.user_id;
         }
 
         var li = document.createElement("li");
-        li.id = "comment-" + comment_data.id;// + '_' + Date.now();
+        li.id = "comment-" + commentData.id;// + '_' + Date.now();
 
         if (hasReplies && includeReplies) revUtils.addClass(li, 'has-children');
 
@@ -2668,12 +2665,12 @@ Author: michael@revcontent.com
         revUtils.addClass(post_author_div, 'author');
         revUtils.addClass(post_author_div, 'vcard');
         revUtils.addClass(post_author_div, 'inline-items');
-        var time = that.timeAgo(comment_data.created, true);
-        post_author_div.innerHTML = '<img src="' + comment_data.user.data.picture.data.url + '" alt="author">' +
+        var time = that.timeAgo(commentData.created, true);
+        post_author_div.innerHTML = '<img src="' + commentData.user.data.picture.data.url + '" alt="author">' +
                                     '<div class="author-date">' +
-                                        '<a class="h6 post__author-name fn" href="#">' + comment_data.user.data.name + '</a>' +
+                                        '<a class="h6 post__author-name fn" href="#">' + commentData.user.data.name + '</a>' +
                                         '<div class="post__date">' +
-                                            '<time class="published" datetime="' + comment_data.created + '"><span>' + time + (time !== 'yesterday' ? ' ago' : '') + '</span></time>' +
+                                            '<time class="published" datetime="' + commentData.created + '"><span>' + time + (time !== 'yesterday' ? ' ago' : '') + '</span></time>' +
                                         '</div>' +
                                     '</div>';
         li.appendChild(post_author_div);
@@ -2687,22 +2684,22 @@ Author: michael@revcontent.com
             post_author_div.querySelector('time').appendChild(deleteCommentElement);
 
             revUtils.addEventListener(deleteCommentElement, 'click', function() {
-               that.deleteComment(comment_data.id, li, uid);
+               that.deleteComment(commentData.id, li, uid);
             });
 
         }
 
         var comment_body = document.createElement("p");
-        comment_body.innerHTML = comment_data.comment || comment_data.reply;
+        comment_body.innerHTML = commentData.comment || commentData.reply;
 
         if (typeof truncate === "number") {
             
-            var comment_length = isReply ? comment_data.reply.length : comment_data.comment.length;
+            var comment_length = isReply ? commentData.reply.length : commentData.comment.length;
 
             if (comment_length > truncate) {
                 comment_body.style = "display:none;";
                 var comment_body_truncated = document.createElement("p");
-                comment_body_truncated.innerHTML = isReply ? comment_data.reply.trunc(truncate) : comment_data.comment.trunc(truncate);
+                comment_body_truncated.innerHTML = isReply ? commentData.reply.trunc(truncate) : commentData.comment.trunc(truncate);
                 
                 var readMoreCommentElement = document.createElement("a");
                 revUtils.addClass(readMoreCommentElement, 'comment-read-more');
@@ -2730,22 +2727,22 @@ Author: michael@revcontent.com
             commentToolBox.appendChild(comment_reply_btn);
 
             revUtils.addEventListener(comment_reply_btn, 'click', function(ev) {
-                that.handleComments(comment_data, true, comment_data.id, uid);
+                that.handleComments(commentData, true, commentData.id, uid);
             });
 
         }
 
-        if (comment_data.up_votes > 0) {
+        if (commentData.up_votes > 0) {
         var comment_likes_count = document.createElement("span");
             revUtils.addClass(comment_likes_count, 'rev-comment-likes-count');
-            comment_likes_count.innerText = comment_data.up_votes + " likes";
+            comment_likes_count.innerText = commentData.up_votes + " likes";
             commentToolBox.appendChild(comment_likes_count);
         }
 
         if (!isLegacyComment) {
             var comment_like = document.createElement("a");
                 revUtils.addClass(comment_like, 'rev-comment-like');
-                if (this.options.hasOwnProperty("jwt") && comment_data.vote.vote === "up") {
+                if (this.options.hasOwnProperty("jwt") && commentData.vote.vote === "up") {
                     revUtils.addClass(comment_like, 'selected');
                 }
                 comment_like.innerHTML = '<svg aria-hidden="true" data-prefix="fas" data-icon="thumbs-up" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-thumbs-up fa-w-16 fa-5x"><path d="M104 224H24c-13.255 0-24 10.745-24 24v240c0 13.255 10.745 24 24 24h80c13.255 0 24-10.745 24-24V248c0-13.255-10.745-24-24-24zM64 472c-13.255 0-24-10.745-24-24s10.745-24 24-24 24 10.745 24 24-10.745 24-24 24zM384 81.452c0 42.416-25.97 66.208-33.277 94.548h101.723c33.397 0 59.397 27.746 59.553 58.098.084 17.938-7.546 37.249-19.439 49.197l-.11.11c9.836 23.337 8.237 56.037-9.308 79.469 8.681 25.895-.069 57.704-16.382 74.757 4.298 17.598 2.244 32.575-6.148 44.632C440.202 511.587 389.616 512 346.839 512l-2.845-.001c-48.287-.017-87.806-17.598-119.56-31.725-15.957-7.099-36.821-15.887-52.651-16.178-6.54-.12-11.783-5.457-11.783-11.998v-213.77c0-3.2 1.282-6.271 3.558-8.521 39.614-39.144 56.648-80.587 89.117-113.111 14.804-14.832 20.188-37.236 25.393-58.902C282.515 39.293 291.817 0 312 0c24 0 72 8 72 81.452z" class=""></path></svg>';
@@ -2753,7 +2750,7 @@ Author: michael@revcontent.com
 
             var comment_dislike = document.createElement("a");
                 revUtils.addClass(comment_dislike, 'rev-comment-dislike');
-                if (this.options.hasOwnProperty("jwt") && comment_data.vote.vote === "down") {
+                if (this.options.hasOwnProperty("jwt") && commentData.vote.vote === "down") {
                     revUtils.addClass(comment_dislike, 'selected');
                 }
                 comment_dislike.innerHTML = '<svg aria-hidden="true" data-prefix="fas" data-icon="thumbs-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-thumbs-down fa-w-16 fa-5x"><path d="M0 56v240c0 13.255 10.745 24 24 24h80c13.255 0 24-10.745 24-24V56c0-13.255-10.745-24-24-24H24C10.745 32 0 42.745 0 56zm40 200c0-13.255 10.745-24 24-24s24 10.745 24 24-10.745 24-24 24-24-10.745-24-24zm272 256c-20.183 0-29.485-39.293-33.931-57.795-5.206-21.666-10.589-44.07-25.393-58.902-32.469-32.524-49.503-73.967-89.117-113.111a11.98 11.98 0 0 1-3.558-8.521V59.901c0-6.541 5.243-11.878 11.783-11.998 15.831-.29 36.694-9.079 52.651-16.178C256.189 17.598 295.709.017 343.995 0h2.844c42.777 0 93.363.413 113.774 29.737 8.392 12.057 10.446 27.034 6.148 44.632 16.312 17.053 25.063 48.863 16.382 74.757 17.544 23.432 19.143 56.132 9.308 79.469l.11.11c11.893 11.949 19.523 31.259 19.439 49.197-.156 30.352-26.157 58.098-59.553 58.098H350.723C358.03 364.34 384 388.132 384 430.548 384 504 336 512 312 512z" class=""></path></svg>';
@@ -2765,7 +2762,7 @@ Author: michael@revcontent.com
         
             //comment voting, remove event handlers as soon as a valid vote is initiated
             var upvote = function() {
-                that.handleVotes(comment_data, 'up', comment_like, li, function(){
+                that.handleVotes(commentData, 'up', comment_like, li, function(){
                     revUtils.removeEventListener(comment_like, 'click', upvote);
                     revUtils.addClass(comment_like, 'novak-animate');
 
@@ -2774,7 +2771,7 @@ Author: michael@revcontent.com
             };
 
             var downvote = function() {
-                that.handleVotes(comment_data, 'down', comment_dislike, li, function(){
+                that.handleVotes(commentData, 'down', comment_dislike, li, function(){
                     revUtils.removeEventListener(comment_dislike, 'click', downvote);
                     revUtils.addClass(comment_dislike, 'novak-animate');
 
@@ -2783,10 +2780,10 @@ Author: michael@revcontent.com
             };
 
             //comment voting, only add listener on non-current vote
-            if (comment_data.vote.vote !== "up") {
+            if (commentData.vote.vote !== "up") {
                 revUtils.addEventListener(comment_like, 'click', upvote);
             }
-            if (comment_data.vote.vote !== "down") {
+            if (commentData.vote.vote !== "down") {
                 revUtils.addEventListener(comment_dislike, 'click', downvote);
             }
 
@@ -2795,9 +2792,9 @@ Author: michael@revcontent.com
                 revUtils.addClass(replies_ul, 'children');
                 var truncate = revDetect.mobile() ? this.options.reply_truncate_length_mobile : this.options.reply_truncate_length;
 
-                for (var key in comment_data.replies) {
-                    if (comment_data.replies.hasOwnProperty(key)) {
-                        var reply_li = that.setCommentHTML.call(this, comment_data.replies[key],false,truncate,uid);
+                for (var key in commentData.replies) {
+                    if (commentData.replies.hasOwnProperty(key)) {
+                        var reply_li = that.setCommentHTML.call(this, commentData.replies[key],false,truncate,uid);
                         reply_li.setAttribute('data-type', 'reply');
                         replies_ul.appendChild(reply_li);
                     }
@@ -3202,18 +3199,18 @@ Author: michael@revcontent.com
     };
 
     
-    RevSlider.prototype.handleVotes = function(comment_data, vote_type, vote_button, comment_li, callback) {
+    RevSlider.prototype.handleVotes = function(commentData, voteType, voteButton, commentLi, callback) {
         var that = this;
-        var oldComment = comment_li;
+        var oldComment = commentLi;
         var currentTime = Date.now()/1000;
-        var hasExistingVote = (comment_data.vote.vote && comment_data.vote.vote !== vote_type);
+        var hasExistingVote = (commentData.vote.vote && commentData.vote.vote !== voteType);
 
-        if ( (currentTime - comment_data.vote.created) < 1 ) {
+        if ( (currentTime - commentData.vote.created) < 1 ) {
             //voting too fast
             return false;
         }
 
-        if (comment_data.vote.vote && comment_data.vote.vote === vote_type) {
+        if (commentData.vote.vote && commentData.vote.vote === voteType) {
             //already voted this type
             //this shouldnt be hit, but just in case
             return false;
@@ -3226,11 +3223,11 @@ Author: michael@revcontent.com
             function (resolve, reject) {
                 if (hasExistingVote) {
                     //remove existing vote first
-                    revApi.xhr(that.options.actions_api_url + 'vote/remove/' + comment_data.vote.id, function(data) {
-                        if (vote_type === "up") {
-                            comment_data.down_votes = comment_data.down_votes - 1;
+                    revApi.xhr(that.options.actions_api_url + 'vote/remove/' + commentData.vote.id, function(data) {
+                        if (voteType === "up") {
+                            commentData.down_votes = commentData.down_votes - 1;
                         } else {
-                            comment_data.up_votes = comment_data.up_votes - 1;
+                            commentData.up_votes = commentData.up_votes - 1;
                         }
                         //old vote removed, continue
                         resolve();
@@ -3251,9 +3248,9 @@ Author: michael@revcontent.com
                     //add new vote
                     var options = {};
                     var data = {
-                        action_id: comment_data.id,
-                        type: comment_data.hasOwnProperty("comment_id") ? 'reply' : 'comment',
-                        vote: vote_type
+                        action_id: commentData.id,
+                        type: commentData.hasOwnProperty("comment_id") ? 'reply' : 'comment',
+                        vote: voteType
                     };
                     options.data = JSON.stringify(data);
                     options.method = "POST";
@@ -3261,23 +3258,23 @@ Author: michael@revcontent.com
 
                     revApi.xhr(that.options.actions_api_url + 'vote/add', function(data) {
 
-                        if (vote_type === "down") {
-                            comment_data.down_votes = comment_data.down_votes + 1;
+                        if (voteType === "down") {
+                            commentData.down_votes = commentData.down_votes + 1;
                         } else {
-                            comment_data.up_votes = comment_data.up_votes + 1;
+                            commentData.up_votes = commentData.up_votes + 1;
                         }
 
-                        comment_data.vote.action_id = data.action_id;
-                        comment_data.vote.created = currentTime;
-                        comment_data.vote.id = data.id;
-                        comment_data.vote.type = data.type;
-                        comment_data.vote.vote = data.vote;
+                        commentData.vote.action_id = data.action_id;
+                        commentData.vote.created = currentTime;
+                        commentData.vote.id = data.id;
+                        commentData.vote.type = data.type;
+                        commentData.vote.vote = data.vote;
 
                         //replace comment with new data (includeReplies)
                         
                         var truncate = revDetect.mobile() ? that.options.comment_truncate_length_mobile : that.options.comment_truncate_length;
 
-                          var newComment = that.setCommentHTML(comment_data, false, truncate);
+                          var newComment = that.setCommentHTML(commentData, false, truncate);
                           var current_replies = oldComment.querySelector("ul.children");
                           if (current_replies !== null) {
                             newComment.appendChild(current_replies);
@@ -3296,7 +3293,7 @@ Author: michael@revcontent.com
             if (revDetect.mobile()) {
                 that.commentDetailAuth(tryToVote);
             } else {
-                var articleEl = that.getClosestParent(comment_li, 'article');
+                var articleEl = that.getClosestParent(commentLi, 'article');
                 revUtils.removeClass(document.querySelector('.rev-flipped'), 'rev-flipped');
                 revUtils.addClass(articleEl, 'rev-flipped');
 
@@ -3386,10 +3383,10 @@ Author: michael@revcontent.com
     };
 
 
-    RevSlider.prototype.deleteComment = function(comment_id, comment_el, uid) {
+    RevSlider.prototype.deleteComment = function(commentID, comment_el, uid) {
         var that = this;
         var mode = comment_el.getAttribute("data-type");
-        revApi.xhr(this.options.actions_api_url + mode + '/delete/' + comment_id, function(data) {
+        revApi.xhr(this.options.actions_api_url + mode + '/delete/' + commentID, function(data) {
             
             if (!revDetect.mobile()) {
                 //update count
@@ -3408,7 +3405,7 @@ Author: michael@revcontent.com
         },null,false,{method:'DELETE', jwt: that.options.jwt});
     };
 
-    RevSlider.prototype.submitComment = function(comment, url, comment_id, callback) {
+    RevSlider.prototype.submitComment = function(comment, url, commentID, callback) {
         
         if (comment === "") {
             return false;
@@ -3418,14 +3415,14 @@ Author: michael@revcontent.com
         var that = this;
         var options = {};
         var data = {};
-        var isReplyMode = (url === null && comment_id !== null);
+        var isReplyMode = (url === null && commentID !== null);
 
               
         data.comment = String(comment).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         data.url = url;
 
         if (isReplyMode) {
-            data.comment_id = comment_id;
+            data.commentID = commentID;
             data.reply = data.comment;
         }
 
