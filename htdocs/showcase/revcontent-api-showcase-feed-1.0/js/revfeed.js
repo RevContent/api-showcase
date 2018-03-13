@@ -94,7 +94,6 @@ Author: michael@revcontent.com
             initial_internal: 2,
             initial_sponsored: 1,
             masonry_layout: false,
-            row_limit: 0,
             img_host: 'https://img.engage.im',
             author_name:'',
             topic_title:'',

@@ -164,7 +164,6 @@ Author: michael@revcontent.com
             disclosure_interest_src: '//trends.engage.im/engage-interests.php',
             disclosure_interest_height: 520,
             masonry_layout: false,
-            row_limit: 0,
             user: null,
             content: [],
             history_stack: [],
@@ -438,8 +437,7 @@ Author: michael@revcontent.com
         var internalLimit = 0;
         var sponsoredLimit = 0;
 
-        var rows = this.options.row_limit > 0 ? this.options.row_limit : this.options.rows;
-        var total = total ? total : rows * grid.perRow;
+        var total = total ? total : this.options.rows * grid.perRow;
 
         // reactions
         var like_b64 = '<div class="rev-reaction rev-reaction-like">' +
