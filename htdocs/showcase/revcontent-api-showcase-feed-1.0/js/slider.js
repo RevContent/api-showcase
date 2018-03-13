@@ -438,7 +438,8 @@ Author: michael@revcontent.com
         var internalLimit = 0;
         var sponsoredLimit = 0;
 
-        var total = total ? total : this.options.row_limit > 0 ? this.options.row_limit : this.options.rows * grid.perRow;
+        var rows = this.options.row_limit > 0 ? this.options.row_limit : this.options.rows;
+        var total = total ? total : rows * grid.perRow;
 
         // reactions
         var like_b64 = '<div class="rev-reaction rev-reaction-like">' +
