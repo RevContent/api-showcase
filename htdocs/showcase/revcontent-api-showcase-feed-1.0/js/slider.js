@@ -1581,7 +1581,9 @@ Author: michael@revcontent.com
                 url += '&author_name=' + encodeURI(authorName);
             }
 
-            url += '&contextual_last_sort=' + encodeURIComponent(this.contextual_last_sort.join(','));
+            if (Array.isArray(this.contextual_last_sort)) {
+                url += '&contextual_last_sort=' + encodeURIComponent(this.contextual_last_sort.join(','));
+            }
         }
 
         if (this.options.keywords) {
