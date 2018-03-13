@@ -9,12 +9,31 @@ properties([
   buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5'))
 ])
 
-if(BRANCH_NAME == "master") {
-  CFID  = "E1GBG7FZ0VP3CL"
-  SLACK = "push-p0"
-} else {
-  CFID  = "E6LFF4BBCLHCL"
-  SLACK = "push-s0"
+// Setup branching information
+switch(BRANCH_NAME){
+  case "master":
+    CFID = "E1GBG7FZ0VP3CL"
+    SLACK = "push-p0"
+    break
+  case "s1":
+    CFID = "E1YWO6UN834KFG"
+    SLACK = "push-s1"
+    break
+  case "s2":
+    CFID = "EFV6RO7XMRMO2"
+    SLACK = "push-s2"
+    break
+  case "s4":
+    CFID = "E1SPDXUNVS9CY1"
+    SLACK = "push-s4"
+    break
+  case "develop":
+    CFID = "E6LFF4BBCLHCL"
+    SLACK = "push-s0"
+    break;
+  default:
+    echo "Branch is unknown to build file. Exiting."
+    return false
 }
 
 node {
