@@ -94,7 +94,7 @@ Author: michael@revcontent.com
             initial_internal: 2,
             initial_sponsored: 1,
             masonry_layout: false,
-            display_limit: 0,
+            row_limit: 0,
             img_host: 'https://img.engage.im',
             author_name:'',
             topic_title:'',
@@ -744,9 +744,9 @@ Author: michael@revcontent.com
             var beforeItemCount = self.innerWidget.grid.items.length;
 
             self
-                .promiseCreateBlankCards(self)
-                .then(self.promiseFetchCardDataRetry)
-                .then(self.promiseUpdateCardData)
+                .promiseCreateBlankCardsRetry(self, beforeItemCount)
+                .then(self.promiseFetchCardData)
+                .then(self.promiseUpdateCardDataRetry)
                 .then(function(input) {
                     self.loadMoreText.innerHTML = 'LOAD MORE CONTENT';
                     self.loadMoreContainer.className = 'rev-loadmore-button';
@@ -773,7 +773,6 @@ Author: michael@revcontent.com
         this.scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
         var scrollFunction = function() {
-
             var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
             var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
             var height = self.element.offsetHeight;
@@ -797,10 +796,10 @@ Author: michael@revcontent.com
                 var beforeItemCount = self.innerWidget.grid.items.length;
 
                 self
-                    .promiseCreateBlankCards(self)
-                    .then(self.promiseFetchCardDataRetry)
+                    .promiseCreateBlankCardsRetry(self, beforeItemCount)
                     .then(self.thenAddScrollListener)
-                    .then(self.promiseUpdateCardData)
+                    .then(self.promiseFetchCardData)
+                    .then(self.promiseUpdateCardDataRetry)
                     .catch(function (error) {
                         revUtils.removeEventListener(window, 'scroll', self.scrollListener);
 
@@ -819,44 +818,23 @@ Author: michael@revcontent.com
         revUtils.addEventListener(window, 'scroll', this.scrollListener);
     };
 
-    Feed.prototype.thenAddScrollListener = function(input) {
-        // give it a rest before going back
-        setTimeout(function () {
-            if (!input.self.removed) {
-                revUtils.addEventListener(window, 'scroll', input.self.scrollListener);
-            }
-        }, 150);
-
-        return input;
+    Feed.prototype.promiseCreateBlankCardsRetry = function(self, beforeItemCount) {
+        return self.promiseRetry(function() {
+            return self.promiseCreateBlankCards(self, beforeItemCount);
+        }, 10, 100);
     };
 
-    Feed.prototype.catchRemoveBlankCards = function(self, beforeItemCount, error) {
-        self.removed = true;
-
-        var remove = self.innerWidget.grid.items.length - beforeItemCount;
-
-        for (var i = 0; i < remove; i++) {
-            var popped = self.innerWidget.grid.items.pop();
-            popped.remove();
-        }
-
-        self.innerWidget.grid.layout();
-
-        throw error;
-    };
-
-    Feed.prototype.promiseCreateBlankCards = function(self) {
+    Feed.prototype.promiseCreateBlankCards = function(self, beforeItemCount) {
         return new Promise(function(resolve, reject) {
-            var rowData = self.innerWidget.createRows(self.innerWidget.grid, self.options.rows);
+            try {
+                var rowData = self.innerWidget.createRows(self.innerWidget.grid, self.options.rows);
 
-            resolve({self: self, rowData: rowData});
+                resolve({self: self, rowData: rowData});
+            } catch (e) {
+                self.removeBlankCards(beforeItemCount);
+                reject(e);
+            }
         });
-    };
-
-    Feed.prototype.promiseFetchCardDataRetry = function(input) {
-        return input.self.promiseRetry(function() {
-            return input.self.promiseFetchCardData(input);
-        }, 3, 100);
     };
 
     Feed.prototype.promiseFetchCardData = function(input) {
@@ -872,21 +850,33 @@ Author: michael@revcontent.com
                 }
 
                 resolve({self: self, rowData: rowData, data: data});
-            })
+            }, function() {
+                reject();
+            });
         });
+    };
+
+    Feed.prototype.promiseUpdateCardDataRetry = function(input) {
+        return input.self.promiseRetry(function() {
+            return input.self.promiseUpdateCardData(input);
+        }, 10, 100);
     };
 
     Feed.prototype.promiseUpdateCardData = function(input) {
         return new Promise(function(resolve, reject) {
-            var self = input.self;
-            var rowData = input.rowData;
-            var data = input.data;
+            try {
+                var self = input.self;
+                var rowData = input.rowData;
+                var data = input.data;
 
-            self.innerWidget.contextual_last_sort = data.contextual_last_sort;
-            var itemTypes = self.innerWidget.updateDisplayedItems(rowData.items, data);
-            self.viewableItems = self.viewableItems.concat(itemTypes.viewableItems);
+                self.innerWidget.contextual_last_sort = data.contextual_last_sort;
+                var itemTypes = self.innerWidget.updateDisplayedItems(rowData.items, data);
+                self.viewableItems = self.viewableItems.concat(itemTypes.viewableItems);
 
-            resolve({self: self, rowData: rowData, data: data});
+                resolve({self: self, rowData: rowData, data: data});
+            } catch (e) {
+                reject(e);
+            }
         });
     };
 
@@ -902,12 +892,41 @@ Author: michael@revcontent.com
                         .catch(function(e){
                             times--;
                             error = e;
+
                             setTimeout(function(){attempt()}, delay);
                         });
                 }
             };
+
             attempt();
         });
+    };
+
+    Feed.prototype.thenAddScrollListener = function(input) {
+        if (!input.self.removed) {
+            revUtils.addEventListener(window, 'scroll', input.self.scrollListener);
+        }
+
+        return input;
+    };
+
+    Feed.prototype.catchRemoveBlankCards = function(self, beforeItemCount, error) {
+        self.removed = true;
+
+        self.removeBlankCards(self, beforeItemCount);
+
+        throw error;
+    };
+
+    Feed.prototype.removeBlankCards = function(self, beforeItemCount) {
+        var remove = self.innerWidget.grid.items.length - beforeItemCount;
+
+        for (var i = 0; i < remove; i++) {
+            var popped = self.innerWidget.grid.items.pop();
+            popped.remove();
+        }
+
+        self.innerWidget.grid.layout();
     };
 
     Feed.prototype.checkVisible = function() {
