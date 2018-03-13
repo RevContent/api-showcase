@@ -50,9 +50,6 @@ api.xhr = function(url, success, failure, withCredentials, opts) {
     
     if (options.hasOwnProperty("jwt")) {
         var authtoken = 'Bearer ' + options.jwt;
-        //var authtoken = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOm51bGwsImV4cCI6bnVsbCwiYXVkIjoiIiwic3ViIjoiIiwidXNlciI6IjEwMTU2ODYwNDMwMDk0NTU0In0.MCazKhwOUS9MrphUjCWXHYI1ICwgs8BLlnbEK0RrcRs';
-        //request.setRequestHeader('authorization','Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOm51bGwsImV4cCI6bnVsbCwiYXVkIjoiIiwic3ViIjoiIiwidXNlciI6IjEwMTU2ODYwNDMwMDk0NTU0In0.MCazKhwOUS9MrphUjCWXHYI1ICwgs8BLlnbEK0RrcRs'); //randy
-        //request.setRequestHeader('authorization','Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOm51bGwsImV4cCI6bnVsbCwiYXVkIjoiIiwic3ViIjoiIiwidXNlciI6IjEwODAwNzUzMzM1MTUzNyJ9.twpF2H3duLRPWtfP4oidciyhokCFgFjnd0oSYd_m85I');
         request.setRequestHeader('authorization', authtoken);
     }
     

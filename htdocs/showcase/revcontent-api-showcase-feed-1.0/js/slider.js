@@ -2628,8 +2628,6 @@ Author: michael@revcontent.com
         var isReply = (comment_data.hasOwnProperty('comment_id') && comment_data.comment_id !== null);
         var isLegacyComment = comment_data.user.id === "legacy";
 
-        //remove this when we have real user info
-        //var user_id = "108007533351537";
         var commentOwner = false;
 
         if (that.options.user !== null && that.options.user.hasOwnProperty("user_id")) {
@@ -2947,24 +2945,8 @@ Author: michael@revcontent.com
             }
 
 
-            
-
-            // commentDetailsElement.id = 'rev-comment-detail';
-
             document.body.appendChild(commentDetailsElement);
             revUtils.addClass(document.body, 'modal-open');
-
-            
-
-            // if (isReplyMode) {
-            //     commentDetailsElement.id = 'rev-reply-detail';
-            //     commentDetailsHeaderElement.innerHTML += '<span style="text-align:center;width: 100%;display: block;font-size: 16px;margin-left: -14px;font-weight: bold;">Replies</span>';
-            //     history.pushState({engage: 'comment_reply'}, null, "#comment-reply");
-            // } else {
-            //     commentDetailsElement.id = 'rev-comment-detail';
-            //     commentDetailsHeaderElement.innerHTML += '<div class="rev-headline" style="margin: 0 7px 0 27px;font-size: 12px;font-weight: bold;text-align: center;line-height: 12px;max-height: 25px;overflow: hidden;">' + itemData.headline + '</div>';
-            //     history.pushState({engage: 'comment'}, null, "#comment");
-            // }
 
             commentDetailsElement.appendChild(commentDetailsHeaderElement);
 
@@ -3070,49 +3052,44 @@ Author: michael@revcontent.com
                 
                     
                     var submitFn = function() {
-                        var submitted_comment_data = that.submitComment(commentTextAreaElement.value, itemData.target_url, replyingTo, function(data,error){
-                            
-                            if (typeof data === "number" && data === 201) {
-                                //for some reason we are getting dual responses, one with the payload and one with the http code
-                                return;
+                    var submitted_comment_data = that.submitComment(commentTextAreaElement.value, itemData.target_url, replyingTo, function(data,error){
+                        
+                        if (typeof data === "number" && data === 201) {
+                            //for some reason we are getting dual responses, one with the payload and one with the http code
+                            return;
+                        }
+
+                        if (error) {
+                            //currently only want to show error for bad words, but gathering the error msg from response for later use
+                            var errorMsg = JSON.parse(data.responseText);
+                            var httpStatus = data.status;
+                            if (httpStatus === 406) {
+                                //bad word
+                                that.displayError(commentBoxElement,"Oops! We've detected a <b>bad word</b> in your comment, Please update your response before submitting.");    
                             }
+                            return;
+                        }
+                        var truncate = isReplyMode ? that.options.reply_truncate_length_mobile : that.options.comment_truncate_length_mobile;
+                        var newCommentElement = that.setCommentHTML(data,false,truncate,uid);
+                        commentFeedUL.appendChild(newCommentElement);
+                        commentTextAreaElement.value = "";
+                        commentFeedElement.scrollTop = commentFeedElement.scrollHeight;
 
-                            if (error) {
-                                //currently only want to show error for bad words, but gathering the error msg from response for later use
-                                var errorMsg = JSON.parse(data.responseText);
-                                var httpStatus = data.status;
-                                if (httpStatus === 406) {
-                                    //bad word
-                                    that.displayError(commentBoxElement,"Oops! We've detected a <b>bad word</b> in your comment, Please update your response before submitting.");    
-                                }
-                                return;
-                            }
-                            var truncate = isReplyMode ? that.options.reply_truncate_length_mobile : that.options.comment_truncate_length_mobile;
-                            var newCommentElement = that.setCommentHTML(data,false,truncate,uid);
-                            commentFeedUL.appendChild(newCommentElement);
-                            commentTextAreaElement.value = "";
-                            commentFeedElement.scrollTop = commentFeedElement.scrollHeight;
+                        that.updateDisplayedItem(that.feedItems[uid]);
+                        
+                    });
+                };
 
-                            that.updateDisplayedItem(that.feedItems[uid]);
-                            
-                        });
-                    };
-
-                    if (that.authenticated) {
-                        submitFn();
-                    } else {
-                        that.commentDetailAuth(submitFn);
-                    }
-                
-
-
+                if (that.authenticated) {
+                    submitFn();
+                } else {
+                    that.commentDetailAuth(submitFn);
+                }
             });
 
             revUtils.addClass(commentDetailsElement, 'comment-slide-in');
 
-
             window.onpopstate = function(event) {
-
                 var authbox = document.getElementById('comment_authbox');
                 var reply_window = document.getElementById('rev-reply-detail');
                 var comment_window = document.getElementById('rev-comment-detail');
@@ -3138,7 +3115,6 @@ Author: michael@revcontent.com
                     var func = function(){authbox.remove();};
                     setTimeout(func, 500);
                 }
-
             };
 
         } else {
