@@ -18,12 +18,21 @@ Author: michael@revcontent.com
         var defaults = {
             per_row: {
                 xxs: 1,
-                xs: 1,
+                xs: 2,
                 sm: 3,
                 md: 4,
                 lg: 5,
                 xl: 6,
                 xxl: 7
+            },
+            breakpoints: {
+                xxs: 0,
+                xs: 350,
+                sm: 550,
+                md: 750,
+                lg: 950,
+                xl: 1150,
+                xxl: 1350
             },
             cell_margin: 8, // TODO make this relative to container
             next_width_percentage: 20,
@@ -185,17 +194,17 @@ Author: michael@revcontent.com
         // determine elements per row based on container width
         if (typeof this.options.per_row == 'number') { // if a number is passed just use that
             this.perRow = this.options.per_row;
-        }else if (this.containerWidth >= 1500) {
+        }else if (this.containerWidth >= this.options.breakpoints.xxl) {
             this.perRow = this.options.per_row.xxl;
-        }else if (this.containerWidth >= 1250) {
+        }else if (this.containerWidth >= this.options.breakpoints.xl) {
             this.perRow = this.options.per_row.xl;
-        }else if (this.containerWidth >= 1000) {
+        }else if (this.containerWidth >= this.options.breakpoints.lg) {
             this.perRow = this.options.per_row.lg;
-        }else if (this.containerWidth >= 750) {
+        }else if (this.containerWidth >= this.options.breakpoints.md) {
             this.perRow = this.options.per_row.md;
-        }else if (this.containerWidth >= 500) {
+        }else if (this.containerWidth >= this.options.breakpoints.sm) {
             this.perRow = this.options.per_row.sm;
-        }else if (this.containerWidth >= 250) {
+        }else if (this.containerWidth >= this.options.breakpoints.xs) {
             this.perRow = this.options.per_row.xs;
         }else {
             this.perRow = this.options.per_row.xxs;
