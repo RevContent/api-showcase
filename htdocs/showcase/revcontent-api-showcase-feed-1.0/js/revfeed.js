@@ -187,10 +187,6 @@ Author: michael@revcontent.com
         this.options.emitter.on('createFeed', function(type, data) {
             self.innerWidget.removeNotify(); // remove notify if present
 
-            if (!data.withoutHistory) {
-                self.pushHistory();
-            }
-
             // initial
             var total = self.options.rows * self.innerWidget.grid.perRow;
 
@@ -241,18 +237,28 @@ Author: michael@revcontent.com
 
             switch (type) {
                 case 'author':
+                    self.options.topic_type = type;
                     self.options.author_name = data.authorName;
                     self.options.topic_id = -1;
+                    self.options.topic_title = '';
                     break;
                 case 'topic':
+                    self.options.topic_type = type;
                     self.options.author_name = '';
                     self.options.topic_id = data.topicId;
                     self.options.topic_title = data.topicTitle;
                     break;
                 default:
+                    self.options.topic_type = 'default';
                     self.options.author_name ='';
                     self.options.topic_id = -1;
                     break;
+            }
+
+
+            // History Stack
+            if (!data.withoutHistory) {
+                self.pushHistory();
             }
 
             // TODO - yikes
@@ -275,7 +281,11 @@ Author: michael@revcontent.com
 
                     if (!internalCount) { // if not content stop infinite scroll and get out
                         self.options.emitter.emitEvent('removedItems');
-                        self.innerWidget.notify('Oh no! This is somewhat embarrassing. We don\'t have content for that ' + revUtils.capitalize(type) + '. Please go back or try a different ' + revUtils.capitalize(type) + '.', {label: 'continue', link: '#'}, 'info', true);
+                        self.innerWidget.notify('Oh no! This is somewhat embarrassing. We don\'t have content for that ' + revUtils.capitalize(type) + '. Please go back or try a different ' + revUtils.capitalize(type) + '.', {label: 'continue', link: '#'}, 'info', false);
+                        if (self.options.history_stack.length > 0) {
+                            self.options.history_stack.pop();
+                            self.navBar();
+                        }
                         return;
                     }
 
@@ -285,14 +295,20 @@ Author: michael@revcontent.com
                     }
 
                     self.innerWidget.updateDisplayedItems(self.innerWidget.grid.items, resp);
+
+                    self.navBar();
+
                 });
             }
 
             setTimeout(function() { // wait a tick ENG-263
                 self.innerWidget.containerElement.scrollIntoView(true);
+                // allow feed link clicks again
+                self.innerWidget.preventFeedLinkClick = false;
+
+                self.navBar();
             });
 
-            self.navBar();
         });
 
         this.innerWidget = this.createInnerWidget(this.containerElement, this.options);
@@ -464,8 +480,14 @@ Author: michael@revcontent.com
 
     Feed.prototype.navBar = function() {
         if(this.options.history_stack.length == 0){
+            var existingBack = this.innerWidget.containerElement.querySelector('.go-back-bar');
+            if (existingBack){
+                this.detachBackBar(existingBack, existingBack.querySelector('button'));
+            }
             return;
         }
+
+        var activePage = this.options.history_stack[this.options.history_stack.length-1];
         var existingHeader = this.innerWidget.containerElement.querySelector('.rev-nav-header');
         var header = existingHeader ? existingHeader : document.createElement('div');
         header.className = 'rev-nav-header';
@@ -479,6 +501,12 @@ Author: michael@revcontent.com
 
         var existingBack = this.innerWidget.containerElement.querySelector('.go-back-bar');
         var back = existingBack ? existingBack : document.createElement('div');
+
+        back.setAttribute('data-type', activePage.type);
+        back.setAttribute('data-author', activePage.author_name.toLowerCase());
+        back.setAttribute('data-topic', activePage.topic_id);
+        back.setAttribute('data-title', activePage.topic_title);
+
         //var e_icon = '<span style="margin: 10px 10px 0 10px;width:16px;height:16px;display:block;background: transparent url(data:image/png;base64,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) top left no-repeat;background-size:contain"></span>';
         var e_icon = '';
         var back_icon = '<span style="margin:0 auto;width:16px;height:16px;display:block;cursor:pointer;background: transparent url(data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgNTEyLjA1NiA1MTIuMDU2IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIuMDU2IDUxMi4wNTY7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgY2xhc3M9IiI+PGc+PGc+Cgk8Zz4KCQk8cGF0aCBkPSJNNDM0LjE2LDI0NC4yMjVjLTUxLjk2OC01My44NjctMTI2LjIyOS04Mi4xNTUtMjIwLjg0My04NC4wOTZWNjQuMDIyYzAtNC4zMDktMi42MDMtOC4yMTMtNi41OTItOS44NTYgICAgYy0zLjk4OS0xLjYyMS04LjU1NS0wLjc0Ny0xMS42MDUsMi4zMDRsLTE5MiwxOTJjLTQuMTYsNC4xNi00LjE2LDEwLjkyMywwLDE1LjA4M2wxOTIsMTkyYzMuMDUxLDMuMDcyLDcuNjU5LDMuOTg5LDExLjYyNywyLjMwNCAgICBjMy45ODktMS42NDMsNi41OTItNS41NDcsNi41OTItOS44NTZ2LTk1LjkxNWMyMTQuMzM2LDMuMTE1LDI3OC4zMTUsMTAwLjU2NSwyNzguOTMzLDEwMS41MjVjMS45ODQsMy4yLDUuNDQsNS4wNTYsOS4wNjcsNS4wNTYgICAgYzAuODk2LDAsMS44MTMtMC4xMjgsMi43MzEtMC4zNjNjNC41NDQtMS4yMTYsNy43NjUtNS4yMjcsNy45MzYtOS45NDFDNTEyLjE1NSw0NDMuNTQyLDUxNS4zMzMsMzI4LjM4NSw0MzQuMTYsMjQ0LjIyNXoiIGRhdGEtb3JpZ2luYWw9IiMwMDAwMDAiIGNsYXNzPSJhY3RpdmUtcGF0aCIgc3R5bGU9ImZpbGw6I0ZGRkZGRiIgZGF0YS1vbGRfY29sb3I9IiNmZmZmZmYiPjwvcGF0aD4KCTwvZz4KPC9nPjwvZz4gPC9zdmc+) top left no-repeat;background-size:contain;">&nbsp;</span>';
@@ -493,7 +521,7 @@ Author: michael@revcontent.com
 
         this.innerWidget.containerElement.style.paddingTop = '48px';
 
-        back.setAttribute('style','overflow:hidden;transition: none;-moz-transition: none;-webkit-transition: none;-o-transition: none;box-shadow: 0 1px 4px 0 rgba(12, 12, 13, 0.5);position:static;z-index:5000;left:' + left_pos + ';top:' + top_pos + ';margin-bottom: 9px;display: block;width: ' + grid_width + ';height: 40px;line-height: 40px;background-color:rgba(0,0,0,0.83);color:#dddddd;font-size:12px;');
+        back.setAttribute('style','overflow:hidden;transition: none;-moz-transition: none;-webkit-transition: none;-o-transition: none;box-shadow: 0 1px 4px 0 rgba(12, 12, 13, 0.5);position:static;z-index:5000;left:' + left_pos + ';top:' + top_pos + ';margin-bottom: 0;display: block;width: ' + grid_width + ';height: 40px;line-height: 40px;background-color:rgba(0,0,0,0.83);color:#dddddd;font-size:12px;');
         back.setAttribute('id','go-back-bar');
         back.classList.add('go-back-bar');
 
@@ -504,14 +532,17 @@ Author: michael@revcontent.com
 
         var title = "";
         var author_initials = '';
-        if(this.options.topic_id>0){
-            title = this.options.topic_title;
+
+        if(activePage.type == "topic"){
+            title = activePage.topic_title;
         }
-        if(this.options.author_name && this.options.author_name.length>0){
-            title = "Articles by "+this.options.author_name;
-            var ai = this.options.author_name.split(' ');
-            author_initials = ai[0].charAt(0) + ' ' + (ai.length == 3 ? ai[2].charAt(0) : ai[1].charAt(0));
-            header_logo = '<span style="display:block;margin-left:9px;width:24px;height:24px;border-radius:24px;text-align:center;font-size:11px;background-color:#ffffff;color:#222222;letter-spacing:-1px;line-height:24px;margin-top:8px;">' + author_initials + '</span>';
+        else if (activePage.type == "author"){
+            if(activePage.author_name){
+                title = "Articles by " + activePage.author_name;
+                var ai = activePage.author_name.split(' ');
+                author_initials = ai[0].charAt(0) + ' ' + (ai.length == 3 ? ai[2].charAt(0) : ai[1].charAt(0));
+                header_logo = '<span style="display:block;margin-left:9px;width:24px;height:24px;border-radius:24px;text-align:center;font-size:11px;background-color:#ffffff;color:#222222;letter-spacing:-1px;line-height:24px;margin-top:8px;">' + author_initials + '</span>';
+            }
         }
 
         back.innerHTML = '<div style="display:flex;flex-direction:row;">' +
@@ -541,7 +572,9 @@ Author: michael@revcontent.com
             that.navbarScrollListener(that, back);
         });
 
-        revUtils.addEventListener(back.querySelector('.feed-back-button'), revDetect.mobile() ? 'touchstart' : 'click', this.loadFromHistory.bind(this));
+        var backButton = back.querySelector('.feed-back-button');
+
+        revUtils.addEventListener(backButton, revDetect.mobile() ? 'touchstart' : 'click', this.loadFromHistory.bind(this, back, backButton));
     };
 
     Feed.prototype.navbarScrollListener = function(that, back){
@@ -565,6 +598,9 @@ Author: michael@revcontent.com
                     // for now these classes are site specific...
                     var fixed_video = document.querySelector('.videocontent-wrapper.mStickyPlayer');
                     var top_offset = 0;
+
+                    var notice = that.element.querySelector('div#rev-notify-panel');
+
                     if (fixed_head) {
                         top_offset = parseInt(fixed_head.clientHeight);
                     }
@@ -579,6 +615,14 @@ Author: michael@revcontent.com
                     back.style.width = grid_rect.width + 'px';
                     back.style.top = 0 + top_offset + 'px';
                     back.classList.remove('no-shadow');
+
+                    if (notice) {
+                        notice.style.position = 'fixed';
+                        notice.style.left = 'auto';
+                        notice.style.top = 0 + (top_offset + back.clientHeight) + 'px';
+                        notice.style.width = grid_rect.width + 'px';
+                    }
+
                     //if (that.options.window_width_devices && revDetect.show(that.options.window_width_devices)) {
                     //    that.enterFlushedState(that.element);
                     //}
@@ -590,6 +634,19 @@ Author: michael@revcontent.com
                 back.style.position = 'static';
                 back.style.width = '100%';
                 back.classList.add('no-shadow');
+
+                var notice = that.element.querySelector('div#rev-notify-panel');
+
+                if (notice) {
+                    notice.style.top = 0;
+                    notice.style.position = 'static';
+                    notice.style.width = '100%';
+                    notice.style.marginBottom = '9px';
+                    back.style.marginBottom = 0;
+                } else {
+                    back.style.marginBottom = '9px';
+                }
+
                 //if (that.options.window_width_devices && revDetect.show(that.options.window_width_devices)) {
                 //    that.leaveFlushedState(that.element);
                 //}
@@ -598,41 +655,95 @@ Author: michael@revcontent.com
     };
 
     Feed.prototype.pushHistory = function(){
+        
+        if (this.options.topic_type == "author") {
+            if(this.options.history_stack.length > 0){
+                if (this.options.author_name.toLowerCase() == this.options.history_stack[this.options.history_stack.length-1].author_name.toLowerCase()) {
+                    return;
+                }
+            }
+        }
+
+        if (this.options.topic_type == "topic" && this.options.topic_id !== -1){
+            if(this.options.history_stack.length > 0){
+                if (this.options.topic_id == this.options.history_stack[this.options.history_stack.length-1].topic_id) {
+                    return;
+                }
+            }
+        }
+
         this.options.history_stack.push({
+            type: this.options.topic_type,
             author_name:this.options.author_name,
             topic_id:this.options.topic_id,
             topic_title:this.options.topic_title
         });
+
     };
 
-    Feed.prototype.loadFromHistory = function() {
-        if (this.options.history_stack.length > 0) {
+    Feed.prototype.loadFromHistory = function(backBar, backButton) {
+        //alert("here!");
+        var that = this;
+        if(this.element.classList.contains('is-loading') || this.options.history_stack.length == 0) {
+            return;
+        }
+        this.element.classList.add('is-loading');
+        this.element.style.pointerEvents = 'none';
+        this.element.style.transition = 'all 0.8s';
+        this.element.style.opacity = 0.7;
+        if (this.options.history_stack.length > 1) {
             var item = this.options.history_stack.pop();
             if(this.options.history_stack.length == 0){
-                this.clearHistory();
+                this.clearHistory(backBar, backButton);
+            } else {
+                item = this.options.history_stack.pop();
             }
-            if (item.topic_id && item.topic_id > 0) {
-                this.innerWidget.loadTopicFeed(item.topic_id,item.topic_title,true);
+            if (item.type == "topic" && !isNaN(item.topic_id)) {
+                this.innerWidget.loadTopicFeed(item.topic_id,item.topic_title, false);
             }
-            else if (item.author_name && item.author_name.length > 0) {
-                this.innerWidget.loadAuthorFeed(item.author_name, true);
+            else if (item.type == "author" && item.author_name.length > 0) {
+                this.innerWidget.loadAuthorFeed(item.author_name, false);
             } else {
                 this.options.emitter.emitEvent('createFeed', ['default', {
                     withoutHistory: true
                 }]);
-                //this.clearHistory();
+                this.clearHistory(backBar, backButton);
             }
+
         } else {
-            this.clearHistory();
+            this.options.emitter.emitEvent('createFeed', ['default', {
+                withoutHistory: true
+            }]);
+            this.clearHistory(backBar, backButton);
         }
+
+        var refreshTimeout = setTimeout(function(){
+            that.element.classList.remove('is-loading');
+            that.element.style.pointerEvents = 'auto';
+            that.element.style.transition = 'none';
+            that.element.style.opacity = 1;
+            clearTimeout(refreshTimeout);
+        }, 800);
     };
 
-    Feed.prototype.clearHistory = function(){
-        var existing_back = this.innerWidget.containerElement.querySelector('.go-back-bar');
-        if(existing_back !== null){
-            existing_back.remove();
-        }
+    Feed.prototype.clearHistory = function(backBar, backButton) {
+        this.detachBackBar(backBar, backButton);
         this.options.history_stack = [];
+    };
+
+    Feed.prototype.detachBackBar = function(backBar, backButton) {
+        if (backBar) {
+            backBar.style.pointerEvents = 'none';
+            if (revDetect.mobile()) {
+                revUtils.addEventListener(backButton, 'touchend', function() {
+                    setTimeout(function() {
+                        backBar.remove(); // wait a tick
+                    });
+                });
+            } else {
+                backBar.remove();
+            }
+        }
     };
 
     Feed.prototype.windowWidth = function() {
@@ -679,20 +790,20 @@ Author: michael@revcontent.com
         window.dispatchEvent(new Event('resize'));
     };
 
-    Feed.prototype.leaveFlushedState = function(grid){
-        if(!grid.classList.contains('is-flushed')) { return; }
-        this.options.window_width_enabled = false;
-        //revUtils.removeClass(this.innerWidget.containerElement, 'rev-slider-window-width');
-        grid.classList.remove("is-flushed");
-        var back = grid.querySelector('div#go-back-bar');
-        if(back !== null) {
-            grid.querySelector('div#go-back-bar').style.width = '100%';
-        }
-        grid.style.backgroundColor = 'transparent';
-        grid.style.marginLeft = 0;
-        grid.style.marginRight = 0;
-        window.dispatchEvent(new Event('resize'));
-    };
+    // Feed.prototype.leaveFlushedState = function(grid){
+    //     if(!grid.classList.contains('is-flushed')) { return; }
+    //     this.options.window_width_enabled = false;
+    //     //revUtils.removeClass(this.innerWidget.containerElement, 'rev-slider-window-width');
+    //     grid.classList.remove("is-flushed");
+    //     var back = grid.querySelector('div#go-back-bar');
+    //     if(back !== null) {
+    //         grid.querySelector('div#go-back-bar').style.width = '100%';
+    //     }
+    //     grid.style.backgroundColor = 'transparent';
+    //     grid.style.marginLeft = 0;
+    //     grid.style.marginRight = 0;
+    //     window.dispatchEvent(new Event('resize'));
+    // };
 
     Feed.prototype.createInnerWidget = function(element, options) {
         options.element = element;
@@ -740,11 +851,11 @@ Author: michael@revcontent.com
             var top = self.innerWidget.grid.element.getBoundingClientRect().top;
             var bottom = self.innerWidget.grid.element.getBoundingClientRect().bottom;
 
-            if(top <= 0 && (self.options.window_width_devices && revDetect.show(self.options.window_width_devices))) {
-                self.enterFlushedState(self.element);
-            } else {
-                self.leaveFlushedState(self.element);
-            }
+            // if(top <= 0 && (self.options.window_width_devices && revDetect.show(self.options.window_width_devices))) {
+            //     self.enterFlushedState(self.element);
+            // } else {
+            //     self.leaveFlushedState(self.element);
+            // }
 
             if (self.removed) {
                 revUtils.removeEventListener(window, 'scroll', self.scrollListener);
