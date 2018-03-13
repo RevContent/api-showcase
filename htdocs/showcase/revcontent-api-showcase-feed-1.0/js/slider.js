@@ -1997,10 +1997,17 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.handleFeedLink = function(type, itemData, e) {
+
+        if (this.preventFeedLinkClick) {
+            return;
+        }
+
         if (e) {
             e.stopPropagation();
             e.preventDefault();
         }
+
+        this.preventFeedLinkClick = true;
 
         switch (type) {
             case 'author':
@@ -2482,17 +2489,34 @@ Author: michael@revcontent.com
         notice.classList.add('rev-notify');
         notice.classList.add('rev-notify-alert');
         notice.classList.add('rev-notify-alert--default');
-        notice.innerHTML = '<p style="margin:0;padding:0"><a class="notice-action" href="' + (action.link !== undefined ? action.link : '#') + '" style="text-transform:uppercase;float:right;font-weight:bold;padding-left:8px;" onclick="javascript:return false;">' + action.label + '</a> ' + message + '</p>';
-        notice.setAttribute('style','display:block;transition: all 0.5s ease-out;position:fixed;top:-48px;left:0;z-index:15000;width:100%;height:32px;line-height:32px;font-size:10px;font-family:"Montserrat";padding:0 9px;background-color:rgba(0,0,0,0.7);color:#ffffff;');
+        notice.innerHTML = '<p style="margin:0;padding:0;"><a class="notice-action" href="' + (action.link !== undefined ? action.link : '#') + '" style="color:#ffffff;text-transform:uppercase;float:right;font-weight:bold;padding:2px 8px;border-radius:8px;margin-left:5px;background-color:rgba(75,152,223,0.9)" onclick="javascript:return false;">' + action.label + '</a> ' + message + '</p>';
+        notice.setAttribute('style','display:block;transition: none;position:static;top:0;left:0;z-index:15000;width:100%;min-height:32px;line-height:16px!important;font-size:10px!important;font-family:"Montserrat";padding:8px 9px;background-color:rgba(0,0,0,0.8);color:#ffffff;border-top:1px solid rgba(75,152,223,0.9)');
 
-        document.body.appendChild(notice);
+        var noticeAction = notice.querySelector('.notice-action');
+        if (noticeAction) {
+            revUtils.addEventListener(noticeAction, 'click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                notice.remove();
+            }, {passive: false});
+        }
+
+        var revHead = this.containerElement.querySelector('.rev-head');
+        var existingBack = this.containerElement.querySelector('.go-back-bar');
+
+        if(existingBack) {
+            existingBack.after(notice);
+        } else {
+            revHead.after(notice);
+        }
+
         setTimeout(function(){
             notice.style.top = 0;
         }, 504);
         clearTimeout(notice_timeout);
 
         if (!keep) {
-            notice_timeout = setTimeout(this.removeNotify, 2000);
+            notice_timeout = setTimeout(this.removeNotify, 6000);
         }
     };
 
