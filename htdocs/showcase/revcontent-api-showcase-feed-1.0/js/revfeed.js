@@ -168,7 +168,11 @@ Author: michael@revcontent.com
         this.options.emitter.on('removedItems', function(items) {
             self.removed = true;
 
-            revUtils.removeEventListener(window, 'scroll', self.scrollListener);
+            if (self.options.infinite) {
+                revUtils.removeEventListener(window, 'scroll', self.scrollListener);
+            } else {
+                revUtils.remove(self.loadMoreContainer);
+            }
 
             if (items) {
                 for (var i = 0; i < items.length; i++) {
@@ -652,7 +656,7 @@ Author: michael@revcontent.com
     };
 
     Feed.prototype.pushHistory = function(){
-        
+
         if (this.options.topic_type == "author") {
             if(this.options.history_stack.length > 0){
                 if (this.options.author_name.toLowerCase() == this.options.history_stack[this.options.history_stack.length-1].author_name.toLowerCase()) {
@@ -833,6 +837,30 @@ Author: michael@revcontent.com
         });
     };
 
+    Feed.prototype.loadMore = function() {
+        var self = this;
+
+        self.loadMoreContainer = document.createElement('div');
+        self.loadMoreContainer.className = 'rev-loadmore-button';
+
+        self.loadMoreText = document.createElement('div');
+        self.loadMoreText.className = 'rev-loadmore-button-text';
+        self.loadMoreText.innerHTML = 'LOAD MORE CONTENT';
+
+        revUtils.append(self.loadMoreContainer, self.loadMoreText);
+        revUtils.append(self.innerWidget.containerElement, self.loadMoreContainer);
+
+        self.loadMoreListener = function() {
+            self.loadMoreText.innerHTML = 'LOADING ...';
+            self.loadMoreContainer.className = 'rev-loadmore-button loading';
+            revUtils.removeEventListener(self.loadMoreContainer, 'click', self.loadMoreListener);
+
+            self.addContent(self);
+        };
+
+        revUtils.addEventListener(self.loadMoreContainer, 'click', self.loadMoreListener);
+    };
+
     Feed.prototype.infinite = function() {
         var self = this;
 
@@ -863,74 +891,7 @@ Author: michael@revcontent.com
 
                 revUtils.removeEventListener(window, 'scroll', self.scrollListener);
 
-                // TODO if promise chain for loadMore() works as expected, convert infinite scroll to use it too
-                var promise = new Promise(function(resolve, reject) {
-
-                    var tryToCreateRows = function(retries) {
-                        try {
-                            var beforeItemCount = self.innerWidget.grid.items.length;
-
-                            var rowData = self.innerWidget.createRows(self.innerWidget.grid, self.options.rows);
-
-                            // if (self.testRetry > 0 && retries != 3) { // TEST
-                            //     throw new Error('Whoops!');
-                            // }
-
-                            setTimeout( function() {
-                                if (!self.removed) {
-                                    revUtils.addEventListener(window, 'scroll', self.scrollListener);
-                                }
-                            }, 150); // give it a rest before going back
-
-                            resolve(rowData);
-                        } catch (e) { // remove items and try again
-                            // remove items TODO: wrap this in try
-                            var remove = self.innerWidget.grid.items.length - beforeItemCount;
-                            for (var i = 0; i < remove; i++) {
-                                var popped = self.innerWidget.grid.items.pop();
-                                popped.remove();
-                            }
-                            // try again
-                            if (retries > 0) {
-                                setTimeout(function() {
-                                    tryToCreateRows((retries - 1));
-                                }, 100);
-                            }
-                        }
-                    }
-
-                    try {
-                        tryToCreateRows(10); // retry 10 times
-                    } catch (e) {
-                        console.log('*************Feed', e);
-                    }
-                }).then(function(rowData) {
-                    return new Promise(function(resolve, reject) {
-                        revApi.request(self.innerWidget.generateUrl(self.innerWidget.internalOffset, rowData.internalLimit, self.innerWidget.sponsoredOffset, rowData.sponsoredLimit), function(data) {
-                            resolve({rowData: rowData, data: data});
-                        })
-                    });
-                }).then(function(data) {
-                    var tryToUpdateDisplayedItems = function(retries) {
-                        try {
-                            self.innerWidget.contextual_last_sort = data.contextual_last_sort;
-                            var itemTypes = self.innerWidget.updateDisplayedItems(data.rowData.items, data.data);
-                            self.viewableItems = self.viewableItems.concat(itemTypes.viewableItems);
-
-                            return Promise.resolve(data);
-                        } catch (e) {
-                            if (retries > 0) {
-                                setTimeout(function() {
-                                    tryToUpdateDisplayedItems((retries - 1));
-                                }, 100)
-                            }
-                        }
-                    }
-
-                    return tryToUpdateDisplayedItems(10);
-                }).catch(function(e) {
-                    console.log('*************Feed', e);
-                });
+                self.addContent(self);
                 // self.testRetry++;
             }
 
@@ -942,152 +903,82 @@ Author: michael@revcontent.com
         revUtils.addEventListener(window, 'scroll', this.scrollListener);
     };
 
-    Feed.prototype.loadMore = function() {
-        var self = this;
+    Feed.prototype.addContent = function(self) {
+        var promise = new Promise(function(resolve, reject) {
 
-        self.loadMoreContainer = document.createElement('div');
-        self.loadMoreContainer.className = 'rev-loadmore-button';
+            var tryToCreateRows = function(retries) {
+                try {
+                    var beforeItemCount = self.innerWidget.grid.items.length;
 
-        self.loadMoreText = document.createElement('div');
-        self.loadMoreText.className = 'rev-loadmore-button-text';
-        self.loadMoreText.innerHTML = 'LOAD MORE CONTENT';
+                    var rowData = self.innerWidget.createRows(self.innerWidget.grid, self.options.rows);
 
-        revUtils.append(self.loadMoreContainer, self.loadMoreText);
-        revUtils.append(self.innerWidget.containerElement, self.loadMoreContainer);
+                    // if (self.testRetry > 0 && retries != 3) { // TEST
+                    //     throw new Error('Whoops!');
+                    // }
 
-        self.loadMoreListener = function() {
-            self.loadMoreText.innerHTML = 'LOADING ...';
-            self.loadMoreContainer.className = 'rev-loadmore-button loading';
-            revUtils.removeEventListener(self.loadMoreContainer, 'click', self.loadMoreListener);
+                    if (self.options.infinite) {
+                        setTimeout(function () {
+                            if (!self.removed) {
+                                revUtils.addEventListener(window, 'scroll', self.scrollListener);
+                            }
+                        }, 150); // give it a rest before going back
+                    }
 
-            var beforeItemCount = self.innerWidget.grid.items.length;
-
-            self
-                .promiseCreateBlankCardsRetry(self, beforeItemCount)
-                .then(self.promiseFetchCardData)
-                .then(self.promiseUpdateCardDataRetry)
-                .then(function(input) {
-                    self.loadMoreText.innerHTML = 'LOAD MORE CONTENT';
-                    self.loadMoreContainer.className = 'rev-loadmore-button';
-                    revUtils.addEventListener(self.loadMoreContainer, 'click', self.loadMoreListener);
-
-                    return input;
-                })
-                .catch(function (error) {
-                    // no more content, remove the button and blank cards
-                    revUtils.remove(self.loadMoreContainer);
-
-                    self.catchRemoveBlankCards(self, beforeItemCount, error);
-                })
-                .catch(function (error) {
-                    // do nothing since the button and blank cards were removed
-                });
-        };
-
-        revUtils.addEventListener(self.loadMoreContainer, 'click', self.loadMoreListener);
-    };
-
-    Feed.prototype.promiseCreateBlankCardsRetry = function(self, beforeItemCount) {
-        return self.promiseRetry(function() {
-            return self.promiseCreateBlankCards(self, beforeItemCount);
-        }, 10, 100);
-    };
-
-    Feed.prototype.promiseCreateBlankCards = function(self, beforeItemCount) {
-        return new Promise(function(resolve, reject) {
-            try {
-                var rowData = self.innerWidget.createRows(self.innerWidget.grid, self.options.rows);
-
-                resolve({self: self, rowData: rowData});
-            } catch (e) {
-                self.removeBlankCards(beforeItemCount);
-                reject(e);
-            }
-        });
-    };
-
-    Feed.prototype.promiseFetchCardData = function(input) {
-        return new Promise(function(resolve, reject) {
-            var self = input.self;
-            var rowData = input.rowData;
-
-            revApi.request(self.innerWidget.generateUrl(self.innerWidget.internalOffset, rowData.internalLimit, self.innerWidget.sponsoredOffset, rowData.sponsoredLimit), function(data) {
-                // reject if we don't have any content or not enough content
-                if (!data.content.length || data.content.length !== (rowData.internalLimit + rowData.sponsoredLimit)) {
-                    reject();
-                    return;
+                    resolve(rowData);
+                } catch (e) { // remove items and try again
+                    // remove items TODO: wrap this in try
+                    var remove = self.innerWidget.grid.items.length - beforeItemCount;
+                    for (var i = 0; i < remove; i++) {
+                        var popped = self.innerWidget.grid.items.pop();
+                        popped.remove();
+                    }
+                    // try again
+                    if (retries > 0) {
+                        setTimeout(function() {
+                            tryToCreateRows((retries - 1));
+                        }, 100);
+                    }
                 }
+            }
 
-                resolve({self: self, rowData: rowData, data: data});
-            }, function() {
-                reject();
+            try {
+                tryToCreateRows(10); // retry 10 times
+            } catch (e) {
+                console.log('*************Feed', e);
+            }
+        }).then(function(rowData) {
+            return new Promise(function(resolve, reject) {
+                revApi.request(self.innerWidget.generateUrl(self.innerWidget.internalOffset, rowData.internalLimit, self.innerWidget.sponsoredOffset, rowData.sponsoredLimit), function(data) {
+                    resolve({rowData: rowData, data: data});
+                })
             });
-        });
-    };
+        }).then(function(data) {
+            var tryToUpdateDisplayedItems = function(retries) {
+                try {
+                    self.innerWidget.contextual_last_sort = data.contextual_last_sort;
+                    var itemTypes = self.innerWidget.updateDisplayedItems(data.rowData.items, data.data);
+                    self.viewableItems = self.viewableItems.concat(itemTypes.viewableItems);
 
-    Feed.prototype.promiseUpdateCardDataRetry = function(input) {
-        return input.self.promiseRetry(function() {
-            return input.self.promiseUpdateCardData(input);
-        }, 10, 100);
-    };
+                    if (!self.options.infinite) {
+                        self.loadMoreText.innerHTML = 'LOAD MORE CONTENT';
+                        self.loadMoreContainer.className = 'rev-loadmore-button';
+                        revUtils.addEventListener(self.loadMoreContainer, 'click', self.loadMoreListener);
+                    }
 
-    Feed.prototype.promiseUpdateCardData = function(input) {
-        return new Promise(function(resolve, reject) {
-            try {
-                var self = input.self;
-                var rowData = input.rowData;
-                var data = input.data;
-
-                self.innerWidget.contextual_last_sort = data.contextual_last_sort;
-                var itemTypes = self.innerWidget.updateDisplayedItems(rowData.items, data);
-                self.viewableItems = self.viewableItems.concat(itemTypes.viewableItems);
-
-                resolve({self: self, rowData: rowData, data: data});
-            } catch (e) {
-                reject(e);
-            }
-        });
-    };
-
-    Feed.prototype.promiseRetry = function(fn, times, delay) {
-        return new Promise(function(resolve, reject){
-            var error;
-
-            var attempt = function() {
-                if (times === 0) {
-                    reject(error);
-                } else {
-                    fn().then(resolve)
-                        .catch(function(e){
-                            times--;
-                            error = e;
-
-                            setTimeout(function(){attempt()}, delay);
-                        });
+                    return Promise.resolve(data);
+                } catch (e) {
+                    if (retries > 0) {
+                        setTimeout(function() {
+                            tryToUpdateDisplayedItems((retries - 1));
+                        }, 100)
+                    }
                 }
-            };
+            }
 
-            attempt();
+            return tryToUpdateDisplayedItems(10);
+        }).catch(function(e) {
+            console.log('*************Feed', e);
         });
-    };
-
-    Feed.prototype.catchRemoveBlankCards = function(self, beforeItemCount, error) {
-        self.removed = true;
-
-        self.removeBlankCards(self, beforeItemCount);
-
-        throw error;
-    };
-
-    Feed.prototype.removeBlankCards = function(self, beforeItemCount) {
-        var remove = self.innerWidget.grid.items.length - beforeItemCount;
-
-        for (var i = 0; i < remove; i++) {
-            var popped = self.innerWidget.grid.items.pop();
-            popped.remove();
-        }
-
-        self.innerWidget.grid.layout();
     };
 
     Feed.prototype.checkVisible = function() {
