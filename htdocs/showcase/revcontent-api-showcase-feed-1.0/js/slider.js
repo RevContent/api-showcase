@@ -1563,7 +1563,7 @@ Author: michael@revcontent.com
         '&sponsored_count=' + sponsoredCount +
         '&internal_count=' + internalCount +
         '&sponsored_offset=' + sponsoredOffset +
-        '&internal_offset=' + internalOffset;
+        '&internal_offset=0'; // fix to 0 so cache doesn't skip over the Elasticsearch results.
 
         if (internalCount) {
             url += '&show_comments=1';
