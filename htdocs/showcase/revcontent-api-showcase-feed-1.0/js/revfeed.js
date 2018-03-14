@@ -996,7 +996,7 @@ Author: michael@revcontent.com
     Feed.prototype.promiseCreateBlankCards = function(self, beforeItemCount) {
         return new Promise(function(resolve, reject) {
             try {
-                var rowData = self.innerWidget.createRows(self.innerWidget.grid, self.options.rows);
+                var rowData = self.innerWidget.createRows(self.innerWidget.grid);
 
                 resolve({self: self, rowData: rowData});
             } catch (e) {
