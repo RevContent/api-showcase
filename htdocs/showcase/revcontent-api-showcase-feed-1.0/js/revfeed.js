@@ -913,7 +913,7 @@ Author: michael@revcontent.com
                 }).then(function(data) {
                     var tryToUpdateDisplayedItems = function(retries) {
                         try {
-                            self.innerWidget.contextual_last_sort = data.contextual_last_sort;
+                            self.innerWidget.contextual_last_sort = data.data.contextual_last_sort;
                             var itemTypes = self.innerWidget.updateDisplayedItems(data.rowData.items, data.data);
                             self.viewableItems = self.viewableItems.concat(itemTypes.viewableItems);
 
