@@ -167,7 +167,8 @@ Author: michael@revcontent.com
             user: null,
             content: [],
             history_stack: [],
-            emitter: false
+            emitter: false,
+            contextual_last_sort: []
         };
 
         // merge options
@@ -285,6 +286,8 @@ Author: michael@revcontent.com
 
         this.internalOffset = 0;
         this.sponsoredOffset = 0;
+
+        this.contextual_last_sort = this.options.contextual_last_sort;
 
         this.getData();
 
@@ -1560,7 +1563,7 @@ Author: michael@revcontent.com
         '&sponsored_count=' + sponsoredCount +
         '&internal_count=' + internalCount +
         '&sponsored_offset=' + sponsoredOffset +
-        '&internal_offset=' + internalOffset;
+        '&internal_offset=0'; // fix to 0 so cache doesn't skip over the Elasticsearch results.
 
         if (internalCount) {
             url += '&show_comments=1';
@@ -1576,6 +1579,10 @@ Author: michael@revcontent.com
             var authorName = this.options.author_name;
             if(authorName && authorName.length>0) {
                 url += '&author_name=' + encodeURI(authorName);
+            }
+
+            if (Array.isArray(this.contextual_last_sort)) {
+                url += '&contextual_last_sort=' + encodeURIComponent(this.contextual_last_sort.join(','));
             }
         }
 
