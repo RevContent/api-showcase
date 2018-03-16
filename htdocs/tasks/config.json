@@ -288,7 +288,7 @@
       "./showcase/js/revdisclose.js",
       "./showcase/js/revdetect-standalone.js",
       "./showcase/js/revbeacon.js",
-      "./showcase/js/revapi.js",
+      "./showcase/revcontent-api-showcase-feed-1.0/js/revapi.js",
       "./showcase/revcontent-api-showcase-feed-1.0/js/interests-carousel.js",
       "./showcase/revcontent-api-showcase-feed-1.0/js/slider.js",
       "./build/files/feed/feed.embed.js"

@@ -101,6 +101,10 @@ Author: michael@revcontent.com
             content: [],
             view: false,
             test: false,
+            comment_truncate_length: 500,
+            reply_truncate_length: 100,
+            comment_truncate_length_mobile: 500,
+            reply_truncate_length_mobile: 100,
             emitter: new EvEmitter(),
             history_stack: []
         };
