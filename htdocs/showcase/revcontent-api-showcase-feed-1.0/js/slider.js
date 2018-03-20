@@ -3684,8 +3684,6 @@ Author: michael@revcontent.com
                             //continue whatever user was doing prior to auth
                             if( callback && typeof callback === 'function' ) { callback.call(); }  
 
-                            alert('success, rm box');
-
                             engage_auth.remove();                 
 
                         },function(data){
