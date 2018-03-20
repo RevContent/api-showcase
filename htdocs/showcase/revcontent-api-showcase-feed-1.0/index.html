@@ -5,7 +5,8 @@
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -397,7 +398,8 @@
 
    <!-- /. Fake Page Content -->
 
-    <script src="/build/feed.min.js"></script>
+    <!--<script src="/build/feed.min.js"></script>-->
+    <script src="/build/files/feed/feed.pkgd.js"></script>
 
     <script>
         var feed = new Feed({
@@ -407,6 +409,14 @@
             pub_id : 3887,
             widget_id : 27826,
             domain : 'newsweek.com',
+            // brand_logo: 'https://pbs.twimg.com/profile_images/854928244969287680/Jk77C_Ig_400x400.jpg',
+            brand_logo_secondary: 'https://pbs.twimg.com/profile_images/854928244969287680/Jk77C_Ig_400x400.jpg',
+            comments_enabled: true,
+            env: 's2',
+            // jwt: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE1MjEyMjcwMDEsImV4cCI6MTU1Mjc2MzAwMSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsInVzZXIiOiIyMjMyNTY5MDMwMzAzNjAyIn0.sVKd4nd_5urRJITuK_0BirA4qPbCTbwrDqi1jujmR4Q',
+            // user: {
+
+            //}
         });
 
     </script>
