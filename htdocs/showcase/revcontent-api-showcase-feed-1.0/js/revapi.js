@@ -42,15 +42,17 @@ api.xhr = function(url, success, failure, withCredentials, opts) {
     var options = revUtils.extend(defaults, opts);
      var request = new XMLHttpRequest();
 
-    // if (withCredentials) {
-    //     request.withCredentials = true;
-    // }   
-    request.withCredentials = true;
+     if (withCredentials) {
+         request.withCredentials = true;
+     }   
+
+    
     request.open(options.method, url, true);
     
     if (options.hasOwnProperty("jwt")) {
+        console.log("using jwt");
         var authtoken = 'Bearer ' + options.jwt;
-        //request.setRequestHeader('authorization', authtoken);
+        request.setRequestHeader('authorization', authtoken);
     }
     
     request.onload = function() {

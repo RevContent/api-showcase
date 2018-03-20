@@ -170,7 +170,7 @@ Author: michael@revcontent.com
             content: [],
             comments_enabled: false,
             actions_api_url: 'https://api.engage.im/' + opts.env + '/actions/',
-            //actions_api_url: 'http://10.99.11.95:8000/actions/',
+            //actions_api_url: 'http://shearn.api.engage.im/actions/',
             history_stack: [],
             emitter: false
         };
@@ -1958,7 +1958,7 @@ Author: michael@revcontent.com
 
             if (revDetect.mobile()) {
                 revUtils.addEventListener(commentBoxElement, 'click', function(ev) {
-                    that.handleComments(this.itemData, true);
+                    //that.handleComments(this.itemData, true);
                 });    
             }
             
@@ -1966,6 +1966,7 @@ Author: michael@revcontent.com
 
             revUtils.addEventListener(submitCommentBtn, 'click', function(ev){
                 revUtils.addClass(this, 'novak-animate');
+                // alert("pressed");
 
                 var callbackFn = function() {
                     //create comment inline on desktop
@@ -2704,8 +2705,8 @@ Author: michael@revcontent.com
 
         var commentOwner = false;
 
-        if (that.options.user !== null && that.options.user.hasOwnProperty("user_id")) {
-            commentOwner = commentData.user.id === that.options.user.user_id || commentData.user.id === that.options.user.id;
+        if (that.options.user !== null) {
+            commentOwner = (commentData.user.id == that.options.user.user_id) || (commentData.user.id == that.options.user.id);
         }
 
         var li = document.createElement("li");
@@ -2721,12 +2722,6 @@ Author: michael@revcontent.com
         var time = that.timeAgo(commentData.created, true);
         var avatar = commentData.user.picture === "" ? that.options.default_avatar_url : commentData.user.picture;
         var display_name = (commentData.user.display_name !== "") ? commentData.user.display_name : (commentData.user.first_name + ' ' + commentData.user.last_name);
-
-        console.log(typeof commentData.user.display_name);
-        console.log(commentData.user.display_name !== "");//false
-        console.log(commentData.user.display_name !== null);//true
-        console.log(display_name);
-        console.log(commentData.user);
 
         post_author_div.innerHTML = '<img src="' + avatar + '" alt="author">' +
                                     '<div class="author-date">' +
@@ -2789,7 +2784,6 @@ Author: michael@revcontent.com
             commentToolBox.appendChild(comment_reply_btn);
 
             revUtils.addEventListener(comment_reply_btn, 'click', function(ev) {
-                console.log("reply");
                 that.handleComments(commentData, true, commentData.id, uid);
             });
 
@@ -2854,7 +2848,7 @@ Author: michael@revcontent.com
                 var replies_ul = document.createElement("ul");
                 revUtils.addClass(replies_ul, 'children');
                 var truncate = revDetect.mobile() ? this.options.reply_truncate_length_mobile : this.options.reply_truncate_length;
-
+                
                 for (var key in commentData.replies) {
                     if (commentData.replies.hasOwnProperty(key)) {
                         var reply_li = that.setCommentHTML.call(this, commentData.replies[key],false,truncate,uid);
@@ -2958,11 +2952,12 @@ Author: michael@revcontent.com
                 commentCountElement.innerText = total + ' comment' + (total !== 1 ? 's' : '');
                 commentCountElement.setAttribute('data-count', total);
 
-                if (!revDetect.mobile() && total > max) {
+                if (/*!revDetect.mobile() &&*/ total > max) {
                     var showmoreLi = document.createElement('li');
                     var showmorebtn = document.createElement('a');
                     revUtils.addClass(showmorebtn, 'show_more');
-                    showmorebtn.style = "text-align: center;padding: 6px;background: #28a2f9; color:#fff;border-radius: 33px;margin: 5px auto 0px;width: 200px;display: block;position: absolute;z-index: 99;left: 50%;top: 5px;margin-left: -100px;";
+                    showmoreLi.style = "padding:7px;";
+                    showmorebtn.style = "text-align: center;padding: 2px;background: rgb(40, 162, 249);color: rgb(255, 255, 255);border-radius: 33px;margin: 5px auto 0px -100px;width: 200px;display: block;position: absolute;z-index: 99;left: 50%;top: 0px;font-size: 12px;";
                     showmorebtn.innerText = "Load previous comments";
 
                     showmoreLi.appendChild(showmorebtn);
@@ -2986,7 +2981,7 @@ Author: michael@revcontent.com
                     that.grid.layout();
                 }
 
-            },null,false,options);
+            },null,true,options);
 
         } //if enabled
 
@@ -3001,8 +2996,6 @@ Author: michael@revcontent.com
         uid = typeof uid  === 'undefined' ? itemData.uid : uid;
         var isReplyMode = replyingTo !== null;
 
-        console.log(uid);
-        console.log(this.feedItems);
         if (uid !== 'undefined') {
             var article = this.feedItems[uid].element;
             var comment_detail = article.querySelector('.rev-comment-detail');    
@@ -3016,7 +3009,7 @@ Author: michael@revcontent.com
         }
 
         //create comment overlay div for mobile only
-        if (revDetect.mobile()) {
+        if (false /*revDetect.mobile()*/ ) {
             
 
             var commentDetailsHeaderElement = document.createElement('div');
@@ -3135,7 +3128,7 @@ Author: michael@revcontent.com
                 var noComments = document.createElement("p");
                 noComments.innerText = "No Comments";
                 commentFeedElement.appendChild(noComments);
-            },false, options);
+            },true, options);
             
             // var commentBoxElement = this.createCommentInput("comment");
             // var clearfix = document.createElement('div');
@@ -3249,7 +3242,6 @@ Author: michael@revcontent.com
 
                 revUtils.addEventListener(submitCommentBtn, 'click', function(ev){
                     revUtils.addClass(this, 'novak-animate');
-                    console.log("submit that shit");
 
                     var submit_comment = function(){
                         that.submitComment(commentTextAreaElement.value, null, replyingTo, function(data){
@@ -3376,7 +3368,7 @@ Author: michael@revcontent.com
                             newComment.appendChild(current_replies);
                           }
                           oldComment.parentNode.replaceChild(newComment, oldComment);
-                    },null,false,options);
+                    },null,true,options);
                 })
                 .catch(function (error) {
                     console.log(error.message);
@@ -3683,7 +3675,11 @@ Author: michael@revcontent.com
                             oldCommentBox.parentNode.replaceChild(newCommentBox, oldCommentBox); 
 
                             //continue whatever user was doing prior to auth
-                            if( callback && typeof callback === 'function' ) { callback.call(); }                      
+                            if( callback && typeof callback === 'function' ) { callback.call(); }  
+
+                            alert('success, rm box');
+
+                            engage_auth.remove();                 
 
                         },function(data){
                             
@@ -3726,10 +3722,12 @@ Author: michael@revcontent.com
                         revApi.xhr(that.options.actions_api_url + 'user/register', function(data) {
                             
                             //load interests card
-                            // console.log("========= that.interests =======");
-                            // console.log(that.interests);
 
-                            if (true) {
+                            //continue whatever user was doing prior to auth
+                            if( callback && typeof callback === 'function' ) { callback.call(); }  
+                            engage_auth.remove();
+
+                            if (false) {
                                 var engage_auth_interests_card = document.createElement('div');
                                 revUtils.addClass(engage_auth_interests_card, 'engage-interests-card');
 
@@ -3970,7 +3968,7 @@ Author: michael@revcontent.com
             //update feed item
             //that.updateDisplayedItem(that.feedItems[uid]);
 
-        },null,false,{method:'DELETE', jwt: that.options.jwt});
+        },null,true,{method:'DELETE', jwt: that.options.jwt});
     };
 
     RevSlider.prototype.submitComment = function(comment, url, commentID, callback) {
@@ -3985,19 +3983,20 @@ Author: michael@revcontent.com
         var data = {};
         var isReplyMode = (url === null && commentID !== null);
 
-        console.log(that.options.user);
-              
         data.comment = String(comment).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         data.url = url;
 
         if (isReplyMode) {
-            data.commentID = commentID;
+            data.comment_id = commentID;
             data.reply = data.comment;
         }
 
         options.data = JSON.stringify(data);
         options.method = "POST";
-        options.jwt = that.options.jwt;
+        if (that.options.hasOwnProperty("jwt")) {
+            options.jwt = that.options.jwt;
+        }
+
 
         //send comment xhr
         var comment_type = isReplyMode ? 'reply' : 'comment';
@@ -4010,15 +4009,12 @@ Author: michael@revcontent.com
                 //Bad Word
                 //if( callback && typeof callback === 'function' ) { callback.call(this, response,true); }
             }
-        },false,options);
+        },true,options);
 
     };
 
     RevSlider.prototype.createCommentInput = function(){
 
-        // console.log("========= user options in create input =========");
-        // console.log(this.options.user);
-        
         var commentBoxElement = document.createElement('div');
         revUtils.addClass(commentBoxElement, 'rev-comment-box');
         commentBoxElement.style = 'padding: 8px;background: #fafbfd;border-top: 1px solid #e6ecf5;'; //add this to css file
@@ -4037,7 +4033,7 @@ Author: michael@revcontent.com
         var commentInputHiddenTxtElement = document.createElement('div');
         revUtils.addClass(commentInputHiddenTxtElement, 'hidden_text_size');
         commentInputHiddenTxtElement.style = 'min-height: 30px;width: 100%;border-radius: 4px;padding: 4px 70px 4px 10px;position: absolute;z-index: -2000;border: 0 none;color: #ffffff00;user-select: none;';
-        commentInputWrapElement.appendChild(commentInputHiddenTxtElement);
+        //commentInputWrapElement.appendChild(commentInputHiddenTxtElement);
 
         var commentTextAreaElement = document.createElement('textarea');
         revUtils.addClass(commentTextAreaElement, 'comment-textarea');
@@ -4057,10 +4053,10 @@ Author: michael@revcontent.com
         //Adjust comment textarea height, 1 - 4 lines
         revUtils.addEventListener(commentTextAreaElement, 'keyup', function(ev) {
             submitCommentBtn.style.display = 'inline-block';
-            commentInputHiddenTxtElement.innerText = commentTextAreaElement.value;
-            if (commentInputHiddenTxtElement.scrollHeight < 88) {
-                commentTextAreaElement.style.height = (commentInputHiddenTxtElement.scrollHeight + 2) + "px";
-            }
+            // commentInputHiddenTxtElement.innerText = commentTextAreaElement.value;
+            // if (commentInputHiddenTxtElement.scrollHeight < 88) {
+            //     commentTextAreaElement.style.height = (commentInputHiddenTxtElement.scrollHeight + 2) + "px";
+            // }
         });
 
         return commentBoxElement;
@@ -4069,7 +4065,7 @@ Author: michael@revcontent.com
     RevSlider.prototype.getUserProfile = function(){
         var that = this;
         revApi.xhr(that.options.actions_api_url + 'user/profile', function(data) {
-            //console.log(data);
+
             //todo check for errors before setting this
             that.authenticated = true;
 
