@@ -170,6 +170,7 @@ Author: michael@revcontent.com
             content: [],
             comments_enabled: false,
             actions_api_url: 'https://api.engage.im/' + opts.env + '/actions/',
+            //actions_api_url: 'http://shearn.api.engage.im/actions/',
             history_stack: [],
             emitter: false,
             contextual_last_sort: []
@@ -286,6 +287,37 @@ Author: michael@revcontent.com
         };
 
         this.authenticated = this.options.user ? true : null;
+
+        if (this.authenticated === null) {
+            //check if user is logged in
+            this.getUserProfile();
+        }
+
+
+
+        // var that = this;
+        // var authPromise = new Promise(function(resolve, reject) {   
+        //     revApi.xhr(that.options.actions_api_url + 'user/profile', function(data) {
+        //         console.log(data);
+        //         resolve(data);
+        //     },null,true);
+        // });
+
+        // authPromise.then(function(data) { 
+        //     that.authenticated = true;
+        //         that.options.user = data;
+        //         if (data.picture === "") {
+        //             that.options.user.profile_url = that.options.default_avatar_url;
+        //             that.options.user.picture = that.options.default_avatar_url;
+        //         }
+        // }).catch(function(e) {
+        //     /* error :( */
+        //         console.log("errrrrorrrrr");
+        //         console.log(e.stack);
+        // });
+
+
+
 
         this.queue = [];
         this.queueRetries = 0;
@@ -662,7 +694,8 @@ Author: michael@revcontent.com
 
                     that.reactionCount(item, iconName, true);
 
-                    that.transitionLogin(item, 'reaction');
+                    //that.transitionLogin(item, 'reaction');
+                    that.tryAuth(item.element, 'reaction');
 
                     return;
                 }
@@ -707,7 +740,8 @@ Author: michael@revcontent.com
                     that.setReactionText(item);
                 }
 
-                that.transitionLogin(item, 'reaction');
+                //that.transitionLogin(item, 'reaction');
+                that.tryAuth(item.element, 'reaction');
             });
 
             this.mc.on('press', function(ev) {
@@ -805,7 +839,9 @@ Author: michael@revcontent.com
                     that.setReactionText(item);
                 }
 
-                that.transitionLogin(item, 'reaction');
+                //that.transitionLogin(item, 'reaction');
+                that.tryAuth(item.element, 'reaction');
+
             });
 
             var menuItems = item.element.querySelectorAll('.rev-reaction-menu-item');
@@ -855,7 +891,8 @@ Author: michael@revcontent.com
 
                     that.setReactionText(item);
 
-                    that.transitionLogin(item, 'reaction');
+                    //that.transitionLogin(item, 'reaction');
+                    that.tryAuth(item.element, 'reaction');
 
                 }, {passive: false});
             }
@@ -966,8 +1003,9 @@ Author: michael@revcontent.com
             }
 
             if (!that.authenticated) {
-                revUtils.removeClass(document.querySelector('.rev-flipped'), 'rev-flipped');
-                revUtils.addClass(item.element, 'rev-flipped');
+                //old flip logic
+                // revUtils.removeClass(document.querySelector('.rev-flipped'), 'rev-flipped');
+                // revUtils.addClass(item.element, 'rev-flipped');
             }
         }, 0);
     };
@@ -1214,7 +1252,6 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.createBrandLogo = function(className, square) {
         var char = square ? this.options.brand_logo_secondary.charAt(0) : this.options.brand_logo.charAt(0);
-
         var brandLogo = document.createElement('div');
 
         if (char === '<') {
@@ -1343,7 +1380,7 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.createNewCell = function() {
         var that = this;
-
+        //old flip logic
         var html = '<div class="rev-content-inner">' +
             '<div class="rev-flip">' +
 
@@ -1385,37 +1422,37 @@ Author: michael@revcontent.com
                     '</div>' +
                 '</div>' +
 
-                '<div class="rev-flip-back">' +
-                    '<div class="rev-auth-mask"></div>' +
-                    '<div class="rev-auth">' +
-                        '<a class="rev-auth-close-button">' +
-                            '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>' +
-                        '</a>' +
-                        '<div class="rev-auth-box">' +
+                //'<div class="rev-flip-back">' +
+                    //'<div class="rev-auth-mask"></div>' +
+                    //'<div class="rev-auth">' +
+                        // '<a class="rev-auth-close-button">' +
+                        //     '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>' +
+                        // '</a>' +
+                        //'<div class="rev-auth-box">' +
 
-                            '<div class="rev-auth-box-inner">' +
-                                '<div class="rev-auth-subline">'+ this.getDisclosure() +'</div>' +
-                                '<div class="rev-auth-headline">' +
-                                    (this.authenticated ? 'Currently logged in!' : '<span class="rev-engage-type-txt">Almost Done! Login to save your reaction</span> <br /> <strong>and</strong> personalize your experience') +
-                                '</div>' +
-                                '<div class="rev-auth-button">' +
-                                    this.revAuthButtonIconHtml() +
-                                    '<div class="rev-auth-button-text">' +
-                                        (this.authenticated ? 'Log out' : 'Continue with facebook') +
-                                    '</div>' +
-                                '</div>' +
+                            //'<div class="rev-auth-box-inner">' +
+                                //'<div class="rev-auth-subline">'+ this.getDisclosure() +'</div>' +
+                                // '<div class="rev-auth-headline">' +
+                                //     (this.authenticated ? 'Currently logged in!' : '<span class="rev-engage-type-txt">Almost Done! Login to save your reaction</span> <br /> <strong>and</strong> personalize your experience') +
+                                // '</div>' +
+                                // '<div class="rev-auth-button">' +
+                                //     this.revAuthButtonIconHtml() +
+                                //     '<div class="rev-auth-button-text">' +
+                                //         (this.authenticated ? 'Log out' : 'Continue with facebook') +
+                                //     '</div>' +
+                                // '</div>' +
 
-                                '<div class="rev-auth-buttonline">Once personalized the content recommendations on this page will be based on the pages you\'ve liked and urls you\'ve shared on Facebook</div>' +
+                                //'<div class="rev-auth-buttonline">Once personalized the content recommendations on this page will be based on the pages you\'ve liked and urls you\'ve shared on Facebook</div>' +
 
-                                '<div class="rev-auth-terms">' +
-                                    '<span>by signing up you agree to the <a target="_blank" href="//www.engage.im/privacy.html">Terms</a></span>' +
-                                    // '<span>|</span>' +
-                                    // '<a href="#">Privacy Policy</a>' +
-                                '</div>' +
-                            '</div>' +
-                        '</div>' +
-                    '</div>' +
-                '</div>' + // end back
+                                // '<div class="rev-auth-terms">' +
+                                //     '<span>by signing up you agree to the <a target="_blank" href="//www.engage.im/privacy.html">Terms</a></span>' +
+                                //     // '<span>|</span>' +
+                                //     // '<a href="#">Privacy Policy</a>' +
+                                // '</div>' +
+                            //'</div>' +
+                        //'</div>' +
+                    //'</div>' +
+                //'</div>' + // end back
 
             '</div>' +
 
@@ -1435,19 +1472,20 @@ Author: michael@revcontent.com
         cell.innerHTML = html;
 
         if (this.options.brand_logo_secondary) {
-
-            var brandLogoSquare = this.createBrandLogo('rev-auth-site-logo', true);
-
-            revUtils.prepend(cell.querySelector('.rev-auth-box'), brandLogoSquare);
+            //old flip logic
+            //var brandLogoSquare = this.createBrandLogo('rev-auth-site-logo', true);
+            //revUtils.prepend(cell.querySelector('.rev-auth-box'), brandLogoSquare);
         }
 
-        var close = cell.querySelector('.rev-auth-close-button');
-        revUtils.addEventListener(close, 'click', function(e) {
-            revUtils.removeClass(cell, 'rev-flipped');
-        });
+        //var close = cell.querySelector('.rev-auth-close-button');
+        //revUtils.addEventListener(close, 'click', function(e) {
+            //old flip logic
+            //revUtils.removeClass(cell, 'rev-flipped');
+        //});
 
         var that = this;
-        revUtils.addEventListener(cell.querySelector('.rev-auth-button'), 'click', this.authButtonHandler.bind(this, cell));
+        //commented out with old flip logic
+        //revUtils.addEventListener(cell.querySelector('.rev-auth-button'), 'click', this.authButtonHandler.bind(this, cell));
 
         /* secondary auth page, deemed unnecessary for now
         revUtils.addEventListener(cell.querySelector('.rev-auth-button'), 'click', function(e) {
@@ -1474,7 +1512,8 @@ Author: michael@revcontent.com
                 that.isAuthenticated(function(response) {
                     if (response === true) {
                         if (cell) {
-                            revUtils.removeClass(cell, 'rev-flipped');
+                            //old flip logic
+                            //revUtils.removeClass(cell, 'rev-flipped');
                         }
                         that.updateAuthElements();
                         that.processQueue();
@@ -1902,10 +1941,12 @@ Author: michael@revcontent.com
 
             var commentButton = item.element.querySelector('.rev-reaction-comment');
             if (commentButton) {
+                var contentInner = that.getClosestParent(commentButton, '.rev-content-inner');
+                itemData.contentInner = contentInner;
                 commentButton.itemData = itemData;
                 revUtils.addEventListener(commentButton, 'click', function(ev) {
                     that.handleComments(this.itemData, false);
-                    commentTextAreaElement.focus();
+                    //commentTextAreaElement.focus();
                 });
             }
 
@@ -1917,14 +1958,14 @@ Author: michael@revcontent.com
                     if (revDetect.mobile()) {
                         that.handleComments(this.itemData, false);
                     } else {
-                        commentTextAreaElement.focus();
+                        //commentTextAreaElement.focus();
                     }
                 });
             }
 
             if (revDetect.mobile()) {
                 revUtils.addEventListener(commentBoxElement, 'click', function(ev) {
-                    that.handleComments(this.itemData, true);
+                    //that.handleComments(this.itemData, true);
                 });    
             }
             
@@ -1932,6 +1973,7 @@ Author: michael@revcontent.com
 
             revUtils.addEventListener(submitCommentBtn, 'click', function(ev){
                 revUtils.addClass(this, 'novak-animate');
+                // alert("pressed");
 
                 var callbackFn = function() {
                     //create comment inline on desktop
@@ -1951,9 +1993,18 @@ Author: michael@revcontent.com
                             }
                             return;
                         }
+                        
+                        var commentDetailsElement = item.element.querySelector(".rev-comment-detail");
                         var commentUL = item.element.querySelector(".comments-list");
                         var newCommentElement = that.setCommentHTML(data,false,false,itemData.uid);
+                        var newCommentElement_forDetails = that.setCommentHTML(data,false,false,itemData.uid);
+
                         commentUL.appendChild(newCommentElement);
+                        
+                        if (commentDetailsElement) {
+                            commentDetailsElement.querySelector(".comments-list").appendChild(newCommentElement_forDetails);    
+                        }
+                        
                         commentTextAreaElement.value = "";
                         var e = document.createEvent('HTMLEvents');
                         e.initEvent("keyup", false, true);
@@ -1974,9 +2025,12 @@ Author: michael@revcontent.com
                 if (that.authenticated) {
                     callbackFn();
                 } else {
-                    revUtils.removeClass(document.querySelector('.rev-flipped'), 'rev-flipped');
-                    revUtils.addClass(item.element, 'rev-flipped');
-                    item.element.scrollIntoView({ behavior: 'smooth', block: "start" });
+                    var contentInner = item.element.querySelector('.rev-content-inner');
+                    that.tryAuth(contentInner, 'comment', callbackFn);
+                    //old flip logic
+                    // revUtils.removeClass(document.querySelector('.rev-flipped'), 'rev-flipped');
+                    // revUtils.addClass(item.element, 'rev-flipped');
+                    //item.element.scrollIntoView({ behavior: 'smooth', block: "start" });
 
                     //store users comment for after auth
                     that.afterAuth = callbackFn;
@@ -2658,8 +2712,8 @@ Author: michael@revcontent.com
 
         var commentOwner = false;
 
-        if (that.options.user !== null && that.options.user.hasOwnProperty("user_id")) {
-            commentOwner = commentData.user.id === that.options.user.user_id;
+        if (that.options.user !== null) {
+            commentOwner = (commentData.user.id == that.options.user.user_id) || (commentData.user.id == that.options.user.id);
         }
 
         var li = document.createElement("li");
@@ -2673,9 +2727,12 @@ Author: michael@revcontent.com
         revUtils.addClass(post_author_div, 'vcard');
         revUtils.addClass(post_author_div, 'inline-items');
         var time = that.timeAgo(commentData.created, true);
-        post_author_div.innerHTML = '<img src="' + commentData.user.data.picture.data.url + '" alt="author">' +
+        var avatar = commentData.user.picture === "" ? that.options.default_avatar_url : commentData.user.picture;
+        var display_name = (commentData.user.display_name !== "") ? commentData.user.display_name : (commentData.user.first_name + ' ' + commentData.user.last_name);
+
+        post_author_div.innerHTML = '<img src="' + avatar + '" alt="author">' +
                                     '<div class="author-date">' +
-                                        '<a class="h6 post__author-name fn" href="#">' + commentData.user.data.name + '</a>' +
+                                        '<a class="h6 post__author-name fn" href="#">' + display_name + '</a>' +
                                         '<div class="post__date">' +
                                             '<time class="published" datetime="' + commentData.created + '"><span>' + time + (time !== 'yesterday' ? ' ago' : '') + '</span></time>' +
                                         '</div>' +
@@ -2798,7 +2855,7 @@ Author: michael@revcontent.com
                 var replies_ul = document.createElement("ul");
                 revUtils.addClass(replies_ul, 'children');
                 var truncate = revDetect.mobile() ? this.options.reply_truncate_length_mobile : this.options.reply_truncate_length;
-
+                
                 for (var key in commentData.replies) {
                     if (commentData.replies.hasOwnProperty(key)) {
                         var reply_li = that.setCommentHTML.call(this, commentData.replies[key],false,truncate,uid);
@@ -2902,11 +2959,12 @@ Author: michael@revcontent.com
                 commentCountElement.innerText = total + ' comment' + (total !== 1 ? 's' : '');
                 commentCountElement.setAttribute('data-count', total);
 
-                if (!revDetect.mobile() && total > max) {
+                if (/*!revDetect.mobile() &&*/ total > max) {
                     var showmoreLi = document.createElement('li');
                     var showmorebtn = document.createElement('a');
                     revUtils.addClass(showmorebtn, 'show_more');
-                    showmorebtn.style = "text-align: center;padding: 6px;background: #28a2f9; color:#fff;border-radius: 33px;margin: 5px auto 0px;width: 200px;display: block;position: absolute;z-index: 99;left: 50%;top: 5px;margin-left: -100px;";
+                    showmoreLi.style = "padding:7px;";
+                    showmorebtn.style = "text-align: center;padding: 2px;background: rgb(40, 162, 249);color: rgb(255, 255, 255);border-radius: 33px;margin: 5px auto 0px -100px;width: 200px;display: block;position: absolute;z-index: 99;left: 50%;top: 0px;font-size: 12px;";
                     showmorebtn.innerText = "Load previous comments";
 
                     showmoreLi.appendChild(showmorebtn);
@@ -2930,7 +2988,7 @@ Author: michael@revcontent.com
                     that.grid.layout();
                 }
 
-            },null,false,options);
+            },null,true,options);
 
         } //if enabled
 
@@ -2945,8 +3003,20 @@ Author: michael@revcontent.com
         uid = typeof uid  === 'undefined' ? itemData.uid : uid;
         var isReplyMode = replyingTo !== null;
 
+        if (uid !== 'undefined') {
+            var article = this.feedItems[uid].element;
+            var comment_detail = article.querySelector('.rev-comment-detail');    
+        }
+        
+
+        if (isReplyMode && (document.getElementById('rev-reply-detail') !== null)) {
+            return false;
+        } else if (!isReplyMode && comment_detail !== null) {
+            return false;
+        }
+
         //create comment overlay div for mobile only
-        if (revDetect.mobile()) {
+        if (false /*revDetect.mobile()*/ ) {
             
 
             var commentDetailsHeaderElement = document.createElement('div');
@@ -2959,22 +3029,34 @@ Author: michael@revcontent.com
                                                     '</a>';
 
             if (isReplyMode) {
+                var detailExists = document.getElementById('rev-reply-detail') !== null;
+
+
                 var commentDetailsElement = document.getElementById('rev-reply-detail') || document.createElement('div');
                 commentDetailsElement.id = 'rev-reply-detail';
 
                 commentDetailsHeaderElement.innerHTML += '<span style="text-align:center;width: 100%;display: block;font-size: 16px;margin-left: -14px;font-weight: bold;">Replies</span>';
                 history.pushState({engage: 'comment_reply'}, null, "#comment-reply");
             } else {
+                var detailExists = document.getElementById('rev-comment-detail') !== null;
+
                 var commentDetailsElement = document.getElementById('rev-comment-detail') || document.createElement('div');
-                commentDetailsElement.id = 'rev-comment-detail';
+                revUtils.addClass(commentDetailsElement, 'rev-comment-detail');
+                //commentDetailsElement.id = 'rev-comment-detail';
 
                 commentDetailsHeaderElement.innerHTML += '<div class="rev-headline" style="margin: 0 7px 0 27px;font-size: 12px;font-weight: bold;text-align: center;line-height: 12px;max-height: 25px;overflow: hidden;">' + itemData.headline + '</div>';
                 history.pushState({engage: 'comment'}, null, "#comment");
             }
 
+            //only inject if doesnt already exist
+            if (!detailExists) {
+                itemData.contentInner.appendChild(commentDetailsElement);
+                //commentDetailsElement.scrollIntoView();
+            }
+            
 
-            document.body.appendChild(commentDetailsElement);
-            revUtils.addClass(document.body, 'modal-open');
+
+            //revUtils.addClass(document.body, 'modal-open');
 
             commentDetailsElement.appendChild(commentDetailsHeaderElement);
 
@@ -2983,7 +3065,7 @@ Author: michael@revcontent.com
                 revUtils.addClass(commentDetailsElement, 'comment-slide-out');
                 var func = function(){commentDetailsElement.remove();};
                 setTimeout(func, 500);
-                revUtils.removeClass(document.body, 'modal-open');
+                //revUtils.removeClass(document.body, 'modal-open');
                 history.back();
             });
 
@@ -2996,7 +3078,7 @@ Author: michael@revcontent.com
 
             var commentFeedUL = document.createElement('ul');
             revUtils.addClass(commentFeedUL, 'comments-list');
-            commentFeedUL.id = "comments-list";
+            //commentFeedUL.id = "comments-list";
 
             //add loader
             commentFeedElement.appendChild(commentFeedLoader);
@@ -3035,10 +3117,8 @@ Author: michael@revcontent.com
 
                 for (var key in data) {
                     if (data.hasOwnProperty(key)) {
-                        
                         var comment_li = that.setCommentHTML(data[key], true, truncate, uid);
                         commentFeedUL.appendChild(comment_li);
-                        
                     }
                 }
 
@@ -3055,95 +3135,95 @@ Author: michael@revcontent.com
                 var noComments = document.createElement("p");
                 noComments.innerText = "No Comments";
                 commentFeedElement.appendChild(noComments);
-            },false, options);
+            },true, options);
             
-            var commentBoxElement = this.createCommentInput("comment");
-            var clearfix = document.createElement('div');
-            clearfix.style = 'clear: both;';
-            commentBoxElement.appendChild(clearfix);
-            commentDetailsElement.appendChild(commentBoxElement);
+            // var commentBoxElement = this.createCommentInput("comment");
+            // var clearfix = document.createElement('div');
+            // clearfix.style = 'clear: both;';
+            // commentBoxElement.appendChild(clearfix);
+            // commentDetailsElement.appendChild(commentBoxElement);
 
-            var commentTextAreaElement = commentBoxElement.querySelector('.comment-textarea');
-            var commentInputHiddenTxtElement = commentBoxElement.querySelector('.hidden_text_size');
-            var submitCommentBtn = commentBoxElement.querySelector('.comment-submit-button');
+            // var commentTextAreaElement = commentBoxElement.querySelector('.comment-textarea');
+            // var commentInputHiddenTxtElement = commentBoxElement.querySelector('.hidden_text_size');
+            // var submitCommentBtn = commentBoxElement.querySelector('.comment-submit-button');
 
             if (isReplyMode) {
                 var ReplyDetailsElement = commentDetailsElement;
             }
 
             if (focus) {
-                commentTextAreaElement.focus();
+                //commentTextAreaElement.focus();
             }
 
-            revUtils.addEventListener(submitCommentBtn, 'click', function(ev){
-                revUtils.addClass(this, 'novak-animate');
+            // revUtils.addEventListener(submitCommentBtn, 'click', function(ev){
+            //     revUtils.addClass(this, 'novak-animate');
                 
                     
-                    var submitFn = function() {
-                    var submitted_comment_data = that.submitComment(commentTextAreaElement.value, itemData.target_url, replyingTo, function(data,error){
+            //         var submitFn = function() {
+            //         var submitted_comment_data = that.submitComment(commentTextAreaElement.value, itemData.target_url, replyingTo, function(data,error){
                         
-                        if (typeof data === "number" && data === 201) {
-                            //for some reason we are getting dual responses, one with the payload and one with the http code
-                            return;
-                        }
+            //             if (typeof data === "number" && data === 201) {
+            //                 //for some reason we are getting dual responses, one with the payload and one with the http code
+            //                 return;
+            //             }
 
-                        if (error) {
-                            //currently only want to show error for bad words, but gathering the error msg from response for later use
-                            var errorMsg = JSON.parse(data.responseText);
-                            var httpStatus = data.status;
-                            if (httpStatus === 406) {
-                                //bad word
-                                that.displayError(commentBoxElement,"Oops! We've detected a <b>bad word</b> in your comment, Please update your response before submitting.");    
-                            }
-                            return;
-                        }
-                        var truncate = isReplyMode ? that.options.reply_truncate_length_mobile : that.options.comment_truncate_length_mobile;
-                        var newCommentElement = that.setCommentHTML(data,false,truncate,uid);
-                        commentFeedUL.appendChild(newCommentElement);
-                        commentTextAreaElement.value = "";
-                        commentFeedElement.scrollTop = commentFeedElement.scrollHeight;
+            //             if (error) {
+            //                 //currently only want to show error for bad words, but gathering the error msg from response for later use
+            //                 var errorMsg = JSON.parse(data.responseText);
+            //                 var httpStatus = data.status;
+            //                 if (httpStatus === 406) {
+            //                     //bad word
+            //                     that.displayError(commentBoxElement,"Oops! We've detected a <b>bad word</b> in your comment, Please update your response before submitting.");    
+            //                 }
+            //                 return;
+            //             }
+            //             var truncate = isReplyMode ? that.options.reply_truncate_length_mobile : that.options.comment_truncate_length_mobile;
+            //             var newCommentElement = that.setCommentHTML(data,false,truncate,uid);
+            //             commentFeedUL.appendChild(newCommentElement);
+            //             commentTextAreaElement.value = "";
+            //             commentFeedElement.scrollTop = commentFeedElement.scrollHeight;
 
-                        that.updateDisplayedItem(that.feedItems[uid]);
+            //             that.updateDisplayedItem(that.feedItems[uid]);
                         
-                    });
-                };
+            //         });
+            //     };
 
-                if (that.authenticated) {
-                    submitFn();
-                } else {
-                    that.commentDetailAuth(submitFn);
-                }
-            });
+            //     if (that.authenticated) {
+            //         submitFn();
+            //     } else {
+            //         that.cardActionAuth(submitFn);
+            //     }
+            // });
 
             revUtils.addClass(commentDetailsElement, 'comment-slide-in');
 
-            window.onpopstate = function(event) {
-                var authbox = document.getElementById('comment_authbox');
-                var reply_window = document.getElementById('rev-reply-detail');
-                var comment_window = document.getElementById('rev-comment-detail');
+            // window.onpopstate = function(event) {
+            //     var authbox = document.getElementById('comment_authbox');
+            //     var reply_window = document.getElementById('rev-reply-detail');
+            //     var comment_window = document.getElementById('rev-comment-detail');
 
-                if (authbox === null) {
+            //     if (authbox === null) {
 
-                    if (reply_window !== null) {
-                        revUtils.removeClass(reply_window, 'comment-slide-in');
-                        revUtils.addClass(reply_window, 'comment-slide-out');
-                        var func = function(){reply_window.remove();};
-                        setTimeout(func, 500);
-                    } else if (comment_window !== null){
-                        revUtils.removeClass(comment_window, 'comment-slide-in');
-                        revUtils.addClass(comment_window, 'comment-slide-out');
-                        var func = function(){comment_window.remove();};
-                        setTimeout(func, 500);
-                        revUtils.removeClass(document.body, 'modal-open');
-                    }
+            //         if (reply_window !== null) {
+            //             revUtils.removeClass(reply_window, 'comment-slide-in');
+            //             revUtils.addClass(reply_window, 'comment-slide-out');
+            //             var func = function(){reply_window.remove();};
+            //             setTimeout(func, 500);
+            //         } else if (comment_window !== null){
+            //             revUtils.removeClass(comment_window, 'comment-slide-in');
+            //             revUtils.addClass(comment_window, 'comment-slide-out');
+            //             var func = function(){comment_window.remove();};
+            //             setTimeout(func, 500);
+            //             revUtils.removeClass(document.body, 'modal-open');
+            //         }
 
-                } else {
-                    revUtils.removeClass(authbox, 'comment-slide-in');
-                    revUtils.addClass(authbox, 'comment-slide-out');
-                    var func = function(){authbox.remove();};
-                    setTimeout(func, 500);
-                }
-            };
+            //     } else {
+            //         revUtils.removeClass(authbox, 'comment-slide-in');
+            //         revUtils.addClass(authbox, 'comment-slide-out');
+            //         var func = function(){authbox.remove();};
+            //         setTimeout(func, 500);
+            //     }
+            // };
 
         } else {
             //not mobile
@@ -3169,9 +3249,9 @@ Author: michael@revcontent.com
 
                 revUtils.addEventListener(submitCommentBtn, 'click', function(ev){
                     revUtils.addClass(this, 'novak-animate');
-                    
-                    if (that.authenticated) {
-                        var submitted_comment_data = that.submitComment(commentTextAreaElement.value, null, replyingTo, function(data){
+
+                    var submit_comment = function(){
+                        that.submitComment(commentTextAreaElement.value, null, replyingTo, function(data){
                             if (typeof data === "number" && data === 201) {
                                 //for some reason we are getting dual responses, one with the payload and one with the http code
                                 return;
@@ -3194,6 +3274,12 @@ Author: michael@revcontent.com
                             // commentTextAreaElement.dispatchEvent(e);
                         });
                     } 
+                    
+                    if (that.authenticated) {
+                        submit_comment();
+                    } else {
+                        that.tryAuth(article, 'comment', submit_comment);
+                    }
                 });
                 
 
@@ -3212,6 +3298,9 @@ Author: michael@revcontent.com
         var currentTime = Date.now()/1000;
         var hasExistingVote = (commentData.vote.vote && commentData.vote.vote !== voteType);
 
+        var contentInner = that.getClosestParent(voteButton, '.rev-content-inner');
+
+
         if ( (currentTime - commentData.vote.created) < 1 ) {
             //voting too fast
             return false;
@@ -3222,8 +3311,6 @@ Author: michael@revcontent.com
             //this shouldnt be hit, but just in case
             return false;
         }
-
-        if( callback && typeof callback === 'function' ) { callback.call(); }//remove event handler
 
         //promise
         var canIAddNewVote = new Promise(
@@ -3252,6 +3339,7 @@ Author: michael@revcontent.com
         var tryToVote = function () {
             canIAddNewVote
                 .then(function (fulfilled) {
+                    if( callback && typeof callback === 'function' ) { callback.call(); }//remove event handler
                     //add new vote
                     var options = {};
                     var data = {
@@ -3287,7 +3375,7 @@ Author: michael@revcontent.com
                             newComment.appendChild(current_replies);
                           }
                           oldComment.parentNode.replaceChild(newComment, oldComment);
-                    },null,false,options);
+                    },null,true,options);
                 })
                 .catch(function (error) {
                     console.log(error.message);
@@ -3298,11 +3386,12 @@ Author: michael@revcontent.com
             tryToVote();
         } else {
             if (revDetect.mobile()) {
-                that.commentDetailAuth(tryToVote);
+                that.tryAuth(contentInner, 'vote', tryToVote);
             } else {
+                that.tryAuth(contentInner, 'vote', tryToVote);
                 var articleEl = that.getClosestParent(commentLi, 'article');
-                revUtils.removeClass(document.querySelector('.rev-flipped'), 'rev-flipped');
-                revUtils.addClass(articleEl, 'rev-flipped');
+                // revUtils.removeClass(document.querySelector('.rev-flipped'), 'rev-flipped');
+                // revUtils.addClass(articleEl, 'rev-flipped');
 
                 articleEl.scrollIntoView({ behavior: 'smooth', block: "start" });
             }
@@ -3312,42 +3401,431 @@ Author: michael@revcontent.com
         
     };
 
-    RevSlider.prototype.commentDetailAuth = function(callback){
-        
+
+    RevSlider.prototype.tryAuth = function(card, engagetype, callback){
         var that = this;
-        var authbox = document.createElement('div');
-        authbox.id = 'comment_authbox';
-        revUtils.addClass(authbox,'rev-auth');
-        authbox.innerHTML = '<div class="rev-auth-box">' +
-            '<a class="rev-auth-close-button">' +
-                '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"/></svg>' +
-            '</a>' +
-            '<div class="rev-auth-box-inner">' +
-                '<div class="rev-auth-subline">'+ that.getDisclosure() +'</div>' +
-                '<div class="rev-auth-headline">' +
-                    '<span class="rev-engage-type-txt">Almost Done! Login to save your comment</span> <br /> <strong>and</strong> personalize your experience' +
-                '</div>' +
-                '<div class="rev-auth-button">' +
-                    that.revAuthButtonIconHtml() +
-                    '<div class="rev-auth-button-text">' +
-                        'Continue with facebook' +
-                    '</div>' +
-                '</div>' +
+        if (that.authenticated) {
+            //already authed
+            if( callback && typeof callback === 'function' ) { callback.call(); }
+        } else {
+            //not authed, double check
 
-                '<div class="rev-auth-buttonline">Once personalized the content recommendations on this page will be based on the pages you\'ve liked and urls you\'ve shared on Facebook</div>' +
+            var authPromise = new Promise(function(resolve, reject) {   
+                revApi.xhr(that.options.actions_api_url + 'user/profile', function(data) {
+                    resolve(data);
+                },function(data){
+                    reject(data);
+                },true);
+            });
 
-                '<div class="rev-auth-terms">' +
-                    '<span>by signing up you agree to the <a target="_blank" href="https://faq.revcontent.com/customer/en/portal/articles/2703838-revcontent-s-privacy-and-cookie-policy">Terms</a></span>' +
-                    // '<span>|</span>' +
-                    // '<a href="#">Privacy Policy</a>' +
-                '</div>' +
-            '</div>' +
-        '</div>';
+            authPromise.then(function(data) { 
+                //user is logged in, continue whatever they were doing
+                that.authenticated = true;
+                    that.options.user = data;
+                    if (data.picture === "") {
+                        that.options.user.profile_url = that.options.default_avatar_url;
+                        that.options.user.picture = that.options.default_avatar_url;
+                    }
+                    if( callback && typeof callback === 'function' ) { callback.call(); }
+            },function(data){
+                //no user logged in, send them to auth
+                that.cardActionAuth(card, engagetype, callback);
+            }).catch(function(e) {
+                /* error :( */
+            });
+        
+        }
+    };
 
-        document.body.appendChild(authbox);
-        history.pushState({engage: 'auth'}, "Login to save your comment", "#login");
+    RevSlider.prototype.cardActionAuth = function(card, engagetype, callback){
+        var that = this;
+        if (that.authenticated) {
+            //already authed, shouldnt get this far, but just incase
+            return false;
+        }
 
-        revUtils.addEventListener(authbox.querySelector('.rev-auth-button'), 'click', function(){
+        //create authbox
+        var engage_auth = document.createElement('div');
+        revUtils.addClass(engage_auth,'rev-auth');
+        revUtils.addClass(engage_auth,'engage-auth');
+        revUtils.addClass(engage_auth, 'comment-slide-in');
+
+        var close_button = document.createElement('a');
+        revUtils.addClass(close_button,'rev-auth-close-button');
+        close_button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fit="" height="20" width="20" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;" viewBox="0 0 36 36"><path d="M28.5 9.62L26.38 7.5 18 15.88 9.62 7.5 7.5 9.62 15.88 18 7.5 26.38l2.12 2.12L18 20.12l8.38 8.38 2.12-2.12L20.12 18z"></path></svg>';
+
+        var engage_auth_box = document.createElement('div');
+        revUtils.addClass(engage_auth_box,'rev-auth-box');
+
+        engage_auth.appendChild(close_button);
+
+        if (this.options.brand_logo_secondary) {
+           var brandLogoSquare = this.createBrandLogo('rev-auth-site-logo', true);
+           engage_auth_box.appendChild(brandLogoSquare);
+        }
+
+        var engage_auth_box_inner = document.createElement('div');
+        revUtils.addClass(engage_auth_box_inner,'rev-auth-box-inner');
+
+        var engage_auth_subline = document.createElement('div');
+        revUtils.addClass(engage_auth_subline,'rev-auth-subline');
+        engage_auth_subline.innerHTML = that.getDisclosure();
+
+        var engage_auth_almost_done = document.createElement('h2');
+        engage_auth_almost_done.innerText = 'Almost Done!';
+        engage_auth_almost_done.style = 'text-align:center;'
+
+        var engage_auth_headline = document.createElement('div');
+        revUtils.addClass(engage_auth_headline,'rev-auth-headline');
+        engage_auth_headline.style.fontSize = '15px';
+        engage_auth_headline.style.lineHeight = '22px';
+        engage_auth_headline.innerHTML = '<span class="rev-engage-type-txt">Login to save your reaction</span> <br> and personalize your experience';
+
+
+        engage_auth_box_inner.appendChild(engage_auth_subline);
+        engage_auth_box_inner.appendChild(engage_auth_almost_done);
+        engage_auth_box_inner.appendChild(engage_auth_headline);
+
+        //create auth buttons
+        var engage_auth_facebook = document.createElement('div');
+        revUtils.addClass(engage_auth_facebook,'auth-button');
+        revUtils.addClass(engage_auth_facebook,'primary-auth-button');
+        engage_auth_facebook.innerHTML = '<span><div style="width: 30px;height: 30px;"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 470.513 470.513" style="enable-background:new 0 0 470.513 470.513;fill: #fff;" xml:space="preserve"><path d="M271.521,154.17v-40.541c0-6.086,0.28-10.8,0.849-14.13c0.567-3.335,1.857-6.615,3.859-9.853   c1.999-3.236,5.236-5.47,9.706-6.708c4.476-1.24,10.424-1.858,17.85-1.858h40.539V0h-64.809c-37.5,0-64.433,8.897-80.803,26.691   c-16.368,17.798-24.551,44.014-24.551,78.658v48.82h-48.542v81.086h48.539v235.256h97.362V235.256h64.805l8.566-81.086H271.521z"></path></svg></div></span><strong>Continue</strong> with <strong>facebook</strong>';
+
+        var engage_auth_email = document.createElement('div');
+        revUtils.addClass(engage_auth_email,'auth-button');
+        revUtils.addClass(engage_auth_email,'secondary-auth-button');
+        engage_auth_email.innerHTML = '<span><div style="width: 30px;height: 30px;"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 612 612" style="enable-background:new 0 0 612 612;fill: #7b7b7b;" xml:space="preserve"><path d="M612,306.036C612,137.405,474.595,0,305.964,0S0,137.405,0,306.036c0,92.881,42.14,176.437,107.698,232.599   c0.795,0.795,1.59,1.59,3.108,2.313C163.86,585.473,231.804,612,306.759,612c73.365,0,141.309-26.527,194.363-69.462   c3.108-0.795,5.493-3.108,7.011-5.493C571.451,480.088,612,398.122,612,306.036z M28.117,306.036   c0-153.018,124.901-277.919,277.919-277.919s277.919,124.901,277.919,277.919c0,74.955-29.635,142.826-78.063,192.845   c-7.806-36.719-31.225-99.169-103.072-139.718c16.408-20.311,25.732-46.838,25.732-74.955c0-67.149-54.644-121.793-121.793-121.793   s-121.793,54.644-121.793,121.793c0,28.117,10.119,53.849,25.732,74.955c-72.497,40.549-95.916,103-102.928,139.718   C58.547,449.658,28.117,380.991,28.117,306.036z M212.36,284.93c0-51.536,42.14-93.676,93.676-93.676s93.676,42.14,93.676,93.676   s-42.14,93.676-93.676,93.676S212.36,336.466,212.36,284.93z M132.707,523.023c1.59-22.624,14.022-99.169,98.374-142.104   c21.106,16.408,46.838,25.732,74.955,25.732c28.117,0,54.644-10.119,75.75-26.527c83.556,42.935,96.784,117.89,99.169,142.104   c-47.633,38.237-108.493,61.655-174.052,61.655C240.478,583.955,180.34,561.331,132.707,523.023z"></path></svg></div></span><strong>Continue</strong> with <strong>E-mail</strong>';
+
+        var engage_auth_or = document.createElement('p');
+        engage_auth_or.style = 'text-align: center;margin: 10px auto;font-style: italic;color: #545454;';
+        engage_auth_or.innerHTML = '- or -';
+
+        var engage_auth_login_option = document.createElement('div');
+        revUtils.addClass(engage_auth_login_option,'engage-auth-login-option');
+        engage_auth_login_option.innerHTML = 'Already have an Account? <a target="_blank">Login</a>';
+
+        var engage_auth_terms = document.createElement('div');
+        revUtils.addClass(engage_auth_terms,'engage-auth-terms');
+        engage_auth_terms.innerHTML = '<span><a target="_blank" href="//www.engage.im/privacy.html">Terms and Conditions</a></span>';
+
+        engage_auth_box_inner.appendChild(engage_auth_facebook);
+        engage_auth_box_inner.appendChild(engage_auth_or);
+        engage_auth_box_inner.appendChild(engage_auth_email);
+
+        engage_auth_box_inner.appendChild(engage_auth_login_option);
+        engage_auth_box_inner.appendChild(engage_auth_terms);
+
+        engage_auth_box.appendChild(engage_auth_box_inner);
+        engage_auth.appendChild(engage_auth_box);
+        
+
+        card.appendChild(engage_auth);
+        //history.pushState({engage: 'auth'}, "Login to save your comment", "#login");
+
+
+        var login_register_handler = function(mode){
+
+            //fade out all elms we are changing  //or do some other animation here
+            revUtils.addClass(engage_auth_almost_done, 'fade-out');
+            revUtils.addClass(engage_auth_headline, 'fade-out');
+            revUtils.addClass(engage_auth_facebook, 'fade-out');
+            revUtils.addClass(engage_auth_or, 'fade-out');
+            revUtils.addClass(engage_auth_email, 'fade-out');
+            revUtils.addClass(engage_auth_login_option, 'fade-out');
+            revUtils.addClass(engage_auth_terms, 'fade-out');
+
+            setTimeout(function(){
+                //remove items we dont need
+                engage_auth_or.remove();
+                engage_auth_login_option.remove();
+                engage_auth_terms.remove();
+
+                //change text elms
+                engage_auth_almost_done.innerText = mode === 'register' ? 'Sign-up' : 'Login';
+                engage_auth_headline.innerHTML = mode === 'register' ? 'Create an Account to continue' : 'Just enter your e-mail and <br/>password to continue';
+
+                //create form elms
+                var engage_auth_email_input_wrap = document.createElement('div');
+                revUtils.addClass(engage_auth_email_input_wrap, 'engage-auth-input-wrap');
+                
+                var engage_auth_email_input = document.createElement('input');
+                revUtils.addClass(engage_auth_email_input, 'engage-auth-input');
+                engage_auth_email_input.placeholder = 'E-mail';
+                engage_auth_email_input.name = 'email';
+
+                var engage_auth_email_input_error_text = document.createElement('span');
+                revUtils.addClass(engage_auth_email_input_error_text, 'error-text');              
+
+                engage_auth_email_input_wrap.appendChild(engage_auth_email_input);
+                engage_auth_email_input_wrap.appendChild(engage_auth_email_input_error_text);
+
+                var engage_auth_password_input_wrap = document.createElement('div');
+                revUtils.addClass(engage_auth_password_input_wrap, 'engage-auth-input-wrap');
+                
+                var engage_auth_password_input = document.createElement('input');
+                revUtils.addClass(engage_auth_password_input, 'engage-auth-input');
+                engage_auth_password_input.placeholder = 'Password';
+                engage_auth_password_input.name = 'password';
+                engage_auth_password_input.type = 'password';
+
+                var engage_auth_password_input_error_text = document.createElement('span');
+                revUtils.addClass(engage_auth_password_input_error_text, 'error-text');
+
+                var engage_auth_password_visibility_on = document.createElement('div');
+                revUtils.addClass(engage_auth_password_visibility_on, 'password-visibility');
+                engage_auth_password_visibility_on.style.display = 'none';
+                engage_auth_password_visibility_on.innerHTML = '<svg aria-hidden="true" data-prefix="far" data-icon="eye" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="svg-inline--fa fa-eye fa-w-18 fa-7x" style=""><path fill="currentColor" d="M569.354 231.631C512.97 135.949 407.81 72 288 72 168.14 72 63.004 135.994 6.646 231.631a47.999 47.999 0 0 0 0 48.739C63.031 376.051 168.19 440 288 440c119.86 0 224.996-63.994 281.354-159.631a47.997 47.997 0 0 0 0-48.738zM288 392c-102.556 0-192.091-54.701-240-136 44.157-74.933 123.677-127.27 216.162-135.007C273.958 131.078 280 144.83 280 160c0 30.928-25.072 56-56 56s-56-25.072-56-56l.001-.042C157.794 179.043 152 200.844 152 224c0 75.111 60.889 136 136 136s136-60.889 136-136c0-31.031-10.4-59.629-27.895-82.515C451.704 164.638 498.009 205.106 528 256c-47.908 81.299-137.444 136-240 136z" class=""></path></svg>';
+
+                var engage_auth_password_visibility_off = document.createElement('div');
+                revUtils.addClass(engage_auth_password_visibility_off, 'password-visibility');
+                engage_auth_password_visibility_off.style.display = 'block';
+                engage_auth_password_visibility_off.innerHTML = '<svg aria-hidden="true" data-prefix="far" data-icon="eye-slash" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="svg-inline--fa fa-eye-slash fa-w-18 fa-7x"><path fill="currentColor" d="M272.702 359.139c-80.483-9.011-136.212-86.886-116.93-167.042l116.93 167.042zM288 392c-102.556 0-192.092-54.701-240-136 21.755-36.917 52.1-68.342 88.344-91.658l-27.541-39.343C67.001 152.234 31.921 188.741 6.646 231.631a47.999 47.999 0 0 0 0 48.739C63.004 376.006 168.14 440 288 440a332.89 332.89 0 0 0 39.648-2.367l-32.021-45.744A284.16 284.16 0 0 1 288 392zm281.354-111.631c-33.232 56.394-83.421 101.742-143.554 129.492l48.116 68.74c3.801 5.429 2.48 12.912-2.949 16.712L450.23 509.83c-5.429 3.801-12.912 2.48-16.712-2.949L102.084 33.399c-3.801-5.429-2.48-12.912 2.949-16.712L125.77 2.17c5.429-3.801 12.912-2.48 16.712 2.949l55.526 79.325C226.612 76.343 256.808 72 288 72c119.86 0 224.996 63.994 281.354 159.631a48.002 48.002 0 0 1 0 48.738zM528 256c-44.157-74.933-123.677-127.27-216.162-135.007C302.042 131.078 296 144.83 296 160c0 30.928 25.072 56 56 56s56-25.072 56-56l-.001-.042c30.632 57.277 16.739 130.26-36.928 171.719l26.695 38.135C452.626 346.551 498.308 306.386 528 256z" class=""></path></svg>';
+
+                engage_auth_password_input_wrap.appendChild(engage_auth_password_input);
+                engage_auth_password_input_wrap.appendChild(engage_auth_password_input_error_text);
+
+                engage_auth_password_input_wrap.appendChild(engage_auth_password_visibility_on);
+                engage_auth_password_input_wrap.appendChild(engage_auth_password_visibility_off);
+
+                revUtils.addEventListener(engage_auth_password_visibility_off,'click', function(){
+                    engage_auth_password_visibility_off.style.display = 'none';
+                    engage_auth_password_visibility_on.style.display = 'block';
+                    engage_auth_password_input.type = 'text';
+                });
+
+                revUtils.addEventListener(engage_auth_password_visibility_on,'click', function(){
+                    engage_auth_password_visibility_on.style.display = 'none';
+                    engage_auth_password_visibility_off.style.display = 'block';
+                    engage_auth_password_input.type = 'password';
+                });
+
+
+                engage_auth_facebook.parentNode.replaceChild(engage_auth_email_input_wrap, engage_auth_facebook);
+                engage_auth_email.parentNode.replaceChild(engage_auth_password_input_wrap, engage_auth_email);
+
+
+                if (mode === "register") {
+                    //create additional fields
+                    var engage_auth_username_input_wrap = document.createElement('div');
+                    revUtils.addClass(engage_auth_username_input_wrap, 'engage-auth-input-wrap');
+                    
+                    var engage_auth_username_input = document.createElement('input');
+                    revUtils.addClass(engage_auth_username_input, 'engage-auth-input');
+                    engage_auth_username_input.placeholder = 'Display Name';
+                    engage_auth_username_input.name = 'username';
+
+                    var engage_auth_username_input_error_text = document.createElement('span');
+                    revUtils.addClass(engage_auth_username_input_error_text, 'error-text');              
+
+                    engage_auth_username_input_wrap.appendChild(engage_auth_username_input);
+                    engage_auth_username_input_wrap.appendChild(engage_auth_username_input_error_text);
+
+                    engage_auth_box_inner.appendChild(engage_auth_username_input_wrap);
+                }
+
+
+                //fade it all back in // or do other animation
+                revUtils.removeClass(engage_auth_almost_done, 'fade-out');
+                revUtils.addClass(engage_auth_almost_done, 'fade-in');
+
+                revUtils.removeClass(engage_auth_headline, 'fade-out');
+                revUtils.addClass(engage_auth_headline, 'fade-in');
+
+                revUtils.removeClass(engage_auth_email_input_wrap, 'fade-out');
+                revUtils.addClass(engage_auth_email_input_wrap, 'fade-in');
+
+                revUtils.removeClass(engage_auth_password_input_wrap, 'fade-out');
+                revUtils.addClass(engage_auth_password_input_wrap, 'fade-in');
+
+                
+
+                if (mode === "register") {
+                    var engage_auth_register = document.createElement('a');
+                    engage_auth_register.innerText = 'REGISTER';
+                    engage_auth_box_inner.appendChild(engage_auth_register);
+                } else {
+                    var engage_auth_login = document.createElement('a');
+                    engage_auth_login.innerText = 'LOGIN';
+                    engage_auth_box_inner.appendChild(engage_auth_login);
+                }
+
+
+                if (engage_auth_login) {
+                    revUtils.addEventListener(engage_auth_login, 'click', function(ev) {
+                        //validate email
+                        if (revUtils.validateEmail(engage_auth_email_input.value)) {
+                            //valid email
+                        } else {
+                            engage_auth_email_input.focus();
+                            engage_auth_email_input_error_text.innerText = 'Please enter a valid email';
+                        }
+
+                        //get values
+                        var data = {
+                            email: engage_auth_email_input.value,
+                            password: engage_auth_password_input.value
+                        };
+
+                        var options = {};
+                        options.data = JSON.stringify(data);
+                        options.method = "POST";
+
+                        //revApi.xhr('https://api.engage.im/s2/health', function(data) {
+                        revApi.xhr(that.options.actions_api_url + 'user/login', function(data) {
+                            that.authenticated = true;
+                            that.options.user = data.user;
+
+                            //update comment box with useris info  // prob just need to update avatar..
+                            var oldCommentBox = card.querySelector('.rev-comment-box');
+                            var newCommentBox = that.createCommentInput();
+                            oldCommentBox.parentNode.replaceChild(newCommentBox, oldCommentBox); 
+
+                            //continue whatever user was doing prior to auth
+                            if( callback && typeof callback === 'function' ) { callback.call(); }  
+
+                            alert('success, rm box');
+
+                            engage_auth.remove();                 
+
+                        },function(data){
+                            
+                            if (data.status === 500) {
+                                //bad user
+                                engage_auth_email_input.focus();
+                                engage_auth_email_input_error_text.innerText = 'Unknown user, Please check your email and try again';
+                            } else if (data.status === 403) {
+                                //bad password
+                                engage_auth_password_input.focus();
+                                engage_auth_password_input_error_text.innerText = 'Invalid password, Please check your password and try again';
+                            }
+
+                        },true,options);
+                    });
+                }
+
+                if(engage_auth_register) {
+                    revUtils.addEventListener(engage_auth_register, 'click', function(ev) {
+                        //validate email
+                        if (revUtils.validateEmail(engage_auth_email_input.value)) {
+                            //valid email
+                        } else {
+                            engage_auth_email_input.focus();
+                            engage_auth_email_input_error_text.innerText = 'Please enter a valid email';
+                        }
+
+                        //get values
+                        var data = {
+                            email: engage_auth_email_input.value,
+                            password: engage_auth_password_input.value,
+                            display_name: engage_auth_username_input.value
+                        };
+
+                        var options = {};
+                        options.data = JSON.stringify(data);
+                        options.method = "POST";
+
+                        //revApi.xhr('https://api.engage.im/s2/health', function(data) {
+                        revApi.xhr(that.options.actions_api_url + 'user/register', function(data) {
+                            
+                            //load interests card
+
+                            //continue whatever user was doing prior to auth
+                            if( callback && typeof callback === 'function' ) { callback.call(); }  
+                            engage_auth.remove();
+
+                            if (false) {
+                                var engage_auth_interests_card = document.createElement('div');
+                                revUtils.addClass(engage_auth_interests_card, 'engage-interests-card');
+
+                                var engage_auth_interests_header = document.createElement('div');
+                                revUtils.addClass(engage_auth_interests_header, 'engage-interests-header');
+                                engage_auth_interests_header.innerHTML = '<div class="engage-interests-header-icon pull-left">' +
+                                '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 57.943 57.943" style="enable-background:new 0 0 57.943 57.943;" xml:space="preserve"><g><path fill="currentColor" d="M57.426,42.053C57.027,37.964,53.974,35,50.156,35c-2.396,0-4.407,1.449-5.684,3.213C43.196,36.449,41.184,35,38.788,35   c-3.818,0-6.871,2.963-7.271,7.052c-0.042,0.268-0.145,1.22,0.226,2.709c0.545,2.197,1.8,4.191,3.631,5.771l8.329,7.126   c0.222,0.19,0.494,0.286,0.768,0.286c0.271,0,0.545-0.095,0.77-0.284l8.331-7.13c1.828-1.575,3.083-3.57,3.629-5.768   C57.57,43.271,57.468,42.319,57.426,42.053z M55.259,44.279c-0.445,1.794-1.479,3.432-2.99,4.732l-7.796,6.672l-7.795-6.67   c-1.514-1.305-2.549-2.941-2.993-4.735c-0.302-1.213-0.194-1.897-0.194-1.897l0.016-0.105C33.751,39.654,35.644,37,38.788,37   c2.189,0,3.974,1.811,4.77,3.605l0.914,2.061l0.914-2.061c0.796-1.795,2.58-3.605,4.77-3.605c3.145,0,5.037,2.654,5.295,5.367   C55.453,42.374,55.563,43.058,55.259,44.279z"></path><path fill="currentColor" d="M27.972,53c-0.634,0-1.266-0.031-1.895-0.078c-0.109-0.008-0.218-0.015-0.326-0.025c-0.634-0.056-1.265-0.131-1.89-0.233   c-0.028-0.005-0.056-0.01-0.084-0.015c-1.322-0.221-2.623-0.546-3.89-0.971c-0.039-0.013-0.079-0.026-0.118-0.04   c-0.629-0.214-1.251-0.45-1.862-0.713c-0.004-0.002-0.009-0.004-0.013-0.006c-0.578-0.249-1.145-0.525-1.705-0.816   c-0.073-0.038-0.147-0.074-0.219-0.113c-0.511-0.273-1.011-0.568-1.504-0.876c-0.146-0.092-0.291-0.185-0.435-0.279   c-0.454-0.297-0.902-0.606-1.338-0.933c-0.045-0.034-0.088-0.07-0.133-0.104c0.032-0.018,0.064-0.036,0.096-0.054l7.907-4.313   c1.36-0.742,2.205-2.165,2.205-3.714l-0.001-3.602l-0.23-0.278c-0.022-0.025-2.184-2.655-3.001-6.216l-0.091-0.396l-0.341-0.221   c-0.481-0.311-0.769-0.831-0.769-1.392v-3.545c0-0.465,0.197-0.898,0.557-1.223l0.33-0.298v-5.57l-0.009-0.131   c-0.003-0.024-0.298-2.429,1.396-4.36C22.055,10.837,24.533,10,27.972,10c3.426,0,5.896,0.83,7.346,2.466   c1.692,1.911,1.415,4.361,1.413,4.381l-0.009,5.701l0.33,0.298c0.359,0.324,0.557,0.758,0.557,1.223v3.545   c0,0.713-0.485,1.36-1.181,1.575c-0.527,0.162-0.823,0.723-0.66,1.25c0.162,0.527,0.72,0.821,1.25,0.66   c1.55-0.478,2.591-1.879,2.591-3.485v-3.545c0-0.867-0.318-1.708-0.887-2.369v-4.667c0.052-0.52,0.236-3.448-1.883-5.864   C34.996,9.065,32.013,8,27.972,8s-7.024,1.065-8.867,3.168c-2.119,2.416-1.935,5.346-1.883,5.864v4.667   c-0.568,0.661-0.887,1.502-0.887,2.369v3.545c0,1.101,0.494,2.128,1.34,2.821c0.81,3.173,2.477,5.575,3.093,6.389v2.894   c0,0.816-0.445,1.566-1.162,1.958l-7.907,4.313c-0.252,0.137-0.502,0.297-0.752,0.476C5.748,41.792,2.472,35.022,2.472,27.5   c0-14.061,11.439-25.5,25.5-25.5s25.5,11.439,25.5,25.5c0,0.553,0.447,1,1,1s1-0.447,1-1c0-15.163-12.337-27.5-27.5-27.5   s-27.5,12.337-27.5,27.5c0,8.009,3.444,15.228,8.926,20.258l-0.026,0.023l0.892,0.752c0.058,0.049,0.121,0.089,0.179,0.137   c0.474,0.393,0.965,0.766,1.465,1.127c0.162,0.117,0.324,0.235,0.489,0.348c0.534,0.368,1.082,0.717,1.642,1.048   c0.122,0.072,0.245,0.142,0.368,0.212c0.613,0.349,1.239,0.678,1.88,0.98c0.047,0.022,0.095,0.042,0.142,0.064   c2.089,0.971,4.319,1.684,6.651,2.105c0.061,0.011,0.122,0.022,0.184,0.033c0.724,0.125,1.456,0.225,2.197,0.292   c0.09,0.008,0.18,0.013,0.271,0.021C26.47,54.961,27.216,55,27.972,55c0.553,0,1-0.447,1-1S28.525,53,27.972,53z"></path></g></svg>' +
+                                '</div>' +
+                                '<div class="engage-interests-header-text pull-left">' +
+                                    '<h2>Interests</h2>' +
+                                    '<p>Subscribe to Channels</p>' +
+                                '</div>' + 
+                                '<div class="clearfix"></div>';
+
+
+                                engage_auth_interests_card.appendChild(engage_auth_interests_header);
+
+
+                                var engage_auth_interests_search_bar = document.createElement('div');
+                                revUtils.addClass(engage_auth_interests_search_bar, 'engage_auth_interests_search_bar');
+                                engage_auth_interests_search_bar.style.height = '40px';
+
+                                var engage_auth_interests_search_wrap = document.createElement('div');
+                                revUtils.addClass(engage_auth_interests_search_wrap, 'engage_auth_interests_search_wrap');
+                                revUtils.addClass(engage_auth_interests_search_wrap, 'pull-left');
+                                engage_auth_interests_search_wrap.style = 'height: 40px;width: 100%;margin-right: -100px;';
+
+                                var engage_auth_interests_search_toggle = document.createElement('div');
+                                revUtils.addClass(engage_auth_interests_search_toggle, 'engage_auth_interests_search_toggle');
+                                revUtils.addClass(engage_auth_interests_search_toggle, 'pull-left');
+                                engage_auth_interests_search_toggle.style = 'width:100px; height: 40px;';
+
+                                engage_auth_interests_search_bar.appendChild(engage_auth_interests_search_wrap);
+                                engage_auth_interests_search_bar.appendChild(engage_auth_interests_search_toggle);
+                                engage_auth_interests_card.appendChild(engage_auth_interests_search_bar);
+
+                                var engage_auth_interests = document.createElement('div');
+
+                                for (var i = 0; i < 9; i++) {
+
+                                    if (i % 3 === 0 && i !== 0) {
+                                        var clearfix = document.createElement('div');
+                                        revUtils.addClass(clearfix, 'clearfix');
+                                        clearfix.style.position = 'static';
+                                        engage_auth_interests.appendChild(clearfix);
+                                    }
+
+                                    var interests_item = document.createElement('div');
+                                    revUtils.addClass(interests_item, 'col-xs-4');
+                                    revUtils.addClass(interests_item, 'engage_auth_interests_item');
+                                    interests_item.style.backgroundImage = 'url(' + that.interests.list[i].image + ')';
+
+                                    var interests_item_toggle = document.createElement('div');
+                                    revUtils.addClass(interests_item_toggle, 'engage_auth_subscription_toggle');
+                                    interests_item_toggle.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 31.059 31.059" style="enable-background:new 0 0 31.059 31.059;" xml:space="preserve"><path d="M15.529,31.059C6.966,31.059,0,24.092,0,15.529C0,6.966,6.966,0,15.529,0    c8.563,0,15.529,6.966,15.529,15.529C31.059,24.092,24.092,31.059,15.529,31.059z M15.529,1.774    c-7.585,0-13.755,6.171-13.755,13.755s6.17,13.754,13.755,13.754c7.584,0,13.754-6.17,13.754-13.754S23.113,1.774,15.529,1.774z" fill="currentColor"></path><path d="M21.652,16.416H9.406c-0.49,0-0.888-0.396-0.888-0.887c0-0.49,0.397-0.888,0.888-0.888h12.246    c0.49,0,0.887,0.398,0.887,0.888C22.539,16.02,22.143,16.416,21.652,16.416z" fill="currentColor"></path><path d="M15.529,22.539c-0.49,0-0.888-0.397-0.888-0.887V9.406c0-0.49,0.398-0.888,0.888-0.888    c0.49,0,0.887,0.398,0.887,0.888v12.246C16.416,22.143,16.02,22.539,15.529,22.539z" fill="currentColor"></path></svg>';
+                                    interests_item.appendChild(interests_item_toggle);
+
+                                    engage_auth_interests.appendChild(interests_item);
+
+                                    revUtils.addEventListener(interests_item_toggle, 'click', function(){
+                                        //add interest
+                                    });
+
+                                };
+                                  
+                                engage_auth_interests_card.appendChild(engage_auth_interests);
+                                card.appendChild(engage_auth_interests_card);
+
+                            }
+
+                        },null,false,options);
+
+                    });
+                }
+                
+                //monitor valid email input only if error already exisits
+                revUtils.addEventListener(engage_auth_email_input, 'keyup', function(ev) {
+                    if (engage_auth_email_input_error_text.innerText !== '') {
+                        if (revUtils.validateEmail(engage_auth_email_input.value)) {
+                            engage_auth_email_input_error_text.innerText = '';
+                        }
+                    }
+                });
+
+            },500);
+
+        };
+
+
+        //continue with facebook
+        revUtils.addEventListener(engage_auth_facebook, 'click', function(){
 
             var url = that.options.host + "/feed.php?provider=facebook_engage&w=" + that.options.widget_id + "&p=" + that.options.pub_id;
             var popup = window.open(url, 'Login', 'resizable,width=600,height=800');
@@ -3357,7 +3835,7 @@ Author: michael@revcontent.com
                     that.isAuthenticated(function(response) {
 
                         if (response === true) {
-                            authbox.remove();
+                            engage_auth.remove();
 
                             that.updateAuthElements();
                             that.processQueue();
@@ -3376,17 +3854,105 @@ Author: michael@revcontent.com
                     clearInterval(closedCheckInterval);
                 }
             }, 100);
-
-
+        });
+        
+        //continue with email
+        revUtils.addEventListener(engage_auth_email, 'click', function(){
+            login_register_handler('register');
         });
 
-        revUtils.addEventListener(authbox.querySelector('.rev-auth-close-button'), 'click', function(ev) {
-            revUtils.removeClass(authbox, 'comment-slide-in');
-            revUtils.addClass(authbox, 'comment-slide-out');
-            var func = function(){authbox.remove();};
+        //already have acct, login
+        revUtils.addEventListener(engage_auth_login_option.querySelector('a'), 'click', function(){
+            login_register_handler('login');
+        });
+
+        revUtils.addEventListener(close_button, 'click', function(ev) {
+            revUtils.removeClass(engage_auth, 'comment-slide-in');
+            revUtils.addClass(engage_auth, 'comment-slide-out');
+            var func = function(){engage_auth.remove();};
             setTimeout(func, 500);
             //history.back();
         });
+
+        //update authbox items
+        setTimeout(function() {
+            var engagetxt = engage_auth_headline.querySelector('.rev-engage-type-txt');
+            
+            if (engagetxt) {
+                engagetxt.innerHTML = 'Sign-up to save your ' + engagetype;
+            }
+
+            that.resizeHeadlineLines(engage_auth_headline);
+
+            // reduce margins based on vertical space
+            var innerHeight = brandLogoSquare ? (brandLogoSquare.offsetHeight + engage_auth_box_inner.offsetHeight) : engage_auth_box_inner.offsetHeight;
+
+            if (engage_auth.offsetHeight < innerHeight) {
+                var sanity = 0;
+                var zeroed = [];
+
+                var subline = engage_auth_box_inner.querySelector('.rev-auth-subline');
+                var button = engage_auth_box_inner.querySelector('.auth-button');
+                // var buttonline = item.element.querySelector('.rev-auth-buttonline');
+                // var terms = item.element.querySelector('.rev-auth-terms');
+
+                while ((sanity < 20) && (zeroed.length < 5) && (engage_auth.offsetHeight < innerHeight)) {
+
+                    var sublineMarginTop = parseInt(revUtils.getComputedStyle(engage_auth_subline, 'margin-top'));
+                    if (sublineMarginTop > 1) {
+                        engage_auth_subline.style.marginTop = (sublineMarginTop - 1) + 'px';
+                    } else if(!zeroed.indexOf('subline')) {
+                        zeroed.push('subline');
+                    }
+
+                    var headlineMarginTop = parseInt(revUtils.getComputedStyle(headline, 'margin-top'));
+                    if (headlineMarginTop > 3) {
+                        headline.style.marginTop = (headlineMarginTop - 2) + 'px';
+                    } else if(!zeroed.indexOf('headline')) {
+                        zeroed.push('headline');
+                    }
+
+                    var buttonMarginTop = parseInt(revUtils.getComputedStyle(button, 'margin-top'));
+                    if (buttonMarginTop > 3) {
+                        button.style.marginTop = (buttonMarginTop - 2) + 'px';
+                    } else if(!zeroed.indexOf('button')) {
+                        zeroed.push('button');
+                    }
+
+                    // var buttonlineMarginTop = parseInt(revUtils.getComputedStyle(buttonline, 'margin-top'));
+                    // if (buttonlineMarginTop > 3) {
+                    //     buttonline.style.marginTop = (buttonlineMarginTop - 1) + 'px';
+                    // } else if(!zeroed.indexOf('buttonline')) {
+                    //     zeroed.push('buttonline');
+                    // }
+
+                    // var termsMarginTop = parseInt(revUtils.getComputedStyle(terms, 'margin-top'));
+                    // if (termsMarginTop > 1) {
+                    //     terms.style.marginTop = (termsMarginTop - 2) + 'px';
+                    // } else if(!zeroed.indexOf('terms')) {
+                    //     zeroed.push('terms');
+                    // }
+
+                    innerHeight = brandLogoSquare ? (brandLogoSquare.offsetHeight + engage_auth_box_inner.offsetHeight) : engage_auth_box_inner.offsetHeight;
+                    sanity++;
+                }
+            }
+
+            if (brandLogoSquare) {
+                brandLogoSquare.style.width = brandLogoSquare.offsetHeight + 'px';
+            }
+
+            if (!that.authenticated) {
+                //old flip logic
+                // revUtils.removeClass(document.querySelector('.rev-flipped'), 'rev-flipped');
+                // revUtils.addClass(item.element, 'rev-flipped');
+            }
+        }, 0);
+
+
+
+
+
     };
 
 
@@ -3409,7 +3975,7 @@ Author: michael@revcontent.com
             //update feed item
             //that.updateDisplayedItem(that.feedItems[uid]);
 
-        },null,false,{method:'DELETE', jwt: that.options.jwt});
+        },null,true,{method:'DELETE', jwt: that.options.jwt});
     };
 
     RevSlider.prototype.submitComment = function(comment, url, commentID, callback) {
@@ -3424,18 +3990,20 @@ Author: michael@revcontent.com
         var data = {};
         var isReplyMode = (url === null && commentID !== null);
 
-              
         data.comment = String(comment).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         data.url = url;
 
         if (isReplyMode) {
-            data.commentID = commentID;
+            data.comment_id = commentID;
             data.reply = data.comment;
         }
 
         options.data = JSON.stringify(data);
         options.method = "POST";
-        options.jwt = that.options.jwt;
+        if (that.options.hasOwnProperty("jwt")) {
+            options.jwt = that.options.jwt;
+        }
+
 
         //send comment xhr
         var comment_type = isReplyMode ? 'reply' : 'comment';
@@ -3448,19 +4016,19 @@ Author: michael@revcontent.com
                 //Bad Word
                 //if( callback && typeof callback === 'function' ) { callback.call(this, response,true); }
             }
-        },false,options);
+        },true,options);
 
     };
 
-    RevSlider.prototype.createCommentInput = function(mode){
-        //mode = comment or reply
+    RevSlider.prototype.createCommentInput = function(){
+
         var commentBoxElement = document.createElement('div');
         revUtils.addClass(commentBoxElement, 'rev-comment-box');
         commentBoxElement.style = 'padding: 8px;background: #fafbfd;border-top: 1px solid #e6ecf5;'; //add this to css file
 
         var commentUserAvatar = document.createElement('img');
         revUtils.addClass(commentUserAvatar, 'comment-avatar');
-        commentUserAvatar.src = typeof this.authenticated && this.options.user !== null && this.options.user.hasOwnProperty("profile_url") ? this.options.user.profile_url : 'https://hostelhops.com/img/profile/user/facebook-default.png?1508323045';
+        commentUserAvatar.src = typeof this.authenticated && this.options.user !== null && this.options.user.hasOwnProperty("profile_url") ? this.options.user.profile_url : this.options.default_avatar_url;
         commentBoxElement.appendChild(commentUserAvatar);
 
         var commentInputWrapElement = document.createElement('div');
@@ -3472,11 +4040,10 @@ Author: michael@revcontent.com
         var commentInputHiddenTxtElement = document.createElement('div');
         revUtils.addClass(commentInputHiddenTxtElement, 'hidden_text_size');
         commentInputHiddenTxtElement.style = 'min-height: 30px;width: 100%;border-radius: 4px;padding: 4px 70px 4px 10px;position: absolute;z-index: -2000;border: 0 none;color: #ffffff00;user-select: none;';
-        commentInputWrapElement.appendChild(commentInputHiddenTxtElement);
+        //commentInputWrapElement.appendChild(commentInputHiddenTxtElement);
 
         var commentTextAreaElement = document.createElement('textarea');
         revUtils.addClass(commentTextAreaElement, 'comment-textarea');
-        //commentTextAreaElement.placeholder = 'Write a ' + mode  + '...';
         commentTextAreaElement.placeholder = 'Engage in this discussion!';
         commentInputWrapElement.appendChild(commentTextAreaElement);
 
@@ -3493,13 +4060,28 @@ Author: michael@revcontent.com
         //Adjust comment textarea height, 1 - 4 lines
         revUtils.addEventListener(commentTextAreaElement, 'keyup', function(ev) {
             submitCommentBtn.style.display = 'inline-block';
-            commentInputHiddenTxtElement.innerText = commentTextAreaElement.value;
-            if (commentInputHiddenTxtElement.scrollHeight < 88) {
-                commentTextAreaElement.style.height = (commentInputHiddenTxtElement.scrollHeight + 2) + "px";
-            }
+            // commentInputHiddenTxtElement.innerText = commentTextAreaElement.value;
+            // if (commentInputHiddenTxtElement.scrollHeight < 88) {
+            //     commentTextAreaElement.style.height = (commentInputHiddenTxtElement.scrollHeight + 2) + "px";
+            // }
         });
 
         return commentBoxElement;
+    };
+
+    RevSlider.prototype.getUserProfile = function(){
+        var that = this;
+        revApi.xhr(that.options.actions_api_url + 'user/profile', function(data) {
+
+            //todo check for errors before setting this
+            that.authenticated = true;
+
+            that.options.user = data;
+            if (data.picture === "") {
+                that.options.user.profile_url = that.options.default_avatar_url;
+                that.options.user.picture = that.options.default_avatar_url;
+            }
+        },null,true);
     };
 
     RevSlider.prototype.updateTimeAgo = function(mode){
@@ -3510,7 +4092,7 @@ Author: michael@revcontent.com
         }
     };
 
-    RevSlider.prototype.getClosestParent = function (elem, selector) {
+    RevSlider.prototype.getClosestParent = function (elem, selector) {        
         // Element.matches() polyfill
         if (!Element.prototype.matches) {
             Element.prototype.matches =
