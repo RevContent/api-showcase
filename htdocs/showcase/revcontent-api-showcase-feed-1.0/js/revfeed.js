@@ -105,6 +105,7 @@ Author: michael@revcontent.com
             reply_truncate_length: 100,
             comment_truncate_length_mobile: 500,
             reply_truncate_length_mobile: 100,
+            default_avatar_url: 'https://hostelhops.com/img/profile/user/facebook-default.png?1508323045',
             emitter: new EvEmitter(),
             history_stack: []
         };

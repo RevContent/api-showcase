@@ -287,6 +287,37 @@ Author: michael@revcontent.com
 
         this.authenticated = this.options.user ? true : null;
 
+        if (this.authenticated === null) {
+            //check if user is logged in
+            this.getUserProfile();
+        }
+
+
+
+        // var that = this;
+        // var authPromise = new Promise(function(resolve, reject) {   
+        //     revApi.xhr(that.options.actions_api_url + 'user/profile', function(data) {
+        //         console.log(data);
+        //         resolve(data);
+        //     },null,true);
+        // });
+
+        // authPromise.then(function(data) { 
+        //     that.authenticated = true;
+        //         that.options.user = data;
+        //         if (data.picture === "") {
+        //             that.options.user.profile_url = that.options.default_avatar_url;
+        //             that.options.user.picture = that.options.default_avatar_url;
+        //         }
+        // }).catch(function(e) {
+        //     /* error :( */
+        //         console.log("errrrrorrrrr");
+        //         console.log(e.stack);
+        // });
+
+
+
+
         this.queue = [];
         this.queueRetries = 0;
 
@@ -660,7 +691,8 @@ Author: michael@revcontent.com
 
                     that.reactionCount(item, iconName, true);
 
-                    that.transitionLogin(item, 'reaction');
+                    //that.transitionLogin(item, 'reaction');
+                    that.tryAuth(item.element, 'reaction');
 
                     return;
                 }
@@ -705,7 +737,8 @@ Author: michael@revcontent.com
                     that.setReactionText(item);
                 }
 
-                that.transitionLogin(item, 'reaction');
+                //that.transitionLogin(item, 'reaction');
+                that.tryAuth(item.element, 'reaction');
             });
 
             this.mc.on('press', function(ev) {
@@ -803,7 +836,9 @@ Author: michael@revcontent.com
                     that.setReactionText(item);
                 }
 
-                that.transitionLogin(item, 'reaction');
+                //that.transitionLogin(item, 'reaction');
+                that.tryAuth(item.element, 'reaction');
+
             });
 
             var menuItems = item.element.querySelectorAll('.rev-reaction-menu-item');
@@ -853,7 +888,8 @@ Author: michael@revcontent.com
 
                     that.setReactionText(item);
 
-                    that.transitionLogin(item, 'reaction');
+                    //that.transitionLogin(item, 'reaction');
+                    that.tryAuth(item.element, 'reaction');
 
                 }, {passive: false});
             }
@@ -1212,11 +1248,7 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.createBrandLogo = function(className, square) {
-
-try {
-
         var char = square ? this.options.brand_logo_secondary.charAt(0) : this.options.brand_logo.charAt(0);
-
         var brandLogo = document.createElement('div');
 
         if (char === '<') {
@@ -1229,10 +1261,6 @@ try {
         revUtils.addClass(brandLogo, className);
 
         return brandLogo;
-} catch(err) {
-    console.log(err.message);
-}
-
     };
 
     RevSlider.prototype.appendElements = function() {
@@ -1957,9 +1985,18 @@ try {
                             }
                             return;
                         }
+                        
+                        var commentDetailsElement = item.element.querySelector(".rev-comment-detail");
                         var commentUL = item.element.querySelector(".comments-list");
                         var newCommentElement = that.setCommentHTML(data,false,false,itemData.uid);
+                        var newCommentElement_forDetails = that.setCommentHTML(data,false,false,itemData.uid);
+
                         commentUL.appendChild(newCommentElement);
+                        
+                        if (commentDetailsElement) {
+                            commentDetailsElement.querySelector(".comments-list").appendChild(newCommentElement_forDetails);    
+                        }
+                        
                         commentTextAreaElement.value = "";
                         var e = document.createEvent('HTMLEvents');
                         e.initEvent("keyup", false, true);
@@ -1981,7 +2018,7 @@ try {
                     callbackFn();
                 } else {
                     var contentInner = item.element.querySelector('.rev-content-inner');
-                    that.cardActionAuth(contentInner, 'comment', callbackFn);
+                    that.tryAuth(contentInner, 'comment', callbackFn);
                     //old flip logic
                     // revUtils.removeClass(document.querySelector('.rev-flipped'), 'rev-flipped');
                     // revUtils.addClass(item.element, 'rev-flipped');
@@ -2668,7 +2705,7 @@ try {
         var commentOwner = false;
 
         if (that.options.user !== null && that.options.user.hasOwnProperty("user_id")) {
-            commentOwner = commentData.user.id === that.options.user.user_id;
+            commentOwner = commentData.user.id === that.options.user.user_id || commentData.user.id === that.options.user.id;
         }
 
         var li = document.createElement("li");
@@ -2682,9 +2719,18 @@ try {
         revUtils.addClass(post_author_div, 'vcard');
         revUtils.addClass(post_author_div, 'inline-items');
         var time = that.timeAgo(commentData.created, true);
-        post_author_div.innerHTML = '<img src="' + commentData.user.picture + '" alt="author">' +
+        var avatar = commentData.user.picture === "" ? that.options.default_avatar_url : commentData.user.picture;
+        var display_name = (commentData.user.display_name !== "") ? commentData.user.display_name : (commentData.user.first_name + ' ' + commentData.user.last_name);
+
+        console.log(typeof commentData.user.display_name);
+        console.log(commentData.user.display_name !== "");//false
+        console.log(commentData.user.display_name !== null);//true
+        console.log(display_name);
+        console.log(commentData.user);
+
+        post_author_div.innerHTML = '<img src="' + avatar + '" alt="author">' +
                                     '<div class="author-date">' +
-                                        '<a class="h6 post__author-name fn" href="#">' + commentData.user.first_name + ' ' + commentData.user.last_name + '</a>' +
+                                        '<a class="h6 post__author-name fn" href="#">' + display_name + '</a>' +
                                         '<div class="post__date">' +
                                             '<time class="published" datetime="' + commentData.created + '"><span>' + time + (time !== 'yesterday' ? ' ago' : '') + '</span></time>' +
                                         '</div>' +
@@ -2743,6 +2789,7 @@ try {
             commentToolBox.appendChild(comment_reply_btn);
 
             revUtils.addEventListener(comment_reply_btn, 'click', function(ev) {
+                console.log("reply");
                 that.handleComments(commentData, true, commentData.id, uid);
             });
 
@@ -2949,28 +2996,22 @@ try {
     RevSlider.prototype.handleComments = function(itemData, focus, replyingTo, uid) {
         var that = this;
 
-        
-
-        var article = this.feedItems[itemData.uid].element;
-        var comment_detail = article.querySelector('.rev-comment-detail');
-        revUtils.addClass(comment_detail, 'fooooobar');
-        console.log(comment_detail);
-
-        setTimeout(function(){
-            var comment_detail = article.querySelector('.rev-comment-detail');
-            revUtils.addClass(comment_detail, 'fooooobar');
-            console.log(comment_detail);
-        },1000);
-
         //gulp wont let us use argument defaults (breaks the build)
         replyingTo = typeof replyingTo  === 'undefined' ? null : replyingTo;
         uid = typeof uid  === 'undefined' ? itemData.uid : uid;
         var isReplyMode = replyingTo !== null;
 
+        console.log(uid);
+        console.log(this.feedItems);
+        if (uid !== 'undefined') {
+            var article = this.feedItems[uid].element;
+            var comment_detail = article.querySelector('.rev-comment-detail');    
+        }
+        
 
         if (isReplyMode && (document.getElementById('rev-reply-detail') !== null)) {
             return false;
-        } else if (!isReplyMode && (document.getElementById('rev-comment-detail') !== null)) {
+        } else if (!isReplyMode && comment_detail !== null) {
             return false;
         }
 
@@ -3037,7 +3078,7 @@ try {
 
             var commentFeedUL = document.createElement('ul');
             revUtils.addClass(commentFeedUL, 'comments-list');
-            commentFeedUL.id = "comments-list";
+            //commentFeedUL.id = "comments-list";
 
             //add loader
             commentFeedElement.appendChild(commentFeedLoader);
@@ -3156,33 +3197,33 @@ try {
 
             revUtils.addClass(commentDetailsElement, 'comment-slide-in');
 
-            window.onpopstate = function(event) {
-                var authbox = document.getElementById('comment_authbox');
-                var reply_window = document.getElementById('rev-reply-detail');
-                var comment_window = document.getElementById('rev-comment-detail');
+            // window.onpopstate = function(event) {
+            //     var authbox = document.getElementById('comment_authbox');
+            //     var reply_window = document.getElementById('rev-reply-detail');
+            //     var comment_window = document.getElementById('rev-comment-detail');
 
-                if (authbox === null) {
+            //     if (authbox === null) {
 
-                    if (reply_window !== null) {
-                        revUtils.removeClass(reply_window, 'comment-slide-in');
-                        revUtils.addClass(reply_window, 'comment-slide-out');
-                        var func = function(){reply_window.remove();};
-                        setTimeout(func, 500);
-                    } else if (comment_window !== null){
-                        revUtils.removeClass(comment_window, 'comment-slide-in');
-                        revUtils.addClass(comment_window, 'comment-slide-out');
-                        var func = function(){comment_window.remove();};
-                        setTimeout(func, 500);
-                        revUtils.removeClass(document.body, 'modal-open');
-                    }
+            //         if (reply_window !== null) {
+            //             revUtils.removeClass(reply_window, 'comment-slide-in');
+            //             revUtils.addClass(reply_window, 'comment-slide-out');
+            //             var func = function(){reply_window.remove();};
+            //             setTimeout(func, 500);
+            //         } else if (comment_window !== null){
+            //             revUtils.removeClass(comment_window, 'comment-slide-in');
+            //             revUtils.addClass(comment_window, 'comment-slide-out');
+            //             var func = function(){comment_window.remove();};
+            //             setTimeout(func, 500);
+            //             revUtils.removeClass(document.body, 'modal-open');
+            //         }
 
-                } else {
-                    revUtils.removeClass(authbox, 'comment-slide-in');
-                    revUtils.addClass(authbox, 'comment-slide-out');
-                    var func = function(){authbox.remove();};
-                    setTimeout(func, 500);
-                }
-            };
+            //     } else {
+            //         revUtils.removeClass(authbox, 'comment-slide-in');
+            //         revUtils.addClass(authbox, 'comment-slide-out');
+            //         var func = function(){authbox.remove();};
+            //         setTimeout(func, 500);
+            //     }
+            // };
 
         } else {
             //not mobile
@@ -3208,9 +3249,10 @@ try {
 
                 revUtils.addEventListener(submitCommentBtn, 'click', function(ev){
                     revUtils.addClass(this, 'novak-animate');
-                    
-                    if (that.authenticated) {
-                        var submitted_comment_data = that.submitComment(commentTextAreaElement.value, null, replyingTo, function(data){
+                    console.log("submit that shit");
+
+                    var submit_comment = function(){
+                        that.submitComment(commentTextAreaElement.value, null, replyingTo, function(data){
                             if (typeof data === "number" && data === 201) {
                                 //for some reason we are getting dual responses, one with the payload and one with the http code
                                 return;
@@ -3233,6 +3275,12 @@ try {
                             // commentTextAreaElement.dispatchEvent(e);
                         });
                     } 
+                    
+                    if (that.authenticated) {
+                        submit_comment();
+                    } else {
+                        that.tryAuth(article, 'comment', submit_comment);
+                    }
                 });
                 
 
@@ -3265,8 +3313,6 @@ try {
             return false;
         }
 
-        if( callback && typeof callback === 'function' ) { callback.call(); }//remove event handler
-
         //promise
         var canIAddNewVote = new Promise(
             function (resolve, reject) {
@@ -3294,6 +3340,7 @@ try {
         var tryToVote = function () {
             canIAddNewVote
                 .then(function (fulfilled) {
+                    if( callback && typeof callback === 'function' ) { callback.call(); }//remove event handler
                     //add new vote
                     var options = {};
                     var data = {
@@ -3340,8 +3387,9 @@ try {
             tryToVote();
         } else {
             if (revDetect.mobile()) {
-                that.cardActionAuth(contentInner, 'vote', tryToVote);
+                that.tryAuth(contentInner, 'vote', tryToVote);
             } else {
+                that.tryAuth(contentInner, 'vote', tryToVote);
                 var articleEl = that.getClosestParent(commentLi, 'article');
                 // revUtils.removeClass(document.querySelector('.rev-flipped'), 'rev-flipped');
                 // revUtils.addClass(articleEl, 'rev-flipped');
@@ -3355,8 +3403,47 @@ try {
     };
 
 
+    RevSlider.prototype.tryAuth = function(card, engagetype, callback){
+        var that = this;
+        if (that.authenticated) {
+            //already authed
+            if( callback && typeof callback === 'function' ) { callback.call(); }
+        } else {
+            //not authed, double check
+
+            var authPromise = new Promise(function(resolve, reject) {   
+                revApi.xhr(that.options.actions_api_url + 'user/profile', function(data) {
+                    resolve(data);
+                },function(data){
+                    reject(data);
+                },true);
+            });
+
+            authPromise.then(function(data) { 
+                //user is logged in, continue whatever they were doing
+                that.authenticated = true;
+                    that.options.user = data;
+                    if (data.picture === "") {
+                        that.options.user.profile_url = that.options.default_avatar_url;
+                        that.options.user.picture = that.options.default_avatar_url;
+                    }
+                    if( callback && typeof callback === 'function' ) { callback.call(); }
+            },function(data){
+                //no user logged in, send them to auth
+                that.cardActionAuth(card, engagetype, callback);
+            }).catch(function(e) {
+                /* error :( */
+            });
+        
+        }
+    };
+
     RevSlider.prototype.cardActionAuth = function(card, engagetype, callback){
         var that = this;
+        if (that.authenticated) {
+            //already authed, shouldnt get this far, but just incase
+            return false;
+        }
 
         //create authbox
         var engage_auth = document.createElement('div');
@@ -3569,7 +3656,7 @@ try {
                     revUtils.addEventListener(engage_auth_login, 'click', function(ev) {
                         //validate email
                         if (revUtils.validateEmail(engage_auth_email_input.value)) {
-                            console.log("valid email");
+                            //valid email
                         } else {
                             engage_auth_email_input.focus();
                             engage_auth_email_input_error_text.innerText = 'Please enter a valid email';
@@ -3587,17 +3674,16 @@ try {
 
                         //revApi.xhr('https://api.engage.im/s2/health', function(data) {
                         revApi.xhr(that.options.actions_api_url + 'user/login', function(data) {
-                            console.log(data);
                             that.authenticated = true;
                             that.options.user = data.user;
 
-                            // console.log("user options in api response =======");
-                            // console.log(that.options.user);
-
+                            //update comment box with useris info  // prob just need to update avatar..
                             var oldCommentBox = card.querySelector('.rev-comment-box');
                             var newCommentBox = that.createCommentInput();
+                            oldCommentBox.parentNode.replaceChild(newCommentBox, oldCommentBox); 
 
-                            oldCommentBox.parentNode.replaceChild(newCommentElement, oldCommentBox);                            
+                            //continue whatever user was doing prior to auth
+                            if( callback && typeof callback === 'function' ) { callback.call(); }                      
 
                         },function(data){
                             
@@ -3611,7 +3697,7 @@ try {
                                 engage_auth_password_input_error_text.innerText = 'Invalid password, Please check your password and try again';
                             }
 
-                        },false,options);
+                        },true,options);
                     });
                 }
 
@@ -3619,7 +3705,7 @@ try {
                     revUtils.addEventListener(engage_auth_register, 'click', function(ev) {
                         //validate email
                         if (revUtils.validateEmail(engage_auth_email_input.value)) {
-                            console.log("valid email");
+                            //valid email
                         } else {
                             engage_auth_email_input.focus();
                             engage_auth_email_input_error_text.innerText = 'Please enter a valid email';
@@ -3640,8 +3726,8 @@ try {
                         revApi.xhr(that.options.actions_api_url + 'user/register', function(data) {
                             
                             //load interests card
-                            console.log("========= that.interests =======");
-                            console.log(that.interests);
+                            // console.log("========= that.interests =======");
+                            // console.log(that.interests);
 
                             if (true) {
                                 var engage_auth_interests_card = document.createElement('div');
@@ -3704,7 +3790,7 @@ try {
                                     engage_auth_interests.appendChild(interests_item);
 
                                     revUtils.addEventListener(interests_item_toggle, 'click', function(){
-                                        console.log("adding interest");
+                                        //add interest
                                     });
 
                                 };
@@ -3800,7 +3886,7 @@ try {
                 var sanity = 0;
                 var zeroed = [];
 
-                var subline = item.element.querySelector('.rev-auth-subline');
+                var subline = engage_auth_box_inner.querySelector('.rev-auth-subline');
                 var button = engage_auth_box_inner.querySelector('.auth-button');
                 // var buttonline = item.element.querySelector('.rev-auth-buttonline');
                 // var terms = item.element.querySelector('.rev-auth-terms');
@@ -3899,6 +3985,7 @@ try {
         var data = {};
         var isReplyMode = (url === null && commentID !== null);
 
+        console.log(that.options.user);
               
         data.comment = String(comment).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         data.url = url;
@@ -3938,7 +4025,7 @@ try {
 
         var commentUserAvatar = document.createElement('img');
         revUtils.addClass(commentUserAvatar, 'comment-avatar');
-        commentUserAvatar.src = typeof this.authenticated && this.options.user !== null && this.options.user.hasOwnProperty("profile_url") ? this.options.user.profile_url : 'https://hostelhops.com/img/profile/user/facebook-default.png?1508323045';
+        commentUserAvatar.src = typeof this.authenticated && this.options.user !== null && this.options.user.hasOwnProperty("profile_url") ? this.options.user.profile_url : this.options.default_avatar_url;
         commentBoxElement.appendChild(commentUserAvatar);
 
         var commentInputWrapElement = document.createElement('div');
@@ -3977,6 +4064,21 @@ try {
         });
 
         return commentBoxElement;
+    };
+
+    RevSlider.prototype.getUserProfile = function(){
+        var that = this;
+        revApi.xhr(that.options.actions_api_url + 'user/profile', function(data) {
+            //console.log(data);
+            //todo check for errors before setting this
+            that.authenticated = true;
+
+            that.options.user = data;
+            if (data.picture === "") {
+                that.options.user.profile_url = that.options.default_avatar_url;
+                that.options.user.picture = that.options.default_avatar_url;
+            }
+        },null,true);
     };
 
     RevSlider.prototype.updateTimeAgo = function(mode){

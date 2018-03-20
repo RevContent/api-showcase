@@ -188,12 +188,12 @@ $reactionMenu8Y: 13.5px;
 
     &.rev-slider-mobile {
         * {
-            -webkit-touch-callout: none;
+            /*-webkit-touch-callout: none;
             -webkit-user-select: none;
             -khtml-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
-            user-select: none;
+            user-select: none;*/
         }
         .rev-reaction-menu-container {
             // bottom: 30px !important;
@@ -2866,8 +2866,8 @@ body.animate-user-profile #profile-mask {
     margin-top: -18px;
 }
 
-#rev-reply-detail .rev-comment-feed,
-#rev-comment-detail .rev-comment-feed {
+.rev-reply-detail .rev-comment-feed,
+.rev-comment-detail .rev-comment-feed {
   height: calc(100% - 50px);
   background: #fdfdfd;
   overflow-y: scroll;
@@ -2912,6 +2912,7 @@ body.animate-user-profile #profile-mask {
 }
 
 .comments-list {
+  height: 100%;
   margin-bottom: 0;
   padding:0;
   list-style: none;
@@ -3057,7 +3058,7 @@ body.animate-user-profile #profile-mask {
 
 .comment-submit-button {
   position: absolute!important;
-  z-index: 999;
+  z-index: 200;
   right: 15px;
   top: 50%;
   margin-top: -22px;
