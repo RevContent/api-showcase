@@ -3015,9 +3015,7 @@ Author: michael@revcontent.com
         if (that.options.user !== null) {
             var commentDataUserID = commentData.user.id.toLowerCase();
             var optionsDataUserID = '';
-            if (that.options.user.hasOwnProperty('user_id')) {
-                optionsDataUserID = that.options.user.user_id.toLowerCase();
-            } else if (that.options.user.hasOwnProperty('id')) {
+            if (that.options.user.hasOwnProperty('id')) {
                 optionsDataUserID = that.options.user.id.toLowerCase();
             }
         

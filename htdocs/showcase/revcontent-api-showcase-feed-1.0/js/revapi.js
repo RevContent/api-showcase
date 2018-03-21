@@ -48,7 +48,7 @@ api.xhr = function(url, success, failure, withCredentials, opts) {
 
     request.open(options.method, url, true);
 
-    if (options.hasOwnProperty("jwt") && options.jwt !== undefined) {
+    if (options.hasOwnProperty("jwt") && options.jwt !== undefined  && options.jwt !== "") {
         var authtoken = 'Bearer ' + options.jwt;
         request.setRequestHeader('authorization', authtoken);
     } else if (localStorage.engage_jwt) {
