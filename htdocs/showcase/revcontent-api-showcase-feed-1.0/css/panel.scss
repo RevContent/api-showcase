@@ -1,0 +1,41 @@
+#rev-side-shifter {
+    background: #fff;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    clear: both;
+    box-sizing: border-box;
+    position: fixed;
+    bottom: 0;
+    z-index: 2147483629;
+    box-shadow: none;
+
+    &.rev-side-shifter-animating {
+        &.rev-side-shifter-right {
+            box-shadow: -5px 0px 10px -5px #888;
+        }
+
+        &.rev-side-shifter-left {
+            box-shadow: 5px 0px 10px -5px #888;
+        }
+    }
+
+    .rev-side-shifter-container {
+        margin: 0 auto;
+        height: 100%;
+
+        .rev-side-shifter-inner {
+            height: 100%;
+        }
+
+        #rev-slider2 {
+            height: 100%;
+            #rev-slider-container {
+                height: 100%;
+                overflow-x: hidden;
+                overflow-y: scroll;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+    }
+}
