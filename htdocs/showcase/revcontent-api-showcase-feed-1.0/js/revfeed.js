@@ -111,6 +111,8 @@ Author: michael@revcontent.com
         // merge options
         this.options = Object.assign(defaults, opts);
 
+        this.options.authenticated = this.options.user ? true : null;
+
         if (!this.options.internal_selector) {
 
             this.options.internal_selector = '';
@@ -294,9 +296,9 @@ Author: michael@revcontent.com
 
         });
 
-        this.cornerButton = this.createCornerButton(this.options);
-
         this.innerWidget = this.createInnerWidget(this.containerElement, this.options);
+
+        this.cornerButton = this.createCornerButton(this.options);
     };
 
     Feed.prototype.navBar = function() {
@@ -632,6 +634,7 @@ Author: michael@revcontent.com
     };
 
     Feed.prototype.createCornerButton = function(options) {
+        options.innerWidget = this.innerWidget;
         return new EngageCornerButton(options);
     }
 

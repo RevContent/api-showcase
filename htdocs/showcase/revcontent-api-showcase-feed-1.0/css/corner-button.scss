@@ -142,6 +142,17 @@ body.animate-user-profile {
           }
         }
 
+        &.menu-button-recommended {
+          &:after {
+            content: "Recommended";
+            bottom: 39px;
+            left: 12px;
+          }
+          .menu-button-icon {
+            background-image: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTE4LjYgNi42MmMtMS40NCAwLTIuOC41Ni0zLjc3IDEuNTNMMTIgMTAuNjYgMTAuNDggMTJoLjAxTDcuOCAxNC4zOWMtLjY0LjY0LTEuNDkuOTktMi40Ljk5LTEuODcgMC0zLjM5LTEuNTEtMy4zOS0zLjM4UzMuNTMgOC42MiA1LjQgOC42MmMuOTEgMCAxLjc2LjM1IDIuNDQgMS4wM2wxLjEzIDEgMS41MS0xLjM0TDkuMjIgOC4yQzguMiA3LjE4IDYuODQgNi42MiA1LjQgNi42MiAyLjQyIDYuNjIgMCA5LjA0IDAgMTJzMi40MiA1LjM4IDUuNCA1LjM4YzEuNDQgMCAyLjgtLjU2IDMuNzctMS41M2wyLjgzLTIuNS4wMS4wMUwxMy41MiAxMmgtLjAxbDIuNjktMi4zOWMuNjQtLjY0IDEuNDktLjk5IDIuNC0uOTkgMS44NyAwIDMuMzkgMS41MSAzLjM5IDMuMzhzLTEuNTIgMy4zOC0zLjM5IDMuMzhjLS45IDAtMS43Ni0uMzUtMi40NC0xLjAzbC0xLjE0LTEuMDEtMS41MSAxLjM0IDEuMjcgMS4xMmMxLjAyIDEuMDEgMi4zNyAxLjU3IDMuODIgMS41NyAyLjk4IDAgNS40LTIuNDEgNS40LTUuMzhzLTIuNDItNS4zNy01LjQtNS4zN3oiLz4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgwVjB6IiBmaWxsPSJub25lIi8+PC9zdmc+);
+          }
+        }
+
         &.menu-button-latest {
           &:after {
             content: "Latest";

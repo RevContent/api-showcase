@@ -18,6 +18,11 @@ Author: michael@revcontent.com
             buttons: [
                 {
                     name: 'Personalized',
+                    auth_required: true,
+                    auth_name: 'Recommended',
+                    auth_options: {
+                        feed_type: 'contextual'
+                    },
                     options: {
 
                     }
@@ -81,7 +86,16 @@ Author: michael@revcontent.com
         this.options.emitter.on('updateButtonElementInnerIcon', function() {
             updateButtonElementInnerIcon(true);
         });
-        // TODO: need this?
+
+        this.options.emitter.on('updateButtons', function(authenticated) {
+            that.options.authenticated = authenticated;
+
+            for (var i = 0; i < that.options.buttons.length; i++) {
+                // console.log('menu-button menu-button-' + (authenticated && that.options.buttons[i].auth_name ? that.options.buttons[i].auth_name.toLowerCase() : that.options.buttons[i].name.toLowerCase()));
+                that.options.buttons[i].element.className = 'menu-button menu-button-' + (authenticated && that.options.buttons[i].auth_name ? that.options.buttons[i].auth_name.toLowerCase() : that.options.buttons[i].name.toLowerCase());
+            }
+        });
+
         updateButtonElementInnerIcon();
 
         revUtils.append(this.buttonElementInner, this.buttonElementInnerIcon);
@@ -94,7 +108,7 @@ Author: michael@revcontent.com
 
         for (var i = 0; i < this.options.buttons.length; i++) {
             var button = document.createElement('button');
-            button.className = 'menu-button menu-button-' + this.options.buttons[i].name.toLowerCase();
+            button.className = 'menu-button menu-button-' + (this.options.authenticated && this.options.buttons[i].auth_name ? this.options.buttons[i].auth_name.toLowerCase() : this.options.buttons[i].name.toLowerCase());
             var buttonIcon = document.createElement('div');
             buttonIcon.className = 'menu-button-icon';
             var buttonWave = document.createElement('div');
@@ -112,12 +126,17 @@ Author: michael@revcontent.com
             var handleButton = function(button) {
                 revUtils.addEventListener(button.element, revDetect.mobile() ? 'touchstart' : 'click', function(ev) {
 
+                    if (button.auth_required && !that.options.authenticated && that.options.innerWidget.feedAuthButton) {
+                        that.options.innerWidget.feedAuthButton.scrollIntoView(true);
+                        return;
+                    }
+
                     if (!that.panel) { // get the panel set at this point
                         that.panel = new EngagePanel(that.options);
                     }
 
                     if (!button.slider) {
-                        button.options = Object.assign(button.options, that.options);
+                        button.options = Object.assign(that.options.authenticated ? button.auth_options : button.options, that.options);
                         button.options.element = that.panel.innerElement;
                         button.options.infinite_element = that.panel.innerElement;
                         button.options.infinite_container = true;

@@ -187,6 +187,7 @@ Author: michael@revcontent.com
         this.emitter.on('dialog_closed', function() {
             that.options.emitter.emitEvent('updateButtonElementInnerIcon');
             that.isAuthenticated(function(response) {
+                that.options.emitter.emitEvent('updateButtons', [response]);
                 that.updateAuthElements();
                 that.processQueue();
                 if (response === true) {
@@ -264,38 +265,10 @@ Author: michael@revcontent.com
             count: 0
         };
 
-        this.authenticated = this.options.user ? true : null;
-
-        if (this.authenticated === null) {
+        if (this.options.authenticated === null) {
             //check if user is logged in
             this.getUserProfile();
         }
-
-
-
-        // var that = this;
-        // var authPromise = new Promise(function(resolve, reject) {
-        //     revApi.xhr(that.options.actions_api_url + 'user/profile', function(data) {
-        //         console.log(data);
-        //         resolve(data);
-        //     },null,true);
-        // });
-
-        // authPromise.then(function(data) {
-        //     that.authenticated = true;
-        //         that.options.user = data;
-        //         if (data.picture === "") {
-        //             that.options.user.profile_url = that.options.default_avatar_url;
-        //             that.options.user.picture = that.options.default_avatar_url;
-        //         }
-        // }).catch(function(e) {
-        //     /* error :( */
-        //         console.log("errrrrorrrrr");
-        //         console.log(e.stack);
-        // });
-
-
-
 
         this.queue = [];
         this.queueRetries = 0;
@@ -495,7 +468,7 @@ Author: michael@revcontent.com
             var starttime = new Date().getTime();
             that.personalized = true;
 
-            that.interestsCarouselItem.carousel.update(data.data, that.authenticated);
+            that.interestsCarouselItem.carousel.update(data.data, that.options.authenticated);
 
             // TODO
             // that.updateVideoItems(that.mockVideosAuthenticated);
@@ -668,12 +641,12 @@ Author: michael@revcontent.com
             // @todo find replacement/correct var for patternTotal
             if (!this.interestsCarouselVisible && i == 3) {
                 this.interestsCarouselVisible = true;
-                layoutItems = layoutItems.concat(this.appendInterestsCarousel(grid,this.authenticated));
+                layoutItems = layoutItems.concat(this.appendInterestsCarousel(grid,this.options.authenticated));
                 i--;
                 continue;
             }
 
-            if (!this.authenticated && i == 1 && !this.feedAuthButtonVisible) {
+            if (!this.options.authenticated && i == 1 && !this.feedAuthButtonVisible) {
                 this.feedAuthButtonVisible = true;
                 var feedAuthButton = this.appendfeedAuthButton(grid);
                 layoutItems = layoutItems.concat(feedAuthButton);
@@ -1153,7 +1126,7 @@ Author: michael@revcontent.com
                 logo.style.width = logo.offsetHeight + 'px';
             }
 
-            if (!that.authenticated) {
+            if (!that.options.authenticated) {
                 //old flip logic
                 // revUtils.removeClass(document.querySelector('.rev-flipped'), 'rev-flipped');
                 // revUtils.addClass(item.element, 'rev-flipped');
@@ -1230,7 +1203,7 @@ Author: michael@revcontent.com
 
                     var url = that.options.host + '/api/v1/engage/removebookmark.php?url=' + encodeURI(item.data.target_url) + '&title=' + encodeURI(item.data.headline);
 
-                    if (that.authenticated) {
+                    if (that.options.authenticated) {
                         revApi.request(url, function(data) {
                             return;
                         });
@@ -1266,7 +1239,7 @@ Author: michael@revcontent.com
                     //save bookmark
                     var url = that.options.host + '/api/v1/engage/addbookmark.php?url=' + encodeURI(item.data.target_url) + '&title=' + encodeURI(item.data.headline);
 
-                    if (that.authenticated) {
+                    if (that.options.authenticated) {
                         revApi.request( url, function(data) {
                             return;
                         });
@@ -1515,8 +1488,8 @@ Author: michael@revcontent.com
     RevSlider.prototype.isAuthenticated = function(callback) {
         var that = this;
         revApi.request(this.options.host + '/feed.php?provider=facebook_engage&action=connected', function(response) {
-            that.authenticated = response.success;
-            callback.call(this, that.authenticated);
+            that.options.authenticated = response.success;
+            callback.call(this, that.options.authenticated);
         }, function() {
             callback.call(this, -1);
         });
@@ -1584,12 +1557,12 @@ Author: michael@revcontent.com
                             //'<div class="rev-auth-box-inner">' +
                                 //'<div class="rev-auth-subline">'+ this.getDisclosure() +'</div>' +
                                 // '<div class="rev-auth-headline">' +
-                                //     (this.authenticated ? 'Currently logged in!' : '<span class="rev-engage-type-txt">Almost Done! Login to save your reaction</span> <br /> <strong>and</strong> personalize your experience') +
+                                //     (this.options.authenticated ? 'Currently logged in!' : '<span class="rev-engage-type-txt">Almost Done! Login to save your reaction</span> <br /> <strong>and</strong> personalize your experience') +
                                 // '</div>' +
                                 // '<div class="rev-auth-button">' +
                                 //     this.revAuthButtonIconHtml() +
                                 //     '<div class="rev-auth-button-text">' +
-                                //         (this.authenticated ? 'Log out' : 'Continue with facebook') +
+                                //         (this.options.authenticated ? 'Log out' : 'Continue with facebook') +
                                 //     '</div>' +
                                 // '</div>' +
 
@@ -1650,7 +1623,7 @@ Author: michael@revcontent.com
     RevSlider.prototype.afterAuth = false;
     RevSlider.prototype.authButtonHandler = function(cell, e) {
         var that = this;
-        if (that.authenticated) {
+        if (that.options.authenticated) {
             var url = that.options.host + "/feed.php?provider=facebook_engage&action=logout&w=" + that.options.widget_id + "&p=" + that.options.pub_id;
         } else {
             var url = that.options.host + "/feed.php?provider=facebook_engage&w=" + that.options.widget_id + "&p=" + that.options.pub_id;
@@ -1662,6 +1635,9 @@ Author: michael@revcontent.com
             if (popup.closed) {
                 that.options.emitter.emitEvent('updateButtonElementInnerIcon');
                 that.isAuthenticated(function(response) {
+
+                    that.options.emitter.emitEvent('updateButtons', [response]);
+
                     if (response === true) {
                         if (cell) {
                             //old flip logic
@@ -1823,7 +1799,7 @@ Author: michael@revcontent.com
             var tryToCreateRows = function(retries) {
                 try {
                     var rowData = that.createRows(that.grid);
-                    resolve({authenticated: that.authenticated, rowData: rowData});
+                    resolve({authenticated: that.options.authenticated, rowData: rowData});
                 } catch (e) {
                     // TODO test
                     while(that.grid.items.length) {
@@ -1841,7 +1817,7 @@ Author: michael@revcontent.com
 
             var initAuthenticated = function() {
                 try {
-                    if (that.authenticated === true) {
+                    if (that.options.authenticated === true) {
                         that.updateAuthElements();
                     }
 
@@ -1852,7 +1828,7 @@ Author: michael@revcontent.com
                 }
             }
 
-            if (that.authenticated === null) {
+            if (that.options.authenticated === null) {
                 that.isAuthenticated(function(authenticated) {
                     initAuthenticated();
                 });
@@ -2178,7 +2154,7 @@ Author: michael@revcontent.com
                     });
                 };
 
-                if (that.authenticated) {
+                if (that.options.authenticated) {
                     callbackFn();
                 } else {
                     var contentInner = item.element.querySelector('.rev-content-inner');
@@ -2408,7 +2384,7 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.updateAuthElements = function() {
         var authBoxes = document.querySelectorAll('.rev-auth-box');
-        if (this.authenticated) {
+        if (this.options.authenticated) {
             for (var i = 0; i < authBoxes.length; i++) {
                 authBoxes[i].querySelector('.rev-auth-headline').innerText = 'Currently logged in!';
                 authBoxes[i].querySelector('.rev-auth-button-text').innerText = 'Log out';
@@ -2592,7 +2568,7 @@ Author: michael@revcontent.com
                 emitter: that.emitter
             });
 
-            that.interestsCarouselItem.carousel.update(data, that.authenticated);
+            that.interestsCarouselItem.carousel.update(data, that.options.authenticated);
 
             if (grid.perRow > 1) { // relayout if not single column
                 grid.layout();
@@ -3513,7 +3489,7 @@ Author: michael@revcontent.com
             //         });
             //     };
 
-            //     if (that.authenticated) {
+            //     if (that.options.authenticated) {
             //         submitFn();
             //     } else {
             //         that.cardActionAuth(submitFn);
@@ -3600,7 +3576,7 @@ Author: michael@revcontent.com
                         });
                     }
 
-                    if (that.authenticated) {
+                    if (that.options.authenticated) {
                         submit_comment();
                     } else {
                         that.tryAuth(article, 'comment', submit_comment);
@@ -3707,7 +3683,7 @@ Author: michael@revcontent.com
                 });
         };
 
-        if (that.authenticated) {
+        if (that.options.authenticated) {
             tryToVote();
         } else {
             if (revDetect.mobile()) {
@@ -3729,7 +3705,7 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.tryAuth = function(card, engagetype, callback){
         var that = this;
-        if (that.authenticated) {
+        if (that.options.authenticated) {
             //already authed
             if( callback && typeof callback === 'function' ) { callback.call(); }
         } else {
@@ -3745,7 +3721,7 @@ Author: michael@revcontent.com
 
             authPromise.then(function(data) {
                 //user is logged in, continue whatever they were doing
-                that.authenticated = true;
+                that.options.authenticated = true;
                     that.options.user = data;
                     if (data.picture === "") {
                         that.options.user.profile_url = that.options.default_avatar_url;
@@ -3764,7 +3740,7 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.cardActionAuth = function(card, engagetype, callback){
         var that = this;
-        if (that.authenticated) {
+        if (that.options.authenticated) {
             //already authed, shouldnt get this far, but just incase
             return false;
         }
@@ -3998,7 +3974,7 @@ Author: michael@revcontent.com
 
                         //revApi.xhr('https://api.engage.im/s2/health', function(data) {
                         revApi.xhr(that.options.actions_api_url + 'user/login', function(data) {
-                            that.authenticated = true;
+                            that.options.authenticated = true;
                             that.options.user = data.user;
 
                             //update comment box with useris info  // prob just need to update avatar..
@@ -4158,6 +4134,8 @@ Author: michael@revcontent.com
                     that.options.emitter.emitEvent('updateButtonElementInnerIcon');
                     that.isAuthenticated(function(response) {
 
+                        that.options.emitter.emitEvent('updateButtons', [response]);
+
                         if (response === true) {
                             engage_auth.remove();
 
@@ -4266,7 +4244,7 @@ Author: michael@revcontent.com
                 brandLogoSquare.style.width = brandLogoSquare.offsetHeight + 'px';
             }
 
-            if (!that.authenticated) {
+            if (!that.options.authenticated) {
                 //old flip logic
                 // revUtils.removeClass(document.querySelector('.rev-flipped'), 'rev-flipped');
                 // revUtils.addClass(item.element, 'rev-flipped');
@@ -4352,7 +4330,7 @@ Author: michael@revcontent.com
 
         var commentUserAvatar = document.createElement('img');
         revUtils.addClass(commentUserAvatar, 'comment-avatar');
-        commentUserAvatar.src = typeof this.authenticated && this.options.user !== null && this.options.user.hasOwnProperty("profile_url") ? this.options.user.profile_url : this.options.default_avatar_url;
+        commentUserAvatar.src = typeof this.options.authenticated && this.options.user !== null && this.options.user.hasOwnProperty("profile_url") ? this.options.user.profile_url : this.options.default_avatar_url;
         commentBoxElement.appendChild(commentUserAvatar);
 
         var commentInputWrapElement = document.createElement('div');
@@ -4398,7 +4376,7 @@ Author: michael@revcontent.com
         revApi.xhr(that.options.actions_api_url + 'user/profile', function(data) {
 
             //todo check for errors before setting this
-            that.authenticated = true;
+            that.options.authenticated = true;
 
             that.options.user = data;
             if (data.picture === "") {
