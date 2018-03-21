@@ -3222,6 +3222,19 @@ input.engage-auth-input:focus {
   cursor: pointer;
 }
 
+.engage-auth-login-button,
+.engage-auth-register-button {
+    display: block;
+    width: 40px;
+    height: 40px;
+    background: $primary-color;
+    color: #fff!important;
+    border-radius: 100%;
+    padding: 9px;
+    float: right;
+    margin: 0 53px 0 0;
+}
+
 .engage-auth-terms {
   color: #949494;
   margin-top: 10px;
