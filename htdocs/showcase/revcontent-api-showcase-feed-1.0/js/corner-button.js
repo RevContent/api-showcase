@@ -136,7 +136,7 @@ Author: michael@revcontent.com
                     }
 
                     if (!button.slider) {
-                        button.options = Object.assign(that.options.authenticated ? button.auth_options : button.options, that.options);
+                        button.options = Object.assign((that.options.authenticated && button.auth_options ? button.auth_options : button.options), that.options);
                         button.options.element = that.panel.innerElement;
                         button.options.infinite_element = that.panel.innerElement;
                         button.options.infinite_container = true;
