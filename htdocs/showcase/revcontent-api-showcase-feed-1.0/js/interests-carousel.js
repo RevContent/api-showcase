@@ -126,7 +126,9 @@ Author: michael@revcontent.com
             return;
         }
 
-        var title = "Trending topics on " + revUtils.capitalize(revUtils.extractRootDomain(window.location.href));
+
+        var pubDomain = this.options.domain?revUtils.capitalize(this.options.domain):revUtils.capitalize(revUtils.extractRootDomain(window.location.href));
+        var title = "Trending topics on " + pubDomain;
         var sub = '';
         if (authenticated) {
             title = 'Content You Love';

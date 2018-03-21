@@ -2563,6 +2563,7 @@ Author: michael@revcontent.com
 
 
             that.interestsCarouselItem.carousel = new EngageInterestsCarousel({
+                domain: that.options.domain,
                 item: that.interestsCarouselItem,
                 emitter: that.emitter
             });
