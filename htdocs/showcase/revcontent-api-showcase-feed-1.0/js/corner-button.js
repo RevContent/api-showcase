@@ -71,12 +71,12 @@ Author: michael@revcontent.com
                 revApi.request(that.options.host + '/api/v1/engage/profile.php?', function(data) {
                     revUtils.addClass(that.buttonElementInnerIcon, 'eng-default-profile');
                     that.buttonElementInnerIcon.style.backgroundImage = null;
-                    if (data && data.profile_url) {
-                        that.buttonElementInnerIcon.style.backgroundImage = 'url(' + data.profile_url + ')';
+                    if (data && data.picture) {
+                        that.buttonElementInnerIcon.style.backgroundImage = 'url(' + data.picture + ')';
                     }
                 });
-            } else if (that.options.user && that.options.user.profile_url) {
-                that.buttonElementInnerIcon.style.backgroundImage = 'url(' + that.options.user.profile_url + ')';
+            } else if (that.options.user && that.options.user.picture) {
+                that.buttonElementInnerIcon.style.backgroundImage = 'url(' + that.options.user.picture + ')';
             } else {
                 revUtils.addClass(that.buttonElementInnerIcon, 'eng-default-profile');
             }
@@ -236,8 +236,8 @@ Author: michael@revcontent.com
         // revUtils.append(document.body, userProfile);
         // revUtils.append(document.body, this.profileMask);
 
-        if (this.options.user && this.options.user.profile_url) {
-            userProfileImage.style.backgroundImage = 'url(' + this.options.user.profile_url + ')';
+        if (this.options.user && this.options.user.picture) {
+            userProfileImage.style.backgroundImage = 'url(' + this.options.user.picture + ')';
         } else {
             revUtils.addClass(userProfileImage, 'eng-default-profile');
         }
