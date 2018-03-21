@@ -1489,6 +1489,7 @@ Author: michael@revcontent.com
         var that = this;
         revApi.request(this.options.host + '/feed.php?provider=facebook_engage&action=connected', function(response) {
             that.options.authenticated = response.success;
+            that.options.jwt = response.data.jwt;
             callback.call(this, that.options.authenticated);
         }, function() {
             callback.call(this, -1);
@@ -4173,31 +4174,6 @@ Author: michael@revcontent.com
                                 that.showPersonalizedTransition();
                                 that.personalize();
                             }
-                            
-
-
-
-
-
-                            // var authPromise = new Promise(function(resolve, reject) {   
-                            //     if (!that.personalized) {
-                            //         reject();
-                            //     } else {
-                            //         resolve();
-                            //     }
-                            // });
-
-                            // authPromise.then(function(data) { 
-                            //     if( callback && typeof callback === 'function' ) { callback.call(); }
-                            // }).catch(function(e) {
-                            //     /* error :( */
-                            //         console.log("errrrrorrrrr");
-                            //         console.log(e.stack);
-                            // });
-
-
-
-
 
                             //post comment
                             if( callback && typeof callback === 'function' ) { callback.call(); }
