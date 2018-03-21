@@ -286,7 +286,7 @@
       "./showcase/revcontent-api-showcase-feed-1.0/js/any-grid.js",
       "./showcase/js/requestAnimationFrame.js",
       "./showcase/js/Object.assign.js",
-      "./showcase/js/revutils.js",
+      "./showcase/revcontent-api-showcase-feed-1.0/js/revutils.js",
       "./showcase/js/revdialog.js",
       "./showcase/js/revdisclose.js",
       "./showcase/js/revdetect-standalone.js",

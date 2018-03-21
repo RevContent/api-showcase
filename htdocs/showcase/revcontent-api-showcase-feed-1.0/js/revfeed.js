@@ -245,7 +245,7 @@ Author: michael@revcontent.com
             }
 
             // TODO - yikes
-            self.innerWidget.options = revUtils.extend(self.innerWidget.options, self.options);
+            self.innerWidget.options = Object.assign(self.innerWidget.options, self.options);
 
             if (updateItems > 0) {
                 var internalURL = self.innerWidget.generateUrl(0, internalLimit, 0, sponsoredLimit);

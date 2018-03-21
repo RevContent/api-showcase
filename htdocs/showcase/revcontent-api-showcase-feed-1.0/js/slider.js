@@ -173,10 +173,6 @@ Author: michael@revcontent.com
         // store options
         revUtils.storeUserOptions(this.options);
 
-        if (revUtils.validateApiParams(this.options).length) {
-            return;
-        }
-
         // don't show for this device
         if (!revDetect.show(this.options.devices)) {
             return;
