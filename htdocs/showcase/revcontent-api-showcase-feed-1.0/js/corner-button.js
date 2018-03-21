@@ -63,16 +63,17 @@ Author: michael@revcontent.com
 
         var updateButtonElementInnerIcon = function(reset) {
             if (reset) {
-                revUtils.addClass(that.buttonElementInnerIcon, 'eng-default-profile');
-                that.buttonElementInnerIcon.style.backgroundImage = null;
-
                 revApi.request(that.options.host + '/api/v1/engage/profile.php?', function(data) {
+                    revUtils.addClass(that.buttonElementInnerIcon, 'eng-default-profile');
+                    that.buttonElementInnerIcon.style.backgroundImage = null;
                     if (data && data.profile_url) {
                         that.buttonElementInnerIcon.style.backgroundImage = 'url(' + data.profile_url + ')';
                     }
                 });
             } else if (that.options.user && that.options.user.profile_url) {
                 that.buttonElementInnerIcon.style.backgroundImage = 'url(' + that.options.user.profile_url + ')';
+            } else {
+                revUtils.addClass(that.buttonElementInnerIcon, 'eng-default-profile');
             }
         }
 

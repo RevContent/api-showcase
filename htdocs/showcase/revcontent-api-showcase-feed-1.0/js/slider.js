@@ -185,6 +185,7 @@ Author: michael@revcontent.com
         revDisclose.setEmitter(this.emitter);
 
         this.emitter.on('dialog_closed', function() {
+            that.options.emitter.emitEvent('updateButtonElementInnerIcon');
             that.isAuthenticated(function(response) {
                 that.updateAuthElements();
                 that.processQueue();
@@ -1659,6 +1660,7 @@ Author: michael@revcontent.com
 
         var closedCheckInterval = setInterval(function() {
             if (popup.closed) {
+                that.options.emitter.emitEvent('updateButtonElementInnerIcon');
                 that.isAuthenticated(function(response) {
                     if (response === true) {
                         if (cell) {
@@ -2405,8 +2407,6 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.updateAuthElements = function() {
-        this.options.emitter.emitEvent('updateButtonElementInnerIcon');
-
         var authBoxes = document.querySelectorAll('.rev-auth-box');
         if (this.authenticated) {
             for (var i = 0; i < authBoxes.length; i++) {
@@ -4155,6 +4155,7 @@ Author: michael@revcontent.com
 
             var closedCheckInterval = setInterval(function() {
                 if (popup.closed) {
+                    that.options.emitter.emitEvent('updateButtonElementInnerIcon');
                     that.isAuthenticated(function(response) {
 
                         if (response === true) {
