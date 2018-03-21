@@ -1973,15 +1973,14 @@ Author: michael@revcontent.com
 
             revUtils.addEventListener(submitCommentBtn, 'click', function(ev){
                 revUtils.addClass(this, 'novak-animate');
-                // alert("pressed");
 
                 var callbackFn = function() {
                     //create comment inline on desktop
                     var submitted_comment_data = that.submitComment(commentTextAreaElement.value, itemData.target_url, null, function(data,error){
-                        if (typeof data === "number" && data === 201) {
-                                //for some reason we are getting dual responses, one with the payload and one with the http code
-                            return;
-                        }
+                        // if (typeof data === "number" && data === 201) {
+                        //         //for some reason we are getting dual responses, one with the payload and one with the http code
+                        //     return;
+                        // }
 
                         if (error) {
                             //currently only want to show error for bad words, but gathering the error msg from response for later use
@@ -2806,7 +2805,7 @@ Author: michael@revcontent.com
         if (!isLegacyComment) {
             var comment_like = document.createElement("a");
                 revUtils.addClass(comment_like, 'rev-comment-like');
-                if (this.options.hasOwnProperty("jwt") && commentData.vote.vote === "up") {
+                if (commentData.vote.vote === "up") {
                     revUtils.addClass(comment_like, 'selected');
                 }
                 comment_like.innerHTML = '<svg aria-hidden="true" data-prefix="fas" data-icon="thumbs-up" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-thumbs-up fa-w-16 fa-5x"><path d="M104 224H24c-13.255 0-24 10.745-24 24v240c0 13.255 10.745 24 24 24h80c13.255 0 24-10.745 24-24V248c0-13.255-10.745-24-24-24zM64 472c-13.255 0-24-10.745-24-24s10.745-24 24-24 24 10.745 24 24-10.745 24-24 24zM384 81.452c0 42.416-25.97 66.208-33.277 94.548h101.723c33.397 0 59.397 27.746 59.553 58.098.084 17.938-7.546 37.249-19.439 49.197l-.11.11c9.836 23.337 8.237 56.037-9.308 79.469 8.681 25.895-.069 57.704-16.382 74.757 4.298 17.598 2.244 32.575-6.148 44.632C440.202 511.587 389.616 512 346.839 512l-2.845-.001c-48.287-.017-87.806-17.598-119.56-31.725-15.957-7.099-36.821-15.887-52.651-16.178-6.54-.12-11.783-5.457-11.783-11.998v-213.77c0-3.2 1.282-6.271 3.558-8.521 39.614-39.144 56.648-80.587 89.117-113.111 14.804-14.832 20.188-37.236 25.393-58.902C282.515 39.293 291.817 0 312 0c24 0 72 8 72 81.452z" class=""></path></svg>';
@@ -2814,7 +2813,7 @@ Author: michael@revcontent.com
 
             var comment_dislike = document.createElement("a");
                 revUtils.addClass(comment_dislike, 'rev-comment-dislike');
-                if (this.options.hasOwnProperty("jwt") && commentData.vote.vote === "down") {
+                if (commentData.vote.vote === "down") {
                     revUtils.addClass(comment_dislike, 'selected');
                 }
                 comment_dislike.innerHTML = '<svg aria-hidden="true" data-prefix="fas" data-icon="thumbs-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-thumbs-down fa-w-16 fa-5x"><path d="M0 56v240c0 13.255 10.745 24 24 24h80c13.255 0 24-10.745 24-24V56c0-13.255-10.745-24-24-24H24C10.745 32 0 42.745 0 56zm40 200c0-13.255 10.745-24 24-24s24 10.745 24 24-10.745 24-24 24-24-10.745-24-24zm272 256c-20.183 0-29.485-39.293-33.931-57.795-5.206-21.666-10.589-44.07-25.393-58.902-32.469-32.524-49.503-73.967-89.117-113.111a11.98 11.98 0 0 1-3.558-8.521V59.901c0-6.541 5.243-11.878 11.783-11.998 15.831-.29 36.694-9.079 52.651-16.178C256.189 17.598 295.709.017 343.995 0h2.844c42.777 0 93.363.413 113.774 29.737 8.392 12.057 10.446 27.034 6.148 44.632 16.312 17.053 25.063 48.863 16.382 74.757 17.544 23.432 19.143 56.132 9.308 79.469l.11.11c11.893 11.949 19.523 31.259 19.439 49.197-.156 30.352-26.157 58.098-59.553 58.098H350.723C358.03 364.34 384 388.132 384 430.548 384 504 336 512 312 512z" class=""></path></svg>';
@@ -2962,9 +2961,8 @@ Author: michael@revcontent.com
                 if (/*!revDetect.mobile() &&*/ total > max) {
                     var showmoreLi = document.createElement('li');
                     var showmorebtn = document.createElement('a');
-                    revUtils.addClass(showmorebtn, 'show_more');
-                    showmoreLi.style = "padding:7px;";
-                    showmorebtn.style = "text-align: center;padding: 2px;background: rgb(40, 162, 249);color: rgb(255, 255, 255);border-radius: 33px;margin: 5px auto 0px -100px;width: 200px;display: block;position: absolute;z-index: 99;left: 50%;top: 0px;font-size: 12px;";
+                    revUtils.addClass(showmorebtn, 'engage_load_prev_comments');
+                    showmoreLi.style.padding = "0";
                     showmorebtn.innerText = "Load previous comments";
 
                     showmoreLi.appendChild(showmorebtn);
@@ -3326,7 +3324,7 @@ Author: michael@revcontent.com
                         //old vote removed, continue
                         resolve();
 
-                    },null,false,{method:'DELETE', jwt:that.options.jwt});
+                    },null,false,{method:'DELETE'});
                 } else {
                     //no existing vote, go ahead
                     resolve();
@@ -3349,7 +3347,9 @@ Author: michael@revcontent.com
                     };
                     options.data = JSON.stringify(data);
                     options.method = "POST";
-                    options.jwt = that.options.jwt;
+                    if (that.options.hasOwnProperty("jwt")) {
+                        options.jwt = that.options.jwt;
+                    }
 
                     revApi.xhr(that.options.actions_api_url + 'vote/add', function(data) {
 
@@ -3659,6 +3659,7 @@ Author: michael@revcontent.com
                         } else {
                             engage_auth_email_input.focus();
                             engage_auth_email_input_error_text.innerText = 'Please enter a valid email';
+                            return false;
                         }
 
                         //get values
@@ -3675,11 +3676,14 @@ Author: michael@revcontent.com
                         revApi.xhr(that.options.actions_api_url + 'user/login', function(data) {
                             that.authenticated = true;
                             that.options.user = data.user;
+                            localStorage.setItem('engage_jwt',data.token);
 
                             //update comment box with useris info  // prob just need to update avatar..
-                            var oldCommentBox = card.querySelector('.rev-comment-box');
-                            var newCommentBox = that.createCommentInput();
-                            oldCommentBox.parentNode.replaceChild(newCommentBox, oldCommentBox); 
+                            var oldAvatar = card.querySelector('.comment-avatar');
+                            
+                            if (data.user.picture !== "") {
+                                oldAvatar.src = data.user.picture;
+                            }
 
                             //continue whatever user was doing prior to auth
                             if( callback && typeof callback === 'function' ) { callback.call(); }  
@@ -3710,6 +3714,15 @@ Author: michael@revcontent.com
                         } else {
                             engage_auth_email_input.focus();
                             engage_auth_email_input_error_text.innerText = 'Please enter a valid email';
+                            return false;
+                        }
+
+                        if (engage_auth_password_input.value.length === 0) {
+                            //valid email
+                        } else {
+                            engage_auth_password_input.focus();
+                            engage_auth_password_input.innerText = 'Please enter a password';
+                            return false;
                         }
 
                         //get values
@@ -3725,7 +3738,7 @@ Author: michael@revcontent.com
 
                         //revApi.xhr('https://api.engage.im/s2/health', function(data) {
                         revApi.xhr(that.options.actions_api_url + 'user/register', function(data) {
-                            
+                            localStorage.setItem('engage_jwt',data.token);
                             //load interests card
 
                             //continue whatever user was doing prior to auth
@@ -3842,6 +3855,31 @@ Author: michael@revcontent.com
                                 that.showPersonalizedTransition();
                                 that.personalize();
                             }
+                            
+
+
+
+
+
+                            // var authPromise = new Promise(function(resolve, reject) {   
+                            //     if (!that.personalized) {
+                            //         reject();
+                            //     } else {
+                            //         resolve();
+                            //     }
+                            // });
+
+                            // authPromise.then(function(data) { 
+                            //     if( callback && typeof callback === 'function' ) { callback.call(); }
+                            // }).catch(function(e) {
+                            //     /* error :( */
+                            //         console.log("errrrrorrrrr");
+                            //         console.log(e.stack);
+                            // });
+
+
+
+
 
                             //post comment
                             if( callback && typeof callback === 'function' ) { callback.call(); }
@@ -3973,7 +4011,7 @@ Author: michael@revcontent.com
             //update feed item
             //that.updateDisplayedItem(that.feedItems[uid]);
 
-        },null,true,{method:'DELETE', jwt: that.options.jwt});
+        },null,true,{method:'DELETE'});
     };
 
     RevSlider.prototype.submitComment = function(comment, url, commentID, callback) {
@@ -4079,7 +4117,10 @@ Author: michael@revcontent.com
                 that.options.user.profile_url = that.options.default_avatar_url;
                 that.options.user.picture = that.options.default_avatar_url;
             }
-        },null,true);
+            //localStorage.setItem('engage_jwt',data.token);
+        },function(data){
+            //error
+        },true);
     };
 
     RevSlider.prototype.updateTimeAgo = function(mode){

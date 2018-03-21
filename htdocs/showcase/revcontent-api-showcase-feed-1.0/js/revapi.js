@@ -40,18 +40,19 @@ api.xhr = function(url, success, failure, withCredentials, opts) {
         method: "GET"
     };
     var options = revUtils.extend(defaults, opts);
-     var request = new XMLHttpRequest();
+    var request = new XMLHttpRequest();
 
      if (withCredentials) {
          request.withCredentials = true;
-     }   
+     }
 
-    
     request.open(options.method, url, true);
-    
-    if (options.hasOwnProperty("jwt")) {
-        console.log("using jwt");
+
+    if (options.hasOwnProperty("jwt") && options.jwt !== undefined) {
         var authtoken = 'Bearer ' + options.jwt;
+        request.setRequestHeader('authorization', authtoken);
+    } else if (localStorage.engage_jwt) {
+        var authtoken = 'Bearer ' + localStorage.engage_jwt;
         request.setRequestHeader('authorization', authtoken);
     }
     

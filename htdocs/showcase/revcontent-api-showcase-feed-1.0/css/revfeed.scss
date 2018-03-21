@@ -2962,6 +2962,7 @@ body.animate-user-profile #profile-mask {
 .comments-list {
   height: 100%;
   margin-bottom: 0;
+  margin-top: 0;
   padding:0;
   list-style: none;
 }
@@ -2977,7 +2978,7 @@ body.animate-user-profile #profile-mask {
     font-size: 13px;
     word-wrap: break-word;
   }
-  #rev-comment-detail .comments-list li {
+  .rev-comment-detail .comments-list li {
       padding: 10px 15px 4px 17px;
       font-size: 13px;
   }
@@ -3181,13 +3182,13 @@ body.modal-open {
     transform: rotate(360deg);
   }
 }
-#comment_authbox,
-#rev-reply-detail,
-#rev-comment-detail {
+.comment_authbox,
+.rev-reply-detail,
+.rev-comment-detail {
   transform: translateX(200%);
   -webkit-transform: translateX(200%);
 }
-#reply_slider {
+.reply_slider {
     position: absolute;
     width: 100px;
     height: 100px;
@@ -3195,7 +3196,7 @@ body.modal-open {
     transform: translateX(-100%);
     -webkit-transform: translateX(-100%);
 }
-#reply_slider.comment-slide-in {
+.reply_slider.comment-slide-in {
   position: fixed;
   top: 0;
   z-index: 9999;
@@ -3332,7 +3333,21 @@ textarea.comment-textarea:focus::placeholder {
     color: #bbb;
 }
 
-
+.engage_load_prev_comments {
+  text-align: center;
+  padding: 2px;
+  background: rgb(40, 162, 249);
+  color: #ffffff!important;
+  border-radius: 33px;
+  margin: 5px auto 0px -100px;
+  width: 200px;
+  display: block;
+  position: absolute;
+  z-index: 99;
+  left: 50%;
+  top: 10px;
+  font-size: 12px;
+}
 
 /* new auth process */
 .engage-auth {
@@ -3352,10 +3367,9 @@ textarea.comment-textarea:focus::placeholder {
 .auth-button {
   margin: 0 auto;
   display: block;
-  text-align: center;
   width: 300px;
   height: 50px;
-  padding: 15px 0;
+  padding: 15px 0 15px 70px;
   border-radius: 5px;
 }
 
@@ -3400,6 +3414,8 @@ input.engage-auth-input {
   border: 0 none;
   border-bottom: 1px solid #8e8e8e;
   width: 100%;
+  font-size: 14px;
+  padding: 4px 5px;
 }
 .engage-auth-input-wrap span.error-text {
   display: block;
@@ -3429,6 +3445,7 @@ input.engage-auth-input:focus {
 .engage-auth-login-option {
   color: #545454;
   text-align: center;
+  font-size: 13px;
 }
 .engage-auth-login-option a {
   color:$primary-color!important;
