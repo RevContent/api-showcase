@@ -2151,6 +2151,7 @@ Author: michael@revcontent.com
 
                         //update feed item
                         //that.updateDisplayedItem(that.feedItems[itemData.uid]);
+                        that.grid.layout();
                     });
                 };
 
@@ -2165,7 +2166,7 @@ Author: michael@revcontent.com
                     //item.element.scrollIntoView({ behavior: 'smooth', block: "start" });
 
                     //store users comment for after auth
-                    that.afterAuth = callbackFn;
+                    //that.afterAuth = callbackFn;
                 }
 
             });
@@ -3041,7 +3042,7 @@ Author: michael@revcontent.com
                                     '<div class="author-date">' +
                                         '<a class="h6 post__author-name fn" href="#">' + display_name + '</a>' +
                                         '<div class="post__date">' +
-                                            '<time class="published" datetime="' + commentData.created + '"><span>' + time + (time !== 'yesterday' ? ' ago' : '') + '</span></time>' +
+                                            '<time class="published" datetime="' + commentData.created + '"><span>' + time + (time !== 'yesterday' && time !== "" ? ' ago' : '') + '</span></time>' +
                                         '</div>' +
                                     '</div>';
         li.appendChild(post_author_div);
