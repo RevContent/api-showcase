@@ -3011,9 +3011,16 @@ Author: michael@revcontent.com
         var isLegacyComment = commentData.user.id === "legacy";
 
         var commentOwner = false;
-
         if (that.options.user !== null) {
-            commentOwner = (commentData.user.id == that.options.user.user_id) || (commentData.user.id == that.options.user.id);
+            var commentDataUserID = commentData.user.id.toLowerCase();
+            var optionsDataUserID = '';
+            if (that.options.user.hasOwnProperty('user_id')) {
+                optionsDataUserID = that.options.user.user_id.toLowerCase();
+            } else if (that.options.user.hasOwnProperty('id')) {
+                optionsDataUserID = that.options.user.id.toLowerCase();
+            }
+        
+            commentOwner = commentDataUserID === optionsDataUserID;
         }
 
         var li = document.createElement("li");
@@ -3616,6 +3623,11 @@ Author: michael@revcontent.com
             function (resolve, reject) {
                 if (hasExistingVote) {
                     //remove existing vote first
+                    var options = {method:'DELETE'};
+                    if (that.options.hasOwnProperty("jwt")) {
+                        options.jwt = that.options.jwt;
+                    }
+
                     revApi.xhr(that.options.actions_api_url + 'vote/remove/' + commentData.vote.id, function(data) {
                         if (voteType === "up") {
                             commentData.down_votes = commentData.down_votes - 1;
@@ -3625,7 +3637,7 @@ Author: michael@revcontent.com
                         //old vote removed, continue
                         resolve();
 
-                    },null,false,{method:'DELETE'});
+                    },null,false,options);
                 } else {
                     //no existing vote, go ahead
                     resolve();
@@ -4302,6 +4314,12 @@ Author: michael@revcontent.com
     RevSlider.prototype.deleteComment = function(commentID, comment_el, uid) {
         var that = this;
         var mode = comment_el.getAttribute("data-type");
+
+        var options = {method:'DELETE'};
+        if (that.options.hasOwnProperty("jwt")) {
+            options.jwt = that.options.jwt;
+        }
+
         revApi.xhr(this.options.actions_api_url + mode + '/delete/' + commentID, function(data) {
 
             if (!revDetect.mobile()) {
@@ -4318,7 +4336,7 @@ Author: michael@revcontent.com
             //update feed item
             //that.updateDisplayedItem(that.feedItems[uid]);
 
-        },null,true,{method:'DELETE'});
+        },null,true,options);
     };
 
     RevSlider.prototype.submitComment = function(comment, url, commentID, callback) {
