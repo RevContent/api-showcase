@@ -3735,6 +3735,7 @@ Author: michael@revcontent.com
                         that.options.user.picture = that.options.default_avatar_url;
                     }
                     if( callback && typeof callback === 'function' ) { callback.call(); }
+
             },function(data){
                 //no user logged in, send them to auth
                 that.cardActionAuth(card, engagetype, callback);
@@ -3988,12 +3989,12 @@ Author: michael@revcontent.com
                             localStorage.setItem('engage_jwt',data.token);
 
                             //update avatar
-                            var oldAvatar = card.querySelector('.comment-avatar');
+                            // var oldAvatar = card.querySelector('.comment-avatar');
                             
-                            if (data.user.picture !== "") {
-                                oldAvatar.src = data.user.picture;
-                            }
-
+                            // if (data.user.picture !== "") {
+                            //     oldAvatar.src = data.user.picture;
+                            // }
+                            that.updateCommentAvatars();
 
                             //continue whatever user was doing prior to auth
                             if( callback && typeof callback === 'function' ) { callback.call(); }
@@ -4050,6 +4051,7 @@ Author: michael@revcontent.com
                         revApi.xhr(that.options.actions_api_url + 'user/register', function(data) {
 
                             localStorage.setItem('engage_jwt',data.token);
+                            that.updateCommentAvatars();
 
                             //load interests card
 
@@ -4173,6 +4175,7 @@ Author: michael@revcontent.com
 
                             //post comment
                             if( callback && typeof callback === 'function' ) { callback.call(); }
+                            that.updateCommentAvatars();
 
                         }
                         revDisclose.postMessage();
@@ -4358,9 +4361,9 @@ Author: michael@revcontent.com
         revUtils.addClass(commentBoxElement, 'rev-comment-box');
         commentBoxElement.style = 'padding: 8px;background: #fafbfd;border-top: 1px solid #e6ecf5;'; //add this to css file
 
-        var commentUserAvatar = document.createElement('img');
+        var commentUserAvatar = document.createElement('div');
         revUtils.addClass(commentUserAvatar, 'comment-avatar');
-        commentUserAvatar.src = typeof this.options.authenticated && this.options.user !== null && this.options.user.hasOwnProperty("profile_url") ? this.options.user.profile_url : this.options.default_avatar_url;
+        commentUserAvatar.style.backgroundImage = 'url(' + (typeof this.options.authenticated && this.options.user !== null && this.options.user.hasOwnProperty("picture") ? this.options.user.picture : this.options.default_avatar_url) + ')';
         commentBoxElement.appendChild(commentUserAvatar);
 
         var commentInputWrapElement = document.createElement('div');
@@ -4450,6 +4453,24 @@ Author: michael@revcontent.com
         }
         return null;
 
+    };
+
+    RevSlider.prototype.updateCommentAvatars = function() {
+        var that = this;
+        revApi.request(that.options.host + '/api/v1/engage/profile.php?', function(data) {
+            if (data && data.picture) {
+                var styleNode = document.createElement('style');
+                styleNode.type = "text/css";
+                // browser detection (based on prototype.js)
+                if(!!(window.attachEvent && !window.opera)) {
+                    styleNode.styleSheet.cssText = '.comment-avatar { background-image: url('+data.picture+')!important; }';
+                } else {
+                    var styleText = document.createTextNode('.comment-avatar { background-image: url('+data.picture+')!important; }');
+                    styleNode.appendChild(styleText);
+                }
+                document.getElementsByTagName('head')[0].appendChild(styleNode);
+            }
+        });
     };
 
     RevSlider.prototype.displayError = function(element, error){

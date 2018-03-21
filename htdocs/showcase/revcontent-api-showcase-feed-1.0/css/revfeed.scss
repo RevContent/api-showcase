@@ -2672,8 +2672,7 @@ body.rev-blur > * {
   right: 0;
 }
 
-.rev-comment-box img.comment-avatar,
-.rev-comment-box img.comment-avatar {
+.rev-comment-box .comment-avatar {
     width: 30px;
     height: 30px;
     float: left;
@@ -2681,6 +2680,7 @@ body.rev-blur > * {
     position: absolute!important;
     top: 50%;
     margin-top: -18px;
+    background-size: contain;
 }
 
 .rev-reply-detail .rev-comment-feed,
