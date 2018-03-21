@@ -41,7 +41,7 @@ Author: michael@revcontent.com
         };
 
         // merge options
-        this.options = revUtils.extend(defaults, opts);
+        this.options = Object.assign(defaults, opts);
 
         this.init();
     };
