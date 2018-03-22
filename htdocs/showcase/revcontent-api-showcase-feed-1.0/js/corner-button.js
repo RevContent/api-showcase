@@ -73,6 +73,7 @@ Author: michael@revcontent.com
                     that.buttonElementInnerIcon.style.backgroundImage = null;
                     if (data && data.picture) {
                         that.buttonElementInnerIcon.style.backgroundImage = 'url(' + data.picture + ')';
+                        that.options.user = data;
                     }
                 });
             } else if (that.options.user && that.options.user.picture) {
