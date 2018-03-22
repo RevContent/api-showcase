@@ -3778,6 +3778,7 @@ Author: michael@revcontent.com
 
         var engage_auth_box_inner = document.createElement('div');
         revUtils.addClass(engage_auth_box_inner,'rev-auth-box-inner');
+        revUtils.addClass(engage_auth_box_inner,'animated');
 
         var engage_auth_subline = document.createElement('div');
         revUtils.addClass(engage_auth_subline,'rev-auth-subline');
@@ -3849,6 +3850,11 @@ Author: michael@revcontent.com
             revUtils.addClass(engage_auth_email, 'fade-out');
             revUtils.addClass(engage_auth_login_option, 'fade-out');
             revUtils.addClass(engage_auth_terms, 'fade-out');
+            
+
+            revUtils.addClass(engage_auth_box_inner, 'flipOutX');
+
+
 
             setTimeout(function(){
                 //remove items we dont need
@@ -3952,6 +3958,9 @@ Author: michael@revcontent.com
 
                 revUtils.removeClass(engage_auth_password_input_wrap, 'fade-out');
                 revUtils.addClass(engage_auth_password_input_wrap, 'fade-in');
+
+                revUtils.removeClass(engage_auth_box_inner, 'flipOutX');
+                revUtils.addClass(engage_auth_box_inner, 'flipInX');
 
 
 

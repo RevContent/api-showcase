@@ -3151,6 +3151,7 @@ textarea.comment-textarea:focus::placeholder {
   height: 50px;
   padding: 15px 0 15px 70px;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .auth-button span {
@@ -3244,6 +3245,7 @@ input.engage-auth-input:focus {
     padding: 6px 10px 0 16px;
     float: right;
     margin: 0 53px 0 0;
+    cursor: pointer;
 }
 
 .engage-auth-terms {
@@ -3470,4 +3472,89 @@ input.engage-auth-input:focus {
 }
 .carousel-cell:active{
   cursor:move;
+}
+
+@keyframes flipInX{
+    from{
+        -webkit-transform:perspective(400px) rotate3d(1,0,0,90deg);
+        transform:perspective(400px) rotate3d(1,0,0,90deg);
+        -webkit-animation-timing-function:ease-in;
+        animation-timing-function:ease-in;
+        opacity:0
+    }
+    40%{
+        -webkit-transform:perspective(400px) rotate3d(1,0,0,-20deg);
+        transform:perspective(400px) rotate3d(1,0,0,-20deg);
+        -webkit-animation-timing-function:ease-in;
+        animation-timing-function:ease-in
+    }
+    60%{
+        -webkit-transform:perspective(400px) rotate3d(1,0,0,10deg);
+        transform:perspective(400px) rotate3d(1,0,0,10deg);
+        opacity:1
+    }
+    80%{
+        -webkit-transform:perspective(400px) rotate3d(1,0,0,-5deg);
+        transform:perspective(400px) rotate3d(1,0,0,-5deg)
+    }
+    to{
+        -webkit-transform:perspective(400px);
+        transform:perspective(400px)
+    }
+}
+
+
+.flipInX {
+    -webkit-backface-visibility: visible!important;
+    backface-visibility: visible!important;
+    -webkit-animation-name: flipInX;
+    animation-name: flipInX;
+}
+.animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+.flipOutX{
+    -webkit-backface-visibility:visible!important
+}
+
+@-webkit-keyframes flipOutX{
+    from{
+        -webkit-transform:perspective(400px);
+        transform:perspective(400px)
+    }
+    30%{
+        -webkit-transform:perspective(400px) rotate3d(1,0,0,-20deg);
+        transform:perspective(400px) rotate3d(1,0,0,-20deg);
+        opacity:1
+    }
+    to{
+        -webkit-transform:perspective(400px) rotate3d(1,0,0,90deg);
+        transform:perspective(400px) rotate3d(1,0,0,90deg);
+        opacity:0
+    }
+}
+@keyframes flipOutX{
+    from{
+        -webkit-transform:perspective(400px);
+        transform:perspective(400px)
+    }
+    30%{
+        -webkit-transform:perspective(400px) rotate3d(1,0,0,-20deg);
+        transform:perspective(400px) rotate3d(1,0,0,-20deg);
+        opacity:1
+    }
+    to{
+        -webkit-transform:perspective(400px) rotate3d(1,0,0,90deg);
+        transform:perspective(400px) rotate3d(1,0,0,90deg);
+        opacity:0
+    }
+}
+.flipOutX{
+    -webkit-animation-name:flipOutX;
+    animation-name:flipOutX;
+    backface-visibility:visible!important
 }
