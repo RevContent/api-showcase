@@ -3151,6 +3151,7 @@ textarea.comment-textarea:focus::placeholder {
   height: 50px;
   padding: 15px 0 15px 70px;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .auth-button span {
@@ -3244,6 +3245,7 @@ input.engage-auth-input:focus {
     padding: 6px 10px 0 16px;
     float: right;
     margin: 0 53px 0 0;
+    cursor: pointer;
 }
 
 .engage-auth-terms {
