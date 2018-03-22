@@ -3125,12 +3125,23 @@ textarea.comment-textarea:focus::placeholder {
     width: 100%;
     z-index: 220;
     padding: 15px;
-    transform: translateX(200%);
-    -webkit-transform: translateX(200%);  
     background: #fdfdfd;
-    /*background: -moz-linear-gradient(top, #efefef 0%, #fefefe 100%);
-    background: -webkit-linear-gradient(top, #efefef 0%, #fefefe 100%);
-    background: linear-gradient(to bottom, #efefef 0%, #fefefe 100%);*/
+    transform: translate3d(0, -100%, 0)!important;
+    transition-duration: .5s;
+    transition-property: transform;
+    transition-timing-function: ease-in-out;
+    transform: rotateY(-180deg)!important;
+    backface-visibility: hidden;
+}
+.engage-auth * {
+  visibility: hidden;
+}
+.engage-auth.flipped * {
+  visibility: visible;
+}
+
+.engage-auth.flipped {
+  transform: rotateY(0deg)!important
 }
 
 .auth-button {

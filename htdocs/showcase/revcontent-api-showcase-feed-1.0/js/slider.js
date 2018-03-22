@@ -3499,7 +3499,7 @@ Author: michael@revcontent.com
             //     }
             // });
 
-            revUtils.addClass(commentDetailsElement, 'comment-slide-in');
+            revUtils.addClass(commentDetailsElement, 'flipped');
 
             // window.onpopstate = function(event) {
             //     var authbox = document.getElementById('comment_authbox');
@@ -3760,7 +3760,7 @@ Author: michael@revcontent.com
         var engage_auth = document.createElement('div');
         revUtils.addClass(engage_auth,'rev-auth');
         revUtils.addClass(engage_auth,'engage-auth');
-        revUtils.addClass(engage_auth, 'comment-slide-in');
+        
 
         var close_button = document.createElement('a');
         revUtils.addClass(close_button,'rev-auth-close-button');
@@ -3833,6 +3833,9 @@ Author: michael@revcontent.com
 
 
         card.appendChild(engage_auth);
+        setTimeout(function(){
+            revUtils.addClass(engage_auth, 'flipped');
+        },50);
         //history.pushState({engage: 'auth'}, "Login to save your comment", "#login");
 
 
@@ -4200,7 +4203,7 @@ Author: michael@revcontent.com
         });
 
         revUtils.addEventListener(close_button, 'click', function(ev) {
-            revUtils.removeClass(engage_auth, 'comment-slide-in');
+            revUtils.removeClass(engage_auth, 'flipped');
             revUtils.addClass(engage_auth, 'comment-slide-out');
             var func = function(){engage_auth.remove();};
             setTimeout(func, 500);
