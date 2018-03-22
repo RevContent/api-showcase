@@ -1998,6 +1998,8 @@ Author: michael@revcontent.com
                         imageUrl += '&fmt=jpeg';
                     }
 
+                    imageUrl += '&h=34&w=34';
+
                     favicon.innerHTML = '<span class="rev-headline-icon-image" style="background-image:url('+ imageUrl +')' + '"></span>';
                 } else {
                     var iconInitialsWords = itemData.author ? itemData.author.replace(/\(|\)/g, '').split(' ') : itemData.brand.replace(/\(|\)/g, '').split(' ');
