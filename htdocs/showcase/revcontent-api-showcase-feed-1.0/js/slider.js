@@ -3934,7 +3934,7 @@ Author: michael@revcontent.com
                     var engage_auth_username_input = document.createElement('input');
                     revUtils.addClass(engage_auth_username_input, 'engage-auth-input');
                     engage_auth_username_input.placeholder = 'Display Name';
-                    engage_auth_username_input.name = 'username';
+                    engage_auth_username_input.name = 'engage_name';
 
                     var engage_auth_username_input_error_text = document.createElement('span');
                     revUtils.addClass(engage_auth_username_input_error_text, 'error-text');

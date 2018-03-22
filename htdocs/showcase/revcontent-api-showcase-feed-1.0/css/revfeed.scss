@@ -2879,10 +2879,10 @@ body.rev-blur > * {
   z-index: 200;
   right: 15px;
   top: 50%;
-  margin-top: -22px;
+  margin-top: -24px;
   width: 40px;
   height: 40px;
-  margin-right: 2px;
+  margin-right: -10px;
   padding: 10px;
   cursor: pointer;
 }
@@ -3088,10 +3088,12 @@ textarea.comment-textarea {
   resize: none;
   height: 30px;
   width: 100%;
-  border-radius: 4px;
-  border: 1px solid rgb(230, 236, 245);
+  box-shadow: none;
+  outline: 0;
+  border: 0;
   padding: 4px 40px 4px 10px;
   cursor: text;
+  border-bottom: 2px solid #8e8e8e;
 }
 
 textarea.comment-textarea:placeholder {
@@ -3100,6 +3102,13 @@ textarea.comment-textarea:placeholder {
 
 textarea.comment-textarea:focus::placeholder {
     color: #bbb;
+}
+
+textarea.comment-textarea:focus {
+  box-shadow: none;
+  outline: 0;
+  border: 0;
+  border-bottom: 2px solid #28a2f9;
 }
 
 .engage_load_prev_comments {
