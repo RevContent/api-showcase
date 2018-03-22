@@ -166,7 +166,7 @@ Author: michael@revcontent.com
                 [
                     Hammer.Press,
                     {
-                        time: 100
+                        time: 150
                     }
                 ],
             ],
@@ -195,6 +195,9 @@ Author: michael@revcontent.com
             clearTimeout(leaveTimeout);
 
             if (revUtils.hasClass(that.buttonElement, 'eng-back')) {
+
+                that.deactivatePanelGrids(true);
+
                 setTimeout(function() { // let it ripple
                     updateButtonElementInnerIcon();
                     revUtils.removeClass(that.buttonElement, 'eng-back');
@@ -281,6 +284,10 @@ Author: michael@revcontent.com
                         that.panel = new EngagePanel(that.options);
                     }
 
+                    that.deactivatePanelGrids();
+
+                    button.options.active = true;
+
                     if (!button.slider) {
                         button.options = Object.assign((that.options.authenticated && button.auth_options ? button.auth_options : button.options), that.options);
                         button.options.element = that.panel.innerElement;
@@ -335,6 +342,17 @@ Author: michael@revcontent.com
         //     }
         // });
     };
+
+
+    EngageCornerButton.prototype.deactivatePanelGrids = function(activateInnerWidget) {
+        this.options.innerWidget.options.active = activateInnerWidget ? true : false;
+
+        for (var i = 0; i < this.options.buttons.length; i++) {
+            if (this.options.buttons[i].slider) {
+                this.options.buttons[i].slider.options.active = false;
+            }
+        }
+    }
 
     return EngageCornerButton;
 
