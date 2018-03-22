@@ -189,7 +189,11 @@ Author: michael@revcontent.com
         var userProfileImage = document.createElement('div');
         userProfileImage.id = 'profile-image';
 
+        var userProfileFake = document.createElement('div');
+        userProfileFake.id = 'profile-fake';
+
         revUtils.append(userProfile, userProfileImage);
+        revUtils.append(userProfile, userProfileFake);
 
         this.mc = new Hammer(this.buttonElement, {
             recognizers: [
