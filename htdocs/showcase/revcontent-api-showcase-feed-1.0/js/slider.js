@@ -3025,7 +3025,7 @@ Author: michael@revcontent.com
             if (that.options.user.hasOwnProperty('id')) {
                 optionsDataUserID = that.options.user.id.toLowerCase();
             }
-        
+
             commentOwner = commentDataUserID === optionsDataUserID;
         }
 
@@ -3762,7 +3762,7 @@ Author: michael@revcontent.com
         var engage_auth = document.createElement('div');
         revUtils.addClass(engage_auth,'rev-auth');
         revUtils.addClass(engage_auth,'engage-auth');
-        
+
 
         var close_button = document.createElement('a');
         revUtils.addClass(close_button,'rev-auth-close-button');
@@ -3852,7 +3852,7 @@ Author: michael@revcontent.com
             revUtils.addClass(engage_auth_email, 'fade-out');
             revUtils.addClass(engage_auth_login_option, 'fade-out');
             revUtils.addClass(engage_auth_terms, 'fade-out');
-            
+
 
             revUtils.addClass(engage_auth_box_inner, 'flipOutX');
 
@@ -4008,7 +4008,7 @@ Author: michael@revcontent.com
 
                             //update avatar
                             // var oldAvatar = card.querySelector('.comment-avatar');
-                            
+
                             // if (data.user.picture !== "") {
                             //     oldAvatar.src = data.user.picture;
                             // }
