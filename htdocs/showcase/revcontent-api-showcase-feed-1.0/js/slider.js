@@ -507,9 +507,14 @@ Author: michael@revcontent.com
         //top_pos = 0; // TODO
         var grid_width = this.containerElement.clientWidth > 0 ?  this.containerElement.clientWidth  + 'px' : '100%';
 
-        this.containerElement.style.paddingTop = '48px';
+        if (!this.options.infinite_container) {
+            this.containerElement.style.paddingTop = '48px';
+        }
 
-        back.setAttribute('style','overflow:hidden;transition: none;-moz-transition: none;-webkit-transition: none;-o-transition: none;box-shadow: 0 1px 4px 0 rgba(12, 12, 13, 0.5);position:static;z-index:5000;left:' + left_pos + ';top:' + top_pos + ';margin-bottom: 0;display: block;width: ' + grid_width + ';height: 40px;line-height: 40px;background-color:rgba(0,0,0,0.83);color:#dddddd;font-size:12px;');
+        back.style.left = left_pos;
+        back.style.top = top_pos;
+        back.style.width = grid_width;
+
         back.setAttribute('id','go-back-bar');
         back.classList.add('go-back-bar');
 

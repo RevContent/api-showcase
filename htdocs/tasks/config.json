@@ -256,6 +256,7 @@
       "./showcase/revcontent-api-showcase-feed-1.0/node_modules/flickity/css/flickity.css",
       "./showcase/revcontent-api-showcase-feed-1.0/node_modules/node-waves/dist/waves.css",
       "./showcase/revcontent-api-showcase-feed-1.0/css/revfeed.scss",
+      "./showcase/revcontent-api-showcase-feed-1.0/css/navbar.scss",
       "./showcase/revcontent-api-showcase-feed-1.0/css/revfeed-interests.scss",
       "./showcase/revcontent-api-showcase-feed-1.0/css/panel.scss",
       "./showcase/revcontent-api-showcase-feed-1.0/css/corner-button.scss",
