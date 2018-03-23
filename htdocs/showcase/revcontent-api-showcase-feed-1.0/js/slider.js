@@ -549,97 +549,89 @@ Author: michael@revcontent.com
         this.head.insertAdjacentElement('afterend', back);
         this.head.insertAdjacentElement('afterend', header);
 
-        var that = this;
+        if (!existingBack) {
+            var that = this;
 
-        revUtils.addEventListener(window, 'resize', function(){
-            var grid_rect = that.containerElement.getBoundingClientRect();
-            back.style.width = grid_rect.width + 'px';
-        });
+            if (!that.options.infinite_container) { // scroll for infinite container
+                this.scrollListenerNavbar = revUtils.throttle(this.navbarScrollListener.bind(this, back), 60);
 
-        revUtils.addEventListener(window, 'scroll', function(){
-            that.navbarScrollListener(that, back);
-        });
+                revUtils.addEventListener(window, 'scroll', this.scrollListenerNavbar);
+            }
+
+            revUtils.addEventListener(window, 'resize', function(){
+                var grid_rect = that.containerElement.getBoundingClientRect();
+                back.style.width = grid_rect.width + 'px';
+            });
+        }
 
         var backButton = back.querySelector('.feed-back-button');
-
+        // TODO fix this
         revUtils.addEventListener(backButton, revDetect.mobile() ? 'touchstart' : 'click', this.loadFromHistory.bind(this, back, backButton));
     };
 
-    RevSlider.prototype.navbarScrollListener = function(that, back){
-        var pos_1 = window.pageYOffset;
-        setTimeout(function(){
-            var pos_2 = window.pageYOffset;
-            var direction = 'down';
-            var grid_rect = that.containerElement.getBoundingClientRect();
+    RevSlider.prototype.navbarScrollListener = function(back){
+        var grid_rect = this.containerElement.getBoundingClientRect();
 
-            if(pos_2 < pos_1) {
-                direction = 'up';
-            }
-
-            if(grid_rect.top <= 0) {
-                var fix_ts = 0;
-                clearTimeout(fix_ts);
-                fix_ts = setTimeout(function() {
-                    var fixed_head = document.querySelector('.page-header.shrink.fixed');
-                    var fixed_head2 = document.querySelector('.page-header.fixed');
-                    // ENG-285 Need to improve fixed element detection for better cross-site support.
-                    // for now these classes are site specific...
-                    var fixed_video = document.querySelector('.videocontent-wrapper.mStickyPlayer');
-                    var top_offset = 0;
-
-                    var notice = that.element.querySelector('div#rev-notify-panel');
-
-                    if (fixed_head) {
-                        top_offset = parseInt(fixed_head.clientHeight);
-                    }
-                    if (fixed_head2) {
-                        top_offset = parseInt(fixed_head2.clientHeight);
-                    }
-                    if (fixed_video) {
-                        top_offset = parseInt(fixed_video.clientHeight);
-                        fixed_video.style.zIndex = '20000';
-                    }
-                    back.style.position = 'fixed';
-                    back.style.width = grid_rect.width + 'px';
-                    back.style.top = 0 + top_offset + 'px';
-                    back.classList.remove('no-shadow');
-
-                    if (notice) {
-                        notice.style.position = 'fixed';
-                        notice.style.left = 'auto';
-                        notice.style.top = 0 + (top_offset + back.clientHeight) + 'px';
-                        notice.style.width = grid_rect.width + 'px';
-                    }
-
-                    //if (that.options.window_width_devices && revDetect.show(that.options.window_width_devices)) {
-                    //    that.enterFlushedState(that.element);
-                    //}
-                    clearTimeout(fix_ts);
-                }, 0);
-
-            } else {
-                back.style.top = 0;
-                back.style.position = 'static';
-                back.style.width = '100%';
-                back.classList.add('no-shadow');
+        if(grid_rect.top <= 0) {
+            var fix_ts = 0;
+            clearTimeout(fix_ts);
+            var that = this;
+            fix_ts = setTimeout(function() {
+                var fixed_head = document.querySelector('.page-header.shrink.fixed');
+                var fixed_head2 = document.querySelector('.page-header.fixed');
+                // ENG-285 Need to improve fixed element detection for better cross-site support.
+                // for now these classes are site specific...
+                var fixed_video = document.querySelector('.videocontent-wrapper.mStickyPlayer');
+                var top_offset = 0;
 
                 var notice = that.element.querySelector('div#rev-notify-panel');
 
+                if (fixed_head) {
+                    top_offset = parseInt(fixed_head.clientHeight);
+                }
+                if (fixed_head2) {
+                    top_offset = parseInt(fixed_head2.clientHeight);
+                }
+                if (fixed_video) {
+                    top_offset = parseInt(fixed_video.clientHeight);
+                    fixed_video.style.zIndex = '20000';
+                }
+                back.style.position = 'fixed';
+                back.style.width = grid_rect.width + 'px';
+                back.style.top = 0 + top_offset + 'px';
+                back.classList.remove('no-shadow');
+
                 if (notice) {
-                    notice.style.top = 0;
-                    notice.style.position = 'static';
-                    notice.style.width = '100%';
-                    notice.style.marginBottom = '9px';
-                    back.style.marginBottom = 0;
-                } else {
-                    back.style.marginBottom = '9px';
+                    notice.style.position = 'fixed';
+                    notice.style.left = 'auto';
+                    notice.style.top = 0 + (top_offset + back.clientHeight) + 'px';
+                    notice.style.width = grid_rect.width + 'px';
                 }
 
                 //if (that.options.window_width_devices && revDetect.show(that.options.window_width_devices)) {
-                //    that.leaveFlushedState(that.element);
+                //    that.enterFlushedState(that.element);
                 //}
+                clearTimeout(fix_ts);
+            }, 0);
+
+        } else {
+            back.style.top = 0;
+            back.style.position = 'static';
+            back.style.width = '100%';
+            back.classList.add('no-shadow');
+
+            var notice = this.element.querySelector('div#rev-notify-panel');
+
+            if (notice) {
+                notice.style.top = 0;
+                notice.style.position = 'static';
+                notice.style.width = '100%';
+                notice.style.marginBottom = '9px';
+                back.style.marginBottom = 0;
+            } else {
+                back.style.marginBottom = '9px';
             }
-        }, 300);
+        }
     };
 
     RevSlider.prototype.pushHistory = function(){
@@ -720,6 +712,9 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.detachBackBar = function(backBar, backButton) {
+
+        revUtils.removeEventListener(window, 'scroll', this.scrollListenerNavbar);
+
         if (backBar) {
             backBar.style.pointerEvents = 'none';
             if (revDetect.mobile()) {
