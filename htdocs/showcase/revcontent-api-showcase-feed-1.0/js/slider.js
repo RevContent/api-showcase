@@ -411,8 +411,6 @@ Author: michael@revcontent.com
         this.internalOffset = 0;
         this.sponsoredOffset = 0;
 
-        this.contextual_last_sort = this.options.contextual_last_sort;
-
         this.getData();
 
         this.dataPromise.then(function(data) {
@@ -543,8 +541,6 @@ Author: michael@revcontent.com
 
             '</div>';
 
-        // this.innerWidget.containerElement.appendChild(back);
-
         this.head.insertAdjacentElement('afterend', back);
         this.head.insertAdjacentElement('afterend', header);
 
@@ -554,9 +550,6 @@ Author: michael@revcontent.com
             var grid_rect = that.containerElement.getBoundingClientRect();
             back.style.width = grid_rect.width + 'px';
         });
-
-        //window.addEventListener('scroll', function() {
-        //}, { passive: true });
 
         revUtils.addEventListener(window, 'scroll', function(){
             that.navbarScrollListener(that, back);
@@ -689,10 +682,10 @@ Author: michael@revcontent.com
                 item = this.options.history_stack.pop();
             }
             if (item.type == "topic" && !isNaN(item.topic_id)) {
-                this.innerWidget.loadTopicFeed(item.topic_id,item.topic_title, false);
+                this.loadTopicFeed(item.topic_id,item.topic_title, false);
             }
             else if (item.type == "author" && item.author_name.length > 0) {
-                this.innerWidget.loadAuthorFeed(item.author_name, false);
+                this.loadAuthorFeed(item.author_name, false);
             } else {
                 this.options.emitter.emitEvent('createFeed', ['default', {
                     withoutHistory: true
@@ -2171,8 +2164,8 @@ Author: michael@revcontent.com
                 url += '&author_name=' + encodeURI(authorName);
             }
 
-            if (Array.isArray(this.contextual_last_sort)) {
-                url += '&contextual_last_sort=' + encodeURIComponent(this.contextual_last_sort.join(','));
+            if (Array.isArray(this.options.contextual_last_sort)) {
+                url += '&contextual_last_sort=' + encodeURIComponent(this.options.contextual_last_sort.join(','));
             }
         }
 
@@ -3187,14 +3180,14 @@ Author: michael@revcontent.com
         self.loadMoreText.innerHTML = 'LOAD MORE CONTENT';
 
         revUtils.append(self.loadMoreContainer, self.loadMoreText);
-        revUtils.append(self.innerWidget.containerElement, self.loadMoreContainer);
+        revUtils.append(self.containerElement, self.loadMoreContainer);
 
         self.loadMoreListener = function() {
             self.loadMoreText.innerHTML = 'LOADING ...';
             self.loadMoreContainer.className = 'rev-loadmore-button loading';
             revUtils.removeEventListener(self.loadMoreContainer, 'click', self.loadMoreListener);
 
-            var beforeItemCount = self.innerWidget.grid.items.length;
+            var beforeItemCount = self.grid.items.length;
 
             self
                 .promiseCreateBlankCardsRetry(self, beforeItemCount)
@@ -3230,7 +3223,7 @@ Author: michael@revcontent.com
     RevSlider.prototype.promiseCreateBlankCards = function(self, beforeItemCount) {
         return new Promise(function(resolve, reject) {
             try {
-                var rowData = self.innerWidget.createRows(self.innerWidget.grid);
+                var rowData = self.createRows(self.grid);
 
                 resolve({self: self, rowData: rowData});
             } catch (e) {
@@ -3245,7 +3238,7 @@ Author: michael@revcontent.com
             var self = input.self;
             var rowData = input.rowData;
 
-            revApi.request(self.innerWidget.generateUrl(self.innerWidget.internalOffset, rowData.internalLimit, self.innerWidget.sponsoredOffset, rowData.sponsoredLimit), function(data) {
+            revApi.request(self.generateUrl(self.internalOffset, rowData.internalLimit, self.sponsoredOffset, rowData.sponsoredLimit), function(data) {
                 // reject if we don't have any content or not enough content
                 if (!data.content.length || data.content.length !== (rowData.internalLimit + rowData.sponsoredLimit)) {
                     reject();
@@ -3272,8 +3265,8 @@ Author: michael@revcontent.com
                 var rowData = input.rowData;
                 var data = input.data;
 
-                self.innerWidget.contextual_last_sort = data.contextual_last_sort;
-                var itemTypes = self.innerWidget.updateDisplayedItems(rowData.items, data);
+                self.options.contextual_last_sort = data.contextual_last_sort;
+                var itemTypes = self.updateDisplayedItems(rowData.items, data);
                 self.viewableItems = self.viewableItems.concat(itemTypes.viewableItems);
 
                 resolve({self: self, rowData: rowData, data: data});
@@ -3314,14 +3307,14 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.removeBlankCards = function(self, beforeItemCount) {
-        var remove = self.innerWidget.grid.items.length - beforeItemCount;
+        var remove = self.grid.items.length - beforeItemCount;
 
         for (var i = 0; i < remove; i++) {
-            var popped = self.innerWidget.grid.items.pop();
+            var popped = self.grid.items.pop();
             popped.remove();
         }
 
-        self.innerWidget.grid.layout();
+        self.grid.layout();
     };
 
 
