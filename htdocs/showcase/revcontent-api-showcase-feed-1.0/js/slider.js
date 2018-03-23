@@ -329,7 +329,11 @@ Author: michael@revcontent.com
             }
 
             setTimeout(function() { // wait a tick ENG-263
-                that.containerElement.scrollIntoView(true);
+                if (that.options.infinite_container) { // scroll to top of container
+                    revUtils.scrollTop(that.innerContainerElement, 3000);
+                } else {
+                    that.containerElement.scrollIntoView({ behavior: 'smooth', block: "start" });
+                }
                 // allow feed link clicks again
                 that.preventFeedLinkClick = false;
 
@@ -510,6 +514,7 @@ Author: michael@revcontent.com
         //top_pos = 0; // TODO
         var grid_width = this.containerElement.clientWidth > 0 ?  this.containerElement.clientWidth  + 'px' : '100%';
 
+        // TODO look into if this is needed always, top offset in general with videos and fixed navbars
         if (!this.options.infinite_container) {
             this.containerElement.style.paddingTop = '48px';
         }
@@ -555,7 +560,7 @@ Author: michael@revcontent.com
         if (!existingBack) {
             var that = this;
 
-            if (!that.options.infinite_container) { // scroll for infinite container
+            if (!that.options.infinite_container) { // don't scroll for infinite container
                 this.scrollListenerNavbar = revUtils.throttle(this.navbarScrollListener.bind(this, back), 60);
 
                 revUtils.addEventListener(window, 'scroll', this.scrollListenerNavbar);

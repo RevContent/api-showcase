@@ -276,7 +276,7 @@ Author: michael@revcontent.com
                 revUtils.addEventListener(button.element, revDetect.mobile() ? 'touchstart' : 'click', function(ev) {
 
                     if (button.auth_required && !that.options.authenticated && that.options.innerWidget.feedAuthButton) {
-                        that.options.innerWidget.feedAuthButton.scrollIntoView(true);
+                        that.options.innerWidget.feedAuthButton.scrollIntoView({ behavior: 'smooth', block: "start" });
                         return;
                     }
 

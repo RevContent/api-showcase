@@ -471,6 +471,38 @@ utils.timeAgo = function(time, output) {
             ) + templates.suffix;
 };
 
+utils.scrollTop = function(element, duration) {
+    var start = element.scrollTop;
+
+    if (start === 0) { // already there
+        return;
+    }
+
+    var change = 0 - start,
+        currentTime = 0,
+        increment = 20,
+        duration = (Math.abs(change) / 2.5);
+
+    var self = this;
+
+    var animateScroll = function(){
+        currentTime += increment;
+        var val = self.easeInOutQuad(currentTime, start, change, duration);
+        element.scrollTop = val;
+        if(currentTime < duration) {
+            setTimeout(animateScroll, increment);
+        }
+    };
+    animateScroll();
+}
+
+utils.easeInOutQuad = function (t, b, c, d) {
+  t /= d/2;
+    if (t < 1) return c/2*t*t + b;
+    t--;
+    return -c/2 * (t*(t-2) - 1) + b;
+};
+
 
 // -----  ----- //
 return utils;
