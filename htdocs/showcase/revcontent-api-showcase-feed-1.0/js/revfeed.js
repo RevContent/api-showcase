@@ -104,7 +104,6 @@ Author: michael@revcontent.com
             comments_enabled: false,
             default_avatar_url: 'https://yt3.ggpht.com/-TXSba-bNQxI/AAAAAAAAAAI/AAAAAAAAAAA/RXEnTzDI_Oc/s288-mo-c-c0xffffffff-rj-k-no/photo.jpg',
             emitter: new EvEmitter(),
-            history_stack: [],
             contextual_last_sort: []
         };
 
