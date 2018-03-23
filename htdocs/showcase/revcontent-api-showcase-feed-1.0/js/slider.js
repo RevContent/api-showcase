@@ -163,7 +163,6 @@ Author: michael@revcontent.com
             comments_enabled: false,
             actions_api_url: 'https://api.engage.im/' + opts.env + '/actions/',
             //actions_api_url: 'http://shearn.api.engage.im/actions/',
-            history_stack: [],
             contextual_last_sort: []
         };
 
@@ -204,6 +203,10 @@ Author: michael@revcontent.com
 
             if (!that.options.active) {
                 return;
+            }
+
+            if (!that.historyStack) {
+                that.historyStack = [];
             }
 
             that.removeNotify(); // remove notify if present
@@ -306,8 +309,8 @@ Author: michael@revcontent.com
                     if (!internalCount) { // if not content stop infinite scroll and get out
                         that.options.emitter.emitEvent('removedItems');
                         that.notify('Oh no! This is somewhat embarrassing. We don\'t have content for that ' + revUtils.capitalize(type) + '. Please go back or try a different ' + revUtils.capitalize(type) + '.', {label: 'continue', link: '#'}, 'info', false);
-                        if (that.options.history_stack.length > 0) {
-                            that.options.history_stack.pop();
+                        if (that.historyStack.length > 0) {
+                            that.historyStack.pop();
                             that.navBar();
                         }
                         return;
@@ -467,7 +470,7 @@ Author: michael@revcontent.com
 
     // TODO make navbar a component
     RevSlider.prototype.navBar = function() {
-        if(this.options.history_stack.length == 0){
+        if(this.historyStack.length == 0){
             var existingBack = this.containerElement.querySelector('.go-back-bar');
             if (existingBack){
                 this.detachBackBar(existingBack, existingBack.querySelector('button'));
@@ -475,7 +478,7 @@ Author: michael@revcontent.com
             return;
         }
 
-        var activePage = this.options.history_stack[this.options.history_stack.length-1];
+        var activePage = this.historyStack[this.historyStack.length-1];
         var existingHeader = this.containerElement.querySelector('.rev-nav-header');
         var header = existingHeader ? existingHeader : document.createElement('div');
         header.className = 'rev-nav-header';
@@ -637,46 +640,45 @@ Author: michael@revcontent.com
     RevSlider.prototype.pushHistory = function(){
 
         if (this.options.topic_type == "author") {
-            if(this.options.history_stack.length > 0){
-                if (this.options.author_name.toLowerCase() == this.options.history_stack[this.options.history_stack.length-1].author_name.toLowerCase()) {
+            if(this.historyStack.length > 0){
+                if (this.options.author_name.toLowerCase() == this.historyStack[this.historyStack.length-1].author_name.toLowerCase()) {
                     return;
                 }
             }
         }
 
         if (this.options.topic_type == "topic" && this.options.topic_id !== -1){
-            if(this.options.history_stack.length > 0){
-                if (this.options.topic_id == this.options.history_stack[this.options.history_stack.length-1].topic_id) {
+            if(this.historyStack.length > 0){
+                if (this.options.topic_id == this.historyStack[this.historyStack.length-1].topic_id) {
                     return;
                 }
             }
         }
 
-        this.options.history_stack.push({
+        this.historyStack.push({
             type: this.options.topic_type,
             author_name:this.options.author_name,
             topic_id:this.options.topic_id,
             topic_title:this.options.topic_title
         });
-
     };
 
     RevSlider.prototype.loadFromHistory = function(backBar, backButton) {
         //alert("here!");
         var that = this;
-        if(this.element.classList.contains('is-loading') || this.options.history_stack.length == 0) {
+        if(this.element.classList.contains('is-loading') || this.historyStack.length == 0) {
             return;
         }
         this.element.classList.add('is-loading');
         this.element.style.pointerEvents = 'none';
         this.element.style.transition = 'all 0.8s';
         this.element.style.opacity = 0.7;
-        if (this.options.history_stack.length > 1) {
-            var item = this.options.history_stack.pop();
-            if(this.options.history_stack.length == 0){
+        if (this.historyStack.length > 1) {
+            var item = this.historyStack.pop();
+            if(this.historyStack.length == 0){
                 this.clearHistory(backBar, backButton);
             } else {
-                item = this.options.history_stack.pop();
+                item = this.historyStack.pop();
             }
             if (item.type == "topic" && !isNaN(item.topic_id)) {
                 this.loadTopicFeed(item.topic_id,item.topic_title, false);
@@ -708,7 +710,7 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.clearHistory = function(backBar, backButton) {
         this.detachBackBar(backBar, backButton);
-        this.options.history_stack = [];
+        this.historyStack = [];
     };
 
     RevSlider.prototype.detachBackBar = function(backBar, backButton) {
