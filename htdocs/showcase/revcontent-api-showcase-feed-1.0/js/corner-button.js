@@ -286,13 +286,12 @@ Author: michael@revcontent.com
 
                     that.deactivatePanelGrids();
 
-                    button.options.active = true;
-
                     if (!button.slider) {
                         button.options = Object.assign((that.options.authenticated && button.auth_options ? button.auth_options : button.options), that.options);
                         button.options.element = that.panel.innerElement;
                         button.options.infinite_element = that.panel.innerElement;
                         button.options.infinite_container = true;
+                        button.options.active = true;
                         // HACK to avoid thrash
                         // TODO: get this out of here, this is a hack
                         var removeMe = document.querySelector('.feed-auth-button-size-remove-me');
@@ -301,6 +300,7 @@ Author: michael@revcontent.com
                         }
                         button.slider = new RevSlider(button.options);
                     } else {
+                        button.slider.options.active = true;
                         that.panel.innerElement.replaceChild(button.slider.containerElement, that.panel.innerElement.firstChild);
                     }
 
