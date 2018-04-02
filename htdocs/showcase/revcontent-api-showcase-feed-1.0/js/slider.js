@@ -1192,9 +1192,12 @@ Author: michael@revcontent.com
 
                 if (iconName) {
 
-                    revApi.request( that.options.host + '/api/v1/engage/addreaction.php?r=' + iconName + '&url=' + encodeURI(item.data.url), function(data) {
-                        return;
-                    });
+                    if(likeReactionElement.getAttribute('data-active')) {
+                        that.removeReaction(likeReactionElement);
+                        that.reactionCount(item, likeReactionElement.getAttribute('data-active'), false);
+                    }
+
+                    that.addReaction(likeReactionElement, item, iconName);
 
                     likeReactionElement.setAttribute('data-active', iconName);
 
@@ -1329,6 +1332,7 @@ Author: michael@revcontent.com
                 clearTimeout(that.likeReactionIconShowTimeout);
 
                 if (likeReactionElement.getAttribute('data-active')) {
+                    that.removeReaction(likeReactionElement);
 
                     iconName = likeReactionElement.getAttribute('data-active');
 
@@ -1348,9 +1352,7 @@ Author: michael@revcontent.com
 
                     count.style.marginLeft = null; // remove margin left
 
-                    revApi.request( that.options.host + '/api/v1/engage/addreaction.php?r=' + iconName + '&url=' + encodeURI(item.data.url), function(data) {
-                        return;
-                    });
+                    that.addReaction(likeReactionElement, item, iconName);
 
                     if (!item.element.querySelector('.rev-reactions-total-inner .rev-reaction.rev-reaction-'+ iconName)) {
                         var iconTotal = 0;
@@ -1386,9 +1388,12 @@ Author: michael@revcontent.com
                         return;
                     }
 
-                    revApi.request( that.options.host + '/api/v1/engage/addreaction.php?r=' + iconName + '&url=' + encodeURI(item.data.url), function(data) {
-                        return;
-                    });
+                    if(likeReactionElement.getAttribute('data-active')) {
+                        that.removeReaction(likeReactionElement);
+                        that.reactionCount(item, likeReactionElement.getAttribute('data-active'), false);
+                    }
+
+                    that.addReaction(likeReactionElement, item, iconName);
 
                     likeReactionElement.setAttribute('data-active', iconName);
 
@@ -2467,6 +2472,7 @@ Author: michael@revcontent.com
             this.setFeaturedComment(item, commentsULElement);
             //add item to array for later access
             this.feedItems[itemData.uid] = item;
+            this.getReactions(item);
         }
 
         //dont show comment input on sponsored
@@ -2580,77 +2586,6 @@ Author: michael@revcontent.com
 
             });
 
-        }
-
-        if (item.reactions) {
-
-            var myReaction = '';
-
-            var likeReactionElement = item.element.querySelector('.rev-reaction-icon');
-            likeReactionElement.removeAttribute('data-active');
-
-            var icon = item.element.querySelector('.rev-reaction-like .rev-reaction-icon');
-            revUtils.removeClass(icon, 'rev-reaction-icon-', true);
-            revUtils.addClass(icon, 'rev-reaction-icon-love');
-            revUtils.removeClass(icon, 'rev-reaction-icon-selected');
-
-            if (itemData.my_reaction) {
-                myReaction = itemData.my_reaction;
-                likeReactionElement.setAttribute('data-active', myReaction);
-
-                revUtils.addClass(icon, 'rev-reaction-icon-' + myReaction);
-                revUtils.addClass(icon, 'rev-reaction-icon-selected');
-                revUtils.removeClass(item.element, 'rev-menu-active');
-            }
-
-            var reactionHtml = '';
-
-            var reactionCountTotal = 0;
-            var reactionCountTotalPos = 0;
-            var reactionCountTotalNeg = 0;
-            var zIndex = 100;
-
-            var positiveReactions = this.options.reactions.slice(0, 3);
-            var negativeReactions = this.options.reactions.slice(3);
-
-            for (var reactionCounter = 0; reactionCounter < this.options.reactions.length; reactionCounter++) {
-                var reaction = this.options.reactions[reactionCounter];
-                var reactionCount = 0;
-                if (itemData.hasOwnProperty("reactions")) {
-                    reactionCount = itemData.reactions[reaction];
-                }
-
-                if (reactionCount) {
-                    if (reactionCounter < 3) {
-                        reactionCountTotalPos += reactionCount;
-                    } else {
-                        reactionCountTotalNeg += reactionCount;
-                    }
-
-                    reactionCountTotal += reactionCount;
-                    reactionHtml += '<div style="z-index:'+ zIndex +';" class="rev-reaction rev-reaction-' + reaction + '">' +
-                        '<div class="rev-reaction-inner">' +
-                        '<div class="rev-reaction-icon rev-reaction-icon-' + reaction + '-full"></div>' +
-                        '</div>' +
-                        '</div>';
-                    zIndex--;
-                }
-            }
-            item.reactionCountTotalPos = reactionCountTotalPos;
-            item.reactionCountTotalNeg = reactionCountTotalNeg;
-            item.reactionCountTotal = reactionCountTotal;
-
-            item.element.querySelector('.rev-reaction-menu-item-count-pos .rev-reaction-menu-item-count-inner').innerText = this.milliFormatter(reactionCountTotalPos);
-            item.element.querySelector('.rev-reaction-menu-item-count-neg .rev-reaction-menu-item-count-inner').innerText = this.milliFormatter(reactionCountTotalNeg);
-
-            if (myReaction) {
-                var reactionTotal = Math.max(1, (reactionCountTotal - 1));
-                reactionHtml += '<div class="rev-reaction-count">'+ ((reactionCountTotal == 1) ? 'You reacted' : 'You and ' + reactionTotal + ' other' + (reactionTotal > 1 ? 's' : '') ) + '</div>';
-            } else {
-                reactionHtml += '<div ' + (!reactionCountTotal ? 'style="margin-left: 0;"' : '') + ' class="rev-reaction-count">'+ (reactionCountTotal ? reactionCountTotal : 'Be the first to react') +'</div>';
-            }
-
-            item.element.querySelector('.rev-reactions-total-inner').innerHTML = reactionHtml;
         }
 
         revUtils.remove(item.element.querySelector('.rev-reason'));
@@ -3586,6 +3521,126 @@ Author: michael@revcontent.com
         }
 
         return li;
+    };
+
+    RevSlider.prototype.getReactions = function(item) {
+        var that = this;
+
+        var params = {
+            url: item.data.target_url
+        };
+
+        var options = {};
+        if (that.options.hasOwnProperty("jwt")) {
+            options.jwt = that.options.jwt;
+        }
+
+        var queryString = Object.keys(params).map(function(key) {
+            return key + '=' + params[key];
+        }).join('&');
+
+        revApi.xhr(that.options.actions_api_url + 'reactions?' + queryString, function(data) {
+            if (data.reactions) {
+
+                var myReaction = '';
+
+                var likeReactionElement = item.element.querySelector('.rev-reaction-icon');
+                likeReactionElement.removeAttribute('data-active');
+
+                var icon = item.element.querySelector('.rev-reaction-like .rev-reaction-icon');
+                revUtils.removeClass(icon, 'rev-reaction-icon-', true);
+                revUtils.addClass(icon, 'rev-reaction-icon-love');
+                revUtils.removeClass(icon, 'rev-reaction-icon-selected');
+
+                if (data.reaction.reaction) {
+                    myReaction = data.reaction.reaction;
+                    likeReactionElement.setAttribute('data-active', myReaction);
+                    likeReactionElement.setAttribute('data-id', data.reaction.id)
+
+                    revUtils.addClass(icon, 'rev-reaction-icon-' + myReaction);
+                    revUtils.addClass(icon, 'rev-reaction-icon-selected');
+                    revUtils.removeClass(item.element, 'rev-menu-active');
+                }
+
+                var reactionHtml = '';
+
+                var reactionCountTotal = 0;
+                var reactionCountTotalPos = 0;
+                var reactionCountTotalNeg = 0;
+                var zIndex = 100;
+
+                var positiveReactions = that.options.reactions.slice(0, 3);
+                var negativeReactions = that.options.reactions.slice(3);
+
+                for (var reactionCounter = 0; reactionCounter < that.options.reactions.length; reactionCounter++) {
+                    var reaction = that.options.reactions[reactionCounter];
+                    var reactionCount = 0;
+                    if (data.reactions.hasOwnProperty(reaction)) {
+                        reactionCount = data.reactions[reaction];
+                    }
+
+                    if (reactionCount) {
+                        if (reactionCounter < 3) {
+                            reactionCountTotalPos += reactionCount;
+                        } else {
+                            reactionCountTotalNeg += reactionCount;
+                        }
+
+                        reactionCountTotal += reactionCount;
+                        reactionHtml += '<div style="z-index:'+ zIndex +';" class="rev-reaction rev-reaction-' + reaction + '">' +
+                            '<div class="rev-reaction-inner">' +
+                            '<div class="rev-reaction-icon rev-reaction-icon-' + reaction + '-full"></div>' +
+                            '</div>' +
+                            '</div>';
+                        zIndex--;
+                    }
+                }
+                item.reactionCountTotalPos = reactionCountTotalPos;
+                item.reactionCountTotalNeg = reactionCountTotalNeg;
+                item.reactionCountTotal = reactionCountTotal;
+
+                item.element.querySelector('.rev-reaction-menu-item-count-pos .rev-reaction-menu-item-count-inner').innerText = that.milliFormatter(reactionCountTotalPos);
+                item.element.querySelector('.rev-reaction-menu-item-count-neg .rev-reaction-menu-item-count-inner').innerText = that.milliFormatter(reactionCountTotalNeg);
+
+                if (myReaction) {
+                    var reactionTotal = Math.max(1, (reactionCountTotal - 1));
+                    reactionHtml += '<div class="rev-reaction-count">'+ ((reactionCountTotal == 1) ? 'You reacted' : 'You and ' + reactionTotal + ' other' + (reactionTotal > 1 ? 's' : '') ) + '</div>';
+                } else {
+                    reactionHtml += '<div ' + (!reactionCountTotal ? 'style="margin-left: 0;"' : '') + ' class="rev-reaction-count">'+ (reactionCountTotal ? reactionCountTotal : 'Be the first to react') +'</div>';
+                }
+
+                item.element.querySelector('.rev-reactions-total-inner').innerHTML = reactionHtml;
+            }
+        },null,true,options);
+    };
+
+    RevSlider.prototype.addReaction = function(element, item, iconName) {
+        var that = this;
+        var options = {};
+        var data = {
+            url: encodeURI(item.data.target_url),
+            reaction: iconName
+        };
+        options.data = JSON.stringify(data);
+        options.method = "POST";
+        if (that.options.hasOwnProperty("jwt")) {
+            options.jwt = that.options.jwt;
+        }
+
+        revApi.xhr( that.options.actions_api_url + 'reaction/add', function(data) {
+            element.setAttribute('data-id', data.id);
+        },null,true,options);
+    };
+
+    RevSlider.prototype.removeReaction = function(element) {
+        var that = this;
+        var options = {};
+        options.method = "DELETE";
+        if (that.options.hasOwnProperty("jwt")) {
+            options.jwt = that.options.jwt;
+        }
+
+        revApi.xhr( that.options.actions_api_url + 'reaction/remove/' + element.getAttribute('data-id'), null, null, true, options);
     };
 
     RevSlider.prototype.setFeaturedComment = function(item,commentULElement) {
