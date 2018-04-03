@@ -119,7 +119,7 @@ Author: michael@revcontent.com
     };
 
     EngageInterestsCarousel.prototype.update = function(data, authenticated, topic_id) {
-        if(typeof data !== "object" || (typeof data == "object" && data.subscribed.length == 0)) {
+        if(typeof data !== "object" || (typeof data == "object" && data.length == 0)) {
             this.options.item.element.setAttribute('style','margin:0!important;padding:0!important;height:0;border:0');
             this.options.item.element.classList.add('revcontent-carousel-is-empty');
             this.options.item.element.classList.add('revcontent-remove-element');
@@ -138,7 +138,7 @@ Author: michael@revcontent.com
         this.header.querySelector('h1 span').innerText = title;
         this.header.querySelector('h1 small sup').innerText = sub;
 
-        var interests_data = data.subscribed;
+        var interests_data = data;
 
         var interests_count = 0;
         var initialIndex = 3;
@@ -159,6 +159,9 @@ Author: michael@revcontent.com
 
         for (var i=0; i < interests_count; i++) {
             var interest = interests_data[i];
+
+            console.log("this.columnWidth");
+            console.log(this.columnWidth);
 
             var cell = document.createElement('div');
             cell.style.width = this.columnWidth + 'px';
