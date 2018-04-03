@@ -455,6 +455,9 @@ Author: michael@revcontent.com
         });
 
         this.options.emitter.on('removedItems', function(items) {
+            if (!that.options.active) {
+                return;
+            }
             that.removed = true;
 
             revUtils.removeEventListener(window, 'scroll', that.scrollListener);
@@ -749,10 +752,11 @@ Author: michael@revcontent.com
         this.infiniteElement = this.options.infinite_container ? this.innerContainerElement : window;
 
         var scrollFunction = function() {
-
+            if (!self.options.active) {
+                return;
+            }
             if (self.options.infinite_container) {
                 var scrollTop = self.innerContainerElement.scrollTop;// || document.documentElement.scrollTop || document.body.scrollTop;
-                // var windowHeight = self.options.infinite_element.offsetHeight;// || document.documentElement.clientHeight || document.body.clientHeight;
                 var height = self.grid.element.offsetHeight;
                 var top = self.grid.element.getBoundingClientRect().top;
                 var bottom = self.grid.element.getBoundingClientRect().bottom;
@@ -1766,6 +1770,8 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.gridOptions = function() {
         return {
+            heightElement: this.options.height_element,
+            heightElementMeasure: this.options.height_element_measure,
             isInitLayout: false,
             perRow: this.options.columns,
             transitionDuration: this.options.transition_duration,
@@ -1801,6 +1807,8 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.appendElements = function() {
+
+        this.head = false;
 
         if (!this.options.hide_header) {
             if (this.head) {
@@ -2084,7 +2092,7 @@ Author: michael@revcontent.com
                     } else {
                         if (!cell) { // logged out from inline auth button
                             that.grid.remove(that.feedAuthButton);
-                            if (that.grid.perRow > 1) { // relayout if not single column
+                            if (that.grid.perRow > 1 && !that.options.height_element) { // relayout if not single column
                                 that.grid.layout();
                             }
                         }
@@ -2700,7 +2708,7 @@ Author: michael@revcontent.com
 
         }
 
-        if (this.grid.perRow > 1) { // relayout if not single column
+        if (this.grid.perRow > 1 && !that.options.height_element) { // relayout if not single column
             if (!this.fontsLoaded && typeof FontFaceObserver !== 'undefined') { // first time wait for the fonts to load
                 var fontNormal = new FontFaceObserver('Montserrat');
                 var fontBold = new FontFaceObserver('Montserrat', { weight: 500 });
@@ -2917,7 +2925,7 @@ Author: michael@revcontent.com
 
             that.interestsCarouselItem.carousel.update(data, that.options.authenticated);
 
-            if (grid.perRow > 1) { // relayout if not single column
+            if (grid.perRow > 1 && !that.options.height_element) { // relayout if not single column
                 grid.layout();
             }
         });
@@ -3744,13 +3752,13 @@ Author: michael@revcontent.com
                         //showmorebtn.scrollIntoView(true);
                         showmorebtn.parentNode.removeChild(showmorebtn);
 
-                        if (that.grid.perRow > 1) {
+                        if (that.grid.perRow > 1 && !that.options.height_element) {
                             that.grid.layout();
                         }
                     });
                 }
 
-                if (that.grid.perRow > 1) {
+                if (that.grid.perRow > 1 && !that.options.height_element) {
                     that.grid.layout();
                 }
 

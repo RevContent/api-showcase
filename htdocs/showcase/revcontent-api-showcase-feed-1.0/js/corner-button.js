@@ -121,24 +121,39 @@ Author: michael@revcontent.com
         Waves.init();
 
         var updateButtonElementInnerIcon = function(reset) {
-            if (reset) {
-                revApi.request(that.options.host + '/api/v1/engage/profile.php?', function(data) {
-                    revUtils.addClass(that.buttonElementInnerIcon, 'eng-default-profile');
-                    that.buttonElementInnerIcon.style.backgroundImage = null;
+            // Leaving this for easy revert to user image
+            // if (reset) {
+            //     revApi.request(that.options.host + '/api/v1/engage/profile.php?', function(data) {
+            //         revUtils.addClass(that.buttonElementInnerIcon, 'eng-default-profile');
+            //         that.buttonElementInnerIcon.style.backgroundImage = null;
 
-                    revUtils.addClass(that.userProfileImage, 'eng-default-profile');
-                    that.userProfileImage.style.backgroundImage = null;
+            //         revUtils.addClass(that.userProfileImage, 'eng-default-profile');
+            //         that.userProfileImage.style.backgroundImage = null;
 
-                    that.options.user = data ? data : null;
+            //         that.options.user = data ? data : null;
 
-                    if (data && data.picture) {
-                        that.buttonElementInnerIcon.style.backgroundImage = 'url(' + data.picture + ')';
-                        that.userProfileImage.style.backgroundImage = 'url(' + data.picture + ')';
-                    }
-                });
-            } else if (that.options.user && that.options.user.picture) {
-                that.buttonElementInnerIcon.style.backgroundImage = 'url(' + that.options.user.picture + ')';
-                that.userProfileImage.style.backgroundImage = 'url(' + that.options.user.picture + ')';
+            //         if (data && data.picture) {
+            //             that.buttonElementInnerIcon.style.backgroundImage = 'url(' + data.picture + ')';
+            //             that.userProfileImage.style.backgroundImage = 'url(' + data.picture + ')';
+            //         }
+            //     });
+            // } else if (that.options.user && that.options.user.picture) {
+            //     that.buttonElementInnerIcon.style.backgroundImage = 'url(' + that.options.user.picture + ')';
+            //     that.userProfileImage.style.backgroundImage = 'url(' + that.options.user.picture + ')';
+            // } else {
+            //     revUtils.addClass(that.buttonElementInnerIcon, 'eng-default-profile');
+            //     revUtils.addClass(that.userProfileImage, 'eng-default-profile');
+            // }
+
+            if (that.options.brand_logo_secondary) {
+                if (that.options.brand_logo_secondary.charAt(0) === '<') {
+                    var removeQuotes = that.options.brand_logo_secondary.replace(/"/g, "'");
+                    that.buttonElementInnerIcon.style.backgroundImage = 'url("data:image/svg+xml;utf8,' + removeQuotes + '")';
+                    that.userProfileImage.style.backgroundImage = 'url("data:image/svg+xml;utf8,' + removeQuotes + '")';
+                } else {
+                    that.buttonElementInnerIcon.style.backgroundImage = 'url(' + that.options.brand_logo_secondary + ')';
+                    that.userProfileImage.style.backgroundImage = 'url(' + that.options.brand_logo_secondary + ')';
+                }
             } else {
                 revUtils.addClass(that.buttonElementInnerIcon, 'eng-default-profile');
                 revUtils.addClass(that.userProfileImage, 'eng-default-profile');
@@ -160,54 +175,142 @@ Author: michael@revcontent.com
         });
 
         // buttonElement press and touch
-
-        this.mc = new Hammer(this.buttonElement, {
-            recognizers: [
-                [
-                    Hammer.Press,
-                    {
-                        time: 150
-                    }
+        // TODO pull the common things out for mobile and desktop
+        if (revDetect.mobile()) {
+            this.mc = new Hammer(this.buttonElement, {
+                recognizers: [
+                    [
+                        Hammer.Press,
+                        {
+                            time: 150
+                        }
+                    ],
                 ],
-            ],
-            // domEvents: true
-        });
+                // domEvents: true
+            });
 
-        this.mc.on('press', function(ev) {
-            if (!revUtils.hasClass(document.body, 'animate-user-profile')) {
+            this.mc.on('press', function(ev) {
+                if (!revUtils.hasClass(document.body, 'animate-user-profile')) {
 
-                // revUtils.removeClass(that.buttonContainerElement, 'visible'); // just in case touch was triggered and buttons visible
+                    // revUtils.removeClass(that.buttonContainerElement, 'visible'); // just in case touch was triggered and buttons visible
 
-                if (!that.userProfileAppended) {
-                    that.appendProfile();
+                    if (!that.userProfileAppended) {
+                        that.appendProfile();
+                    }
+
+                    revUtils.addClass(document.body, 'profile-mask-show');
+                    setTimeout(function() {
+                        revUtils.addClass(document.body, 'animate-user-profile');
+                    });
+                }
+            });
+
+            revUtils.addEventListener(this.buttonElement,  revDetect.mobile() ? 'touchstart' : 'click', function(ev) {
+                if (revUtils.hasClass(that.buttonElement, 'eng-back')) {
+
+                    that.deactivatePanelGrids(true);
+
+                    setTimeout(function() { // let it ripple
+                        updateButtonElementInnerIcon();
+                        revUtils.removeClass(that.buttonElement, 'eng-back');
+                    }, 200);
+                    that.options.emitter.emitEvent('addScrollListener');
+                    that.panel.transition();
+                    return;
                 }
 
-                revUtils.addClass(document.body, 'profile-mask-show');
-                setTimeout(function() {
-                    revUtils.addClass(document.body, 'animate-user-profile');
-                });
-            }
-        });
+                if (revUtils.hasClass(that.buttonContainerElement, 'visible')) {
+                    // revUtils.removeClass(that.buttonContainerElement, 'visible');
 
-        var leaveTimeout;
+                    if (!that.userProfileAppended) {
+                        that.appendProfile();
+                    }
 
-        revUtils.addEventListener(this.buttonElement,  revDetect.mobile() ? 'touchstart' : 'click', function(ev) {
-            clearTimeout(leaveTimeout);
+                    // that.innerWidget.grid.unbindResize();
+                    // document.body.style.overflow = 'hidden';
 
-            if (revUtils.hasClass(that.buttonElement, 'eng-back')) {
+                    revUtils.addClass(document.body, 'profile-mask-show');
 
-                that.deactivatePanelGrids(true);
+                    setTimeout(function() {
+                        if (revUtils.hasClass(document.body, 'animate-user-profile')) {
+                            revUtils.removeClass(document.body, 'animate-user-profile');
+                        } else {
+                            revUtils.addClass(document.body, 'animate-user-profile');
+                        }
+                    });
+                    return;
+                }
 
-                setTimeout(function() { // let it ripple
-                    updateButtonElementInnerIcon();
-                    revUtils.removeClass(that.buttonElement, 'eng-back');
-                }, 200);
-                that.options.emitter.emitEvent('addScrollListener');
-                that.panel.transition();
-                return;
-            }
+                if (revUtils.hasClass(document.body, 'animate-user-profile')) {
+                    revUtils.removeClass(document.body, 'animate-user-profile');
+                    return;
+                }
 
-            if (revUtils.hasClass(that.buttonContainerElement, 'visible')) {
+                setTimeout(function() { // wait for long press this.mc.on('press'
+                    if (!revUtils.hasClass(document.body, 'profile-mask-show')) {
+                        revUtils.addClass(that.buttonContainerElement, 'visible');
+
+                        var removeVisible = function() {
+                            setTimeout(function() { // everythinks a ripple
+                                revUtils.removeClass(that.buttonContainerElement, 'visible');
+                            }, 200);
+                            revUtils.removeEventListener(window, revDetect.mobile() ? 'touchstart' : 'scroll', removeVisible);
+                        }
+
+                        revUtils.addEventListener(window, revDetect.mobile() ? 'touchstart' : 'scroll', removeVisible);
+                    }
+                }, 201);
+            });
+        } else {
+
+            var leaveTimeout;
+
+            revUtils.addEventListener(this.buttonElement,  revDetect.mobile() ? 'touchstart' : 'mouseenter', function(ev) {
+
+                clearTimeout(leaveTimeout);
+
+                if (revUtils.hasClass(that.buttonElement, 'eng-back')) {
+                    return;
+                }
+
+                setTimeout(function() { // wait for long press this.mc.on('press'
+                    if (!revUtils.hasClass(document.body, 'profile-mask-show')) {
+                        revUtils.addClass(that.buttonContainerElement, 'visible');
+
+                        var removeVisible = function() {
+                            setTimeout(function() { // everythinks a ripple
+                                revUtils.removeClass(that.buttonContainerElement, 'visible');
+                            }, 200);
+                            revUtils.removeEventListener(window, revDetect.mobile() ? 'touchstart' : 'scroll', removeVisible);
+                        }
+
+                        revUtils.addEventListener(window, revDetect.mobile() ? 'touchstart' : 'scroll', removeVisible);
+                    }
+                }, 201);
+            });
+
+            revUtils.addEventListener(this.buttonElement,  revDetect.mobile() ? 'touchstart' : 'mouseleave', function(ev) {
+                    leaveTimeout = setTimeout(function() {
+                        revUtils.removeClass(that.buttonContainerElement, 'visible');
+                    }, 2000);
+            });
+
+            revUtils.addEventListener(this.buttonElement,  revDetect.mobile() ? 'touchstart' : 'click', function(ev) {
+
+                if (revUtils.hasClass(that.buttonElement, 'eng-back')) {
+
+                    that.deactivatePanelGrids(true);
+
+                    setTimeout(function() { // let it ripple
+                        updateButtonElementInnerIcon();
+                        revUtils.addClass(that.buttonContainerElement, 'visible');
+                        revUtils.removeClass(that.buttonElement, 'eng-back');
+                    }, 200);
+                    that.options.emitter.emitEvent('addScrollListener');
+                    that.panel.transition();
+                    return;
+                }
+
                 // revUtils.removeClass(that.buttonContainerElement, 'visible');
 
                 if (!that.userProfileAppended) {
@@ -226,29 +329,9 @@ Author: michael@revcontent.com
                         revUtils.addClass(document.body, 'animate-user-profile');
                     }
                 });
-                return;
-            }
 
-            if (revUtils.hasClass(document.body, 'animate-user-profile')) {
-                revUtils.removeClass(document.body, 'animate-user-profile');
-                return;
-            }
-
-            setTimeout(function() { // wait for long press this.mc.on('press'
-                if (!revUtils.hasClass(document.body, 'profile-mask-show')) {
-                    revUtils.addClass(that.buttonContainerElement, 'visible');
-
-                    var removeVisible = function() {
-                        setTimeout(function() { // everythinks a ripple
-                            revUtils.removeClass(that.buttonContainerElement, 'visible');
-                        }, 200);
-                        revUtils.removeEventListener(window, revDetect.mobile() ? 'touchstart' : 'scroll', removeVisible);
-                    }
-
-                    revUtils.addEventListener(window, revDetect.mobile() ? 'touchstart' : 'scroll', removeVisible);
-                }
-            }, 201);
-        });
+            });
+        }
 
         // corner button menu
 
@@ -282,15 +365,26 @@ Author: michael@revcontent.com
 
                     if (!that.panel) { // get the panel set at this point
                         that.panel = new EngagePanel(that.options);
+                        if (!revDetect.mobile()) {
+                            revUtils.addEventListener(that.panel.fullPageContainer, 'transitionend', function() {
+                                that.options.innerWidget.element.style.overflow = 'visible';
+                                if (!that.panel.open) {
+                                    that.panel.fullPageContainer.style.display = 'none';
+                                }
+                            });
+                        };
                     }
+
+                    that.panel.fullPageContainer.style.display = 'block';
 
                     that.deactivatePanelGrids();
 
                     if (!button.slider) {
                         button.options = Object.assign((that.options.authenticated && button.auth_options ? button.auth_options : button.options), that.options);
                         button.options.element = that.panel.innerElement;
-                        button.options.infinite_element = that.panel.innerElement;
-                        button.options.infinite_container = true;
+                        button.options.height_element = that.options.innerWidget.element;
+                        button.options.height_element_measure = [that.options.innerWidget.head];
+                        button.options.infinite_container = revDetect.mobile() ? true : false;
                         button.options.active = true;
                         // HACK to avoid thrash
                         // TODO: get this out of here, this is a hack
@@ -304,13 +398,18 @@ Author: michael@revcontent.com
                         that.panel.innerElement.replaceChild(button.slider.containerElement, that.panel.innerElement.firstChild);
                     }
 
+                    if (!revDetect.mobile()) { // TODO only scroll if Feed is above/below the fold
+                        revUtils.removeClass(that.buttonContainerElement, 'visible');
+                        that.options.containerElement.scrollIntoView({ behavior: 'smooth', block: "start" });
+                    }
+
                     setTimeout(function() {
                         that.panel.transition();
                         // revUtils.removeClass(that.buttonContainerElement, 'visible');
                         that.buttonElementInnerIcon.style.backgroundImage = null;
                         revUtils.addClass(that.buttonElement, 'eng-back');
-                        // TODO get this working on a single unit
-                        that.options.emitter.emitEvent('removeScrollListener');
+                        // TODO get this working on a single unit to prevent multiple event listeners
+                        // that.options.emitter.emitEvent('removeScrollListener');
                     });
                 });
 
@@ -343,8 +442,9 @@ Author: michael@revcontent.com
         // });
     };
 
-
     EngageCornerButton.prototype.deactivatePanelGrids = function(activateInnerWidget) {
+        this.options.innerWidget.element.scrollIntoView({ behavior: 'smooth', block: "start" });
+        this.options.innerWidget.element.style.height = 'auto';
         this.options.innerWidget.options.active = activateInnerWidget ? true : false;
 
         for (var i = 0; i < this.options.buttons.length; i++) {
