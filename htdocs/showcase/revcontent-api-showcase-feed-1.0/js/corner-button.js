@@ -313,23 +313,24 @@ Author: michael@revcontent.com
 
                 // revUtils.removeClass(that.buttonContainerElement, 'visible');
 
-                if (!that.userProfileAppended) {
-                    that.appendProfile();
-                }
-
-                // that.innerWidget.grid.unbindResize();
-                // document.body.style.overflow = 'hidden';
-
-                revUtils.addClass(document.body, 'profile-mask-show');
-
-                setTimeout(function() {
-                    if (revUtils.hasClass(document.body, 'animate-user-profile')) {
-                        revUtils.removeClass(document.body, 'animate-user-profile');
-                    } else {
-                        revUtils.addClass(document.body, 'animate-user-profile');
+                requestAnimationFrame(function() {
+                    if (!that.userProfileAppended) {
+                        that.appendProfile();
                     }
-                });
 
+                    // that.innerWidget.grid.unbindResize();
+                    // document.body.style.overflow = 'hidden';
+
+                    revUtils.addClass(document.body, 'profile-mask-show');
+
+                    setTimeout(function() { // HACK BS timeout - similar case works https://codepen.io/anon/pen/QmBqWg TODO
+                        if (revUtils.hasClass(document.body, 'animate-user-profile')) {
+                            revUtils.removeClass(document.body, 'animate-user-profile');
+                        } else {
+                            revUtils.addClass(document.body, 'animate-user-profile');
+                        }
+                    });
+                });
             });
         }
 
@@ -367,9 +368,9 @@ Author: michael@revcontent.com
                         that.panel = new EngagePanel(that.options);
                         if (!revDetect.mobile()) {
                             revUtils.addEventListener(that.panel.fullPageContainer, 'transitionend', function() {
-                                that.options.innerWidget.element.style.overflow = 'visible';
                                 if (!that.panel.open) {
                                     that.panel.fullPageContainer.style.display = 'none';
+                                    that.options.innerWidget.element.style.overflow = 'visible';
                                 }
                             });
                         };

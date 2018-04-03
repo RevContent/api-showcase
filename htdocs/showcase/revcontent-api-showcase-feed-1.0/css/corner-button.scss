@@ -282,6 +282,10 @@ body.animate-user-profile {
   // transition: transform 3s, opacity 1s linear 1s;
 }
 
+body.profile-mask-show {
+  overflow-x: hidden;
+}
+
 body.profile-mask-show #profile-mask {
   display: block;
 }
