@@ -159,6 +159,7 @@ Author: michael@revcontent.com
             initial_comments_limit_mobile: 1,
             initial_comments_limit: 3,
             user: null,
+            jwt: null,
             content: [],
             comments_enabled: false,
             actions_api_url: 'https://api.engage.im/' + opts.env + '/actions/',
@@ -3531,7 +3532,7 @@ Author: michael@revcontent.com
         };
 
         var options = {};
-        if (that.options.hasOwnProperty("jwt")) {
+        if (that.options.jwt) {
             options.jwt = that.options.jwt;
         }
 
@@ -3623,7 +3624,7 @@ Author: michael@revcontent.com
         };
         options.data = JSON.stringify(data);
         options.method = "POST";
-        if (that.options.hasOwnProperty("jwt")) {
+        if (that.options.jwt) {
             options.jwt = that.options.jwt;
         }
 
@@ -3636,7 +3637,7 @@ Author: michael@revcontent.com
         var that = this;
         var options = {};
         options.method = "DELETE";
-        if (that.options.hasOwnProperty("jwt")) {
+        if (that.options.jwt) {
             options.jwt = that.options.jwt;
         }
 
@@ -3658,7 +3659,7 @@ Author: michael@revcontent.com
             };
 
             var options = {};
-            if (that.options.hasOwnProperty("jwt")) {
+            if (that.options.jwt) {
                 options.jwt = that.options.jwt;
             }
 
@@ -3861,7 +3862,7 @@ Author: michael@revcontent.com
             };
 
             var options = {};
-            if (that.options.hasOwnProperty("jwt")) {
+            if (that.options.jwt) {
                 options.jwt = that.options.jwt;
             }
 
@@ -4083,7 +4084,7 @@ Author: michael@revcontent.com
                 if (hasExistingVote) {
                     //remove existing vote first
                     var options = {method:'DELETE'};
-                    if (that.options.hasOwnProperty("jwt")) {
+                    if (that.options.jwt) {
                         options.jwt = that.options.jwt;
                     }
 
@@ -4119,7 +4120,7 @@ Author: michael@revcontent.com
                     };
                     options.data = JSON.stringify(data);
                     options.method = "POST";
-                    if (that.options.hasOwnProperty("jwt")) {
+                    if (that.options.jwt) {
                         options.jwt = that.options.jwt;
                     }
 
@@ -4767,7 +4768,7 @@ Author: michael@revcontent.com
         var mode = comment_el.getAttribute("data-type");
 
         var options = {method:'DELETE'};
-        if (that.options.hasOwnProperty("jwt")) {
+        if (that.options.jwt) {
             options.jwt = that.options.jwt;
         }
 
@@ -4812,7 +4813,7 @@ Author: michael@revcontent.com
 
         options.data = JSON.stringify(data);
         options.method = "POST";
-        if (that.options.hasOwnProperty("jwt")) {
+        if (that.options.jwt) {
             options.jwt = that.options.jwt;
         }
 
