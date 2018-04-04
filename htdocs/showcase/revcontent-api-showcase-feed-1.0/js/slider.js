@@ -2708,7 +2708,7 @@ Author: michael@revcontent.com
 
         }
 
-        if (this.grid.perRow > 1 && !that.options.height_element) { // relayout if not single column
+        if (this.grid.perRow > 1 && !this.options.height_element) { // relayout if not single column
             if (!this.fontsLoaded && typeof FontFaceObserver !== 'undefined') { // first time wait for the fonts to load
                 var fontNormal = new FontFaceObserver('Montserrat');
                 var fontBold = new FontFaceObserver('Montserrat', { weight: 500 });
