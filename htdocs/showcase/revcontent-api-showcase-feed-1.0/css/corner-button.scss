@@ -218,7 +218,7 @@ body.animate-user-profile {
         transform: none !important;
         min-width: 0;
         overflow: hidden;
-        background-color: rgba(181, 181, 181, 0.83);
+        background-color: rgba(234, 234, 234, 0.91);
         transition: background-color 1s;
 
         // &.eng-transition-bg {
@@ -283,6 +283,10 @@ body.animate-user-profile {
   // transition: transform 3s, opacity 1s linear 1s;
 }
 
+body.profile-mask-show {
+  overflow-x: hidden;
+}
+
 body.profile-mask-show #profile-mask {
   display: block;
 }
@@ -314,7 +318,7 @@ body.animate-user-profile #profile-mask {
     top: 115px;
     border-radius: 50%;
     margin-left: -50px;
-    background-color: #e7ebf2;
+    background-color: rgba(234, 234, 234, 0.91);
   }
   #profile-fake {
     position: absolute;

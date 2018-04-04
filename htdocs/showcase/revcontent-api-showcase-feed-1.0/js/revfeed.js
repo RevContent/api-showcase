@@ -238,11 +238,13 @@ Author: michael@revcontent.com
 
     Feed.prototype.createInnerWidget = function(element, options) {
         options.element = element;
+        options.active = true;
         return new RevSlider(options);
     };
 
     Feed.prototype.createCornerButton = function(options) {
         options.innerWidget = this.innerWidget;
+        options.containerElement = this.containerElement;
         return new EngageCornerButton(options);
     };
 
