@@ -239,7 +239,7 @@ Author: michael@revcontent.com
         //     this.initButtonContainerElement();
         // }
 
-        revUtils.prepend(document.body, this.fullPageContainer);
+        revUtils.prepend((revDetect.mobile() ? document.body : this.options.containerElement), this.fullPageContainer);
 
         // this.options.element = this.innerElement;
 
@@ -449,6 +449,11 @@ Author: michael@revcontent.com
             revUtils.transitionDurationCss(this.buttonElement.children[0], (this.transitionDuration / 4) + 'ms');
         }
 
+        if (!revDetect.mobile()) {
+            // this gets removed in cornerbutton transitionend callback
+            this.options.innerWidget.element.style.overflow = 'hidden';
+        }
+
         if (this.open) {
             document.documentElement.style.overflow = 'visible';
             document.documentElement.style.height = 'auto';
@@ -470,8 +475,11 @@ Author: michael@revcontent.com
                 revUtils.removeClass(that.fullPageContainer, 'rev-side-shifter-animating');
             }, Math.max(0, this.transitionDuration - 300));
         } else {
-            document.documentElement.style.overflow = 'hidden';
-            document.documentElement.style.height = '100%';
+
+            if (revDetect.mobile()) {
+                document.documentElement.style.overflow = 'hidden';
+                document.documentElement.style.height = '100%';
+            }
 
             revUtils.addClass(this.fullPageContainer, 'rev-side-shifter-animating');
 
