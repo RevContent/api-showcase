@@ -1612,7 +1612,7 @@ Author: michael@revcontent.com
         var that = this;
         var handleSave = function(bookmark) {
             revUtils.addEventListener(bookmark, revDetect.mobile() ? 'touchstart' : 'click', function(e) {
-                //e.preventDefault();
+                e.preventDefault();
                 if (revUtils.hasClass(bookmark, 'rev-save-active')) {
                     revUtils.removeClass(bookmark, 'rev-save-active');
 

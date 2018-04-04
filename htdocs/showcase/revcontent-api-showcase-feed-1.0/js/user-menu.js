@@ -4,8 +4,6 @@ Version: 0.0.1
 Author: john.burnette@revcontent.com
 */
 
-//TODO: Move body animate css from corner button into user menu
-
 (function (window, factory) {
   'use strict';
   window.EngageUserMenu = factory(window, window.revUtils, window.revDetect, window.revApi);
@@ -73,7 +71,6 @@ Author: john.burnette@revcontent.com
     this.userAvatarEditContainer = document.createElement('div');
     revUtils.addClass(this.userAvatarEditContainer, 'eng-feed-user-avatar-edit');
 
-    //TODO: This needs to be set up to allow users to edit their profile pictures
     this.userAvatarEditContainerLink = document.createElement('a');
 
     revUtils.append(this.userAvatarEditContainer, this.userAvatarEditContainerLink);
@@ -106,9 +103,7 @@ Author: john.burnette@revcontent.com
       revUtils.addClass(anchor, 'animated');
       revUtils.addClass(anchor, 'zoomInRight');
       anchor.innerHTML = this.options.items[i].name;
-      //Why does this throw a random trim error?
       revUtils.addEventListener(anchor, 'click', function (e) {
-        //This is a hack, needs to be cleaned up
         if (anchor.id === "Bookmarks") {
           var bookmarks = document.getElementById('eng-bookmarks-container');
           if(bookmarks) {

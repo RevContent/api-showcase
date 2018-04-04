@@ -25,8 +25,6 @@ Author: john.burnette@revcontent.com
 
     this.bookmarksHeaderContainer = document.createElement('div');
     revUtils.addClass(this.bookmarksHeaderContainer, 'eng-bookmarks-header');
-
-    // //TODO: Don't forget to add text into this element
     this.bookmarksHeaderImgContainer = document.createElement('span');
     revUtils.addClass(this.bookmarksHeaderImgContainer, 'eng-bookmarks-header-img-container');
     this.bookmarksHeaderImgContainer.innerHTML = "My Bookmarks";
@@ -231,11 +229,6 @@ Author: john.burnette@revcontent.com
     revApi.xhr(that.options.actions_api_url + 'bookmarks', function (data) {
       for (var i = 0; i < data.length; i++) {
         that.addBookmarkItem(data[i]);
-      }
-      if (data.length > 0) {
-        
-      } else {
-
       }
     }, null, true, options);
 
