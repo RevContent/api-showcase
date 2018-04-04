@@ -110,7 +110,10 @@ Author: john.burnette@revcontent.com
             revUtils.addClass(bookmarks, 'is-open');
           } else {
             that.bookmarks = that.createBookmarks(that.options);
-            revUtils.addClass(that.bookmarks, 'is-open');
+            bookmarks = document.getElementById('eng-bookmarks-container');
+            setTimeout(function(){
+              revUtils.addClass(bookmarks, 'is-open');
+            }, 100);
           }
         }
       });

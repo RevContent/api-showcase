@@ -72,10 +72,6 @@ Author: michael@revcontent.com
             revUtils.removeClass(document.body, 'animate-user-profile');
         });
 
-        // revUtils.addEventListener(this.userProfile, revDetect.mobile() ? 'touchstart' : 'click', function(ev) {
-        //     ev.preventDefault();
-        // }, {passive: false});
-
         this.userProfileAppended = true;
     }
 
