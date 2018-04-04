@@ -54,38 +54,27 @@ Author: michael@revcontent.com
         this.profileMask = document.createElement('div');
         this.profileMask.id = 'profile-mask';
 
-        this.userProfile = document.createElement('div');
-        this.userProfile.id = 'rev-user-profile';
-
-        this.userProfileImage = document.createElement('div');
-        this.userProfileImage.id = 'profile-image';
-
-        var userProfileFake = document.createElement('div');
-        userProfileFake.id = 'profile-fake';
-
-        revUtils.append(this.userProfile, this.userProfileImage);
-        revUtils.append(this.userProfile, userProfileFake);
-    }
+        //Used for opening the user menu
+        this.userProfile = document.getElementById('eng-feed-user-menu-container');
+    };
 
     EngageCornerButton.prototype.appendProfile = function() {
-        revUtils.append(document.body, this.userProfile);
+        // revUtils.append(document.body, this.userProfile);
         revUtils.append(document.body, this.profileMask);
 
         revUtils.addEventListener(this.profileMask, 'transitionend', function(ev) {
-            if (ev.propertyName === 'transform') {
                 if (!revUtils.hasClass(document.body, 'animate-user-profile')) {
                     revUtils.removeClass(document.body, 'profile-mask-show');
-                }
-            }
+                }            
         });
 
         revUtils.addEventListener(this.profileMask, revDetect.mobile() ? 'touchstart' : 'click', function(ev) {
             revUtils.removeClass(document.body, 'animate-user-profile');
         });
 
-        revUtils.addEventListener(this.userProfile, revDetect.mobile() ? 'touchstart' : 'click', function(ev) {
-            ev.preventDefault();
-        }, {passive: false});
+        // revUtils.addEventListener(this.userProfile, revDetect.mobile() ? 'touchstart' : 'click', function(ev) {
+        //     ev.preventDefault();
+        // }, {passive: false});
 
         this.userProfileAppended = true;
     }
@@ -138,7 +127,7 @@ Author: michael@revcontent.com
                 });
             } else if (that.options.user && that.options.user.picture) {
                 that.buttonElementInnerIcon.style.backgroundImage = 'url(' + that.options.user.picture + ')';
-                that.userProfileImage.style.backgroundImage = 'url(' + that.options.user.picture + ')';
+                // that.userProfileImage.style.backgroundImage = 'url(' + that.options.user.picture + ')';
             } else {
                 revUtils.addClass(that.buttonElementInnerIcon, 'eng-default-profile');
                 revUtils.addClass(that.userProfileImage, 'eng-default-profile');
@@ -150,7 +139,6 @@ Author: michael@revcontent.com
         this.options.emitter.on('updateButtonElementInnerIcon', function() {
             updateButtonElementInnerIcon(true);
         });
-
         this.options.emitter.on('updateButtons', function(authenticated) {
             that.options.authenticated = authenticated;
 
@@ -176,11 +164,11 @@ Author: michael@revcontent.com
         this.mc.on('press', function(ev) {
             if (!revUtils.hasClass(document.body, 'animate-user-profile')) {
 
-                // revUtils.removeClass(that.buttonContainerElement, 'visible'); // just in case touch was triggered and buttons visible
+                revUtils.removeClass(that.buttonContainerElement, 'visible'); // just in case touch was triggered and buttons visible
 
-                if (!that.userProfileAppended) {
-                    that.appendProfile();
-                }
+                // if (!that.userProfileAppended) {
+                //     that.appendProfile();
+                // }
 
                 revUtils.addClass(document.body, 'profile-mask-show');
                 setTimeout(function() {
@@ -189,6 +177,7 @@ Author: michael@revcontent.com
             }
         });
 
+        
         var leaveTimeout;
 
         revUtils.addEventListener(this.buttonElement,  revDetect.mobile() ? 'touchstart' : 'click', function(ev) {
@@ -222,6 +211,8 @@ Author: michael@revcontent.com
                 setTimeout(function() {
                     if (revUtils.hasClass(document.body, 'animate-user-profile')) {
                         revUtils.removeClass(document.body, 'animate-user-profile');
+                        
+                        
                     } else {
                         revUtils.addClass(document.body, 'animate-user-profile');
                     }
@@ -231,6 +222,7 @@ Author: michael@revcontent.com
 
             if (revUtils.hasClass(document.body, 'animate-user-profile')) {
                 revUtils.removeClass(document.body, 'animate-user-profile');
+                
                 return;
             }
 
@@ -243,7 +235,7 @@ Author: michael@revcontent.com
                             revUtils.removeClass(that.buttonContainerElement, 'visible');
                         }, 200);
                         revUtils.removeEventListener(window, revDetect.mobile() ? 'touchstart' : 'scroll', removeVisible);
-                    }
+                    };
 
                     revUtils.addEventListener(window, revDetect.mobile() ? 'touchstart' : 'scroll', removeVisible);
                 }
