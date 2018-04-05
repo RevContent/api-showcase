@@ -3670,6 +3670,9 @@ input.engage-auth-input:focus {
             -moz-box-sizing: border-box;
             -webkit-box-sizing: border-box;
             box-sizing: border-box;
+            overflow: scroll;
+            height: 300px;
+            margin-bottom: 10px;
         }
 
         .rc-interests .grid {
@@ -3686,6 +3689,11 @@ input.engage-auth-input:focus {
             cursor: pointer;
             position: relative;
 
+        }
+
+        .engage-interests-card .grid .interests-cell{
+          background-size: cover;
+          box-shadow: 1px 3px 3px 0px rgba(0, 0, 0, 0.21);
         }
 
         .rc-interests .grid .interests-cell.with-img {
@@ -3742,6 +3750,11 @@ input.engage-auth-input:focus {
 
         .rc-interests .grid .interests-cell.with-img:hover .interest-title {
             color: #eeeeee;
+        }
+
+        .engage-interests-card .grid .interests-cell .interest-title {
+          font-size: 14px;
+          height: 71%;
         }
 
 

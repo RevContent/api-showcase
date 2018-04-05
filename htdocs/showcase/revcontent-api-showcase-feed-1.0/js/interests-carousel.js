@@ -159,10 +159,6 @@ Author: michael@revcontent.com
 
         for (var i=0; i < interests_count; i++) {
             var interest = interests_data[i];
-
-            console.log("this.columnWidth");
-            console.log(this.columnWidth);
-
             var cell = document.createElement('div');
             cell.style.width = this.columnWidth + 'px';
             cell.style.marginRight = this.options.cell_margin + 'px';

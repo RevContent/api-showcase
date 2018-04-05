@@ -831,7 +831,6 @@ Author: michael@revcontent.com
 
                             return Promise.resolve(data);
                         } catch (e) {
-                            console.log('up in this bull', e);
                             if (retries > 0) {
                                 setTimeout(function() {
                                     tryToUpdateDisplayedItems((retries - 1));
@@ -1921,7 +1920,7 @@ Author: michael@revcontent.com
         },true);
 
         }
-        
+
     };
 
     // Don't dupe this svg
@@ -2917,7 +2916,7 @@ Author: michael@revcontent.com
         var added = grid.addItems([interestsCarouselElement]);
 
         this.interestsCarouselItem = added[0];
-        
+
         if (that.options.user !== null && that.options.user.hasOwnProperty('interests')) {
             that.handleCarousel(that.options.user.interests);
         } else {
@@ -4650,109 +4649,84 @@ Author: michael@revcontent.com
                                 // engage_auth_interests_search_bar.appendChild(engage_auth_interests_search_toggle);
                                 // engage_auth_interests_card.appendChild(engage_auth_interests_search_bar);
 
-                                var engage_auth_interests = document.createElement('div');
-                                revUtils.addClass(engage_auth_interests, 'grid');
-                                engage_auth_interests.innerHTML = '' +
-                                '<div id="interest_cell_24" data-id="1811" data-interest="science" data-selected="false" class="interests-cell with-img interests_24 deselected">' +
-                                    '<div class="interest-wrap">' +
-                                        '<div class="rc-circle-tag off"><span class="checkmark interest-checked">&nbsp;</span></div>' +
-                                        '<div class="interest-title">SCIENCE</div>' +
-                                    '</div>&nbsp;' +
-                                '</div>';
-                                engage_auth_interests.innerHTML += '' +
-                                '<div id="interest_cell_5" data-id="3187" data-interest="lifestyle" data-selected="false" class="interests-cell with-img interests_5 deselected">' +
-                                    '<div class="interest-wrap">' +
-                                        '<div class="rc-circle-tag off"><span class="checkmark interest-checked">&nbsp;</span></div>' +
-                                        '<div class="interest-title">LIFESTYLE</div>' +
-                                    '</div>' +
-                                    '&nbsp;' +
-                                '</div>';
-                                engage_auth_interests.innerHTML += '' +
-                                '<div id="interest_cell_14" data-id="3197" data-interest="RELIGION" data-selected="false" class="interests-cell with-img interests_14 deselected">' +
-                                    '<div class="interest-wrap">' +
-                                        '<div class="rc-circle-tag off"><span class="checkmark interest-checked">&nbsp;</span></div>' +
-                                        '<div class="interest-title">RELIGION & FAITH</div>' +
-                                    '</div>' +
-                                    '&nbsp;' +
-                                '</div>';
-                                engage_auth_interests.innerHTML += '' +
-                                '<div id="interest_cell_9" data-id="660" data-interest="finance" data-selected="false" class="interests-cell with-img interests_9 deselected">' +
-                                    '<div class="interest-wrap">' +
-                                        '<div class="rc-circle-tag off"><span class="checkmark interest-checked">&nbsp;</span></div>' +
-                                        '<div class="interest-title">FINANCE</div>' +
-                                    '</div>' +
-                                    '&nbsp;' +
-                                '</div>';
-                                engage_auth_interests.innerHTML += '' +
-                                '<div id="interest_cell_4" data-id="2159" data-interest="travel" data-selected="false" class="interests-cell with-img interests_4 deselected">' +
-                                    '<div class="interest-wrap">' +
-                                        '<div class="rc-circle-tag off"><span class="checkmark interest-checked">&nbsp;</span></div>' +
-                                        '<div class="interest-title">TRAVEL</div>' +
-                                    '</div>' +
-                                    '&nbsp;' +
-                                '</div>';
-                                engage_auth_interests.innerHTML += '' +
-                                '<div id="interest_cell_18" data-id="261" data-interest="women" data-selected="false" class="interests-cell with-img interests_18 deselected">' +
-                                    '<div class="interest-wrap">' +
-                                        '<div class="rc-circle-tag off"><span class="checkmark interest-checked">&nbsp;</span></div>' +
-                                        '<div class="interest-title">WOMEN\'S INTEREST</div>' +
-                                    '</div>' +
-                                    '&nbsp;' +
-                                '</div>';
-                                engage_auth_interests.innerHTML += '' +
-                                '<div id="interest_cell_10" data-id="796" data-interest="TECHNOLOGY" data-selected="false" class="interests-cell with-img interests_10 deselected">' +
-                                    '<div class="interest-wrap">' +
-                                        '<div class="rc-circle-tag off"><span class="checkmark interest-checked">&nbsp;</span></div>' +
-                                        '<div class="interest-title">TECHNOLOGY</div>' +
-                                    '</div>' +
-                                    '&nbsp;' +
-                                '</div>';
-                                engage_auth_interests.innerHTML += '' +
-                                '<div id="interest_cell_23" data-id="3191" data-interest="HOME & GARDEN" data-selected="false" class="interests-cell with-img interests_23 deselected">' +
-                                    '<div class="interest-wrap">' +
-                                        '<div class="rc-circle-tag off"><span class="checkmark interest-checked">&nbsp;</span></div>' +
-                                        '<div class="interest-title">HOME & GARDEN</div>' +
-                                    '</div>' +
-                                    '&nbsp;' +
-                                '</div>';
-                                engage_auth_interests.innerHTML += '' +
-                                '<div id="interest_cell_7" data-id="2128" data-interest="HEALTH & WELLNESS" data-selected="false" class="interests-cell with-img interests_7 deselected">' +
-                                    '<div class="interest-wrap">' +
-                                        '<div class="rc-circle-tag off"><span class="checkmark interest-checked">&nbsp;</span></div>' +
-                                        '<div class="interest-title">HEALTH & WELLNESS</div>' +
-                                    '</div>' +
-                                    '&nbsp;' +
-                                '</div>';
-
-                                engage_auth_interests.innerHTML += '<div class="clearfix"></div>';
-
-                                engage_auth_interests_card.appendChild(engage_auth_interests);
-
-                                revUtils.addClass(engage_auth_interests, 'animated');
-                                revUtils.addClass(engage_auth_interests, 'flipInX');
-
                                 var engage_auth_finish_buton = document.createElement('a');
                                 revUtils.addClass(engage_auth_finish_buton, 'engage-auth-register-button');
                                 engage_auth_finish_buton.innerHTML = '<svg aria-hidden="true" data-prefix="fal" data-icon="chevron-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" class="svg-inline--fa fa-chevron-right fa-w-8 fa-7x"><path fill="currentColor" d="M17.525 36.465l-7.071 7.07c-4.686 4.686-4.686 12.284 0 16.971L205.947 256 10.454 451.494c-4.686 4.686-4.686 12.284 0 16.971l7.071 7.07c4.686 4.686 12.284 4.686 16.97 0l211.051-211.05c4.686-4.686 4.686-12.284 0-16.971L34.495 36.465c-4.686-4.687-12.284-4.687-16.97 0z" class=""></path></svg>';
                                 engage_auth_finish_buton.style.display = "none";
-                                engage_auth_interests_card.appendChild(engage_auth_finish_buton);
 
 
-                                for (var i = 0; i < engage_auth_interests.childNodes.length; i++) {
+                                var engage_auth_interests = document.createElement('div');
+                                revUtils.addClass(engage_auth_interests, 'grid');
+                                engage_auth_interests.innerHTML = '';
 
-                                    revUtils.addEventListener(engage_auth_interests.childNodes[i], 'click', function(){
-                                        this.classList.toggle('selected');
-                                        this.classList.toggle('deselected');
+                                revApi.xhr( that.options.actions_api_url + 'interests?domain=' + that.options.domain, function (data) {
 
-                                        var interest = {
-                                            id: this.getAttribute("data-id"),
-                                            name: this.getAttribute("data-interest")
-                                        };
+                                    for(var i = 0; i < data.length; i++) {
 
-                                        that.handleInterests(interest, engage_auth_finish_buton);
-                                    });
+                                        var new_interest = document.createElement('div');
+                                        new_interest.id = 'interest_cell_' + data[i].id;
+                                        new_interest.setAttribute('data-id', data[i].id);
+                                        new_interest.setAttribute('data-interest', data[i].title);
+                                        new_interest.setAttribute('data-selected', false);
+                                        new_interest.style.backgroundImage = 'url(' + data[i].image + ')';
+                                        revUtils.addClass(new_interest, 'interests-cell');
+                                        revUtils.addClass(new_interest, 'with-img');
+                                        revUtils.addClass(new_interest, 'interests_'+data[i].id);
+                                        revUtils.addClass(new_interest, 'deselected');
+                                        new_interest.innerHTML = '<div class="interest-wrap">' +
+                                                '<div class="rc-circle-tag off"><span class="checkmark interest-checked">&nbsp;</span></div>' +
+                                                '<div class="interest-title">'+data[i].title+'</div>' +
+                                            '</div>&nbsp;';
 
-                                }
+                                        revUtils.addEventListener(new_interest, 'click', function(){
+                                            console.log("clicked");
+                                            this.classList.toggle('selected');
+                                            this.classList.toggle('deselected');
+
+                                            var interest = {
+                                                id: this.getAttribute("data-id"),
+                                                name: this.getAttribute("data-interest")
+                                            };
+
+                                            that.handleInterests(interest, engage_auth_finish_buton);
+                                        });
+
+                                        engage_auth_interests.appendChild(new_interest);
+
+                                    }
+
+                                    var clearfix = document.createElement('div');
+                                    revUtils.addClass(clearfix, 'clearfix');
+                                    engage_auth_interests.appendChild(clearfix);
+
+                                    engage_auth_interests_card.appendChild(engage_auth_interests);
+                                    engage_auth_interests_card.appendChild(engage_auth_finish_buton);
+
+                                });
+
+                                // engage_auth_interests_card.appendChild(engage_auth_interests);
+
+                                revUtils.addClass(engage_auth_interests, 'animated');
+                                revUtils.addClass(engage_auth_interests, 'flipInX');
+
+
+
+
+                                // for (var i = 0; i < engage_auth_interests.childNodes.length; i++) {
+
+                                //     revUtils.addEventListener(engage_auth_interests.childNodes[i], 'click', function(){
+                                //         this.classList.toggle('selected');
+                                //         this.classList.toggle('deselected');
+
+                                //         var interest = {
+                                //             id: this.getAttribute("data-id"),
+                                //             name: this.getAttribute("data-interest")
+                                //         };
+
+                                //         that.handleInterests(interest, engage_auth_finish_buton);
+                                //     });
+
+                                // }
 
                                 //card.appendChild(engage_auth_interests_card);
                                 //engage_auth.parentNode.replaceChild(engage_auth_interests_card,engage_auth);
@@ -5171,6 +5145,8 @@ Author: michael@revcontent.com
             var options = {method:'DELETE'};
             if (that.options.hasOwnProperty("jwt")) {
                 options.jwt = that.options.jwt;
+                console.log("opts has jwt");
+                console.log(that.options.jwt);
             }
 
             revApi.xhr(that.options.actions_api_url + 'interest/remove/' + interest.id, function(data) {
