@@ -77,7 +77,6 @@ Author: john.burnette@revcontent.com
 
     this.userNameContainer = document.createElement('div');
     revUtils.addClass(this.userNameContainer, 'eng-feed-user-display-name');
-    this.userNameContainer.innerHTML = 'John Doe';
 
     // this.userStatsContainer = document.createElement('div');
     // revUtils.addClass(this.userStatsContainer, 'eng-feed-user-stats');
