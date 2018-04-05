@@ -3724,6 +3724,11 @@ Author: michael@revcontent.com
 
                         var legacyCommentLi = that.setCommentHTML(legacyData);
                         commentULElement.appendChild(legacyCommentLi);
+
+                        if (that.grid.perRow > 1) {
+                            that.grid.layout();
+                        }
+
                     }
 
                     return false;
