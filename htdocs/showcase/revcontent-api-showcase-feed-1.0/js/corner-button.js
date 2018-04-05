@@ -54,38 +54,23 @@ Author: michael@revcontent.com
         this.profileMask = document.createElement('div');
         this.profileMask.id = 'profile-mask';
 
-        this.userProfile = document.createElement('div');
-        this.userProfile.id = 'rev-user-profile';
-
-        this.userProfileImage = document.createElement('div');
-        this.userProfileImage.id = 'profile-image';
-
-        var userProfileFake = document.createElement('div');
-        userProfileFake.id = 'profile-fake';
-
-        revUtils.append(this.userProfile, this.userProfileImage);
-        revUtils.append(this.userProfile, userProfileFake);
-    }
+        //Used for opening the user menu
+        this.userProfile = document.getElementById('eng-feed-user-menu-container');
+    };
 
     EngageCornerButton.prototype.appendProfile = function() {
-        revUtils.append(document.body, this.userProfile);
+        // revUtils.append(document.body, this.userProfile);
         revUtils.append(document.body, this.profileMask);
 
         revUtils.addEventListener(this.profileMask, 'transitionend', function(ev) {
-            if (ev.propertyName === 'transform') {
                 if (!revUtils.hasClass(document.body, 'animate-user-profile')) {
                     revUtils.removeClass(document.body, 'profile-mask-show');
-                }
-            }
+                }            
         });
 
         revUtils.addEventListener(this.profileMask, revDetect.mobile() ? 'touchstart' : 'click', function(ev) {
             revUtils.removeClass(document.body, 'animate-user-profile');
         });
-
-        revUtils.addEventListener(this.userProfile, revDetect.mobile() ? 'touchstart' : 'click', function(ev) {
-            ev.preventDefault();
-        }, {passive: false});
 
         this.userProfileAppended = true;
     }
@@ -149,10 +134,10 @@ Author: michael@revcontent.com
                 if (that.options.brand_logo_secondary.charAt(0) === '<') {
                     var removeQuotes = that.options.brand_logo_secondary.replace(/"/g, "'");
                     that.buttonElementInnerIcon.style.backgroundImage = 'url("data:image/svg+xml;utf8,' + removeQuotes + '")';
-                    that.userProfileImage.style.backgroundImage = 'url("data:image/svg+xml;utf8,' + removeQuotes + '")';
+                    //that.userProfileImage.style.backgroundImage = 'url("data:image/svg+xml;utf8,' + removeQuotes + '")';
                 } else {
                     that.buttonElementInnerIcon.style.backgroundImage = 'url(' + that.options.brand_logo_secondary + ')';
-                    that.userProfileImage.style.backgroundImage = 'url(' + that.options.brand_logo_secondary + ')';
+                    //that.userProfileImage.style.backgroundImage = 'url(' + that.options.brand_logo_secondary + ')';
                 }
             } else {
                 revUtils.addClass(that.buttonElementInnerIcon, 'eng-default-profile');
@@ -165,7 +150,6 @@ Author: michael@revcontent.com
         this.options.emitter.on('updateButtonElementInnerIcon', function() {
             updateButtonElementInnerIcon(true);
         });
-
         this.options.emitter.on('updateButtons', function(authenticated) {
             that.options.authenticated = authenticated;
 

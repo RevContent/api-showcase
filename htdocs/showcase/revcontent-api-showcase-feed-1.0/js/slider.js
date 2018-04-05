@@ -164,7 +164,7 @@ Author: michael@revcontent.com
             comments_enabled: false,
             actions_api_url: 'https://api.engage.im/' + opts.env + '/actions/',
             //actions_api_url: 'http://shearn.api.engage.im/actions/',
-            contextual_last_sort: []
+            contextual_last_sort: []            
         };
 
         // merge options
@@ -1612,15 +1612,20 @@ Author: michael@revcontent.com
         var that = this;
         var handleSave = function(bookmark) {
             revUtils.addEventListener(bookmark, revDetect.mobile() ? 'touchstart' : 'click', function(e) {
+                e.preventDefault();
                 if (revUtils.hasClass(bookmark, 'rev-save-active')) {
                     revUtils.removeClass(bookmark, 'rev-save-active');
 
-                    var url = that.options.host + '/api/v1/engage/removebookmark.php?url=' + encodeURI(item.data.target_url) + '&title=' + encodeURI(item.data.headline);
-
+                    var options = {
+                        method: 'DELETE'
+                    }
                     if (that.options.authenticated) {
-                        revApi.request(url, function(data) {
-                            return;
-                        });
+                        revApi.xhr(that.options.actions_api_url + 'bookmark/remove/' + item.element.getAttribute('data-id'), function(data) {
+                            EngageBookmarksManager.prototype.removeBookmark(data);                            
+                        }, null, true, options);
+                        // revApi.request(url, function(data) {
+                        //     return;
+                        // });
                     } else {
                         that.queue.push({
                             type: 'bookmark',
@@ -1651,12 +1656,28 @@ Author: michael@revcontent.com
                     that.transitionLogin(item, 'bookmark');
 
                     //save bookmark
-                    var url = that.options.host + '/api/v1/engage/addbookmark.php?url=' + encodeURI(item.data.target_url) + '&title=' + encodeURI(item.data.headline);
+                    var url = that.options.actions_api_url + 'bookmark/add';
+                    var opts = {};
+                    var bm = {
+                        title: item.data.headline,
+                        url: item.data.target_url
+                    }
+                    opts.data = JSON.stringify(bm);
+                    opts.method = "POST";
+                    if (that.options.jwt) {
+                        opts.jwt = that.options.jwt;
+                    }
+
+                    //var url = that.options.host + '/api/v1/engage/addbookmark.php?url=' + encodeURI(item.data.target_url) + '&title=' + encodeURI(item.data.headline);
 
                     if (that.options.authenticated) {
-                        revApi.request( url, function(data) {
-                            return;
-                        });
+                        revApi.xhr(url, function (bm) {
+                            item.element.setAttribute('data-id', bm.id);
+                            that.options.emitter.emitEvent('addBookmark', bm);
+                        }, null, true, opts);
+                        // revApi.request( url, function(data) {
+                        //     return;
+                        // });
                     } else {
                         that.queue.push({
                             type: 'bookmark',
@@ -1672,7 +1693,7 @@ Author: michael@revcontent.com
 
         var save = document.createElement('div');
         save.className = 'rev-save';
-        save.innerHTML = '<?xml version="1.0" ?><svg contentScriptType="text/ecmascript" contentStyleType="text/css" preserveAspectRatio="xMidYMid meet" version="1.0" viewBox="0 0 60.000000 60.000000" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" zoomAndPan="magnify"><g><polygon fill="none" points="51.0,59.0 29.564941,45.130005 9.0,59.0 9.0,1.0 51.0,1.0" stroke="#231F20" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/></g></svg>'
+        save.innerHTML = '<a href="#"><?xml version="1.0" ?><svg contentScriptType="text/ecmascript" contentStyleType="text/css" preserveAspectRatio="xMidYMid meet" version="1.0" viewBox="0 0 60.000000 60.000000" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" zoomAndPan="magnify"><g><polygon fill="none" points="51.0,59.0 29.564941,45.130005 9.0,59.0 9.0,1.0 51.0,1.0" stroke="#231F20" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/></g></svg></a>';
 
         revUtils.append(item.element.querySelector('.rev-meta-inner'), save);
 
@@ -3622,6 +3643,8 @@ Author: michael@revcontent.com
             }
         },null,true,options);
     };
+
+
 
     RevSlider.prototype.addReaction = function(element, item, iconName) {
         var that = this;
