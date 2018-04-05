@@ -80,9 +80,6 @@ Author: john.burnette@revcontent.com
 
 
     this.getBookmarks();
-
-    //TODO: get bookmarks and loop through them here to create items
-
     revUtils.append(this.bookmarksContainer, this.bookmarksList);
     this.userMenu = document.getElementById('eng-feed-user-menu-container');
 
@@ -231,8 +228,6 @@ Author: john.burnette@revcontent.com
         that.addBookmarkItem(data[i]);
       }
     }, null, true, options);
-
-    
   };
   
   
