@@ -452,6 +452,9 @@ Author: michael@revcontent.com
         });
 
         this.options.emitter.on('removedItems', function(items) {
+            if (!that.options.active) {
+                return;
+            }
             that.removed = true;
 
             revUtils.removeEventListener(window, 'scroll', that.scrollListener);
@@ -746,10 +749,11 @@ Author: michael@revcontent.com
         this.infiniteElement = this.options.infinite_container ? this.innerContainerElement : window;
 
         var scrollFunction = function() {
-
+            if (!self.options.active) {
+                return;
+            }
             if (self.options.infinite_container) {
                 var scrollTop = self.innerContainerElement.scrollTop;// || document.documentElement.scrollTop || document.body.scrollTop;
-                // var windowHeight = self.options.infinite_element.offsetHeight;// || document.documentElement.clientHeight || document.body.clientHeight;
                 var height = self.grid.element.offsetHeight;
                 var top = self.grid.element.getBoundingClientRect().top;
                 var bottom = self.grid.element.getBoundingClientRect().bottom;
@@ -1606,15 +1610,20 @@ Author: michael@revcontent.com
         var that = this;
         var handleSave = function(bookmark) {
             revUtils.addEventListener(bookmark, revDetect.mobile() ? 'touchstart' : 'click', function(e) {
+                e.preventDefault();
                 if (revUtils.hasClass(bookmark, 'rev-save-active')) {
                     revUtils.removeClass(bookmark, 'rev-save-active');
 
-                    var url = that.options.host + '/api/v1/engage/removebookmark.php?url=' + encodeURI(item.data.target_url) + '&title=' + encodeURI(item.data.headline);
-
+                    var options = {
+                        method: 'DELETE'
+                    }
                     if (that.options.authenticated) {
-                        revApi.request(url, function(data) {
-                            return;
-                        });
+                        revApi.xhr(that.options.actions_api_url + 'bookmark/remove/' + item.element.getAttribute('data-id'), function(data) {
+                            EngageBookmarksManager.prototype.removeBookmark(data);
+                        }, null, true, options);
+                        // revApi.request(url, function(data) {
+                        //     return;
+                        // });
                     } else {
                         that.queue.push({
                             type: 'bookmark',
@@ -1645,11 +1654,27 @@ Author: michael@revcontent.com
                     that.transitionLogin(item, 'bookmark');
 
                     //save bookmark
-                    var url = that.options.host + '/api/v1/engage/addbookmark.php?url=' + encodeURI(item.data.target_url) + '&title=' + encodeURI(item.data.headline);
+
+                    var url = that.options.actions_api_url + 'bookmark/add';
+                    var opts = {};
+                    var bm = {
+                        title: item.data.headline,
+                        url: item.data.target_url
+                    }
+                    opts.data = JSON.stringify(bm);
+                    opts.method = "POST";
+                    if (that.options.jwt) {
+                        opts.jwt = that.options.jwt;
+                    }
+
                     if (that.options.authenticated) {
-                        revApi.request( url, function(data) {
-                            return;
-                        });
+                        revApi.xhr(url, function (bm) {
+                            item.element.setAttribute('data-id', bm.id);
+                            that.options.emitter.emitEvent('addBookmark', bm);
+                        }, null, true, opts);
+                        // revApi.request( url, function(data) {
+                        //     return;
+                        // });
                     } else {
                         that.queue.push({
                             type: 'bookmark',
@@ -1665,7 +1690,7 @@ Author: michael@revcontent.com
 
         var save = document.createElement('div');
         save.className = 'rev-save';
-        save.innerHTML = '<?xml version="1.0" ?><svg contentScriptType="text/ecmascript" contentStyleType="text/css" preserveAspectRatio="xMidYMid meet" version="1.0" viewBox="0 0 60.000000 60.000000" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" zoomAndPan="magnify"><g><polygon fill="none" points="51.0,59.0 29.564941,45.130005 9.0,59.0 9.0,1.0 51.0,1.0" stroke="#231F20" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/></g></svg>'
+        save.innerHTML = '<a href="#"><?xml version="1.0" ?><svg contentScriptType="text/ecmascript" contentStyleType="text/css" preserveAspectRatio="xMidYMid meet" version="1.0" viewBox="0 0 60.000000 60.000000" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" zoomAndPan="magnify"><g><polygon fill="none" points="51.0,59.0 29.564941,45.130005 9.0,59.0 9.0,1.0 51.0,1.0" stroke="#231F20" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/></g></svg></a>';
 
         revUtils.append(item.element.querySelector('.rev-meta-inner'), save);
 
@@ -1763,6 +1788,8 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.gridOptions = function() {
         return {
+            heightElement: this.options.height_element,
+            heightElementMeasure: this.options.height_element_measure,
             isInitLayout: false,
             perRow: this.options.columns,
             transitionDuration: this.options.transition_duration,
@@ -1798,6 +1825,8 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.appendElements = function() {
+
+        this.head = false;
 
         if (!this.options.hide_header) {
             if (this.head) {
@@ -2102,7 +2131,7 @@ Author: michael@revcontent.com
                     } else {
                         if (!cell) { // logged out from inline auth button
                             that.grid.remove(that.feedAuthButton);
-                            if (that.grid.perRow > 1) { // relayout if not single column
+                            if (that.grid.perRow > 1 && !that.options.height_element) { // relayout if not single column
                                 that.grid.layout();
                             }
                         }
@@ -2718,7 +2747,7 @@ Author: michael@revcontent.com
 
         }
 
-        if (this.grid.perRow > 1) { // relayout if not single column
+        if (this.grid.perRow > 1 && !this.options.height_element) { // relayout if not single column
             if (!this.fontsLoaded && typeof FontFaceObserver !== 'undefined') { // first time wait for the fonts to load
                 var fontNormal = new FontFaceObserver('Montserrat');
                 var fontBold = new FontFaceObserver('Montserrat', { weight: 500 });
@@ -2944,6 +2973,7 @@ Author: michael@revcontent.com
             //recomended: data.recommended,
             count: data.length // data.count
         };
+
 
         that.interestsCarouselItem.carousel = new EngageInterestsCarousel({
             domain: that.options.domain,
@@ -3653,6 +3683,8 @@ Author: michael@revcontent.com
         },null,true,options);
     };
 
+
+
     RevSlider.prototype.addReaction = function(element, item, iconName) {
         var that = this;
         var options = {};
@@ -3783,13 +3815,13 @@ Author: michael@revcontent.com
                         //showmorebtn.scrollIntoView(true);
                         showmorebtn.parentNode.removeChild(showmorebtn);
 
-                        if (that.grid.perRow > 1) {
+                        if (that.grid.perRow > 1 && !that.options.height_element) {
                             that.grid.layout();
                         }
                     });
                 }
 
-                if (that.grid.perRow > 1) {
+                if (that.grid.perRow > 1 && !that.options.height_element) {
                     that.grid.layout();
                 }
 

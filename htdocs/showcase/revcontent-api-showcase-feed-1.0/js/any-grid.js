@@ -174,7 +174,18 @@ AnyGrid.prototype._resetLayout = function(check) {
 
 AnyGrid.prototype._postLayout = function() {
   this.resizeContainer();
-  this.emitEvent( 'postLayout', [ this ] );
+  if (this.options.heightElement) {
+    var heightElementMeasure = 0;
+    if (this.options.heightElementMeasure) {
+        for (var i = 0; i < this.options.heightElementMeasure.length; i++) {
+            if (this.options.heightElementMeasure[i]) {
+                var heightElementMeasureSize = getSize(this.options.heightElementMeasure[i]);
+                heightElementMeasure += heightElementMeasureSize.outerHeight;
+            }
+        }
+    }
+    this.options.heightElement.style.height = this.element.offsetHeight + heightElementMeasure + 'px';
+  }
 };
 
 AnyGrid.prototype._create = function() {

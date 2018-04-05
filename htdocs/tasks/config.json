@@ -255,6 +255,8 @@
     "css": [
       "./showcase/revcontent-api-showcase-feed-1.0/node_modules/flickity/css/flickity.css",
       "./showcase/revcontent-api-showcase-feed-1.0/node_modules/node-waves/dist/waves.css",
+      "./showcase/revcontent-api-showcase-feed-1.0/css/user-menu.scss",
+      "./showcase/revcontent-api-showcase-feed-1.0/css/bookmarks.scss",
       "./showcase/revcontent-api-showcase-feed-1.0/css/revfeed.scss",
       "./showcase/revcontent-api-showcase-feed-1.0/css/navbar.scss",
       "./showcase/revcontent-api-showcase-feed-1.0/css/revfeed-interests.scss",
@@ -295,6 +297,8 @@
       "./showcase/revcontent-api-showcase-feed-1.0/js/revapi.js",
       "./showcase/revcontent-api-showcase-feed-1.0/js/interests-carousel.js",
       "./showcase/revcontent-api-showcase-feed-1.0/js/panel.js",
+      "./showcase/revcontent-api-showcase-feed-1.0/js/user-menu.js",
+      "./showcase/revcontent-api-showcase-feed-1.0/js/bookmarks.js",      
       "./showcase/revcontent-api-showcase-feed-1.0/js/corner-button.js",
       "./showcase/revcontent-api-showcase-feed-1.0/js/slider.js",
       "./build/files/feed/feed.embed.js"

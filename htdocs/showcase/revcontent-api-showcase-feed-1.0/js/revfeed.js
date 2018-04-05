@@ -171,8 +171,9 @@ Author: michael@revcontent.com
         this.options.active = true;
 
         this.innerWidget = this.createInnerWidget(this.containerElement, this.options);
-
         this.cornerButton = this.createCornerButton(this.options);
+        this.userMenu = this.createMenu(this.options);
+        
     };
 
     Feed.prototype.windowWidth = function() {
@@ -236,13 +237,19 @@ Author: michael@revcontent.com
 
     Feed.prototype.createInnerWidget = function(element, options) {
         options.element = element;
+        options.active = true;
         return new RevSlider(options);
     };
 
     Feed.prototype.createCornerButton = function(options) {
         options.innerWidget = this.innerWidget;
+        options.containerElement = this.containerElement;
         return new EngageCornerButton(options);
-    }
+    };
+
+    Feed.prototype.createMenu = function(options) {        
+        return new EngageUserMenu(options);
+    };
 
     return Feed;
 

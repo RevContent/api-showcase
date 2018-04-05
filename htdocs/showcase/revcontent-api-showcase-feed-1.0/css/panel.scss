@@ -1,14 +1,38 @@
 #rev-side-shifter {
+    position: absolute;
+    height: auto;
+    width: 100%;
+    top: 0;
     background: #fff;
     padding: 0;
-    width: 100%;
-    height: 100%;
-    clear: both;
-    box-sizing: border-box;
-    position: fixed;
-    bottom: 0;
     z-index: 2147483629;
     box-shadow: none;
+    box-sizing: border-box;
+
+    .rev-side-shifter-container {
+        height: auto;
+
+        #rev-slider2 {
+            height: auto;
+            #rev-slider-container {
+                height: auto;
+                overflow-x: visible;
+                overflow-y: visible;
+                // -webkit-overflow-scrolling: touch;
+            }
+        }
+    }
+}
+
+body > #rev-side-shifter {
+
+    // width: 100%;
+    height: 100%;
+    clear: both;
+    position: fixed;
+    bottom: 0;
+    // z-index: 2147483629;
+    // box-shadow: none;
 
     &.rev-side-shifter-animating {
         &.rev-side-shifter-right {

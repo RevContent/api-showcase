@@ -503,6 +503,11 @@ utils.easeInOutQuad = function (t, b, c, d) {
     return -c/2 * (t*(t-2) - 1) + b;
 };
 
+utils.getName = function(user) {
+    var result = (user.first_name !== "") ? (user.first_name + ' ' + user.last_name) : user.display_name;
+    return result;
+};
+
 
 // -----  ----- //
 return utils;
