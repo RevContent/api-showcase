@@ -5,7 +5,7 @@
     top: 0;
     background: #fff;
     padding: 0;
-    z-index: 2147483629;
+    z-index: 9;
     box-shadow: none;
     box-sizing: border-box;
 
@@ -31,7 +31,7 @@ body > #rev-side-shifter {
     clear: both;
     position: fixed;
     bottom: 0;
-    // z-index: 2147483629;
+    z-index: 2147483629;
     // box-shadow: none;
 
     &.rev-side-shifter-animating {
