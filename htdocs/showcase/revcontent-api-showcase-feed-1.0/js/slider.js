@@ -164,7 +164,7 @@ Author: michael@revcontent.com
             comments_enabled: false,
             actions_api_url: 'https://api.engage.im/' + opts.env + '/actions/',
             //actions_api_url: 'http://shearn.api.engage.im/actions/',
-            contextual_last_sort: []            
+            contextual_last_sort: []
         };
 
         // merge options
@@ -408,10 +408,7 @@ Author: michael@revcontent.com
             count: 0
         };
 
-        if (this.options.authenticated === null) {
-            //check if user is logged in
-            this.getUserProfile();
-        }
+        this.selected_interests = {};
 
         this.queue = [];
         this.queueRetries = 0;
@@ -838,7 +835,6 @@ Author: michael@revcontent.com
 
                             return Promise.resolve(data);
                         } catch (e) {
-                            console.log('up in this bull', e);
                             if (retries > 0) {
                                 setTimeout(function() {
                                     tryToUpdateDisplayedItems((retries - 1));
@@ -938,18 +934,20 @@ Author: michael@revcontent.com
                         return;
                     }
 
-                    revApi.request( that.options.host + '/api/v1/engage/getinterests.php?', function(data) {
-                        if (!data.subscribed || !data.subscribed.length) { // test with && totaltime < 1200
+                    revApi.xhr(that.options.actions_api_url + 'user/profile', function(data) {
+
+                        //data.interests
+                        if (!data.hasOwnProperty('interests')) { // test with && totaltime < 1200
                             setTimeout(function() {
                                 request();
                             }, 2000);
                         } else {
                             resolve({
                                 totaltime: totaltime,
-                                data: data
+                                data: data.interests
                             });
                         }
-                    });
+                    },null, true);
                 }
                 request();
             });
@@ -1621,7 +1619,7 @@ Author: michael@revcontent.com
                     }
                     if (that.options.authenticated) {
                         revApi.xhr(that.options.actions_api_url + 'bookmark/remove/' + item.element.getAttribute('data-id'), function(data) {
-                            EngageBookmarksManager.prototype.removeBookmark(data);                            
+                            EngageBookmarksManager.prototype.removeBookmark(data);
                         }, null, true, options);
                         // revApi.request(url, function(data) {
                         //     return;
@@ -1656,6 +1654,7 @@ Author: michael@revcontent.com
                     that.transitionLogin(item, 'bookmark');
 
                     //save bookmark
+
                     var url = that.options.actions_api_url + 'bookmark/add';
                     var opts = {};
                     var bm = {
@@ -1667,8 +1666,6 @@ Author: michael@revcontent.com
                     if (that.options.jwt) {
                         opts.jwt = that.options.jwt;
                     }
-
-                    //var url = that.options.host + '/api/v1/engage/addbookmark.php?url=' + encodeURI(item.data.target_url) + '&title=' + encodeURI(item.data.headline);
 
                     if (that.options.authenticated) {
                         revApi.xhr(url, function (bm) {
@@ -1926,13 +1923,33 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.isAuthenticated = function(callback) {
         var that = this;
-        revApi.request(this.options.host + '/feed.php?provider=facebook_engage&action=connected', function(response) {
-            that.options.authenticated = response.success;
-            that.options.jwt = response.data.jwt;
+        if (that.options.authenticated) {
             callback.call(this, that.options.authenticated);
-        }, function() {
-            callback.call(this, -1);
-        });
+        } else {
+            revApi.xhr(that.options.actions_api_url + 'user/profile', function(data) {
+                //todo check for errors before setting this
+                that.options.authenticated = true;
+
+                that.options.user = data;
+                if (data.picture === "") {
+                    that.options.user.profile_url = that.options.default_avatar_url;
+                    that.options.user.picture = that.options.default_avatar_url;
+                }
+
+                if (data.picture.indexOf("gravatar") !== -1) {
+                    data.picture = data.picture + '?d=' + that.options.default_avatar_url;
+                }
+
+
+                callback.call(that, true);
+                //localStorage.setItem('engage_jwt',data.token);
+        },function(data){
+            //error
+            callback.call(that, -1);
+        },true);
+
+        }
+
     };
 
     // Don't dupe this svg
@@ -2064,9 +2081,10 @@ Author: michael@revcontent.com
     RevSlider.prototype.authButtonHandler = function(cell, e) {
         var that = this;
         if (that.options.authenticated) {
-            var url = that.options.host + "/feed.php?provider=facebook_engage&action=logout&w=" + that.options.widget_id + "&p=" + that.options.pub_id;
+            var url = that.options.actions_api_url + 'user/logout';
         } else {
-            var url = that.options.host + "/feed.php?provider=facebook_engage&w=" + that.options.widget_id + "&p=" + that.options.pub_id;
+            //var url = that.options.host + "/feed.php?provider=facebook_engage&w=" + that.options.widget_id + "&p=" + that.options.pub_id;
+            var url = that.options.actions_api_url + 'facebook/login';
         }
 
         var popup = window.open(url, 'Login', 'resizable,width=600,height=800');
@@ -2862,7 +2880,8 @@ Author: michael@revcontent.com
             return;
         }
         if(that.interests && that.interests.subscribed_ids.indexOf(interestId) == -1) {
-            revApi.request(that.options.host + '/api/v1/engage/addinterest.php?id=' + interestId, function(subscribeResponse) {
+            //add post opt
+            revApi.request(that.options.actions_api_url + 'interest/add/' + interestId, function(subscribeResponse) {
                 if(!subscribeResponse.success || typeof subscribeResponse !== "object") {
                     that.notify('Preference not saved, try again.', {label: 'continue', link: '#'});
                     return false;
@@ -2887,7 +2906,8 @@ Author: michael@revcontent.com
             return;
         }
         if(that.interests && that.interests.subscribed_ids.indexOf(interestId) !== -1) {
-            revApi.request(that.options.host + '/api/v1/engage/removeinterest.php?id=' + interestId, function(unsubscribeResponse) {
+            //add delete opt
+            revApi.request(that.options.actions_api_url + 'interest/remove/' + interestId, function(unsubscribeResponse) {
                 if(!unsubscribeResponse.success || typeof unsubscribeResponse !== "object") {
                     that.notify('Operation cancelled, please try again.', {label: 'continue', link: '#'});
                     return false;
@@ -2926,32 +2946,45 @@ Author: michael@revcontent.com
 
         this.interestsCarouselItem = added[0];
 
-        revApi.request( that.options.host + '/api/v1/engage/getinterests.php?d=' + that.options.domain, function (data) {
-
-            that.interests = {
-                list: data.subscribed,
-                subscribed: data.subscribed, //data.subscribed
-                subscribed_ids: data.subscribed_ids, //data.subscribed_ids
-                available: data.subscribed,
-                //recomended: data.recommended,
-                count: data.subscribed.length // data.count
-            };
-
-
-            that.interestsCarouselItem.carousel = new EngageInterestsCarousel({
-                domain: that.options.domain,
-                item: that.interestsCarouselItem,
-                emitter: that.emitter
+        if (that.options.user !== null && that.options.user.hasOwnProperty('interests')) {
+            that.handleCarousel(that.options.user.interests);
+        } else {
+            revApi.xhr( that.options.actions_api_url + 'interests?domain=' + that.options.domain, function (data) {
+                that.handleCarousel(data);
             });
-
-            that.interestsCarouselItem.carousel.update(data, that.options.authenticated);
-
-            if (grid.perRow > 1) { // relayout if not single column
-                grid.layout();
-            }
-        });
+        }
 
         return added;
+    };
+
+    RevSlider.prototype.handleCarousel = function(data) {
+        var that = this;
+
+        var subscribed_ids = [];
+        for (var i; i < data.length; i++) {
+            subscribed_ids[i] = data[i].id;
+        }
+
+        that.interests = {
+            list: data,
+            subscribed: data, //data.subscribed
+            subscribed_ids: subscribed_ids, //data.subscribed_ids
+            available: data,
+            //recomended: data.recommended,
+            count: data.length // data.count
+        };
+
+        that.interestsCarouselItem.carousel = new EngageInterestsCarousel({
+            domain: that.options.domain,
+            item: that.interestsCarouselItem,
+            emitter: that.emitter
+        });
+
+        that.interestsCarouselItem.carousel.update(data, that.options.authenticated);
+
+        if (grid.perRow > 1) { // relayout if not single column
+            grid.layout();
+        }
     };
 
     RevSlider.prototype.appendExplorePanel = function(grid){
@@ -3410,6 +3443,11 @@ Author: michael@revcontent.com
         revUtils.addClass(post_author_div, 'inline-items');
         var time = revUtils.timeAgo(commentData.created, true);
         var avatar = commentData.user.picture === "" ? that.options.default_avatar_url : commentData.user.picture;
+
+        if (avatar.indexOf("gravatar") !== -1) {
+            avatar = avatar + '?d=' + that.options.default_avatar_url;
+        }
+
         var display_name = (commentData.user.display_name !== "") ? commentData.user.display_name : (commentData.user.first_name + ' ' + commentData.user.last_name);
 
         post_author_div.innerHTML = '<img src="' + avatar + '" alt="author">' +
@@ -3767,6 +3805,7 @@ Author: michael@revcontent.com
                     var showmorebtn = document.createElement('a');
                     revUtils.addClass(showmorebtn, 'engage_load_prev_comments');
                     showmoreLi.style.padding = "0";
+                    showmoreLi.style.border = "0 none";
                     showmorebtn.innerText = "Load previous comments";
 
                     showmoreLi.appendChild(showmorebtn);
@@ -4254,11 +4293,18 @@ Author: michael@revcontent.com
             return false;
         }
 
+        //var article = card.parentNode;
+        //card is rev-content-inner
+        card.style.height = "600px";
+        card.style.overflow = "hidden";
+
+        //re-layout grid for masonry
+        that.grid.layout();
+
         //create authbox
         var engage_auth = document.createElement('div');
         revUtils.addClass(engage_auth,'rev-auth');
         revUtils.addClass(engage_auth,'engage-auth');
-
 
         var close_button = document.createElement('a');
         revUtils.addClass(close_button,'rev-auth-close-button');
@@ -4330,8 +4376,16 @@ Author: michael@revcontent.com
         engage_auth_box.appendChild(engage_auth_box_inner);
         engage_auth.appendChild(engage_auth_box);
 
-
         card.appendChild(engage_auth);
+
+        //article.parentNode.insertBefore(engage_auth, article.nextSibling);
+
+        //scroll auth into view
+        var elementRect = engage_auth.getBoundingClientRect();
+        var absoluteElementTop = elementRect.top + window.pageYOffset;
+        var middle = absoluteElementTop - (window.innerHeight - elementRect.height) / 2;
+        window.scrollTo(0, middle);
+
         setTimeout(function(){
             revUtils.addClass(engage_auth, 'flipped');
         },50);
@@ -4476,7 +4530,8 @@ Author: michael@revcontent.com
 
 
                 if (engage_auth_login) {
-                    revUtils.addEventListener(engage_auth_login, 'click', function(ev) {
+
+                    var login_fn = function(){
                         //validate email
                         if (revUtils.validateEmail(engage_auth_email_input.value)) {
                             //valid email
@@ -4502,18 +4557,16 @@ Author: michael@revcontent.com
                             that.options.user = data.user;
                             localStorage.setItem('engage_jwt',data.token);
 
-                            //update avatar
-                            // var oldAvatar = card.querySelector('.comment-avatar');
-
-                            // if (data.user.picture !== "") {
-                            //     oldAvatar.src = data.user.picture;
-                            // }
                             that.updateCommentAvatars();
 
                             //continue whatever user was doing prior to auth
                             if( callback && typeof callback === 'function' ) { callback.call(); }
 
+                            // that.engage_auth_personalize();
+
                             engage_auth.remove();
+                            //re-layout grid for masonry
+                            that.grid.layout();
 
                         },function(data){
 
@@ -4528,18 +4581,34 @@ Author: michael@revcontent.com
                             }
 
                         },true,options);
+                    };
+
+
+                    revUtils.addEventListener(engage_auth_login, 'click', function(){
+                        login_fn();
+                    });
+                    revUtils.addEventListener(engage_auth_password_input, 'keyup', function(ev){
+                        if (ev.which === 13) {
+                            login_fn();
+                        }
+                    });
+                    revUtils.addEventListener(engage_auth_email_input, 'keyup', function(ev){
+                        if (ev.which === 13) {
+                            login_fn();
+                        }
                     });
                 }
 
                 if(engage_auth_register) {
-                    revUtils.addEventListener(engage_auth_register, 'click', function(ev) {
+
+                    var register_fn = function(){
                         //validate email
                         if (revUtils.validateEmail(engage_auth_email_input.value)) {
                             //valid email
                         } else {
                             engage_auth_email_input.focus();
                             engage_auth_email_input_error_text.innerText = 'Please enter a valid email';
-                            return false;
+                            //return false;
                         }
 
                         if (engage_auth_password_input.value.length !== 0) {
@@ -4547,7 +4616,7 @@ Author: michael@revcontent.com
                         } else {
                             engage_auth_password_input.focus();
                             engage_auth_password_input.innerText = 'Please enter a password';
-                            return false;
+                            //return false;
                         }
 
                         //get values
@@ -4564,6 +4633,9 @@ Author: michael@revcontent.com
                         //revApi.xhr('https://api.engage.im/s2/health', function(data) {
                         revApi.xhr(that.options.actions_api_url + 'user/register', function(data) {
 
+                            that.options.authenticated = true;
+                            that.options.user = data.user;
+
                             localStorage.setItem('engage_jwt',data.token);
                             that.updateCommentAvatars();
 
@@ -4571,11 +4643,13 @@ Author: michael@revcontent.com
 
                             //continue whatever user was doing prior to auth
                             if( callback && typeof callback === 'function' ) { callback.call(); }
-                            engage_auth.remove();
+                            //engage_auth.remove();
 
-                            if (false) {
+
+                            if (true) {
                                 var engage_auth_interests_card = document.createElement('div');
                                 revUtils.addClass(engage_auth_interests_card, 'engage-interests-card');
+                                revUtils.addClass(engage_auth_interests_card, 'rc-interests');
 
                                 var engage_auth_interests_header = document.createElement('div');
                                 revUtils.addClass(engage_auth_interests_header, 'engage-interests-header');
@@ -4583,70 +4657,146 @@ Author: michael@revcontent.com
                                 '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 57.943 57.943" style="enable-background:new 0 0 57.943 57.943;" xml:space="preserve"><g><path fill="currentColor" d="M57.426,42.053C57.027,37.964,53.974,35,50.156,35c-2.396,0-4.407,1.449-5.684,3.213C43.196,36.449,41.184,35,38.788,35   c-3.818,0-6.871,2.963-7.271,7.052c-0.042,0.268-0.145,1.22,0.226,2.709c0.545,2.197,1.8,4.191,3.631,5.771l8.329,7.126   c0.222,0.19,0.494,0.286,0.768,0.286c0.271,0,0.545-0.095,0.77-0.284l8.331-7.13c1.828-1.575,3.083-3.57,3.629-5.768   C57.57,43.271,57.468,42.319,57.426,42.053z M55.259,44.279c-0.445,1.794-1.479,3.432-2.99,4.732l-7.796,6.672l-7.795-6.67   c-1.514-1.305-2.549-2.941-2.993-4.735c-0.302-1.213-0.194-1.897-0.194-1.897l0.016-0.105C33.751,39.654,35.644,37,38.788,37   c2.189,0,3.974,1.811,4.77,3.605l0.914,2.061l0.914-2.061c0.796-1.795,2.58-3.605,4.77-3.605c3.145,0,5.037,2.654,5.295,5.367   C55.453,42.374,55.563,43.058,55.259,44.279z"></path><path fill="currentColor" d="M27.972,53c-0.634,0-1.266-0.031-1.895-0.078c-0.109-0.008-0.218-0.015-0.326-0.025c-0.634-0.056-1.265-0.131-1.89-0.233   c-0.028-0.005-0.056-0.01-0.084-0.015c-1.322-0.221-2.623-0.546-3.89-0.971c-0.039-0.013-0.079-0.026-0.118-0.04   c-0.629-0.214-1.251-0.45-1.862-0.713c-0.004-0.002-0.009-0.004-0.013-0.006c-0.578-0.249-1.145-0.525-1.705-0.816   c-0.073-0.038-0.147-0.074-0.219-0.113c-0.511-0.273-1.011-0.568-1.504-0.876c-0.146-0.092-0.291-0.185-0.435-0.279   c-0.454-0.297-0.902-0.606-1.338-0.933c-0.045-0.034-0.088-0.07-0.133-0.104c0.032-0.018,0.064-0.036,0.096-0.054l7.907-4.313   c1.36-0.742,2.205-2.165,2.205-3.714l-0.001-3.602l-0.23-0.278c-0.022-0.025-2.184-2.655-3.001-6.216l-0.091-0.396l-0.341-0.221   c-0.481-0.311-0.769-0.831-0.769-1.392v-3.545c0-0.465,0.197-0.898,0.557-1.223l0.33-0.298v-5.57l-0.009-0.131   c-0.003-0.024-0.298-2.429,1.396-4.36C22.055,10.837,24.533,10,27.972,10c3.426,0,5.896,0.83,7.346,2.466   c1.692,1.911,1.415,4.361,1.413,4.381l-0.009,5.701l0.33,0.298c0.359,0.324,0.557,0.758,0.557,1.223v3.545   c0,0.713-0.485,1.36-1.181,1.575c-0.527,0.162-0.823,0.723-0.66,1.25c0.162,0.527,0.72,0.821,1.25,0.66   c1.55-0.478,2.591-1.879,2.591-3.485v-3.545c0-0.867-0.318-1.708-0.887-2.369v-4.667c0.052-0.52,0.236-3.448-1.883-5.864   C34.996,9.065,32.013,8,27.972,8s-7.024,1.065-8.867,3.168c-2.119,2.416-1.935,5.346-1.883,5.864v4.667   c-0.568,0.661-0.887,1.502-0.887,2.369v3.545c0,1.101,0.494,2.128,1.34,2.821c0.81,3.173,2.477,5.575,3.093,6.389v2.894   c0,0.816-0.445,1.566-1.162,1.958l-7.907,4.313c-0.252,0.137-0.502,0.297-0.752,0.476C5.748,41.792,2.472,35.022,2.472,27.5   c0-14.061,11.439-25.5,25.5-25.5s25.5,11.439,25.5,25.5c0,0.553,0.447,1,1,1s1-0.447,1-1c0-15.163-12.337-27.5-27.5-27.5   s-27.5,12.337-27.5,27.5c0,8.009,3.444,15.228,8.926,20.258l-0.026,0.023l0.892,0.752c0.058,0.049,0.121,0.089,0.179,0.137   c0.474,0.393,0.965,0.766,1.465,1.127c0.162,0.117,0.324,0.235,0.489,0.348c0.534,0.368,1.082,0.717,1.642,1.048   c0.122,0.072,0.245,0.142,0.368,0.212c0.613,0.349,1.239,0.678,1.88,0.98c0.047,0.022,0.095,0.042,0.142,0.064   c2.089,0.971,4.319,1.684,6.651,2.105c0.061,0.011,0.122,0.022,0.184,0.033c0.724,0.125,1.456,0.225,2.197,0.292   c0.09,0.008,0.18,0.013,0.271,0.021C26.47,54.961,27.216,55,27.972,55c0.553,0,1-0.447,1-1S28.525,53,27.972,53z"></path></g></svg>' +
                                 '</div>' +
                                 '<div class="engage-interests-header-text pull-left">' +
-                                    '<h2>Interests</h2>' +
-                                    '<p>Subscribe to Channels</p>' +
+                                    '<h2>Personalize<br>' +
+                                    '<i>your</i> Experience</h2>' +
                                 '</div>' +
-                                '<div class="clearfix"></div>';
+                                '<div class="clearfix"></div>' +
+                                '<p>Pick at least <strong>3</strong> topics you like, or automatically with Facebook</p>';
 
 
                                 engage_auth_interests_card.appendChild(engage_auth_interests_header);
 
 
-                                var engage_auth_interests_search_bar = document.createElement('div');
-                                revUtils.addClass(engage_auth_interests_search_bar, 'engage_auth_interests_search_bar');
-                                engage_auth_interests_search_bar.style.height = '40px';
+                                // var engage_auth_interests_search_bar = document.createElement('div');
+                                // revUtils.addClass(engage_auth_interests_search_bar, 'engage_auth_interests_search_bar');
+                                // engage_auth_interests_search_bar.style.height = '40px';
 
-                                var engage_auth_interests_search_wrap = document.createElement('div');
-                                revUtils.addClass(engage_auth_interests_search_wrap, 'engage_auth_interests_search_wrap');
-                                revUtils.addClass(engage_auth_interests_search_wrap, 'pull-left');
-                                engage_auth_interests_search_wrap.style = 'height: 40px;width: 100%;margin-right: -100px;';
+                                // var engage_auth_interests_search_wrap = document.createElement('div');
+                                // revUtils.addClass(engage_auth_interests_search_wrap, 'engage_auth_interests_search_wrap');
+                                // revUtils.addClass(engage_auth_interests_search_wrap, 'pull-left');
+                                // engage_auth_interests_search_wrap.style = 'height: 40px;width: 100%;margin-right: -100px;';
 
-                                var engage_auth_interests_search_toggle = document.createElement('div');
-                                revUtils.addClass(engage_auth_interests_search_toggle, 'engage_auth_interests_search_toggle');
-                                revUtils.addClass(engage_auth_interests_search_toggle, 'pull-left');
-                                engage_auth_interests_search_toggle.style = 'width:100px; height: 40px;';
+                                // var engage_auth_interests_search_toggle = document.createElement('div');
+                                // revUtils.addClass(engage_auth_interests_search_toggle, 'engage_auth_interests_search_toggle');
+                                // revUtils.addClass(engage_auth_interests_search_toggle, 'pull-left');
+                                // engage_auth_interests_search_toggle.style = 'width:100px; height: 40px;';
 
-                                engage_auth_interests_search_bar.appendChild(engage_auth_interests_search_wrap);
-                                engage_auth_interests_search_bar.appendChild(engage_auth_interests_search_toggle);
-                                engage_auth_interests_card.appendChild(engage_auth_interests_search_bar);
+                                // engage_auth_interests_search_bar.appendChild(engage_auth_interests_search_wrap);
+                                // engage_auth_interests_search_bar.appendChild(engage_auth_interests_search_toggle);
+                                // engage_auth_interests_card.appendChild(engage_auth_interests_search_bar);
+
+                                var engage_auth_finish_buton = document.createElement('a');
+                                revUtils.addClass(engage_auth_finish_buton, 'engage-auth-register-button');
+                                engage_auth_finish_buton.innerHTML = '<svg aria-hidden="true" data-prefix="fal" data-icon="chevron-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" class="svg-inline--fa fa-chevron-right fa-w-8 fa-7x"><path fill="currentColor" d="M17.525 36.465l-7.071 7.07c-4.686 4.686-4.686 12.284 0 16.971L205.947 256 10.454 451.494c-4.686 4.686-4.686 12.284 0 16.971l7.071 7.07c4.686 4.686 12.284 4.686 16.97 0l211.051-211.05c4.686-4.686 4.686-12.284 0-16.971L34.495 36.465c-4.686-4.687-12.284-4.687-16.97 0z" class=""></path></svg>';
+                                engage_auth_finish_buton.style.display = "none";
+
 
                                 var engage_auth_interests = document.createElement('div');
+                                revUtils.addClass(engage_auth_interests, 'grid');
+                                engage_auth_interests.innerHTML = '';
 
-                                for (var i = 0; i < 9; i++) {
+                                revApi.xhr( that.options.actions_api_url + 'interests?domain=' + that.options.domain, function (data) {
 
-                                    if (i % 3 === 0 && i !== 0) {
-                                        var clearfix = document.createElement('div');
-                                        revUtils.addClass(clearfix, 'clearfix');
-                                        clearfix.style.position = 'static';
-                                        engage_auth_interests.appendChild(clearfix);
+                                    for(var i = 0; i < data.length; i++) {
+
+                                        var new_interest = document.createElement('div');
+                                        new_interest.id = 'interest_cell_' + data[i].id;
+                                        new_interest.setAttribute('data-id', data[i].id);
+                                        new_interest.setAttribute('data-interest', data[i].title);
+                                        new_interest.setAttribute('data-selected', false);
+                                        new_interest.style.backgroundImage = 'url(' + data[i].image + ')';
+                                        revUtils.addClass(new_interest, 'interests-cell');
+                                        revUtils.addClass(new_interest, 'with-img');
+                                        revUtils.addClass(new_interest, 'interests_'+data[i].id);
+                                        revUtils.addClass(new_interest, 'deselected');
+                                        new_interest.innerHTML = '<div class="interest-wrap">' +
+                                                '<div class="rc-circle-tag off"><span class="checkmark interest-checked">&nbsp;</span></div>' +
+                                                '<div class="interest-title">'+data[i].title+'</div>' +
+                                            '</div>&nbsp;';
+
+                                        revUtils.addEventListener(new_interest, 'click', function(){
+                                            console.log("clicked");
+                                            this.classList.toggle('selected');
+                                            this.classList.toggle('deselected');
+
+                                            var interest = {
+                                                id: this.getAttribute("data-id"),
+                                                name: this.getAttribute("data-interest")
+                                            };
+
+                                            that.handleInterests(interest, engage_auth_finish_buton);
+                                        });
+
+                                        engage_auth_interests.appendChild(new_interest);
+
                                     }
 
-                                    var interests_item = document.createElement('div');
-                                    revUtils.addClass(interests_item, 'col-xs-4');
-                                    revUtils.addClass(interests_item, 'engage_auth_interests_item');
-                                    interests_item.style.backgroundImage = 'url(' + that.interests.list[i].image + ')';
+                                    var clearfix = document.createElement('div');
+                                    revUtils.addClass(clearfix, 'clearfix');
+                                    engage_auth_interests.appendChild(clearfix);
 
-                                    var interests_item_toggle = document.createElement('div');
-                                    revUtils.addClass(interests_item_toggle, 'engage_auth_subscription_toggle');
-                                    interests_item_toggle.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 31.059 31.059" style="enable-background:new 0 0 31.059 31.059;" xml:space="preserve"><path d="M15.529,31.059C6.966,31.059,0,24.092,0,15.529C0,6.966,6.966,0,15.529,0    c8.563,0,15.529,6.966,15.529,15.529C31.059,24.092,24.092,31.059,15.529,31.059z M15.529,1.774    c-7.585,0-13.755,6.171-13.755,13.755s6.17,13.754,13.755,13.754c7.584,0,13.754-6.17,13.754-13.754S23.113,1.774,15.529,1.774z" fill="currentColor"></path><path d="M21.652,16.416H9.406c-0.49,0-0.888-0.396-0.888-0.887c0-0.49,0.397-0.888,0.888-0.888h12.246    c0.49,0,0.887,0.398,0.887,0.888C22.539,16.02,22.143,16.416,21.652,16.416z" fill="currentColor"></path><path d="M15.529,22.539c-0.49,0-0.888-0.397-0.888-0.887V9.406c0-0.49,0.398-0.888,0.888-0.888    c0.49,0,0.887,0.398,0.887,0.888v12.246C16.416,22.143,16.02,22.539,15.529,22.539z" fill="currentColor"></path></svg>';
-                                    interests_item.appendChild(interests_item_toggle);
+                                    engage_auth_interests_card.appendChild(engage_auth_interests);
+                                    engage_auth_interests_card.appendChild(engage_auth_finish_buton);
 
-                                    engage_auth_interests.appendChild(interests_item);
+                                });
 
-                                    revUtils.addEventListener(interests_item_toggle, 'click', function(){
-                                        //add interest
-                                    });
+                                // engage_auth_interests_card.appendChild(engage_auth_interests);
 
-                                };
+                                revUtils.addClass(engage_auth_interests, 'animated');
+                                revUtils.addClass(engage_auth_interests, 'flipInX');
 
-                                engage_auth_interests_card.appendChild(engage_auth_interests);
-                                card.appendChild(engage_auth_interests_card);
+
+
+
+                                // for (var i = 0; i < engage_auth_interests.childNodes.length; i++) {
+
+                                //     revUtils.addEventListener(engage_auth_interests.childNodes[i], 'click', function(){
+                                //         this.classList.toggle('selected');
+                                //         this.classList.toggle('deselected');
+
+                                //         var interest = {
+                                //             id: this.getAttribute("data-id"),
+                                //             name: this.getAttribute("data-interest")
+                                //         };
+
+                                //         that.handleInterests(interest, engage_auth_finish_buton);
+                                //     });
+
+                                // }
+
+                                //card.appendChild(engage_auth_interests_card);
+                                //engage_auth.parentNode.replaceChild(engage_auth_interests_card,engage_auth);
+                                engage_auth_box.parentNode.replaceChild(engage_auth_interests_card,engage_auth_box);
+
+
+                                revUtils.addEventListener(engage_auth_finish_buton, 'click', function(){
+                                    engage_auth.remove();
+                                    //re-layout grid for masonry
+                                    that.grid.layout();
+                                    if (!that.personalized) {
+                                       that.showPersonalizedTransition();
+                                        that.personalize();
+                                    }
+                                });
 
                             }
 
                         },null,false,options);
+                    };
 
+                    revUtils.addEventListener(engage_auth_register, 'click', function(){
+                        register_fn();
                     });
+                    revUtils.addEventListener(engage_auth_password_input, 'keyup', function(ev){
+                        if (ev.which === 13) {register_fn();}
+                    });
+                    revUtils.addEventListener(engage_auth_email_input, 'keyup', function(ev){
+                        if (ev.which === 13) {register_fn()};
+                    });
+                    revUtils.addEventListener(engage_auth_username_input, 'keyup', function(ev){
+                        if (ev.which === 13) {register_fn()};
+                    });
+
                 }
 
                 //monitor valid email input only if error already exisits
@@ -4666,7 +4816,7 @@ Author: michael@revcontent.com
         //continue with facebook
         revUtils.addEventListener(engage_auth_facebook, 'click', function(){
 
-            var url = that.options.host + "/feed.php?provider=facebook_engage&w=" + that.options.widget_id + "&p=" + that.options.pub_id;
+            var url = that.options.actions_api_url + "facebook/login";
             var popup = window.open(url, 'Login', 'resizable,width=600,height=800');
 
             var closedCheckInterval = setInterval(function() {
@@ -4678,6 +4828,8 @@ Author: michael@revcontent.com
 
                         if (response === true) {
                             engage_auth.remove();
+                            //re-layout grid for masonry
+                            that.grid.layout();
 
                             that.updateAuthElements();
                             that.processQueue();
@@ -4712,7 +4864,13 @@ Author: michael@revcontent.com
         revUtils.addEventListener(close_button, 'click', function(ev) {
             revUtils.removeClass(engage_auth, 'flipped');
             revUtils.addClass(engage_auth, 'comment-slide-out');
-            var func = function(){engage_auth.remove();};
+            card.style = "";
+            var func = function(){
+                engage_auth.remove();
+                //re-layout grid for masonry
+                that.grid.layout();
+                card.scrollIntoView();
+            };
             setTimeout(func, 500);
             //history.back();
         });
@@ -4821,6 +4979,8 @@ Author: michael@revcontent.com
 
             //remove comment from ui
             revUtils.remove(comment_el);
+            //re-layout grid for masonry
+            that.grid.layout();
             //update feed item
             //that.updateDisplayedItem(that.feedItems[uid]);
 
@@ -4918,10 +5078,9 @@ Author: michael@revcontent.com
         return commentBoxElement;
     };
 
-    RevSlider.prototype.getUserProfile = function(){
+    RevSlider.prototype.getUserProfile = function(callback){
         var that = this;
         revApi.xhr(that.options.actions_api_url + 'user/profile', function(data) {
-
             //todo check for errors before setting this
             that.options.authenticated = true;
 
@@ -4930,6 +5089,13 @@ Author: michael@revcontent.com
                 that.options.user.profile_url = that.options.default_avatar_url;
                 that.options.user.picture = that.options.default_avatar_url;
             }
+
+            if (data.picture.indexOf("gravatar") !== -1) {
+                data.picture = data.picture + '?d=' + that.options.default_avatar_url;
+            }
+
+
+            callback.call(that);
             //localStorage.setItem('engage_jwt',data.token);
         },function(data){
             //error
@@ -4971,20 +5137,84 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.updateCommentAvatars = function() {
         var that = this;
-        revApi.request(that.options.host + '/api/v1/engage/profile.php?', function(data) {
-            if (data && data.picture) {
-                var styleNode = document.createElement('style');
-                styleNode.type = "text/css";
-                // browser detection (based on prototype.js)
-                if(!!(window.attachEvent && !window.opera)) {
-                    styleNode.styleSheet.cssText = '.comment-avatar { background-image: url('+data.picture+')!important; }';
-                } else {
-                    var styleText = document.createTextNode('.comment-avatar { background-image: url('+data.picture+')!important; }');
-                    styleNode.appendChild(styleText);
-                }
-                document.getElementsByTagName('head')[0].appendChild(styleNode);
+        // revApi.xhr(that.options.actions_api_url + 'user/profile', function(data) {
+        //     if (data && data.picture) {
+        //         var styleNode = document.createElement('style');
+        //         styleNode.type = "text/css";
+        //         // browser detection (based on prototype.js)
+        //         if(!!(window.attachEvent && !window.opera)) {
+        //             styleNode.styleSheet.cssText = '.comment-avatar { background-image: url('+data.picture+')!important; }';
+        //         } else {
+        //             var styleText = document.createTextNode('.comment-avatar { background-image: url('+data.picture+')!important; }');
+        //             styleNode.appendChild(styleText);
+        //         }
+        //         document.getElementsByTagName('head')[0].appendChild(styleNode);
+        //     }
+        // });
+
+        if (that.options.user && that.options.user.picture) {
+            var styleNode = document.createElement('style');
+            styleNode.type = "text/css";
+            // browser detection (based on prototype.js)
+            if(!!(window.attachEvent && !window.opera)) {
+                styleNode.styleSheet.cssText = '.comment-avatar { background-image: url('+that.options.user.picture+')!important; }';
+            } else {
+                var styleText = document.createTextNode('.comment-avatar { background-image: url('+that.options.user.picture+')!important; }');
+                styleNode.appendChild(styleText);
             }
-        });
+            document.getElementsByTagName('head')[0].appendChild(styleNode);
+        }
+
+
+
+    };
+
+    RevSlider.prototype.handleInterests = function(interest, button) {
+
+        var that = this;
+
+
+        if (that.selected_interests.hasOwnProperty(interest.id)) {
+            //remove interest
+            delete that.selected_interests[interest.id];
+
+            var options = {method:'DELETE'};
+            if (that.options.hasOwnProperty("jwt")) {
+                options.jwt = that.options.jwt;
+                console.log("opts has jwt");
+                console.log(that.options.jwt);
+            }
+
+            revApi.xhr(that.options.actions_api_url + 'interest/remove/' + interest.id, function(data) {
+                console.log(data);
+            },null,false,options);
+
+        } else {
+            //add interest
+            that.selected_interests[interest.id] = interest.name;
+
+            var options = {method:'POST'};
+            if (that.options.hasOwnProperty("jwt")) {
+                options.jwt = that.options.jwt;
+            }
+
+            revApi.xhr(that.options.actions_api_url + 'interest/add/' + interest.id, function(data) {
+                console.log(data);
+            },null,false,options);
+        }
+
+        var count = Object.keys(that.selected_interests).length;
+        if (count >= 3) {
+            button.style.display = "block";
+        } else {
+            button.style.display = "none";
+        }
+
+        // if (!that.personalized) {
+        //     that.showPersonalizedTransition();
+        //     that.personalize();
+        // }
+
     };
 
     RevSlider.prototype.displayError = function(element, error){
