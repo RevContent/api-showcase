@@ -40,8 +40,6 @@ Author: john.burnette@revcontent.com
   EngageUserMenu.prototype.init = function () {
     var that = this;
 
-    
-
     this.menuContainer = document.createElement('div');
     this.menuContainer.id = 'eng-feed-user-menu-container';
 
@@ -91,7 +89,6 @@ Author: john.burnette@revcontent.com
     this.userFeedMenu = document.createElement('ul');
     revUtils.addClass(this.userFeedMenu, 'eng-feed-user-menu-options');
 
-    //We need an li, a, span, and img to make up each list item
     for (var i = 0; i < this.options.items.length; i++) {
 
       var item = document.createElement('li');
