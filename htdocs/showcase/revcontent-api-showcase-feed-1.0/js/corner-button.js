@@ -319,8 +319,6 @@ Author: michael@revcontent.com
                             }
                         });
                     });
-                } else {
-                    that.options.innerWidget.feedAuthButton.scrollIntoView({ behavior: 'smooth', block: "start" });
                 }
 
                 
@@ -437,7 +435,6 @@ Author: michael@revcontent.com
     };
 
     EngageCornerButton.prototype.deactivatePanelGrids = function(activateInnerWidget) {
-        this.options.innerWidget.element.scrollIntoView({ behavior: 'smooth', block: "start" });
         this.options.innerWidget.element.style.height = 'auto';
         this.options.innerWidget.options.active = activateInnerWidget ? true : false;
 
