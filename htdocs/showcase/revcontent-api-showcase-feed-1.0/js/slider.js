@@ -2113,7 +2113,7 @@ Author: michael@revcontent.com
                     } else {
                         if (!cell) { // logged out from inline auth button
                             that.grid.remove(that.feedAuthButton);
-                            if (that.grid.perRow > 1 && !that.options.height_element) { // relayout if not single column
+                            if (that.grid.perRow > 1) { // relayout if not single column
                                 that.grid.layout();
                             }
                         }
@@ -2729,7 +2729,7 @@ Author: michael@revcontent.com
 
         }
 
-        if (this.grid.perRow > 1 && !this.options.height_element) { // relayout if not single column
+        if (this.grid.perRow > 1) { // relayout if not single column
             if (!this.fontsLoaded && typeof FontFaceObserver !== 'undefined') { // first time wait for the fonts to load
                 var fontNormal = new FontFaceObserver('Montserrat');
                 var fontBold = new FontFaceObserver('Montserrat', { weight: 500 });
@@ -2946,7 +2946,7 @@ Author: michael@revcontent.com
 
             that.interestsCarouselItem.carousel.update(data, that.options.authenticated);
 
-            if (grid.perRow > 1 && !that.options.height_element) { // relayout if not single column
+            if (grid.perRow > 1) { // relayout if not single column
                 grid.layout();
             }
         });
@@ -3724,6 +3724,11 @@ Author: michael@revcontent.com
 
                         var legacyCommentLi = that.setCommentHTML(legacyData);
                         commentULElement.appendChild(legacyCommentLi);
+
+                        if (that.grid.perRow > 1) {
+                            that.grid.layout();
+                        }
+
                     }
 
                     return false;
@@ -3775,13 +3780,13 @@ Author: michael@revcontent.com
                         //showmorebtn.scrollIntoView(true);
                         showmorebtn.parentNode.removeChild(showmorebtn);
 
-                        if (that.grid.perRow > 1 && !that.options.height_element) {
+                        if (that.grid.perRow > 1) {
                             that.grid.layout();
                         }
                     });
                 }
 
-                if (that.grid.perRow > 1 && !that.options.height_element) {
+                if (that.grid.perRow > 1) {
                     that.grid.layout();
                 }
 
