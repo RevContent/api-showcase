@@ -3442,7 +3442,7 @@ Author: michael@revcontent.com
         revUtils.addClass(post_author_div, 'vcard');
         revUtils.addClass(post_author_div, 'inline-items');
         var time = revUtils.timeAgo(commentData.created, true);
-        var avatar = commentData.user.picture === "" ? that.options.default_avatar_url : commentData.user.picture;
+        var avatar = commentData.user.picture === "" ? "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=" + that.options.default_avatar_url : commentData.user.picture;
 
         if (avatar.indexOf("gravatar") !== -1) {
             avatar = avatar + '?d=' + that.options.default_avatar_url;
@@ -4271,8 +4271,8 @@ Author: michael@revcontent.com
                 that.options.authenticated = true;
                     that.options.user = data;
                     if (data.picture === "") {
-                        that.options.user.profile_url = that.options.default_avatar_url;
-                        that.options.user.picture = that.options.default_avatar_url;
+                        that.options.user.profile_url = "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=" + that.options.default_avatar_url;
+                        that.options.user.picture = "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=" + that.options.default_avatar_url;
                     }
                     if( callback && typeof callback === 'function' ) { callback.call(); }
 
@@ -5037,7 +5037,7 @@ Author: michael@revcontent.com
 
         var commentUserAvatar = document.createElement('div');
         revUtils.addClass(commentUserAvatar, 'comment-avatar');
-        commentUserAvatar.style.backgroundImage = 'url(' + (typeof this.options.authenticated && this.options.user !== null && this.options.user.hasOwnProperty("picture") ? this.options.user.picture : this.options.default_avatar_url) + ')';
+        commentUserAvatar.style.backgroundImage = 'url(' + (typeof this.options.authenticated && this.options.user !== null && this.options.user.hasOwnProperty("picture") ? this.options.user.picture : "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=" + this.options.default_avatar_url) + ')';
         commentBoxElement.appendChild(commentUserAvatar);
 
         var commentInputWrapElement = document.createElement('div');
@@ -5086,8 +5086,8 @@ Author: michael@revcontent.com
 
             that.options.user = data;
             if (data.picture === "") {
-                that.options.user.profile_url = that.options.default_avatar_url;
-                that.options.user.picture = that.options.default_avatar_url;
+                that.options.user.profile_url = "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=" + that.options.default_avatar_url;
+                that.options.user.picture = "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=" + that.options.default_avatar_url;
             }
 
             if (data.picture.indexOf("gravatar") !== -1) {
