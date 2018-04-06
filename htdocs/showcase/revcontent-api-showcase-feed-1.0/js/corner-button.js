@@ -65,7 +65,7 @@ Author: michael@revcontent.com
         revUtils.addEventListener(this.profileMask, 'transitionend', function(ev) {
                 if (!revUtils.hasClass(document.body, 'animate-user-profile')) {
                     revUtils.removeClass(document.body, 'profile-mask-show');
-                }
+                }            
         });
 
         revUtils.addEventListener(this.profileMask, revDetect.mobile() ? 'touchstart' : 'click', function(ev) {
@@ -134,19 +134,16 @@ Author: michael@revcontent.com
                 if (that.options.brand_logo_secondary.charAt(0) === '<') {
                     var removeQuotes = that.options.brand_logo_secondary.replace(/"/g, "'");
                     that.buttonElementInnerIcon.style.backgroundImage = 'url("data:image/svg+xml;utf8,' + removeQuotes + '")';
-
-                    that.userProfileImage.style.backgroundImage = 'url("data:image/svg+xml;utf8,' + removeQuotes + '")';
+                    //that.userProfileImage.style.backgroundImage = 'url("data:image/svg+xml;utf8,' + removeQuotes + '")';
                 } else {
                     that.buttonElementInnerIcon.style.backgroundImage = 'url(' + that.options.brand_logo_secondary + ')';
-
-                    // This throws an undefined exception
-                    // that.userProfileImage.style.backgroundImage = 'url(' + that.options.brand_logo_secondary + ')';
+                    //that.userProfileImage.style.backgroundImage = 'url(' + that.options.brand_logo_secondary + ')';
                 }
             } else {
                 revUtils.addClass(that.buttonElementInnerIcon, 'eng-default-profile');
                 revUtils.addClass(that.userProfileImage, 'eng-default-profile');
             }
-        };
+        }
 
         updateButtonElementInnerIcon();
 
@@ -181,25 +178,25 @@ Author: michael@revcontent.com
                     if (!revUtils.hasClass(document.body, 'animate-user-profile')) {
 
                         // revUtils.removeClass(that.buttonContainerElement, 'visible'); // just in case touch was triggered and buttons visible
-
+    
                         if (!that.userProfileAppended) {
                             that.appendProfile();
                         }
-
+    
                         revUtils.addClass(document.body, 'profile-mask-show');
                         setTimeout(function() {
                             revUtils.addClass(document.body, 'animate-user-profile');
                         });
                     }
                 }
-
+                
             });
 
             revUtils.addEventListener(this.buttonElement,  revDetect.mobile() ? 'touchstart' : 'click', function(ev) {
                     if (revUtils.hasClass(that.buttonElement, 'eng-back')) {
 
                         that.deactivatePanelGrids(true);
-
+    
                         setTimeout(function() { // let it ripple
                             updateButtonElementInnerIcon();
                             revUtils.removeClass(that.buttonElement, 'eng-back');
@@ -208,19 +205,19 @@ Author: michael@revcontent.com
                         that.panel.transition();
                         return;
                     }
-
+    
                     if (revUtils.hasClass(that.buttonContainerElement, 'visible')) {
                         // revUtils.removeClass(that.buttonContainerElement, 'visible');
-
+    
                         if (!that.userProfileAppended) {
                             that.appendProfile();
                         }
-
+    
                         // that.innerWidget.grid.unbindResize();
                         // document.body.style.overflow = 'hidden';
-
+    
                         revUtils.addClass(document.body, 'profile-mask-show');
-
+    
                         setTimeout(function() {
                             if (revUtils.hasClass(document.body, 'animate-user-profile')) {
                                 revUtils.removeClass(document.body, 'animate-user-profile');
@@ -230,23 +227,23 @@ Author: michael@revcontent.com
                         });
                         return;
                     }
-
+    
                     if (revUtils.hasClass(document.body, 'animate-user-profile')) {
                         revUtils.removeClass(document.body, 'animate-user-profile');
                         return;
                     }
-
+    
                     setTimeout(function() { // wait for long press this.mc.on('press'
                         if (!revUtils.hasClass(document.body, 'profile-mask-show')) {
                             revUtils.addClass(that.buttonContainerElement, 'visible');
-
+    
                             var removeVisible = function() {
                                 setTimeout(function() { // everythinks a ripple
                                     revUtils.removeClass(that.buttonContainerElement, 'visible');
                                 }, 200);
                                 revUtils.removeEventListener(window, revDetect.mobile() ? 'touchstart' : 'scroll', removeVisible);
                             }
-
+    
                             revUtils.addEventListener(window, revDetect.mobile() ? 'touchstart' : 'scroll', removeVisible);
                         }
                     }, 201);
@@ -256,13 +253,13 @@ Author: michael@revcontent.com
             var leaveTimeout;
 
             revUtils.addEventListener(this.buttonElement,  revDetect.mobile() ? 'touchstart' : 'mouseenter', function(ev) {
-
+                
                 clearTimeout(leaveTimeout);
 
                 if (revUtils.hasClass(that.buttonElement, 'eng-back')) {
                     return;
                 }
-
+                
                 setTimeout(function() { // wait for long press this.mc.on('press'
                     if (!revUtils.hasClass(document.body, 'profile-mask-show')) {
                         revUtils.addClass(that.buttonContainerElement, 'visible');
@@ -308,12 +305,12 @@ Author: michael@revcontent.com
                         if (!that.userProfileAppended) {
                             that.appendProfile();
                         }
-
+    
                         // that.innerWidget.grid.unbindResize();
                         // document.body.style.overflow = 'hidden';
-
+    
                         revUtils.addClass(document.body, 'profile-mask-show');
-
+    
                         setTimeout(function() { // HACK BS timeout - similar case works https://codepen.io/anon/pen/QmBqWg TODO
                             if (revUtils.hasClass(document.body, 'animate-user-profile')) {
                                 revUtils.removeClass(document.body, 'animate-user-profile');
@@ -325,6 +322,8 @@ Author: michael@revcontent.com
                 } else {
                     that.options.innerWidget.feedAuthButton.scrollIntoView({ behavior: 'smooth', block: "start" });
                 }
+
+                
             });
         }
 

@@ -104,12 +104,8 @@ Author: michael@revcontent.com
             comments_enabled: false,
             default_avatar_url: 'https://yt3.ggpht.com/-TXSba-bNQxI/AAAAAAAAAAI/AAAAAAAAAAA/RXEnTzDI_Oc/s288-mo-c-c0xffffffff-rj-k-no/photo.jpg',
             emitter: new EvEmitter(),
-            contextual_last_sort: [],
-            jwt:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiMTMwMzM1MGUtYzhlNS00N2NiLThmZWMtZDA0ZjAwMGM4NmI2In0.FmJsLtYuEw8sYBwLG316xAj-fX3TT05RAe0kz8PSaXA'
+            contextual_last_sort: []
         };
-
-
-        // jwt:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiMTMwMzM1MGUtYzhlNS00N2NiLThmZWMtZDA0ZjAwMGM4NmI2In0.FmJsLtYuEw8sYBwLG316xAj-fX3TT05RAe0kz8PSaXA'
 
         // merge options
         this.options = Object.assign(defaults, opts);
@@ -177,6 +173,7 @@ Author: michael@revcontent.com
         this.innerWidget = this.createInnerWidget(this.containerElement, this.options);
         this.cornerButton = this.createCornerButton(this.options);
         this.userMenu = this.createMenu(this.options);
+        
     };
 
     Feed.prototype.windowWidth = function() {
@@ -250,7 +247,7 @@ Author: michael@revcontent.com
         return new EngageCornerButton(options);
     };
 
-    Feed.prototype.createMenu = function(options) {
+    Feed.prototype.createMenu = function(options) {        
         return new EngageUserMenu(options);
     };
 
