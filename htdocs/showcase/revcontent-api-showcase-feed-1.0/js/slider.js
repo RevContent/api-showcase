@@ -2081,66 +2081,75 @@ Author: michael@revcontent.com
     RevSlider.prototype.authButtonHandler = function(cell, e) {
         var that = this;
         if (that.options.authenticated) {
-            var url = that.options.actions_api_url + 'user/logout';
+            that.logOut();
         } else {
-            //var url = that.options.host + "/feed.php?provider=facebook_engage&w=" + that.options.widget_id + "&p=" + that.options.pub_id;
-            var url = that.options.actions_api_url + 'facebook/login';
-        }
+            var popup = window.open(that.options.actions_api_url + 'facebook/login', 'Login', 'resizable,width=600,height=800');
 
-        var popup = window.open(url, 'Login', 'resizable,width=600,height=800');
+            var closedCheckInterval = setInterval(function () {
+                if (popup.closed) {
+                    that.options.emitter.emitEvent('updateButtonElementInnerIcon');
+                    that.isAuthenticated(function (response) {
 
-        var closedCheckInterval = setInterval(function() {
-            if (popup.closed) {
-                that.options.emitter.emitEvent('updateButtonElementInnerIcon');
-                that.isAuthenticated(function(response) {
+                        that.options.emitter.emitEvent('updateButtons', [response]);
 
-                    that.options.emitter.emitEvent('updateButtons', [response]);
-
-                    if (response === true) {
-                        if (cell) {
-                            //old flip logic
-                            //revUtils.removeClass(cell, 'rev-flipped');
-                        }
-                        that.updateAuthElements();
-                        that.processQueue();
-
-                        /* secondary auth page, deemed unnecessary for now
-                        var headline = cell.querySelector('.rev-auth-headline');
-                        var button = cell.querySelector('.rev-auth-button');
-                        var image = cell.querySelector('.rev-auth-site-logo');
-                        var container = cell.querySelector('.rev-auth-box');
-
-                        if (image) {
-                            image.innerHTML = "<img src='https://graph.facebook.com/758080600/picture?type=square' />";
-                        } else {
-                            container.insertAdjacentHTML('afterbegin',"<img src='https://graph.facebook.com/758080600/picture?type=square' />");
-                        }
-
-                        button.style.display = "none";
-                        headline.innerHTML = "One Last Step, Please enter a password:<br/><input type='text' class='rev-engpass'/><input type='button' value='Sign Up'/>";*/
-                        if (!that.personalized) {
-                            that.showPersonalizedTransition();
-                            that.personalize();
-                        }
-
-                        //if commenting
-                        if (typeof that.afterAuth === "function") {
-                            that.afterAuth();
-                        }
-
-                    } else {
-                        if (!cell) { // logged out from inline auth button
-                            that.grid.remove(that.feedAuthButton);
-                            if (that.grid.perRow > 1) { // relayout if not single column
-                                that.grid.layout();
+                        if (response === true) {
+                            if (cell) {
+                                //old flip logic
+                                //revUtils.removeClass(cell, 'rev-flipped');
                             }
+                            that.updateAuthElements();
+                            that.processQueue();
+
+                            /* secondary auth page, deemed unnecessary for now
+                            var headline = cell.querySelector('.rev-auth-headline');
+                            var button = cell.querySelector('.rev-auth-button');
+                            var image = cell.querySelector('.rev-auth-site-logo');
+                            var container = cell.querySelector('.rev-auth-box');
+
+                            if (image) {
+                                image.innerHTML = "<img src='https://graph.facebook.com/758080600/picture?type=square' />";
+                            } else {
+                                container.insertAdjacentHTML('afterbegin',"<img src='https://graph.facebook.com/758080600/picture?type=square' />");
+                            }
+
+                            button.style.display = "none";
+                            headline.innerHTML = "One Last Step, Please enter a password:<br/><input type='text' class='rev-engpass'/><input type='button' value='Sign Up'/>";*/
+                            if (!that.personalized) {
+                                that.showPersonalizedTransition();
+                                that.personalize();
+                            }
+
+                            //if commenting
+                            if (typeof that.afterAuth === "function") {
+                                that.afterAuth();
+                            }
+
                         }
-                    }
-                    revDisclose.postMessage();
-                });
-                clearInterval(closedCheckInterval);
+                        revDisclose.postMessage();
+                    });
+                    clearInterval(closedCheckInterval);
+                }
+            }, 100);
+        }
+    }
+
+    RevSlider.prototype.logOut = function() {
+        var that = this;
+        revApi.xhr(that.options.actions_api_url + 'user/logout', function(data) {
+            localStorage.clear();
+            that.options.authenticated = false;
+            that.options.user = null;
+
+            that.options.emitter.emitEvent('updateButtonElementInnerIcon');
+            that.options.emitter.emitEvent('updateButtons', [false]);
+
+            that.grid.remove(that.feedAuthButton);
+            if (that.grid.perRow > 1) { // relayout if not single column
+                that.grid.layout();
             }
-        }, 100);
+
+            that.grid.layout();
+        },null,true,null);
     }
 
     RevSlider.prototype.getDisclosure = function() {
@@ -2777,17 +2786,19 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.updateAuthElements = function() {
         var authBoxes = document.querySelectorAll('.rev-auth-box');
-        if (this.options.authenticated) {
-            for (var i = 0; i < authBoxes.length; i++) {
-                authBoxes[i].querySelector('.rev-auth-headline').innerText = 'Currently logged in!';
-                authBoxes[i].querySelector('.rev-auth-button-text').innerText = 'Log out';
+        this.isAuthenticated(function(response) {
+            if(response) {
+                for (var i = 0; i < authBoxes.length; i++) {
+                    authBoxes[i].querySelector('.rev-auth-headline').innerText = 'Currently logged in!';
+                    authBoxes[i].querySelector('.rev-auth-button-text').innerText = 'Log out';
+                }
+            } else {
+                for (var i = 0; i < authBoxes.length; i++) {
+                    authBoxes[i].querySelector('.rev-auth-headline').innerHTML = 'Almost Done! Login to save your reaction <br /> <strong>and</strong> personalize your experience';
+                    authBoxes[i].querySelector('.rev-auth-button-text').innerText = 'Continue with facebook';
+                }
             }
-        } else {
-            for (var i = 0; i < authBoxes.length; i++) {
-                authBoxes[i].querySelector('.rev-auth-headline').innerHTML = 'Almost Done! Login to save your reaction <br /> <strong>and</strong> personalize your experience';
-                authBoxes[i].querySelector('.rev-auth-button-text').innerText = 'Continue with facebook';
-            }
-        }
+        });
     };
 
     RevSlider.prototype.closePersonalizedTransition = function(ev) {
@@ -2982,8 +2993,8 @@ Author: michael@revcontent.com
 
         that.interestsCarouselItem.carousel.update(data, that.options.authenticated);
 
-        if (grid.perRow > 1) { // relayout if not single column
-            grid.layout();
+        if (that.grid.perRow > 1) { // relayout if not single column
+            that.grid.layout();
         }
     };
 
