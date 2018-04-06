@@ -18,7 +18,6 @@
     align-self: flex-start;
     flex-direction: row;
     justify-content: space-between;
-    width: 100%;
     padding-bottom: 20px;
     a {
       cursor: pointer;
@@ -62,10 +61,13 @@
     padding: 0;
     width: 100%;
     font-size: 14px;
+
   }
   ul.eng-bookmarks-list {
     padding-top: 16px;
     width: 100%;
+    overflow: scroll;
+    overflow-x: hidden;
   }
   ul.eng-bookmarks-list>li {
     list-style: none;

@@ -29,7 +29,6 @@ Author: john.burnette@revcontent.com
     revUtils.addClass(this.bookmarksHeaderImgContainer, 'eng-bookmarks-header-img-container');
     this.bookmarksHeaderImgContainer.innerHTML = "My Bookmarks";
 
-
     this.bookmarksMenuActionIcon = document.createElement('img');
     this.bookmarksMenuActionIcon.src = 'data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjUxMnB4IiBoZWlnaHQ9IjUxMnB4IiB2aWV3Qm94PSIwIDAgNzkyIDc5MiIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNzkyIDc5MjsiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8Zz4KCTxnIGlkPSJSZWN0YW5nbGVfNV9jb3B5Ij4KCQk8Zz4KCQkJPHBvbHlnb24gcG9pbnRzPSI1ODAuODAyLDM2OS42MDQgNTgwLjgwMiwzNjkuNjA0IDIxMS4xOTgsMCAxODQuODAyLDI2LjM5NiA1NTQuNDA1LDM5NiAxODQuODAyLDc2NS42MDQgMjExLjE5OCw3OTIgICAgICA2MDcuMTk4LDM5NiAgICAiIGZpbGw9IiMwMDhlZmYiLz4KCQk8L2c+Cgk8L2c+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPC9zdmc+Cg==';
     this.bookmarksMenuAction = document.createElement('a');
@@ -45,7 +44,6 @@ Author: john.burnette@revcontent.com
     if (that.options.user && that.options.user.picture) {
       this.bookmarksHeaderImg.src = that.options.user.picture;
     }
-
 
     revUtils.append(this.bookmarksHeaderImgContainer, this.bookmarksHeaderImg);
     //revUtils.append(this.bookmarksHeaderImgContainer, "My Bookmarks");
@@ -63,39 +61,36 @@ Author: john.burnette@revcontent.com
     this.bookmarksList.id = 'eng-bookmarks-list';
     revUtils.addClass(this.bookmarksList, 'eng-bookmarks-list');
 
-    this.options.emitter.on('addBookmark', function(data) {
-      if (this.bookmarksContainer) {
-        this.addBookmarkItem(data);
-      }
-    });
-
-    this.options.emitter.on('removeBookmark', function(data) {
-      console.log('remove bookmark');
-      
-    });
-
-    this.options.emitter.on('menuClose', function() {
-      revUtils.removeClass(this.bookmarksContainer, 'is-open');
-    });
-
-
     this.getBookmarks();
     revUtils.append(this.bookmarksContainer, this.bookmarksList);
     this.userMenu = document.getElementById('eng-feed-user-menu-container');
-
     revUtils.append(this.userMenu, this.bookmarksContainer);
+
+    this.options.emitter.on('addBookmark', function(data) {
+      that.addBookmark(data);
+    });
+
+    this.options.emitter.on('removeBookmark', function(data){
+      that.removeBookmark(data.dataset);
+    });
+    this.options.emitter.on('menuClose', function() {
+      that.bookmarksContainer.removeClass('is-open');
+    });
   };
 
   EngageBookmarksManager.prototype.addBookmark = function(data) {
     if (this.bookmarksContainer) {
-      addBookmarkItem(data);
+      this.addBookmarkItem(data);
     }
   };
-  
+
   EngageBookmarksManager.prototype.removeBookmark = function(data) {
     if(this.bookmarksContainer) {
-      var el = document.querySelector("[data-id='" + data.id +"']");
-      el.parentNode.removeChild(el);
+      var list = document.getElementById('eng-bookmarks-list');
+      var el = list.querySelector("[data-id='" + data.id +"']");
+      if (el) {
+        el.parentNode.removeChild(el);
+      }
     }
   };
 
@@ -144,7 +139,8 @@ Author: john.burnette@revcontent.com
         date.innerHTML = revUtils.timeAgo(data.created, true) + ' ago';
         headline.innerHTML = data.title;
         domain.innerHTML = extractRootDomain(data.url);
-        domain.href = data.url + "?utm_source=engageim";
+        domain.setAttribute('target', '_blank');
+        domain.href = 'http://' + extractHostname(data.url) + "?utm_source=engageim";
         //TODO: refactor this to be a function
         var options = {
           method: 'DELETE'
@@ -152,7 +148,7 @@ Author: john.burnette@revcontent.com
         revUtils.addEventListener(deleteActionLink, 'click', function(e) {
           var anchor = this;
           var el = anchor.closest('.eng-bookmark-list-item');
-          revApi.xhr(that.options.actions_api_url + 'bookmark/remove/' + el.getAttribute('data-id'), function(e) {
+          revApi.xhr(that.options.actions_api_url + 'bookmark/remove/' + el.dataset.id, function(e) {
             el.parentNode.removeChild(el);
           }, null, true, options);
         });
@@ -173,6 +169,7 @@ Author: john.burnette@revcontent.com
 
         revUtils.append(headlineContainer, date);
         headlineLink.href = data.url + "?utm_source=engageim";
+        headlineLink.setAttribute('target', '_blank');
         revUtils.append(headlineLink, headline);
         revUtils.append(headlineContainer, headlineLink);
 
@@ -188,21 +185,21 @@ Author: john.burnette@revcontent.com
         function extractHostname(url) {
           var hostname;
           //find & remove protocol (http, ftp, etc.) and get hostname
-    
+
           if (url.indexOf("://") > -1) {
             hostname = url.split('/')[2];
           } else {
             hostname = url.split('/')[0];
           }
-    
+
           //find & remove port number
           hostname = hostname.split(':')[0];
           //find & remove "?"
           hostname = hostname.split('?')[0];
-    
+
           return hostname;
         }
-    
+
         function extractRootDomain(url) {
           var domain = extractHostname(url),
             splitArr = domain.split('.'),
@@ -229,7 +226,7 @@ Author: john.burnette@revcontent.com
       }
     }, null, true, options);
   };
-  
-  
+
+
   return EngageBookmarksManager;
 }));
