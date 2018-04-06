@@ -48,7 +48,6 @@ Author: john.burnette@revcontent.com
     revUtils.append(this.bookmarksHeaderImgContainer, this.bookmarksHeaderImg);
     //revUtils.append(this.bookmarksHeaderImgContainer, "My Bookmarks");
     revUtils.append(this.bookmarksHeaderContainer, this.bookmarksHeaderImgContainer);
-
     revUtils.append(this.bookmarksContainer, this.bookmarksHeaderContainer);
 
     this.bookmarksTitleContainer = document.createElement('div');
