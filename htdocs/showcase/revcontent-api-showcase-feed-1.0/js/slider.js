@@ -2552,6 +2552,13 @@ Author: michael@revcontent.com
                     commentBoxElement.style.display = 'block';
                     that.grid.layout();
                     commentTextAreaElement.focus();
+
+                    var fontSize = parseInt(revUtils.getComputedStyle(commentTextAreaElement, 'font-size'));
+                    // if commentTextArea is scrolling bump the font size down, min font size is 10
+                    while(commentTextAreaElement.scrollHeight > commentTextAreaElement.offsetHeight && fontSize > 10) {
+                        fontSize--;
+                        commentTextAreaElement.style.fontSize = fontSize + 'px';
+                    }
                 });
             }
 
