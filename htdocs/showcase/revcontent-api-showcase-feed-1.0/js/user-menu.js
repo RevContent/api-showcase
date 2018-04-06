@@ -32,13 +32,9 @@ Author: john.burnette@revcontent.com
       items: [ {
         name: 'Bookmarks',
         icon: 'data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDYwIDYwIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA2MCA2MDsiIHhtbDpzcGFjZT0icHJlc2VydmUiIHdpZHRoPSI2NHB4IiBoZWlnaHQ9IjY0cHgiPgo8cGF0aCBkPSJNMTMsMGMtMS41NDcsMC0zLjAzMywwLjY2Mi00LjA3OCwxLjgxN0M3Ljg5NSwyLjk1NCw3LjM4OSw0LjQ3Niw3LjUyNSw2SDcuNXY0OC45NThDNy41LDU3LjczOCw5Ljc2Miw2MCwxMi41NDIsNjBINTIuNVYxMSAgVjlWMEgxM3ogTTkuNSw1NC45NThWOS45OThjMC44MzYsMC42MjksMS44NzUsMS4wMDIsMywxLjAwMnY0Ni45OTZDMTAuODQyLDU3Ljk3Myw5LjUsNTYuNjIxLDkuNSw1NC45NTh6IE01MC41LDU4aC0zNlYxMWgzdjI1LjIwMSAgYzAsMC42ODIsMC40NDEsMS4yNjIsMS4wOTksMS40NDRjMC4xMzcsMC4wMzcsMC4yNzMsMC4wNTYsMC40MDgsMC4wNTZjMC4wMTUsMCwwLjAyOS0wLjAwNSwwLjA0NC0wLjAwNiAgYzAuMDQ1LTAuMDAxLDAuMDg4LTAuMDEyLDAuMTMzLTAuMDE3YzAuMTAzLTAuMDEyLDAuMjAyLTAuMDMzLDAuMjk5LTAuMDY2YzAuMDQ4LTAuMDE2LDAuMDkzLTAuMDM1LDAuMTM4LTAuMDU2ICBjMC4wOTQtMC4wNDMsMC4xOC0wLjA5NywwLjI2My0wLjE1OWMwLjAzNi0wLjAyNywwLjA3My0wLjA1LDAuMTA2LTAuMDhjMC4xMTEtMC4wOTksMC4yMTItMC4yMTEsMC4yOTItMC4zNDZsNC4yMTctNy4wMjggIGw0LjIxNyw3LjAyOWMwLjMyNywwLjU0NSwwLjkzOSwwLjgwMSwxLjU1LDAuNjg3YzAuMDQ1LTAuMDA4LDAuMDg5LTAuMDAyLDAuMTM0LTAuMDE0YzAuNjU3LTAuMTgzLDEuMDk5LTAuNzYzLDEuMDk5LTEuNDQ0VjExaDE5ICBWNTh6IE0yOS42NCw5LjQ4M2wtMC4wMDMsMC4wMDdMMjkuNSw5Ljc2NHYwLjA0MmwtMC4xLDAuMjNsMC4xLDAuMTUydjAuMTEyVjM0LjM5bC01LTguMzMzbC01LDguMzMzVjEwLjIzNkwyMS4xMTgsN2g5Ljc2NCAgTDI5LjY0LDkuNDgzeiBNMzIuMTE4LDlsMi00SDE5Ljg4MmwtMiw0aC00LjY3Yy0xLjg5NCwwLTMuNTE2LTEuMzc5LTMuNjkzLTMuMTRjLTAuMTAxLTAuOTk4LDAuMjE0LTEuOTU3LDAuODg3LTIuNzAxICBDMTEuMDcxLDIuNDIyLDEyLjAxNywyLDEzLDJoMzcuNXYxaC01Yy0wLjU1MywwLTEsMC40NDctMSwxczAuNDQ3LDEsMSwxaDV2MWgtNGMtMC41NTMsMC0xLDAuNDQ3LTEsMXMwLjQ0NywxLDEsMWg0djFIMzIuMTE4eiIgZmlsbD0iIzAwMDAwMCIvPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8L3N2Zz4K'
-      }, {
-        name: 'Logout',
-        icon: 'data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDU1IDU1IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1NSA1NTsiIHhtbDpzcGFjZT0icHJlc2VydmUiIHdpZHRoPSI1MTJweCIgaGVpZ2h0PSI1MTJweCI+CjxnPgoJPHBhdGggZD0iTTUzLjkyNCwyNC4zODJjMC4xMDEtMC4yNDQsMC4xMDEtMC41MTksMC0wLjc2NGMtMC4wNTEtMC4xMjMtMC4xMjUtMC4yMzQtMC4yMTctMC4zMjdMNDEuNzA4LDExLjI5MyAgIGMtMC4zOTEtMC4zOTEtMS4wMjMtMC4zOTEtMS40MTQsMHMtMC4zOTEsMS4wMjMsMCwxLjQxNEw1MC41ODcsMjNIMjkuMDAxYy0wLjU1MywwLTEsMC40NDctMSwxczAuNDQ3LDEsMSwxaDIxLjU4Nkw0MC4yOTQsMzUuMjkzICAgYy0wLjM5MSwwLjM5MS0wLjM5MSwxLjAyMywwLDEuNDE0QzQwLjQ4OSwzNi45MDIsNDAuNzQ1LDM3LDQxLjAwMSwzN3MwLjUxMi0wLjA5OCwwLjcwNy0wLjI5M2wxMS45OTktMTEuOTk5ICAgQzUzLjc5OSwyNC42MTYsNTMuODczLDI0LjUwNSw1My45MjQsMjQuMzgyeiIgZmlsbD0iIzAwMDAwMCIvPgoJPHBhdGggZD0iTTM2LjAwMSwyOWMtMC41NTMsMC0xLDAuNDQ3LTEsMXYxNmgtMTBWOGMwLTAuNDM2LTAuMjgyLTAuODIxLTAuNjk3LTAuOTUzTDguNDQyLDJoMjYuNTU5djE2YzAsMC41NTMsMC40NDcsMSwxLDEgICBzMS0wLjQ0NywxLTFWMWMwLTAuNTUzLTAuNDQ3LTEtMS0xaC0zNGMtMC4wMzIsMC0wLjA2LDAuMDE1LTAuMDkxLDAuMDE4QzEuODU0LDAuMDIzLDEuODA1LDAuMDM2LDEuNzUyLDAuMDUgICBDMS42NTgsMC4wNzUsMS41NzQsMC4xMDksMS40OTMsMC4xNThDMS40NjcsMC4xNzQsMS40MzYsMC4xNzQsMS40MTEsMC4xOTJDMS4zOCwwLjIxNSwxLjM1NiwwLjI0NCwxLjMyOCwwLjI2OSAgIGMtMC4wMTcsMC4wMTYtMC4wMzUsMC4wMy0wLjA1MSwwLjA0N0MxLjIwMSwwLjM5OCwxLjEzOSwwLjQ4OSwxLjA5MywwLjU4OWMtMC4wMDksMC4wMi0wLjAxNCwwLjA0LTAuMDIyLDAuMDYgICBDMS4wMjksMC43NjEsMS4wMDEsMC44NzgsMS4wMDEsMXY0NmMwLDAuMTI1LDAuMDI5LDAuMjQzLDAuMDcyLDAuMzU1YzAuMDE0LDAuMDM3LDAuMDM1LDAuMDY4LDAuMDUzLDAuMTAzICAgYzAuMDM3LDAuMDcxLDAuMDc5LDAuMTM2LDAuMTMyLDAuMTk2YzAuMDI5LDAuMDMyLDAuMDU4LDAuMDYxLDAuMDksMC4wOWMwLjA1OCwwLjA1MSwwLjEyMywwLjA5MywwLjE5MywwLjEzICAgYzAuMDM3LDAuMDIsMC4wNzEsMC4wNDEsMC4xMTEsMC4wNTZjMC4wMTcsMC4wMDYsMC4wMywwLjAxOCwwLjA0NywwLjAyNGwyMiw3QzIzLjc5Nyw1NC45ODQsMjMuODk5LDU1LDI0LjAwMSw1NSAgIGMwLjIxLDAsMC40MTctMC4wNjYsMC41OS0wLjE5MmMwLjI1OC0wLjE4OCwwLjQxLTAuNDg4LDAuNDEtMC44MDh2LTZoMTFjMC41NTMsMCwxLTAuNDQ3LDEtMVYzMCAgIEMzNy4wMDEsMjkuNDQ3LDM2LjU1MywyOSwzNi4wMDEsMjl6IE0yMy4wMDEsNTIuNjMzbC0yMC02LjM2NFYyLjM2N2wyMCw2LjM2NFY1Mi42MzN6IiBmaWxsPSIjMDAwMDAwIi8+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPC9zdmc+Cg=='
-      } ],
+      }, ],
     };
     this.options = Object.assign(defaults, opts);
-
     this.init();
   };
   EngageUserMenu.prototype.init = function () {
@@ -92,7 +88,47 @@ Author: john.burnette@revcontent.com
     this.userFeedMenu = document.createElement('ul');
     revUtils.addClass(this.userFeedMenu, 'eng-feed-user-menu-options');
 
+    for (var i = 0; i < this.options.items.length; i++) {
 
+      var item = document.createElement('li');
+      revUtils.addClass(item, 'animated');
+      revUtils.addClass(item, 'flipInX');
+
+      var anchor = document.createElement('a');
+      anchor.id = this.options.items[i].name;
+      revUtils.addClass(anchor, 'animated');
+      revUtils.addClass(anchor, 'zoomInRight');
+      anchor.innerHTML = this.options.items[i].name;
+      revUtils.addEventListener(anchor, 'click', function (e) {
+        if (anchor.id === "Bookmarks") {
+          var bookmarks = document.getElementById('eng-bookmarks-container');
+          if(bookmarks) {
+            revUtils.addClass(bookmarks, 'is-open');
+          } else {
+            that.bookmarks = that.createBookmarks(that.options);
+            bookmarks = document.getElementById('eng-bookmarks-container');
+            setTimeout(function(){
+              revUtils.addClass(bookmarks, 'is-open');
+            }, 100);
+          }
+        }
+      });
+
+      var span = document.createElement('span');
+      revUtils.addClass(span, 'eng-feed-user-menu-icon');
+      revUtils.addClass(span, 'animated');
+      revUtils.addClass(span, 'bounceInLeft');
+
+      var icon = document.createElement('img');
+      revUtils.addClass(icon, 'eng-feed-user-menu-icon-graphic');
+      revUtils.addClass(icon, this.options.items[i].name.toLowerCase());
+      icon.src = this.options.items[i].icon;
+
+      revUtils.append(span, icon);
+      revUtils.prepend(anchor, span);
+      revUtils.append(item, anchor);
+      revUtils.append(this.userFeedMenu, item);
+    }
     revUtils.append(this.userFeedMenuContainer, this.userFeedMenu);
 
     this.notificationsContainer = document.createElement('div');
@@ -158,51 +194,7 @@ Author: john.burnette@revcontent.com
     //We're done, add the panel to the page.
     revUtils.append(document.body, this.menuContainer);
     this.loadUserData();
-    this.createMenuItems();
   };
-  EngageUserMenu.prototype.createMenuItems = function() {
-    var that = this;
-    for (var i = 0; i < this.options.items.length; i++) {
-      var item = document.createElement('li');
-      revUtils.addClass(item, 'animated');
-      revUtils.addClass(item, 'flipInX');
-      var anchor = document.createElement('a');
-      anchor.id = this.options.items[i].name;
-      revUtils.addClass(anchor, 'animated');
-      revUtils.addClass(anchor, 'zoomInRight');
-      anchor.innerHTML = this.options.items[i].name;
-      revUtils.addEventListener(anchor, 'click', function (e) {
-        if (this.id === "Bookmarks") {
-          var bookmarks = document.getElementById('eng-bookmarks-container');
-          if(bookmarks) {
-            revUtils.addClass(bookmarks, 'is-open');
-          } else {
-            that.bookmarks = that.createBookmarks(that.options);
-            bookmarks = document.getElementById('eng-bookmarks-container');
-            setTimeout(function(){
-              revUtils.addClass(bookmarks, 'is-open');
-            }, 100);
-          }
-        }
-      });
-
-      var span = document.createElement('span');
-      revUtils.addClass(span, 'eng-feed-user-menu-icon');
-      revUtils.addClass(span, 'animated');
-      revUtils.addClass(span, 'bounceInLeft');
-
-      var icon = document.createElement('img');
-      revUtils.addClass(icon, 'eng-feed-user-menu-icon-graphic');
-      revUtils.addClass(icon, this.options.items[i].name.toLowerCase());
-      icon.src = this.options.items[i].icon;
-
-      revUtils.append(span, icon);
-      revUtils.prepend(anchor, span);
-      revUtils.append(item, anchor);
-      revUtils.append(this.userFeedMenu, item);
-    }
-  };
-
   EngageUserMenu.prototype.createBookmarks = function (options) {
     return new EngageBookmarksManager(options);
   };

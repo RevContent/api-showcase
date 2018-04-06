@@ -2639,6 +2639,10 @@ body.rev-blur > * {
     font-size: 12px;
     line-height: 20px;
     color: rgba(90,90,90,.86);
+    cursor: pointer;
+}
+.rev-comment-count:hover {
+  color: $primary-color;
 }
 
 
@@ -2744,7 +2748,7 @@ body.rev-blur > * {
     padding: 12px;
     border-bottom: 1px solid #e6ecf5;
     background-color: #fafbfd;
-    position: relative;
+    position: relative; 
     font-size: 13px;
     word-wrap: break-word;
   }
@@ -2981,7 +2985,7 @@ body.modal-open {
     animation: slide-out 0.5s forwards;
     -webkit-animation: comment-slide-out 0.5s forwards;
 }
-
+    
 @keyframes comment-slide-in {
     100% { transform: translateX(0%); }
 }
@@ -2989,7 +2993,7 @@ body.modal-open {
 @-webkit-keyframes comment-slide-in {
     100% { -webkit-transform: translateX(0%); }
 }
-
+    
 @keyframes comment-slide-out {
     0% { transform: translateX(0%); }
     100% { transform: translateX(200%); }
@@ -3262,7 +3266,7 @@ input.engage-auth-input:focus {
   color: #949494;
   margin-top: 10px;
   text-align: center;
-  font-size: 11px;
+  font-size: 11px;  
   text-decoration: underline;
 }
 
