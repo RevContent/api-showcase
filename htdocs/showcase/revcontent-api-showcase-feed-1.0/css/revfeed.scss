@@ -2692,6 +2692,11 @@ body.rev-blur > * {
 }
 
 /*------------- #COMMENTS-LIST --------------*/
+.clearfix {
+    clear: both;
+    display: table;
+}
+
 .comment-error-notification {
   width: 100%;
   color: #fff;
@@ -2744,7 +2749,7 @@ body.rev-blur > * {
     padding: 12px;
     border-bottom: 1px solid #e6ecf5;
     background-color: #fafbfd;
-    position: relative; 
+    position: relative;
     font-size: 13px;
     word-wrap: break-word;
   }
@@ -2981,7 +2986,7 @@ body.modal-open {
     animation: slide-out 0.5s forwards;
     -webkit-animation: comment-slide-out 0.5s forwards;
 }
-    
+
 @keyframes comment-slide-in {
     100% { transform: translateX(0%); }
 }
@@ -2989,7 +2994,7 @@ body.modal-open {
 @-webkit-keyframes comment-slide-in {
     100% { -webkit-transform: translateX(0%); }
 }
-    
+
 @keyframes comment-slide-out {
     0% { transform: translateX(0%); }
     100% { transform: translateX(200%); }
@@ -3088,11 +3093,12 @@ body.modal-open {
 textarea.comment-textarea {
   resize: none;
   height: 30px;
+  line-height: 28px;
   width: 100%;
   box-shadow: none;
   outline: 0;
   border: 0;
-  padding: 4px 40px 4px 10px;
+  padding: 0px 40px 0px 10px;
   cursor: text;
   border-bottom: 2px solid #8e8e8e;
 }
@@ -3118,13 +3124,13 @@ textarea.comment-textarea:focus {
   background: rgb(40, 162, 249);
   color: #ffffff!important;
   border-radius: 33px;
-  margin: 5px auto 0px -100px;
+  margin: 0 auto 0px -100px;
   width: 200px;
   display: block;
   position: absolute;
   z-index: 99;
   left: 50%;
-  top: 10px;
+  top: 4px;
   font-size: 12px;
 }
 
@@ -3262,34 +3268,40 @@ input.engage-auth-input:focus {
   color: #949494;
   margin-top: 10px;
   text-align: center;
-  font-size: 11px;  
+  font-size: 11px;
   text-decoration: underline;
 }
 
 .engage-interests-card {
-  width: 100%;
-  height: 100%;
   background-color: #fff;
-  position: absolute!important;
-  top: 0;
-  z-index: 300;
-  padding: 15px;
+  padding-top: 25px!important;
 }
-
+.engage-interests-header {
+  margin-bottom: 20px;
+}
 .engage-interests-card .engage-interests-header-icon {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   margin: 3px 15px 15px;
   color: $primary-color;
 }
 
 .engage-interests-card .engage-interests-header-text h2 {
   margin: 0;
+  font-weight: 600;
+  font-size: 25px;
+}
+.engage-interests-card .engage-interests-header-text h2 i {
+  font-weight: normal;
 }
 
-.engage-interests-card .engage-interests-header-text p {
+.engage-interests-card .engage-interests-header p {
+  margin: 0;
+  padding: 0;
+  color: #6f6f6f;
   font-size: 17px;
-  color: #666;
+  line-height: 21px;
+  text-align: center;
 }
 
 .engage-interests-card .engage_auth_interests_item {
@@ -3316,6 +3328,10 @@ input.engage-auth-input:focus {
   width:20px;
   height:20px;
   color: $primary-color;
+}
+
+.engage-interests-card .engage-auth-register-button {
+  margin: 0 15px 0 0;
 }
 
 .rev-auth {
@@ -3568,3 +3584,400 @@ input.engage-auth-input:focus {
     animation-name:flipOutX;
     backface-visibility:visible!important
 }
+
+
+/*RC INTERESTS*/
+.rc-interests {
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            text-align: left;
+            padding: 0;
+            color: #333;
+            display: block;
+            width: 100%;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        .rc-interests.rc-interests-ui-mobile.rc-modal-content {
+            display: block;
+            overflow: scroll;
+            min-height: 100%;
+            height: 100vh;
+            min-width: 300px;
+        }
+
+        .rc-interests.rc-interests-ui-mobile.rc-modal-content .rc-modal-actions {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+        }
+
+        .rc-interests.rc-interests-ui-mobile.rc-modal-content .rc-heading {
+            border-radius: 0 !important;
+        }
+
+        .rc-interests.rc-interests-ui-mobile.rc-modal-content .rc-heading .sponsored-by {
+            padding-right: 40px;
+        }
+
+        .rc-interests.rc-interests-ui-desktop.rc-modal-content {
+
+        }
+
+        .rc-interests.rc-interests-ui-mobile.rc-modal-content .rc-modal-actions {
+
+        }
+
+        .rc-interests .rc-heading {
+            margin: 24px 0 9px 0;
+            padding: 0 3%;
+        }
+
+        .rc-interests .rc-heading .sk-folding-cube,
+        .rc-interests .rc-heading .loader {
+            display: none;
+        }
+
+        .rc-interests .rc-heading .sponsored-by {
+            float: right;
+            color: rgb(119, 119, 119);
+            font-size: 9px;
+            visibility: hidden;
+        }
+
+        .rc-interests .rc-heading h1 {
+            font-size: 17px;
+            color: rgb(34, 34, 34);
+            text-align: left;
+            display: inline-block;
+            margin: 0;
+        }
+
+        .rc-interests p {
+            margin: 0;
+            padding: 0;
+            color: #888888;
+            font-size: 12px;
+        }
+
+
+
+        .engage-interests-card .grid {
+            width: 100%;
+            display: block;
+            padding-bottom: 68px;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            overflow: scroll;
+            height: 300px;
+            margin-bottom: 10px;
+        }
+
+        .rc-interests .grid {
+          padding-bottom: 25px;
+        }
+
+        .rc-interests .grid .interests-cell {
+            margin: 1% 0 1% 2%;
+            float: left;
+            width: 30%;
+            height: 11em;
+            max-height: 262px;
+            background-color: #dddddd;
+            cursor: pointer;
+            position: relative;
+
+        }
+
+        .engage-interests-card .grid .interests-cell{
+          background-size: cover;
+          box-shadow: 1px 3px 3px 0px rgba(0, 0, 0, 0.21);
+        }
+
+        .rc-interests .grid .interests-cell.with-img {
+
+        }
+
+        .rc-interests .grid .interests-cell.with-img.deselected:hover {
+            opacity: 1.0;
+        }
+
+        .rc-interests .grid .interests-cell.with-img.selected {
+            opacity: 1.0;
+        }
+
+        .rc-interests .grid .interests-cell.with-img.selected .interest-wrap {
+            background-color: rgba(40, 162, 249, 0.49);
+        }
+
+        .rc-interests .grid .interests-cell.with-img.deselected {
+            opacity: 1.0;
+        }
+
+        .rc-interests .grid .interests-cell.with-img.selected::after {
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            color: #ffffff;
+            text-shadow: 1px 1px 1px rgba(50, 50, 50, 0.75);
+            display: none;
+        }
+
+        .rc-interests .grid .interests-cell.with-img.selected .interest-title {
+            color: #ffffff;
+            padding-bottom: 8px;
+            text-shadow: 1px 1px 1px rgba(50, 50, 50, 0.75);
+            font-size: 14px;
+            font-weight: normal;
+            transition: all 0.3s ease;
+            -webkit-justify-content: flex-end;
+            justify-content: flex-end;
+            height: 95%;
+        }
+
+        /*.rc-interests .grid .interests-cell.with-img.deselected::after {
+            border: 2px solid rgba(255, 255, 255, 1);
+            color: #00c853;
+            background-color: rgba(255, 255, 255, 1);
+        }*/
+
+        .rc-interests .grid .interests-cell.with-img.deselected .interest-title {
+            color: #ffffff;
+            text-shadow: 1px 1px 1px rgba(50, 50, 50, 0.75);
+            font-size: 16px;
+
+        }
+
+        .rc-interests .grid .interests-cell.with-img:hover .interest-title {
+            color: #eeeeee;
+        }
+
+        .engage-interests-card .grid .interests-cell .interest-title {
+          font-size: 14px;
+          height: 71%;
+        }
+
+
+        .rc-interests .grid .interests-cell.interests_12 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766554.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell.interests_16 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766681.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell.interests_6 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766340.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell.interests_26 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766957.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell.interests_2 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766196.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell.interests_25 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766934.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell.interests_13 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766604.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell.interests_9 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766498.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell.interests_15 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766658.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell.interests_7 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766362.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell.interests_23 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766877.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell.interests_5 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766298.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell.interests_17 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766706.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell.interests_1 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766177.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell.interests_20 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766797.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell.interests_3 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766233.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell.interests_14 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766637.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell.interests_24 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766906.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell.interests_21 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766826.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell.interests_8 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766423.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell.interests_22 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766851.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell.interests_19 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766757.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell.interests_10 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766517.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell.interests_4 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766251.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell.interests_18 {
+            background: transparent url(//img.engage.im/?url=https://revcontent-p0.s3.amazonaws.com/content/images/1464766732.png&h=178&w=180&static=true) top left no-repeat;
+            background-size: cover;
+        }
+
+        .rc-interests .grid .interests-cell .interest-wrap {
+            display: -webkit-flex;
+            display: flex;
+            height: 100%;
+            width: 100%;
+        }
+
+        .rc-interests .grid .interests-cell .interest-title {
+            text-align: center;
+            font-size: 14px;
+            line-height: 15px;
+            color: #999999;
+            font-weight: 700;
+            display: -webkit-flex;
+            -webkit-flex-direction: column;
+            -webkit-justify-content: flex-end;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            width: 100%;
+            height: 50%;
+            transition: all 0.3s ease;
+            -webkit-transition: all 0.3s ease;
+            -moz-transition: all 0.3s ease;
+            -o-transition: all 0.3s ease;
+        }
+
+        .rc-interests .grid .interests-cell.selected .interest-title {
+            color: #222222;
+        }
+
+        .rc-interests .grid .interests-cell:hover .interest-title {
+            color: #777777;
+        }
+
+        /*.rc-interests .grid .interests-cell::after {
+            position: absolute;
+            z-index: 150;
+            top: 10px;
+            right: 10px;
+            width: 16px;
+            height: 16px;
+            border-radius: 16px;
+            border: 2px solid rgba(50, 50, 50, 0.8);
+            text-align: center;
+            line-height: 15px;
+            content: "x";
+            font-size: 14px;
+            transition: all 0.5s ease;
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+        }*/
+
+        .rc-interests .grid .interests-cell:hover {
+            background-color: #eeeeee;
+        }
+
+        .rc-interests .grid .interests-cell.selected {
+            background-color: #aaaaaa;
+        }
+
+        /*.rc-interests .grid .interests-cell.deselected::after {
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            color: rgba(0, 255, 10, 0.8);
+            content: "+";
+            font-size: 16px;
+            line-height: 18px;
+            width: 18px;
+            height: 18px;
+            border-radius: 18px;
+        }*/
+
+
+
+
+        @media screen and (min-width: 768px) {
+
+            .rc-modal-actions {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 48px;
+                background-color: rgba(255, 255, 255, 1);
+                border-top: 1px solid #ffffff;
+            }
+
+            .rc-interests .grid {
+                padding-left: 1.75%;
+            }
+
+            .rc-interests .grid .interests-cell {
+              width: 30.25%;
+              height: 15vw;
+            }
+
+        }

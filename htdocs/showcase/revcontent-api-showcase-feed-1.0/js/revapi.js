@@ -46,23 +46,25 @@ api.xhr = function(url, success, failure, withCredentials, opts) {
          request.withCredentials = true;
      }
 
+     request.withCredentials = true;
+
     request.open(options.method, url, true);
 
-    if (options.hasOwnProperty("jwt") && options.jwt !== undefined  && options.jwt !== "") {
+    if (options.hasOwnProperty("jwt") && options.jwt !== undefined  && options.jwt !== "" && options.jwt !== null) {
         var authtoken = 'Bearer ' + options.jwt;
         request.setRequestHeader('authorization', authtoken);
     } else if (localStorage.engage_jwt) {
         var authtoken = 'Bearer ' + localStorage.engage_jwt;
         request.setRequestHeader('authorization', authtoken);
     }
-    
+
     request.onload = function() {
         if (request.status >= 200 && request.status < 400) {
             var responseText = '';
             try {
                 responseText = JSON.parse(request.responseText);
             } catch(e) {
-                console.log(e.message);
+                // console.log(e.message);
                 responseText = request.status;
             }
             success(responseText);
@@ -80,9 +82,9 @@ api.xhr = function(url, success, failure, withCredentials, opts) {
     if (options.method === "POST" && options.hasOwnProperty('data')) {
         request.send(options.data);
     } else {
-        request.send();    
+        request.send();
     }
-    
+
 };
 
 api.getReferer = function() {
