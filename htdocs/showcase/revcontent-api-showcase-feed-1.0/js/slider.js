@@ -164,7 +164,7 @@ Author: michael@revcontent.com
             comments_enabled: false,
             actions_api_url: 'https://api.engage.im/' + opts.env + '/actions/',
             //actions_api_url: 'http://shearn.api.engage.im/actions/',
-            contextual_last_sort: []            
+            contextual_last_sort: []
         };
 
         // merge options
@@ -420,6 +420,10 @@ Author: michael@revcontent.com
         this.sponsoredOffset = 0;
 
         this.getData();
+
+
+        // TODO: get bookmarks and add them to UI and save under this.options.user.bookmarks
+        // TODO: add bookmarks count to side menu
 
         this.dataPromise.then(function(data) {
 
@@ -1621,7 +1625,7 @@ Author: michael@revcontent.com
                     }
                     if (that.options.authenticated) {
                         revApi.xhr(that.options.actions_api_url + 'bookmark/remove/' + item.element.getAttribute('data-id'), function(data) {
-                            EngageBookmarksManager.prototype.removeBookmark(data);                            
+                            that.options.emitter.emitEvent('removeBookmark', [item.element]);
                         }, null, true, options);
                         // revApi.request(url, function(data) {
                         //     return;
@@ -1668,17 +1672,13 @@ Author: michael@revcontent.com
                         opts.jwt = that.options.jwt;
                     }
 
-                    //var url = that.options.host + '/api/v1/engage/addbookmark.php?url=' + encodeURI(item.data.target_url) + '&title=' + encodeURI(item.data.headline);
-
                     if (that.options.authenticated) {
                         revApi.xhr(url, function (bm) {
                             item.element.setAttribute('data-id', bm.id);
-                            that.options.emitter.emitEvent('addBookmark', bm);
+                            that.options.emitter.emitEvent('addBookmark', [bm]);
                         }, null, true, opts);
-                        // revApi.request( url, function(data) {
-                        //     return;
-                        // });
                     } else {
+                        that.transitionLogin(item, 'bookmark');
                         that.queue.push({
                             type: 'bookmark',
                             url: url
@@ -2503,6 +2503,7 @@ Author: michael@revcontent.com
             //add item to array for later access
             this.feedItems[itemData.uid] = item;
             this.getReactions(item);
+            //TODO: This is where bookmarks needs to be called when setting bookmark indicators
         }
 
         //dont show comment input on sponsored
@@ -3481,7 +3482,11 @@ Author: michael@revcontent.com
         if (commentData.up_votes > 0) {
         var comment_likes_count = document.createElement("span");
             revUtils.addClass(comment_likes_count, 'rev-comment-likes-count');
-            comment_likes_count.innerText = commentData.up_votes + " likes";
+            if (commentData.up_votes <= 1) {
+                comment_likes_count.innerText = commentData.up_votes + " like";
+            } else {
+                comment_likes_count.innerText = commentData.up_votes + " likes";
+            }
             commentToolBox.appendChild(comment_likes_count);
         }
 

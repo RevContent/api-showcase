@@ -62,39 +62,40 @@ Author: john.burnette@revcontent.com
     this.bookmarksList.id = 'eng-bookmarks-list';
     revUtils.addClass(this.bookmarksList, 'eng-bookmarks-list');
 
-    this.options.emitter.on('addBookmark', function(data) {
-      if (this.bookmarksContainer) {
-        this.addBookmarkItem(data);
-      }
-    });
-
-    this.options.emitter.on('removeBookmark', function(data) {
-      console.log('remove bookmark');
-      
-    });
-
-    this.options.emitter.on('menuClose', function() {
-      revUtils.removeClass(this.bookmarksContainer, 'is-open');
-    });
-
-
     this.getBookmarks();
     revUtils.append(this.bookmarksContainer, this.bookmarksList);
     this.userMenu = document.getElementById('eng-feed-user-menu-container');
-
     revUtils.append(this.userMenu, this.bookmarksContainer);
+
+    this.options.emitter.on('addBookmark', function(data) {
+      that.addBookmark(data);
+    });
+
+    this.options.emitter.on('removeBookmark', function(data){
+      that.removeBookmark(data.dataset);
+    });
+    this.options.emitter.on('menuClose', function() {
+      that.bookmarksContainer.removeClass('is-open');
+    });
+
+    this.options.emitter.on('getBookmarks', function() {
+      this.getBookmarks();
+    });
   };
 
   EngageBookmarksManager.prototype.addBookmark = function(data) {
     if (this.bookmarksContainer) {
-      addBookmarkItem(data);
+      this.addBookmarkItem(data);
     }
   };
-  
+
   EngageBookmarksManager.prototype.removeBookmark = function(data) {
     if(this.bookmarksContainer) {
-      var el = document.querySelector("[data-id='" + data.id +"']");
-      el.parentNode.removeChild(el);
+      var list = document.getElementById('eng-bookmarks-list');
+      var el = list.querySelector("[data-id='" + data.id +"']");
+      if (el) {
+        el.parentNode.removeChild(el);
+      }
     }
   };
 
@@ -187,21 +188,21 @@ Author: john.burnette@revcontent.com
         function extractHostname(url) {
           var hostname;
           //find & remove protocol (http, ftp, etc.) and get hostname
-    
+
           if (url.indexOf("://") > -1) {
             hostname = url.split('/')[2];
           } else {
             hostname = url.split('/')[0];
           }
-    
+
           //find & remove port number
           hostname = hostname.split(':')[0];
           //find & remove "?"
           hostname = hostname.split('?')[0];
-    
+
           return hostname;
         }
-    
+
         function extractRootDomain(url) {
           var domain = extractHostname(url),
             splitArr = domain.split('.'),
@@ -222,13 +223,19 @@ Author: john.burnette@revcontent.com
     if (that.options.jwt) {
       options.jwt = that.options.jwt;
     }
-    revApi.xhr(that.options.actions_api_url + 'bookmarks', function (data) {
-      for (var i = 0; i < data.length; i++) {
-        that.addBookmarkItem(data[i]);
-      }
-    }, null, true, options);
+    //TODO: check if user is authenication before calling this RevSlider.isAuthenticated()
+
+    if (that.options.authenticated) {
+      revApi.xhr(that.options.actions_api_url + 'bookmarks', function (data) {
+        that.options.user.bookmarks = data;
+        console.log(that.options.user.bookmarks);
+        for (var i = 0; i < data.length; i++) {
+          that.addBookmarkItem(data[i]);
+        }
+      }, null, true, options);
+    }
   };
-  
-  
+
+
   return EngageBookmarksManager;
 }));
