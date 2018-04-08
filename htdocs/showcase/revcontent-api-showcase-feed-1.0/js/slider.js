@@ -1677,6 +1677,7 @@ Author: michael@revcontent.com
                             that.options.emitter.emitEvent('addBookmark', [bm]);
                         }, null, true, opts);
                     } else {
+                        //TODO: Fix bookmark/reactions ENG-363
                         that.transitionLogin(item, 'bookmark');
                         that.queue.push({
                             type: 'bookmark',

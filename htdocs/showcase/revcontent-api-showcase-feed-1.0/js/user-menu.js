@@ -62,7 +62,6 @@ Author: john.burnette@revcontent.com
     revUtils.append(this.menuActionBtn, this.menuActionBtnIcon);
     revUtils.append(this.menuAction, this.menuActionBtn);
     revUtils.append(this.menuHeader, this.menuAction);
-
     this.userAvatarContainer = document.createElement('div');
     revUtils.addClass(this.userAvatarContainer, 'eng-feed-user-avatar');
     revUtils.addClass(this.userAvatarContainer, 'animated');
