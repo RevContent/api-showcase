@@ -286,7 +286,7 @@ Author: michael@revcontent.com
 
             // History Stack
             if (!data.withoutHistory) {
-                that.pushHistory();
+                that.pushHistory(data);
             }
 
             // TODO - yikes
@@ -531,32 +531,21 @@ Author: michael@revcontent.com
         back.setAttribute('id','go-back-bar');
         back.classList.add('go-back-bar');
 
-        var header_logo = '';
-        if(this.options.brand_logo_secondary){
-            header_logo = '<img src="' + this.options.brand_logo_secondary + '" alt="" style="max-width:100%;margin: 0 9px;" />';
-        }
+        var header_logo = activePage.iconHtml;
 
         var title = "";
-        var author_initials = '';
 
-        if(activePage.type == "topic"){
+        if (activePage.type == "topic") {
             title = activePage.topic_title;
-        }
-        else if (activePage.type == "author"){
-            if(activePage.author_name){
-                title = "Articles by " + activePage.author_name;
-                var ai = activePage.author_name.split(' ');
-                author_initials = ai[0].charAt(0) + ' ' + (ai.length == 3 ? ai[2].charAt(0) : ai[1].charAt(0));
-                header_logo = '<span style="display:block;margin-left:9px;width:24px;height:24px;border-radius:24px;text-align:center;font-size:11px;background-color:#ffffff;color:#222222;letter-spacing:-1px;line-height:24px;margin-top:8px;">' + author_initials + '</span>';
-            }
+        } else if (activePage.type == "author" && activePage.author_name) {
+            title = "Articles by " + activePage.author_name;
         }
 
-        back.innerHTML = '<div style="display:flex;flex-direction:row;">' +
+        back.innerHTML = '<div class="feed-header">' +
             '<div class="feed-header-back"><button style="background-color:#444444;border:0;margin:0;border-right:1.0px solid #484848;display:block;width:40px;height:40px;text-align:center;font-weight: bold;font-size:32px" class="feed-back-button" name="feed-back-button" value="">' + back_icon + '</button></div>' +
-            '<div class="feed-header-logo" style="' + (header_logo != '' ? 'width:32px;' : '') + '">' + header_logo + '</div>' +
-            '<div class="feed-header-title" style="white-space:nowrap;width:95%;padding-left:18px;text-overflow:ellipsis;overflow:hidden;text-align-center;color:#ffffff;font-size:14px;letter-spacing: 0;font-weight:normal;"><span>' + title + '</span></div>' +
+            '<div class="feed-header-logo">' + header_logo + '</div>' +
+            '<div class="feed-header-title" style="white-space:nowrap;padding-left:18px;text-overflow:ellipsis;overflow:hidden;text-align-center;color:#ffffff;font-size:14px;letter-spacing: 0;font-weight:normal;"><span>' + title + '</span></div>' +
             '<div class="feed-header-options" style="min-width:auto;text-align:center;">' + e_icon + '</div>' +
-
             '</div>';
 
         this.head.insertAdjacentElement('afterend', back);
@@ -647,7 +636,7 @@ Author: michael@revcontent.com
         }
     };
 
-    RevSlider.prototype.pushHistory = function(){
+    RevSlider.prototype.pushHistory = function(data){
 
         if (this.options.topic_type == "author") {
             if(this.historyStack.length > 0){
@@ -669,7 +658,8 @@ Author: michael@revcontent.com
             type: this.options.topic_type,
             author_name:this.options.author_name,
             topic_id:this.options.topic_id,
-            topic_title:this.options.topic_title
+            topic_title:this.options.topic_title,
+            iconHtml: data.iconHtml
         });
     };
 
@@ -691,10 +681,10 @@ Author: michael@revcontent.com
                 item = this.historyStack.pop();
             }
             if (item.type == "topic" && !isNaN(item.topic_id)) {
-                this.loadTopicFeed(item.topic_id,item.topic_title, false);
+                this.loadTopicFeed(item.topic_id, item.topic_title, item.iconHtml, false);
             }
             else if (item.type == "author" && item.author_name.length > 0) {
-                this.loadAuthorFeed(item.author_name, false);
+                this.loadAuthorFeed(item.author_name, item.iconHtml, false);
             } else {
                 this.options.emitter.emitEvent('createFeed', ['default', {
                     withoutHistory: true
@@ -2190,17 +2180,19 @@ Author: michael@revcontent.com
         return list;
     };
 
-    RevSlider.prototype.loadTopicFeed = function(topicId, topicTitle, withoutHistory){
+    RevSlider.prototype.loadTopicFeed = function(topicId, topicTitle, iconHtml, withoutHistory){
         this.options.emitter.emitEvent('createFeed', ['topic', {
             topicId: topicId,
             topicTitle: topicTitle,
+            iconHtml: iconHtml,
             withoutHistory: withoutHistory
         }]);
     }
 
-    RevSlider.prototype.loadAuthorFeed = function(authorName, withoutHistory){
+    RevSlider.prototype.loadAuthorFeed = function(authorName, iconHtml, withoutHistory){
         this.options.emitter.emitEvent('createFeed', ['author', {
             authorName: authorName,
+            iconHtml: iconHtml,
             withoutHistory: withoutHistory
         }]);
     }
@@ -2473,7 +2465,9 @@ Author: michael@revcontent.com
 
                     imageUrl += '&h=34&w=34';
 
-                    favicon.innerHTML = '<span class="rev-headline-icon-image" style="background-image:url('+ imageUrl +')' + '"></span>';
+                    itemData.iconHtml = '<span class="rev-headline-icon-image" style="background-image:url('+ imageUrl +')' + '"></span>'
+
+                    favicon.innerHTML = itemData.iconHtml;
                 } else {
                     var iconInitialsWords = itemData.author ? itemData.author.replace(/\(|\)/g, '').split(' ') : itemData.brand.replace(/\(|\)/g, '').split(' ');
 
@@ -2499,7 +2493,10 @@ Author: michael@revcontent.com
                         }
                         this.initialColors[initials] = initialColor;
                     }
-                    favicon.innerHTML = '<div style="background-color:#'+ initialColor +'" class="rev-author-initials">'+ initials +'</div>';
+
+                    itemData.iconHtml = '<div style="background-color:#'+ initialColor +'" class="rev-author-initials">'+ initials +'</div>';
+
+                    favicon.innerHTML = itemData.iconHtml;
                 }
 
                 var date = item.element.querySelector('.rev-date');
@@ -2719,10 +2716,10 @@ Author: michael@revcontent.com
 
         switch (type) {
             case 'author':
-                this.loadAuthorFeed(itemData.author);
+                this.loadAuthorFeed(itemData.author, itemData.iconHtml);
                 break;
             case 'topic':
-                this.loadTopicFeed(itemData.reason_topic_id, itemData.reason_topic)
+                this.loadTopicFeed(itemData.reason_topic_id, itemData.reason_topic, itemData.iconHtml)
                 break;
             default:
                 // TODO
@@ -4721,6 +4718,10 @@ Author: michael@revcontent.com
                             engage_auth.remove();
                             //re-layout grid for masonry
                             that.grid.layout();
+                            if (!that.personalized) {
+                                that.showPersonalizedTransition();
+                                that.personalize();
+                            }
 
                         },function(data){
 
