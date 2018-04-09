@@ -3236,11 +3236,12 @@ body.modal-open {
 textarea.comment-textarea {
   resize: none;
   height: 30px;
+  line-height: 28px;
   width: 100%;
   box-shadow: none;
   outline: 0;
   border: 0;
-  padding: 4px 40px 4px 10px;
+  padding: 0px 40px 0px 10px;
   cursor: text;
   border-bottom: 2px solid #8e8e8e;
 }
@@ -3305,11 +3306,12 @@ textarea.comment-textarea:focus {
 .auth-button {
   margin: 0 auto;
   display: block;
-  width: 300px;
+  width: 100%;
   height: 50px;
-  padding: 15px 0 15px 70px;
+  padding: 15px 0 15px 25%;
   border-radius: 5px;
   cursor: pointer;
+  max-width: 300px;
 }
 
 .auth-button span {
