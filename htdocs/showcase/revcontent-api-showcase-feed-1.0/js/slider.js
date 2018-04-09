@@ -2854,7 +2854,7 @@ Author: michael@revcontent.com
                 'Welcome!' +
             '</div>' +
 
-            '<div id="personalized-transition-text" class="text-out"><div>Analyzing ' + ucDomain + ' Articles</div></div>' +
+            '<div id="personalized-transition-text" class="text-out"><div>Analyzing <strong>' + ucDomain + '</strong> Articles</div></div>' +
 
 
             '<div id="personalized-transition-animation">' +
@@ -2971,14 +2971,14 @@ Author: michael@revcontent.com
                     personalizedTransitionText.classList.remove('text-in');
                     personalizedTransitionText.classList.add('text-out');
                     setTimeout(function() {
-                        personalizedTransitionText.textContent = 'Matching your interests.';
+                        personalizedTransitionText.textContent = 'Matching your Interests';
                         personalizedTransitionText.classList.remove('text-out');
                         personalizedTransitionText.classList.add('text-in');
                         setTimeout(function() {
                             personalizedTransitionText.classList.remove('text-in');
                             personalizedTransitionText.classList.add('text-out');
                             setTimeout(function() {
-                                personalizedTransitionText.textContent = 'Personalizing your experience.';
+                                personalizedTransitionText.textContent = 'Personalizing your Experience';
                                 personalizedTransitionText.classList.remove('text-out');
                                 personalizedTransitionText.classList.add('text-in');
                                 setTimeout(function() {
