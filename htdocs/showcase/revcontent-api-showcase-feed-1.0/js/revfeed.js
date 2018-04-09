@@ -102,7 +102,7 @@ Author: michael@revcontent.com
             comment_truncate_length_mobile: 500,
             reply_truncate_length_mobile: 100,
             comments_enabled: false,
-            default_avatar_url: 'https://yt3.ggpht.com/-TXSba-bNQxI/AAAAAAAAAAI/AAAAAAAAAAA/RXEnTzDI_Oc/s288-mo-c-c0xffffffff-rj-k-no/photo.jpg',
+            default_avatar_url: 'mm',//gravatar mystery man
             emitter: new EvEmitter(),
             contextual_last_sort: []
         };
@@ -173,7 +173,7 @@ Author: michael@revcontent.com
         this.innerWidget = this.createInnerWidget(this.containerElement, this.options);
         this.cornerButton = this.createCornerButton(this.options);
         this.userMenu = this.createMenu(this.options);
-        
+
     };
 
     Feed.prototype.windowWidth = function() {
@@ -247,7 +247,7 @@ Author: michael@revcontent.com
         return new EngageCornerButton(options);
     };
 
-    Feed.prototype.createMenu = function(options) {        
+    Feed.prototype.createMenu = function(options) {
         return new EngageUserMenu(options);
     };
 
