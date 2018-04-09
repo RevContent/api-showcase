@@ -1234,8 +1234,6 @@ Author: michael@revcontent.com
 
                     //that.transitionLogin(item, 'reaction');
                     var rc_inner = item.element.querySelector('.rev-content-inner');
-                    console.log(item.element);
-                    console.log(rc_inner);
                     that.tryAuth(rc_inner, 'reaction');
 
                     return;
@@ -1283,8 +1281,6 @@ Author: michael@revcontent.com
 
                 //that.transitionLogin(item, 'reaction');
                 var rc_inner = item.element.querySelector('.rev-content-inner');
-                    console.log(item.element);
-                    console.log(rc_inner);
                     that.tryAuth(rc_inner, 'reaction');
             });
 
@@ -1384,8 +1380,6 @@ Author: michael@revcontent.com
 
                 //that.transitionLogin(item, 'reaction');
                 var rc_inner = item.element.querySelector('.rev-content-inner');
-                    console.log(item.element);
-                    console.log(rc_inner);
                     that.tryAuth(rc_inner, 'reaction');
 
             });
@@ -1442,8 +1436,6 @@ Author: michael@revcontent.com
 
                     //that.transitionLogin(item, 'reaction');
                     var rc_inner = item.element.querySelector('.rev-content-inner');
-                    console.log(item.element);
-                    console.log(rc_inner);
                     that.tryAuth(rc_inner, 'reaction');
 
                 }, {passive: false});
@@ -4752,7 +4744,6 @@ Author: michael@revcontent.com
                                             '</div>&nbsp;';
 
                                         revUtils.addEventListener(new_interest, 'click', function(){
-                                            console.log("clicked");
                                             this.classList.toggle('selected');
                                             this.classList.toggle('deselected');
 
@@ -5218,12 +5209,10 @@ Author: michael@revcontent.com
             var options = {method:'DELETE'};
             if (that.options.hasOwnProperty("jwt")) {
                 options.jwt = that.options.jwt;
-                console.log("opts has jwt");
-                console.log(that.options.jwt);
             }
 
             revApi.xhr(that.options.actions_api_url + 'interest/remove/' + interest.id, function(data) {
-                console.log(data);
+                //console.log(data);
             },null,false,options);
 
         } else {
@@ -5236,7 +5225,7 @@ Author: michael@revcontent.com
             }
 
             revApi.xhr(that.options.actions_api_url + 'interest/add/' + interest.id, function(data) {
-                console.log(data);
+                //console.log(data);
             },null,false,options);
         }
 
