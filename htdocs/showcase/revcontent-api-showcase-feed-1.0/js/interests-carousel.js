@@ -103,7 +103,8 @@ Author: michael@revcontent.com
             if (target.classList.contains('cell-wrapper') || target.classList.contains('interest-title')) {
                 that.options.emitter.emitEvent('feedLink', ['topic', {
                     reason_topic_id: parseInt(cellElement.getAttribute('data-id'), 10),
-                    reason_topic: cellElement.getAttribute('data-title')
+                    reason_topic: cellElement.getAttribute('data-title'),
+                    iconHtml: '<span class="rev-headline-icon-image" style="background-image:url(' + cellElement.getAttribute('data-image') + '&h=36&w=36' + ')"></span>'
                 }]);
             }
 
@@ -168,6 +169,7 @@ Author: michael@revcontent.com
             }
             cell.setAttribute('data-id', interest.id);
             cell.setAttribute('data-title', interest.title);
+            cell.setAttribute('data-image', interest.image);
             cell.setAttribute('data-interest', interest.title.toLowerCase());
 
             cell.className = 'carousel-cell interest-cell interest-' + interest.title.toLowerCase() + ' selected-interest';
