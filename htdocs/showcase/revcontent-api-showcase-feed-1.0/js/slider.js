@@ -2859,35 +2859,160 @@ Author: michael@revcontent.com
 
         this.personalizedMask = document.createElement('div');
         this.personalizedMask.id = 'personalized-transition-mask';
+        this.personalizedMask.classList.add('mask-bg-dark');
 
         this.personalizedContent = document.createElement('div');
         this.personalizedContent.id = 'personalized-transition-wrapper';
 
         var ucDomain = this.options.domain.charAt(0).toUpperCase() + this.options.domain.slice(1);
 
-        this.personalizedContent.innerHTML = '<div id="personalized-transition-animation"><div></div></div><div id="personalized-transition-text"><div>Analyzing ' + ucDomain + ' Articles</div></div>';
+        this.personalizedContent.innerHTML = '' +
+
+            '<div id="personalized-transition-logo">' +
+            '<div id="personalized-transition-logo-publisher-logo" style="background:#222222 url(' + this.options.brand_logo_secondary + ');background-size:contain;background-position: center center;">' +
+
+            '</div>' +
+            '</div>' +
+
+            '<div id="personalized-transition-copyright">by <strong>ENGAGE.IM</strong></div>' +
+            '<div id="personalized-transition-headline">' +
+            'Welcome!' +
+            '</div>' +
+
+            '<div id="personalized-transition-text" class="text-out"><div>Analyzing <strong>' + ucDomain + '</strong> Articles</div></div>' +
+
+            '<div id="personalized-transition-animation">' +
+
+            '<div class="personalized-transition-dna animated" style="display:flex;flex:1;align-items:center;width:100%">' +
+            '<div class="personalized-transition-dna-element" style="margin:0 auto">' +
+            '<svg class="lds-dna" width="100px"  height="auto"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" style="background: rgba(0, 0, 0, 0) none repeat scroll 0% 0%;"><circle cx="6.451612903225806" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-0.5s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="0s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#941946;#fbacc9;#941946" dur="2s" repeatCount="indefinite" begin="-0.5s"></animate>' +
+            '</circle><circle cx="6.451612903225806" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-1.5s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-1s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#a2f0fb;#164ba3;#a2f0fb" dur="2s" repeatCount="indefinite" begin="-0.5s"></animate>' +
+            '</circle><circle cx="16.129032258064512" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-0.7s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-0.2s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#941946;#fbacc9;#941946" dur="2s" repeatCount="indefinite" begin="-0.7s"></animate>' +
+            '</circle><circle cx="16.129032258064512" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-1.7s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-1.2s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#a2f0fb;#164ba3;#a2f0fb" dur="2s" repeatCount="indefinite" begin="-0.7s"></animate>' +
+            '</circle><circle cx="25.806451612903224" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-0.9s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-0.4s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#941946;#fbacc9;#941946" dur="2s" repeatCount="indefinite" begin="-0.9s"></animate>' +
+            '</circle><circle cx="25.806451612903224" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-1.9s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-1.4s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#a2f0fb;#164ba3;#a2f0fb" dur="2s" repeatCount="indefinite" begin="-0.9s"></animate>' +
+            '</circle><circle cx="35.48387096774193" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-1.1s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-0.6s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#941946;#fbacc9;#941946" dur="2s" repeatCount="indefinite" begin="-1.1s"></animate>' +
+            '</circle><circle cx="35.48387096774193" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-2.1s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-1.6s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#a2f0fb;#164ba3;#a2f0fb" dur="2s" repeatCount="indefinite" begin="-1.1s"></animate>' +
+            '</circle><circle cx="45.16129032258064" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-1.3s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-0.8s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#941946;#fbacc9;#941946" dur="2s" repeatCount="indefinite" begin="-1.3s"></animate>' +
+            '</circle><circle cx="45.16129032258064" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-2.3s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-1.8s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#a2f0fb;#164ba3;#a2f0fb" dur="2s" repeatCount="indefinite" begin="-1.3s"></animate>' +
+            '</circle><circle cx="54.838709677419345" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-1.5s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-1s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#941946;#fbacc9;#941946" dur="2s" repeatCount="indefinite" begin="-1.5s"></animate>' +
+            '</circle><circle cx="54.838709677419345" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-2.5s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-2s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#a2f0fb;#164ba3;#a2f0fb" dur="2s" repeatCount="indefinite" begin="-1.5s"></animate>' +
+            '</circle><circle cx="64.51612903225805" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-1.7s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-1.2s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#941946;#fbacc9;#941946" dur="2s" repeatCount="indefinite" begin="-1.7s"></animate>' +
+            '</circle><circle cx="64.51612903225805" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-2.7s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-2.2s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#a2f0fb;#164ba3;#a2f0fb" dur="2s" repeatCount="indefinite" begin="-1.7s"></animate>' +
+            '</circle><circle cx="74.19354838709677" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-1.9s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-1.4s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#941946;#fbacc9;#941946" dur="2s" repeatCount="indefinite" begin="-1.9s"></animate>' +
+            '</circle><circle cx="74.19354838709677" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-2.9s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-2.4s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#a2f0fb;#164ba3;#a2f0fb" dur="2s" repeatCount="indefinite" begin="-1.9s"></animate>' +
+            '</circle><circle cx="83.87096774193547" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-2.1s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-1.6s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#941946;#fbacc9;#941946" dur="2s" repeatCount="indefinite" begin="-2.1s"></animate>' +
+            '</circle><circle cx="83.87096774193547" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-3.1s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-2.6s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#a2f0fb;#164ba3;#a2f0fb" dur="2s" repeatCount="indefinite" begin="-2.1s"></animate>' +
+            '</circle><circle cx="93.54838709677418" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-2.3s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-1.8s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#941946;#fbacc9;#941946" dur="2s" repeatCount="indefinite" begin="-2.3s"></animate>' +
+            '</circle><circle cx="93.54838709677418" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-3.3s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-2.8s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#a2f0fb;#164ba3;#a2f0fb" dur="2s" repeatCount="indefinite" begin="-2.3s"></animate>' +
+            '</circle></svg>' +
+            '</div>' +
+            '</div>' +
+
+            '</div>';
 
         show();
 
         setTimeout(function() {
-            var personalizedTransitionText = that.personalizedContent.querySelector('#personalized-transition-text div');
+            that.personalizedMask.classList.add('mask-bg-activated');
+            var personalizedTransitionLogo = that.personalizedContent.querySelector('div#personalized-transition-logo');
+            var personalizedTransitionHeadline = that.personalizedContent.querySelector('div#personalized-transition-headline');
+            var personalizedTransitionText = that.personalizedContent.querySelector('div#personalized-transition-text');
+            var personalizedTransitionAnimation = that.personalizedContent.querySelector('div#personalized-transition-animation');
+            var personalizedTransitionCopyright = that.personalizedContent.querySelector('div#personalized-transition-copyright');
 
-            var remove = function() {
-                that.onEndAnimation(personalizedTransitionText, function() {
-                    revUtils.removeClass(personalizedTransitionText, 'personalized-transition-text-animated');
-                });
-            };
-
-            revUtils.addClass(personalizedTransitionText, 'personalized-transition-text-animated');
-            personalizedTransitionText.innerHTML = 'Matching your interests to ' + ucDomain + ' content';
-            remove();
+            personalizedTransitionLogo.classList.add('logo-in');
+            personalizedTransitionHeadline.classList.add('text-in');
+            personalizedTransitionCopyright.classList.add('text-in');
 
             setTimeout(function() {
-                revUtils.addClass(personalizedTransitionText, 'personalized-transition-text-animated');
-                personalizedTransitionText.innerHTML = 'Preparing a personalized ' + ucDomain + ' experience for you';
-                remove();
-            }, 2500);
-        }, 2500);
+                personalizedTransitionText.classList.remove('text-out');
+                personalizedTransitionText.classList.add('text-in');
+                personalizedTransitionAnimation.classList.add('animation-active');
+                setTimeout(function() {
+                    personalizedTransitionText.classList.remove('text-in');
+                    personalizedTransitionText.classList.add('text-out');
+                    setTimeout(function() {
+                        personalizedTransitionText.textContent = 'Matching your Interests';
+                        personalizedTransitionText.classList.remove('text-out');
+                        personalizedTransitionText.classList.add('text-in');
+                        setTimeout(function() {
+                            personalizedTransitionText.classList.remove('text-in');
+                            personalizedTransitionText.classList.add('text-out');
+                            setTimeout(function() {
+                                personalizedTransitionText.textContent = 'Personalizing your Experience';
+                                personalizedTransitionText.classList.remove('text-out');
+                                personalizedTransitionText.classList.add('text-in');
+                                //setTimeout(function() {
+
+                                //}, 2500);
+                            }, 800);
+                        }, 2500);
+                    }, 800);
+                }, 2500);
+            }, 800);
+        }, 1000);
+
     };
 
     RevSlider.prototype.updateInterstsSubscription = function(type, data) {
