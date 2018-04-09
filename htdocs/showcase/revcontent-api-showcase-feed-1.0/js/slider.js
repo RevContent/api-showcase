@@ -3634,81 +3634,74 @@ Author: michael@revcontent.com
         }).join('&');
 
         revApi.xhr(that.options.actions_api_url + 'reactions?' + queryString, function(data) {
-            if (data.reactions) {
 
-                var myReaction = '';
+            var myReaction = '';
 
-                var likeReactionElement = item.element.querySelector('.rev-reaction-icon');
-                likeReactionElement.removeAttribute('data-active');
+            var likeReactionElement = item.element.querySelector('.rev-reaction-icon');
+            likeReactionElement.removeAttribute('data-active');
 
-                var icon = item.element.querySelector('.rev-reaction-like .rev-reaction-icon');
-                revUtils.removeClass(icon, 'rev-reaction-icon-', true);
-                revUtils.addClass(icon, 'rev-reaction-icon-love');
-                revUtils.removeClass(icon, 'rev-reaction-icon-selected');
+            var icon = item.element.querySelector('.rev-reaction-like .rev-reaction-icon');
+            revUtils.removeClass(icon, 'rev-reaction-icon-', true);
+            revUtils.addClass(icon, 'rev-reaction-icon-love');
+            revUtils.removeClass(icon, 'rev-reaction-icon-selected');
 
-                if (data.reaction.reaction) {
-                    myReaction = data.reaction.reaction;
-                    likeReactionElement.setAttribute('data-active', myReaction);
-                    likeReactionElement.setAttribute('data-id', data.reaction.id)
+            if (data.reaction && data.reaction.reaction) {
+                myReaction = data.reaction.reaction;
+                likeReactionElement.setAttribute('data-active', myReaction);
+                likeReactionElement.setAttribute('data-id', data.reaction.id)
 
-                    revUtils.addClass(icon, 'rev-reaction-icon-' + myReaction);
-                    revUtils.addClass(icon, 'rev-reaction-icon-selected');
-                    revUtils.removeClass(item.element, 'rev-menu-active');
-                }
-
-                var reactionHtml = '';
-
-                var reactionCountTotal = 0;
-                var reactionCountTotalPos = 0;
-                var reactionCountTotalNeg = 0;
-                var zIndex = 100;
-
-                var positiveReactions = that.options.reactions.slice(0, 3);
-                var negativeReactions = that.options.reactions.slice(3);
-
-                for (var reactionCounter = 0; reactionCounter < that.options.reactions.length; reactionCounter++) {
-                    var reaction = that.options.reactions[reactionCounter];
-                    var reactionCount = 0;
-                    if (data.reactions.hasOwnProperty(reaction)) {
-                        reactionCount = data.reactions[reaction];
-                    }
-
-                    if (reactionCount) {
-                        if (reactionCounter < 3) {
-                            reactionCountTotalPos += reactionCount;
-                        } else {
-                            reactionCountTotalNeg += reactionCount;
-                        }
-
-                        reactionCountTotal += reactionCount;
-                        reactionHtml += '<div style="z-index:'+ zIndex +';" class="rev-reaction rev-reaction-' + reaction + '">' +
-                            '<div class="rev-reaction-inner">' +
-                            '<div class="rev-reaction-icon rev-reaction-icon-' + reaction + '-full"></div>' +
-                            '</div>' +
-                            '</div>';
-                        zIndex--;
-                    }
-                }
-                item.reactionCountTotalPos = reactionCountTotalPos;
-                item.reactionCountTotalNeg = reactionCountTotalNeg;
-                item.reactionCountTotal = reactionCountTotal;
-
-                item.element.querySelector('.rev-reaction-menu-item-count-pos .rev-reaction-menu-item-count-inner').innerText = that.milliFormatter(reactionCountTotalPos);
-                item.element.querySelector('.rev-reaction-menu-item-count-neg .rev-reaction-menu-item-count-inner').innerText = that.milliFormatter(reactionCountTotalNeg);
-
-                if (myReaction) {
-                    var reactionTotal = Math.max(1, (reactionCountTotal - 1));
-                    reactionHtml += '<div class="rev-reaction-count">'+ ((reactionCountTotal == 1) ? 'You reacted' : 'You and ' + reactionTotal + ' other' + (reactionTotal > 1 ? 's' : '') ) + '</div>';
-                } else {
-                    reactionHtml += '<div ' + (!reactionCountTotal ? 'style="margin-left: 0;"' : '') + ' class="rev-reaction-count">'+ (reactionCountTotal ? reactionCountTotal : 'Be the first to react') +'</div>';
-                }
-
-                item.element.querySelector('.rev-reactions-total-inner').innerHTML = reactionHtml;
+                revUtils.addClass(icon, 'rev-reaction-icon-' + myReaction);
+                revUtils.addClass(icon, 'rev-reaction-icon-selected');
+                revUtils.removeClass(item.element, 'rev-menu-active');
             }
+
+            var reactionHtml = '';
+
+            var reactionCountTotal = 0;
+            var reactionCountTotalPos = 0;
+            var reactionCountTotalNeg = 0;
+            var zIndex = 100;
+
+            for (var reactionCounter = 0; reactionCounter < that.options.reactions.length; reactionCounter++) {
+                var reaction = that.options.reactions[reactionCounter];
+                var reactionCount = 0;
+                if (data.reaction && data.reactions.hasOwnProperty(reaction)) {
+                    reactionCount = data.reactions[reaction];
+                }
+
+                if (reactionCount) {
+                    if (reactionCounter < 3) {
+                        reactionCountTotalPos += reactionCount;
+                    } else {
+                        reactionCountTotalNeg += reactionCount;
+                    }
+
+                    reactionCountTotal += reactionCount;
+                    reactionHtml += '<div style="z-index:'+ zIndex +';" class="rev-reaction rev-reaction-' + reaction + '">' +
+                        '<div class="rev-reaction-inner">' +
+                        '<div class="rev-reaction-icon rev-reaction-icon-' + reaction + '-full"></div>' +
+                        '</div>' +
+                        '</div>';
+                    zIndex--;
+                }
+            }
+            item.reactionCountTotalPos = reactionCountTotalPos;
+            item.reactionCountTotalNeg = reactionCountTotalNeg;
+            item.reactionCountTotal = reactionCountTotal;
+
+            item.element.querySelector('.rev-reaction-menu-item-count-pos .rev-reaction-menu-item-count-inner').innerText = that.milliFormatter(reactionCountTotalPos);
+            item.element.querySelector('.rev-reaction-menu-item-count-neg .rev-reaction-menu-item-count-inner').innerText = that.milliFormatter(reactionCountTotalNeg);
+
+            if (myReaction) {
+                var reactionTotal = Math.max(1, (reactionCountTotal - 1));
+                reactionHtml += '<div class="rev-reaction-count">'+ ((reactionCountTotal == 1) ? 'You reacted' : 'You and ' + reactionTotal + ' other' + (reactionTotal > 1 ? 's' : '') ) + '</div>';
+            } else {
+                reactionHtml += '<div ' + (!reactionCountTotal ? 'style="margin-left: 0;"' : '') + ' class="rev-reaction-count">'+ (reactionCountTotal ? reactionCountTotal : 'Be the first to react') +'</div>';
+            }
+
+            item.element.querySelector('.rev-reactions-total-inner').innerHTML = reactionHtml;
         },null,true,options);
     };
-
-
 
     RevSlider.prototype.addReaction = function(element, item, iconName) {
         var that = this;
