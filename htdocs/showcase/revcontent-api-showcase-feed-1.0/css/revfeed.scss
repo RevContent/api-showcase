@@ -3166,11 +3166,12 @@ textarea.comment-textarea:focus {
 .auth-button {
   margin: 0 auto;
   display: block;
-  width: 300px;
+  width: 100%;
   height: 50px;
-  padding: 15px 0 15px 70px;
+  padding: 15px 0 15px 25%;
   border-radius: 5px;
   cursor: pointer;
+  max-width: 300px;
 }
 
 .auth-button span {
