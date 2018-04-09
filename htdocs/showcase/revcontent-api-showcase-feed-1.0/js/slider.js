@@ -4593,6 +4593,10 @@ Author: michael@revcontent.com
                             engage_auth.remove();
                             //re-layout grid for masonry
                             that.grid.layout();
+                            if (!that.personalized) {
+                                that.showPersonalizedTransition();
+                                that.personalize();
+                            }
 
                         },function(data){
 
