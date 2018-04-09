@@ -2975,7 +2975,9 @@ Author: michael@revcontent.com
         this.interestsCarouselItem = added[0];
 
         if (that.options.user !== null && that.options.user.hasOwnProperty('interests')) {
-            that.handleCarousel(that.options.user.interests);
+            setTimeout(function() { // wait a tick for layout
+                that.handleCarousel(that.options.user.interests);
+            });
         } else {
             revApi.xhr( that.options.actions_api_url + 'interests?domain=' + that.options.domain, function (data) {
                 that.handleCarousel(data);
