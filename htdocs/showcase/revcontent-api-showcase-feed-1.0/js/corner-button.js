@@ -130,19 +130,19 @@ Author: michael@revcontent.com
             //     revUtils.addClass(that.userProfileImage, 'eng-default-profile');
             // }
 
-            // if (that.options.brand_logo_secondary) {
-            //     if (that.options.brand_logo_secondary.charAt(0) === '<') {
-            //         var removeQuotes = that.options.brand_logo_secondary.replace(/"/g, "'");
-            //         that.buttonElementInnerIcon.style.backgroundImage = 'url("data:image/svg+xml;utf8,' + removeQuotes + '")';
-            //         //that.userProfileImage.style.backgroundImage = 'url("data:image/svg+xml;utf8,' + removeQuotes + '")';
-            //     } else {
-            //         that.buttonElementInnerIcon.style.backgroundImage = 'url(' + that.options.brand_logo_secondary + ')';
-            //         //that.userProfileImage.style.backgroundImage = 'url(' + that.options.brand_logo_secondary + ')';
-            //     }
-            // } else {
+            if (that.options.brand_logo_secondary) {
+                if (that.options.brand_logo_secondary.charAt(0) === '<') {
+                    var removeQuotes = that.options.brand_logo_secondary.replace(/"/g, "'");
+                    that.buttonElementInnerIcon.style.backgroundImage = 'url("data:image/svg+xml;utf8,' + removeQuotes + '")';
+                    //that.userProfileImage.style.backgroundImage = 'url("data:image/svg+xml;utf8,' + removeQuotes + '")';
+                } else {
+                    that.buttonElementInnerIcon.style.backgroundImage = 'url(' + that.options.brand_logo_secondary + ')';
+                    //that.userProfileImage.style.backgroundImage = 'url(' + that.options.brand_logo_secondary + ')';
+                }
+            } else {
                 revUtils.addClass(that.buttonElementInnerIcon, 'eng-default-profile');
                 revUtils.addClass(that.userProfileImage, 'eng-default-profile');
-            //}
+            }
         }
 
         updateButtonElementInnerIcon();
