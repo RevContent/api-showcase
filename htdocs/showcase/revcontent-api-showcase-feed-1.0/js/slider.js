@@ -2884,7 +2884,6 @@ Author: michael@revcontent.com
 
             '<div id="personalized-transition-text" class="text-out"><div>Analyzing <strong>' + ucDomain + '</strong> Articles</div></div>' +
 
-
             '<div id="personalized-transition-animation">' +
 
             '<div class="personalized-transition-dna animated" style="display:flex;flex:1;align-items:center;width:100%">' +
@@ -2973,7 +2972,6 @@ Author: michael@revcontent.com
             '</div>' +
             '</div>' +
 
-
             '</div>';
 
         show();
@@ -2994,7 +2992,6 @@ Author: michael@revcontent.com
                 personalizedTransitionText.classList.remove('text-out');
                 personalizedTransitionText.classList.add('text-in');
                 personalizedTransitionAnimation.classList.add('animation-active');
-
                 setTimeout(function() {
                     personalizedTransitionText.classList.remove('text-in');
                     personalizedTransitionText.classList.add('text-out');
@@ -3009,42 +3006,15 @@ Author: michael@revcontent.com
                                 personalizedTransitionText.textContent = 'Personalizing your Experience';
                                 personalizedTransitionText.classList.remove('text-out');
                                 personalizedTransitionText.classList.add('text-in');
-                                setTimeout(function() {
+                                //setTimeout(function() {
 
-                                }, 2500);
+                                //}, 2500);
                             }, 800);
                         }, 2500);
-
-
                     }, 800);
-
-
                 }, 2500);
             }, 800);
-
-
         }, 1000);
-
-        /* setTimeout(function() {
-         var personalizedTransitionText = that.personalizedContent.querySelector('#personalized-transition-text div');
-
-         var remove = function() {
-         that.onEndAnimation(personalizedTransitionText, function() {
-         revUtils.removeClass(personalizedTransitionText, 'personalized-transition-text-animated');
-         });
-         };
-
-         revUtils.addClass(personalizedTransitionText, 'personalized-transition-text-animated');
-         personalizedTransitionText.innerHTML = 'Matching your interests to ' + ucDomain + ' content';
-         remove();
-
-         setTimeout(function() {
-         revUtils.addClass(personalizedTransitionText, 'personalized-transition-text-animated');
-         personalizedTransitionText.innerHTML = 'Preparing a personalized ' + ucDomain + ' experience for you';
-         remove();
-         }, 2500);
-         }, 2500);
-         */
 
     };
 
