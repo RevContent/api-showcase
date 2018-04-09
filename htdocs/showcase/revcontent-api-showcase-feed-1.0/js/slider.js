@@ -3709,19 +3709,15 @@ Author: michael@revcontent.com
             item.element.querySelector('.rev-reaction-menu-item-count-pos .rev-reaction-menu-item-count-inner').innerText = that.milliFormatter(reactionCountTotalPos);
             item.element.querySelector('.rev-reaction-menu-item-count-neg .rev-reaction-menu-item-count-inner').innerText = that.milliFormatter(reactionCountTotalNeg);
 
-                if (myReaction) {
-                    var reactionTotal = Math.max(1, (reactionCountTotal - 1));
-                    reactionHtml += '<div class="rev-reaction-count">'+ ((reactionCountTotal == 1) ? 'You reacted' : 'You and ' + reactionTotal + ' other' + (reactionTotal > 1 ? 's' : '') ) + '</div>';
-                } else {
-                    reactionHtml += '<div ' + (!reactionCountTotal ? 'style="margin-left: 0;"' : '') + ' class="rev-reaction-count">'+ (reactionCountTotal ? reactionCountTotal : 'Be the first to react') +'</div>';
-                }
-
+            if (myReaction) {
+                var reactionTotal = Math.max(1, (reactionCountTotal - 1));
+                reactionHtml += '<div class="rev-reaction-count">'+ ((reactionCountTotal == 1) ? 'You reacted' : 'You and ' + reactionTotal + ' other' + (reactionTotal > 1 ? 's' : '') ) + '</div>';
                 item.element.querySelector('.rev-reactions-total-inner').innerHTML = reactionHtml;
             } else {
                 item.element.querySelector('.rev-reactions-total-inner').innerHTML = '<div class="rev-reaction-count">Be the first to react</div>';
             }
 
-            item.element.querySelector('.rev-reactions-total-inner').innerHTML = reactionHtml;
+
         },null,true,options);
     };
 
