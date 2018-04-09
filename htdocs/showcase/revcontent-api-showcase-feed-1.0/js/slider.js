@@ -1229,7 +1229,10 @@ Author: michael@revcontent.com
                     that.reactionCount(item, iconName, true);
 
                     //that.transitionLogin(item, 'reaction');
-                    that.tryAuth(item.element, 'reaction');
+                    var rc_inner = item.element.querySelector('.rev-content-inner');
+                    console.log(item.element);
+                    console.log(rc_inner);
+                    that.tryAuth(rc_inner, 'reaction');
 
                     return;
                 }
@@ -1275,7 +1278,10 @@ Author: michael@revcontent.com
                 }
 
                 //that.transitionLogin(item, 'reaction');
-                that.tryAuth(item.element, 'reaction');
+                var rc_inner = item.element.querySelector('.rev-content-inner');
+                    console.log(item.element);
+                    console.log(rc_inner);
+                    that.tryAuth(rc_inner, 'reaction');
             });
 
             this.mc.on('press', function(ev) {
@@ -1373,7 +1379,10 @@ Author: michael@revcontent.com
                 }
 
                 //that.transitionLogin(item, 'reaction');
-                that.tryAuth(item.element, 'reaction');
+                var rc_inner = item.element.querySelector('.rev-content-inner');
+                    console.log(item.element);
+                    console.log(rc_inner);
+                    that.tryAuth(rc_inner, 'reaction');
 
             });
 
@@ -1428,7 +1437,10 @@ Author: michael@revcontent.com
                     that.setReactionText(item);
 
                     //that.transitionLogin(item, 'reaction');
-                    that.tryAuth(item.element, 'reaction');
+                    var rc_inner = item.element.querySelector('.rev-content-inner');
+                    console.log(item.element);
+                    console.log(rc_inner);
+                    that.tryAuth(rc_inner, 'reaction');
 
                 }, {passive: false});
             }
@@ -2523,6 +2535,7 @@ Author: michael@revcontent.com
             this.getReactions(item);
         }
 
+        var commentButton = item.element.querySelector('.rev-reaction-comment');
         //dont show comment input on sponsored
         if (item.type !== 'sponsored' && this.options.comments_enabled) {
 
@@ -2533,7 +2546,7 @@ Author: michael@revcontent.com
 
             commentBoxElement.itemData = itemData;
 
-            var commentButton = item.element.querySelector('.rev-reaction-comment');
+            //var commentButton = item.element.querySelector('.rev-reaction-comment');
             if (commentButton) {
                 var contentInner = that.getClosestParent(commentButton, '.rev-content-inner');
                 itemData.contentInner = contentInner;
@@ -2634,6 +2647,10 @@ Author: michael@revcontent.com
 
             });
 
+        } else {
+            if (commentButton) {
+                commentButton.href = item.data.target_url + '#' + (this.options.comment_div ? this.options.comment_div : this.options.feed_id);
+            }
         }
 
         revUtils.remove(item.element.querySelector('.rev-reason'));
@@ -3678,6 +3695,8 @@ Author: michael@revcontent.com
                 }
 
                 item.element.querySelector('.rev-reactions-total-inner').innerHTML = reactionHtml;
+            } else {
+                item.element.querySelector('.rev-reactions-total-inner').innerHTML = '<div class="rev-reaction-count">Be the first to react</div>';
             }
         },null,true,options);
     };
