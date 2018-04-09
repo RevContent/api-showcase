@@ -418,10 +418,6 @@ Author: michael@revcontent.com
 
         this.getData();
 
-
-        // TODO: get bookmarks and add them to UI and save under this.options.user.bookmarks
-        // TODO: add bookmarks count to side menu
-
         this.dataPromise.then(function(data) {
 
             that.viewableItems = [];
@@ -475,6 +471,9 @@ Author: michael@revcontent.com
         });
 
         this.appendElements();
+
+        // UX DEV ONLY!
+        this.showPersonalizedTransition();
     };
 
     // TODO make navbar a component
@@ -1233,8 +1232,7 @@ Author: michael@revcontent.com
                     that.reactionCount(item, iconName, true);
 
                     //that.transitionLogin(item, 'reaction');
-                    var rc_inner = item.element.querySelector('.rev-content-inner');
-                    that.tryAuth(rc_inner, 'reaction');
+                    that.tryAuth(item.element, 'reaction');
 
                     return;
                 }
@@ -1280,8 +1278,7 @@ Author: michael@revcontent.com
                 }
 
                 //that.transitionLogin(item, 'reaction');
-                var rc_inner = item.element.querySelector('.rev-content-inner');
-                    that.tryAuth(rc_inner, 'reaction');
+                that.tryAuth(item.element, 'reaction');
             });
 
             this.mc.on('press', function(ev) {
@@ -1379,8 +1376,7 @@ Author: michael@revcontent.com
                 }
 
                 //that.transitionLogin(item, 'reaction');
-                var rc_inner = item.element.querySelector('.rev-content-inner');
-                    that.tryAuth(rc_inner, 'reaction');
+                that.tryAuth(item.element, 'reaction');
 
             });
 
@@ -1435,8 +1431,7 @@ Author: michael@revcontent.com
                     that.setReactionText(item);
 
                     //that.transitionLogin(item, 'reaction');
-                    var rc_inner = item.element.querySelector('.rev-content-inner');
-                    that.tryAuth(rc_inner, 'reaction');
+                    that.tryAuth(item.element, 'reaction');
 
                 }, {passive: false});
             }
@@ -1627,7 +1622,7 @@ Author: michael@revcontent.com
                     }
                     if (that.options.authenticated) {
                         revApi.xhr(that.options.actions_api_url + 'bookmark/remove/' + item.element.getAttribute('data-id'), function(data) {
-                            that.options.emitter.emitEvent('removeBookmark', [item.element]);
+                            EngageBookmarksManager.prototype.removeBookmark(data);
                         }, null, true, options);
                         // revApi.request(url, function(data) {
                         //     return;
@@ -1678,11 +1673,12 @@ Author: michael@revcontent.com
                     if (that.options.authenticated) {
                         revApi.xhr(url, function (bm) {
                             item.element.setAttribute('data-id', bm.id);
-                            that.options.emitter.emitEvent('addBookmark', [bm]);
+                            that.options.emitter.emitEvent('addBookmark', bm);
                         }, null, true, opts);
+                        // revApi.request( url, function(data) {
+                        //     return;
+                        // });
                     } else {
-                        //TODO: Fix bookmark/reactions ENG-363
-                        that.transitionLogin(item, 'bookmark');
                         that.queue.push({
                             type: 'bookmark',
                             url: url
@@ -2088,75 +2084,66 @@ Author: michael@revcontent.com
     RevSlider.prototype.authButtonHandler = function(cell, e) {
         var that = this;
         if (that.options.authenticated) {
-            that.logOut();
+            var url = that.options.actions_api_url + 'user/logout';
         } else {
-            var popup = window.open(that.options.actions_api_url + 'facebook/login', 'Login', 'resizable,width=600,height=800');
-
-            var closedCheckInterval = setInterval(function () {
-                if (popup.closed) {
-                    that.options.emitter.emitEvent('updateButtonElementInnerIcon');
-                    that.isAuthenticated(function (response) {
-
-                        that.options.emitter.emitEvent('updateButtons', [response]);
-
-                        if (response === true) {
-                            if (cell) {
-                                //old flip logic
-                                //revUtils.removeClass(cell, 'rev-flipped');
-                            }
-                            that.updateAuthElements();
-                            that.processQueue();
-
-                            /* secondary auth page, deemed unnecessary for now
-                            var headline = cell.querySelector('.rev-auth-headline');
-                            var button = cell.querySelector('.rev-auth-button');
-                            var image = cell.querySelector('.rev-auth-site-logo');
-                            var container = cell.querySelector('.rev-auth-box');
-
-                            if (image) {
-                                image.innerHTML = "<img src='https://graph.facebook.com/758080600/picture?type=square' />";
-                            } else {
-                                container.insertAdjacentHTML('afterbegin',"<img src='https://graph.facebook.com/758080600/picture?type=square' />");
-                            }
-
-                            button.style.display = "none";
-                            headline.innerHTML = "One Last Step, Please enter a password:<br/><input type='text' class='rev-engpass'/><input type='button' value='Sign Up'/>";*/
-                            if (!that.personalized) {
-                                that.showPersonalizedTransition();
-                                that.personalize();
-                            }
-
-                            //if commenting
-                            if (typeof that.afterAuth === "function") {
-                                that.afterAuth();
-                            }
-
-                        }
-                        revDisclose.postMessage();
-                    });
-                    clearInterval(closedCheckInterval);
-                }
-            }, 100);
+            //var url = that.options.host + "/feed.php?provider=facebook_engage&w=" + that.options.widget_id + "&p=" + that.options.pub_id;
+            var url = that.options.actions_api_url + 'facebook/login';
         }
-    }
 
-    RevSlider.prototype.logOut = function() {
-        var that = this;
-        revApi.xhr(that.options.actions_api_url + 'user/logout', function(data) {
-            localStorage.clear();
-            that.options.authenticated = false;
-            that.options.user = null;
+        var popup = window.open(url, 'Login', 'resizable,width=600,height=800');
 
-            that.options.emitter.emitEvent('updateButtonElementInnerIcon');
-            that.options.emitter.emitEvent('updateButtons', [false]);
+        var closedCheckInterval = setInterval(function() {
+            if (popup.closed) {
+                that.options.emitter.emitEvent('updateButtonElementInnerIcon');
+                that.isAuthenticated(function(response) {
 
-            that.grid.remove(that.feedAuthButton);
-            if (that.grid.perRow > 1) { // relayout if not single column
-                that.grid.layout();
+                    that.options.emitter.emitEvent('updateButtons', [response]);
+
+                    if (response === true) {
+                        if (cell) {
+                            //old flip logic
+                            //revUtils.removeClass(cell, 'rev-flipped');
+                        }
+                        that.updateAuthElements();
+                        that.processQueue();
+
+                        /* secondary auth page, deemed unnecessary for now
+                        var headline = cell.querySelector('.rev-auth-headline');
+                        var button = cell.querySelector('.rev-auth-button');
+                        var image = cell.querySelector('.rev-auth-site-logo');
+                        var container = cell.querySelector('.rev-auth-box');
+
+                        if (image) {
+                            image.innerHTML = "<img src='https://graph.facebook.com/758080600/picture?type=square' />";
+                        } else {
+                            container.insertAdjacentHTML('afterbegin',"<img src='https://graph.facebook.com/758080600/picture?type=square' />");
+                        }
+
+                        button.style.display = "none";
+                        headline.innerHTML = "One Last Step, Please enter a password:<br/><input type='text' class='rev-engpass'/><input type='button' value='Sign Up'/>";*/
+                        if (!that.personalized) {
+                            that.showPersonalizedTransition();
+                            that.personalize();
+                        }
+
+                        //if commenting
+                        if (typeof that.afterAuth === "function") {
+                            that.afterAuth();
+                        }
+
+                    } else {
+                        if (!cell) { // logged out from inline auth button
+                            that.grid.remove(that.feedAuthButton);
+                            if (that.grid.perRow > 1) { // relayout if not single column
+                                that.grid.layout();
+                            }
+                        }
+                    }
+                    revDisclose.postMessage();
+                });
+                clearInterval(closedCheckInterval);
             }
-
-            that.grid.layout();
-        },null,true,null);
+        }, 100);
     }
 
     RevSlider.prototype.getDisclosure = function() {
@@ -2537,10 +2524,8 @@ Author: michael@revcontent.com
             //add item to array for later access
             this.feedItems[itemData.uid] = item;
             this.getReactions(item);
-            //TODO: This is where bookmarks needs to be called when setting bookmark indicators
         }
 
-        var commentButton = item.element.querySelector('.rev-reaction-comment');
         //dont show comment input on sponsored
         if (item.type !== 'sponsored' && this.options.comments_enabled) {
 
@@ -2551,7 +2536,7 @@ Author: michael@revcontent.com
 
             commentBoxElement.itemData = itemData;
 
-            //var commentButton = item.element.querySelector('.rev-reaction-comment');
+            var commentButton = item.element.querySelector('.rev-reaction-comment');
             if (commentButton) {
                 var contentInner = that.getClosestParent(commentButton, '.rev-content-inner');
                 itemData.contentInner = contentInner;
@@ -2561,13 +2546,6 @@ Author: michael@revcontent.com
                     commentBoxElement.style.display = 'block';
                     that.grid.layout();
                     commentTextAreaElement.focus();
-
-                    var fontSize = parseInt(revUtils.getComputedStyle(commentTextAreaElement, 'font-size'));
-                    // if commentTextArea is scrolling bump the font size down, min font size is 10
-                    while(commentTextAreaElement.scrollHeight > commentTextAreaElement.offsetHeight && fontSize > 10) {
-                        fontSize--;
-                        commentTextAreaElement.style.fontSize = fontSize + 'px';
-                    }
                 });
             }
 
@@ -2659,10 +2637,6 @@ Author: michael@revcontent.com
 
             });
 
-        } else {
-            if (commentButton) {
-                commentButton.href = item.data.target_url + '#' + (this.options.comment_div ? this.options.comment_div : this.options.feed_id);
-            }
         }
 
         revUtils.remove(item.element.querySelector('.rev-reason'));
@@ -2806,19 +2780,17 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.updateAuthElements = function() {
         var authBoxes = document.querySelectorAll('.rev-auth-box');
-        this.isAuthenticated(function(response) {
-            if(response) {
-                for (var i = 0; i < authBoxes.length; i++) {
-                    authBoxes[i].querySelector('.rev-auth-headline').innerText = 'Currently logged in!';
-                    authBoxes[i].querySelector('.rev-auth-button-text').innerText = 'Log out';
-                }
-            } else {
-                for (var i = 0; i < authBoxes.length; i++) {
-                    authBoxes[i].querySelector('.rev-auth-headline').innerHTML = 'Almost Done! Login to save your reaction <br /> <strong>and</strong> personalize your experience';
-                    authBoxes[i].querySelector('.rev-auth-button-text').innerText = 'Continue with facebook';
-                }
+        if (this.options.authenticated) {
+            for (var i = 0; i < authBoxes.length; i++) {
+                authBoxes[i].querySelector('.rev-auth-headline').innerText = 'Currently logged in!';
+                authBoxes[i].querySelector('.rev-auth-button-text').innerText = 'Log out';
             }
-        });
+        } else {
+            for (var i = 0; i < authBoxes.length; i++) {
+                authBoxes[i].querySelector('.rev-auth-headline').innerHTML = 'Almost Done! Login to save your reaction <br /> <strong>and</strong> personalize your experience';
+                authBoxes[i].querySelector('.rev-auth-button-text').innerText = 'Continue with facebook';
+            }
+        }
     };
 
     RevSlider.prototype.closePersonalizedTransition = function(ev) {
@@ -2862,17 +2834,170 @@ Author: michael@revcontent.com
 
         this.personalizedMask = document.createElement('div');
         this.personalizedMask.id = 'personalized-transition-mask';
+        this.personalizedMask.classList.add('mask-bg-dark');
 
         this.personalizedContent = document.createElement('div');
         this.personalizedContent.id = 'personalized-transition-wrapper';
 
         var ucDomain = this.options.domain.charAt(0).toUpperCase() + this.options.domain.slice(1);
 
-        this.personalizedContent.innerHTML = '<div id="personalized-transition-animation"><div></div></div><div id="personalized-transition-text"><div>Analyzing ' + ucDomain + ' Articles</div></div>';
+        this.personalizedContent.innerHTML = '' +
+
+            '<div id="personalized-transition-logo">' +
+            '<div id="personalized-transition-logo-publisher-logo" style="background:#222222 url(' + this.options.brand_logo_secondary + ');background-size:contain;background-position: center center;">' +
+
+            '</div>' +
+            '</div>' +
+
+            '<div id="personalized-transition-copyright">by <strong>ENGAGE.IM</strong></div>' +
+            '<div id="personalized-transition-headline">' +
+                'Welcome!' +
+            '</div>' +
+
+            '<div id="personalized-transition-text" class="text-out"><div>Analyzing ' + ucDomain + ' Articles</div></div>' +
+
+
+            '<div id="personalized-transition-animation">' +
+
+            '<div class="personalized-transition-dna animated" style="display:flex;flex:1;align-items:center;width:100%">' +
+            '<div class="personalized-transition-dna-element" style="margin:0 auto">' +
+            '<svg class="lds-dna" width="100px"  height="auto"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" style="background: rgba(0, 0, 0, 0) none repeat scroll 0% 0%;"><circle cx="6.451612903225806" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-0.5s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="0s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#941946;#fbacc9;#941946" dur="2s" repeatCount="indefinite" begin="-0.5s"></animate>' +
+            '</circle><circle cx="6.451612903225806" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-1.5s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-1s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#a2f0fb;#164ba3;#a2f0fb" dur="2s" repeatCount="indefinite" begin="-0.5s"></animate>' +
+            '</circle><circle cx="16.129032258064512" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-0.7s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-0.2s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#941946;#fbacc9;#941946" dur="2s" repeatCount="indefinite" begin="-0.7s"></animate>' +
+            '</circle><circle cx="16.129032258064512" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-1.7s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-1.2s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#a2f0fb;#164ba3;#a2f0fb" dur="2s" repeatCount="indefinite" begin="-0.7s"></animate>' +
+            '</circle><circle cx="25.806451612903224" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-0.9s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-0.4s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#941946;#fbacc9;#941946" dur="2s" repeatCount="indefinite" begin="-0.9s"></animate>' +
+            '</circle><circle cx="25.806451612903224" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-1.9s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-1.4s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#a2f0fb;#164ba3;#a2f0fb" dur="2s" repeatCount="indefinite" begin="-0.9s"></animate>' +
+            '</circle><circle cx="35.48387096774193" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-1.1s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-0.6s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#941946;#fbacc9;#941946" dur="2s" repeatCount="indefinite" begin="-1.1s"></animate>' +
+            '</circle><circle cx="35.48387096774193" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-2.1s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-1.6s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#a2f0fb;#164ba3;#a2f0fb" dur="2s" repeatCount="indefinite" begin="-1.1s"></animate>' +
+            '</circle><circle cx="45.16129032258064" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-1.3s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-0.8s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#941946;#fbacc9;#941946" dur="2s" repeatCount="indefinite" begin="-1.3s"></animate>' +
+            '</circle><circle cx="45.16129032258064" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-2.3s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-1.8s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#a2f0fb;#164ba3;#a2f0fb" dur="2s" repeatCount="indefinite" begin="-1.3s"></animate>' +
+            '</circle><circle cx="54.838709677419345" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-1.5s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-1s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#941946;#fbacc9;#941946" dur="2s" repeatCount="indefinite" begin="-1.5s"></animate>' +
+            '</circle><circle cx="54.838709677419345" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-2.5s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-2s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#a2f0fb;#164ba3;#a2f0fb" dur="2s" repeatCount="indefinite" begin="-1.5s"></animate>' +
+            '</circle><circle cx="64.51612903225805" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-1.7s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-1.2s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#941946;#fbacc9;#941946" dur="2s" repeatCount="indefinite" begin="-1.7s"></animate>' +
+            '</circle><circle cx="64.51612903225805" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-2.7s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-2.2s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#a2f0fb;#164ba3;#a2f0fb" dur="2s" repeatCount="indefinite" begin="-1.7s"></animate>' +
+            '</circle><circle cx="74.19354838709677" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-1.9s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-1.4s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#941946;#fbacc9;#941946" dur="2s" repeatCount="indefinite" begin="-1.9s"></animate>' +
+            '</circle><circle cx="74.19354838709677" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-2.9s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-2.4s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#a2f0fb;#164ba3;#a2f0fb" dur="2s" repeatCount="indefinite" begin="-1.9s"></animate>' +
+            '</circle><circle cx="83.87096774193547" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-2.1s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-1.6s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#941946;#fbacc9;#941946" dur="2s" repeatCount="indefinite" begin="-2.1s"></animate>' +
+            '</circle><circle cx="83.87096774193547" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-3.1s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-2.6s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#a2f0fb;#164ba3;#a2f0fb" dur="2s" repeatCount="indefinite" begin="-2.1s"></animate>' +
+            '</circle><circle cx="93.54838709677418" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-2.3s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-1.8s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#941946;#fbacc9;#941946" dur="2s" repeatCount="indefinite" begin="-2.3s"></animate>' +
+            '</circle><circle cx="93.54838709677418" cy="50" r="3">' +
+            '<animate attributeName="r" times="0;0.5;1" values="2.4000000000000004;3.5999999999999996;2.4000000000000004" dur="2s" repeatCount="indefinite" begin="-3.3s"></animate>' +
+            '<animate attributeName="cy" keyTimes="0;0.5;1" values="32;68;32" dur="2s" repeatCount="indefinite" begin="-2.8s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline"></animate>' +
+            '<animate attributeName="fill" keyTimes="0;0.5;1" values="#a2f0fb;#164ba3;#a2f0fb" dur="2s" repeatCount="indefinite" begin="-2.3s"></animate>' +
+            '</circle></svg>' +
+            '</div>' +
+            '</div>' +
+
+
+            '</div>';
 
         show();
 
         setTimeout(function() {
+            that.personalizedMask.classList.add('mask-bg-activated');
+            var personalizedTransitionLogo = that.personalizedContent.querySelector('div#personalized-transition-logo');
+            var personalizedTransitionHeadline = that.personalizedContent.querySelector('div#personalized-transition-headline');
+            var personalizedTransitionText = that.personalizedContent.querySelector('div#personalized-transition-text');
+            var personalizedTransitionAnimation = that.personalizedContent.querySelector('div#personalized-transition-animation');
+            var personalizedTransitionCopyright = that.personalizedContent.querySelector('div#personalized-transition-copyright');
+
+            personalizedTransitionLogo.classList.add('logo-in');
+            personalizedTransitionHeadline.classList.add('text-in');
+            personalizedTransitionCopyright.classList.add('text-in');
+
+            setTimeout(function() {
+                personalizedTransitionText.classList.remove('text-out');
+                personalizedTransitionText.classList.add('text-in');
+                personalizedTransitionAnimation.classList.add('animation-active');
+
+                setTimeout(function() {
+                    personalizedTransitionText.classList.remove('text-in');
+                    personalizedTransitionText.classList.add('text-out');
+                    setTimeout(function() {
+                        personalizedTransitionText.textContent = 'Matching your interests.';
+                        personalizedTransitionText.classList.remove('text-out');
+                        personalizedTransitionText.classList.add('text-in');
+                        setTimeout(function() {
+                            personalizedTransitionText.classList.remove('text-in');
+                            personalizedTransitionText.classList.add('text-out');
+                            setTimeout(function() {
+                                personalizedTransitionText.textContent = 'Personalizing your experience.';
+                                personalizedTransitionText.classList.remove('text-out');
+                                personalizedTransitionText.classList.add('text-in');
+                                setTimeout(function() {
+
+                                }, 2500);
+                            }, 800);
+                        }, 2500);
+
+
+                    }, 800);
+
+
+                }, 2500);
+            }, 800);
+
+
+        }, 1000);
+
+       /* setTimeout(function() {
             var personalizedTransitionText = that.personalizedContent.querySelector('#personalized-transition-text div');
 
             var remove = function() {
@@ -2891,6 +3016,8 @@ Author: michael@revcontent.com
                 remove();
             }, 2500);
         }, 2500);
+        */
+
     };
 
     RevSlider.prototype.updateInterstsSubscription = function(type, data) {
@@ -3013,8 +3140,8 @@ Author: michael@revcontent.com
 
         that.interestsCarouselItem.carousel.update(data, that.options.authenticated);
 
-        if (that.grid.perRow > 1) { // relayout if not single column
-            that.grid.layout();
+        if (grid.perRow > 1) { // relayout if not single column
+            grid.layout();
         }
     };
 
@@ -3473,7 +3600,7 @@ Author: michael@revcontent.com
         revUtils.addClass(post_author_div, 'vcard');
         revUtils.addClass(post_author_div, 'inline-items');
         var time = revUtils.timeAgo(commentData.created, true);
-        var avatar = commentData.user.picture === "" ? "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=" + that.options.default_avatar_url : commentData.user.picture;
+        var avatar = commentData.user.picture === "" ? that.options.default_avatar_url : commentData.user.picture;
 
         if (avatar.indexOf("gravatar") !== -1) {
             avatar = avatar + '?d=' + that.options.default_avatar_url;
@@ -3550,11 +3677,7 @@ Author: michael@revcontent.com
         if (commentData.up_votes > 0) {
         var comment_likes_count = document.createElement("span");
             revUtils.addClass(comment_likes_count, 'rev-comment-likes-count');
-            if (commentData.up_votes <= 1) {
-                comment_likes_count.innerText = commentData.up_votes + " like";
-            } else {
-                comment_likes_count.innerText = commentData.up_votes + " likes";
-            }
+            comment_likes_count.innerText = commentData.up_votes + " likes";
             commentToolBox.appendChild(comment_likes_count);
         }
 
@@ -3643,75 +3766,81 @@ Author: michael@revcontent.com
         }).join('&');
 
         revApi.xhr(that.options.actions_api_url + 'reactions?' + queryString, function(data) {
+            if (data.reactions) {
 
-            var myReaction = '';
+                var myReaction = '';
 
-            var likeReactionElement = item.element.querySelector('.rev-reaction-icon');
-            likeReactionElement.removeAttribute('data-active');
+                var likeReactionElement = item.element.querySelector('.rev-reaction-icon');
+                likeReactionElement.removeAttribute('data-active');
 
-            var icon = item.element.querySelector('.rev-reaction-like .rev-reaction-icon');
-            revUtils.removeClass(icon, 'rev-reaction-icon-', true);
-            revUtils.addClass(icon, 'rev-reaction-icon-love');
-            revUtils.removeClass(icon, 'rev-reaction-icon-selected');
+                var icon = item.element.querySelector('.rev-reaction-like .rev-reaction-icon');
+                revUtils.removeClass(icon, 'rev-reaction-icon-', true);
+                revUtils.addClass(icon, 'rev-reaction-icon-love');
+                revUtils.removeClass(icon, 'rev-reaction-icon-selected');
 
-            if (data.reaction && data.reaction.reaction) {
-                myReaction = data.reaction.reaction;
-                likeReactionElement.setAttribute('data-active', myReaction);
-                likeReactionElement.setAttribute('data-id', data.reaction.id)
+                if (data.reaction.reaction) {
+                    myReaction = data.reaction.reaction;
+                    likeReactionElement.setAttribute('data-active', myReaction);
+                    likeReactionElement.setAttribute('data-id', data.reaction.id)
 
-                revUtils.addClass(icon, 'rev-reaction-icon-' + myReaction);
-                revUtils.addClass(icon, 'rev-reaction-icon-selected');
-                revUtils.removeClass(item.element, 'rev-menu-active');
-            }
-
-            var reactionHtml = '';
-
-            var reactionCountTotal = 0;
-            var reactionCountTotalPos = 0;
-            var reactionCountTotalNeg = 0;
-            var zIndex = 100;
-
-            for (var reactionCounter = 0; reactionCounter < that.options.reactions.length; reactionCounter++) {
-                var reaction = that.options.reactions[reactionCounter];
-                var reactionCount = 0;
-                if (data.reaction && data.reactions.hasOwnProperty(reaction)) {
-                    reactionCount = data.reactions[reaction];
+                    revUtils.addClass(icon, 'rev-reaction-icon-' + myReaction);
+                    revUtils.addClass(icon, 'rev-reaction-icon-selected');
+                    revUtils.removeClass(item.element, 'rev-menu-active');
                 }
 
-                if (reactionCount) {
-                    if (reactionCounter < 3) {
-                        reactionCountTotalPos += reactionCount;
-                    } else {
-                        reactionCountTotalNeg += reactionCount;
+                var reactionHtml = '';
+
+                var reactionCountTotal = 0;
+                var reactionCountTotalPos = 0;
+                var reactionCountTotalNeg = 0;
+                var zIndex = 100;
+
+                var positiveReactions = that.options.reactions.slice(0, 3);
+                var negativeReactions = that.options.reactions.slice(3);
+
+                for (var reactionCounter = 0; reactionCounter < that.options.reactions.length; reactionCounter++) {
+                    var reaction = that.options.reactions[reactionCounter];
+                    var reactionCount = 0;
+                    if (data.reactions.hasOwnProperty(reaction)) {
+                        reactionCount = data.reactions[reaction];
                     }
 
-                    reactionCountTotal += reactionCount;
-                    reactionHtml += '<div style="z-index:'+ zIndex +';" class="rev-reaction rev-reaction-' + reaction + '">' +
-                        '<div class="rev-reaction-inner">' +
-                        '<div class="rev-reaction-icon rev-reaction-icon-' + reaction + '-full"></div>' +
-                        '</div>' +
-                        '</div>';
-                    zIndex--;
+                    if (reactionCount) {
+                        if (reactionCounter < 3) {
+                            reactionCountTotalPos += reactionCount;
+                        } else {
+                            reactionCountTotalNeg += reactionCount;
+                        }
+
+                        reactionCountTotal += reactionCount;
+                        reactionHtml += '<div style="z-index:'+ zIndex +';" class="rev-reaction rev-reaction-' + reaction + '">' +
+                            '<div class="rev-reaction-inner">' +
+                            '<div class="rev-reaction-icon rev-reaction-icon-' + reaction + '-full"></div>' +
+                            '</div>' +
+                            '</div>';
+                        zIndex--;
+                    }
                 }
-            }
-            item.reactionCountTotalPos = reactionCountTotalPos;
-            item.reactionCountTotalNeg = reactionCountTotalNeg;
-            item.reactionCountTotal = reactionCountTotal;
+                item.reactionCountTotalPos = reactionCountTotalPos;
+                item.reactionCountTotalNeg = reactionCountTotalNeg;
+                item.reactionCountTotal = reactionCountTotal;
 
-            item.element.querySelector('.rev-reaction-menu-item-count-pos .rev-reaction-menu-item-count-inner').innerText = that.milliFormatter(reactionCountTotalPos);
-            item.element.querySelector('.rev-reaction-menu-item-count-neg .rev-reaction-menu-item-count-inner').innerText = that.milliFormatter(reactionCountTotalNeg);
+                item.element.querySelector('.rev-reaction-menu-item-count-pos .rev-reaction-menu-item-count-inner').innerText = that.milliFormatter(reactionCountTotalPos);
+                item.element.querySelector('.rev-reaction-menu-item-count-neg .rev-reaction-menu-item-count-inner').innerText = that.milliFormatter(reactionCountTotalNeg);
 
-            if (myReaction) {
-                var reactionTotal = Math.max(1, (reactionCountTotal - 1));
-                reactionHtml += '<div class="rev-reaction-count">'+ ((reactionCountTotal == 1) ? 'You reacted' : 'You and ' + reactionTotal + ' other' + (reactionTotal > 1 ? 's' : '') ) + '</div>';
+                if (myReaction) {
+                    var reactionTotal = Math.max(1, (reactionCountTotal - 1));
+                    reactionHtml += '<div class="rev-reaction-count">'+ ((reactionCountTotal == 1) ? 'You reacted' : 'You and ' + reactionTotal + ' other' + (reactionTotal > 1 ? 's' : '') ) + '</div>';
+                } else {
+                    reactionHtml += '<div ' + (!reactionCountTotal ? 'style="margin-left: 0;"' : '') + ' class="rev-reaction-count">'+ (reactionCountTotal ? reactionCountTotal : 'Be the first to react') +'</div>';
+                }
+
                 item.element.querySelector('.rev-reactions-total-inner').innerHTML = reactionHtml;
-            } else {
-                item.element.querySelector('.rev-reactions-total-inner').innerHTML = '<div class="rev-reaction-count">Be the first to react</div>';
             }
-
-
         },null,true,options);
     };
+
+
 
     RevSlider.prototype.addReaction = function(element, item, iconName) {
         var that = this;
@@ -4300,8 +4429,8 @@ Author: michael@revcontent.com
                 that.options.authenticated = true;
                     that.options.user = data;
                     if (data.picture === "") {
-                        that.options.user.profile_url = "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=" + that.options.default_avatar_url;
-                        that.options.user.picture = "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=" + that.options.default_avatar_url;
+                        that.options.user.profile_url = that.options.default_avatar_url;
+                        that.options.user.picture = that.options.default_avatar_url;
                     }
                     if( callback && typeof callback === 'function' ) { callback.call(); }
 
@@ -4744,6 +4873,7 @@ Author: michael@revcontent.com
                                             '</div>&nbsp;';
 
                                         revUtils.addEventListener(new_interest, 'click', function(){
+                                            console.log("clicked");
                                             this.classList.toggle('selected');
                                             this.classList.toggle('deselected');
 
@@ -5065,7 +5195,7 @@ Author: michael@revcontent.com
 
         var commentUserAvatar = document.createElement('div');
         revUtils.addClass(commentUserAvatar, 'comment-avatar');
-        commentUserAvatar.style.backgroundImage = 'url(' + (typeof this.options.authenticated && this.options.user !== null && this.options.user.hasOwnProperty("picture") ? this.options.user.picture : "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=" + this.options.default_avatar_url) + ')';
+        commentUserAvatar.style.backgroundImage = 'url(' + (typeof this.options.authenticated && this.options.user !== null && this.options.user.hasOwnProperty("picture") ? this.options.user.picture : this.options.default_avatar_url) + ')';
         commentBoxElement.appendChild(commentUserAvatar);
 
         var commentInputWrapElement = document.createElement('div');
@@ -5114,8 +5244,8 @@ Author: michael@revcontent.com
 
             that.options.user = data;
             if (data.picture === "") {
-                that.options.user.profile_url = "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=" + that.options.default_avatar_url;
-                that.options.user.picture = "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=" + that.options.default_avatar_url;
+                that.options.user.profile_url = that.options.default_avatar_url;
+                that.options.user.picture = that.options.default_avatar_url;
             }
 
             if (data.picture.indexOf("gravatar") !== -1) {
@@ -5209,10 +5339,12 @@ Author: michael@revcontent.com
             var options = {method:'DELETE'};
             if (that.options.hasOwnProperty("jwt")) {
                 options.jwt = that.options.jwt;
+                console.log("opts has jwt");
+                console.log(that.options.jwt);
             }
 
             revApi.xhr(that.options.actions_api_url + 'interest/remove/' + interest.id, function(data) {
-                //console.log(data);
+                console.log(data);
             },null,false,options);
 
         } else {
@@ -5225,7 +5357,7 @@ Author: michael@revcontent.com
             }
 
             revApi.xhr(that.options.actions_api_url + 'interest/add/' + interest.id, function(data) {
-                //console.log(data);
+                console.log(data);
             },null,false,options);
         }
 
