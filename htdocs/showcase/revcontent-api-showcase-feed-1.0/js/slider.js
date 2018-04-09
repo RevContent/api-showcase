@@ -418,6 +418,10 @@ Author: michael@revcontent.com
 
         this.getData();
 
+
+        // TODO: get bookmarks and add them to UI and save under this.options.user.bookmarks
+        // TODO: add bookmarks count to side menu
+
         this.dataPromise.then(function(data) {
 
             that.viewableItems = [];
@@ -1631,7 +1635,7 @@ Author: michael@revcontent.com
                     }
                     if (that.options.authenticated) {
                         revApi.xhr(that.options.actions_api_url + 'bookmark/remove/' + item.element.getAttribute('data-id'), function(data) {
-                            EngageBookmarksManager.prototype.removeBookmark(data);
+                            that.options.emitter.emitEvent('removeBookmark', [item.element]);
                         }, null, true, options);
                         // revApi.request(url, function(data) {
                         //     return;
@@ -1682,12 +1686,11 @@ Author: michael@revcontent.com
                     if (that.options.authenticated) {
                         revApi.xhr(url, function (bm) {
                             item.element.setAttribute('data-id', bm.id);
-                            that.options.emitter.emitEvent('addBookmark', bm);
+                            that.options.emitter.emitEvent('addBookmark', [bm]);
                         }, null, true, opts);
-                        // revApi.request( url, function(data) {
-                        //     return;
-                        // });
                     } else {
+                        //TODO: Fix bookmark/reactions ENG-363
+                        that.transitionLogin(item, 'bookmark');
                         that.queue.push({
                             type: 'bookmark',
                             url: url
@@ -2542,6 +2545,7 @@ Author: michael@revcontent.com
             //add item to array for later access
             this.feedItems[itemData.uid] = item;
             this.getReactions(item);
+            //TODO: This is where bookmarks needs to be called when setting bookmark indicators
         }
 
         var commentButton = item.element.querySelector('.rev-reaction-comment');
@@ -3554,7 +3558,11 @@ Author: michael@revcontent.com
         if (commentData.up_votes > 0) {
         var comment_likes_count = document.createElement("span");
             revUtils.addClass(comment_likes_count, 'rev-comment-likes-count');
-            comment_likes_count.innerText = commentData.up_votes + " likes";
+            if (commentData.up_votes <= 1) {
+                comment_likes_count.innerText = commentData.up_votes + " like";
+            } else {
+                comment_likes_count.innerText = commentData.up_votes + " likes";
+            }
             commentToolBox.appendChild(comment_likes_count);
         }
 
@@ -3643,67 +3651,63 @@ Author: michael@revcontent.com
         }).join('&');
 
         revApi.xhr(that.options.actions_api_url + 'reactions?' + queryString, function(data) {
-            if (data.reactions) {
 
-                var myReaction = '';
+            var myReaction = '';
 
-                var likeReactionElement = item.element.querySelector('.rev-reaction-icon');
-                likeReactionElement.removeAttribute('data-active');
+            var likeReactionElement = item.element.querySelector('.rev-reaction-icon');
+            likeReactionElement.removeAttribute('data-active');
 
-                var icon = item.element.querySelector('.rev-reaction-like .rev-reaction-icon');
-                revUtils.removeClass(icon, 'rev-reaction-icon-', true);
-                revUtils.addClass(icon, 'rev-reaction-icon-love');
-                revUtils.removeClass(icon, 'rev-reaction-icon-selected');
+            var icon = item.element.querySelector('.rev-reaction-like .rev-reaction-icon');
+            revUtils.removeClass(icon, 'rev-reaction-icon-', true);
+            revUtils.addClass(icon, 'rev-reaction-icon-love');
+            revUtils.removeClass(icon, 'rev-reaction-icon-selected');
 
-                if (data.reaction.reaction) {
-                    myReaction = data.reaction.reaction;
-                    likeReactionElement.setAttribute('data-active', myReaction);
-                    likeReactionElement.setAttribute('data-id', data.reaction.id)
+            if (data.reaction && data.reaction.reaction) {
+                myReaction = data.reaction.reaction;
+                likeReactionElement.setAttribute('data-active', myReaction);
+                likeReactionElement.setAttribute('data-id', data.reaction.id)
 
-                    revUtils.addClass(icon, 'rev-reaction-icon-' + myReaction);
-                    revUtils.addClass(icon, 'rev-reaction-icon-selected');
-                    revUtils.removeClass(item.element, 'rev-menu-active');
+                revUtils.addClass(icon, 'rev-reaction-icon-' + myReaction);
+                revUtils.addClass(icon, 'rev-reaction-icon-selected');
+                revUtils.removeClass(item.element, 'rev-menu-active');
+            }
+
+            var reactionHtml = '';
+
+            var reactionCountTotal = 0;
+            var reactionCountTotalPos = 0;
+            var reactionCountTotalNeg = 0;
+            var zIndex = 100;
+
+            for (var reactionCounter = 0; reactionCounter < that.options.reactions.length; reactionCounter++) {
+                var reaction = that.options.reactions[reactionCounter];
+                var reactionCount = 0;
+                if (data.reaction && data.reactions.hasOwnProperty(reaction)) {
+                    reactionCount = data.reactions[reaction];
                 }
 
-                var reactionHtml = '';
-
-                var reactionCountTotal = 0;
-                var reactionCountTotalPos = 0;
-                var reactionCountTotalNeg = 0;
-                var zIndex = 100;
-
-                var positiveReactions = that.options.reactions.slice(0, 3);
-                var negativeReactions = that.options.reactions.slice(3);
-
-                for (var reactionCounter = 0; reactionCounter < that.options.reactions.length; reactionCounter++) {
-                    var reaction = that.options.reactions[reactionCounter];
-                    var reactionCount = 0;
-                    if (data.reactions.hasOwnProperty(reaction)) {
-                        reactionCount = data.reactions[reaction];
+                if (reactionCount) {
+                    if (reactionCounter < 3) {
+                        reactionCountTotalPos += reactionCount;
+                    } else {
+                        reactionCountTotalNeg += reactionCount;
                     }
 
-                    if (reactionCount) {
-                        if (reactionCounter < 3) {
-                            reactionCountTotalPos += reactionCount;
-                        } else {
-                            reactionCountTotalNeg += reactionCount;
-                        }
-
-                        reactionCountTotal += reactionCount;
-                        reactionHtml += '<div style="z-index:'+ zIndex +';" class="rev-reaction rev-reaction-' + reaction + '">' +
-                            '<div class="rev-reaction-inner">' +
-                            '<div class="rev-reaction-icon rev-reaction-icon-' + reaction + '-full"></div>' +
-                            '</div>' +
-                            '</div>';
-                        zIndex--;
-                    }
+                    reactionCountTotal += reactionCount;
+                    reactionHtml += '<div style="z-index:'+ zIndex +';" class="rev-reaction rev-reaction-' + reaction + '">' +
+                        '<div class="rev-reaction-inner">' +
+                        '<div class="rev-reaction-icon rev-reaction-icon-' + reaction + '-full"></div>' +
+                        '</div>' +
+                        '</div>';
+                    zIndex--;
                 }
-                item.reactionCountTotalPos = reactionCountTotalPos;
-                item.reactionCountTotalNeg = reactionCountTotalNeg;
-                item.reactionCountTotal = reactionCountTotal;
+            }
+            item.reactionCountTotalPos = reactionCountTotalPos;
+            item.reactionCountTotalNeg = reactionCountTotalNeg;
+            item.reactionCountTotal = reactionCountTotal;
 
-                item.element.querySelector('.rev-reaction-menu-item-count-pos .rev-reaction-menu-item-count-inner').innerText = that.milliFormatter(reactionCountTotalPos);
-                item.element.querySelector('.rev-reaction-menu-item-count-neg .rev-reaction-menu-item-count-inner').innerText = that.milliFormatter(reactionCountTotalNeg);
+            item.element.querySelector('.rev-reaction-menu-item-count-pos .rev-reaction-menu-item-count-inner').innerText = that.milliFormatter(reactionCountTotalPos);
+            item.element.querySelector('.rev-reaction-menu-item-count-neg .rev-reaction-menu-item-count-inner').innerText = that.milliFormatter(reactionCountTotalNeg);
 
                 if (myReaction) {
                     var reactionTotal = Math.max(1, (reactionCountTotal - 1));
@@ -3716,10 +3720,10 @@ Author: michael@revcontent.com
             } else {
                 item.element.querySelector('.rev-reactions-total-inner').innerHTML = '<div class="rev-reaction-count">Be the first to react</div>';
             }
+
+            item.element.querySelector('.rev-reactions-total-inner').innerHTML = reactionHtml;
         },null,true,options);
     };
-
-
 
     RevSlider.prototype.addReaction = function(element, item, iconName) {
         var that = this;
