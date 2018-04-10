@@ -884,7 +884,7 @@ Author: michael@revcontent.com
                         that.closePersonalizedTransition();
                     }
 
-                    var mintime = 7000; // show for a minimum of 7s
+                    var mintime = 10400; // show for a minimum of 10.4s
                     if (data.totaltime > mintime) {
                         finishPersonalize();
                     } else {
