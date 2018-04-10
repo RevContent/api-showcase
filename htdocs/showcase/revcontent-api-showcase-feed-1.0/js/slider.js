@@ -492,24 +492,18 @@ Author: michael@revcontent.com
         }
 
         var activePage = this.historyStack[this.historyStack.length-1];
-        var existingHeader = this.containerElement.querySelector('.rev-nav-header');
-        var header = existingHeader ? existingHeader : document.createElement('div');
-        header.className = 'rev-nav-header';
-        //if(this.options.topic_id>0){
-        //    header.innerHTML="<h3>"+this.options.topic_title+" Articles</h3>";
-        //}
 
-        //if(this.options.author_name && this.options.author_name.length>0){
-        //    header.innerHTML="<h3>Articles By "+this.options.author_name+"</h3>";
-        //}
+        if (!this.navBarElement) {
+            this.navBarElement = document.createElement('div');
+        }
 
         var existingBack = this.containerElement.querySelector('.go-back-bar');
         var back = existingBack ? existingBack : document.createElement('div');
 
-        back.setAttribute('data-type', activePage.type);
-        back.setAttribute('data-author', activePage.author_name.toLowerCase());
-        back.setAttribute('data-topic', activePage.topic_id);
-        back.setAttribute('data-title', activePage.topic_title);
+        this.navBarElement.setAttribute('data-type', activePage.type);
+        this.navBarElement.setAttribute('data-author', activePage.author_name.toLowerCase());
+        this.navBarElement.setAttribute('data-topic', activePage.topic_id);
+        this.navBarElement.setAttribute('data-title', activePage.topic_title);
 
         //var e_icon = '<span style="margin: 10px 10px 0 10px;width:16px;height:16px;display:block;background: transparent url(data:image/png;base64,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) top left no-repeat;background-size:contain"></span>';
         var e_icon = '';
@@ -528,12 +522,12 @@ Author: michael@revcontent.com
             this.containerElement.style.paddingTop = '48px';
         }
 
-        back.style.left = left_pos;
-        back.style.top = top_pos;
-        back.style.width = grid_width;
+        this.navBarElement.style.left = left_pos;
+        this.navBarElement.style.top = top_pos;
+        this.navBarElement.style.width = grid_width;
 
-        back.setAttribute('id','go-back-bar');
-        back.classList.add('go-back-bar');
+        this.navBarElement.setAttribute('id','go-back-bar');
+        this.navBarElement.classList.add('go-back-bar');
 
         var header_logo = activePage.iconHtml;
 
@@ -545,34 +539,33 @@ Author: michael@revcontent.com
             title = "Articles by " + activePage.author_name;
         }
 
-        back.innerHTML = '<div class="feed-header">' +
+        this.navBarElement.innerHTML = '<div class="feed-header">' +
             '<div class="feed-header-back"><button style="background-color:#444444;border:0;margin:0;border-right:1.0px solid #484848;display:block;width:40px;height:40px;text-align:center;font-weight: bold;font-size:32px" class="feed-back-button" name="feed-back-button" value="">' + back_icon + '</button></div>' +
             '<div class="feed-header-logo">' + header_logo + '</div>' +
             '<div class="feed-header-title" style="white-space:nowrap;padding-left:18px;text-overflow:ellipsis;overflow:hidden;text-align-center;color:#ffffff;font-size:14px;letter-spacing: 0;font-weight:normal;"><span>' + title + '</span></div>' +
             '<div class="feed-header-options" style="min-width:auto;text-align:center;">' + e_icon + '</div>' +
             '</div>';
 
-        this.head.insertAdjacentElement('afterend', back);
-        this.head.insertAdjacentElement('afterend', header);
+        this.head.insertAdjacentElement('afterend', this.navBarElement);
 
         if (!existingBack) {
             var that = this;
 
             if (!that.options.infinite_container) { // don't scroll for infinite container
-                this.scrollListenerNavbar = revUtils.throttle(this.navbarScrollListener.bind(this, back), 60);
+                this.scrollListenerNavbar = revUtils.throttle(this.navbarScrollListener.bind(this, this.navBarElement), 60);
 
                 revUtils.addEventListener(window, 'scroll', this.scrollListenerNavbar);
             }
 
             revUtils.addEventListener(window, 'resize', function(){
                 var grid_rect = that.containerElement.getBoundingClientRect();
-                back.style.width = grid_rect.width + 'px';
+                this.navBarElement.style.width = grid_rect.width + 'px';
             });
         }
 
-        var backButton = back.querySelector('.feed-back-button');
+        var backButton = this.navBarElement.querySelector('.feed-back-button');
         // TODO fix this
-        revUtils.addEventListener(backButton, revDetect.mobile() ? 'touchstart' : 'click', this.loadFromHistory.bind(this, back, backButton));
+        revUtils.addEventListener(backButton, revDetect.mobile() ? 'touchstart' : 'click', this.loadFromHistory.bind(this, this.navBarElement, backButton));
     };
 
     RevSlider.prototype.navbarScrollListener = function(back){
