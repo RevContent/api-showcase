@@ -184,6 +184,10 @@ Author: michael@revcontent.com
 
         revDisclose.setEmitter(this.emitter);
 
+        this.options.emitter.on('logout', function() {
+            that.logOut();
+        });
+
         this.emitter.on('dialog_closed', function() {
             that.options.emitter.emitEvent('updateButtonElementInnerIcon');
             that.isAuthenticated(function(response) {
@@ -2139,6 +2143,7 @@ Author: michael@revcontent.com
             }
 
             that.grid.layout();
+            that.options.emitter.emitEvent('menu-closed');
         },null,true,null);
     }
 
