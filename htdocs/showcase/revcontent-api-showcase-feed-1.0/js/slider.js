@@ -2114,6 +2114,7 @@ Author: michael@revcontent.com
                             if (!that.personalized) {
                                 that.showPersonalizedTransition();
                                 that.personalize();
+                                that.userMenu = that.createUserMenu(that.options);
                             }
 
                             //if commenting
@@ -2809,6 +2810,7 @@ Author: michael@revcontent.com
                     authBoxes[i].querySelector('.rev-auth-headline').innerText = 'Currently logged in!';
                     authBoxes[i].querySelector('.rev-auth-button-text').innerText = 'Log out';
                 }
+
             } else {
                 for (var i = 0; i < authBoxes.length; i++) {
                     authBoxes[i].querySelector('.rev-auth-headline').innerHTML = 'Almost Done! Login to save your reaction <br /> <strong>and</strong> personalize your experience';
@@ -4979,13 +4981,13 @@ Author: michael@revcontent.com
                 if (popup.closed) {
                     that.options.emitter.emitEvent('updateButtonElementInnerIcon');
                     that.isAuthenticated(function(response) {
-
                         that.options.emitter.emitEvent('updateButtons', [response]);
 
                         if (response === true) {
                             engage_auth.remove();
                             //re-layout grid for masonry
                             that.grid.layout();
+
 
                             that.updateAuthElements();
                             that.processQueue();
@@ -5386,6 +5388,10 @@ Author: michael@revcontent.com
         var tO2 = setTimeout(function(){
             errorEl.remove();
         },7000);
+    };
+
+    RevSlider.prototype.createUserMenu = function (options) {
+        return new EngageUserMenu(options);
     };
 
     String.prototype.trunc = String.prototype.trunc ||
