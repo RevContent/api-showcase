@@ -1609,21 +1609,20 @@ Author: michael@revcontent.com
                 if (revUtils.hasClass(bookmark, 'rev-save-active')) {
                     revUtils.removeClass(bookmark, 'rev-save-active');
 
-                    var options = {
+                    var removeBookmark = function(){
+                        var options = {
                         method: 'DELETE'
-                    }
-                    if (that.options.authenticated) {
+                        }
                         revApi.xhr(that.options.actions_api_url + 'bookmark/remove/' + item.element.getAttribute('data-id'), function(data) {
-                            that.options.emitter.emitEvent('removeBookmark', [item.element]);
-                        }, null, true, options);
-                        // revApi.request(url, function(data) {
-                        //     return;
-                        // });
+                                that.options.emitter.emitEvent('removeBookmark', [item.element]);
+                            }, null, true, options);
+                    };
+
+                    if (that.options.authenticated) {
+                        removeBookmark();
                     } else {
-                        that.queue.push({
-                            type: 'bookmark',
-                            url: url
-                        });
+                        var contentInner = item.element.querySelector('.rev-content-inner');
+                        that.tryAuth(contentInner, 'bookmark', removeBookmark);
                     }
                 } else {
                     revUtils.addClass(bookmark, 'rev-save-active');
@@ -1646,34 +1645,32 @@ Author: michael@revcontent.com
                             removeOverflow();
                         });
                     }
-                    that.transitionLogin(item, 'bookmark');
+                    //that.transitionLogin(item, 'bookmark');
 
-                    //save bookmark
-
-                    var url = that.options.actions_api_url + 'bookmark/add';
-                    var opts = {};
-                    var bm = {
-                        title: item.data.headline,
-                        url: item.data.target_url
-                    }
-                    opts.data = JSON.stringify(bm);
-                    opts.method = "POST";
-                    if (that.options.jwt) {
-                        opts.jwt = that.options.jwt;
-                    }
+                    var saveBookmark = function() {
+                        //save bookmark
+                        var url = that.options.actions_api_url + 'bookmark/add';
+                        var opts = {};
+                        var bm = {
+                            title: item.data.headline,
+                            url: item.data.target_url
+                        }
+                        opts.data = JSON.stringify(bm);
+                        opts.method = "POST";
+                        if (that.options.jwt) {
+                            opts.jwt = that.options.jwt;
+                        }
+                        revApi.xhr(url, function (bm) {
+                                item.element.setAttribute('data-id', bm.id);
+                                that.options.emitter.emitEvent('addBookmark', [bm]);
+                            }, null, true, opts);
+                    };
 
                     if (that.options.authenticated) {
-                        revApi.xhr(url, function (bm) {
-                            item.element.setAttribute('data-id', bm.id);
-                            that.options.emitter.emitEvent('addBookmark', [bm]);
-                        }, null, true, opts);
+                        saveBookmark();
                     } else {
-                        //TODO: Fix bookmark/reactions ENG-363
-                        that.transitionLogin(item, 'bookmark');
-                        that.queue.push({
-                            type: 'bookmark',
-                            url: url
-                        });
+                        var contentInner = item.element.querySelector('.rev-content-inner');
+                        that.tryAuth(contentInner, 'bookmark', saveBookmark);
                     }
                 }
                 e.preventDefault();
