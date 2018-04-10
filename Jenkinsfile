@@ -79,7 +79,7 @@ with open('./cloudfront.json', 'w') as cf_file:
 
 """
     sh 'aws cloudfront update-distribution --id ' + CFID + ' --distribution-config file://./cloudfront.json --if-match ' + etag
-    
+    sleep 15
   }
 
   stage("Clearing CDN") {
@@ -93,3 +93,4 @@ with open('./cloudfront.json', 'w') as cf_file:
   cleanWs()
 
 }
+
