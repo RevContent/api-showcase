@@ -434,6 +434,10 @@ Author: michael@revcontent.com
 
     EngageCornerButton.prototype.deactivatePanelGrids = function(activateInnerWidget) {
         this.options.innerWidget.element.style.height = 'auto';
+        if (this.options.innerWidget.navBarElement) { // hack it up
+            this.options.innerWidget.navBarElement.style.display = activateInnerWidget ? 'block' : 'none';
+        }
+
         this.options.innerWidget.options.active = activateInnerWidget ? true : false;
 
         for (var i = 0; i < this.options.buttons.length; i++) {
