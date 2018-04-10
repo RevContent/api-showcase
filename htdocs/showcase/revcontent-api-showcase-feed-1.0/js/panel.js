@@ -483,7 +483,9 @@ Author: michael@revcontent.com
 
             revUtils.addClass(this.fullPageContainer, 'rev-side-shifter-animating');
 
-            revUtils.transformCss(this.fullPageContainer, 'translateX(0%)');
+            // revUtils.transformCss(this.fullPageContainer, 'translateX(0%)');
+            this.fullPageContainer.style.transform = null; // ENG-412
+
             this.open = true;
             revUtils.addClass(this.buttonElement, 'rev-close');
             // if (button && this.showVisibleElement) { // if they clicked the button disable showVisibleElement behavior
