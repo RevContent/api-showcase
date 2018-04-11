@@ -162,6 +162,7 @@ Author: john.burnette@revcontent.com
 
     //We're done, add the panel to the page.
     revUtils.append(document.body, this.menuContainer);
+
     this.options.emitter.on('loadUserData', function (authenticated) {
       that.options.authenticated = authenticated;
       that.loadUserData();
@@ -172,6 +173,7 @@ Author: john.burnette@revcontent.com
       revUtils.removeClass(document.body, 'animate-user-profile');
       revUtils.removeClass(document.body, 'profile-mask-show');
     });
+
     this.loadUserData();
     this.createMenuItems();
   };
