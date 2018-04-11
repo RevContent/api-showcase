@@ -953,6 +953,31 @@ Author: michael@revcontent.com
         });
     };
 
+    RevSlider.prototype.unpersonalize = function() {
+        var that = this;
+
+        that.personalized = false;
+
+        revApi.xhr( that.options.actions_api_url + 'interests?domain=' + that.options.domain, function (data) {
+            that.interestsCarouselItem.carousel.update(data, false);
+        });
+
+        var internalPersonalizedCount = 0;
+        for (var i = 0; i < that.grid.items.length; i++) {
+            if (that.grid.items[i].type === 'internal') {
+                internalPersonalizedCount++;
+            }
+        }
+
+        if (internalPersonalizedCount) {
+            var internalURL = that.generateUrl(0, internalPersonalizedCount, 0, 0);
+
+            revApi.request(internalURL, function(resp) {
+                    that.updateDisplayedItems(that.grid.items, resp, true);
+            });
+        }
+    };
+
     RevSlider.prototype.setGridClasses = function() {
         revUtils.addClass(this.containerElement, 'rev-slider-' + (this.options.vertical ? 'vertical' : 'horizontal'));
 
@@ -2084,13 +2109,10 @@ Author: michael@revcontent.com
                     that.options.emitter.emitEvent('updateButtonElementInnerIcon');
                     that.isAuthenticated(function (response) {
 
-                        that.options.emitter.emitEvent('updateButtons', [response]);
-
                         if (response === true) {
-                            if (cell) {
-                                //old flip logic
-                                //revUtils.removeClass(cell, 'rev-flipped');
-                            }
+                            that.options.emitter.emitEvent('updateButtons', [true]);
+                            that.options.emitter.emitEvent('loadUserData', [that.options.user])
+
                             that.updateAuthElements();
                             that.processQueue();
 
@@ -2138,10 +2160,9 @@ Author: michael@revcontent.com
             that.options.emitter.emitEvent('updateButtonElementInnerIcon');
             that.options.emitter.emitEvent('updateButtons', [false]);
 
+            that.unpersonalize();
+
             that.grid.remove(that.feedAuthButton);
-            if (that.grid.perRow > 1) { // relayout if not single column
-                that.grid.layout();
-            }
 
             that.grid.layout();
         },null,true,null);
@@ -3606,7 +3627,7 @@ Author: michael@revcontent.com
 
         post_author_div.innerHTML = '<img src="' + avatar + '" alt="author">' +
                                     '<div class="author-date">' +
-                                        '<a class="h6 post__author-name fn" href="#">' + display_name + '</a>' +
+                                        '<a class="h6 post__author-name fn">' + display_name + '</a>' +
                                         '<div class="post__date">' +
                                             '<time class="published" datetime="' + commentData.created + '"><span>' + time + (time !== 'yesterday' && time !== "" ? ' ago' : '') + '</span></time>' +
                                         '</div>' +
@@ -4709,6 +4730,9 @@ Author: michael@revcontent.com
                             that.options.user = data.user;
                             localStorage.setItem('engage_jwt',data.token);
 
+                            that.options.emitter.emitEvent('updateButtons', [true]);
+                            that.options.emitter.emitEvent('loadUserData', [that.options.user])
+
                             that.updateCommentAvatars();
 
                             //continue whatever user was doing prior to auth
@@ -4929,11 +4953,13 @@ Author: michael@revcontent.com
                                     //re-layout grid for masonry
                                     that.grid.layout();
                                     if (!that.personalized) {
-                                       that.showPersonalizedTransition();
+                                        that.showPersonalizedTransition();
                                         that.personalize();
                                     }
-                                });
 
+                                    that.options.emitter.emitEvent('updateButtons', [true]);
+                                    that.options.emitter.emitEvent('loadUserData', [that.options.user])
+                                });
                             }
 
                         },null,false,options);
@@ -4978,9 +5004,11 @@ Author: michael@revcontent.com
                 if (popup.closed) {
                     that.options.emitter.emitEvent('updateButtonElementInnerIcon');
                     that.isAuthenticated(function(response) {
-                        that.options.emitter.emitEvent('updateButtons', [response]);
 
                         if (response === true) {
+                            that.options.emitter.emitEvent('updateButtons', [true]);
+                            that.options.emitter.emitEvent('loadUserData', [that.options.user])
+
                             engage_auth.remove();
                             //re-layout grid for masonry
                             that.grid.layout();
