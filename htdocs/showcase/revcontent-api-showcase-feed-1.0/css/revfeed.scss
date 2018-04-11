@@ -2840,14 +2840,17 @@ body.rev-blur > * {
 .comment-error-notification {
   width: 100%;
   color: #fff;
-  text-align: center;
-  padding: 7px 0;
+  text-align: left;
+  padding: 7px 7px;
   z-index: 100;
   background: #ff2a2a;
-  height: 54px;
+  min-height: 54px;
+  height: auto;
+  max-height: 108px;
   position: absolute!important;
-  top: -55px;
+  bottom: 54px;
   left: 0;
+  font-size: 13px;
 }
 
 @keyframes fadeIn {
