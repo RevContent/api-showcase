@@ -1950,8 +1950,8 @@ Author: michael@revcontent.com
 
                 that.options.user = data;
                 if (data.picture === "") {
-                    that.options.user.profile_url = that.options.default_avatar_url;
-                    that.options.user.picture = that.options.default_avatar_url;
+                    that.options.user.profile_url = "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=" + that.options.default_avatar_url;
+                    that.options.user.picture = "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=" + that.options.default_avatar_url;
                 }
 
                 if (data.picture.indexOf("gravatar") !== -1) {
@@ -5238,7 +5238,7 @@ Author: michael@revcontent.com
         var commentInputHiddenTxtElement = document.createElement('div');
         revUtils.addClass(commentInputHiddenTxtElement, 'hidden_text_size');
         commentInputHiddenTxtElement.style = 'min-height: 30px;width: 100%;border-radius: 4px;padding: 4px 70px 4px 10px;position: absolute;z-index: -2000;border: 0 none;color: #ffffff00;user-select: none;';
-        //commentInputWrapElement.appendChild(commentInputHiddenTxtElement);
+        commentInputWrapElement.appendChild(commentInputHiddenTxtElement);
 
         var commentTextAreaElement = document.createElement('textarea');
         revUtils.addClass(commentTextAreaElement, 'comment-textarea');
@@ -5255,13 +5255,14 @@ Author: michael@revcontent.com
         clearfix.style = 'clear: both;';
         commentBoxElement.appendChild(clearfix);
 
-        var masonry_layout = this.options.masonry_layout;
+        var masonry_layout = this.options.masonry_layout == true;
         //Adjust comment textarea height, 1 - 4 lines
         revUtils.addEventListener(commentTextAreaElement, 'keyup', function(ev) {
             submitCommentBtn.style.display = 'inline-block';
             commentInputHiddenTxtElement.innerText = commentTextAreaElement.value;
             if (commentInputHiddenTxtElement.scrollHeight < 88) {
                 if (masonry_layout) {return false;}
+                console.log(commentInputHiddenTxtElement.scrollHeight);
                 commentTextAreaElement.style.height = (commentInputHiddenTxtElement.scrollHeight + 2) + "px";
             }
         });
