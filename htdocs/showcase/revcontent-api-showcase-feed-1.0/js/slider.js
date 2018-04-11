@@ -476,7 +476,6 @@ Author: michael@revcontent.com
             }
 
             that.grid.layout();
-            that.options.emitter.emitEvent('menu-closed');
         });
 
         this.appendElements();
@@ -2163,8 +2162,9 @@ Author: michael@revcontent.com
             that.unpersonalize();
 
             that.grid.remove(that.feedAuthButton);
-
             that.grid.layout();
+
+            that.options.emitter.emitEvent('menu-closed');
         },null,true,null);
     }
 
