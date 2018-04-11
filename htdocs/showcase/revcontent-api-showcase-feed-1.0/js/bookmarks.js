@@ -220,12 +220,10 @@ Author: john.burnette@revcontent.com
   EngageBookmarksManager.prototype.getBookmarks = function () {
     var that = this;
     var options = {};
-    if (that.options.jwt) {
-      options.jwt = that.options.jwt;
-    }
-    //TODO: check if user is authenication before calling this RevSlider.isAuthenticated()
-
     if (that.options.authenticated) {
+      if (that.options.jwt) {
+        options.jwt = that.options.jwt;
+      }
       revApi.xhr(that.options.actions_api_url + 'bookmarks', function (data) {
         that.options.user.bookmarks = data;
         console.log(that.options.user.bookmarks);
@@ -235,7 +233,6 @@ Author: john.burnette@revcontent.com
       }, null, true, options);
     }
   };
-
 
   return EngageBookmarksManager;
 }));
