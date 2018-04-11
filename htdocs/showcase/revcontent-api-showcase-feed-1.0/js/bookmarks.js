@@ -143,8 +143,10 @@ Author: john.burnette@revcontent.com
         item.setAttribute('data-id', data.id);
         date.innerHTML = revUtils.timeAgo(data.created, true) + ' ago';
         headline.innerHTML = data.title;
+        headline.setAttribute('target', '_blank');
         domain.innerHTML = extractRootDomain(data.url);
         domain.href = data.url + "?utm_source=engageim";
+        domain.setAttribute('target', '_blank');
         //TODO: refactor this to be a function
         var options = {
           method: 'DELETE'
