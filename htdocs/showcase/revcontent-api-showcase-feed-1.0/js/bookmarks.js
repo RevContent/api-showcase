@@ -143,8 +143,10 @@ Author: john.burnette@revcontent.com
         item.setAttribute('data-id', data.id);
         date.innerHTML = revUtils.timeAgo(data.created, true) + ' ago';
         headline.innerHTML = data.title;
+        headlineLink.setAttribute('target', '_blank');
         domain.innerHTML = extractRootDomain(data.url);
-        domain.href = data.url + "?utm_source=engageim";
+        domain.href = 'https://' + extractHostname(data.url) + '?utm_source=engageim';
+        domain.setAttribute('target', '_blank');
         //TODO: refactor this to be a function
         var options = {
           method: 'DELETE'
@@ -220,12 +222,10 @@ Author: john.burnette@revcontent.com
   EngageBookmarksManager.prototype.getBookmarks = function () {
     var that = this;
     var options = {};
-    if (that.options.jwt) {
-      options.jwt = that.options.jwt;
-    }
-    //TODO: check if user is authenication before calling this RevSlider.isAuthenticated()
-
     if (that.options.authenticated) {
+      if (that.options.jwt) {
+        options.jwt = that.options.jwt;
+      }
       revApi.xhr(that.options.actions_api_url + 'bookmarks', function (data) {
         that.options.user.bookmarks = data;
         console.log(that.options.user.bookmarks);
@@ -235,7 +235,6 @@ Author: john.burnette@revcontent.com
       }, null, true, options);
     }
   };
-
 
   return EngageBookmarksManager;
 }));

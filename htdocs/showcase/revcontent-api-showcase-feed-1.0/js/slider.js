@@ -552,23 +552,22 @@ Author: michael@revcontent.com
             var that = this;
 
             if (!that.options.infinite_container) { // don't scroll for infinite container
-                this.scrollListenerNavbar = revUtils.throttle(this.navbarScrollListener.bind(this, this.navBarElement), 60);
+                this.scrollListenerNavbar = revUtils.throttle(this.navbarScrollListener.bind(this), 60);
 
                 revUtils.addEventListener(window, 'scroll', this.scrollListenerNavbar);
             }
 
             revUtils.addEventListener(window, 'resize', function(){
                 var grid_rect = that.containerElement.getBoundingClientRect();
-                this.navBarElement.style.width = grid_rect.width + 'px';
+                that.navBarElement.style.width = grid_rect.width + 'px';
             });
         }
 
-        var backButton = this.navBarElement.querySelector('.feed-back-button');
-        // TODO fix this
-        revUtils.addEventListener(backButton, revDetect.mobile() ? 'touchstart' : 'click', this.loadFromHistory.bind(this, this.navBarElement, backButton));
+        this.navBarBackButton = this.navBarElement.querySelector('.feed-back-button');
+        revUtils.addEventListener(this.navBarBackButton, revDetect.mobile() ? 'touchstart' : 'click', this.loadFromHistory.bind(this));
     };
 
-    RevSlider.prototype.navbarScrollListener = function(back){
+    RevSlider.prototype.navbarScrollListener = function(){
         var grid_rect = this.containerElement.getBoundingClientRect();
 
         if(grid_rect.top <= 0) {
@@ -595,15 +594,15 @@ Author: michael@revcontent.com
                     top_offset = parseInt(fixed_video.clientHeight);
                     fixed_video.style.zIndex = '20000';
                 }
-                back.style.position = 'fixed';
-                back.style.width = grid_rect.width + 'px';
-                back.style.top = 0 + top_offset + 'px';
-                back.classList.remove('no-shadow');
+                that.navBarElement.style.position = 'fixed';
+                that.navBarElement.style.width = grid_rect.width + 'px';
+                that.navBarElement.style.top = 0 + top_offset + 'px';
+                that.navBarElement.classList.remove('no-shadow');
 
                 if (notice) {
                     notice.style.position = 'fixed';
                     notice.style.left = 'auto';
-                    notice.style.top = 0 + (top_offset + back.clientHeight) + 'px';
+                    notice.style.top = 0 + (top_offset + that.navBarElement.clientHeight) + 'px';
                     notice.style.width = grid_rect.width + 'px';
                 }
 
@@ -614,10 +613,10 @@ Author: michael@revcontent.com
             }, 0);
 
         } else {
-            back.style.top = 0;
-            back.style.position = 'static';
-            back.style.width = '100%';
-            back.classList.add('no-shadow');
+            this.navBarElement.style.top = 0;
+            this.navBarElement.style.position = 'static';
+            this.navBarElement.style.width = '100%';
+            this.navBarElement.classList.add('no-shadow');
 
             var notice = this.element.querySelector('div#rev-notify-panel');
 
@@ -626,9 +625,6 @@ Author: michael@revcontent.com
                 notice.style.position = 'static';
                 notice.style.width = '100%';
                 notice.style.marginBottom = '9px';
-                back.style.marginBottom = 0;
-            } else {
-                back.style.marginBottom = '9px';
             }
         }
     };
@@ -660,7 +656,7 @@ Author: michael@revcontent.com
         });
     };
 
-    RevSlider.prototype.loadFromHistory = function(backBar, backButton) {
+    RevSlider.prototype.loadFromHistory = function() {
         //alert("here!");
         var that = this;
         if(this.element.classList.contains('is-loading') || this.historyStack.length == 0) {
@@ -673,7 +669,7 @@ Author: michael@revcontent.com
         if (this.historyStack.length > 1) {
             var item = this.historyStack.pop();
             if(this.historyStack.length == 0){
-                this.clearHistory(backBar, backButton);
+                this.clearHistory();
             } else {
                 item = this.historyStack.pop();
             }
@@ -686,14 +682,14 @@ Author: michael@revcontent.com
                 this.options.emitter.emitEvent('createFeed', ['default', {
                     withoutHistory: true
                 }]);
-                this.clearHistory(backBar, backButton);
+                this.clearHistory();
             }
 
         } else {
             this.options.emitter.emitEvent('createFeed', ['default', {
                 withoutHistory: true
             }]);
-            this.clearHistory(backBar, backButton);
+            this.clearHistory();
         }
 
         var refreshTimeout = setTimeout(function(){
@@ -705,25 +701,26 @@ Author: michael@revcontent.com
         }, 800);
     };
 
-    RevSlider.prototype.clearHistory = function(backBar, backButton) {
-        this.detachBackBar(backBar, backButton);
+    RevSlider.prototype.clearHistory = function() {
+        this.detachBackBar();
         this.historyStack = [];
     };
 
-    RevSlider.prototype.detachBackBar = function(backBar, backButton) {
+    RevSlider.prototype.detachBackBar = function() {
 
         revUtils.removeEventListener(window, 'scroll', this.scrollListenerNavbar);
 
-        if (backBar) {
-            backBar.style.pointerEvents = 'none';
+        if (this.navBarElement) {
+            // backBar.style.pointerEvents = 'none';
             if (revDetect.mobile()) {
-                revUtils.addEventListener(backButton, 'touchend', function() {
+                var that = this;
+                revUtils.addEventListener(this.navBarBackButton, 'touchend', function() {
                     setTimeout(function() {
-                        backBar.remove(); // wait a tick
+                        that.navBarElement.remove(); // wait a tick
                     });
                 });
             } else {
-                backBar.remove();
+                this.navBarElement.remove();
             }
         }
     };
@@ -888,7 +885,7 @@ Author: michael@revcontent.com
                         that.closePersonalizedTransition();
                     }
 
-                    var mintime = 7000; // show for a minimum of 7s
+                    var mintime = 10400; // show for a minimum of 10.4s
                     if (data.totaltime > mintime) {
                         finishPersonalize();
                     } else {
@@ -953,6 +950,31 @@ Author: michael@revcontent.com
         }).catch(function(e) {
             console.log(e);
         });
+    };
+
+    RevSlider.prototype.unpersonalize = function() {
+        var that = this;
+
+        that.personalized = false;
+
+        revApi.xhr( that.options.actions_api_url + 'interests?domain=' + that.options.domain, function (data) {
+            that.interestsCarouselItem.carousel.update(data, false);
+        });
+
+        var internalPersonalizedCount = 0;
+        for (var i = 0; i < that.grid.items.length; i++) {
+            if (that.grid.items[i].type === 'internal') {
+                internalPersonalizedCount++;
+            }
+        }
+
+        if (internalPersonalizedCount) {
+            var internalURL = that.generateUrl(0, internalPersonalizedCount, 0, 0);
+
+            revApi.request(internalURL, function(resp) {
+                    that.updateDisplayedItems(that.grid.items, resp, true);
+            });
+        }
     };
 
     RevSlider.prototype.setGridClasses = function() {
@@ -1611,20 +1633,21 @@ Author: michael@revcontent.com
                 if (revUtils.hasClass(bookmark, 'rev-save-active')) {
                     revUtils.removeClass(bookmark, 'rev-save-active');
 
-                    var removeBookmark = function(){
-                        var options = {
+                    var options = {
                         method: 'DELETE'
-                        }
-                        revApi.xhr(that.options.actions_api_url + 'bookmark/remove/' + item.element.getAttribute('data-id'), function(data) {
-                                that.options.emitter.emitEvent('removeBookmark', [item.element]);
-                            }, null, true, options);
-                    };
-
+                    }
                     if (that.options.authenticated) {
-                        removeBookmark();
+                        revApi.xhr(that.options.actions_api_url + 'bookmark/remove/' + item.element.getAttribute('data-id'), function(data) {
+                            that.options.emitter.emitEvent('removeBookmark', [item.element]);
+                        }, null, true, options);
+                        // revApi.request(url, function(data) {
+                        //     return;
+                        // });
                     } else {
-                        var contentInner = item.element.querySelector('.rev-content-inner');
-                        that.tryAuth(contentInner, 'bookmark', removeBookmark);
+                        that.queue.push({
+                            type: 'bookmark',
+                            url: url
+                        });
                     }
                 } else {
                     revUtils.addClass(bookmark, 'rev-save-active');
@@ -1647,32 +1670,34 @@ Author: michael@revcontent.com
                             removeOverflow();
                         });
                     }
-                    //that.transitionLogin(item, 'bookmark');
+                    that.transitionLogin(item, 'bookmark');
 
-                    var saveBookmark = function() {
-                        //save bookmark
-                        var url = that.options.actions_api_url + 'bookmark/add';
-                        var opts = {};
-                        var bm = {
-                            title: item.data.headline,
-                            url: item.data.target_url
-                        }
-                        opts.data = JSON.stringify(bm);
-                        opts.method = "POST";
-                        if (that.options.jwt) {
-                            opts.jwt = that.options.jwt;
-                        }
-                        revApi.xhr(url, function (bm) {
-                                item.element.setAttribute('data-id', bm.id);
-                                that.options.emitter.emitEvent('addBookmark', [bm]);
-                            }, null, true, opts);
-                    };
+                    //save bookmark
+
+                    var url = that.options.actions_api_url + 'bookmark/add';
+                    var opts = {};
+                    var bm = {
+                        title: item.data.headline,
+                        url: item.data.target_url
+                    }
+                    opts.data = JSON.stringify(bm);
+                    opts.method = "POST";
+                    if (that.options.jwt) {
+                        opts.jwt = that.options.jwt;
+                    }
 
                     if (that.options.authenticated) {
-                        saveBookmark();
+                        revApi.xhr(url, function (bm) {
+                            item.element.setAttribute('data-id', bm.id);
+                            that.options.emitter.emitEvent('addBookmark', [bm]);
+                        }, null, true, opts);
                     } else {
-                        var contentInner = item.element.querySelector('.rev-content-inner');
-                        that.tryAuth(contentInner, 'bookmark', saveBookmark);
+                        //TODO: Fix bookmark/reactions ENG-363
+                        that.transitionLogin(item, 'bookmark');
+                        that.queue.push({
+                            type: 'bookmark',
+                            url: url
+                        });
                     }
                 }
                 e.preventDefault();
@@ -2083,13 +2108,10 @@ Author: michael@revcontent.com
                     that.options.emitter.emitEvent('updateButtonElementInnerIcon');
                     that.isAuthenticated(function (response) {
 
-                        that.options.emitter.emitEvent('updateButtons', [response]);
-
                         if (response === true) {
-                            if (cell) {
-                                //old flip logic
-                                //revUtils.removeClass(cell, 'rev-flipped');
-                            }
+                            that.options.emitter.emitEvent('updateButtons', [true]);
+                            that.options.emitter.emitEvent('loadUserData', [that.options.user])
+
                             that.updateAuthElements();
                             that.processQueue();
 
@@ -2110,6 +2132,7 @@ Author: michael@revcontent.com
                             if (!that.personalized) {
                                 that.showPersonalizedTransition();
                                 that.personalize();
+                                that.userMenu = that.createUserMenu(that.options);
                             }
 
                             //if commenting
@@ -2136,12 +2159,11 @@ Author: michael@revcontent.com
             that.options.emitter.emitEvent('updateButtonElementInnerIcon');
             that.options.emitter.emitEvent('updateButtons', [false]);
 
-            that.grid.remove(that.feedAuthButton);
-            if (that.grid.perRow > 1) { // relayout if not single column
-                that.grid.layout();
-            }
+            that.unpersonalize();
 
+            that.grid.remove(that.feedAuthButton);
             that.grid.layout();
+
             that.options.emitter.emitEvent('menu-closed');
         },null,true,null);
     }
@@ -2586,62 +2608,71 @@ Author: michael@revcontent.com
 
             item.element.querySelector('.rev-content-inner').appendChild(commentBoxElement);
 
-            var submitCommentFn = function() {
-                //create comment inline on desktop
-                var submitted_comment_data = that.submitComment(commentTextAreaElement.value, itemData.target_url, null, function(data,error){
-                    // if (typeof data === "number" && data === 201) {
-                    //         //for some reason we are getting dual responses, one with the payload and one with the http code
-                    //     return;
-                    // }
-
-                    if (error) {
-                        //currently only want to show error for bad words, but gathering the error msg from response for later use
-                        var errorMsg = JSON.parse(data.responseText);
-                        var httpStatus = data.status;
-                        if (httpStatus === 406) {
-                            //bad word
-                            that.displayError(commentBoxElement,"Oops! We've detected a <b>bad word</b> in your comment, Please update your response before submitting.");
-                        }
-                        return;
-                    }
-
-                    var commentDetailsElement = item.element.querySelector(".rev-comment-detail");
-                    var commentUL = item.element.querySelector(".comments-list");
-                    var newCommentElement = that.setCommentHTML(data,false,false,itemData.uid);
-                    var newCommentElement_forDetails = that.setCommentHTML(data,false,false,itemData.uid);
-
-                    commentUL.appendChild(newCommentElement);
-
-                    if (commentDetailsElement) {
-                        commentDetailsElement.querySelector(".comments-list").appendChild(newCommentElement_forDetails);
-                    }
-
-                    commentTextAreaElement.value = "";
-                    var e = document.createEvent('HTMLEvents');
-                    e.initEvent("keyup", false, true);
-                    commentTextAreaElement.dispatchEvent(e);
-
-                    //update count
-                    var countEl = that.getClosestParent(newCommentElement, '.rev-content-inner').querySelector('.rev-reactions-total > .rev-comment-count');
-                    var currentCount = countEl.getAttribute('data-count') * 1;
-
-                    countEl.setAttribute('data-count', currentCount + 1);
-                    countEl.innerText = (currentCount + 1) + ' comment' + ((currentCount + 1) !== 1 ? 's' : '');
-
-                    //update feed item
-                    //that.updateDisplayedItem(that.feedItems[itemData.uid]);
-                    that.grid.layout();
-                });
-            };
-
             revUtils.addEventListener(submitCommentBtn, 'click', function(ev){
                 revUtils.addClass(this, 'novak-animate');
+
+                var callbackFn = function() {
+                    //create comment inline on desktop
+                    var submitted_comment_data = that.submitComment(commentTextAreaElement.value, itemData.target_url, null, function(data,error){
+                        // if (typeof data === "number" && data === 201) {
+                        //         //for some reason we are getting dual responses, one with the payload and one with the http code
+                        //     return;
+                        // }
+
+                        if (error) {
+                            //currently only want to show error for bad words, but gathering the error msg from response for later use
+                            var errorMsg = JSON.parse(data.responseText);
+                            var httpStatus = data.status;
+                            if (httpStatus === 406) {
+                                //bad word
+                                that.displayError(commentBoxElement,"Oops! We've detected a <b>bad word</b> in your comment, Please update your response before submitting.");
+                            }
+                            return;
+                        }
+
+                        var commentDetailsElement = item.element.querySelector(".rev-comment-detail");
+                        var commentUL = item.element.querySelector(".comments-list");
+                        var newCommentElement = that.setCommentHTML(data,false,false,itemData.uid);
+                        var newCommentElement_forDetails = that.setCommentHTML(data,false,false,itemData.uid);
+
+                        commentUL.appendChild(newCommentElement);
+
+                        if (commentDetailsElement) {
+                            commentDetailsElement.querySelector(".comments-list").appendChild(newCommentElement_forDetails);
+                        }
+
+                        commentTextAreaElement.value = "";
+                        var e = document.createEvent('HTMLEvents');
+                        e.initEvent("keyup", false, true);
+                        commentTextAreaElement.dispatchEvent(e);
+
+                        //update count
+                        var countEl = that.getClosestParent(newCommentElement, '.rev-content-inner').querySelector('.rev-reactions-total > .rev-comment-count');
+                        var currentCount = countEl.getAttribute('data-count') * 1;
+
+                        countEl.setAttribute('data-count', currentCount + 1);
+                        countEl.innerText = (currentCount + 1) + ' comment' + ((currentCount + 1) !== 1 ? 's' : '');
+
+                        //update feed item
+                        //that.updateDisplayedItem(that.feedItems[itemData.uid]);
+                        that.grid.layout();
+                    });
+                };
+
                 if (that.options.authenticated) {
-                    submitCommentFn();
+                    callbackFn();
                 } else {
                     var contentInner = item.element.querySelector('.rev-content-inner');
-                    that.tryAuth(contentInner, 'comment', submitCommentFn);
+                    that.tryAuth(contentInner, 'comment', callbackFn);
+                    //old flip logic
+                    // revUtils.removeClass(document.querySelector('.rev-flipped'), 'rev-flipped');
+                    // revUtils.addClass(item.element, 'rev-flipped');
+                    //item.element.scrollIntoView({ behavior: 'smooth', block: "start" });
+
+                    //store users comment for after auth
+                    //that.afterAuth = callbackFn;
                 }
+
             });
 
         } else {
@@ -2797,6 +2828,7 @@ Author: michael@revcontent.com
                     authBoxes[i].querySelector('.rev-auth-headline').innerText = 'Currently logged in!';
                     authBoxes[i].querySelector('.rev-auth-button-text').innerText = 'Log out';
                 }
+
             } else {
                 for (var i = 0; i < authBoxes.length; i++) {
                     authBoxes[i].querySelector('.rev-auth-headline').innerHTML = 'Almost Done! Login to save your reaction <br /> <strong>and</strong> personalize your experience';
@@ -3595,7 +3627,7 @@ Author: michael@revcontent.com
 
         post_author_div.innerHTML = '<img src="' + avatar + '" alt="author">' +
                                     '<div class="author-date">' +
-                                        '<a class="h6 post__author-name fn" href="#">' + display_name + '</a>' +
+                                        '<a class="h6 post__author-name fn">' + display_name + '</a>' +
                                         '<div class="post__date">' +
                                             '<time class="published" datetime="' + commentData.created + '"><span>' + time + (time !== 'yesterday' && time !== "" ? ' ago' : '') + '</span></time>' +
                                         '</div>' +
@@ -4698,6 +4730,9 @@ Author: michael@revcontent.com
                             that.options.user = data.user;
                             localStorage.setItem('engage_jwt',data.token);
 
+                            that.options.emitter.emitEvent('updateButtons', [true]);
+                            that.options.emitter.emitEvent('loadUserData', [that.options.user])
+
                             that.updateCommentAvatars();
 
                             //continue whatever user was doing prior to auth
@@ -4918,11 +4953,13 @@ Author: michael@revcontent.com
                                     //re-layout grid for masonry
                                     that.grid.layout();
                                     if (!that.personalized) {
-                                       that.showPersonalizedTransition();
+                                        that.showPersonalizedTransition();
                                         that.personalize();
                                     }
-                                });
 
+                                    that.options.emitter.emitEvent('updateButtons', [true]);
+                                    that.options.emitter.emitEvent('loadUserData', [that.options.user])
+                                });
                             }
 
                         },function(data){
@@ -4974,12 +5011,14 @@ Author: michael@revcontent.com
                     that.options.emitter.emitEvent('updateButtonElementInnerIcon');
                     that.isAuthenticated(function(response) {
 
-                        that.options.emitter.emitEvent('updateButtons', [response]);
-
                         if (response === true) {
+                            that.options.emitter.emitEvent('updateButtons', [true]);
+                            that.options.emitter.emitEvent('loadUserData', [that.options.user])
+
                             engage_auth.remove();
                             //re-layout grid for masonry
                             that.grid.layout();
+
 
                             that.updateAuthElements();
                             that.processQueue();
@@ -5199,7 +5238,7 @@ Author: michael@revcontent.com
         var commentInputHiddenTxtElement = document.createElement('div');
         revUtils.addClass(commentInputHiddenTxtElement, 'hidden_text_size');
         commentInputHiddenTxtElement.style = 'min-height: 30px;width: 100%;border-radius: 4px;padding: 4px 70px 4px 10px;position: absolute;z-index: -2000;border: 0 none;color: #ffffff00;user-select: none;';
-        commentInputWrapElement.appendChild(commentInputHiddenTxtElement);
+        //commentInputWrapElement.appendChild(commentInputHiddenTxtElement);
 
         var commentTextAreaElement = document.createElement('textarea');
         revUtils.addClass(commentTextAreaElement, 'comment-textarea');
@@ -5382,6 +5421,10 @@ Author: michael@revcontent.com
         var tO2 = setTimeout(function(){
             errorEl.remove();
         },7000);
+    };
+
+    RevSlider.prototype.createUserMenu = function (options) {
+        return new EngageUserMenu(options);
     };
 
     String.prototype.trunc = String.prototype.trunc ||
