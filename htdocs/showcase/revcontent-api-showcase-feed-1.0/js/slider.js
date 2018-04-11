@@ -4753,7 +4753,7 @@ Author: michael@revcontent.com
                         } else {
                             engage_auth_email_input.focus();
                             engage_auth_email_input_error_text.innerText = 'Please enter a valid email';
-                            //return false;
+                            return false;
                         }
 
                         if (engage_auth_password_input.value.length !== 0) {
@@ -4761,7 +4761,7 @@ Author: michael@revcontent.com
                         } else {
                             engage_auth_password_input.focus();
                             engage_auth_password_input.innerText = 'Please enter a password';
-                            //return false;
+                            return false;
                         }
 
                         //get values
@@ -4925,7 +4925,13 @@ Author: michael@revcontent.com
 
                             }
 
-                        },null,false,options);
+                        },function(data){
+                            if (data.status === 500) {
+                                //bad user
+                                engage_auth_email_input.focus();
+                                engage_auth_email_input_error_text.innerText = 'User already exists';
+                            }
+                        },false,options);
                     };
 
                     revUtils.addEventListener(engage_auth_register, 'click', function(){
