@@ -2313,28 +2313,30 @@ body.rev-blur > * {
   }
 
     #personalized-transition-copyright {
-    margin:0;
-    padding:0;
-    text-align:center;
-    font-size:11px;
-    letter-spacing:2px;
-    color:rgba(110,110,110,0.98);
-    opacity: 0;
-    margin-left: 64px;
-    transition: all 0.8s ease;
+      margin:0;
+      padding:0;
+      text-align:center;
+      font-size:11px;
+      line-height: 18px;
+      letter-spacing:2px;
+      color:rgba(110,110,110,0.98);
+      opacity: 0;
+      margin-left: 64px;
+      transition: all 0.8s ease;
 
-    &.text-in {
-      opacity: 1;
-      margin-left: 0;
-    }
+      &.text-in {
+        opacity: 1;
+        margin-left: 0;
+      }
 
   }
 
   #personalized-transition-headline {
     transition: all 0.5s ease-out 0s;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0 0 8px 0;
     font-size: 32px;
+    line-height:38px;
     color: rgb(255, 255, 255);
     font-weight: 700;
     letter-spacing: 1px;
@@ -2358,10 +2360,10 @@ body.rev-blur > * {
     background-color: transparent;
     border: 0;
     opacity: 0;
-    color:rgba(110,110,110,0.98);
+    color: rgba(133, 133, 133, 0.98);
     width: 100%;
     font-size: 16px;
-    ine-height:26px;
+    line-height:26px;
     margin-top: 100px;
     transition: all 0.8s ease;
     transform: scale(0);
