@@ -145,7 +145,7 @@ Author: john.burnette@revcontent.com
         headline.innerHTML = data.title;
         headlineLink.setAttribute('target', '_blank');
         domain.innerHTML = extractRootDomain(data.url);
-        domain.href = extractRootDomain(data.url) + "?utm_source=engageim";
+        domain.href = 'https://' + extractHostname(data.url) + '?utm_source=engageim';
         domain.setAttribute('target', '_blank');
         //TODO: refactor this to be a function
         var options = {
