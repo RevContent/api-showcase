@@ -163,10 +163,6 @@ Author: john.burnette@revcontent.com
     //We're done, add the panel to the page.
     revUtils.append(document.body, this.menuContainer);
 
-    this.options.emitter.on('logout', function (data) {
-      that.logout();
-    });
-
     this.options.emitter.on('loadUserData', function (authenticated) {
       that.options.authenticated = authenticated;
       that.loadUserData();
@@ -181,22 +177,6 @@ Author: john.burnette@revcontent.com
     this.loadUserData();
     this.createMenuItems();
   };
-
-
-  EngageUserMenu.prototype.logout = function () {
-    var that = this;
-    revApi.xhr(that.options.actions_api_url + 'user/logout', function (data) {
-      localStorage.clear();
-      that.options.authenticated = false;
-      that.options.user = null;
-      that.options.emitter.emitEvent('updateButtonElementInnerIcon');
-      that.options.emitter.emitEvent('updateButtons', [false]);
-      that.options.emitter.emitEvent('updateAfterLogout');
-      revUtils.removeClass(document.body, 'profile-mask-show');
-      revUtils.removeClass(document.body, 'animate-user-profile');
-    });
-  };
-
 
   EngageUserMenu.prototype.createMenuItems = function () {
     var that = this;
