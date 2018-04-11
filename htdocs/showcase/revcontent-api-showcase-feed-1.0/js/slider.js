@@ -5208,11 +5208,13 @@ Author: michael@revcontent.com
         clearfix.style = 'clear: both;';
         commentBoxElement.appendChild(clearfix);
 
+        var masonry_layout = this.options.masonry_layout;
         //Adjust comment textarea height, 1 - 4 lines
         revUtils.addEventListener(commentTextAreaElement, 'keyup', function(ev) {
             submitCommentBtn.style.display = 'inline-block';
             commentInputHiddenTxtElement.innerText = commentTextAreaElement.value;
             if (commentInputHiddenTxtElement.scrollHeight < 88) {
+                if (masonry_layout) {return false;}
                 commentTextAreaElement.style.height = (commentInputHiddenTxtElement.scrollHeight + 2) + "px";
             }
         });
