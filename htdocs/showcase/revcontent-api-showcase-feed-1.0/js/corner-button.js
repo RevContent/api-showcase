@@ -434,8 +434,17 @@ Author: michael@revcontent.com
 
     EngageCornerButton.prototype.deactivatePanelGrids = function(activateInnerWidget) {
         this.options.innerWidget.element.style.height = 'auto';
-        if (this.options.innerWidget.navBarElement) { // hack it up
-            this.options.innerWidget.navBarElement.style.display = activateInnerWidget ? 'block' : 'none';
+        if (this.options.innerWidget.navBarElement) { // manage innerwidget navbar visibility
+            if (activateInnerWidget) { // show it right away
+                this.options.innerWidget.navBarElement.style.visibility = 'visible';
+            } else { // wait for transition to end then hide
+                var that = this;
+                var hideNavBar = function() {
+                    revUtils.removeEventListener(that.panel.fullPageContainer, 'transitionend', hideNavBar);
+                    that.options.innerWidget.navBarElement.style.visibility = 'hidden';
+                };
+                revUtils.addEventListener(this.panel.fullPageContainer, 'transitionend', hideNavBar);
+            }
         }
 
         this.options.innerWidget.options.active = activateInnerWidget ? true : false;

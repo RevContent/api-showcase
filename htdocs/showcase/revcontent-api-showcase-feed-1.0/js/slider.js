@@ -553,23 +553,22 @@ Author: michael@revcontent.com
             var that = this;
 
             if (!that.options.infinite_container) { // don't scroll for infinite container
-                this.scrollListenerNavbar = revUtils.throttle(this.navbarScrollListener.bind(this, this.navBarElement), 60);
+                this.scrollListenerNavbar = revUtils.throttle(this.navbarScrollListener.bind(this), 60);
 
                 revUtils.addEventListener(window, 'scroll', this.scrollListenerNavbar);
             }
 
             revUtils.addEventListener(window, 'resize', function(){
                 var grid_rect = that.containerElement.getBoundingClientRect();
-                this.navBarElement.style.width = grid_rect.width + 'px';
+                that.navBarElement.style.width = grid_rect.width + 'px';
             });
         }
 
-        var backButton = this.navBarElement.querySelector('.feed-back-button');
-        // TODO fix this
-        revUtils.addEventListener(backButton, revDetect.mobile() ? 'touchstart' : 'click', this.loadFromHistory.bind(this, this.navBarElement, backButton));
+        this.navBarBackButton = this.navBarElement.querySelector('.feed-back-button');
+        revUtils.addEventListener(this.navBarBackButton, revDetect.mobile() ? 'touchstart' : 'click', this.loadFromHistory.bind(this));
     };
 
-    RevSlider.prototype.navbarScrollListener = function(back){
+    RevSlider.prototype.navbarScrollListener = function(){
         var grid_rect = this.containerElement.getBoundingClientRect();
 
         if(grid_rect.top <= 0) {
@@ -596,15 +595,15 @@ Author: michael@revcontent.com
                     top_offset = parseInt(fixed_video.clientHeight);
                     fixed_video.style.zIndex = '20000';
                 }
-                back.style.position = 'fixed';
-                back.style.width = grid_rect.width + 'px';
-                back.style.top = 0 + top_offset + 'px';
-                back.classList.remove('no-shadow');
+                that.navBarElement.style.position = 'fixed';
+                that.navBarElement.style.width = grid_rect.width + 'px';
+                that.navBarElement.style.top = 0 + top_offset + 'px';
+                that.navBarElement.classList.remove('no-shadow');
 
                 if (notice) {
                     notice.style.position = 'fixed';
                     notice.style.left = 'auto';
-                    notice.style.top = 0 + (top_offset + back.clientHeight) + 'px';
+                    notice.style.top = 0 + (top_offset + that.navBarElement.clientHeight) + 'px';
                     notice.style.width = grid_rect.width + 'px';
                 }
 
@@ -615,10 +614,10 @@ Author: michael@revcontent.com
             }, 0);
 
         } else {
-            back.style.top = 0;
-            back.style.position = 'static';
-            back.style.width = '100%';
-            back.classList.add('no-shadow');
+            this.navBarElement.style.top = 0;
+            this.navBarElement.style.position = 'static';
+            this.navBarElement.style.width = '100%';
+            this.navBarElement.classList.add('no-shadow');
 
             var notice = this.element.querySelector('div#rev-notify-panel');
 
@@ -627,9 +626,6 @@ Author: michael@revcontent.com
                 notice.style.position = 'static';
                 notice.style.width = '100%';
                 notice.style.marginBottom = '9px';
-                back.style.marginBottom = 0;
-            } else {
-                back.style.marginBottom = '9px';
             }
         }
     };
@@ -661,7 +657,7 @@ Author: michael@revcontent.com
         });
     };
 
-    RevSlider.prototype.loadFromHistory = function(backBar, backButton) {
+    RevSlider.prototype.loadFromHistory = function() {
         //alert("here!");
         var that = this;
         if(this.element.classList.contains('is-loading') || this.historyStack.length == 0) {
@@ -674,7 +670,7 @@ Author: michael@revcontent.com
         if (this.historyStack.length > 1) {
             var item = this.historyStack.pop();
             if(this.historyStack.length == 0){
-                this.clearHistory(backBar, backButton);
+                this.clearHistory();
             } else {
                 item = this.historyStack.pop();
             }
@@ -687,14 +683,14 @@ Author: michael@revcontent.com
                 this.options.emitter.emitEvent('createFeed', ['default', {
                     withoutHistory: true
                 }]);
-                this.clearHistory(backBar, backButton);
+                this.clearHistory();
             }
 
         } else {
             this.options.emitter.emitEvent('createFeed', ['default', {
                 withoutHistory: true
             }]);
-            this.clearHistory(backBar, backButton);
+            this.clearHistory();
         }
 
         var refreshTimeout = setTimeout(function(){
@@ -706,25 +702,26 @@ Author: michael@revcontent.com
         }, 800);
     };
 
-    RevSlider.prototype.clearHistory = function(backBar, backButton) {
-        this.detachBackBar(backBar, backButton);
+    RevSlider.prototype.clearHistory = function() {
+        this.detachBackBar();
         this.historyStack = [];
     };
 
-    RevSlider.prototype.detachBackBar = function(backBar, backButton) {
+    RevSlider.prototype.detachBackBar = function() {
 
         revUtils.removeEventListener(window, 'scroll', this.scrollListenerNavbar);
 
-        if (backBar) {
-            backBar.style.pointerEvents = 'none';
+        if (this.navBarElement) {
+            // backBar.style.pointerEvents = 'none';
             if (revDetect.mobile()) {
-                revUtils.addEventListener(backButton, 'touchend', function() {
+                var that = this;
+                revUtils.addEventListener(this.navBarBackButton, 'touchend', function() {
                     setTimeout(function() {
-                        backBar.remove(); // wait a tick
+                        that.navBarElement.remove(); // wait a tick
                     });
                 });
             } else {
-                backBar.remove();
+                this.navBarElement.remove();
             }
         }
     };
