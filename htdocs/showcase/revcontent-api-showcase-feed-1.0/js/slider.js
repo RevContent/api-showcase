@@ -1235,11 +1235,13 @@ Author: michael@revcontent.com
                     revUtils.removeClass(likeReactionElement, 'rev-reaction-icon-', true);
                     revUtils.addClass(likeReactionElement, 'rev-reaction-icon-love');
 
+                    that.removeReaction(likeReactionElement);
                     that.reactionCount(item, iconName, false);
 
                     // var count = item.element.querySelector('.rev-reaction-count');
                     // count.innerHTML = count.innerHTML.split(' ')[2];
                 } else {
+                    that.addReaction(likeReactionElement, item, iconName);
                     likeReactionElement.setAttribute('data-active', iconName);
                     revUtils.addClass(likeReactionElement, 'rev-reaction-icon-like');
 
