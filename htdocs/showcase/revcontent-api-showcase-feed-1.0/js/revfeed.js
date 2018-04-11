@@ -172,6 +172,7 @@ Author: michael@revcontent.com
 
         this.innerWidget = this.createInnerWidget(this.containerElement, this.options);
         this.cornerButton = this.createCornerButton(this.options);
+        this.userMenu = this.createMenu(this.options);
     };
 
     Feed.prototype.windowWidth = function() {

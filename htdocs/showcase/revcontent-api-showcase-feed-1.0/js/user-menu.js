@@ -163,8 +163,9 @@ Author: john.burnette@revcontent.com
     //We're done, add the panel to the page.
     revUtils.append(document.body, this.menuContainer);
 
-    this.options.emitter.on('loadUserData', function (authenticated) {
-      that.options.authenticated = authenticated;
+    this.options.emitter.on('loadUserData', function (user) {
+      that.options.authenticated = true;
+      that.options.user = user;
       that.loadUserData();
     });
 
