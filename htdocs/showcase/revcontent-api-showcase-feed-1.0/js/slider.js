@@ -4163,6 +4163,8 @@ Author: michael@revcontent.com
                 //scroll to bottom of comments list
                 commentFeedElement.scrollTop = commentFeedElement.scrollHeight;
 
+                that.grid.layout();
+
             },function(){
                 //if loading comments api fails, do so gracefully
                 commentFeedElement.removeChild(commentFeedLoader);
