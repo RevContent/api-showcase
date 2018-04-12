@@ -200,7 +200,7 @@ Author: john.burnette@revcontent.com
         revUtils.append(row, domainRow);
         revUtils.append(item, row);
 
-        revUtils.prepend(that.bookmarksList, item);
+        revUtils.append(that.bookmarksList, item);
 
         function extractHostname(url) {
           var hostname;
