@@ -3616,9 +3616,9 @@ Author: michael@revcontent.com
         var time = revUtils.timeAgo(commentData.created, true);
         var avatar = commentData.user.picture === "" ? "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=" + that.options.default_avatar_url : commentData.user.picture;
 
-        if (avatar.indexOf("gravatar") !== -1) {
-            avatar = avatar + '?d=' + that.options.default_avatar_url;
-        }
+        // if (avatar.indexOf("gravatar") !== -1) {
+        //     avatar = avatar + '?d=' + that.options.default_avatar_url;
+        // }
 
         var display_name = (commentData.user.display_name !== "") ? commentData.user.display_name : (commentData.user.first_name + ' ' + commentData.user.last_name);
 
@@ -3752,7 +3752,11 @@ Author: michael@revcontent.com
                 revUtils.addClass(replies_ul, 'children');
                 var truncate = revDetect.mobile() ? this.options.reply_truncate_length_mobile : this.options.reply_truncate_length;
 
+
                 for (var key in commentData.replies) {
+                    if (typeof includeReplies == "number" && key + 1 > includeReplies) {
+                        break;
+                    }
                     if (commentData.replies.hasOwnProperty(key)) {
                         var reply_li = that.setCommentHTML.call(this, commentData.replies[key],false,truncate,uid);
                         reply_li.setAttribute('data-type', 'reply');
@@ -3955,7 +3959,7 @@ Author: michael@revcontent.com
                         commentULElementFULL.insertBefore(comment_li_full, commentULElementFULL.childNodes[0]);
 
                     if (max >= count + 1) {
-                        var comment_li = that.setCommentHTML(data[key],true, truncate,item.data.uid);
+                        var comment_li = that.setCommentHTML(data[key],1, truncate,item.data.uid);
                         commentULElement.insertBefore(comment_li, commentULElement.childNodes[0]);
                      }
 
@@ -3970,7 +3974,10 @@ Author: michael@revcontent.com
                 commentCountElement.innerText = total + ' comment' + (total !== 1 ? 's' : '');
                 commentCountElement.setAttribute('data-count', total);
 
-                if (/*!revDetect.mobile() &&*/ total > max) {
+                var allCommentsCount = commentULElementFULL.querySelectorAll("li").length;
+                var featuredCommentsCount = commentULElement.querySelectorAll("li").length;
+
+                if (/*!revDetect.mobile() &&*/ allCommentsCount > featuredCommentsCount) {
                     var showmoreLi = document.createElement('li');
                     var showmorebtn = document.createElement('a');
                     revUtils.addClass(showmorebtn, 'engage_load_prev_comments');
@@ -5259,7 +5266,6 @@ Author: michael@revcontent.com
             commentInputHiddenTxtElement.innerText = commentTextAreaElement.value;
             if (commentInputHiddenTxtElement.scrollHeight < 88) {
                 if (masonry_layout) {return false;}
-                console.log(commentInputHiddenTxtElement.scrollHeight);
                 commentTextAreaElement.style.height = (commentInputHiddenTxtElement.scrollHeight + 2) + "px";
             }
         });
