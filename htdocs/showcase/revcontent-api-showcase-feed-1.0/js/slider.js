@@ -2299,7 +2299,6 @@ Author: michael@revcontent.com
                 try {
                     if (that.options.authenticated === true) {
                         that.updateAuthElements();
-                        that.getBookmarks();
                     }
 
                     tryToCreateRows(10);
@@ -2548,17 +2547,6 @@ Author: michael@revcontent.com
             //add item to array for later access
             this.feedItems[itemData.uid] = item;
             this.getReactions(item);
-
-            if(this.options.authenticated) {
-                that.options.user.bookmarks.forEach(function(bm) {
-                    if(item.data.target_url.includes(bm.url)) {
-                        var save = item.element.querySelector('.rev-save')
-                        revUtils.addClass(save, 'rev-save-active')
-                        save.setAttribute('data-id', bm.id);
-                        return
-                    }
-                });
-            }
         }
 
         var commentButton = item.element.querySelector('.rev-reaction-comment');
@@ -2790,6 +2778,8 @@ Author: michael@revcontent.com
             }
 
         }
+
+        this.getBookmarks(items);
 
         if (this.grid.perRow > 1) { // relayout if not single column
             if (!this.fontsLoaded && typeof FontFaceObserver !== 'undefined') { // first time wait for the fonts to load
@@ -3890,15 +3880,37 @@ Author: michael@revcontent.com
         revApi.xhr( that.options.actions_api_url + 'reaction/remove/' + element.getAttribute('data-id'), null, null, true, options);
     };
 
-    RevSlider.prototype.getBookmarks = function() {
+    RevSlider.prototype.getBookmarks = function(items) {
         var that = this;
+
+        var handleBookmarks = function(items, bookmarks) {
+            items.forEach(function(item) {
+                if(item.type == 'internal') {
+                    bookmarks.forEach(function(bm) {
+                        if(item.data.target_url.includes(bm.url)) {
+                            var save = item.element.querySelector('.rev-save')
+                            revUtils.addClass(save, 'rev-save-active')
+                            save.setAttribute('data-id', bm.id);
+                            return;
+                        }
+                    });
+                }
+            });
+        };
+
         if(that.options.authenticated) {
+            if(that.options.user.bookmarks) {
+                handleBookmarks(items, that.options.user.bookmarks);
+                return;
+            }
+
             var options = {};
             if (that.options.jwt) {
                 options.jwt = that.options.jwt;
             }
             revApi.xhr(that.options.actions_api_url + 'bookmarks?count=5000&sort=desc', function (data) {
                 that.options.user.bookmarks = data;
+                handleBookmarks(items,data);
             }, null, true, options);
         }
     };
