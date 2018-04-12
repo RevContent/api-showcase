@@ -4829,7 +4829,15 @@ Author: michael@revcontent.com
                             //valid password
                         } else {
                             engage_auth_password_input.focus();
-                            engage_auth_password_input.innerText = 'Please enter a password';
+                            engage_auth_password_input_error_text.innerText = 'Please enter a password';
+                            return false;
+                        }
+
+                        if (engage_auth_username_input.value.length !== 0) {
+                            //valid username
+                        } else {
+                            engage_auth_username_input.focus();
+                            engage_auth_username_input_error_text.innerText = 'Please enter a display name';
                             return false;
                         }
 
