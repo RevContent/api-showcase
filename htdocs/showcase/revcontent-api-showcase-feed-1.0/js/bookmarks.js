@@ -14,7 +14,7 @@ Author: john.burnette@revcontent.com
     var defaults = {
       actions_api_url: 'https://api.engage.im/' + opts.env + '/actions/',
       current_bookmark_page: 1,
-      bookmarks_per_page: 5
+      bookmarks_per_page: 4
     };
     this.options = Object.assign(defaults, opts);
     this.init();
@@ -237,7 +237,7 @@ Author: john.burnette@revcontent.com
   EngageBookmarksManager.prototype.fetchBookmarksList = function() {
     var that = this;
     var options = {};
-    revApi.xhr(that.options.actions_api_url + 'bookmarks?count=5000', function (data) {
+    revApi.xhr(that.options.actions_api_url + 'bookmarks?count=5000&sort=desc', function (data) {
       that.options.user.bookmarks = data;
       that.buildBookmarksList();
     }, null, true, options);
