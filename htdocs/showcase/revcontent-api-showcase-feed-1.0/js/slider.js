@@ -423,7 +423,6 @@ Author: michael@revcontent.com
         this.getData();
 
 
-        // TODO: get bookmarks and add them to UI and save under this.options.user.bookmarks
         // TODO: add bookmarks count to side menu
 
         this.dataPromise.then(function(data) {
@@ -1637,8 +1636,8 @@ Author: michael@revcontent.com
                         var options = {
                         method: 'DELETE'
                         }
-                        revApi.xhr(that.options.actions_api_url + 'bookmark/remove/' + item.element.getAttribute('data-id'), function(data) {
-                                that.options.emitter.emitEvent('removeBookmark', [item.element]);
+                        revApi.xhr(that.options.actions_api_url + 'bookmark/remove/' + bookmark.getAttribute('data-id'), function(data) {
+                                that.options.emitter.emitEvent('removeBookmark', [bookmark]);
                             }, null, true, options);
                     };
 
@@ -1685,7 +1684,7 @@ Author: michael@revcontent.com
                             opts.jwt = that.options.jwt;
                         }
                         revApi.xhr(url, function (bm) {
-                                item.element.setAttribute('data-id', bm.id);
+                                bookmark.setAttribute('data-id', bm.id);
                                 that.options.emitter.emitEvent('addBookmark', [bm]);
                             }, null, true, opts);
                     };
@@ -2300,6 +2299,7 @@ Author: michael@revcontent.com
                 try {
                     if (that.options.authenticated === true) {
                         that.updateAuthElements();
+                        that.getBookmarks();
                     }
 
                     tryToCreateRows(10);
@@ -2548,7 +2548,17 @@ Author: michael@revcontent.com
             //add item to array for later access
             this.feedItems[itemData.uid] = item;
             this.getReactions(item);
-            //TODO: This is where bookmarks needs to be called when setting bookmark indicators
+
+            if(this.options.authenticated) {
+                that.options.user.bookmarks.forEach(function(bm) {
+                    if(item.data.target_url.includes(bm.url)) {
+                        var save = item.element.querySelector('.rev-save')
+                        revUtils.addClass(save, 'rev-save-active')
+                        save.setAttribute('data-id', bm.id);
+                        return
+                    }
+                });
+            }
         }
 
         var commentButton = item.element.querySelector('.rev-reaction-comment');
@@ -2695,12 +2705,6 @@ Author: michael@revcontent.com
         }
 
         if (item.type == 'internal') {
-            var save = item.element.querySelector('.rev-save');
-            revUtils.removeClass(save, 'rev-save-active');
-            if (itemData.bookmarked) {
-                revUtils.addClass(save, 'rev-save-active');
-            }
-
             // feed links
             var feedLinks = item.element.querySelectorAll('.rev-feed-link');
             for (var i = 0; i < feedLinks.length; i++) {
@@ -3884,6 +3888,19 @@ Author: michael@revcontent.com
         }
 
         revApi.xhr( that.options.actions_api_url + 'reaction/remove/' + element.getAttribute('data-id'), null, null, true, options);
+    };
+
+    RevSlider.prototype.getBookmarks = function() {
+        var that = this;
+        if(that.options.authenticated) {
+            var options = {};
+            if (that.options.jwt) {
+                options.jwt = that.options.jwt;
+            }
+            revApi.xhr(that.options.actions_api_url + 'bookmarks?count=5000&sort=desc', function (data) {
+                that.options.user.bookmarks = data;
+            }, null, true, options);
+        }
     };
 
     RevSlider.prototype.setFeaturedComment = function(item,commentULElement) {
