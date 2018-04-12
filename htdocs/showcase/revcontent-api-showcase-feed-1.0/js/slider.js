@@ -2324,7 +2324,6 @@ Author: michael@revcontent.com
                     resolve(data);
                 } else {
                     revApi.request(that.generateUrl(that.internalOffset, data.rowData.internalLimit, that.sponsoredOffset, data.rowData.sponsoredLimit), function(apiData) {
-
                         if (!apiData.content.length) {
                             reject(new Error("Feed - getData no data"));
                             return;
@@ -3683,6 +3682,7 @@ Author: michael@revcontent.com
 
             revUtils.addEventListener(comment_reply_btn, 'click', function(ev) {
                 that.handleComments(commentData, true, commentData.id, uid);
+                that.grid.layout();
             });
 
         }
