@@ -168,7 +168,8 @@ Author: michael@revcontent.com
             content: [],
             history_stack: [],
             emitter: false,
-            contextual_last_sort: []
+            contextual_last_sort: [],
+            page_utms: ''
         };
 
         // merge options
@@ -1584,6 +1585,8 @@ Author: michael@revcontent.com
             if (Array.isArray(this.contextual_last_sort)) {
                 url += '&contextual_last_sort=' + encodeURIComponent(this.contextual_last_sort.join(','));
             }
+
+            url += '&page_utms=' + this.options.page_utms;
         }
 
         if (this.options.keywords) {
