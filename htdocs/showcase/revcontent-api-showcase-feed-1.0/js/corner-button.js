@@ -158,6 +158,10 @@ Author: michael@revcontent.com
             }
         });
 
+        this.options.emitter.on('loadUserData', function(user) {
+            that.options.user = user
+        });
+
         // buttonElement press and touch
         // TODO pull the common things out for mobile and desktop
         if (revDetect.mobile()) {
