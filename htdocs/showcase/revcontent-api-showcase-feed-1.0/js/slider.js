@@ -2129,7 +2129,6 @@ Author: michael@revcontent.com
                             if (!that.personalized) {
                                 that.showPersonalizedTransition();
                                 that.personalize();
-                                that.userMenu = that.createUserMenu(that.options);
                             }
 
                             //if commenting
@@ -5425,10 +5424,6 @@ Author: michael@revcontent.com
         var tO2 = setTimeout(function(){
             errorEl.remove();
         },7000);
-    };
-
-    RevSlider.prototype.createUserMenu = function (options) {
-        return new EngageUserMenu(options);
     };
 
     String.prototype.trunc = String.prototype.trunc ||

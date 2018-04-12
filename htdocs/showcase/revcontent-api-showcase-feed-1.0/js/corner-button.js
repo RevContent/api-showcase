@@ -210,7 +210,7 @@ Author: michael@revcontent.com
                         return;
                     }
 
-                    if (revUtils.hasClass(that.buttonContainerElement, 'visible')) {
+                    if (that.options.authenticated) {
                         // revUtils.removeClass(that.buttonContainerElement, 'visible');
 
                         if (!that.userProfileAppended) {
