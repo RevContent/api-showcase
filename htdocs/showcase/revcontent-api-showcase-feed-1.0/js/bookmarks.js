@@ -66,7 +66,6 @@ Author: john.burnette@revcontent.com
     revUtils.addClass(this.bookmarksList, 'eng-bookmarks-list');
 
     this.fetchBookmarksList();
-    //this.getBookmarks();
     revUtils.append(this.bookmarksContainer, this.bookmarksList);
     this.userMenu = document.getElementById('eng-feed-user-menu-container');
     revUtils.append(this.userMenu, this.bookmarksContainer);
@@ -80,10 +79,6 @@ Author: john.burnette@revcontent.com
     });
     this.options.emitter.on('menuClose', function() {
       that.bookmarksContainer.removeClass('is-open');
-    });
-
-    this.options.emitter.on('getBookmarks', function() {
-      this.getBookmarks();
     });
   };
 
@@ -330,15 +325,6 @@ Author: john.burnette@revcontent.com
       this.options.current_bookmark_page = page;
     }
     this.buildBookmarksList(this.options.user.bookmarks);
-  };
-
-  EngageBookmarksManager.prototype.getBookmarks = function (data) {
-    var that = this;
-    if (that.options.authenticated) {
-      if (that.options.jwt) {
-        options.jwt = that.options.jwt;
-      }
-    }
   };
 
   return EngageBookmarksManager;
