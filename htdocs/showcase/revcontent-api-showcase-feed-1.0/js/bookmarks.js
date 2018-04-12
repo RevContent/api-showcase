@@ -13,6 +13,8 @@ Author: john.burnette@revcontent.com
   var EngageBookmarksManager = function (opts) {
     var defaults = {
       actions_api_url: 'https://api.engage.im/' + opts.env + '/actions/',
+      current_bookmark_page: 1,
+      bookmarks_per_page: 5
     };
     this.options = Object.assign(defaults, opts);
     this.init();
@@ -20,6 +22,7 @@ Author: john.burnette@revcontent.com
 
   EngageBookmarksManager.prototype.init = function () {
     var that = this;
+    this.calculateItemCount();
     this.bookmarksContainer = document.createElement('div');
     this.bookmarksContainer.id = 'eng-bookmarks-container';
 
@@ -62,13 +65,14 @@ Author: john.burnette@revcontent.com
     this.bookmarksList.id = 'eng-bookmarks-list';
     revUtils.addClass(this.bookmarksList, 'eng-bookmarks-list');
 
-    this.getBookmarks();
+    this.fetchBookmarksList();
+    //this.getBookmarks();
     revUtils.append(this.bookmarksContainer, this.bookmarksList);
     this.userMenu = document.getElementById('eng-feed-user-menu-container');
     revUtils.append(this.userMenu, this.bookmarksContainer);
 
     this.options.emitter.on('addBookmark', function(data) {
-      that.addBookmark(data);
+      that.fetchBookmarksList();
     });
 
     this.options.emitter.on('removeBookmark', function(data){
@@ -90,11 +94,23 @@ Author: john.burnette@revcontent.com
   };
 
   EngageBookmarksManager.prototype.removeBookmark = function(data) {
+    var that = this;
     if(this.bookmarksContainer) {
       var list = document.getElementById('eng-bookmarks-list');
       var el = list.querySelector("[data-id='" + data.id +"']");
       if (el) {
-        el.parentNode.removeChild(el);
+        var options = {
+          method: 'DELETE'
+        };
+        revApi.xhr(that.options.actions_api_url + 'bookmark/remove/' + el.dataset.id, function(e) {
+          for (var i = 0; i < that.options.user.bookmarks.length; i++) {
+            if (that.options.user.bookmarks[i].id === el.dataset.id) {
+              that.options.user.bookmarks.splice(i, 1);
+            }
+          }
+          that.buildBookmarksList();
+
+          }, null, true, options);
       }
     }
   };
@@ -141,7 +157,8 @@ Author: john.burnette@revcontent.com
         revUtils.addClass(deleteIcon, 'icon-delete');
 
         item.setAttribute('data-id', data.id);
-        date.innerHTML = revUtils.timeAgo(data.created, true) + ' ago';
+        var time = revUtils.timeAgo(data.created, true);
+        date.innerHTML = time + (time !== 'yesterday' && time !== "" ? ' ago' : '');
         headline.innerHTML = data.title;
         headlineLink.setAttribute('target', '_blank');
         domain.innerHTML = extractRootDomain(data.url);
@@ -154,9 +171,7 @@ Author: john.burnette@revcontent.com
         revUtils.addEventListener(deleteActionLink, 'click', function(e) {
           var anchor = this;
           var el = anchor.closest('.eng-bookmark-list-item');
-          revApi.xhr(that.options.actions_api_url + 'bookmark/remove/' + el.getAttribute('data-id'), function(e) {
-            el.parentNode.removeChild(el);
-          }, null, true, options);
+          that.removeBookmark(el.dataset);
         });
 
         deleteIcon.src = 'data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjE2cHgiIGhlaWdodD0iMTZweCIgdmlld0JveD0iMCAwIDQ4Mi40MjggNDgyLjQyOSIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDgyLjQyOCA0ODIuNDI5OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+CjxnPgoJPGc+CgkJPHBhdGggZD0iTTM4MS4xNjMsNTcuNzk5aC03NS4wOTRDMzAyLjMyMywyNS4zMTYsMjc0LjY4NiwwLDI0MS4yMTQsMGMtMzMuNDcxLDAtNjEuMTA0LDI1LjMxNS02NC44NSw1Ny43OTloLTc1LjA5OCAgICBjLTMwLjM5LDAtNTUuMTExLDI0LjcyOC01NS4xMTEsNTUuMTE3djIuODI4YzAsMjMuMjIzLDE0LjQ2LDQzLjEsMzQuODMsNTEuMTk5djI2MC4zNjljMCwzMC4zOSwyNC43MjQsNTUuMTE3LDU1LjExMiw1NS4xMTcgICAgaDIxMC4yMzZjMzAuMzg5LDAsNTUuMTExLTI0LjcyOSw1NS4xMTEtNTUuMTE3VjE2Ni45NDRjMjAuMzY5LTguMSwzNC44My0yNy45NzcsMzQuODMtNTEuMTk5di0yLjgyOCAgICBDNDM2LjI3NCw4Mi41MjcsNDExLjU1MSw1Ny43OTksMzgxLjE2Myw1Ny43OTl6IE0yNDEuMjE0LDI2LjEzOWMxOS4wMzcsMCwzNC45MjcsMTMuNjQ1LDM4LjQ0MywzMS42NmgtNzYuODc5ICAgIEMyMDYuMjkzLDM5Ljc4MywyMjIuMTg0LDI2LjEzOSwyNDEuMjE0LDI2LjEzOXogTTM3NS4zMDUsNDI3LjMxMmMwLDE1Ljk3OC0xMywyOC45NzktMjguOTczLDI4Ljk3OUgxMzYuMDk2ICAgIGMtMTUuOTczLDAtMjguOTczLTEzLjAwMi0yOC45NzMtMjguOTc5VjE3MC44NjFoMjY4LjE4MlY0MjcuMzEyeiBNNDEwLjEzNSwxMTUuNzQ0YzAsMTUuOTc4LTEzLDI4Ljk3OS0yOC45NzMsMjguOTc5SDEwMS4yNjYgICAgYy0xNS45NzMsMC0yOC45NzMtMTMuMDAxLTI4Ljk3My0yOC45Nzl2LTIuODI4YzAtMTUuOTc4LDEzLTI4Ljk3OSwyOC45NzMtMjguOTc5aDI3OS44OTdjMTUuOTczLDAsMjguOTczLDEzLjAwMSwyOC45NzMsMjguOTc5ICAgIFYxMTUuNzQ0eiIgZmlsbD0iIzdkN2Q3ZCIvPgoJCTxwYXRoIGQ9Ik0xNzEuMTQ0LDQyMi44NjNjNy4yMTgsMCwxMy4wNjktNS44NTMsMTMuMDY5LTEzLjA2OFYyNjIuNjQxYzAtNy4yMTYtNS44NTItMTMuMDctMTMuMDY5LTEzLjA3ICAgIGMtNy4yMTcsMC0xMy4wNjksNS44NTQtMTMuMDY5LDEzLjA3djE0Ny4xNTRDMTU4LjA3NCw0MTcuMDEyLDE2My45MjYsNDIyLjg2MywxNzEuMTQ0LDQyMi44NjN6IiBmaWxsPSIjN2Q3ZDdkIi8+CgkJPHBhdGggZD0iTTI0MS4yMTQsNDIyLjg2M2M3LjIxOCwwLDEzLjA3LTUuODUzLDEzLjA3LTEzLjA2OFYyNjIuNjQxYzAtNy4yMTYtNS44NTQtMTMuMDctMTMuMDctMTMuMDcgICAgYy03LjIxNywwLTEzLjA2OSw1Ljg1NC0xMy4wNjksMTMuMDd2MTQ3LjE1NEMyMjguMTQ1LDQxNy4wMTIsMjMzLjk5Niw0MjIuODYzLDI0MS4yMTQsNDIyLjg2M3oiIGZpbGw9IiM3ZDdkN2QiLz4KCQk8cGF0aCBkPSJNMzExLjI4NCw0MjIuODYzYzcuMjE3LDAsMTMuMDY4LTUuODUzLDEzLjA2OC0xMy4wNjhWMjYyLjY0MWMwLTcuMjE2LTUuODUyLTEzLjA3LTEzLjA2OC0xMy4wNyAgICBjLTcuMjE5LDAtMTMuMDcsNS44NTQtMTMuMDcsMTMuMDd2MTQ3LjE1NEMyOTguMjEzLDQxNy4wMTIsMzA0LjA2Nyw0MjIuODYzLDMxMS4yODQsNDIyLjg2M3oiIGZpbGw9IiM3ZDdkN2QiLz4KCTwvZz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8L3N2Zz4K';
@@ -219,20 +234,110 @@ Author: john.burnette@revcontent.com
         }
   };
 
-  EngageBookmarksManager.prototype.getBookmarks = function () {
+  EngageBookmarksManager.prototype.fetchBookmarksList = function() {
     var that = this;
     var options = {};
+    revApi.xhr(that.options.actions_api_url + 'bookmarks?count=5000', function (data) {
+      that.options.user.bookmarks = data;
+      that.buildBookmarksList();
+    }, null, true, options);
+  };
+
+  EngageBookmarksManager.prototype.buildPaginationUI = function() {
+
+    var that = this;
+    var el = document.getElementById('eng-bookmarks-container');
+    var pagination = document.getElementById('eng-bookmarks-pagination');
+    //If pagination exists, clear it to rebuild when pages are removed, etc.
+    if (pagination) {
+      pagination.parentNode.removeChild(pagination);
+    }
+
+    if (el) {
+      var index;
+      var containerWrapper = document.createElement('div');
+      var container = document.createElement('div');
+      containerWrapper.id = 'eng-bookmarks-pagination';
+      revUtils.addClass(container, 'eng-bookmarks-pagination-container');
+      for (var i = 1; i <= this.getPageCount(this.options.user.bookmarks); i++) {
+        index = i;
+        var pageLink = document.createElement('a');
+          pageLink.setAttribute('data-id', i);
+          revUtils.addClass(pageLink, 'eng-pagination-item');
+        var linkContent = document.createElement('span');
+        revUtils.addClass(linkContent, 'eng-bookmarks-pagination');
+        linkContent.innerHTML = i;
+        if(i == this.options.current_bookmark_page) {
+          revUtils.addClass(linkContent, 'active');
+        }
+        revUtils.addEventListener(pageLink, 'click', function(e) {
+          var pagination = document.getElementById('eng-bookmarks-pagination');
+          var items = pagination.querySelectorAll('.eng-bookmarks-pagination');
+
+          [].forEach.call(items, function(el) {
+            el.classList.remove('active');
+          });
+
+          that.changeBookmarksPage(this.dataset.id, that.options.user.bookmarks);
+          var el = this.querySelector('.eng-bookmarks-pagination');
+          revUtils.addClass(el, 'active');
+        });
+        revUtils.append(pageLink, linkContent);
+        revUtils.append(container, pageLink);
+        revUtils.append(containerWrapper, container);
+     }
+     revUtils.append(el, containerWrapper);
+    }
+  };
+
+  EngageBookmarksManager.prototype.calculateItemCount = function() {
+    var w;
+    if (window.innerHeight < 660) {
+      this.options.bookmarks_per_page = 2;
+    } else if (window.innerHeight < 800) {
+      this.options.bookmarks_per_page = 3;
+    }
+  };
+
+  EngageBookmarksManager.prototype.buildBookmarksList = function() {
+    var currentPage = this.options.current_bookmark_page,
+    itemCount = this.options.bookmarks_per_page,
+    list = document.getElementById('eng-bookmarks-list'),
+    pagination = document.querySelector('.eng-bookmarks-pagination');
+
+    //Remove all children to update the page;
+    while(list.firstChild) {
+      list.removeChild(list.firstChild);
+    }
+
+    for (var i = (currentPage - 1) * itemCount; i < (currentPage * itemCount) && i < this.options.user.bookmarks.length; i++) {
+      this.addBookmarkItem(this.options.user.bookmarks[i]);
+    }
+
+    this.buildPaginationUI();
+  };
+
+  EngageBookmarksManager.prototype.getPageCount = function() {
+    return Math.ceil(this.options.user.bookmarks.length / this.options.bookmarks_per_page);
+  };
+
+  EngageBookmarksManager.prototype.changeBookmarksPage = function(page) {
+    if (page < 1) {
+      this.options.current_bookmark_page = 1;
+    } else if (page > this.getPageCount(this.options.user.bookmarks)) {
+      this.options.current_bookmark_page = this.getPageCount(this.options.user.bookmarks);
+    } else {
+      this.options.current_bookmark_page = page;
+    }
+    this.buildBookmarksList(this.options.user.bookmarks);
+  };
+
+  EngageBookmarksManager.prototype.getBookmarks = function (data) {
+    var that = this;
     if (that.options.authenticated) {
       if (that.options.jwt) {
         options.jwt = that.options.jwt;
       }
-      revApi.xhr(that.options.actions_api_url + 'bookmarks', function (data) {
-        that.options.user.bookmarks = data;
-        console.log(that.options.user.bookmarks);
-        for (var i = 0; i < data.length; i++) {
-          that.addBookmarkItem(data[i]);
-        }
-      }, null, true, options);
     }
   };
 

@@ -12,6 +12,31 @@
   &.is-open {
     transform: none !important;
   }
+  #eng-bookmarks-pagination {
+    padding: 15px 0;
+    position: absolute;
+    bottom: 25px;
+    .eng-bookmarks-pagination-container {
+      position: relative;
+      a {
+        cursor: pointer;
+        text-decoration: none;
+        margin: 0 5px;
+        .eng-bookmarks-pagination {
+          border-radius: 3px;
+          padding: 5px 10px;
+          background: #e5e5e5;
+
+          &.active {
+            background: #008eff;
+            color: white;
+          }
+        }
+      }
+    }
+
+  }
+
   .eng-bookmarks-header {
     padding: 4%;
     display: flex;
