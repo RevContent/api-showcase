@@ -2745,6 +2745,7 @@ Author: michael@revcontent.com
 
         var view = data.view;
         var content = data.content;
+        this.options.contextual_last_sort = data.contextual_last_sort
 
         var itemTypes = {
             sponsored: [],
