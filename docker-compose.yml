@@ -3,6 +3,8 @@ version: '2'
 services:
     web:
         image: nginx:latest
+        ports:
+            - "9999:80"
         expose:
             - 80
         volumes:

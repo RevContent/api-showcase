@@ -1,0 +1,291 @@
+$highlight-bg-color: #008eff;
+$highlight-foreground-color: #fff;
+$text-normal: #333;
+$text-muted: #777;
+$box-shadow-color: rgba(0, 0, 0, 0.46);
+$options-text-color: #607188;
+
+//TODO: convert this to cleaner scss
+.togglebutton {
+  vertical-align: middle;
+}
+
+.togglebutton,
+.togglebutton label,
+.togglebutton input,
+.togglebutton .toggle {
+  user-select: none;
+}
+
+.togglebutton label {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.form-group.is-focused .togglebutton label {
+  color: rgba(0, 0, 0, 0.26);
+}
+
+.form-group.is-focused .togglebutton label:focus,
+.form-group.is-focused .togglebutton label:hover {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+fieldset[disabled] .form-group.is-focused .togglebutton label {
+  color: rgba(0, 0, 0, 0.26);
+}
+
+.togglebutton label input[type=checkbox] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.togglebutton label .toggle {
+  text-align: left;
+  margin-left: 5px;
+}
+
+.togglebutton label .toggle,
+.togglebutton label input[type=checkbox][disabled]+.toggle {
+  content: "";
+  display: inline-block;
+  width: 30px;
+  height: 15px;
+  background-color: #899cb2;
+  border-radius: 15px;
+  margin-right: 15px;
+  transition: background 0.3s ease;
+  vertical-align: middle;
+}
+
+.togglebutton label .toggle:after {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border-radius: 20px;
+  position: relative;
+  box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.4);
+  left: -5px;
+  top: -3px;
+  border: 1px solid #788da5;
+  transition: left 0.3s ease, background 0.3s ease, box-shadow 0.1s ease;
+}
+
+.togglebutton label input[type=checkbox][disabled]+.toggle:after,
+.togglebutton label input[type=checkbox][disabled]:checked+.toggle:after {
+  background-color: #899cb2;
+}
+
+.togglebutton label input[type=checkbox]+.toggle:active:after,
+.togglebutton label input[type=checkbox][disabled]+.toggle:active:after {
+  box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.4), 0 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.togglebutton label input[type=checkbox]:checked+.toggle:after {
+  left: 15px;
+}
+
+.togglebutton label input.toggle-info[type=checkbox]:checked+.toggle {
+  background-color: rgba(66, 165, 245, 0.7);
+}
+
+.togglebutton label input.toggle-info[type=checkbox]:checked+.toggle:after {
+  border-color: #42a5f5;
+}
+
+.togglebutton label input.toggle-info[type=checkbox]:checked+.toggle:active:after {
+  box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.4), 0 0 0 15px rgba(66, 165, 245, 0.1);
+}
+
+.togglebutton label input.toggle-warning[type=checkbox]:checked+.toggle {
+  background-color: rgba(254, 192, 7, 0.7);
+}
+
+.togglebutton label input.toggle-warning[type=checkbox]:checked+.toggle:after {
+  border-color: #fec007;
+}
+
+.togglebutton label input.toggle-warning[type=checkbox]:checked+.toggle:active:after {
+  box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.4), 0 0 0 15px rgba(254, 192, 7, 0.1);
+}
+
+.togglebutton label input.toggle-success[type=checkbox]:checked+.toggle {
+  background-color: rgba(38, 166, 154, 0.7);
+}
+
+.togglebutton label input.toggle-success[type=checkbox]:checked+.toggle:after {
+  border-color: #26a69a;
+}
+
+.togglebutton label input.toggle-success[type=checkbox]:checked+.toggle:active:after {
+  box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.4), 0 0 0 15px rgba(38, 166, 154, 0.1);
+}
+
+.togglebutton label input.toggle-default[type=checkbox]:checked+.toggle {
+  background-color: rgba(157, 174, 196, 0.7);
+}
+
+.togglebutton label input.toggle-default[type=checkbox]:checked+.toggle:after {
+  border-color: #9daec4;
+}
+
+.togglebutton label input.toggle-default[type=checkbox]:checked+.toggle:active:after {
+  box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.4), 0 0 0 15px rgba(157, 174, 196, 0.1);
+}
+
+#eng-feed-user-menu-container {
+  font-family: 'Montserrat';
+  color: $text-normal;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 325px;
+  height: 100%;
+  transform: translateX(-325px);
+  background-color: #fff;
+  z-index: 9999999999;
+  box-shadow: 0 0 7px rgba(0, 0, 0, .4);
+  overflow: hidden;
+
+  &.is-open {
+    transform: none !important;
+  }
+  .eng-feed-user-avatar {
+    display: flex;
+    width: 100%;
+    padding-bottom: 32px;
+    justify-content: center;
+    .eng-feed-user-avatar-photo {
+      position: relative;
+      -webkit-box-shadow: 0px 0px 6px 0px $box-shadow-color;
+      -moz-box-shadow: 0px 0px 6px 0px $box-shadow-color;
+      box-shadow: 0px 0px 4px 0px $box-shadow-color;
+      background: #222222;
+      background-size: contain;
+      background-position: center center;
+      overflow: hidden;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+    }
+    .eng-feed-user-avatar-edit {
+      float: right;
+      margin-top: 80px;
+      z-index: 500;
+      display: block;
+      line-height: 16px;
+      width: 14px;
+      height: 14px;
+      position: relative;
+      bottom: 0;
+      right: 0;
+      opacity: 0.4;
+      a {
+        max-width: 100%;
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+  .eng-feed-user-display-name {
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    line-height: 40px;
+    color: $text-normal;
+    font-size: 28px;
+    letter-spacing: 1px;
+    font-weight: 300;
+  }
+  .eng-feed-user-stats {
+    letter-spacing: 3px;
+    color: $text-muted;
+    font-size: 14px;
+    line-height: 24px;
+    text-align: center;
+  }
+  .eng-feed-user-menu-options-container {
+    padding-top: 32px;
+  }
+  ul.eng-feed-user-menu-options {
+    margin: 0;
+    padding: 0;
+    padding-top: 32px;
+    >li {
+      list-style: none;
+      margin: 0;
+      padding: 0 18px;
+      line-height: 64px;
+      display: block;
+      >a {
+        cursor: pointer;
+        color: $options-text-color;
+        display: block;
+        width: 100%;
+        height: 100%;
+        line-height: 64px;
+        font-size: 18px;
+        letter-spacing: 2px;
+        text-decoration: none;
+        &:hover {
+          color: $highlight-bg-color;
+        }
+        .eng-feed-user-menu-icon {
+          float: left;
+          margin: 0 18px;
+          width: 32px;
+          height: 32px;
+          line-height: 64px;
+          img {
+            max-width: 100%;
+            background-size: 32px 32px;
+            background-repeat: no-repeat;
+            border-width: 0 !important;
+          }
+        }
+      }
+      &.active {
+        background-color: $highlight-bg-color;
+        >a {
+          color: $highlight-foreground-color;
+          font-weight: 700;
+        }
+      }
+    }
+  }
+  .eng-feed-user-notifications-container,
+  .eng-feed-user-options-row {
+    display: flex;
+    width: 100%;
+  }
+  .eng-feed-user-notifications-container {
+    position: absolute;
+    bottom: 0;
+    flex: 1;
+    align-items: flex-end;
+    .eng-feed-user-options-row {
+      padding-bottom: 22px;
+      .notifications-toggle {
+        padding-left: 18px;
+        padding-right: 13px;
+      }
+      .notifications-toggle-label {
+        font-size: 18px;
+        letter-spacing: 2px;
+        color: $highlight-bg-color;
+      }
+      .eng-branding {
+        .eng-brand-icon {
+          position: absolute;
+          width: 25px;
+          right: 15px;
+          //Remove this when notifications are added
+          bottom: 15px;
+        }
+      }
+    }
+  }
+}
