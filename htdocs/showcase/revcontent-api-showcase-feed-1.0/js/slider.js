@@ -161,9 +161,9 @@ Author: michael@revcontent.com
             user: null,
             jwt: null,
             content: [],
+            page_utms: '',
             comments_enabled: false,
             actions_api_url: 'https://api.engage.im/' + opts.env + '/actions/',
-            //actions_api_url: 'http://shearn.api.engage.im/actions/',
             contextual_last_sort: []
         };
 
@@ -1150,7 +1150,7 @@ Author: michael@revcontent.com
                 '<div class="rev-auth-buttonline">Once personalized the content recommendations on this page will be based on the pages you\'ve liked and urls you\'ve shared on Facebook</div>' +
 
                 '<div class="rev-auth-terms">' +
-                    '<span>by signing up you agree to the <a target="_blank" href="//www.engage.im/privacy.html">Terms</a></span>' +
+                    '<span>by signing up you agree to the <a target="_blank" href="//faq.engage.im/customer/en/portal/articles/2923351-publisher-terms-conditions">Terms</a></span>' +
                     // '<span>|</span>' +
                     // '<a href="#">Privacy Policy</a>' +
                 '</div>' +
@@ -2249,6 +2249,8 @@ Author: michael@revcontent.com
             if (Array.isArray(this.options.contextual_last_sort)) {
                 url += '&contextual_last_sort=' + encodeURIComponent(this.options.contextual_last_sort.join(','));
             }
+
+            url += '&page_utms=' + this.options.page_utms;
         }
 
         if (this.options.keywords) {
