@@ -161,10 +161,7 @@ Author: michael@revcontent.com
             user: null,
             jwt: null,
             content: [],
-            history_stack: [],
-            emitter: false,
-            contextual_last_sort: [],
-            page_utms: ''
+            page_utms: '',
             comments_enabled: false,
             actions_api_url: 'https://api.engage.im/' + opts.env + '/actions/',
             contextual_last_sort: []
