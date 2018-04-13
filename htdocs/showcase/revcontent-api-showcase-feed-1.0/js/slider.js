@@ -2706,6 +2706,8 @@ Author: michael@revcontent.com
                 });
                 revUtils.addEventListener(feedLinks[i], 'click', clickHandle, {passive:false});
             }
+
+            this.getBookmarks(item);
         }
     };
 
@@ -2743,6 +2745,7 @@ Author: michael@revcontent.com
 
         var view = data.view;
         var content = data.content;
+        this.options.contextual_last_sort = data.contextual_last_sort
 
         var itemTypes = {
             sponsored: [],
@@ -2780,8 +2783,6 @@ Author: michael@revcontent.com
             }
 
         }
-
-        this.getBookmarks(items);
 
         if (this.grid.perRow > 1) { // relayout if not single column
             if (!this.fontsLoaded && typeof FontFaceObserver !== 'undefined') { // first time wait for the fonts to load
@@ -3882,27 +3883,27 @@ Author: michael@revcontent.com
         revApi.xhr( that.options.actions_api_url + 'reaction/remove/' + element.getAttribute('data-id'), null, null, true, options);
     };
 
-    RevSlider.prototype.getBookmarks = function(items) {
+    RevSlider.prototype.getBookmarks = function(item) {
+
         var that = this;
 
-        var handleBookmarks = function(items, bookmarks) {
-            items.forEach(function(item) {
-                if(item.type == 'internal') {
-                    bookmarks.forEach(function(bm) {
-                        if(item.data.target_url.includes(bm.url)) {
-                            var save = item.element.querySelector('.rev-save')
-                            revUtils.addClass(save, 'rev-save-active')
-                            save.setAttribute('data-id', bm.id);
-                            return;
-                        }
-                    });
+        var handleBookmarks = function(item, bookmarks) {
+            if (!bookmarks || !bookmarks.length) {
+                return;
+            }
+            bookmarks.forEach(function(bm) {
+                if(item.data.target_url.includes(bm.url)) {
+                    var save = item.element.querySelector('.rev-save')
+                    revUtils.addClass(save, 'rev-save-active')
+                    save.setAttribute('data-id', bm.id);
+                    return;
                 }
             });
         };
 
         if(that.options.authenticated) {
             if(that.options.user.bookmarks) {
-                handleBookmarks(items, that.options.user.bookmarks);
+                handleBookmarks(item, that.options.user.bookmarks);
                 return;
             }
 
@@ -3912,7 +3913,7 @@ Author: michael@revcontent.com
             }
             revApi.xhr(that.options.actions_api_url + 'bookmarks?count=5000&sort=desc', function (data) {
                 that.options.user.bookmarks = data;
-                handleBookmarks(items,data);
+                handleBookmarks(item ,data);
             }, null, true, options);
         }
     };
