@@ -3841,8 +3841,8 @@ input.engage-auth-input:focus {
           background-size: cover;
           box-shadow: 1px 3px 3px 0px rgba(0, 0, 0, 0.21);
           margin: 1% 0 1% 2%;
-          width: 45%;
-          height: 11em;
+          width: 45%!important;
+          height: 11em!important;
         }
 
         .rc-interests .grid .interests-cell.with-img {
