@@ -41,7 +41,7 @@ Author: michael@revcontent.com
         };
 
         // merge options
-        this.options = revUtils.extend(defaults, opts);
+        this.options = Object.assign(defaults, opts);
 
         this.init();
     };
@@ -103,7 +103,8 @@ Author: michael@revcontent.com
             if (target.classList.contains('cell-wrapper') || target.classList.contains('interest-title')) {
                 that.options.emitter.emitEvent('feedLink', ['topic', {
                     reason_topic_id: parseInt(cellElement.getAttribute('data-id'), 10),
-                    reason_topic: cellElement.getAttribute('data-title')
+                    reason_topic: cellElement.getAttribute('data-title'),
+                    iconHtml: '<span class="rev-headline-icon-image" style="background-image:url(' + cellElement.getAttribute('data-image') + '&h=36&w=36' + ')"></span>'
                 }]);
             }
 
@@ -119,14 +120,16 @@ Author: michael@revcontent.com
     };
 
     EngageInterestsCarousel.prototype.update = function(data, authenticated, topic_id) {
-        if(typeof data !== "object" || (typeof data == "object" && data.subscribed.length == 0)) {
+        if(typeof data !== "object" || (typeof data == "object" && data.length == 0)) {
             this.options.item.element.setAttribute('style','margin:0!important;padding:0!important;height:0;border:0');
             this.options.item.element.classList.add('revcontent-carousel-is-empty');
             this.options.item.element.classList.add('revcontent-remove-element');
             return;
         }
 
-        var title = "Trending topics on " + revUtils.capitalize(revUtils.extractRootDomain(window.location.href));
+
+        var pubDomain = this.options.domain?revUtils.capitalize(this.options.domain):revUtils.capitalize(revUtils.extractRootDomain(window.location.href));
+        var title = "Trending topics on " + pubDomain;
         var sub = '';
         if (authenticated) {
             title = 'Content You Love';
@@ -136,7 +139,7 @@ Author: michael@revcontent.com
         this.header.querySelector('h1 span').innerText = title;
         this.header.querySelector('h1 small sup').innerText = sub;
 
-        var interests_data = data.subscribed;
+        var interests_data = data;
 
         var interests_count = 0;
         var initialIndex = 3;
@@ -157,7 +160,6 @@ Author: michael@revcontent.com
 
         for (var i=0; i < interests_count; i++) {
             var interest = interests_data[i];
-
             var cell = document.createElement('div');
             cell.style.width = this.columnWidth + 'px';
             cell.style.marginRight = this.options.cell_margin + 'px';
@@ -167,6 +169,7 @@ Author: michael@revcontent.com
             }
             cell.setAttribute('data-id', interest.id);
             cell.setAttribute('data-title', interest.title);
+            cell.setAttribute('data-image', interest.image);
             cell.setAttribute('data-interest', interest.title.toLowerCase());
 
             cell.className = 'carousel-cell interest-cell interest-' + interest.title.toLowerCase() + ' selected-interest';

@@ -1,0 +1,186 @@
+#eng-bookmarks-container {
+  transition: transform 1.5s, opacity 1s linear .5s;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 100%;
+  transform: translateX(325px);
+  background-color: #fff;
+  z-index: 9999999999;
+  box-shadow: 0 0 7px rgba(0, 0, 0, .4);
+  &.is-open {
+    transform: none !important;
+  }
+  #eng-bookmarks-pagination {
+    padding: 10px 0;
+    position: absolute;
+    left: 5px;
+    bottom: 5px;
+    .eng-bookmarks-pagination-container {
+      position: relative;
+      a {
+        cursor: pointer;
+        text-decoration: none;
+        margin: 0 5px;
+        .eng-bookmarks-pagination {
+          border-radius: 3px;
+          padding: 5px 10px;
+          background: #e5e5e5;
+
+          &.active {
+            background: #008eff;
+            color: white;
+          }
+        }
+      }
+    }
+
+  }
+
+  .eng-bookmarks-header {
+    padding: 4%;
+    display: flex;
+    align-self: flex-start;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    a {
+      cursor: pointer;
+      img {
+        width: 30px;
+        height: 30px;
+      }
+    }
+    .eng-bookmarks-header-img-container {
+      line-height: 25px;
+      color: #a9a9a9;
+      font-weight: 300;
+      img {
+        float: right;
+        width: 25px;
+        margin-left: 15px;
+        box-shadow: 0 0 4px 0 rgba(0,0,0,.46);
+        background: center center #222;
+        background-size: contain;
+        overflow: hidden;
+        border-radius: 50%;
+      }
+    }
+    .eng-bookmarks-heading {
+      .eng-bookmarks-title {
+        font-size: 1.25rem;
+      }
+    }
+  }
+  .eng-bookmarks-title {
+    line-height: 60px;
+    color: #333;
+    font-size: 28px;
+    letter-spacing: 1px;
+    text-align: center;
+    font-weight: 600;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    font-size: 14px;
+  }
+  ul.eng-bookmarks-list {
+    padding-top: 16px;
+    width: 100%;
+  }
+  ul.eng-bookmarks-list>li {
+    list-style: none;
+    margin: 0;
+    padding: 0 18px;
+    min-height: 150px;
+    display: block;
+  }
+  ul.eng-bookmarks-list>li>div {
+    padding: 0 10px;
+  }
+  ul.eng-bookmarks-list>li.active {
+    background-color: #008eff;
+  }
+  ul.eng-bookmarks-list>li {
+    border-top: 1px solid #e5e5e5;
+    padding: 10px 0;
+  }
+  ul.eng-bookmarks-list>li:last-child {
+    border-bottom: 1px solid #e5e5e5;
+  }
+  ul.eng-bookmarks-list>li>div>div>span.list-item-category {
+    background-color: #006df0;
+    color: #fff;
+    padding: 1px 18px;
+    border-radius: 9px;
+    font-weight: 600;
+    float: right;
+    font-size: 0.8em;
+    letter-spacing: 1px;
+  }
+  ul.eng-bookmarks-list>li.active>div>div>span.list-item-category {
+    background-color: #fff;
+    color: #006df0;
+  }
+  ul.eng-bookmarks-list>li>div>div>div.list-item-date,
+  ul.eng-bookmarks-list>li>div>div>div.list-item-author-domain-container>a {
+    color: #b1b1b1;
+    font-weight: 600;
+  }
+  ul.eng-bookmarks-list>li.active>div>div>div.list-item-date {
+    color: #8feeff;
+  }
+  ul.eng-bookmarks-list>li>div>div:nth-child(2) {
+    margin-top: -10px;
+  }
+  ul.eng-bookmarks-list>li>div>div>a.list-item-headline {
+    padding-top: 5px;
+    font-weight: 600;
+    color: #464646;
+    font-size: 1.25em;
+  }
+  ul.eng-bookmarks-list>li.active>div>div>div.list-item-headline {
+    color: #fff;
+  }
+  ul.eng-bookmarks-list>li>div>div>div.list-item-domain-container,
+  ul.eng-bookmarks-list>li>div>div>div.list-item-actions-container {
+    display: inline-block;
+  }
+  ul.eng-bookmarks-list>li>div>div>div.list-item-domain-container {
+    padding-top: 10px;
+    font-size: 0.8em;
+  }
+  ul.eng-bookmarks-list>li>div>div>div.list-item-domain-container>a {
+    display: block;
+    text-transform: uppercase;
+    color: #006df0;
+    font-weight: 600;
+    font-size: 1.2em;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+  }
+  ul.eng-bookmarks-list>li.active>div>div>div.list-item-domain-container>span {
+    color: #fff770;
+  }
+  ul.eng-bookmarks-list>li.active>div>div>div.list-item-domain-container>a {
+    color: #fff;
+  }
+  ul.eng-bookmarks-list>li>div>div>div.list-item-actions-container {
+    position: absolute;
+    right: 5px;
+  }
+
+  ul.eng-bookmarks-list>li>div>div>div.list-item-actions-container>a {
+    cursor: pointer;
+  }
+
+  ul.eng-bookmarks-list>li>div>div>div.list-item-actions-container>a>img.list-item-action {
+    margin: 20px 10px;
+    height: 20px;
+    width: 20px;
+  }
+}

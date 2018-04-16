@@ -18,22 +18,6 @@
 
 var utils = {};
 
-utils.deprecateOptions = function(opts) {
-    if (opts.overlay) {
-        opts.image_overlay = opts.overlay;
-    }
-
-    if (opts.overlay_icons) {
-        opts.image_overlay_icons = opts.overlay_icons;
-    }
-
-    if (opts.overlay_position) {
-        opts.image_overlay_position = opts.overlay_position;
-    }
-
-    return opts;
-};
-
 utils.validateApiParams = function(params) {
     var errors = [];
     if (!params.api_key){
@@ -124,13 +108,6 @@ utils.extend = function( a, b ) {
     return c;
 };
 
-utils.merge = function(a, b) {
-    for (var prop in b) {
-        a[prop] = b[prop];
-    }
-    return a;
-};
-
 utils.inArray = function(array, item) {
     for (var i = 0; i < array.length; i++) {
     if (array[i] === item)
@@ -170,25 +147,6 @@ utils.remove = function(el) {
     if (el && el.parentNode) {
         el.parentNode.removeChild(el);
     }
-};
-
-utils.wrap = function(el, wrapper) {
-    if (el.nextSibling) {
-        el.parentNode.insertBefore(wrapper, el.nextSibling);
-    } else {
-        el.parentNode.appendChild(wrapper);
-    }
-
-    wrapper.appendChild(el);
-};
-
-utils.next = function(el) {
-    function nextElementSibling(el) {
-        do { el = el.nextSibling; } while ( el && el.nodeType !== 1 );
-        return el;
-    }
-
-    return el.nextElementSibling || nextElementSibling(el);
 };
 
 utils.hasClass = function(el, className) {
@@ -338,146 +296,12 @@ utils.ellipsisText = function(headlines) {
     }
 };
 
-utils.imagesLoaded = function(images, emitter) {
-    // emit done event when all images have finished loading
-
-    if (!images.length) {
-        emitter.emitEvent('imagesLoaded');
-    }
-
-    var maxMilliseconds = 4000;
-
-    // LoadingImage code from https://github.com/desandro/imagesloaded
-    function LoadingImage( img ) {
-        this.img = img;
-    }
-
-    LoadingImage.prototype = new EventEmitter();
-
-    LoadingImage.prototype.check = function() {
-        // If complete is true and browser supports natural sizes,
-        // try to check for image status manually.
-        var isComplete = this.getIsImageComplete();
-        if ( isComplete ) {
-            // HACK check async to allow time to bind listeners
-            var that = this;
-            setTimeout(function() {
-                // report based on naturalWidth
-                that.confirm( that.img.naturalWidth !== 0, 'naturalWidth' );
-            });
-            return;
-        }
-
-        // If none of the checks above matched, simulate loading on detached element.
-        this.proxyImage = new Image();
-        utils.addEventListener(this.proxyImage, 'load', this);
-        utils.addEventListener(this.proxyImage, 'error', this);
-        // bind to image as well for Firefox. #191
-        utils.addEventListener(this.img, 'load', this);
-        utils.addEventListener(this.img, 'error', this);
-        this.proxyImage.src = this.img.src;
-    };
-
-    LoadingImage.prototype.getIsImageComplete = function() {
-        return this.img.complete && this.img.naturalWidth !== undefined;
-    };
-
-    LoadingImage.prototype.confirm = function( isLoaded, message ) {
-        this.isLoaded = isLoaded;
-        this.emit( 'progress', this, this.img, message );
-    };
-
-    // ----- events ----- //
-
-    // trigger specified handler for event type
-    LoadingImage.prototype.handleEvent = function( event ) {
-        var method = 'on' + event.type;
-        if ( this[ method ] ) {
-          this[ method ]( event );
-        }
-    };
-
-    LoadingImage.prototype.onload = function() {
-        this.confirm( true, 'onload' );
-        this.unbindEvents();
-    };
-
-    LoadingImage.prototype.onerror = function() {
-        this.confirm( false, 'onerror' );
-        this.unbindEvents();
-    };
-
-    LoadingImage.prototype.unbindEvents = function() {
-        utils.removeEventListener(this.proxyImage, 'load', this);
-        utils.removeEventListener(this.proxyImage, 'error', this);
-        utils.removeEventListener(this.img, 'load', this);
-        utils.removeEventListener(this.img, 'error', this);
-    };
-
-    var progressedCount = 0;
-
-    for (var i=0; i < images.length; i++ ) {
-        var loadingImage = new LoadingImage(images[i]);
-        loadingImage.once( 'progress', function() {
-            progressedCount++;
-            if (progressedCount == images.length) {
-                emitter.emitEvent('imagesLoaded');
-            }
-        });
-        loadingImage.check();
-    }
-
-    // don't wait longer than maxMilliseconds, this is a safety for network slowness or other issues
-    setTimeout(function() {
-        emitter.emitEvent('imagesLoaded');
-    }, maxMilliseconds);
-}
-
 utils.getComputedStyle = function (el, prop, pseudoElt) {
     if (getComputedStyle !== 'undefined') {
         return getComputedStyle(el, pseudoElt).getPropertyValue(prop);
     } else {
         return el.currentStyle[prop];
     }
-};
-
-utils.setImage = function(wrapperElement, src) {
-    var img = document.createElement('img');
-    img.src = src;
-    this.append(wrapperElement, img);
-};
-
-utils.mergeOverlayIcons = function(icons) {
-    this.merge(revOverlay.icons, icons);
-};
-
-utils.imageOverlay = function(image, content_type, overlay, position) {
-    revOverlay.image(image, content_type, overlay, position);
-};
-
-utils.adOverlay = function(ad, content_type, overlay, position) {
-    revOverlay.ad(ad, content_type, overlay, position);
-};
-
-utils.checkVisible = function(element, callback, percentVisible, buffer) {
-    var that = this;
-    requestAnimationFrame(function() {
-        // what percentage of the element should be visible
-        var visibleHeightMultiplier = (typeof percentVisible === 'number') ? (parseInt(percentVisible) * .01) : 0;
-        // fire if within buffer
-        var bufferPixels = (typeof buffer === 'number') ? buffer : 0;
-
-        var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-        var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-        var elementTop = element.getBoundingClientRect().top;
-        var elementBottom = element.getBoundingClientRect().bottom;
-        var elementVisibleHeight = element.offsetHeight * visibleHeightMultiplier;
-
-        if ((scroll + windowHeight >= (elementTop + scroll + elementVisibleHeight - bufferPixels)) &&
-            elementBottom > elementVisibleHeight) {
-            callback.call(that);
-        }
-    });
 };
 
 utils.checkVisibleItem = function(item, callback, percentVisible, buffer, container) {
@@ -518,38 +342,6 @@ utils.windowWidth = function() {
     return document.documentElement.clientWidth || document.body.clientWidth;
 }
 
-utils.checkHidden = function(element, callback, percentHidden, checkBottom) {
-    var that = this;
-    requestAnimationFrame(function() {
-        // what percentage of the element should be hidden
-        var visibleHeightMultiplier = (typeof percentHidden === 'number') ? (parseInt(percentHidden) * .01) : 0;
-
-        var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-        var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-
-        if ((scroll + windowHeight < element.getBoundingClientRect().top + scroll ||
-            (checkBottom !== false && element.getBoundingClientRect().top + (element.offsetHeight * visibleHeightMultiplier) <= 0))) {
-            callback.call(that);
-        }
-    });
-};
-
-// get all images above an element
-utils.imagesAbove = function(element) {
-    // get all images
-    var images = document.querySelectorAll('img');
-    // top position of show visible element
-    var elementTop = element.getBoundingClientRect().top;
-    // if show visible element is below image add to imagesAboveElement array
-    var imagesAboveElement = [];
-    for (var i = 0; i < images.length; i++) {
-        if (images[i].getBoundingClientRect().top < elementTop) {
-            imagesAboveElement.push(images[i]);
-        }
-    }
-    return imagesAboveElement;
-};
-
 utils.throttle = function throttle(fn, threshhold, scope) {
     threshhold || (threshhold = 250);
     var last,
@@ -573,17 +365,6 @@ utils.throttle = function throttle(fn, threshhold, scope) {
     };
 };
 
-utils.siblingIndex = function(el) {
-    if (!el) {
-        return false;
-    }
-    var i = 0;
-    while( (el = el.previousSibling) != null ) {
-      i++;
-    }
-    return i;
-};
-
 utils.storeUserOptions = function(options){
     var that = this;
     that.userOptions = options;
@@ -596,19 +377,6 @@ utils.retrieveUserOptions = function(){
 
 utils.isArray = function(param) {
     return Object.prototype.toString.call(param) === '[object Array]';
-}
-
-utils.docReady = function(fn) {
-    if (document.readyState != 'loading'){
-        fn();
-    } else if (document.addEventListener) {
-        document.addEventListener('DOMContentLoaded', fn);
-    } else {
-        document.attachEvent('onreadystatechange', function() {
-        if (document.readyState != 'loading')
-            fn();
-        });
-    }
 }
 
 utils.capitalize = function (str) {
@@ -647,6 +415,97 @@ utils.extractRootDomain = function(url) {
 utils.validateEmail = function (str) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(str).toLowerCase());
+};
+
+utils.timeAgo = function(time, output) {
+    var templates = {
+        prefix: "",
+        suffix: "",
+        seconds: "less than a minute",
+        minute: "about a minute",
+        minutes: "%d minutes",
+        hour: "1 hr",
+        hours: "%d hrs",
+        day: "yesterday",
+        days: "%d days",
+        month: "1 month",
+        months: "%d months",
+        year: "1 year",
+        years: "%d years"
+    };
+    var template = function(t, n) {
+        return templates[t] && templates[t].replace(/%d/i, Math.abs(Math.round(n)));
+    };
+
+    // random hrs
+    if (!time)
+        return '';
+    if (typeof time === 'string') {
+        time = time.replace(/\.\d+/, ""); // remove milliseconds
+        time = time.replace(/-/, "/").replace(/-/, "/");
+        time = time.replace(/T/, " ").replace(/Z/, " UTC");
+        time = time.replace(/([\+\-]\d\d)\:?(\d\d)/, " $1$2"); // -04:00 -> -0400
+    }
+
+    time = new Date(time * 1000 || time);
+
+    var now = new Date();
+    var seconds = ((now.getTime() - time) * .001) >> 0;
+    var minutes = seconds / 60;
+    var hours = minutes / 60;
+    var days = hours / 24;
+    var years = days / 365;
+
+    return templates.prefix + (
+            seconds < 45 && template('seconds', seconds) ||
+            seconds < 90 && template('minute', 1) ||
+            minutes < 45 && template('minutes', minutes) ||
+            minutes < 90 && template('hour', 1) ||
+            hours < 24 && template('hours', hours) ||
+            hours < 42 && template('day', 1) ||
+            days < 30 && template('days', days) ||
+            days < 45 && template('month', 1) ||
+            days < 365 && template('months', days / 30) ||
+            years < 1.5 && template('year', 1) ||
+            template('years', years)
+            ) + templates.suffix;
+};
+
+utils.scrollTop = function(element, duration) {
+    var start = element.scrollTop;
+
+    if (start === 0) { // already there
+        return;
+    }
+
+    var change = 0 - start,
+        currentTime = 0,
+        increment = 20,
+        duration = (Math.abs(change) / 2.5);
+
+    var self = this;
+
+    var animateScroll = function(){
+        currentTime += increment;
+        var val = self.easeInOutQuad(currentTime, start, change, duration);
+        element.scrollTop = val;
+        if(currentTime < duration) {
+            setTimeout(animateScroll, increment);
+        }
+    };
+    animateScroll();
+}
+
+utils.easeInOutQuad = function (t, b, c, d) {
+  t /= d/2;
+    if (t < 1) return c/2*t*t + b;
+    t--;
+    return -c/2 * (t*(t-2) - 1) + b;
+};
+
+utils.getName = function(user) {
+    var result = (user.first_name !== "") ? (user.first_name + ' ' + user.last_name) : user.display_name;
+    return result;
 };
 
 
