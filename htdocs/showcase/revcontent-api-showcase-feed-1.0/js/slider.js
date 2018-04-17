@@ -2387,11 +2387,6 @@ Author: michael@revcontent.com
 
                             revApi.request(that.generateUrl(actualInternalOffset, missInternalCount, actualSponsoredOffset, missSponsoredCount), function(apiData) {
 
-                                if (!apiData.content.length) {
-                                    reject(new Error("Feed - getData no extra data"));
-                                    return;
-                                };
-
                                 tryToUpdateDisplayedItems(10, itemTypes.removeItems, apiData).then(function() {
                                     resolve(data);
                                 })
