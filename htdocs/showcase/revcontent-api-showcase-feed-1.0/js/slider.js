@@ -4885,7 +4885,7 @@ Author: michael@revcontent.com
                                     '<h2>Personalize<br>' +
                                     '<i>your</i> Experience</h2>' +
                                 '</div>' +
-                                '<div class="clearfix"></div>' +
+                                '<div class="eng-clearfix"></div>' +
                                 '<p>Pick at least <strong>3</strong> topics you like, or automatically with Facebook</p>';
 
 
@@ -4956,7 +4956,7 @@ Author: michael@revcontent.com
                                     }
 
                                     var clearfix = document.createElement('div');
-                                    revUtils.addClass(clearfix, 'clearfix');
+                                    revUtils.addClass(clearfix, 'eng-clearfix');
                                     engage_auth_interests.appendChild(clearfix);
 
                                     engage_auth_interests_card.appendChild(engage_auth_interests);
