@@ -377,7 +377,7 @@ Author: michael@revcontent.com
                         button.options = Object.assign((that.options.authenticated && button.auth_options ? button.auth_options : button.options), that.options);
                         button.options.element = that.panel.innerElement;
                         button.options.height_element = that.options.innerWidget.element;
-                        button.options.height_element_measure = [that.options.innerWidget.head];
+                        button.options.height_element_measure = [that.options.innerWidget.head, that.options.innerWidget.loadMoreContainer];
                         button.options.infinite_container = revDetect.mobile() ? true : false;
                         button.options.active = true;
                         // HACK to avoid thrash
