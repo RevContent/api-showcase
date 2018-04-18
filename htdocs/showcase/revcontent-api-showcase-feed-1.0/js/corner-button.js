@@ -389,6 +389,7 @@ Author: michael@revcontent.com
                         button.slider = new RevSlider(button.options);
                     } else {
                         button.slider.options.active = true;
+                        that.options.innerWidget.element.style.height = button.slider.grid.heightElementMeasure + 'px';
                         that.panel.innerElement.replaceChild(button.slider.containerElement, that.panel.innerElement.firstChild);
                     }
 
@@ -437,7 +438,10 @@ Author: michael@revcontent.com
     };
 
     EngageCornerButton.prototype.deactivatePanelGrids = function(activateInnerWidget) {
-        this.options.innerWidget.element.style.height = 'auto';
+        if (activateInnerWidget) {
+            this.options.innerWidget.element.style.height = 'auto';
+        }
+
         if (this.options.innerWidget.navBarElement) { // manage innerwidget navbar visibility
             if (activateInnerWidget) { // show it right away
                 this.options.innerWidget.navBarElement.style.visibility = 'visible';
