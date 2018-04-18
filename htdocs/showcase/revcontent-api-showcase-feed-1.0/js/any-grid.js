@@ -184,7 +184,8 @@ AnyGrid.prototype._postLayout = function() {
             }
         }
     }
-    this.options.heightElement.style.height = this.element.offsetHeight + heightElementMeasure + 'px';
+    this.heightElementMeasure = this.element.offsetHeight + heightElementMeasure;
+    this.options.heightElement.style.height = this.heightElementMeasure + 'px';
   }
 };
 
