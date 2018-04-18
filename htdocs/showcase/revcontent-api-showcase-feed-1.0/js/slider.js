@@ -466,7 +466,7 @@ Author: michael@revcontent.com
 
             if (that.loadMoreContainer) {
                 revUtils.addClass(that.loadMoreContainer, 'eng-loadmore-disabled');
-                revUtils.removeEventListener(that.loadMoreContainer, revDetect.mobile() ? 'touchstart' : 'click', that.loadMoreListener);
+                revUtils.removeEventListener(that.loadMoreContainer, revDetect.mobile() ? 'click' : 'click', that.loadMoreListener);
             }
 
             revUtils.removeEventListener(window, 'scroll', that.scrollListener);
@@ -3380,7 +3380,7 @@ Author: michael@revcontent.com
                 });
         };
 
-        revUtils.addEventListener(self.loadMoreContainer, revDetect.mobile() ? 'touchstart' : 'click', self.loadMoreListener);
+        revUtils.addEventListener(self.loadMoreContainer, revDetect.mobile() ? 'click' : 'click', self.loadMoreListener);
     };
 
     RevSlider.prototype.promiseCreateBlankCardsRetry = function(self, beforeItemCount) {
