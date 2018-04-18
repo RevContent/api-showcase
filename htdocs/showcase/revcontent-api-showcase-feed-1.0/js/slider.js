@@ -464,6 +464,11 @@ Author: michael@revcontent.com
             }
             that.removed = true;
 
+            if (that.loadMoreContainer) {
+                revUtils.addClass(that.loadMoreContainer, 'eng-loadmore-disabled');
+                revUtils.removeEventListener(that.loadMoreContainer, revDetect.mobile() ? 'click' : 'click', that.loadMoreListener);
+            }
+
             revUtils.removeEventListener(window, 'scroll', that.scrollListener);
 
             if (items) { // TODO make sure these items are in the grid
@@ -2321,7 +2326,7 @@ Author: michael@revcontent.com
             return new Promise(function(resolve, reject) {
                 if (that.options.content.length && that.options.view) {
                     data.initial_content_mode = true;
-                    data.data = { content: that.options.content, view: that.options.view };
+                    data.data = { content: that.options.content, view: that.options.view, contextual_last_sort: that.options.contextual_last_sort };
                     resolve(data);
                 } else {
                     revApi.request(that.generateUrl(that.internalOffset, data.rowData.internalLimit, that.sponsoredOffset, data.rowData.sponsoredLimit), function(apiData) {
@@ -3351,8 +3356,7 @@ Author: michael@revcontent.com
 
         self.loadMoreListener = function() {
             self.loadMoreText.innerHTML = 'LOADING ...';
-            self.loadMoreContainer.className = 'rev-loadmore-button loading';
-            revUtils.removeEventListener(self.loadMoreContainer, 'click', self.loadMoreListener);
+            revUtils.addClass(self.loadMoreContainer, 'loading');
 
             var beforeItemCount = self.grid.items.length;
 
@@ -3362,9 +3366,7 @@ Author: michael@revcontent.com
                 .then(self.promiseUpdateCardDataRetry)
                 .then(function(input) {
                     self.loadMoreText.innerHTML = 'LOAD MORE CONTENT';
-                    self.loadMoreContainer.className = 'rev-loadmore-button';
-                    revUtils.addEventListener(self.loadMoreContainer, 'click', self.loadMoreListener);
-
+                    revUtils.removeClass(self.loadMoreContainer, 'loading');
                     return input;
                 })
                 .catch(function (error) {
@@ -3378,7 +3380,7 @@ Author: michael@revcontent.com
                 });
         };
 
-        revUtils.addEventListener(self.loadMoreContainer, 'click', self.loadMoreListener);
+        revUtils.addEventListener(self.loadMoreContainer, revDetect.mobile() ? 'click' : 'click', self.loadMoreListener);
     };
 
     RevSlider.prototype.promiseCreateBlankCardsRetry = function(self, beforeItemCount) {
@@ -3406,12 +3408,6 @@ Author: michael@revcontent.com
             var rowData = input.rowData;
 
             revApi.request(self.generateUrl(self.internalOffset, rowData.internalLimit, self.sponsoredOffset, rowData.sponsoredLimit), function(data) {
-                // reject if we don't have any content or not enough content
-                if (!data.content.length || data.content.length !== (rowData.internalLimit + rowData.sponsoredLimit)) {
-                    reject();
-                    return;
-                }
-
                 resolve({self: self, rowData: rowData, data: data});
             }, function() {
                 reject();
