@@ -1148,14 +1148,15 @@ Author: michael@revcontent.com
                 '<div class="rev-auth-button">' +
                     this.revAuthButtonIconHtml() +
                     '<div class="rev-auth-button-text">' +
-                        'Personalize with facebook' +
+                        'Personalize with Facebook' +
                     '</div>' +
                 '</div>' +
 
-                '<div class="rev-auth-buttonline">Once personalized the content recommendations on this page will be based on the pages you\'ve liked and urls you\'ve shared on Facebook</div>' +
+                '<div class="rev-auth-button rev-auth-button-secondary" style="margin-top:10px"><span class="rev-auth-button-icon"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 612 612" style="enable-background:new 0 0 612 612;fill: #7b7b7b;" xml:space="preserve"><path d="M612,306.036C612,137.405,474.595,0,305.964,0S0,137.405,0,306.036c0,92.881,42.14,176.437,107.698,232.599   c0.795,0.795,1.59,1.59,3.108,2.313C163.86,585.473,231.804,612,306.759,612c73.365,0,141.309-26.527,194.363-69.462   c3.108-0.795,5.493-3.108,7.011-5.493C571.451,480.088,612,398.122,612,306.036z M28.117,306.036   c0-153.018,124.901-277.919,277.919-277.919s277.919,124.901,277.919,277.919c0,74.955-29.635,142.826-78.063,192.845   c-7.806-36.719-31.225-99.169-103.072-139.718c16.408-20.311,25.732-46.838,25.732-74.955c0-67.149-54.644-121.793-121.793-121.793   s-121.793,54.644-121.793,121.793c0,28.117,10.119,53.849,25.732,74.955c-72.497,40.549-95.916,103-102.928,139.718   C58.547,449.658,28.117,380.991,28.117,306.036z M212.36,284.93c0-51.536,42.14-93.676,93.676-93.676s93.676,42.14,93.676,93.676   s-42.14,93.676-93.676,93.676S212.36,336.466,212.36,284.93z M132.707,523.023c1.59-22.624,14.022-99.169,98.374-142.104   c21.106,16.408,46.838,25.732,74.955,25.732c28.117,0,54.644-10.119,75.75-26.527c83.556,42.935,96.784,117.89,99.169,142.104   c-47.633,38.237-108.493,61.655-174.052,61.655C240.478,583.955,180.34,561.331,132.707,523.023z"></path></svg></span><span class="rev-auth-button-text">Continue with E-mail</span></div>' +
+
 
                 '<div class="rev-auth-terms">' +
-                    '<span>by signing up you agree to the <a target="_blank" href="//faq.engage.im/customer/en/portal/articles/2923351-publisher-terms-conditions">Terms</a></span>' +
+                    '<span><a target="_blank" href="//faq.engage.im/customer/en/portal/articles/2923351-publisher-terms-conditions">Terms and Conditions</a></span>' +
                     // '<span>|</span>' +
                     // '<a href="#">Privacy Policy</a>' +
                 '</div>' +
@@ -1974,7 +1975,7 @@ Author: michael@revcontent.com
     // Don't dupe this svg
     RevSlider.prototype.revAuthButtonIconHtml = function() {
         return '<div class="rev-auth-button-icon">' +
-            '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 155.139 155.139" style="enable-background:new 0 0 155.139 155.139;" xml:space="preserve" class=""><g><g> <path id="f_1_" d="M89.584,155.139V84.378h23.742l3.562-27.585H89.584V39.184   c0-7.984,2.208-13.425,13.67-13.425l14.595-0.006V1.08C115.325,0.752,106.661,0,96.577,0C75.52,0,61.104,12.853,61.104,36.452   v20.341H37.29v27.585h23.814v70.761H89.584z" data-original="#000000" class="active-path" data-old_color="#ffffff" fill="#ffffff"/> </g></g> </svg>' +
+            '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 470.513 470.513" style="enable-background:new 0 0 470.513 470.513;fill: #fff;" xml:space="preserve"><path d="M271.521,154.17v-40.541c0-6.086,0.28-10.8,0.849-14.13c0.567-3.335,1.857-6.615,3.859-9.853   c1.999-3.236,5.236-5.47,9.706-6.708c4.476-1.24,10.424-1.858,17.85-1.858h40.539V0h-64.809c-37.5,0-64.433,8.897-80.803,26.691   c-16.368,17.798-24.551,44.014-24.551,78.658v48.82h-48.542v81.086h48.539v235.256h97.362V235.256h64.805l8.566-81.086H271.521z"></path></svg>' +
         '</div>';
     };
 
@@ -2824,7 +2825,7 @@ Author: michael@revcontent.com
             } else {
                 for (var i = 0; i < authBoxes.length; i++) {
                     authBoxes[i].querySelector('.rev-auth-headline').innerHTML = 'Almost Done! Login to save your reaction <br /> <strong>and</strong> personalize your experience';
-                    authBoxes[i].querySelector('.rev-auth-button-text').innerText = 'Continue with facebook';
+                    authBoxes[i].querySelector('.rev-auth-button-text').innerText = 'Continue with Facebook';
                 }
             }
         });
@@ -4494,9 +4495,14 @@ Author: michael@revcontent.com
             return false;
         }
 
-        //var article = card.parentNode;
-        //card is rev-content-inner
-        card.style.height = "600px";
+        var minCardHeight = 530;
+        var sc = card.querySelector('.engage-auth');
+        if(card.offsetHeight < minCardHeight) {
+            card.querySelector('.rev-description').style.transition = 'all 0.5s';
+            var xtraPad = minCardHeight - card.offsetHeight + 8;
+            card.querySelector('.rev-description').style.paddingBottom = xtraPad + 'px';
+            that.grid.layout();
+        }
         card.style.overflow = "hidden";
 
         //re-layout grid for masonry
@@ -4526,11 +4532,12 @@ Author: michael@revcontent.com
         revUtils.addClass(engage_auth_box_inner,'animated');
 
         var engage_auth_subline = document.createElement('div');
-        revUtils.addClass(engage_auth_subline,'rev-auth-subline');
+        revUtils.addClass(engage_auth_subline,'rev-auth-copyright');
         engage_auth_subline.innerHTML = that.getDisclosure();
 
         var engage_auth_almost_done = document.createElement('h2');
         engage_auth_almost_done.innerText = 'Almost Done!';
+        revUtils.addClass(engage_auth_almost_done, 'rev-auth-h2');
         engage_auth_almost_done.style = 'text-align:center;'
 
         var engage_auth_headline = document.createElement('div');
@@ -4548,15 +4555,15 @@ Author: michael@revcontent.com
         var engage_auth_facebook = document.createElement('div');
         revUtils.addClass(engage_auth_facebook,'auth-button');
         revUtils.addClass(engage_auth_facebook,'primary-auth-button');
-        engage_auth_facebook.innerHTML = '<span><div style="width: 30px;height: 30px;"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 470.513 470.513" style="enable-background:new 0 0 470.513 470.513;fill: #fff;" xml:space="preserve"><path d="M271.521,154.17v-40.541c0-6.086,0.28-10.8,0.849-14.13c0.567-3.335,1.857-6.615,3.859-9.853   c1.999-3.236,5.236-5.47,9.706-6.708c4.476-1.24,10.424-1.858,17.85-1.858h40.539V0h-64.809c-37.5,0-64.433,8.897-80.803,26.691   c-16.368,17.798-24.551,44.014-24.551,78.658v48.82h-48.542v81.086h48.539v235.256h97.362V235.256h64.805l8.566-81.086H271.521z"></path></svg></div></span><strong>Continue</strong> with <strong>facebook</strong>';
+        engage_auth_facebook.innerHTML = '<span class="button-icon"><div style="display:block;width: 28px;height: 28px"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 470.513 470.513" style="enable-background:new 0 0 470.513 470.513;fill: #fff;" xml:space="preserve"><path d="M271.521,154.17v-40.541c0-6.086,0.28-10.8,0.849-14.13c0.567-3.335,1.857-6.615,3.859-9.853   c1.999-3.236,5.236-5.47,9.706-6.708c4.476-1.24,10.424-1.858,17.85-1.858h40.539V0h-64.809c-37.5,0-64.433,8.897-80.803,26.691   c-16.368,17.798-24.551,44.014-24.551,78.658v48.82h-48.542v81.086h48.539v235.256h97.362V235.256h64.805l8.566-81.086H271.521z"></path></svg></div></span><span class="button-text">Continue with <strong>Facebook</strong></span>';
 
         var engage_auth_email = document.createElement('div');
         revUtils.addClass(engage_auth_email,'auth-button');
         revUtils.addClass(engage_auth_email,'secondary-auth-button');
-        engage_auth_email.innerHTML = '<span><div style="width: 30px;height: 30px;"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 612 612" style="enable-background:new 0 0 612 612;fill: #7b7b7b;" xml:space="preserve"><path d="M612,306.036C612,137.405,474.595,0,305.964,0S0,137.405,0,306.036c0,92.881,42.14,176.437,107.698,232.599   c0.795,0.795,1.59,1.59,3.108,2.313C163.86,585.473,231.804,612,306.759,612c73.365,0,141.309-26.527,194.363-69.462   c3.108-0.795,5.493-3.108,7.011-5.493C571.451,480.088,612,398.122,612,306.036z M28.117,306.036   c0-153.018,124.901-277.919,277.919-277.919s277.919,124.901,277.919,277.919c0,74.955-29.635,142.826-78.063,192.845   c-7.806-36.719-31.225-99.169-103.072-139.718c16.408-20.311,25.732-46.838,25.732-74.955c0-67.149-54.644-121.793-121.793-121.793   s-121.793,54.644-121.793,121.793c0,28.117,10.119,53.849,25.732,74.955c-72.497,40.549-95.916,103-102.928,139.718   C58.547,449.658,28.117,380.991,28.117,306.036z M212.36,284.93c0-51.536,42.14-93.676,93.676-93.676s93.676,42.14,93.676,93.676   s-42.14,93.676-93.676,93.676S212.36,336.466,212.36,284.93z M132.707,523.023c1.59-22.624,14.022-99.169,98.374-142.104   c21.106,16.408,46.838,25.732,74.955,25.732c28.117,0,54.644-10.119,75.75-26.527c83.556,42.935,96.784,117.89,99.169,142.104   c-47.633,38.237-108.493,61.655-174.052,61.655C240.478,583.955,180.34,561.331,132.707,523.023z"></path></svg></div></span><strong>Continue</strong> with <strong>E-mail</strong>';
+        engage_auth_email.innerHTML = '<span class="button-icon"><div style="display:block;width: 26px;height: 26px;"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 612 612" style="enable-background:new 0 0 612 612;fill: #7b7b7b;" xml:space="preserve"><path d="M612,306.036C612,137.405,474.595,0,305.964,0S0,137.405,0,306.036c0,92.881,42.14,176.437,107.698,232.599   c0.795,0.795,1.59,1.59,3.108,2.313C163.86,585.473,231.804,612,306.759,612c73.365,0,141.309-26.527,194.363-69.462   c3.108-0.795,5.493-3.108,7.011-5.493C571.451,480.088,612,398.122,612,306.036z M28.117,306.036   c0-153.018,124.901-277.919,277.919-277.919s277.919,124.901,277.919,277.919c0,74.955-29.635,142.826-78.063,192.845   c-7.806-36.719-31.225-99.169-103.072-139.718c16.408-20.311,25.732-46.838,25.732-74.955c0-67.149-54.644-121.793-121.793-121.793   s-121.793,54.644-121.793,121.793c0,28.117,10.119,53.849,25.732,74.955c-72.497,40.549-95.916,103-102.928,139.718   C58.547,449.658,28.117,380.991,28.117,306.036z M212.36,284.93c0-51.536,42.14-93.676,93.676-93.676s93.676,42.14,93.676,93.676   s-42.14,93.676-93.676,93.676S212.36,336.466,212.36,284.93z M132.707,523.023c1.59-22.624,14.022-99.169,98.374-142.104   c21.106,16.408,46.838,25.732,74.955,25.732c28.117,0,54.644-10.119,75.75-26.527c83.556,42.935,96.784,117.89,99.169,142.104   c-47.633,38.237-108.493,61.655-174.052,61.655C240.478,583.955,180.34,561.331,132.707,523.023z"></path></svg></div></span><span class="button-text">Continue with <strong>E-mail</strong></span>';
 
         var engage_auth_or = document.createElement('p');
-        engage_auth_or.style = 'text-align: center;margin: 10px auto;font-style: italic;color: #545454;';
+        engage_auth_or.style = 'text-align: center;margin: 10px auto;font-style: italic;color: #676767;font-size:12px;';
         engage_auth_or.innerHTML = '- or -';
 
         var engage_auth_login_option = document.createElement('div');
@@ -4720,12 +4727,12 @@ Author: michael@revcontent.com
                 if (mode === "register") {
                     var engage_auth_register = document.createElement('a');
                     revUtils.addClass(engage_auth_register, 'engage-auth-register-button');
-                    engage_auth_register.innerHTML = '<svg aria-hidden="true" data-prefix="fal" data-icon="chevron-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" class="svg-inline--fa fa-chevron-right fa-w-8 fa-7x"><path fill="currentColor" d="M17.525 36.465l-7.071 7.07c-4.686 4.686-4.686 12.284 0 16.971L205.947 256 10.454 451.494c-4.686 4.686-4.686 12.284 0 16.971l7.071 7.07c4.686 4.686 12.284 4.686 16.97 0l211.051-211.05c4.686-4.686 4.686-12.284 0-16.971L34.495 36.465c-4.686-4.687-12.284-4.687-16.97 0z" class=""></path></svg>';
+                    engage_auth_register.innerHTML = '<div><svg aria-hidden="true" data-prefix="fal" data-icon="chevron-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path fill="currentColor" d="M17.525 36.465l-7.071 7.07c-4.686 4.686-4.686 12.284 0 16.971L205.947 256 10.454 451.494c-4.686 4.686-4.686 12.284 0 16.971l7.071 7.07c4.686 4.686 12.284 4.686 16.97 0l211.051-211.05c4.686-4.686 4.686-12.284 0-16.971L34.495 36.465c-4.686-4.687-12.284-4.687-16.97 0z" class="svg-chevron-right"></path></svg></div>';
                     engage_auth_box_inner.appendChild(engage_auth_register);
                 } else {
                     var engage_auth_login = document.createElement('a');
                     revUtils.addClass(engage_auth_login, 'engage-auth-login-button');
-                    engage_auth_login.innerHTML = '<svg aria-hidden="true" data-prefix="fal" data-icon="chevron-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" class="svg-inline--fa fa-chevron-right fa-w-8 fa-7x"><path fill="currentColor" d="M17.525 36.465l-7.071 7.07c-4.686 4.686-4.686 12.284 0 16.971L205.947 256 10.454 451.494c-4.686 4.686-4.686 12.284 0 16.971l7.071 7.07c4.686 4.686 12.284 4.686 16.97 0l211.051-211.05c4.686-4.686 4.686-12.284 0-16.971L34.495 36.465c-4.686-4.687-12.284-4.687-16.97 0z" class=""></path></svg>';
+                    engage_auth_login.innerHTML = '<div><svg aria-hidden="true" data-prefix="fal" data-icon="chevron-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path fill="currentColor" d="M17.525 36.465l-7.071 7.07c-4.686 4.686-4.686 12.284 0 16.971L205.947 256 10.454 451.494c-4.686 4.686-4.686 12.284 0 16.971l7.071 7.07c4.686 4.686 12.284 4.686 16.97 0l211.051-211.05c4.686-4.686 4.686-12.284 0-16.971L34.495 36.465c-4.686-4.687-12.284-4.687-16.97 0z" class=""></path></svg></div>';
                     engage_auth_box_inner.appendChild(engage_auth_login);
                 }
 
@@ -4903,7 +4910,7 @@ Author: michael@revcontent.com
 
                                 var engage_auth_finish_buton = document.createElement('a');
                                 revUtils.addClass(engage_auth_finish_buton, 'engage-auth-register-button');
-                                engage_auth_finish_buton.innerHTML = '<svg aria-hidden="true" data-prefix="fal" data-icon="chevron-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" class="svg-inline--fa fa-chevron-right fa-w-8 fa-7x"><path fill="currentColor" d="M17.525 36.465l-7.071 7.07c-4.686 4.686-4.686 12.284 0 16.971L205.947 256 10.454 451.494c-4.686 4.686-4.686 12.284 0 16.971l7.071 7.07c4.686 4.686 12.284 4.686 16.97 0l211.051-211.05c4.686-4.686 4.686-12.284 0-16.971L34.495 36.465c-4.686-4.687-12.284-4.687-16.97 0z" class=""></path></svg>';
+                                engage_auth_finish_buton.innerHTML = '<svg aria-hidden="true" data-prefix="fal" data-icon="chevron-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" class="svg-inline--fa fa-chevron-right fa-w-8 fa-7x"><path fill="currentColor" d="M17.525 36.465l-7.071 7.07c-4.686 4.686-4.686 12.284 0 16.971L205.947 256 10.454 451.494c-4.686 4.686-4.686 12.284 0 16.971l7.071 7.07c4.686 4.686 12.284 4.686 16.97 0l211.051-211.05c4.686-4.686 4.686-12.284 0-16.971L34.495 36.465c-4.686-4.687-12.284-4.687-16.97 0z" class="svg-chevron-next"></path></svg>';
                                 engage_auth_finish_buton.style.display = "none";
 
 
@@ -5092,6 +5099,7 @@ Author: michael@revcontent.com
             card.style = "";
             var func = function(){
                 engage_auth.remove();
+                card.querySelector('.rev-description').style.paddingBottom = 0;
                 //re-layout grid for masonry
                 that.grid.layout();
                 card.scrollIntoView();
@@ -5164,9 +5172,9 @@ Author: michael@revcontent.com
                 }
             }
 
-            if (brandLogoSquare) {
-                brandLogoSquare.style.width = brandLogoSquare.offsetHeight + 'px';
-            }
+            //if (brandLogoSquare) {
+            //    brandLogoSquare.style.width = brandLogoSquare.offsetHeight + 'px';
+            //}
 
             if (!that.options.authenticated) {
                 //old flip logic
