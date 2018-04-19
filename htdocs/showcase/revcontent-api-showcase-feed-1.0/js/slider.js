@@ -1139,10 +1139,10 @@ Author: michael@revcontent.com
         // TODO: remove background: none hack. Only way to get button shadow to show
         this.feedAuthButton.innerHTML = '<div class="rev-content-inner feed-auth-button-size-remove-me" style="background: none; height:' + (this.options.auth_height > 0 ? (this.options.auth_height + 'px') : 'auto') + ';"><div class="rev-auth-mask"></div><div class="rev-auth">' +
         '<div class="rev-auth-box">' +
-            '<div class="rev-auth-box-inner" style="margin-bottom: 30px;">' +
+            '<div class="rev-auth-box-inner">' +
 
                 '<div class="rev-auth-headline">' +
-                    '<span class="rev-engage-type-txt">Hey there! Connect your account to<br /> surface personalized <strong>and</strong> relevant content!</span>' +
+                    '<span class="rev-engage-type-txt">Hey there! Connect your account to<br /> surface <strong>personalized</strong> and <strong>relevant</strong> content!</span>' +
                 '</div>' +
 
                 '<div class="rev-auth-button">' +
@@ -4519,6 +4519,7 @@ Author: michael@revcontent.com
 
         var engage_auth_box = document.createElement('div');
         revUtils.addClass(engage_auth_box,'rev-auth-box');
+        revUtils.addClass(engage_auth_box,'auth-pad-top');
 
         engage_auth.appendChild(close_button);
 
