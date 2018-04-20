@@ -2820,6 +2820,10 @@ Author: michael@revcontent.com
                 for (var i = 0; i < authBoxes.length; i++) {
                     authBoxes[i].querySelector('.rev-auth-headline').innerText = 'Currently logged in!';
                     authBoxes[i].querySelector('.rev-auth-button-text').innerText = 'Log out';
+                    var abs = authBoxes[i].querySelector('.rev-auth-button-secondary');
+                    if (abs) {
+                       abs.remove();
+                    }
                 }
 
             } else {
