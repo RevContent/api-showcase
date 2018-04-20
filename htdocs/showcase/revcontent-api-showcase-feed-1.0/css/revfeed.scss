@@ -1686,8 +1686,8 @@ $reactionMenu8Y: 13.5px;
                 // min-width: 320px;
                 max-width: 420px;
                 width: 100%;
-                padding-bottom: 2%;
-                margin-bottom: 3%;
+                //padding-bottom: 2%;
+                //margin-bottom: 3%;
             }
 
             .rev-auth-site-logo {
@@ -1791,9 +1791,10 @@ $reactionMenu8Y: 13.5px;
             }
 
             .rev-auth-terms {
-                display: flex;
-                justify-content: space-around;
-                margin-top: 42px;
+                //display: flex;
+                //justify-content: space-around;
+                //margin-top: 42px;
+                padding: 18px 0 6% 0;
                 opacity: .8;
                 text-align: center;
                 a, span {
