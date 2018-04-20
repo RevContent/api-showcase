@@ -1691,6 +1691,7 @@ $reactionMenu8Y: 13.5px;
             }
 
             .rev-auth-site-logo {
+                position: relative;
                 top: 2px;
                 display: block;
                 box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.39);
@@ -1699,16 +1700,19 @@ $reactionMenu8Y: 13.5px;
                 background-position: center center;
                 overflow:hidden;
                 width:84px;
-                min-width: 32px;
-                max-width: 120px;
+                min-width: 84px;
+                max-width: 128px;
                 height:84px;
-                max-height: 120px;
-                min-height: 32px;
+                max-height: 128px;
+                min-height: 84px;
                 border-radius:50%;
                 padding: 8px;
                 margin-bottom: 12px;
 
                 svg, img {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
                     width: 100%;
                 }
             }
