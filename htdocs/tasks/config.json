@@ -1,4 +1,25 @@
 {
+  "rcevents" : {
+      "name": "rc-events",
+      "description": "Revcontent Events API",
+      "homepage": "http://revcontent.com",
+      "version": "0.1.0",
+      "pkg": "./showcase/revcontent-api-showcase-events-api-1.0/package.json",
+      "js": "./showcase/revcontent-api-showcase-events-api-1.0/js/events.js",
+      "css": [
+      ],
+      "build": [
+	  "./showcase/js/revutils.js",
+	  "./showcase/js/revapi.js",
+	  "./build/files/rcevents/revrcevents.embed.js"
+      ],
+      "watch": [
+	  "./showcase/js/*",
+	  "./showcase/css/*",
+	  "./showcase/revcontent-api-showcase-powr-api-1.0/js/*"
+      ]
+  },
+
   "powrvideo" : {
     "name": "powr-video",
     "description": "Powr Video Widget",
