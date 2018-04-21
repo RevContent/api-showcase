@@ -3899,8 +3899,8 @@ Author: michael@revcontent.com
             }
             bookmarks.forEach(function(bm) {
                 if(item.data.target_url.includes(bm.url)) {
-                    var save = item.element.querySelector('.rev-save')
-                    revUtils.addClass(save, 'rev-save-active')
+                    var save = item.element.querySelector('.rev-save');
+                    revUtils.addClass(save, 'rev-save-active');
                     save.setAttribute('data-id', bm.id);
                     return;
                 }
@@ -4611,6 +4611,14 @@ Author: michael@revcontent.com
         engage_auth_box.appendChild(engage_auth_box_inner);
         engage_auth.appendChild(engage_auth_box);
 
+        var inner = card.querySelector('.rev-content-inner');
+        if (inner) {
+            var auth = inner.querySelector('.rev-auth');
+            if (auth) {
+                auth.style.opacity = 0;
+            }
+        }
+
         card.appendChild(engage_auth);
 
         //article.parentNode.insertBefore(engage_auth, article.nextSibling);
@@ -5124,27 +5132,42 @@ Author: michael@revcontent.com
             //revUtils.addClass(engage_auth, 'comment-slide-out');
             //revUtils.addClass(engage_auth, 'flipOutX');
             revUtils.addClass(engage_auth, 'animated');
-            engage_auth.style.transition = '0.5s ease';
-            engage_auth.style.opacity = 0;
+            revUtils.addClass(engage_auth, 'flipOutX');
+            //engage_auth.style.transition = '0.5s ease';
+            //engage_auth.style.opacity = 0;
             var desc = card.querySelector('.rev-description');
             var authInner = card.querySelector('.rev-auth-box-inner');
             var save = card.querySelector('.rev-save');
-            if (desc) {
-                desc.style.transition = 'none';
-                desc.style.paddingBottom = 0;
+
+            if(save) {
+                save.classList.add('animated');
+                save.classList.add('flipOutX');
             }
-            if (authInner) {
-                authInner.style.transition = 'none';
-                authInner.style.paddingBottom = 0;
-            }
-            if (save) {
-                save.classList.remove('rev-save-active');
-            }
-            card.style = "";
+
+            //card.style = "";
             var func = function(){
                 revUtils.removeClass(engage_auth, 'flipped');
                 engage_auth.remove();
-
+                if (save) {
+                    save.classList.remove('rev-save-active');
+                    save.classList.remove('flipOutX');
+                    save.classList.add('flipInX');
+                }
+                var inner = card.querySelector('.rev-content-inner');
+                if (inner) {
+                    var auth = inner.querySelector('.rev-auth');
+                    if (auth) {
+                        auth.style.opacity = 1;
+                    }
+                }
+                if (desc) {
+                    desc.style.transition = 'none';
+                    desc.style.paddingBottom = 0;
+                }
+                if (authInner) {
+                    authInner.style.transition = 'none';
+                    authInner.style.paddingBottom = 0;
+                }
                 //re-layout grid for masonry
                 that.grid.layout();
                 //card.scrollIntoView();
