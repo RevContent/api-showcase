@@ -1747,10 +1747,16 @@ $reactionMenu8Y: 13.5px;
                 background-color: #efefef;
                 color: #797979;
 
+                &.rev-button-white {
+                  background-color: #ffffff;
+                  border: 1px solid #e3e3e3;
+                  color: #656565;
+                }
+
                 .rev-auth-button-icon {
                   width: 32px;
                   height: 32px;
-                  margin-bottom: 2%;
+                  margin-bottom: 8px;
                 }
 
                 .rev-auth-button-text {
@@ -3400,10 +3406,17 @@ textarea.comment-textarea:focus {
     background-color: #efefef;
     color: #797979!important;
     margin-bottom: 30px;
+
+    span.button-icon {
+      display: flex;
+      align-items: center;
+    }
   }
 
   span.button-icon {
-    display: flex;
+    position:absolute!important;
+    left: 3%;
+    display: block;
     width: auto;
     min-width: 48px;
     height: 40px;
@@ -3418,7 +3431,7 @@ textarea.comment-textarea:focus {
 
   span.button-text {
     width: 100%;
-    text-align: left;
+    text-align: center;
   }
 
   strong {

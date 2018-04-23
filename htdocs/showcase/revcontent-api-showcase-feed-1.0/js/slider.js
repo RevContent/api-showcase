@@ -1134,6 +1134,7 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.appendfeedAuthButton = function(grid) {
+        var that = this;
         this.feedAuthButton = document.createElement('div');
         this.feedAuthButton.className = 'rev-content';
         // TODO: remove background: none hack. Only way to get button shadow to show
@@ -1152,7 +1153,7 @@ Author: michael@revcontent.com
                     '</div>' +
                 '</div>' +
 
-                '<div class="rev-auth-button rev-auth-button-secondary" style="margin-top:10px"><span class="rev-auth-button-icon"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 612 612" style="enable-background:new 0 0 612 612;fill: #7b7b7b;" xml:space="preserve"><path d="M612,306.036C612,137.405,474.595,0,305.964,0S0,137.405,0,306.036c0,92.881,42.14,176.437,107.698,232.599   c0.795,0.795,1.59,1.59,3.108,2.313C163.86,585.473,231.804,612,306.759,612c73.365,0,141.309-26.527,194.363-69.462   c3.108-0.795,5.493-3.108,7.011-5.493C571.451,480.088,612,398.122,612,306.036z M28.117,306.036   c0-153.018,124.901-277.919,277.919-277.919s277.919,124.901,277.919,277.919c0,74.955-29.635,142.826-78.063,192.845   c-7.806-36.719-31.225-99.169-103.072-139.718c16.408-20.311,25.732-46.838,25.732-74.955c0-67.149-54.644-121.793-121.793-121.793   s-121.793,54.644-121.793,121.793c0,28.117,10.119,53.849,25.732,74.955c-72.497,40.549-95.916,103-102.928,139.718   C58.547,449.658,28.117,380.991,28.117,306.036z M212.36,284.93c0-51.536,42.14-93.676,93.676-93.676s93.676,42.14,93.676,93.676   s-42.14,93.676-93.676,93.676S212.36,336.466,212.36,284.93z M132.707,523.023c1.59-22.624,14.022-99.169,98.374-142.104   c21.106,16.408,46.838,25.732,74.955,25.732c28.117,0,54.644-10.119,75.75-26.527c83.556,42.935,96.784,117.89,99.169,142.104   c-47.633,38.237-108.493,61.655-174.052,61.655C240.478,583.955,180.34,561.331,132.707,523.023z"></path></svg></span><span class="rev-auth-button-text">Continue with E-mail</span></div>' +
+                '<div class="rev-auth-button rev-auth-button-secondary rev-button-white" style="margin-top:10px"><span class="rev-auth-button-icon"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 612 612" style="enable-background:new 0 0 612 612;fill: #7b7b7b;" xml:space="preserve"><path d="M612,306.036C612,137.405,474.595,0,305.964,0S0,137.405,0,306.036c0,92.881,42.14,176.437,107.698,232.599   c0.795,0.795,1.59,1.59,3.108,2.313C163.86,585.473,231.804,612,306.759,612c73.365,0,141.309-26.527,194.363-69.462   c3.108-0.795,5.493-3.108,7.011-5.493C571.451,480.088,612,398.122,612,306.036z M28.117,306.036   c0-153.018,124.901-277.919,277.919-277.919s277.919,124.901,277.919,277.919c0,74.955-29.635,142.826-78.063,192.845   c-7.806-36.719-31.225-99.169-103.072-139.718c16.408-20.311,25.732-46.838,25.732-74.955c0-67.149-54.644-121.793-121.793-121.793   s-121.793,54.644-121.793,121.793c0,28.117,10.119,53.849,25.732,74.955c-72.497,40.549-95.916,103-102.928,139.718   C58.547,449.658,28.117,380.991,28.117,306.036z M212.36,284.93c0-51.536,42.14-93.676,93.676-93.676s93.676,42.14,93.676,93.676   s-42.14,93.676-93.676,93.676S212.36,336.466,212.36,284.93z M132.707,523.023c1.59-22.624,14.022-99.169,98.374-142.104   c21.106,16.408,46.838,25.732,74.955,25.732c28.117,0,54.644-10.119,75.75-26.527c83.556,42.935,96.784,117.89,99.169,142.104   c-47.633,38.237-108.493,61.655-174.052,61.655C240.478,583.955,180.34,561.331,132.707,523.023z"></path></svg></span><span class="rev-auth-button-text">Continue with E-mail</span></div>' +
 
 
                 '<div class="rev-auth-terms">' +
@@ -1167,8 +1168,14 @@ Author: michael@revcontent.com
 
         revUtils.addEventListener(this.feedAuthButton.querySelector('.rev-auth-button'), 'click', this.authButtonHandler.bind(this, false));
 
+        revUtils.addEventListener(this.feedAuthButton.querySelector('.rev-auth-button-secondary'), 'click', function(){
+            that.cardActionAuth(that.feedAuthButton, 'vote', function(){
+                //alert("hey!");
+            });
+        }, {passive: false});
+
         return grid.addItems([this.feedAuthButton]);
-    }
+    };
 
     RevSlider.prototype.handleReactionMenu = function(item) {
         var that = this;
@@ -3131,6 +3138,9 @@ Author: michael@revcontent.com
 
     RevSlider.prototype.handleCarousel = function(data) {
         var that = this;
+        if(!data){
+            return;
+        }
 
         var subscribed_ids = [];
         for (var i; i < data.length; i++) {
@@ -3889,8 +3899,8 @@ Author: michael@revcontent.com
             }
             bookmarks.forEach(function(bm) {
                 if(item.data.target_url.includes(bm.url)) {
-                    var save = item.element.querySelector('.rev-save')
-                    revUtils.addClass(save, 'rev-save-active')
+                    var save = item.element.querySelector('.rev-save');
+                    revUtils.addClass(save, 'rev-save-active');
                     save.setAttribute('data-id', bm.id);
                     return;
                 }
@@ -4502,10 +4512,22 @@ Author: michael@revcontent.com
         var minCardHeight = 530;
         var sc = card.querySelector('.engage-auth');
         if(card.offsetHeight < minCardHeight) {
-            card.querySelector('.rev-description').style.transition = 'all 0.5s';
             var xtraPad = minCardHeight - card.offsetHeight + 8;
-            card.querySelector('.rev-description').style.paddingBottom = xtraPad + 'px';
-            that.grid.layout();
+            var desc = card.querySelector('.rev-description');
+            var authInner = card.querySelector('.rev-auth-box-inner');
+            if (desc && !authInner) {
+                //desc.style.transition = 'all 0.5s';
+                desc.style.transition = 'none';
+                desc.style.paddingBottom = xtraPad + 'px';
+            }
+            if(!desc && authInner){
+                //authInner.style.transition = 'all 0.5s';
+                authInner.style.transition = 'none';
+                authInner.style.paddingBottom = xtraPad + 'px';
+            }
+            setTimeout(function(){
+                that.grid.layout();
+            }, 500);
         }
         card.style.overflow = "hidden";
 
@@ -4588,6 +4610,14 @@ Author: michael@revcontent.com
 
         engage_auth_box.appendChild(engage_auth_box_inner);
         engage_auth.appendChild(engage_auth_box);
+
+        var inner = card.querySelector('.rev-content-inner');
+        if (inner) {
+            var auth = inner.querySelector('.rev-auth');
+            if (auth) {
+                auth.style.opacity = 0;
+            }
+        }
 
         card.appendChild(engage_auth);
 
@@ -5099,15 +5129,48 @@ Author: michael@revcontent.com
         });
 
         revUtils.addEventListener(close_button, 'click', function(ev) {
-            revUtils.removeClass(engage_auth, 'flipped');
-            revUtils.addClass(engage_auth, 'comment-slide-out');
-            card.style = "";
+            //revUtils.addClass(engage_auth, 'comment-slide-out');
+            //revUtils.addClass(engage_auth, 'flipOutX');
+            revUtils.addClass(engage_auth, 'animated');
+            revUtils.addClass(engage_auth, 'flipOutX');
+            //engage_auth.style.transition = '0.5s ease';
+            //engage_auth.style.opacity = 0;
+            var desc = card.querySelector('.rev-description');
+            var authInner = card.querySelector('.rev-auth-box-inner');
+            var save = card.querySelector('.rev-save');
+
+            if(save) {
+                save.classList.add('animated');
+                save.classList.add('flipOutX');
+            }
+
+            //card.style = "";
             var func = function(){
+                revUtils.removeClass(engage_auth, 'flipped');
                 engage_auth.remove();
-                card.querySelector('.rev-description').style.paddingBottom = 0;
+                if (save) {
+                    save.classList.remove('rev-save-active');
+                    save.classList.remove('flipOutX');
+                    save.classList.add('flipInX');
+                }
+                var inner = card.querySelector('.rev-content-inner');
+                if (inner) {
+                    var auth = inner.querySelector('.rev-auth');
+                    if (auth) {
+                        auth.style.opacity = 1;
+                    }
+                }
+                if (desc) {
+                    desc.style.transition = 'none';
+                    desc.style.paddingBottom = 0;
+                }
+                if (authInner) {
+                    authInner.style.transition = 'none';
+                    authInner.style.paddingBottom = 0;
+                }
                 //re-layout grid for masonry
                 that.grid.layout();
-                card.scrollIntoView();
+                //card.scrollIntoView();
             };
             setTimeout(func, 500);
             //history.back();
