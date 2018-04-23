@@ -1015,8 +1015,14 @@ Author: michael@revcontent.com
     };
 
     RevSlider.prototype.milliFormatter = function(value) {
-        return value > 999 ? (value/1000).toFixed(1) + 'k' : value
-    }
+        if (value > 999) {
+            (value/1000).toFixed(1) + 'k';
+        }
+        if (isNaN(value)) {
+            value = 0;
+        }
+        return value;
+    };
 
     RevSlider.prototype.createRows = function(grid, total) {
         var limit = 0;
