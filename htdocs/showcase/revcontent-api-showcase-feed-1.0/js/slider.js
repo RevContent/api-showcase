@@ -5168,6 +5168,9 @@ Author: michael@revcontent.com
                     authInner.style.transition = 'none';
                     authInner.style.paddingBottom = 0;
                 }
+
+                card.style.overflow = "visible";
+                card.removeAttribute("style");
                 //re-layout grid for masonry
                 that.grid.layout();
                 //card.scrollIntoView();
