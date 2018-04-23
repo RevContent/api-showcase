@@ -2029,6 +2029,14 @@ $reactionMenu8Y: 13.5px;
             margin-bottom: 14px;
             padding: 9px 0;
         }
+
+        .rev-auth {
+          .rev-auth-box {
+            &.auth-pad-top {
+              padding-top: 9%;
+            }
+          }
+        }
     }
 }
 
