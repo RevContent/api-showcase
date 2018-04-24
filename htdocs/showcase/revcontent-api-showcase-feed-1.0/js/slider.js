@@ -1175,9 +1175,10 @@ Author: michael@revcontent.com
         revUtils.addEventListener(this.feedAuthButton.querySelector('.rev-auth-button'), 'click', this.authButtonHandler.bind(this, false));
 
         revUtils.addEventListener(this.feedAuthButton.querySelector('.rev-auth-button-secondary'), 'click', function(){
-            that.cardActionAuth(that.feedAuthButton, 'vote', function(){
-                //alert("hey!");
-            });
+            var rci = that.feedAuthButton.querySelector('.rev-content-inner');
+            that.cardActionAuth(rci, 'bookmarks', function(){
+
+            }, true);
         }, {passive: false});
 
         return grid.addItems([this.feedAuthButton]);
@@ -4508,7 +4509,7 @@ Author: michael@revcontent.com
         }
     };
 
-    RevSlider.prototype.cardActionAuth = function(card, engagetype, callback){
+    RevSlider.prototype.cardActionAuth = function(card, engagetype, callback, autoLogin){
         var that = this;
         if (that.options.authenticated) {
             //already authed, shouldnt get this far, but just incase
@@ -4517,6 +4518,7 @@ Author: michael@revcontent.com
 
         var minCardHeight = 530;
         var sc = card.querySelector('.engage-auth');
+        var comments = card.querySelector('.rev-comments');
         if(card.offsetHeight < minCardHeight) {
             var xtraPad = minCardHeight - card.offsetHeight + 8;
             var desc = card.querySelector('.rev-description');
@@ -4528,8 +4530,11 @@ Author: michael@revcontent.com
             }
             if(!desc && authInner){
                 //authInner.style.transition = 'all 0.5s';
-                authInner.style.transition = 'none';
+                //authInner.style.transition = 'none';
                 authInner.style.paddingBottom = xtraPad + 'px';
+            }
+            if (comments) {
+               comments.style.display = 'none';
             }
             setTimeout(function(){
                 that.grid.layout();
@@ -4617,12 +4622,9 @@ Author: michael@revcontent.com
         engage_auth_box.appendChild(engage_auth_box_inner);
         engage_auth.appendChild(engage_auth_box);
 
-        var inner = card.querySelector('.rev-content-inner');
-        if (inner) {
-            var auth = inner.querySelector('.rev-auth');
-            if (auth) {
-                auth.style.opacity = 0;
-            }
+        var auth = card.querySelector('.rev-auth');
+        if (auth) {
+            auth.style.visibility = 'hidden';
         }
 
         card.appendChild(engage_auth);
@@ -5141,17 +5143,20 @@ Author: michael@revcontent.com
             revUtils.addClass(engage_auth, 'flipOutX');
             //engage_auth.style.transition = '0.5s ease';
             //engage_auth.style.opacity = 0;
-            var desc = card.querySelector('.rev-description');
-            var authInner = card.querySelector('.rev-auth-box-inner');
-            var save = card.querySelector('.rev-save');
 
-            if(save) {
-                save.classList.add('animated');
-                save.classList.add('flipOutX');
-            }
 
             //card.style = "";
             var func = function(){
+                var desc = card.querySelector('.rev-description');
+                var authBox = card.querySelector('.rev-auth');
+                var authInner = card.querySelector('.rev-auth-box-inner');
+                var save = card.querySelector('.rev-save');
+                var comments = card.querySelector('.rev-comments');
+
+                if(save) {
+                    save.classList.add('animated');
+                    save.classList.add('flipOutX');
+                }
                 revUtils.removeClass(engage_auth, 'flipped');
                 engage_auth.remove();
                 if (save) {
@@ -5170,9 +5175,15 @@ Author: michael@revcontent.com
                     desc.style.transition = 'none';
                     desc.style.paddingBottom = 0;
                 }
+                if (authBox) {
+                    authBox.style.visibility = 'visible';
+                }
                 if (authInner) {
-                    authInner.style.transition = 'none';
+                    //authInner.style.transition = 'none';
                     authInner.style.paddingBottom = 0;
+                }
+                if (comments) {
+                    comments.style.display = 'block';
                 }
 
                 card.style.overflow = "visible";
@@ -5260,9 +5271,9 @@ Author: michael@revcontent.com
             }
         }, 0);
 
-
-
-
+        if (true === autoLogin) {
+            login_register_handler('login');
+        }
 
     };
 
