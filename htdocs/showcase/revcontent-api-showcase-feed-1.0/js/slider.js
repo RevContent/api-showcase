@@ -1182,6 +1182,14 @@ Author: michael@revcontent.com
     RevSlider.prototype.handleSecondaryAuth = function(){
         var that = this;
         var rci = that.feedAuthButton.querySelector('.rev-content-inner');
+        that.cardActionAuth(rci, 'bookmarks', function(){
+            that.setLoggedInDisplay();
+        }, true);
+    };
+
+    RevSlider.prototype.setLoggedInDisplay = function(){
+        var that = this;
+        var rci = that.feedAuthButton.querySelector('.rev-content-inner');
         var headline = rci.querySelector('.rev-auth-headline');
         var authBox = rci.querySelector('.rev-auth');
         var authInner = rci.querySelector('.rev-auth-box-inner');
@@ -1189,25 +1197,23 @@ Author: michael@revcontent.com
         var btnEngage = rci.querySelector('.rev-auth-button-secondary');
         btnEngage.setAttribute('disabled', true);
         btnEngage.classList.add('disabled');
-        that.cardActionAuth(rci, 'bookmarks', function(){
-            headline.innerText = 'Currently logged in!';
-            if (authBox) {
-                authBox.style.visibility = 'visible';
-            }
-            if (authInner) {
-                authInner.style.paddingBottom = 0;
-            }
-            if(that.options.authenticated) {
-                btnFacebook.style.display = 'none';
-                btnEngage.querySelector('.rev-auth-button-text').textContent = 'Log Out';
-                revUtils.removeEventListener(btnEngage, revDetect.mobile() ? 'touchstart' : 'click', that.handleSecondaryAuth);
-                revUtils.addEventListener(btnEngage, revDetect.mobile() ? 'touchstart' : 'click', function() {
-                    that.logOut();
-                }, {passive: false});
-                btnEngage.removeAttribute('disabled');
-                btnEngage.classList.remove('disabled');
-            }
-        }, true);
+        headline.innerText = 'Currently logged in!';
+        if (authBox) {
+            authBox.style.visibility = 'visible';
+        }
+        if (authInner) {
+            authInner.style.paddingBottom = 0;
+        }
+        if(that.options.authenticated) {
+            btnFacebook.style.display = 'none';
+            btnEngage.querySelector('.rev-auth-button-text').textContent = 'Log Out';
+            revUtils.removeEventListener(btnEngage, revDetect.mobile() ? 'touchstart' : 'click', that.handleSecondaryAuth);
+            revUtils.addEventListener(btnEngage, revDetect.mobile() ? 'touchstart' : 'click', function() {
+                that.logOut();
+            }, {passive: false});
+            btnEngage.removeAttribute('disabled');
+            btnEngage.classList.remove('disabled');
+        }
     };
 
     RevSlider.prototype.handleReactionMenu = function(item) {
@@ -4700,7 +4706,7 @@ Author: michael@revcontent.com
 
 
 
-            setTimeout(function(){
+            //setTimeout(function(){
                 //remove items we dont need
                 engage_auth_or.remove();
                 engage_auth_login_option.remove();
@@ -4858,8 +4864,13 @@ Author: michael@revcontent.com
                             if( callback && typeof callback === 'function' ) { callback.call(); }
 
                             // that.engage_auth_personalize();
-
+                            var desc = engage_auth.parentNode.querySelector('.rev-description');
+                            if (desc) {
+                                desc.style.paddingBottom = 0;
+                            }
+                            that.setLoggedInDisplay();
                             engage_auth.remove();
+
                             //re-layout grid for masonry
                             that.grid.layout();
                             if (!that.personalized) {
@@ -5076,6 +5087,11 @@ Author: michael@revcontent.com
 
 
                                 revUtils.addEventListener(engage_auth_finish_buton, 'click', function(){
+                                    var desc = engage_auth.parentNode.querySelector('.rev-description');
+                                    if (desc) {
+                                        desc.style.paddingBottom = 0;
+                                    }
+                                    that.setLoggedInDisplay();
                                     engage_auth.remove();
                                     //re-layout grid for masonry
                                     that.grid.layout();
@@ -5083,7 +5099,6 @@ Author: michael@revcontent.com
                                         that.showPersonalizedTransition();
                                         that.personalize();
                                     }
-
                                     that.options.emitter.emitEvent('updateButtons', [true]);
                                     that.options.emitter.emitEvent('loadUserData', [that.options.user])
                                 });
@@ -5122,7 +5137,7 @@ Author: michael@revcontent.com
                     }
                 });
 
-            },500);
+            //},500);
 
         };
 
@@ -5142,7 +5157,12 @@ Author: michael@revcontent.com
                             that.options.emitter.emitEvent('updateButtons', [true]);
                             that.options.emitter.emitEvent('loadUserData', [that.options.user])
 
+                            var desc = engage_auth.parentNode.querySelector('.rev-description');
+                            if (desc) {
+                                desc.style.paddingBottom = 0;
+                            }
                             engage_auth.remove();
+
                             //re-layout grid for masonry
                             that.grid.layout();
 
