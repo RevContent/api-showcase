@@ -1184,7 +1184,7 @@ Author: michael@revcontent.com
         var rci = that.feedAuthButton.querySelector('.rev-content-inner');
         that.cardActionAuth(rci, 'bookmarks', function(){
             that.setLoggedInDisplay();
-        }, false);
+        }, false, true);
     };
 
     RevSlider.prototype.setLoggedInDisplay = function(){
@@ -4550,8 +4550,10 @@ Author: michael@revcontent.com
         }
     };
 
-    RevSlider.prototype.cardActionAuth = function(card, engagetype, callback, autoLogin){
+    RevSlider.prototype.cardActionAuth = function(card, engagetype, callback, autoLogin, autoRegister){
         var that = this;
+        if (!autoLogin) { autoLogin = false; }
+        if( !autoRegister) { autoRegister = false; }
         if (that.options.authenticated) {
             //already authed, shouldnt get this far, but just incase
             return false;
@@ -5339,6 +5341,10 @@ Author: michael@revcontent.com
 
         if (true === autoLogin) {
             login_register_handler('login');
+        }
+
+        if (true === autoRegister) {
+            login_register_handler('register');
         }
 
     };
