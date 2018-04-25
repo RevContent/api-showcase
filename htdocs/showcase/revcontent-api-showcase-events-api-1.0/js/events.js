@@ -10,7 +10,8 @@
 	'use strict';
 	window.revEvents = factory(
 		window,
-		window.revApi
+		window.revApi,
+		window.TimeMe
 	);
 
 	window.rceInit = function(userId) {
@@ -21,7 +22,11 @@
 		return window.revEvents.track(eventName, props);
 	}
 
-}( window, function factory( window, revApi ) {
+	window.addEventListener("beforeunload", function() {
+		window.revEvents.trackActivity();
+	});
+
+}( window, function factory( window, revApi, TimeMe ) {
 
 	'use strict';
 
@@ -48,6 +53,19 @@
 			}
 		);
 	}
+
+	events.trackActivity = function() {
+		this.track("user_activity", { active_time : TimeMe.getTimeOnCurrentPageInSeconds() });
+	}
+
+	TimeMe.initialize({
+		currentPageName: "rc-event",
+		idleTimeoutInSeconds: 30
+	});
+
+	window.setInterval(function() {
+		events.trackActivity()
+	}, 300000);
 
 	return events;
 }));
