@@ -4610,7 +4610,7 @@ Author: michael@revcontent.com
 
         var engage_auth_terms = document.createElement('div');
         revUtils.addClass(engage_auth_terms,'engage-auth-terms');
-        engage_auth_terms.innerHTML = '<span><a target="_blank" href="//www.engage.im/privacy.html">Terms and Conditions</a></span>';
+        engage_auth_terms.innerHTML = '<span><a target="_blank" href="//faq.engage.im/customer/en/portal/articles/2923351-publisher-terms-conditions">Terms and Conditions</a></span>';
 
         engage_auth_box_inner.appendChild(engage_auth_facebook);
         engage_auth_box_inner.appendChild(engage_auth_or);
