@@ -4560,6 +4560,9 @@ Author: michael@revcontent.com
         var minCardHeight = 530;
         var sc = card.querySelector('.engage-auth');
         var comments = card.querySelector('.comments-list');
+        if (comments) {
+            comments.style.display = 'none';
+        }
         if(card.offsetHeight < minCardHeight) {
             var xtraPad = minCardHeight - card.offsetHeight + 8;
             var desc = card.querySelector('.rev-description');
@@ -4574,13 +4577,11 @@ Author: michael@revcontent.com
                 //authInner.style.transition = 'none';
                 authInner.style.paddingBottom = xtraPad + 'px';
             }
-            if (comments) {
-               comments.style.display = 'none';
-            }
             setTimeout(function(){
                 that.grid.layout();
             }, 500);
         }
+
         card.style.overflow = "hidden";
 
         if (that.loadMoreContainer) {
