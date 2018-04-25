@@ -4559,7 +4559,7 @@ Author: michael@revcontent.com
 
         var minCardHeight = 530;
         var sc = card.querySelector('.engage-auth');
-        var comments = card.querySelector('.rev-comments');
+        var comments = card.querySelector('.comments-list');
         if(card.offsetHeight < minCardHeight) {
             var xtraPad = minCardHeight - card.offsetHeight + 8;
             var desc = card.querySelector('.rev-description');
@@ -5212,7 +5212,7 @@ Author: michael@revcontent.com
                 var authBox = card.querySelector('.rev-auth');
                 var authInner = card.querySelector('.rev-auth-box-inner');
                 var save = card.querySelector('.rev-save');
-                var comments = card.querySelector('.rev-comments');
+                var comments = card.querySelector('.comments-list');
 
                 if(save) {
                     save.classList.add('animated');
