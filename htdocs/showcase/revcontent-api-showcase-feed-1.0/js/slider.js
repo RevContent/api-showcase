@@ -1184,7 +1184,7 @@ Author: michael@revcontent.com
         var rci = that.feedAuthButton.querySelector('.rev-content-inner');
         that.cardActionAuth(rci, 'bookmarks', function(){
             that.setLoggedInDisplay();
-        }, true);
+        }, false);
     };
 
     RevSlider.prototype.setLoggedInDisplay = function(){
