@@ -3962,6 +3962,8 @@ input.engage-auth-input:focus {
             overflow-y: scroll;
             //height: 300px;
             height: 60%;
+            max-height: 300px;
+            margin-bottom: 18px;
         }
 
         .rc-interests .grid {
