@@ -1144,7 +1144,7 @@ Author: michael@revcontent.com
         this.feedAuthButton = document.createElement('div');
         this.feedAuthButton.className = 'rev-content';
         // TODO: remove background: none hack. Only way to get button shadow to show
-        this.feedAuthButton.innerHTML = '<div class="rev-content-inner feed-auth-button-size-remove-me" style="background: none; height:' + (this.options.auth_height > 0 ? (this.options.auth_height + 'px') : 'auto') + ';"><div class="rev-auth-mask"></div><div class="rev-auth">' +
+        this.feedAuthButton.innerHTML = '<div class="rev-content-inner feed-auth-button-size-remove-me" style="background: none; height:' + (this.options.auth_height > 0 ? (this.options.auth_height + 'px') : 'auto') + ';"><div class="rev-auth-mask"></div><div class="rev-auth rev-auth-login-choices">' +
         '<div class="rev-auth-box">' +
             '<div class="rev-auth-box-inner">' +
 
@@ -1182,6 +1182,7 @@ Author: michael@revcontent.com
     RevSlider.prototype.handleSecondaryAuth = function(){
         var that = this;
         var rci = that.feedAuthButton.querySelector('.rev-content-inner');
+        rci.classList.add('using-engage-auth');
         that.cardActionAuth(rci, 'bookmarks', function(){
             that.setLoggedInDisplay();
         }, false, true);
@@ -1190,6 +1191,10 @@ Author: michael@revcontent.com
     RevSlider.prototype.setLoggedInDisplay = function(){
         var that = this;
         var rci = that.feedAuthButton.querySelector('.rev-content-inner');
+        var originalAuthBox = that.feedAuthButton.querySelector('.rev-auth-login-choices');
+        if (originalAuthBox && originalAuthBox.style.display == "none") {
+            originalAuthBox.style.display = 'flex';
+        }
         var headline = rci.querySelector('.rev-auth-headline');
         var authBox = rci.querySelector('.rev-auth');
         var authInner = rci.querySelector('.rev-auth-box-inner');
@@ -5008,8 +5013,9 @@ Author: michael@revcontent.com
 
                                 var engage_auth_finish_buton = document.createElement('a');
                                 revUtils.addClass(engage_auth_finish_buton, 'engage-auth-register-button');
-                                engage_auth_finish_buton.innerHTML = '<svg aria-hidden="true" data-prefix="fal" data-icon="chevron-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" class="svg-inline--fa fa-chevron-right fa-w-8 fa-7x"><path fill="currentColor" d="M17.525 36.465l-7.071 7.07c-4.686 4.686-4.686 12.284 0 16.971L205.947 256 10.454 451.494c-4.686 4.686-4.686 12.284 0 16.971l7.071 7.07c4.686 4.686 12.284 4.686 16.97 0l211.051-211.05c4.686-4.686 4.686-12.284 0-16.971L34.495 36.465c-4.686-4.687-12.284-4.687-16.97 0z" class="svg-chevron-next"></path></svg>';
-                                engage_auth_finish_buton.style.display = "none";
+                                engage_auth_finish_buton.innerHTML = '<div><svg aria-hidden="true" data-prefix="fal" data-icon="chevron-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" class="svg-inline--fa fa-chevron-right fa-w-8 fa-7x"><path fill="currentColor" d="M17.525 36.465l-7.071 7.07c-4.686 4.686-4.686 12.284 0 16.971L205.947 256 10.454 451.494c-4.686 4.686-4.686 12.284 0 16.971l7.071 7.07c4.686 4.686 12.284 4.686 16.97 0l211.051-211.05c4.686-4.686 4.686-12.284 0-16.971L34.495 36.465c-4.686-4.687-12.284-4.687-16.97 0z" class="svg-chevron-next"></path></svg></div>';
+                                revUtils.addClass(engage_auth_finish_buton, 'disabled');
+                                //engage_auth_finish_buton.style.display = "none";
 
 
                                 var engage_auth_interests = document.createElement('div');
@@ -5056,7 +5062,16 @@ Author: michael@revcontent.com
                                     engage_auth_interests.appendChild(clearfix);
 
                                     engage_auth_interests_card.appendChild(engage_auth_interests);
-                                    engage_auth_interests_card.appendChild(engage_auth_finish_buton);
+                                    engage_auth.appendChild(engage_auth_finish_buton);
+
+
+                                    if (that.feedAuthButton.querySelector('.rev-content-inner').classList.contains('using-engage-auth')) {
+                                        var authBox = that.feedAuthButton.querySelector('.rev-auth-login-choices');
+                                        authBox.style.display = 'none';
+                                        engage_auth.classList.add('is-relative');
+                                        that.grid.layout();
+                                    }
+
 
                                 });
 
@@ -5252,6 +5267,11 @@ Author: michael@revcontent.com
 
                 card.style.overflow = "visible";
                 card.removeAttribute("style");
+                that.feedAuthButton.querySelector('.rev-content-inner').classList.remove('using-engage-auth');
+                var originalAuthBox = that.feedAuthButton.querySelector('.rev-auth-login-choices');
+                if (originalAuthBox && originalAuthBox.style.display == "none") {
+                    originalAuthBox.style.display = 'flex';
+                }
                 if (card.classList.contains('load-more--detached')) {
                     card.classList.remove('load-more--detached');
                     //that.loadMore();
@@ -5598,9 +5618,11 @@ Author: michael@revcontent.com
 
         var count = Object.keys(that.selected_interests).length;
         if (count >= 3) {
-            button.style.display = "block";
+            //button.style.display = "block";
+            button.classList.remove("disabled");
         } else {
-            button.style.display = "none";
+            button.classList.add("disabled");
+            //button.style.display = "none";
         }
 
         // if (!that.personalized) {
