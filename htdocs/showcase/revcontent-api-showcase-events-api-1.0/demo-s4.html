@@ -9,11 +9,11 @@
     (function(document, callback) {
       var firstScript = document.getElementsByTagName('script')[0],
       js = document.createElement('script');
-      js.src = '//labs.revcontent.com/build/revrcevents.min.js';
+      js.src = '//labs-s4.revcontent.com/build/revrcevents.min.js';
       js.onload = callback;
       firstScript.parentNode.insertBefore(js, firstScript);
     })(document, function() {
-      rceInit(2310, "//trends.revcontent.com/api/v1/events/track.php").track('purchase', {'amount' : 0.25});
+      rceInit(2310, "//trends-s4.revcontent.com/api/v1/events/track.php").track('purchase', {'amount' : 0.25});
     });
   </script>
 </head>
