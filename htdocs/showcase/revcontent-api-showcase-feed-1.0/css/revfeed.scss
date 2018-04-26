@@ -3516,6 +3516,13 @@ input.engage-auth-input:focus {
   cursor: pointer;
 }
 
+.engage-auth-finish-wrapper {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  padding-bottom: 18px;
+}
+
 .engage-auth-login-button,
 .engage-auth-register-button {
     display: flex;
@@ -3563,28 +3570,46 @@ input.engage-auth-input:focus {
 .engage-interests-header {
   margin-bottom: 20px;
 }
+.engage-interests-header-top {
+  display: flex;
+  flex-direction: row;
+}
+
 .engage-interests-card .engage-interests-header-icon {
   width: 50px;
   height: 50px;
-  margin: 3px 15px 15px;
+  //margin: 3px 15px 15px;
   color: $primary-color;
+  justify-content: center;
+
+}
+.engage-interests-card .engage-interests-header-text {
+  width: 100%;
+  text-align:left;
+  padding-left: 12px;
 }
 
 .engage-interests-card .engage-interests-header-text h2 {
   margin: 0;
+  padding: 0;
   font-weight: 600;
-  font-size: 25px;
+  font-size: 24px;
+  line-height: 24px;
 }
 .engage-interests-card .engage-interests-header-text h2 i {
   font-weight: normal;
 }
 
-.engage-interests-card .engage-interests-header p {
+.engage-interests-card .engage-interests-caption {
+  padding-top: 12px;
+}
+
+.engage-interests-card .engage-interests-caption p {
   margin: 0;
   padding: 0;
   color: #6f6f6f;
-  font-size: 17px;
-  line-height: 21px;
+  font-size: 16px;
+  line-height: 18px;
   text-align: left;
 }
 
@@ -3621,19 +3646,13 @@ input.engage-auth-input:focus {
 .rev-auth {
   display: flex;
   width: 100%;
-  flex-direction: column;
   height: 100%;
-  border-top-right-radius: 4;
-  border-top-left-radius: 4;
-  color: #80808c;
-  display: flex;
-  width: 100%;
   flex-direction: column;
-  height: 100%;
   border-top-right-radius: 4px;
   border-top-left-radius: 4px;
   color: #222;
   text-shadow: 1px 1px rgba(255, 255, 255, 0.15);
+
 }
 .rev-auth .rev-auth-close-button {
   display: inline-block;
@@ -3928,6 +3947,10 @@ input.engage-auth-input:focus {
 
 
 
+        .engage-interests-card {
+          height: 90%;
+        }
+
         .engage-interests-card .grid {
             width: 100%;
             display: block;
@@ -3935,9 +3958,10 @@ input.engage-auth-input:focus {
             -moz-box-sizing: border-box;
             -webkit-box-sizing: border-box;
             box-sizing: border-box;
-            overflow: scroll;
-            height: 300px;
-            margin-bottom: 10px;
+            overflow: hidden;
+            overflow-y: scroll;
+            //height: 300px;
+            height: 60%;
         }
 
         .rc-interests .grid {
