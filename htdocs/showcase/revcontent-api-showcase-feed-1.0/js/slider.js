@@ -1144,7 +1144,7 @@ Author: michael@revcontent.com
         this.feedAuthButton = document.createElement('div');
         this.feedAuthButton.className = 'rev-content';
         // TODO: remove background: none hack. Only way to get button shadow to show
-        this.feedAuthButton.innerHTML = '<div class="rev-content-inner feed-auth-button-size-remove-me" style="background: none; height:' + (this.options.auth_height > 0 ? (this.options.auth_height + 'px') : 'auto') + ';"><div class="rev-auth-mask"></div><div class="rev-auth">' +
+        this.feedAuthButton.innerHTML = '<div class="rev-content-inner feed-auth-button-size-remove-me" style="background: none; height:' + (this.options.auth_height > 0 ? (this.options.auth_height + 'px') : 'auto') + ';"><div class="rev-auth-mask"></div><div class="rev-auth rev-auth-login-choices">' +
         '<div class="rev-auth-box">' +
             '<div class="rev-auth-box-inner">' +
 
@@ -1182,14 +1182,19 @@ Author: michael@revcontent.com
     RevSlider.prototype.handleSecondaryAuth = function(){
         var that = this;
         var rci = that.feedAuthButton.querySelector('.rev-content-inner');
+        rci.classList.add('using-engage-auth');
         that.cardActionAuth(rci, 'bookmarks', function(){
             that.setLoggedInDisplay();
-        }, true);
+        }, false, true);
     };
 
     RevSlider.prototype.setLoggedInDisplay = function(){
         var that = this;
         var rci = that.feedAuthButton.querySelector('.rev-content-inner');
+        var originalAuthBox = that.feedAuthButton.querySelector('.rev-auth-login-choices');
+        if (originalAuthBox && originalAuthBox.style.display == "none") {
+            originalAuthBox.style.display = 'flex';
+        }
         var headline = rci.querySelector('.rev-auth-headline');
         var authBox = rci.querySelector('.rev-auth');
         var authInner = rci.querySelector('.rev-auth-box-inner');
@@ -4550,8 +4555,10 @@ Author: michael@revcontent.com
         }
     };
 
-    RevSlider.prototype.cardActionAuth = function(card, engagetype, callback, autoLogin){
+    RevSlider.prototype.cardActionAuth = function(card, engagetype, callback, autoLogin, autoRegister){
         var that = this;
+        if (!autoLogin) { autoLogin = false; }
+        if( !autoRegister) { autoRegister = false; }
         if (that.options.authenticated) {
             //already authed, shouldnt get this far, but just incase
             return false;
@@ -4815,16 +4822,21 @@ Author: michael@revcontent.com
 
 
 
+                var auth_finish_wrapper = document.createElement('div');
+                revUtils.addClass(auth_finish_wrapper, 'engage-auth-finish-wrapper');
+
                 if (mode === "register") {
                     var engage_auth_register = document.createElement('a');
                     revUtils.addClass(engage_auth_register, 'engage-auth-register-button');
                     engage_auth_register.innerHTML = '<div><svg aria-hidden="true" data-prefix="fal" data-icon="chevron-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path fill="currentColor" d="M17.525 36.465l-7.071 7.07c-4.686 4.686-4.686 12.284 0 16.971L205.947 256 10.454 451.494c-4.686 4.686-4.686 12.284 0 16.971l7.071 7.07c4.686 4.686 12.284 4.686 16.97 0l211.051-211.05c4.686-4.686 4.686-12.284 0-16.971L34.495 36.465c-4.686-4.687-12.284-4.687-16.97 0z" class="svg-chevron-right"></path></svg></div>';
-                    engage_auth_box_inner.appendChild(engage_auth_register);
+                    auth_finish_wrapper.appendChild(engage_auth_register);
+                    engage_auth_box_inner.appendChild(auth_finish_wrapper);
                 } else {
                     var engage_auth_login = document.createElement('a');
                     revUtils.addClass(engage_auth_login, 'engage-auth-login-button');
                     engage_auth_login.innerHTML = '<div><svg aria-hidden="true" data-prefix="fal" data-icon="chevron-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path fill="currentColor" d="M17.525 36.465l-7.071 7.07c-4.686 4.686-4.686 12.284 0 16.971L205.947 256 10.454 451.494c-4.686 4.686-4.686 12.284 0 16.971l7.071 7.07c4.686 4.686 12.284 4.686 16.97 0l211.051-211.05c4.686-4.686 4.686-12.284 0-16.971L34.495 36.465c-4.686-4.687-12.284-4.687-16.97 0z" class=""></path></svg></div>';
-                    engage_auth_box_inner.appendChild(engage_auth_login);
+                    auth_finish_wrapper.appendChild(engage_auth_login);
+                    engage_auth_box_inner.appendChild(auth_finish_wrapper);
                 }
 
 
@@ -4972,15 +4984,18 @@ Author: michael@revcontent.com
 
                                 var engage_auth_interests_header = document.createElement('div');
                                 revUtils.addClass(engage_auth_interests_header, 'engage-interests-header');
-                                engage_auth_interests_header.innerHTML = '<div class="engage-interests-header-icon pull-left">' +
+                                engage_auth_interests_header.innerHTML = '<div class="engage-interests-header-top">' +
+                                '<div class="engage-interests-header-icon">' +
                                 '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 57.943 57.943" style="enable-background:new 0 0 57.943 57.943;" xml:space="preserve"><g><path fill="currentColor" d="M57.426,42.053C57.027,37.964,53.974,35,50.156,35c-2.396,0-4.407,1.449-5.684,3.213C43.196,36.449,41.184,35,38.788,35   c-3.818,0-6.871,2.963-7.271,7.052c-0.042,0.268-0.145,1.22,0.226,2.709c0.545,2.197,1.8,4.191,3.631,5.771l8.329,7.126   c0.222,0.19,0.494,0.286,0.768,0.286c0.271,0,0.545-0.095,0.77-0.284l8.331-7.13c1.828-1.575,3.083-3.57,3.629-5.768   C57.57,43.271,57.468,42.319,57.426,42.053z M55.259,44.279c-0.445,1.794-1.479,3.432-2.99,4.732l-7.796,6.672l-7.795-6.67   c-1.514-1.305-2.549-2.941-2.993-4.735c-0.302-1.213-0.194-1.897-0.194-1.897l0.016-0.105C33.751,39.654,35.644,37,38.788,37   c2.189,0,3.974,1.811,4.77,3.605l0.914,2.061l0.914-2.061c0.796-1.795,2.58-3.605,4.77-3.605c3.145,0,5.037,2.654,5.295,5.367   C55.453,42.374,55.563,43.058,55.259,44.279z"></path><path fill="currentColor" d="M27.972,53c-0.634,0-1.266-0.031-1.895-0.078c-0.109-0.008-0.218-0.015-0.326-0.025c-0.634-0.056-1.265-0.131-1.89-0.233   c-0.028-0.005-0.056-0.01-0.084-0.015c-1.322-0.221-2.623-0.546-3.89-0.971c-0.039-0.013-0.079-0.026-0.118-0.04   c-0.629-0.214-1.251-0.45-1.862-0.713c-0.004-0.002-0.009-0.004-0.013-0.006c-0.578-0.249-1.145-0.525-1.705-0.816   c-0.073-0.038-0.147-0.074-0.219-0.113c-0.511-0.273-1.011-0.568-1.504-0.876c-0.146-0.092-0.291-0.185-0.435-0.279   c-0.454-0.297-0.902-0.606-1.338-0.933c-0.045-0.034-0.088-0.07-0.133-0.104c0.032-0.018,0.064-0.036,0.096-0.054l7.907-4.313   c1.36-0.742,2.205-2.165,2.205-3.714l-0.001-3.602l-0.23-0.278c-0.022-0.025-2.184-2.655-3.001-6.216l-0.091-0.396l-0.341-0.221   c-0.481-0.311-0.769-0.831-0.769-1.392v-3.545c0-0.465,0.197-0.898,0.557-1.223l0.33-0.298v-5.57l-0.009-0.131   c-0.003-0.024-0.298-2.429,1.396-4.36C22.055,10.837,24.533,10,27.972,10c3.426,0,5.896,0.83,7.346,2.466   c1.692,1.911,1.415,4.361,1.413,4.381l-0.009,5.701l0.33,0.298c0.359,0.324,0.557,0.758,0.557,1.223v3.545   c0,0.713-0.485,1.36-1.181,1.575c-0.527,0.162-0.823,0.723-0.66,1.25c0.162,0.527,0.72,0.821,1.25,0.66   c1.55-0.478,2.591-1.879,2.591-3.485v-3.545c0-0.867-0.318-1.708-0.887-2.369v-4.667c0.052-0.52,0.236-3.448-1.883-5.864   C34.996,9.065,32.013,8,27.972,8s-7.024,1.065-8.867,3.168c-2.119,2.416-1.935,5.346-1.883,5.864v4.667   c-0.568,0.661-0.887,1.502-0.887,2.369v3.545c0,1.101,0.494,2.128,1.34,2.821c0.81,3.173,2.477,5.575,3.093,6.389v2.894   c0,0.816-0.445,1.566-1.162,1.958l-7.907,4.313c-0.252,0.137-0.502,0.297-0.752,0.476C5.748,41.792,2.472,35.022,2.472,27.5   c0-14.061,11.439-25.5,25.5-25.5s25.5,11.439,25.5,25.5c0,0.553,0.447,1,1,1s1-0.447,1-1c0-15.163-12.337-27.5-27.5-27.5   s-27.5,12.337-27.5,27.5c0,8.009,3.444,15.228,8.926,20.258l-0.026,0.023l0.892,0.752c0.058,0.049,0.121,0.089,0.179,0.137   c0.474,0.393,0.965,0.766,1.465,1.127c0.162,0.117,0.324,0.235,0.489,0.348c0.534,0.368,1.082,0.717,1.642,1.048   c0.122,0.072,0.245,0.142,0.368,0.212c0.613,0.349,1.239,0.678,1.88,0.98c0.047,0.022,0.095,0.042,0.142,0.064   c2.089,0.971,4.319,1.684,6.651,2.105c0.061,0.011,0.122,0.022,0.184,0.033c0.724,0.125,1.456,0.225,2.197,0.292   c0.09,0.008,0.18,0.013,0.271,0.021C26.47,54.961,27.216,55,27.972,55c0.553,0,1-0.447,1-1S28.525,53,27.972,53z"></path></g></svg>' +
                                 '</div>' +
-                                '<div class="engage-interests-header-text pull-left">' +
+                                '<div class="engage-interests-header-text">' +
                                     '<h2>Personalize<br>' +
                                     '<i>your</i> Experience</h2>' +
                                 '</div>' +
-                                '<div class="eng-clearfix"></div>' +
-                                '<p>Pick at least <strong>3</strong> topics you like, or automatically with Facebook</p>';
+                                '</div>' +
+                                '<div class="engage-interests-caption">' +
+                                '<p>Pick at least <strong>3</strong> topics you like, or automatically with Facebook</p>' +
+                                '</div>';
 
 
                                 engage_auth_interests_card.appendChild(engage_auth_interests_header);
@@ -5006,8 +5021,9 @@ Author: michael@revcontent.com
 
                                 var engage_auth_finish_buton = document.createElement('a');
                                 revUtils.addClass(engage_auth_finish_buton, 'engage-auth-register-button');
-                                engage_auth_finish_buton.innerHTML = '<svg aria-hidden="true" data-prefix="fal" data-icon="chevron-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" class="svg-inline--fa fa-chevron-right fa-w-8 fa-7x"><path fill="currentColor" d="M17.525 36.465l-7.071 7.07c-4.686 4.686-4.686 12.284 0 16.971L205.947 256 10.454 451.494c-4.686 4.686-4.686 12.284 0 16.971l7.071 7.07c4.686 4.686 12.284 4.686 16.97 0l211.051-211.05c4.686-4.686 4.686-12.284 0-16.971L34.495 36.465c-4.686-4.687-12.284-4.687-16.97 0z" class="svg-chevron-next"></path></svg>';
-                                engage_auth_finish_buton.style.display = "none";
+                                engage_auth_finish_buton.innerHTML = '<div><svg aria-hidden="true" data-prefix="fal" data-icon="chevron-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" class="svg-inline--fa fa-chevron-right fa-w-8 fa-7x"><path fill="currentColor" d="M17.525 36.465l-7.071 7.07c-4.686 4.686-4.686 12.284 0 16.971L205.947 256 10.454 451.494c-4.686 4.686-4.686 12.284 0 16.971l7.071 7.07c4.686 4.686 12.284 4.686 16.97 0l211.051-211.05c4.686-4.686 4.686-12.284 0-16.971L34.495 36.465c-4.686-4.687-12.284-4.687-16.97 0z" class="svg-chevron-next"></path></svg></div>';
+                                revUtils.addClass(engage_auth_finish_buton, 'disabled');
+                                //engage_auth_finish_buton.style.display = "none";
 
 
                                 var engage_auth_interests = document.createElement('div');
@@ -5054,7 +5070,16 @@ Author: michael@revcontent.com
                                     engage_auth_interests.appendChild(clearfix);
 
                                     engage_auth_interests_card.appendChild(engage_auth_interests);
-                                    engage_auth_interests_card.appendChild(engage_auth_finish_buton);
+                                    engage_auth.appendChild(engage_auth_finish_buton);
+
+
+                                    if (that.feedAuthButton.querySelector('.rev-content-inner').classList.contains('using-engage-auth')) {
+                                        var authBox = that.feedAuthButton.querySelector('.rev-auth-login-choices');
+                                        authBox.style.display = 'none';
+                                        engage_auth.classList.add('is-relative');
+                                        that.grid.layout();
+                                    }
+
 
                                 });
 
@@ -5062,7 +5087,6 @@ Author: michael@revcontent.com
 
                                 revUtils.addClass(engage_auth_interests, 'animated');
                                 revUtils.addClass(engage_auth_interests, 'flipInX');
-
 
 
 
@@ -5250,6 +5274,11 @@ Author: michael@revcontent.com
 
                 card.style.overflow = "visible";
                 card.removeAttribute("style");
+                that.feedAuthButton.querySelector('.rev-content-inner').classList.remove('using-engage-auth');
+                var originalAuthBox = that.feedAuthButton.querySelector('.rev-auth-login-choices');
+                if (originalAuthBox && originalAuthBox.style.display == "none") {
+                    originalAuthBox.style.display = 'flex';
+                }
                 if (card.classList.contains('load-more--detached')) {
                     card.classList.remove('load-more--detached');
                     //that.loadMore();
@@ -5339,6 +5368,10 @@ Author: michael@revcontent.com
 
         if (true === autoLogin) {
             login_register_handler('login');
+        }
+
+        if (true === autoRegister) {
+            login_register_handler('register');
         }
 
     };
@@ -5592,9 +5625,11 @@ Author: michael@revcontent.com
 
         var count = Object.keys(that.selected_interests).length;
         if (count >= 3) {
-            button.style.display = "block";
+            //button.style.display = "block";
+            button.classList.remove("disabled");
         } else {
-            button.style.display = "none";
+            button.classList.add("disabled");
+            //button.style.display = "none";
         }
 
         // if (!that.personalized) {
