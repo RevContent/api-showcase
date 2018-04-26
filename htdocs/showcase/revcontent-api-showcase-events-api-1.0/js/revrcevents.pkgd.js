@@ -1132,8 +1132,8 @@ return api;
 		window.TimeMe
 	);
 
-	window.rceInit = function(userId) {
-		return window.revEvents.init(userId);
+	window.rceInit = function(userId, endpoint) {
+		return window.revEvents.init(userId, endpoint);
 	}
 
 	window.rceTrack = function(eventName, props) {
@@ -1153,8 +1153,10 @@ return api;
 		USER_ID : ""
 	};
 
-	events.init = function(userId) {
+	events.init = function(userId, endpoint) {
 		this.USER_ID = userId;
+		if(endpoint)
+			this.ENDPOINT = endpoint;
 		return this;
 	}
 
