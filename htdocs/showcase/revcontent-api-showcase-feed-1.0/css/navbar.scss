@@ -1,0 +1,15 @@
+#go-back-bar {
+    overflow:hidden;
+    transition: none;
+    box-shadow: 0 1px 4px 0 rgba(12, 12, 13, 0.5);
+    position:static;
+    z-index:5000;
+    margin-bottom: 0;
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    background-color:rgba(0,0,0,0.83);
+    color:#dddddd;
+    font-size:12px;
+    margin-bottom: 9px;
+}
