@@ -70,8 +70,12 @@ if (!String.prototype.endsWithPowr) {
 	if (this.config.permanent_cross) {
 	    this.permanentClose = this.config.permanent_cross;
 	}
-        this.permanentClose = "yes";
-	this.crossDelay = this.config.cross_delay;
+
+	this.crossDelay = 0;
+	if (this.config.cross_delay) {
+        this.crossDelay = this.config.cross_delay;
+	}
+
 	this.showOnFocus = "no";
 	if (this.config.show_on_focus) {
 	    this.showOnFocus = this.config.show_on_focus;
