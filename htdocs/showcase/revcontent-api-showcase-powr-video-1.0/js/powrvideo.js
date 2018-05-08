@@ -44,6 +44,7 @@ if (!String.prototype.endsWithPowr) {
      * controls : "custom"
      * float_conflicts : [ "" ]
      * permanent_close : "yes" or "no"
+	 * cross_delay: 0
      * muted : "yes" or "no"
      * show_on_focus : "yes" or "no"
      * custom_css : ""
@@ -69,6 +70,12 @@ if (!String.prototype.endsWithPowr) {
 	if (this.config.permanent_cross) {
 	    this.permanentClose = this.config.permanent_cross;
 	}
+
+	this.crossDelay = 0;
+	if (this.config.cross_delay) {
+        this.crossDelay = this.config.cross_delay;
+	}
+
 	this.showOnFocus = "no";
 	if (this.config.show_on_focus) {
 	    this.showOnFocus = this.config.show_on_focus;
@@ -364,13 +371,22 @@ if (!String.prototype.endsWithPowr) {
 	if (this.permanentClose == "yes") {
 	    this.container.className = 'powr_player powr_permanent_close';
 	    this.crossButton = document.createElement("a");
-	    this.crossButton.className = 'powr_perm_close';
+	    this.crossButton.id = this.playerId + '_close_button';
+	    this.crossButton.className = 'powr_perm_close '  + (this.crossDelay > 0 ? ' powr_close_hide' : '');
 	    // this.crossButton.style = "display : block; position : absolute; right : 5px; top : 5px; background-color : #333; z-index : 10000; border-radius : 20px; color : #FFF; padding : 4px 11px; font-weight : 700; font-size : 14px; ";
 	    this.crossButton.setAttribute("href", "javascript: void(0)");
 	    this.crossButton.innerHTML = "X";
 	    // this.crossButton.style.display = "none";
 
 	    this.container.appendChild(this.crossButton);
+
+	    if (this.crossDelay > 0) {
+            var that = this;
+            setTimeout(function() {
+                that.playerId;
+                me.showCrossButton(that.crossButton.id);
+            }, this.crossDelay);
+		}
 
 	    revUtils.addEventListener(this.crossButton, 'click', this.bind(this, this.onCrossClicked));
 	}
@@ -1348,6 +1364,11 @@ if (!String.prototype.endsWithPowr) {
 
     PowrVideo.prototype.log = function() {
 	if ((typeof console) != "undefined") console.log(arguments);
+    };
+
+    PowrVideo.prototype.showCrossButton = function(close_id) {
+        var closeButton = document.getElementById(close_id);
+        closeButton.classList.remove('powr_close_hide');
     };
 
     return PowrVideo;
