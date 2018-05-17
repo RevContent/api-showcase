@@ -7,20 +7,20 @@
     "url": "git:///Revcontent/api-showcase.git"
   },
   "devDependencies": {
-    "gulp": "3.9.1",
-    "gulp-inject": "1.5.0",
-    "gulp-rename": "1.2.2",
-    "gulp-minify-css": "1.2.4",
-    "gulp-concat": "2.6.1",
-    "gulp-uglify": "1.5.4",
+    "gulp": "^3.9.1",
     "gulp-autoprefixer": "5.0.0",
+    "gulp-concat": "2.6.1",
     "gulp-header": "1.8.9",
-    "gulp-util": "3.0.8",
+    "gulp-inject": "1.5.0",
+    "gulp-minify-css": "1.2.4",
     "gulp-notify": "2.2.0",
+    "gulp-rename": "1.2.2",
+    "gulp-sass": "3.1.0",
     "gulp-strip-debug": "1.1.0",
-    "yargs": "10.0.3",
+    "gulp-uglify": "1.5.4",
+    "gulp-util": "3.0.8",
     "pump": "1.0.2",
-    "gulp-sass": "3.1.0"
+    "yargs": "10.0.3"
   },
   "dependencies": {
     "mobile-detect": "~1",

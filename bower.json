@@ -22,6 +22,7 @@
     "ng-device-detector": "2.0.2",
     "mobile-detect": "~1",
     "showdown": "~1.4",
-    "angular-sanitize": "1.4.8"
+    "angular-sanitize": "1.4.8",
+    "timeme.js": "*"
   }
 }

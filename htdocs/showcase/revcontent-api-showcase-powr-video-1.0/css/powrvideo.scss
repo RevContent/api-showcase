@@ -367,3 +367,7 @@ body .powr_player.rc-float-video a.powr_skip {
 body .powr_rc_container {
     box-sizing : border-box;
 }
+
+a.powr_close_hide {
+    display: none!important;
+}
