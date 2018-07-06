@@ -236,8 +236,6 @@ if (!String.prototype.endsWithPowr) {
             height = parseInt(this.getPlayerHeight());
         }
 
-        this.config.adserver = "ss";
-
         if (this.config.adserver == "dfp") {
             var ret = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
                 + "&cust_params=p_width%3D" + width + "%26p_height%3D" + height
@@ -1353,8 +1351,7 @@ if (!String.prototype.endsWithPowr) {
                 callback(false);
             }
         };
-        //video.load();
-
+        video.load();
         video.play();
     };
 
