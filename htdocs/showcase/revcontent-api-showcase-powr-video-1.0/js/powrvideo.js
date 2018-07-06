@@ -143,7 +143,7 @@ if (!String.prototype.endsWithPowr) {
             id: this.playerId,
             nativeControlForTouch: false,
             enablePreloading: false,
-            prerollTimeout: 5000,
+            prerollTimeout: 2000,
             timeout: 10000,
             adWillAutoPlay: this.autoplaySettings.autoplay
 
@@ -282,7 +282,7 @@ if (!String.prototype.endsWithPowr) {
         this.floated = false;
 
         var imaCss = document.createElement("link");
-        imaCss.setAttribute("href", "https://cdnjs.cloudflare.com/ajax/libs/videojs-ima/0.6.0/videojs.ima.css");
+        imaCss.setAttribute("href", "//cdnjs.cloudflare.com/ajax/libs/videojs-ima/0.6.0/videojs.ima.css");
         imaCss.setAttribute("type", "text/css");
         imaCss.setAttribute("rel", "stylesheet");
         revUtils.append(this.element, imaCss);
