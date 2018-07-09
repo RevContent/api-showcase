@@ -1133,7 +1133,9 @@ return api;
 	);
 
 	window.rceInit = function(userId, endpoint) {
-		return window.revEvents.init(userId, endpoint);
+		var api = window.revEvents.init(userId, endpoint);
+		api.trackActivity();
+		return api;
 	}
 
 	window.rceTrack = function(eventName, props) {
