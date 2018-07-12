@@ -158,6 +158,15 @@ utils.getCookie = function(cname) {
     return "";
 };
 
+utils.getUrlParam = function( name, url ) {
+    if (!url) url = top.location.href;
+    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    var regexS = "[\\?&]"+name+"=([^&#]*)";
+    var regex = new RegExp( regexS );
+    var results = regex.exec( url );
+    return results == null ? null : results[1];
+};
+
 utils.prepend = function(el, html) {
     el.insertBefore(html, el.firstChild);
 };

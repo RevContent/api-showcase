@@ -519,6 +519,15 @@ utils.getCookie = function(cname) {
     return "";
 };
 
+utils.getUrlParam = function( name, url ) {
+    if (!url) url = top.location.href;
+    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    var regexS = "[\\?&]"+name+"=([^&#]*)";
+    var regex = new RegExp( regexS );
+    var results = regex.exec( url );
+    return results == null ? null : results[1];
+};
+
 utils.prepend = function(el, html) {
     el.insertBefore(html, el.firstChild);
 };
@@ -1129,6 +1138,7 @@ return api;
 	window.revEvents = factory(
 		window,
 		window.revApi,
+		window.revUtils,
 		window.TimeMe
 	);
 
@@ -1146,7 +1156,7 @@ return api;
 		window.revEvents.trackActivity();
 	});
 
-}( window, function factory( window, revApi, TimeMe ) {
+}( window, function factory( window, revApi, revUtils, TimeMe ) {
 
 	'use strict';
 
@@ -1163,6 +1173,13 @@ return api;
 	}
 
 	events.track = function(eventName, props) {
+
+		var click_uuid = revUtils.getUrlParam("rc_click");
+
+		if(!props["click_uuid"] && click_uuid) {
+			props["click_uuid"] = click_uuid;
+		}
+
 		revApi.request(
 			this.ENDPOINT + "?u=" + encodeURIComponent(this.USER_ID)
 						  + "&e=" + encodeURIComponent(eventName)

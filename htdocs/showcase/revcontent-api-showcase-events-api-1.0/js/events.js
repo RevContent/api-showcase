@@ -11,6 +11,7 @@
 	window.revEvents = factory(
 		window,
 		window.revApi,
+		window.revUtils,
 		window.TimeMe
 	);
 
@@ -28,7 +29,7 @@
 		window.revEvents.trackActivity();
 	});
 
-}( window, function factory( window, revApi, TimeMe ) {
+}( window, function factory( window, revApi, revUtils, TimeMe ) {
 
 	'use strict';
 
@@ -45,6 +46,13 @@
 	}
 
 	events.track = function(eventName, props) {
+
+		var click_uuid = revUtils.getUrlParam("rc_click");
+
+		if(!props["click_uuid"] && click_uuid) {
+			props["click_uuid"] = click_uuid;
+		}
+
 		revApi.request(
 			this.ENDPOINT + "?u=" + encodeURIComponent(this.USER_ID)
 						  + "&e=" + encodeURIComponent(eventName)
