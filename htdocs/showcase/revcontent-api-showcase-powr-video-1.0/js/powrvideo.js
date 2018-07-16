@@ -310,14 +310,21 @@ if (!String.prototype.endsWithPowr) {
     };
 
     PowrVideo.prototype.onResize = function (shouldFloat) {
+
         var width = this.element.clientWidth;
-        var height = parseInt(0.5625 * width);
+        var height;
+        if ((width == null || width <= 0) && this.config.showhide == "yes") {
+            width = parseInt(this.config.width);
+        }
+
+        height = parseInt(0.5625 * width);
         var hs = height + "px";
 
         if (this.config.fluid) {
             height = this.element.clientHeight;
             hs = "100%";
         }
+
         if (this.player && !this.floated) {
             this.player.dimensions(width, height);
         }
