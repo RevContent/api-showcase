@@ -643,7 +643,7 @@ if (!String.prototype.endsWithPowr) {
 
 
         if (this.config.showhide == 'yes') {
-            this.animateDispose(this.player);
+            this.animateDispose(this.player, this.element);
             return;
         }
 
@@ -1033,7 +1033,10 @@ if (!String.prototype.endsWithPowr) {
                 }
 
                 if (this.config.showhide == 'yes') {
+                    this.player.dimensions(0, 0);
                     this.player.dispose();
+                    this.element.parentNode.removeChild(this.element);
+                    return;
                 }
             }
 
@@ -1519,7 +1522,7 @@ if (!String.prototype.endsWithPowr) {
         });
     });
 
-    PowrVideo.prototype.animateDispose = (function (playerInstance) {
+    PowrVideo.prototype.animateDispose = (function (playerInstance, elementId) {
         if (this.disposed == true) {
             return;
         }
@@ -1543,7 +1546,9 @@ if (!String.prototype.endsWithPowr) {
         this.element.classList.add("animated", "zoomOut");
         this.element.addEventListener(animationEnd, function(e) {
             e.target.removeEventListener(e.type, arguments.callee);
+            playerInstance.dimensions(0, 0);
             playerInstance.dispose();
+            elementId.parentNode.removeChild(elementId);
         });
 	});
     return PowrVideo;
