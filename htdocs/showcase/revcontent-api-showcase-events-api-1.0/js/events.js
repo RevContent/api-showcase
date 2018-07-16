@@ -26,7 +26,7 @@
 	}
 
 	window.addEventListener("beforeunload", function() {
-		window.revEvents.trackActivity();
+		window.revEvents.trackActivity(true);
 	});
 
 }( window, function factory( window, revApi, revUtils, TimeMe ) {
@@ -35,7 +35,8 @@
 
 	var events = {
 		ENDPOINT : "//trends.revcontent.com/api/v1/events/track.php",
-		USER_ID : ""
+		USER_ID : "",
+		LAST_ACTIVE_TIME : 0
 	};
 
 	events.init = function(userId, endpoint) {
@@ -66,18 +67,41 @@
 		);
 	}
 
-	events.trackActivity = function() {
-		this.track("user_activity", { active_time : TimeMe.getTimeOnCurrentPageInSeconds() });
+	events.trackActivity = function(force) {
+		var trackingInterval;
+		if(this.LAST_ACTIVE_TIME < 60) {
+			trackingInterval = 10;
+		}
+		else if(this.LAST_ACTIVE_TIME < 300) {
+			trackingInterval = 60;
+		}
+		else {
+			trackingInterval = 300;
+		}
+
+		var active_time = TimeMe.getTimeOnCurrentPageInSeconds();
+		var nextActiveTimeToTrack = Math.round(this.LAST_ACTIVE_TIME / trackingInterval + 1) * trackingInterval
+		var nextTimeout = trackingInterval * 1000;
+
+		if(force || active_time >= nextActiveTimeToTrack) {
+			this.track("user_activity", { active_time : active_time });
+		}
+
+		this.LAST_ACTIVE_TIME = active_time;
+
+		window.setTimeout(function() {
+			events.trackActivity(false);
+		}, nextTimeout);
 	}
 
 	TimeMe.initialize({
 		currentPageName: "rc-event",
-		idleTimeoutInSeconds: 30
+		idleTimeoutInSeconds: 10
 	});
 
-	window.setInterval(function() {
-		events.trackActivity()
-	}, 300000);
+	window.setTimeout(function() {
+		events.trackActivity(false)
+	}, 100000);
 
 	return events;
 }));
