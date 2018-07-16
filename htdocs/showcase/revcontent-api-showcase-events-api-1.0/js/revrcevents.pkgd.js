@@ -1144,7 +1144,7 @@ return api;
 
 	window.rceInit = function(userId, endpoint) {
 		var api = window.revEvents.init(userId, endpoint);
-		api.trackActivity();
+		api.trackActivity(true);
 		return api;
 	}
 
@@ -1153,7 +1153,7 @@ return api;
 	}
 
 	window.addEventListener("beforeunload", function() {
-		window.revEvents.trackActivity(true);
+		window.revEvents.trackActivity();
 	});
 
 }( window, function factory( window, revApi, revUtils, TimeMe ) {
