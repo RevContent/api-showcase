@@ -149,6 +149,8 @@ if (!String.prototype.endsWithPowr) {
 
         };
 
+
+        this.abp = false;
         this.disposed = false;
         var me = this;
         me.autoplayDetected = false;
@@ -157,13 +159,13 @@ if (!String.prototype.endsWithPowr) {
             me.autoplaySettings.autoplay = (me.autoplaySettings.autoplay && b);
             // We support audio
             if (!me.config.hasOwnProperty("muted") || me.config.muted == "no") {
-                // And we are not autoplaying
-                if (!me.autoplaySettings.autoplay) {
-                    me.autoplaySettings.audio = true;
-                }
+            // And we are not autoplaying
+            if (!me.autoplaySettings.autoplay) {
+                me.autoplaySettings.audio = true;
+            }
             }
             if (me.config.hasOwnProperty('preloaded') && me.config.preloaded) {
-                me.setup();
+            me.setup();
             } else {
                 me.init();
             }
@@ -250,7 +252,9 @@ if (!String.prototype.endsWithPowr) {
             return ret;
         } else if (this.config.adserver == "ss") {
 	        var ret = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dlinearvpaid2js&correlator=";
-//	        var ret = "//vid.springserve.com/vast/" + tag + "?w=" + width + "&h=" + height + "&url=" + url + "&cb=" + new Date().getTime();
+            var syndicationid = (this.config.syndication_id && this.config.syndication_id != '') ? "&syid=" + this.config.syndication_id : "";
+            var subid = (this.config.subid && this.config.subid != '') ? "&suid=" + this.config.subid : "";
+        //    var ret = "//vid.springserve.com/vast/" + tag + "?w=" + width + "&h=" + height + "&url=" + url + "&cb=" + new Date().getTime() + syndicationid + subid;
             return ret;
         } else {
             tag = tag.replace("REFERRER_URL", url);
@@ -292,6 +296,10 @@ if (!String.prototype.endsWithPowr) {
         imaScript.setAttribute('type', 'text/javascript');
 
         revUtils.addEventListener(imaScript, "load", function () {
+            that.setup();
+        });
+        revUtils.addEventListener(imaScript, "error", function () {
+            that.abp = true;
             that.setup();
         });
         revUtils.append(this.element, imaScript);
@@ -368,14 +376,15 @@ if (!String.prototype.endsWithPowr) {
     };
 
     PowrVideo.prototype.setup = function () {
-        this.attachVisibleListener();
-        if (this.showOnFocus == "yes" && !this.hasOwnProperty("setupOnVisible")) {
-            this.setupOnVisible = true;
-            return;
-        }
-        revUtils.removeClass(this.element, "powr_hidden");
-        // google.ima.settings.setVpaidMode(google.ima.ImaSdkSettings.VpaidMode.INSECURE);
+	this.attachVisibleListener();
+	if (this.showOnFocus == "yes" && !this.hasOwnProperty("setupOnVisible")) {
+	    this.setupOnVisible = true;
+	    return;
+	}
+	revUtils.removeClass(this.element, "powr_hidden");
+	// google.ima.settings.setVpaidMode(google.ima.ImaSdkSettings.VpaidMode.INSECURE);
 
+    if (this.abp !== true) {
         this.events = [google.ima.AdEvent.Type.ALL_ADS_COMPLETED,
             google.ima.AdEvent.Type.CLICK,
             google.ima.AdEvent.Type.COMPLETE,
@@ -394,6 +403,7 @@ if (!String.prototype.endsWithPowr) {
         ];
 
         google.ima.settings.setDisableCustomPlaybackForIOS10Plus(true);
+    }
 
         this.container = document.createElement("div");
         this.container.className = "powr_player";
@@ -587,17 +597,29 @@ if (!String.prototype.endsWithPowr) {
         }
     };
 
-    PowrVideo.prototype.start = function (playOnLoad) {
-        this.started = true;
-        this.player.ima(this.options, this.bind(this, this.adsManagerLoadedCallback));
-        this.player.ima.initializeAdDisplayContainer();
-        // this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), playOnLoad);
-        this.player.ima.setContentWithAdsResponse(this.getVideoFromResolution(this.videos[this.currentContent]), this.getAdsResponse(this.videos[this.currentContent]), playOnLoad);
-        if (!this.autoplaySettings.autoplay) {
-            this.player.poster(this.videos[this.currentContent].thumbnail);
+    PowrVideo.prototype.start = function(playOnLoad) {
+    	this.started = true;
+
+        if (this.abp !== true) {
+          this.player.ima(this.options, this.bind(this, this.adsManagerLoadedCallback));
+          this.player.ima.initializeAdDisplayContainer();
+          // this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), playOnLoad);
+          this.player.ima.setContentWithAdsResponse(this.getVideoFromResolution(this.videos[this.currentContent]), this.getAdsResponse(this.videos[this.currentContent]), playOnLoad);
+            if (!this.autoplaySettings.autoplay) {
+                this.player.poster(this.videos[this.currentContent].thumbnail);
+            }
+            this.adsPlayed = 0;
+          this.player.ima.requestAds();
+        } else {
+            if (!this.autoplaySettings.autoplay) {
+                this.player.poster(this.videos[this.currentContent].thumbnail);
+            } else {
+                this.playOverlay.hide();
+                this.player.loadingSpinner.unlockShowing();
+                this.player.play();
+            }
         }
-        this.adsPlayed = 0;
-        this.player.ima.requestAds();
+
         var me = this;
         //this.player.ima.addContentAndAdsEndedListener(function () {
         //setTimeout(function () {
@@ -606,11 +628,12 @@ if (!String.prototype.endsWithPowr) {
         //});
     };
 
-    PowrVideo.prototype.loadNextVideoWithTick = function () {
+    PowrVideo.prototype.loadNextVideoWithTick = function() {
         this.log("loadNextVideoWithTick");
-        if (this.player.ads.isInAdMode()) {
+        if (this.abp !== true && this.player.ads.isInAdMode()) {
             return;
         }
+
 
         if (this.config.showhide == 'yes') {
             this.animateDispose(this.player);
@@ -635,19 +658,27 @@ if (!String.prototype.endsWithPowr) {
         }
         this.currentContent = (this.currentContent + 1) % this.videos.length;
         if (this.currentContent < this.videos.length) {
-            this.adsPlayed = 0;
+            if (this.abp !== true) {
+                this.adsPlayed = 0;
 
-            this.player.ima.initializeAdDisplayContainer();
-            this.player.ima.setContentWithAdsResponse(this.getVideoFromResolution(this.videos[this.currentContent]), this.getAdsResponse(this.videos[this.currentContent]), false);
-            // this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), false);
-            var titleContent = this.videos[this.currentContent].title;
-            this.titleDom.innerHTML = '<a target="_blank" href="' + this.getVideoLink(this.videos[this.currentContent]) + '">' + titleContent + "</a>";
-            this.player.ima.requestAds();
-            if (this.config.showhide != "yes") {
-                this.player.play();
+                this.player.ima.initializeAdDisplayContainer();
+                this.player.ima.setContentWithAdsResponse(this.getVideoFromResolution(this.videos[this.currentContent]), this.getAdsResponse(this.videos[this.currentContent]), false);
+                // this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), false);
+                var titleContent = this.videos[this.currentContent].title;
+                this.titleDom.innerHTML = '<a target="_blank" href="' + this.getVideoLink(this.videos[this.currentContent]) + '">' + titleContent + "</a>";
+                this.player.ima.requestAds();
+                if (this.config.showhide != "yes") {
+                    this.player.play();
+                }
+            } else {
+                var titleContent = this.videos[this.currentContent].title;
+                this.titleDom.innerHTML = '<a target="_blank" href="' + this.getVideoLink(this.videos[this.currentContent]) + '">' + titleContent + "</a>";
+                if (this.config.showhide != "yes") {
+                    this.player.play();
+                }
             }
         }
-    };
+	};
 
     PowrVideo.prototype.getVideoLink = function (v) {
         var title = v.title;
