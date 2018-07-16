@@ -1033,7 +1033,7 @@ if (!String.prototype.endsWithPowr) {
                 }
 
                 if (this.config.showhide == 'yes') {
-                    this.player.dimensions(0, 0);
+                    this.element.setAttribute("style", "width: 0px; height : 0px; position : relative;");
                     this.player.dispose();
                     this.element.parentNode.removeChild(this.element);
                     return;
@@ -1041,7 +1041,7 @@ if (!String.prototype.endsWithPowr) {
             }
 
             if (this.config.showhide == 'yes') {
-                this.animateDispose(this.player);
+                this.animateDispose(this.player, this.element);
                 return;
             }
         }
@@ -1177,7 +1177,7 @@ if (!String.prototype.endsWithPowr) {
             this.player.ima.requestAds();
 
             if (this.config.showhide == "yes") {
-                this.animateDispose(this.player);
+                this.animateDispose(this.player, this.element);
             } else {
                 this.player.play();
             }
@@ -1546,7 +1546,7 @@ if (!String.prototype.endsWithPowr) {
         this.element.classList.add("animated", "zoomOut");
         this.element.addEventListener(animationEnd, function(e) {
             e.target.removeEventListener(e.type, arguments.callee);
-            playerInstance.dimensions(0, 0);
+            elementId.setAttribute("style", "width: 0px; height : 0px; position : relative;");
             playerInstance.dispose();
             elementId.parentNode.removeChild(elementId);
         });
