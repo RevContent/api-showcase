@@ -1543,6 +1543,7 @@ if (!String.prototype.endsWithPowr) {
         this.element.classList.add("animated", "zoomOut");
         this.element.addEventListener(animationEnd, function(e) {
             e.target.removeEventListener(e.type, arguments.callee);
+            playerInstance.dimensions(width, height);
             playerInstance.dispose();
         });
 	});
