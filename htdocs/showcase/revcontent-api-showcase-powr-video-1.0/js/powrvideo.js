@@ -1036,6 +1036,7 @@ if (!String.prototype.endsWithPowr) {
 
                 if (this.config.showhide == 'yes') {
                     this.element.setAttribute("style", "width: 0px; height : 0px; position : relative;");
+                    revUtils.removeEventListener(window, 'resize');
                     this.player.dispose();
                     this.element.parentNode.removeChild(this.element);
                     return;
@@ -1548,7 +1549,7 @@ if (!String.prototype.endsWithPowr) {
         this.element.parentNode.classList.add("animated", "zoomOut");
         this.element.parentNode.addEventListener(animationEnd, function(e) {
             e.target.removeEventListener(e.type, arguments.callee);
-            revUtils.removeEventListener(window, 'resize', this.onResize.bind(this, true));
+            revUtils.removeEventListener(window, 'resize');
             elementId.setAttribute("style", "width: 0px; height : 0px; position : relative;");
             playerInstance.dispose();
             elementId.parentNode.removeChild(elementId);
