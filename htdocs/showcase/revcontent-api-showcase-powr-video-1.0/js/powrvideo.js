@@ -131,7 +131,7 @@ if (!String.prototype.endsWithPowr) {
             revUtils.addClass(this.element, "showhide");
         }
 
-        this.element.setAttribute("style", "width: 100%; height : " + hs + "; background-color : #EFEFEF; position : relative;");
+        this.element.setAttribute("style", "width: 100%; height : 100%; background-color : #EFEFEF; position : relative;");
 
         if (this.showOnFocus == "yes") {
             revUtils.addClass(this.element, "powr_hidden");
@@ -315,7 +315,7 @@ if (!String.prototype.endsWithPowr) {
         if ((width == null || width <= 0) && this.config.showhide == "yes") {
             width = parseInt(this.config.width);
         }
-console.log(height);
+
         height = parseInt(0.5625 * width);
         var hs = height + "px";
 
