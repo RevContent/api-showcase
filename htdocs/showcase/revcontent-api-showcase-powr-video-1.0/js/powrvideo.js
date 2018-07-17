@@ -310,6 +310,10 @@ if (!String.prototype.endsWithPowr) {
 
     PowrVideo.prototype.onResize = function (shouldFloat) {
 
+        if (this.element == null) {
+            return;
+        }
+        
         var width = this.element.clientWidth;
         var height;
         if ((width == null || width <= 0) && this.config.showhide == "yes") {
@@ -1549,7 +1553,6 @@ if (!String.prototype.endsWithPowr) {
         this.element.parentNode.classList.add("animated", "zoomOut");
         this.element.parentNode.addEventListener(animationEnd, function(e) {
             e.target.removeEventListener(e.type, arguments.callee);
-            revUtils.removeEventListener(window, 'resize');
             elementId.setAttribute("style", "width: 0px; height : 0px; position : relative;");
             playerInstance.dispose();
             elementId.parentNode.removeChild(elementId);
