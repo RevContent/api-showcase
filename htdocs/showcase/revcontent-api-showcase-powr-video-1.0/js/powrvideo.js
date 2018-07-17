@@ -1010,7 +1010,7 @@ console.log(height);
         if (event.type == google.ima.AdEvent.Type.STARTED) {
             this.adsPlayed++;
             if (this.config.showhide == "yes") {
-                console.log(this.player.height());
+                console.log(this.player.ima.getPlayerHeight());
                 this.animateShow();
             }
             if (this.adListeners.length > 0) {
