@@ -1017,7 +1017,6 @@ if (!String.prototype.endsWithPowr) {
         if (event.type == google.ima.AdEvent.Type.STARTED) {
             this.adsPlayed++;
             if (this.config.showhide == "yes") {
-                console.log(this.player.ima.getPlayerHeight());
                 this.animateShow();
             }
             if (this.adListeners.length > 0) {
@@ -1552,6 +1551,7 @@ if (!String.prototype.endsWithPowr) {
         })(document.createElement('div'));
 
         this.element.parentNode.classList.add("animated", "zoomOut");
+        this.element.classList.add("animated", "zoomOut");
         this.element.parentNode.addEventListener(animationEnd, function(e) {
             e.target.removeEventListener(e.type, arguments.callee);
             elementId.setAttribute("style", "width: 0px; height : 0px; position : relative;");
