@@ -237,8 +237,7 @@ if (!String.prototype.endsWithPowr) {
             width = parseInt(this.getPlayerWidth());
             height = parseInt(this.getPlayerHeight());
         }
-this.config.adserver = "ss";
-        console.log(this.config.adserver);
+
         if (this.config.adserver == "dfp") {
             var ret = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
                 + "&cust_params=p_width%3D" + width + "%26p_height%3D" + height
@@ -316,7 +315,7 @@ this.config.adserver = "ss";
         if ((width == null || width <= 0) && this.config.showhide == "yes") {
             width = parseInt(this.config.width);
         }
-
+console.log(height);
         height = parseInt(0.5625 * width);
         var hs = height + "px";
 
@@ -1011,6 +1010,7 @@ this.config.adserver = "ss";
         if (event.type == google.ima.AdEvent.Type.STARTED) {
             this.adsPlayed++;
             if (this.config.showhide == "yes") {
+                console.log(this.player.height());
                 this.animateShow();
             }
             if (this.adListeners.length > 0) {
