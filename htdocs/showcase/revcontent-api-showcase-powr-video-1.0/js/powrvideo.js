@@ -310,10 +310,11 @@ if (!String.prototype.endsWithPowr) {
 
     PowrVideo.prototype.onResize = function (shouldFloat) {
 
-        if (this.element == null) {
+        var elementCheck = document.getElementById(this.config.id);
+        if (elementCheck == null) {
             return;
         }
-        
+
         var width = this.element.clientWidth;
         var height;
         if ((width == null || width <= 0) && this.config.showhide == "yes") {
