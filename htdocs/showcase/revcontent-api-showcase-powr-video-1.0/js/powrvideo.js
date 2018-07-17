@@ -1544,7 +1544,7 @@ if (!String.prototype.endsWithPowr) {
         })(document.createElement('div'));
 
         this.element.parentNode.classList.add("animated", "zoomOut");
-        this.element.addEventListener(animationEnd, function(e) {
+        this.element.parentNode.addEventListener(animationEnd, function(e) {
             e.target.removeEventListener(e.type, arguments.callee);
             elementId.setAttribute("style", "width: 0px; height : 0px; position : relative;");
             playerInstance.dispose();
