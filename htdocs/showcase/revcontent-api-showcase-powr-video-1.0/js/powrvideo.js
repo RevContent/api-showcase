@@ -1515,7 +1515,7 @@ if (!String.prototype.endsWithPowr) {
             }
         })(document.createElement('div'));
         revUtils.removeClass(this.element, "showhide");
-        this.element.classList.add("animated", "zoomIn");
+        this.element.parentNode.classList.add("animated", "zoomIn");
         this.element.addEventListener(animationEnd, function(e) {
             e.target.removeEventListener(e.type, arguments.callee);
 
