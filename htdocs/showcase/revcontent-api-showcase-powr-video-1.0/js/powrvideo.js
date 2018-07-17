@@ -1546,7 +1546,7 @@ if (!String.prototype.endsWithPowr) {
         this.element.parentNode.classList.add("animated", "zoomOut");
         this.element.parentNode.addEventListener(animationEnd, function(e) {
             e.target.removeEventListener(e.type, arguments.callee);
-            elementId.setAttribute("style", "width: 0px; height : 0px; position : relative;");
+            // elementId.setAttribute("style", "width: 0px; height : 0px; position : relative;");
             playerInstance.dispose();
             elementId.parentNode.removeChild(elementId);
         });
