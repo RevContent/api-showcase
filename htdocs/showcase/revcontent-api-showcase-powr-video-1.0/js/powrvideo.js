@@ -327,7 +327,7 @@ if (!String.prototype.endsWithPowr) {
         if (this.player && !this.floated) {
             this.player.dimensions(width, height);
         }
-        this.element.setAttribute("style", "width : 100%; height : " + hs + "; background-color : #EFEFEF");
+        this.element.setAttribute("style", "width : 100%; height : 100%; background-color : #EFEFEF");
 
         var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
         var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
