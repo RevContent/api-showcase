@@ -1208,17 +1208,15 @@ return api;
 
 		var active_time = TimeMe.getTimeOnCurrentPageInSeconds();
 		var nextActiveTimeToTrack = Math.round(this.LAST_ACTIVE_TIME / trackingInterval + 1) * trackingInterval
-		var nextTimeout = trackingInterval * 1000;
 
 		if(force || active_time >= nextActiveTimeToTrack) {
 			this.track("user_activity", { active_time : active_time });
+			this.LAST_ACTIVE_TIME = active_time;
 		}
-
-		this.LAST_ACTIVE_TIME = active_time;
 
 		window.setTimeout(function() {
 			events.trackActivity(false);
-		}, nextTimeout);
+		}, 10000);
 	}
 
 	TimeMe.initialize({
@@ -1228,7 +1226,7 @@ return api;
 
 	window.setTimeout(function() {
 		events.trackActivity(false)
-	}, 100000);
+	}, 10000);
 
 	return events;
 }));
