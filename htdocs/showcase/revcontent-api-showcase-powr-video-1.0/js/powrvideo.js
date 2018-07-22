@@ -1537,7 +1537,7 @@ if (!String.prototype.endsWithPowr) {
                 animation: 'animationend',
                 OAnimation: 'oAnimationEnd',
                 MozAnimation: 'mozAnimationEnd',
-                WebkitAnimation: 'webkitAnimationEnd',
+                WebkitAnimation: 'webkitAnimationEnd'
             };
 
             for (var t in animations) {
@@ -1565,7 +1565,7 @@ if (!String.prototype.endsWithPowr) {
                 animation: 'animationend',
                 OAnimation: 'oAnimationEnd',
                 MozAnimation: 'mozAnimationEnd',
-                WebkitAnimation: 'webkitAnimationEnd',
+                WebkitAnimation: 'webkitAnimationEnd'
             };
 
             for (var t in animations) {
