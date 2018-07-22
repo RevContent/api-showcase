@@ -133,7 +133,7 @@ if (!String.prototype.endsWithPowr) {
                 this.showhideHeight = h;
                 this.showhideWidth = w;
                 focusCheck.id = "powr-focus-check";
-                focusCheck.src= this.config.focus_pixel;
+                focusCheck.src= "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6Xw4AAn4BedMp3VYAAAAASUVORK5CYII=";
                 this.element.parentNode.insertBefore(focusCheck, this.element);
                 this.focusPixel = document.getElementById('powr-focus-check');
             }
