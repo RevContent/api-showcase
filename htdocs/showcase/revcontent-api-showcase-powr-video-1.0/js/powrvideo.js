@@ -128,6 +128,16 @@ if (!String.prototype.endsWithPowr) {
         }
 
         if (this.config.showhide == "yes") {
+            if (this.autoplaySettings.focus) {
+                var focusCheck = document.createElement("img");
+                this.showhideHeight = h;
+                this.showhideWidth = w;
+                focusCheck.id = "powr-focus-check";
+                focusCheck.src= this.config.focus_pixel;
+                this.element.parentNode.insertBefore(focusCheck, this.element);
+                this.focusPixel = document.getElementById('powr-focus-check');
+            }
+
             revUtils.addClass(this.element, "showhide");
         }
 
@@ -567,8 +577,14 @@ if (!String.prototype.endsWithPowr) {
 
         if (me.autoplaySettings.autoplay) {
             if (me.autoplaySettings.focus) {
+                this.checkVisible();
                 this.autoplayOnVisible = true;
-                this.playOverlay.show();
+                if (this.config.showhide != "yes") {
+                    this.playOverlay.show();
+                }
+                if (this.visible === true) {
+                    this.onVisible();
+                }
             } else {
                 this.playOverlay.hide();
                 this.player.loadingSpinner.lockShowing();
@@ -629,7 +645,8 @@ if (!String.prototype.endsWithPowr) {
             } else {
                 this.playOverlay.hide();
                 this.player.loadingSpinner.unlockShowing();
-                this.player.play();
+                var playPromise = this.player.play();
+                playPromise.catch(function(error) {});
             }
         }
 
@@ -938,9 +955,16 @@ if (!String.prototype.endsWithPowr) {
             // var bufferPixels = (typeof buffer === 'number') ? buffer : 0;
             var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
             var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-            var elementTop = that.element.getBoundingClientRect().top;
-            var elementBottom = that.element.getBoundingClientRect().bottom;
-            var elementVisibleHeight = that.element.offsetHeight * 0.50;
+            var elementTop, elementBottom, elementVisibleHeight;
+            if (that.config.showhide == "yes") {
+                elementTop = that.focusPixel.getBoundingClientRect().top;
+                elementBottom = that.focusPixel.getBoundingClientRect().bottom;
+                elementVisibleHeight = that.showhideHeight * 0.50;
+            } else {
+                elementTop = that.element.getBoundingClientRect().top;
+                elementBottom = that.element.getBoundingClientRect().bottom;
+                elementVisibleHeight = that.element.offsetHeight * 0.50;
+            }
 
             if (elementTop + that.getPlayerHeight() < 0) {
                 if (that.visible) {
@@ -968,7 +992,6 @@ if (!String.prototype.endsWithPowr) {
             this.playOverlay.hide();
             this.player.loadingSpinner.lockShowing();
             this.start(true);
-
             this.pauseOnHidden = true;
         } else if (this.pauseOnHidden && this.autoPaused && this.player.paused() && this.config.showhide != "yes") {
             this.player.play();
@@ -1401,7 +1424,8 @@ if (!String.prototype.endsWithPowr) {
             }
         };
         video.load();
-        video.play();
+        var playPromise = video.play();
+        playPromise.catch(function(error) {});
     };
 
     PowrVideo.prototype.videoEnd = function (data) {
@@ -1420,7 +1444,8 @@ if (!String.prototype.endsWithPowr) {
                 var player = this.player;
 
                 if (data[0] === "play") {
-                    player.play();
+                    var playPromise = player.play();
+                    playPromise.catch(function(error) {});
                     response['msg'] = "playing";
                 } else if (data[0] === "pause") {
                     player.pause();
