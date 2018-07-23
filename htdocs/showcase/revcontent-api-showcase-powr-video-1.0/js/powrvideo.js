@@ -156,7 +156,6 @@ if (!String.prototype.endsWithPowr) {
             prerollTimeout: 2000,
             timeout: 10000,
             adWillAutoPlay: this.autoplaySettings.autoplay
-
         };
 
 
@@ -462,7 +461,14 @@ if (!String.prototype.endsWithPowr) {
 
         var dumbPlayer = document.createElement('video');
         dumbPlayer.id = this.playerId;
-        dumbPlayer.className = 'video-js vjs-default-skin vjs-big-play-centered vjs-fluid';
+        var aspectRatio;
+        if (this.config.showhide == "yes") {
+            aspectRatio = "vjs-16-9";
+        } else {
+            aspectRatio = "vjs-fluid";
+        }
+
+        dumbPlayer.className = 'video-js vjs-default-skin vjs-big-play-centered ' + aspectRatio;
         dumbPlayer.setAttribute('width', this.getPlayerWidth() + 'px');
         dumbPlayer.setAttribute('height', this.getPlayerHeight() + 'px');
         dumbPlayer.setAttribute("controls", "true");
