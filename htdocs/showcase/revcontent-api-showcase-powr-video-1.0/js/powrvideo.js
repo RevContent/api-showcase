@@ -523,8 +523,13 @@ if (!String.prototype.endsWithPowr) {
 
 	if (me.autoplaySettings.autoplay) {
 	    if (me.autoplaySettings.focus) {
-		this.autoplayOnVisible = true;
-		this.playOverlay.show();
+			this.checkVisible();
+			this.autoplayOnVisible = true;
+			if (this.visible === true) {
+				this.onVisible();
+			} else {
+                this.playOverlay.show();
+			}
 	    } else {
 		this.playOverlay.hide();
 		this.player.loadingSpinner.lockShowing();
