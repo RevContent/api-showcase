@@ -155,7 +155,9 @@ if (!String.prototype.endsWithPowr) {
             enablePreloading: false,
             prerollTimeout: 2000,
             timeout: 10000,
-            adWillAutoPlay: this.autoplaySettings.autoplay
+            adWillAutoPlay: this.autoplaySettings.autoplay,
+            showControlsForJSAds: false,
+            showCountdown: true
         };
 
 
