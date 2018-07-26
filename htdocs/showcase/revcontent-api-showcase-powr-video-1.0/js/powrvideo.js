@@ -20,9 +20,9 @@ if (!String.prototype.endsWithPowr) {
 // universal module definition
 ( function( window, factory ) {
     // browser global
-    window.PowrVideo = factory(window, window.revUtils, window.revApi);
+    window.PowrVideo = factory(window, window.powrUtils, window.revApi);
 
-}( window, function factory(window, revUtils, revApi) {
+}( window, function factory(window, powrUtils, revApi) {
 
     var PowrInitialized = false;
     var PowrPlayers = 0;
@@ -140,13 +140,13 @@ if (!String.prototype.endsWithPowr) {
             }
 
             showControls = false;
-            revUtils.addClass(this.element, "showhide");
+            powrUtils.addClass(this.element, "showhide");
         }
 
         this.element.setAttribute("style", "width: 100%; height : 100%; background-color : #EFEFEF; position : relative;");
 
         if (this.showOnFocus == "yes") {
-            revUtils.addClass(this.element, "powr_hidden");
+            powrUtils.addClass(this.element, "powr_hidden");
         }
 
         this.currentContent = 0;
@@ -290,7 +290,7 @@ if (!String.prototype.endsWithPowr) {
             return;
         }
 
-        revUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-powr-video');
+        powrUtils.appendStyle('/* inject:css */[inject]/* endinject */', 'rev-powr-video');
 
         var that = this;
 
@@ -300,21 +300,21 @@ if (!String.prototype.endsWithPowr) {
         imaCss.setAttribute("href", "//cdnjs.cloudflare.com/ajax/libs/videojs-ima/0.6.0/videojs.ima.css");
         imaCss.setAttribute("type", "text/css");
         imaCss.setAttribute("rel", "stylesheet");
-        revUtils.append(this.element, imaCss);
+        powrUtils.append(this.element, imaCss);
 
         var imaScript = document.createElement('script');
         imaScript.setAttribute('src', '//imasdk.googleapis.com/js/sdkloader/ima3.js');
         imaScript.setAttribute('async', true);
         imaScript.setAttribute('type', 'text/javascript');
 
-        revUtils.addEventListener(imaScript, "load", function () {
+        powrUtils.addEventListener(imaScript, "load", function () {
             that.setup();
         });
-        revUtils.addEventListener(imaScript, "error", function () {
+        powrUtils.addEventListener(imaScript, "error", function () {
             that.abp = true;
             that.setup();
         });
-        revUtils.append(this.element, imaScript);
+        powrUtils.append(this.element, imaScript);
 
         this.adListeners = Array();
         this.player_ready = 0;
@@ -407,7 +407,7 @@ if (!String.prototype.endsWithPowr) {
 	    this.setupOnVisible = true;
 	    return;
 	}
-	revUtils.removeClass(this.element, "powr_hidden");
+	powrUtils.removeClass(this.element, "powr_hidden");
 	// google.ima.settings.setVpaidMode(google.ima.ImaSdkSettings.VpaidMode.INSECURE);
 
     if (this.abp !== true) {
@@ -455,11 +455,11 @@ if (!String.prototype.endsWithPowr) {
                 }, this.crossDelay);
             }
 
-            revUtils.addEventListener(this.crossButton, 'click', this.bind(this, this.onCrossClicked));
+            powrUtils.addEventListener(this.crossButton, 'click', this.bind(this, this.onCrossClicked));
         }
 
 
-        revUtils.addEventListener(window, 'resize', this.onResize.bind(this, true));
+        powrUtils.addEventListener(window, 'resize', this.onResize.bind(this, true));
         this.orientation = 'none';
         this.onResize(true);
 
@@ -520,7 +520,7 @@ if (!String.prototype.endsWithPowr) {
         // If we are autoplaying a muted version, let's toggle audio on first click
         this.player.ready(this.onReady.bind(this));
 
-        // revutils.addEventListener(this.container, "touchstart",
+        // powrUtils.addEventListener(this.container, "touchstart",
     };
 
     PowrVideo.prototype.onReady = function () {
@@ -571,7 +571,7 @@ if (!String.prototype.endsWithPowr) {
         this.closeButton = this.container.querySelector(".rc-video-close");
         this.titleDom = this.container.querySelector(".rc-video-title");
 
-        revUtils.addEventListener(this.closeButton, 'click', function () {
+        powrUtils.addEventListener(this.closeButton, 'click', function () {
             me.floatSettings.landscape = false;//neverFloat = true;
             me.floatSettings.portrait = false;
 
@@ -730,7 +730,7 @@ if (!String.prototype.endsWithPowr) {
     PowrVideo.prototype.attachVisibleListener = function () {
         if (this.visibleListenerAttached) return;
         if (this.floatSettings.landscape || this.floatSettings.portrait || this.autoplaySettings.focus || (this.showOnFocus == 'yes')) {
-            revUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
+            powrUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
             this.checkVisible();
         }
         this.visibleListenerAttached = true;
@@ -744,7 +744,7 @@ if (!String.prototype.endsWithPowr) {
         if (this.orientation == "landscape" && !this.floatSettings.landscape)
             return;
 
-        revUtils.addClass(document.body, 'powr_player_floating');
+        powrUtils.addClass(document.body, 'powr_player_floating');
         this.container.className = "rc-float-video powr_player " + (this.permanentClose == "yes" ? "powr_permanent_close" : "");
         var styleString = "";
         var fs = this.floatSettings;
@@ -862,19 +862,19 @@ if (!String.prototype.endsWithPowr) {
         if (this.rcDiv)
             return;
         this.rcDiv = document.createElement("div");
-        revUtils.addClass(this.element, "rc_ad_showing");
-        revUtils.addClass(this.rcDiv, "powr_rc_container");
+        powrUtils.addClass(this.element, "rc_ad_showing");
+        powrUtils.addClass(this.rcDiv, "powr_rc_container");
         this.container.appendChild(this.rcDiv);
 
         var skipBtn = document.createElement("a");
-        revUtils.addClass(skipBtn, "powr_skip");
-        revUtils.addClass(skipBtn, "powr_disabled");
+        powrUtils.addClass(skipBtn, "powr_skip");
+        powrUtils.addClass(skipBtn, "powr_disabled");
         skipBtn.innerHTML = "Loading ...";
         this.rcDiv.appendChild(skipBtn);
 
 
         var label = document.createElement("label");
-        revUtils.addClass(label, "powr_by_rc");
+        powrUtils.addClass(label, "powr_by_rc");
         label.innerHTML = "Ads By Revcontent";
         this.rcDiv.appendChild(label);
 
@@ -900,7 +900,7 @@ if (!String.prototype.endsWithPowr) {
         this.rcCountDownSeconds--;
         if (this.rcCountDownSeconds == 10) {
             var me = this;
-            revUtils.addEventListener(this.rcDiv, "click", function () {
+            powrUtils.addEventListener(this.rcDiv, "click", function () {
                 clearInterval(me.rcCountDownInterval);
                 me.rcCountDownInterval = null;
                 me.hideRCAd();
@@ -918,7 +918,7 @@ if (!String.prototype.endsWithPowr) {
 
 
     PowrVideo.prototype.hideRCAd = function () {
-        revUtils.removeClass(this.element, "rc_ad_showing");
+        powrUtils.removeClass(this.element, "rc_ad_showing");
         this.container.removeChild(this.rcDiv);
         this.rcDiv = null;
         this.player.muted(false);
@@ -927,7 +927,7 @@ if (!String.prototype.endsWithPowr) {
 
     PowrVideo.prototype.unfloatPlayer = function () {
         if (this.floated) {
-            revUtils.removeClass(document.body, 'powr_player_floating');
+            powrUtils.removeClass(document.body, 'powr_player_floating');
             this.container.className = 'powr_player ' + (this.permanentClose == "yes" ? 'powr_permanent_close' : '');
             this.container.removeAttribute("style");
             this.floated = false;
@@ -1072,7 +1072,7 @@ if (!String.prototype.endsWithPowr) {
 
                 if (this.config.showhide == 'yes') {
                     this.element.setAttribute("style", "width: 0px; height : 0px; position : relative;");
-                    revUtils.removeEventListener(window, 'resize');
+                    powrUtils.removeEventListener(window, 'resize');
                     this.player.dispose();
                     this.element.parentNode.removeChild(this.element);
                     return;
@@ -1394,7 +1394,7 @@ if (!String.prototype.endsWithPowr) {
             callback(true);
             return;
         }
-        // var old = revUtils.getCookie("p_a_s");
+        // var old = powrUtils.getCookie("p_a_s");
         // if (old != "") {
         // callback(old == "yes");
         // return;
@@ -1428,7 +1428,7 @@ if (!String.prototype.endsWithPowr) {
                 // PowrVideo.setCookie('p_a_s', 'yes', 1);
                 callback(true);
             } else {
-                // revUtils.setCookie('p_a_s', 'no', 1);
+                // powrUtils.setCookie('p_a_s', 'no', 1);
                 callback(false);
             }
         };
@@ -1555,7 +1555,7 @@ if (!String.prototype.endsWithPowr) {
                 }
             }
         })(document.createElement('div'));
-        revUtils.removeClass(this.element, "showhide");
+        powrUtils.removeClass(this.element, "showhide");
         this.element.parentNode.classList.add("animated", "zoomIn");
         this.element.addEventListener(animationEnd, function(e) {
             e.target.removeEventListener(e.type, arguments.callee);
