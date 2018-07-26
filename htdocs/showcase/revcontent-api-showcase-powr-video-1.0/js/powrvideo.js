@@ -578,7 +578,7 @@ if (!String.prototype.endsWithPowr) {
             me.player.pause();
             me.unfloatPlayer();
         });
-
+        
         // Don't show big button. we have our own.
         this.player.bigPlayButton.hide();
         this.player.controlBar.volumeMenuButton.hide();
