@@ -20,9 +20,9 @@ if (!String.prototype.endsWithPowr) {
 // universal module definition
 ( function( window, factory ) {
     // browser global
-    window.PowrVideo = factory(window, window.powrUtils, window.revApi);
+    window.PowrVideo = factory(window, window.powrUtils, window.powrApiOriginal);
 
-}( window, function factory(window, powrUtils, revApi) {
+}( window, function factory(window, powrUtils, powrApiOriginal) {
 
     var PowrInitialized = false;
     var PowrPlayers = 0;
@@ -613,22 +613,22 @@ if (!String.prototype.endsWithPowr) {
         var d = this.player.currentTime();
         d = (d * 1.0) / video.duration;
         if (video.tracking['start'] && (d > 0)) {
-            revApi.request(this.config.tracking_url + video.tracking['start'], function () {
+            powrApiOriginal.request(this.config.tracking_url + video.tracking['start'], function () {
                 return;
             });
             video.tracking['start'] = null;
         } else if (video.tracking['q_1'] && (d > 0.25)) {
-            revApi.request(this.config.tracking_url + video.tracking['q_1'], function () {
+            powrApiOriginal.request(this.config.tracking_url + video.tracking['q_1'], function () {
                 return;
             });
             video.tracking['q_1'] = null;
         } else if (video.tracking['q_2'] && (d > 0.5)) {
-            revApi.request(this.config.tracking_url + video.tracking['q_2'], function () {
+            powrApiOriginal.request(this.config.tracking_url + video.tracking['q_2'], function () {
                 return;
             });
             video.tracking['q_2'] = null;
         } else if (video.tracking['q_3'] && (d > 0.75)) {
-            revApi.request(this.config.tracking_url + video.tracking['q_3'], function () {
+            powrApiOriginal.request(this.config.tracking_url + video.tracking['q_3'], function () {
                 return;
             });
             video.tracking['q_3'] = null;
@@ -689,7 +689,7 @@ if (!String.prototype.endsWithPowr) {
         var video = this.videos[this.currentContent];
         if (this.config.hasOwnProperty("tracking_url")) {
             if (video.tracking['end']) {
-                revApi.request(this.config.tracking_url + video.tracking['end'], function () {
+                powrApiOriginal.request(this.config.tracking_url + video.tracking['end'], function () {
                     return;
                 });
                 video.tracking['end'] = null;
@@ -1091,7 +1091,7 @@ if (!String.prototype.endsWithPowr) {
             return;
         if (!this.viewed) {
             this.viewed = true;
-            revApi.request(this.config.tracking_url + this.config.view_tracker, function () {
+            powrApiOriginal.request(this.config.tracking_url + this.config.view_tracker, function () {
                 return;
             });
         }

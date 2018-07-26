@@ -43,7 +43,7 @@
       "./showcase/revcontent-api-showcase-powr-video-1.0/js/videojs.ima.js",
       "./showcase/js/requestAnimationFrame.js",
       "./showcase/js/powrutils.js",
-      "./showcase/js/revapi.js",
+      "./showcase/js/powrapioriginal.js",
       "./build/files/powrvideo/revpowrvideo.embed.js"
     ],
     "watch": [
@@ -62,8 +62,8 @@
     "js": "./showcase/revcontent-api-showcase-powr-video-1.0/js/powrapi.js",
     "css": [],
     "build": [
-      "./showcase/js/revutils.js",
-      "./showcase/js/revapi.js",
+      "./showcase/js/powrutils.js",
+      "./showcase/js/powrapioriginal.js",
       "./build/files/powrapi/revpowrapi.embed.js"
     ],
     "watch": [
