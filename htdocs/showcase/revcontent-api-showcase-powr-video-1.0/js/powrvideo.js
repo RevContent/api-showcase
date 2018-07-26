@@ -127,6 +127,7 @@ if (!String.prototype.endsWithPowr) {
             return;
         }
 
+        var showControls = true;
         if (this.config.showhide == "yes") {
             if (this.autoplaySettings.focus) {
                 var focusCheck = document.createElement("img");
@@ -138,6 +139,7 @@ if (!String.prototype.endsWithPowr) {
                 this.focusPixel = document.getElementById('powr-focus-check');
             }
 
+            showControls = false;
             revUtils.addClass(this.element, "showhide");
         }
 
@@ -156,7 +158,7 @@ if (!String.prototype.endsWithPowr) {
             prerollTimeout: 2000,
             timeout: 10000,
             adWillAutoPlay: this.autoplaySettings.autoplay,
-            showControlsForJSAds: false,
+            showControlsForJSAds: showControls,
             showCountdown: true
         };
 
@@ -339,7 +341,7 @@ if (!String.prototype.endsWithPowr) {
             height = this.element.clientHeight;
             hs = "100%";
         } else if (this.config.showhide == "yes") {
-            hs = "100%"
+            hs = "100%";
         }
 
         if (this.player && !this.floated) {
