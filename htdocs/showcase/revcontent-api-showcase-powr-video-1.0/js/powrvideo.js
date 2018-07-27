@@ -627,9 +627,9 @@ if (!String.prototype.endsWithPowr) {
 
         if (this.abp !== true) {
             this.options = {
+
                 id: this.playerId,
                 nativeControlForTouch: false,
-                enablePreloading: false,
                 prerollTimeout: 2000,
                 timeout: 10000,
                 adWillAutoPlay: this.autoplaySettings.autoplay,
@@ -641,6 +641,7 @@ if (!String.prototype.endsWithPowr) {
             this.player.ima.initializeAdDisplayContainer();
             // this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), playOnLoad);
             this.player.ima.setContentWithAdsResponse(this.getVideoFromResolution(this.videos[this.currentContent]), this.getAdsResponse(this.videos[this.currentContent]), playOnLoad);
+
             if (!this.autoplaySettings.autoplay) {
                 this.player.poster(this.videos[this.currentContent].thumbnail);
             }
