@@ -125,15 +125,6 @@ if (!String.prototype.endsWithPowr) {
 
         this.currentContent = 0;
 
-        this.options = {
-            id : this.playerId,
-            nativeControlForTouch: false,
-	    prerollTimeout : 2000,
-	    timeout : 10000,
-	    adWillAutoPlay : this.autoplaySettings.autoplay
-
-        };
-
     this.abp = false;
 
 	var me = this;
@@ -567,6 +558,15 @@ if (!String.prototype.endsWithPowr) {
     	this.started = true;
 
         if (this.abp !== true) {
+            this.options = {
+              id : this.playerId,
+              nativeControlForTouch: false,
+              prerollTimeout : 2000,
+              timeout : 10000,
+              adWillAutoPlay : this.autoplaySettings.autoplay,
+              vpaidMode: google.ima.ImaSdkSettings.VpaidMode.INSECURE
+
+          };
           this.player.ima(this.options, this.bind(this, this.adsManagerLoadedCallback));
           this.player.ima.initializeAdDisplayContainer();
           // this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), playOnLoad);
