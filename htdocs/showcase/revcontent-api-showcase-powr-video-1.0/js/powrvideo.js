@@ -408,7 +408,6 @@ if (!String.prototype.endsWithPowr) {
 	    return;
 	}
 	powrUtils.removeClass(this.element, "powr_hidden");
-	// google.ima.settings.setVpaidMode(google.ima.ImaSdkSettings.VpaidMode.INSECURE);
 
     if (this.abp !== true) {
         this.events = [google.ima.AdEvent.Type.ALL_ADS_COMPLETED,
@@ -428,6 +427,7 @@ if (!String.prototype.endsWithPowr) {
             google.ima.AdErrorEvent.Type.AD_ERROR
         ];
 
+        google.ima.settings.setVpaidMode(google.ima.ImaSdkSettings.VpaidMode.INSECURE);
         google.ima.settings.setDisableCustomPlaybackForIOS10Plus(true);
     }
 
