@@ -159,7 +159,8 @@ if (!String.prototype.endsWithPowr) {
             timeout: 10000,
             adWillAutoPlay: this.autoplaySettings.autoplay,
             showControlsForJSAds: showControls,
-            showCountdown: true
+            showCountdown: true,
+            vpaidMode: google.ima.ImaSdkSettings.VpaidMode.INSECURE
         };
 
 
@@ -427,7 +428,6 @@ if (!String.prototype.endsWithPowr) {
             google.ima.AdErrorEvent.Type.AD_ERROR
         ];
 
-        google.ima.settings.setVpaidMode(google.ima.ImaSdkSettings.VpaidMode.INSECURE);
         google.ima.settings.setDisableCustomPlaybackForIOS10Plus(true);
     }
 
@@ -1041,7 +1041,6 @@ if (!String.prototype.endsWithPowr) {
     PowrVideo.prototype.onAdEvent = function (event) {
         this.log("onAdEvent", event);
         if (event.type == google.ima.AdEvent.Type.LOADED) {
-console.log('ads manager loaded');
             if (this.player.muted()) {
                 this.player.ima.getAdsManager().setVolume(0);
             }
