@@ -127,7 +127,7 @@ if (!String.prototype.endsWithPowr) {
             return;
         }
 
-        var showControls = true;
+        this.showControls = true;
         if (this.config.showhide == "yes") {
             if (this.autoplaySettings.focus) {
                 var focusCheck = document.createElement("img");
@@ -139,7 +139,7 @@ if (!String.prototype.endsWithPowr) {
                 this.focusPixel = document.getElementById('powr-focus-check');
             }
 
-            showControls = false;
+            this.showControls = false;
             powrUtils.addClass(this.element, "showhide");
         }
 
@@ -150,19 +150,6 @@ if (!String.prototype.endsWithPowr) {
         }
 
         this.currentContent = 0;
-
-        this.options = {
-            id: this.playerId,
-            nativeControlForTouch: false,
-            enablePreloading: false,
-            prerollTimeout: 2000,
-            timeout: 10000,
-            adWillAutoPlay: this.autoplaySettings.autoplay,
-            showControlsForJSAds: showControls,
-            showCountdown: true,
-            vpaidMode: google.ima.ImaSdkSettings.VpaidMode.INSECURE
-        };
-
 
         this.abp = false;
         this.disposed = false;
@@ -639,15 +626,26 @@ if (!String.prototype.endsWithPowr) {
     	this.started = true;
 
         if (this.abp !== true) {
-          this.player.ima(this.options, this.bind(this, this.adsManagerLoadedCallback));
-          this.player.ima.initializeAdDisplayContainer();
-          // this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), playOnLoad);
-          this.player.ima.setContentWithAdsResponse(this.getVideoFromResolution(this.videos[this.currentContent]), this.getAdsResponse(this.videos[this.currentContent]), playOnLoad);
+            this.options = {
+                id: this.playerId,
+                nativeControlForTouch: false,
+                enablePreloading: false,
+                prerollTimeout: 2000,
+                timeout: 10000,
+                adWillAutoPlay: this.autoplaySettings.autoplay,
+                showControlsForJSAds: this.showControls,
+                showCountdown: true,
+                vpaidMode: google.ima.ImaSdkSettings.VpaidMode.INSECURE
+            };
+            this.player.ima(this.options, this.bind(this, this.adsManagerLoadedCallback));
+            this.player.ima.initializeAdDisplayContainer();
+            // this.player.ima.setContentWithAdTag(this.videos[this.currentContent].sd_url, this.getAdTag(this.videos[this.currentContent].id), playOnLoad);
+            this.player.ima.setContentWithAdsResponse(this.getVideoFromResolution(this.videos[this.currentContent]), this.getAdsResponse(this.videos[this.currentContent]), playOnLoad);
             if (!this.autoplaySettings.autoplay) {
                 this.player.poster(this.videos[this.currentContent].thumbnail);
             }
             this.adsPlayed = 0;
-          this.player.ima.requestAds();
+            this.player.ima.requestAds();
         } else {
             if (!this.autoplaySettings.autoplay) {
                 this.player.poster(this.videos[this.currentContent].thumbnail);
