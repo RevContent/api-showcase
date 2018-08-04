@@ -199,6 +199,13 @@ if (!String.prototype.endsWithPowr) {
 	if (this.mobile) {
 	    tag = this.config.mobile_tag;
 	}
+
+	var volume = "0";
+	var muted = this.player.muted();
+	if (muted != true) {
+		volume = "100";
+	}
+
 	if (this.config.adserver == "dfp") {
             var ret = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
 		+ "&cust_params=p_width%3D" + parseInt(this.getPlayerWidth()) + "%26p_height%3D" + parseInt(this.getPlayerHeight())
@@ -209,7 +216,7 @@ if (!String.prototype.endsWithPowr) {
 	    ret += "&description_url=" + encodeURI("http://www.powr.com/video/" + video.id);
 	    return ret;
 	} else if (this.config.adserver == "lkqd") {
-        var ret = "//v.lkqd.net/ad?pid=505&sid=" + tag + "&output=vastvpaid&support=html5&execution=any&placement=&playinit=auto&volume=100&width=" + parseInt(this.getPlayerWidth()) + "&height=" + parseInt(this.getPlayerHeight()) + "&dnt=0&gdpr=0&gdprcs&pageurl=" + url + "&contentid=" + video.id + "&contenttitle=" + encodeURI(video.title) + "&contentlength=" + video.duration + "&contenturl=" + encodeURI("http://www.powr.com/video/" + video.id) + "&rnd=" + new Date().getTime() + "&c1=u_" + this.config.pub_id;
+        var ret = "//v.lkqd.net/ad?pid=505&sid=" + tag + "&output=vastvpaid&support=html5&execution=any&placement=&playinit=auto&volume=" + volume + "&width=" + parseInt(this.getPlayerWidth()) + "&height=" + parseInt(this.getPlayerHeight()) + "&dnt=0&gdpr=0&gdprcs&pageurl=" + url + "&contentid=" + video.id + "&contenttitle=" + encodeURI(video.title) + "&contentlength=" + video.duration + "&contenturl=" + encodeURI("http://www.powr.com/video/" + video.id) + "&rnd=" + new Date().getTime() + "&c1=u_" + this.config.pub_id;
         return ret;
 	} else if (this.config.adserver == "ss") {
 		var syndicationid = (this.config.syndication_id && this.config.syndication_id != '') ? "&syid=" + this.config.syndication_id : "";
