@@ -7,8 +7,8 @@
  // universal module definition
 ( function( window, factory ) {
   // browser global
-  window.PowrApi = factory(window, window.revUtils, window.revApi);
-}( window, function factory(window, revUtils, revApi) {
+  window.PowrApi = factory(window, window.powrUtils, window.powrApiOriginal);
+}( window, function factory(window, powrUtils, powrApiOriginal) {
 
   /**
    * id : id of the iframe to attach.
@@ -85,11 +85,11 @@
       var element = document.getElementById(this.config.iframe_id);
       if(element != null) {
         this.visibleListener = this.checkVisible.bind(this, element, this.playerState);
-        revUtils.addEventListener(window.parent, 'scroll', this.visibleListener);
+        powrUtils.addEventListener(window.parent, 'scroll', this.visibleListener);
       }
       this.log("added onfocus video autoplay listener");
     } else if(!play_on_focus && this.visibleListener != null) {
-      revUtils.removeEventListener(window.parent, 'scroll', this.visibleListener);
+      powrUtils.removeEventListener(window.parent, 'scroll', this.visibleListener);
       this.visibleListener = null;
       this.log("removed onfocus video autoplay listeners");
     }
