@@ -345,6 +345,7 @@ Author: michael@revcontent.com
             isInitLayout: false,
             masonry: false,
             perRow: this.options.per_row,
+            rows: this.options.rows,
             transitionDuration: this.options.transition_duration,
             isResizeBound: this.options.is_resize_bound,
             adjustGutter: true,
