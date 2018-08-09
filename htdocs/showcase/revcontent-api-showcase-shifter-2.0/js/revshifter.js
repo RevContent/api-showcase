@@ -151,6 +151,7 @@ RevShifter({
         this.init = function() {
             this.element = document.createElement('div');
             this.element.style.zIndex = '10001';
+            this.element.style.overflowY = 'hidden';
             this.element.id = 'rev-shifter';
             revUtils.addClass(this.element, 'rev-shifter');
             revUtils.addClass(this.element, 'rev-hidden');
