@@ -980,7 +980,9 @@ if (!String.prototype.endsWithPowr) {
                 elementVisibleHeight = that.element.offsetHeight * 0.50;
             }
 
-            if (elementTop + that.getPlayerHeight() < 0) {
+            // var pixelsShown = Math.min(Math.max(elementTop > 0 ? windowHeight - elementTop : that.getPlayerHeight() + elementTop, 0), that.getPlayerHeight());
+
+            if (elementTop + (that.getPlayerHeight() / 2) < 0) {
                 if (that.visible) {
                     that.visible = false;
                     that.onHidden();
