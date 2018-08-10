@@ -42,8 +42,8 @@
       "./showcase/revcontent-api-showcase-powr-video-1.0/js/videojs.ads.js",
       "./showcase/revcontent-api-showcase-powr-video-1.0/js/videojs.ima.js",
       "./showcase/js/requestAnimationFrame.js",
-      "./showcase/js/revutils.js",
-      "./showcase/js/revapi.js",
+      "./showcase/js/powrutils.js",
+      "./showcase/js/powrapioriginal.js",
       "./build/files/powrvideo/revpowrvideo.embed.js"
     ],
     "watch": [
@@ -62,8 +62,8 @@
     "js": "./showcase/revcontent-api-showcase-powr-video-1.0/js/powrapi.js",
     "css": [],
     "build": [
-      "./showcase/js/revutils.js",
-      "./showcase/js/revapi.js",
+      "./showcase/js/powrutils.js",
+      "./showcase/js/powrapioriginal.js",
       "./build/files/powrapi/revpowrapi.embed.js"
     ],
     "watch": [
@@ -114,7 +114,7 @@
       "./node_modules/es6-promise/dist/es6-promise.js",
       "./node_modules/hammerjs/hammer.js",
       "./node_modules/mobile-detect/mobile-detect.js",
-      "./node_modules/any-grid/dist/any-grid.js",
+      "./showcase/revcontent-api-showcase-slider-2.0/node_modules/any-grid/dist/any-grid.js",
       "./showcase/js/requestAnimationFrame.js",
       "./showcase/js/revoverlay.js",
       "./showcase/js/revutils.js",
@@ -128,7 +128,7 @@
     "watch": [
       "./showcase/js/*",
       "./showcase/css/*",
-      "./node_modules/any-grid/dist/any-grid.js",
+      "./showcase/revcontent-api-showcase-slider-2.0/node_modules/any-grid/dist/any-grid.js",
       "./showcase/revcontent-api-showcase-slider-1.0/js/*",
       "./showcase/revcontent-api-showcase-slider-1.0/css/*"
     ]
