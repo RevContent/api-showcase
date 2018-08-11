@@ -980,7 +980,9 @@ if (!String.prototype.endsWithPowr) {
                 elementVisibleHeight = that.element.offsetHeight * 0.50;
             }
 
-            if (elementTop + that.getPlayerHeight() < 0) {
+            // var pixelsShown = Math.min(Math.max(elementTop > 0 ? windowHeight - elementTop : that.getPlayerHeight() + elementTop, 0), that.getPlayerHeight());
+
+            if (elementTop + (that.getPlayerHeight() / 2) < 0) {
                 if (that.visible) {
                     that.visible = false;
                     that.onHidden();
@@ -1451,7 +1453,7 @@ if (!String.prototype.endsWithPowr) {
     PowrVideo.prototype.receiveMessage = function (event) {
         try {
             var seperator = "###";
-            if (event != null && event.data != null && event.data.indexOf(seperator) !== -1) {
+            if (event != null && event.data != null && (typeof event.data === 'string' || event.data instanceof String) && event.data.indexOf(seperator) !== -1) {
                 var response = {};
                 var data = event.data.split(seperator);
                 var player = this.player;
@@ -1500,7 +1502,7 @@ if (!String.prototype.endsWithPowr) {
                 event.source.postMessage(JSON.stringify(response), event.origin);
             }
         } catch (e) {
-            this.log(e);
+            this.log(e, event);
         }
     };
 
