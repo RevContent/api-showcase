@@ -654,7 +654,7 @@ if (!String.prototype.endsWithPowr) {
             this.adsPlayed = 0;
 
             var pubId = this.config.pub_id || 0;
-            if (pubId === 945) {
+            if (pubId === '945') {
                 this.player.trigger("nopreroll");
 
                 // remove the videojs-ima content pause listener so we continue to show the content video while the ad is loading
