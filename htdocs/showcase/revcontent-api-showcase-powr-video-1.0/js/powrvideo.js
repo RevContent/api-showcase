@@ -1067,13 +1067,13 @@ if (!String.prototype.endsWithPowr) {
         this.log("onAdEvent", event);
 
         if (event.type == google.ima.AdEvent.Type.LOADED) {
-            this.originalImaOnContentPauseRequested_(this.originalAdData);
-
             if (this.player.muted()) {
                 this.player.ima.getAdsManager().setVolume(0);
             }
         }
         if (event.type == google.ima.AdEvent.Type.STARTED) {
+            this.originalImaOnContentPauseRequested_(this.originalAdData);
+
             this.adsPlayed++;
             if (this.config.showhide == "yes") {
                 this.animateShow();
