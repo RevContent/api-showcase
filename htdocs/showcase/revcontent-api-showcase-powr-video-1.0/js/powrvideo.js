@@ -653,7 +653,8 @@ if (!String.prototype.endsWithPowr) {
             }
             this.adsPlayed = 0;
 
-            if (window.location.hostname === 'powr.com') {
+            var pubId = this.config.pub_id || 0;
+            if (pubId === 945) {
                 this.player.trigger("nopreroll");
 
                 // remove the videojs-ima content pause listener so we continue to show the content video while the ad is loading
@@ -999,7 +1000,7 @@ if (!String.prototype.endsWithPowr) {
 
             // var pixelsShown = Math.min(Math.max(elementTop > 0 ? windowHeight - elementTop : that.getPlayerHeight() + elementTop, 0), that.getPlayerHeight());
 
-            if (elementTop + (that.getPlayerHeight() / 2) < 0) {
+            if (elementTop + (that.getPlayerHeight() * 0.4) < 0) {
                 if (that.visible) {
                     that.visible = false;
                     that.onHidden();
