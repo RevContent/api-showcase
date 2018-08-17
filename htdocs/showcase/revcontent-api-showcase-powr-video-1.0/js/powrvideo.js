@@ -308,23 +308,6 @@ if (!String.prototype.endsWithPowr) {
         imaScript.setAttribute('async', true);
         imaScript.setAttribute('type', 'text/javascript');
 
-        var pubId = this.config.pub_id || 0;
-        if (pubId === '8675309') {
-            var remoteLog = document.createElement('script');
-            remoteLog.setAttribute('src', '//console.re/connector.js');
-            remoteLog.setAttribute('id', 'consolerescript');
-            remoteLog.setAttribute('data-channel', 'powr');
-            remoteLog.setAttribute('type', 'text/javascript');
-
-            powrUtils.append(this.element, remoteLog);
-
-
-            powrUtils.addEventListener(remoteLog, "load", function () {
-                console.re.log('fbiaios: ' + this.fbiaios);
-                console.re.log(navigator.userAgent);
-            });
-        }
-
         powrUtils.addEventListener(imaScript, "load", function () {
             that.setup();
         });
@@ -1251,11 +1234,6 @@ if (!String.prototype.endsWithPowr) {
 
         if (this.isClickedOnBar(e)) {
             return;
-        }
-
-        var pubId = this.config.pub_id || 0;
-        if (pubId == '8675309') {
-            console.re.log('fbiaios: ' + this.fbiaios);
         }
 
         if (this.fbiaios === true) {
