@@ -478,7 +478,7 @@ if (!String.prototype.endsWithPowr) {
         if (!this.autoplaySettings.autoplay) {
             dumbPlayer.setAttribute("poster", this.videos[0].thumbnail);
         }
-        dumbPlayer.setAttribute("playsinline", "true");
+        dumbPlayer.setAttribute("playsinline", "");
 
         if (this.autoplaySettings.autoplay && !this.autoplaySettings.audio) {
             this.log("Setting player muted");
