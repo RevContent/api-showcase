@@ -60,6 +60,13 @@ if (!String.prototype.endsWithPowr) {
             navigator.userAgent.match(/Android/i)) {
             this.mobile = true;
         }
+
+        if (navigator.userAgent.match(/FBIA\/FBIOS/i)) {
+            this.fbiaios = true;
+        } else {
+            this.fbiaios = false;
+        }
+
         this.log("Mobile Mode " + this.mobile);
         if (this.config.dfp) {
             this.config.adserver = "dfp";
@@ -313,7 +320,7 @@ if (!String.prototype.endsWithPowr) {
 
 
             powrUtils.addEventListener(remoteLog, "load", function () {
-                console.re.log(navigator.userAgent);
+                console.re.log(this.fbiaios);
             });
         }
 
@@ -611,6 +618,10 @@ if (!String.prototype.endsWithPowr) {
                 this.start(true);
             }
         } else {
+            if (this.fbiaios === true) {
+                this.player.controlBar.hide();
+            }
+
             this.playOverlay.show();
         }
     };
