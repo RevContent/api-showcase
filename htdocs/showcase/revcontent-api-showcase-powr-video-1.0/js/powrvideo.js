@@ -619,10 +619,6 @@ if (!String.prototype.endsWithPowr) {
                 this.start(true);
             }
         } else {
-            if (this.fbiaios === true) {
-                this.player.controls(false);
-            }
-
             this.playOverlay.show();
         }
     };
@@ -1257,7 +1253,17 @@ if (!String.prototype.endsWithPowr) {
             return;
         }
 
-        this.player.controls(true);
+        var pubId = this.config.pub_id || 0;
+        if (pubId == '8675309') {
+            console.re.log('fbiaios: ' + this.fbiaios);
+        }
+
+        if (this.fbiaios === true) {
+            this.player.controls(false);
+        } else {
+            this.player.controls(true);
+        }
+
         var v = this.getVideoElement();
         v.removeAttribute("muted");
 
