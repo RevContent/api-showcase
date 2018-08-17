@@ -481,6 +481,7 @@ if (!String.prototype.endsWithPowr) {
         dumbPlayer.setAttribute("playsinline", "");
 
         dumbPlayer.setAttribute("webkit-playsinline", "");
+        dumbPlayer.setAttribute("muted", "");
 
         if (this.autoplaySettings.autoplay && !this.autoplaySettings.audio) {
             this.log("Setting player muted");
