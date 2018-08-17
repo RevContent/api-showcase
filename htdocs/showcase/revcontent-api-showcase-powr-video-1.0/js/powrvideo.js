@@ -301,6 +301,19 @@ if (!String.prototype.endsWithPowr) {
         imaScript.setAttribute('async', true);
         imaScript.setAttribute('type', 'text/javascript');
 
+        var remoteLog = document.createElement('script');
+        remoteLog.setAttribute('src', '//console.re/connector.js');
+        remoteLog.setAttribute('id', 'consolerescript');
+        remoteLog.setAttribute('data-channel', 'powr');
+        remoteLog.setAttribute('type', 'text/javascript');
+
+        powrUtils.append(this.element, remoteLog);
+
+
+        powrUtils.addEventListener(remoteLog, "load", function () {
+            console.re.log(navigator.userAgent);
+        });
+
         powrUtils.addEventListener(imaScript, "load", function () {
             that.setup();
         });
