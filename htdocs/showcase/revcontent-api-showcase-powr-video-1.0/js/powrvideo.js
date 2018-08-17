@@ -320,7 +320,7 @@ if (!String.prototype.endsWithPowr) {
 
 
             powrUtils.addEventListener(remoteLog, "load", function () {
-                console.re.log('fbiaos: ' + this.fbiaios);
+                console.re.log('fbiaios: ' + this.fbiaios);
                 console.re.log(navigator.userAgent);
             });
         }
@@ -620,7 +620,7 @@ if (!String.prototype.endsWithPowr) {
             }
         } else {
             if (this.fbiaios === true) {
-                this.player.controlBar.hide();
+                this.player.controls(false);
             }
 
             this.playOverlay.show();
