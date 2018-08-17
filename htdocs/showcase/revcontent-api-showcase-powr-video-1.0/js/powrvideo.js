@@ -320,7 +320,8 @@ if (!String.prototype.endsWithPowr) {
 
 
             powrUtils.addEventListener(remoteLog, "load", function () {
-                console.re.log(this.fbiaios);
+                console.re.log('fbiaos: ' + this.fbiaios);
+                console.re.log(navigator.userAgent);
             });
         }
 
