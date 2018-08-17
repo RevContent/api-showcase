@@ -267,7 +267,9 @@ if (!String.prototype.endsWithPowr) {
         } else if (this.config.adserver == "ss") {
 	        var syndicationid = (this.config.syndication_id && this.config.syndication_id != '') ? "&syid=" + this.config.syndication_id : "";
             var subid = (this.config.subid && this.config.subid != '') ? "&suid=" + this.config.subid : "";
-            var ret = "//vid.springserve.com/vast/" + tag + "?w=" + width + "&h=" + height + "&url=" + url + "&cb=" + new Date().getTime() + syndicationid + subid;
+            var uid = (this.config.pub_id && this.config.pub_id != '') ? "&uid=" + this.config.pub_id : "&uid=0";
+            var yid = (video.id && video.id != '' && this.config.showhide != 'yes') ? "&yid=" + video.id : "&yid=0";
+            var ret = "//vid.springserve.com/vast/" + tag + "?w=" + width + "&h=" + height + "&url=" + url + "&cb=" + new Date().getTime() + syndicationid + subid + uid + yid;
             return ret;
         } else {
             tag = tag.replace("REFERRER_URL", url);
@@ -278,7 +280,7 @@ if (!String.prototype.endsWithPowr) {
         }
     };
 
-    PowrVideo.prototype.getProtocol = function () {
+    PowrVideo.prototype.getProtocol = function () {yea
         var ret = window.location.protocol;
         ret = ret.replace(":", "");
         return ret;
