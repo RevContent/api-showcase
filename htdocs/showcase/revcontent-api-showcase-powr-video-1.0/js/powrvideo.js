@@ -280,7 +280,7 @@ if (!String.prototype.endsWithPowr) {
         }
     };
 
-    PowrVideo.prototype.getProtocol = function () {yea
+    PowrVideo.prototype.getProtocol = function () {
         var ret = window.location.protocol;
         ret = ret.replace(":", "");
         return ret;
