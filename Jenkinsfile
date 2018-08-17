@@ -1,6 +1,7 @@
 properties([
   authorizationMatrix([
     'hudson.model.Item.Build:stash-qa',
+    'hudson.model.Item.Build:cladensack',
     'hudson.model.Item.Discover:authenticated',
     'hudson.model.Item.Discover:stash-qa',
     'hudson.model.Item.Read:authenticated',
