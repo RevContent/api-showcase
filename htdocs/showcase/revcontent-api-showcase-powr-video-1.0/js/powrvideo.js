@@ -61,10 +61,10 @@ if (!String.prototype.endsWithPowr) {
             this.mobile = true;
         }
 
-        if (navigator.userAgent.match(/FBIA\/FBIOS/i)) {
+        this.fbiaios = false;
+
+        if (navigator.userAgent.match(/FBIOS/i)) {
             this.fbiaios = true;
-        } else {
-            this.fbiaios = false;
         }
 
         this.log("Mobile Mode " + this.mobile);
