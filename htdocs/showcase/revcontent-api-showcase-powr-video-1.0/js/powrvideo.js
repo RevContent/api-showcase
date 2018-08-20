@@ -664,22 +664,17 @@ if (!String.prototype.endsWithPowr) {
             }
             this.adsPlayed = 0;
 
-            var pubId = this.config.pub_id || 0;
-            if (pubId === '945') {
-                this.player.trigger("nopreroll");
+            this.player.trigger("nopreroll");
 
-                // remove the videojs-ima content pause listener so we continue to show the content video while the ad is loading
-                this.originalImaOnContentPauseRequested_ = this.player.ima.onContentPauseRequested_;
-                this.player.ima.onContentPauseRequested_ = function(adData) {
-                    console.log("overloaded onContentPauseRequested", adData);
+            // remove the videojs-ima content pause listener so we continue to show the content video while the ad is loading
+            this.originalImaOnContentPauseRequested_ = this.player.ima.onContentPauseRequested_;
+            this.player.ima.onContentPauseRequested_ = function(adData) {
+                console.log("overloaded onContentPauseRequested", adData);
 
-                    this.originalAdData = adData;
-                    // this.player.removeClass('vjs-ad-loading');
-                    this.player.ima.adContainerDiv.style.display = 'none';
-                }.bind(this);
-            } else {
-                this.originalImaOnContentPauseRequested_ = function() {};
-            }
+                this.originalAdData = adData;
+                // this.player.removeClass('vjs-ad-loading');
+                this.player.ima.adContainerDiv.style.display = 'none';
+            }.bind(this);
 
             this.player.ima.requestAds();
         } else {
