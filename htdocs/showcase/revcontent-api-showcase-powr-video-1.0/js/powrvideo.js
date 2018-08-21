@@ -1224,7 +1224,7 @@ if (!String.prototype.endsWithPowr) {
             return;
         }
         if (!this.started) {
-            this.muted(false);
+            this.player.muted(false);
             this.playOverlay.hide();
             this.start(true);
             this.cancelEvent(e);
