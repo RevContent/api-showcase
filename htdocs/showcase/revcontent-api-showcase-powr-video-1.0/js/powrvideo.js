@@ -485,6 +485,7 @@ if (!String.prototype.endsWithPowr) {
 
         this.log("Setting up Video Element");
         if (!this.autoplaySettings.autoplay) {
+            dumbPlayer.setAttribute("muted", "true");
             dumbPlayer.setAttribute("poster", this.videos[0].thumbnail);
         }
         dumbPlayer.setAttribute("playsinline", "");
@@ -1223,6 +1224,7 @@ if (!String.prototype.endsWithPowr) {
             return;
         }
         if (!this.started) {
+            this.player.muted(false);
             this.playOverlay.hide();
             this.start(true);
             this.cancelEvent(e);
