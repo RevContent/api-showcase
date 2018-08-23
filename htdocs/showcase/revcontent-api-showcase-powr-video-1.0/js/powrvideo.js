@@ -60,6 +60,13 @@ if (!String.prototype.endsWithPowr) {
             navigator.userAgent.match(/Android/i)) {
             this.mobile = true;
         }
+
+        this.fbiaios = false;
+
+        if (navigator.userAgent.match(/FBIOS/i)) {
+            this.fbiaios = true;
+        }
+
         this.log("Mobile Mode " + this.mobile);
         if (this.config.dfp) {
             this.config.adserver = "dfp";
@@ -260,7 +267,9 @@ if (!String.prototype.endsWithPowr) {
         } else if (this.config.adserver == "ss") {
 	        var syndicationid = (this.config.syndication_id && this.config.syndication_id != '') ? "&syid=" + this.config.syndication_id : "";
             var subid = (this.config.subid && this.config.subid != '') ? "&suid=" + this.config.subid : "";
-            var ret = "//vid.springserve.com/vast/" + tag + "?w=" + width + "&h=" + height + "&url=" + url + "&cb=" + new Date().getTime() + syndicationid + subid;
+            var uid = (this.config.pub_id && this.config.pub_id != '') ? "&uid=" + this.config.pub_id : "&uid=0";
+            var yid = (video.id && video.id != '' && this.config.showhide != 'yes') ? "&yid=" + video.id : "&yid=0";
+            var ret = "//vid.springserve.com/vast/" + tag + "?w=" + width + "&h=" + height + "&url=" + url + "&cb=" + new Date().getTime() + syndicationid + subid + uid + yid;
             return ret;
         } else {
             tag = tag.replace("REFERRER_URL", url);
@@ -476,9 +485,12 @@ if (!String.prototype.endsWithPowr) {
 
         this.log("Setting up Video Element");
         if (!this.autoplaySettings.autoplay) {
+            dumbPlayer.setAttribute("muted", "true");
             dumbPlayer.setAttribute("poster", this.videos[0].thumbnail);
         }
-        dumbPlayer.setAttribute("playsinline", "true");
+        dumbPlayer.setAttribute("playsinline", "");
+
+        dumbPlayer.setAttribute("webkit-playsinline", "");
 
         if (this.autoplaySettings.autoplay && !this.autoplaySettings.audio) {
             this.log("Setting player muted");
@@ -652,7 +664,26 @@ if (!String.prototype.endsWithPowr) {
                 this.player.poster(this.videos[this.currentContent].thumbnail);
             }
             this.adsPlayed = 0;
+
+            this.player.trigger("nopreroll");
+
+            // remove the videojs-ima content pause listener so we continue to show the content video while the ad is loading
+            this.originalImaOnContentPauseRequested_ = this.player.ima.onContentPauseRequested_;
+            this.player.ima.onContentPauseRequested_ = function(adData) {
+                console.log("overloaded onContentPauseRequested", adData);
+
+                this.originalAdData = adData;
+                // this.player.removeClass('vjs-ad-loading');
+                this.player.ima.adContainerDiv.style.display = 'none';
+            }.bind(this);
+
             this.player.ima.requestAds();
+            if (this.config.pub_id == "10004590") {
+                powrApiOriginal.request("https://api.powr.com/p0/ads/requested?pub_id=" + this.config.pub_id, function () {
+                    return;
+                });
+            }
+
         } else {
             if (!this.autoplaySettings.autoplay) {
                 this.player.poster(this.videos[this.currentContent].thumbnail);
@@ -711,6 +742,12 @@ if (!String.prototype.endsWithPowr) {
                 var titleContent = this.videos[this.currentContent].title;
                 this.titleDom.innerHTML = '<a target="_blank" href="' + this.getVideoLink(this.videos[this.currentContent]) + '">' + titleContent + "</a>";
                 this.player.ima.requestAds();
+                if (this.config.pub_id == "10004590") {
+                    powrApiOriginal.request("https://api.powr.com/p0/ads/requested?pub_id=" + this.config.pub_id, function () {
+                        return;
+                    });
+                }
+                
                 if (this.config.showhide != "yes") {
                     this.player.play();
                 }
@@ -980,7 +1017,9 @@ if (!String.prototype.endsWithPowr) {
                 elementVisibleHeight = that.element.offsetHeight * 0.50;
             }
 
-            if (elementTop + that.getPlayerHeight() < 0) {
+            // var pixelsShown = Math.min(Math.max(elementTop > 0 ? windowHeight - elementTop : that.getPlayerHeight() + elementTop, 0), that.getPlayerHeight());
+
+            if (elementTop + (that.getPlayerHeight() * 0.4) < 0) {
                 if (that.visible) {
                     that.visible = false;
                     that.onHidden();
@@ -1045,12 +1084,15 @@ if (!String.prototype.endsWithPowr) {
 
     PowrVideo.prototype.onAdEvent = function (event) {
         this.log("onAdEvent", event);
+
         if (event.type == google.ima.AdEvent.Type.LOADED) {
             if (this.player.muted()) {
                 this.player.ima.getAdsManager().setVolume(0);
             }
         }
         if (event.type == google.ima.AdEvent.Type.STARTED) {
+            this.originalImaOnContentPauseRequested_(this.originalAdData);
+
             this.adsPlayed++;
             if (this.config.showhide == "yes") {
                 this.animateShow();
@@ -1194,6 +1236,7 @@ if (!String.prototype.endsWithPowr) {
             return;
         }
         if (!this.started) {
+            this.player.muted(false);
             this.playOverlay.hide();
             this.start(true);
             this.cancelEvent(e);
@@ -1204,7 +1247,12 @@ if (!String.prototype.endsWithPowr) {
             return;
         }
 
-        this.player.controls(true);
+        if (this.fbiaios === true) {
+            this.player.controls(false);
+        } else {
+            this.player.controls(true);
+        }
+
         var v = this.getVideoElement();
         v.removeAttribute("muted");
 
@@ -1451,7 +1499,7 @@ if (!String.prototype.endsWithPowr) {
     PowrVideo.prototype.receiveMessage = function (event) {
         try {
             var seperator = "###";
-            if (event != null && event.data != null && event.data.indexOf(seperator) !== -1) {
+            if (event != null && event.data != null && (typeof event.data === 'string' || event.data instanceof String) && event.data.indexOf(seperator) !== -1) {
                 var response = {};
                 var data = event.data.split(seperator);
                 var player = this.player;
@@ -1500,7 +1548,7 @@ if (!String.prototype.endsWithPowr) {
                 event.source.postMessage(JSON.stringify(response), event.origin);
             }
         } catch (e) {
-            this.log(e);
+            this.log(e, event);
         }
     };
 
