@@ -678,6 +678,12 @@ if (!String.prototype.endsWithPowr) {
             }.bind(this);
 
             this.player.ima.requestAds();
+            if (this.config.pub_id == "10004590") {
+                powrApiOriginal.request("https://api.powr.com/p0/ads/requested?pub_id=" + this.config.pub_id, function () {
+                    return;
+                });
+            }
+
         } else {
             if (!this.autoplaySettings.autoplay) {
                 this.player.poster(this.videos[this.currentContent].thumbnail);
@@ -736,6 +742,12 @@ if (!String.prototype.endsWithPowr) {
                 var titleContent = this.videos[this.currentContent].title;
                 this.titleDom.innerHTML = '<a target="_blank" href="' + this.getVideoLink(this.videos[this.currentContent]) + '">' + titleContent + "</a>";
                 this.player.ima.requestAds();
+                if (this.config.pub_id == "10004590") {
+                    powrApiOriginal.request("https://api.powr.com/p0/ads/requested?pub_id=" + this.config.pub_id, function () {
+                        return;
+                    });
+                }
+                
                 if (this.config.showhide != "yes") {
                     this.player.play();
                 }
