@@ -677,14 +677,15 @@ if (!String.prototype.endsWithPowr) {
                     // this.player.removeClass('vjs-ad-loading');
                     this.player.ima.adContainerDiv.style.display = 'none';
                 }.bind(this);
-
-                this.player.ima.requestAds();
-                if (this.config.pub_id == "10004590") {
-                    powrApiOriginal.request("https://api.powr.com/p0/ads/requested?pub_id=" + this.config.pub_id, function () {
-                        return;
-                    });
-                }
             }
+
+            this.player.ima.requestAds();
+            if (this.config.pub_id == "10004590") {
+                powrApiOriginal.request("https://api.powr.com/p0/ads/requested?pub_id=" + this.config.pub_id, function () {
+                    return;
+                });
+            }
+
         } else {
             if (!this.autoplaySettings.autoplay) {
                 this.player.poster(this.videos[this.currentContent].thumbnail);
