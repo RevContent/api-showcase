@@ -677,6 +677,8 @@ if (!String.prototype.endsWithPowr) {
                     // this.player.removeClass('vjs-ad-loading');
                     this.player.ima.adContainerDiv.style.display = 'none';
                 }.bind(this);
+            } else {
+                this.originalImaOnContentPauseRequested_ = function() {};
             }
 
             this.player.ima.requestAds();
@@ -1093,11 +1095,7 @@ if (!String.prototype.endsWithPowr) {
             }
         }
         if (event.type == google.ima.AdEvent.Type.STARTED) {
-
-            if (this.config.showhide != "yes") {
-                this.originalImaOnContentPauseRequested_(this.originalAdData);
-            }
-
+            this.originalImaOnContentPauseRequested_(this.originalAdData);
             this.adsPlayed++;
             if (this.config.showhide == "yes") {
                 this.animateShow();
