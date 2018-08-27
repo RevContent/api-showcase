@@ -665,17 +665,21 @@ if (!String.prototype.endsWithPowr) {
             }
             this.adsPlayed = 0;
 
-            this.player.trigger("nopreroll");
+            if (this.config.showhide != 'yes') {
+                this.player.trigger("nopreroll");
 
-            // remove the videojs-ima content pause listener so we continue to show the content video while the ad is loading
-            this.originalImaOnContentPauseRequested_ = this.player.ima.onContentPauseRequested_;
-            this.player.ima.onContentPauseRequested_ = function(adData) {
-                console.log("overloaded onContentPauseRequested", adData);
+                // remove the videojs-ima content pause listener so we continue to show the content video while the ad is loading
+                this.originalImaOnContentPauseRequested_ = this.player.ima.onContentPauseRequested_;
+                this.player.ima.onContentPauseRequested_ = function(adData) {
+                    console.log("overloaded onContentPauseRequested", adData);
 
-                this.originalAdData = adData;
-                // this.player.removeClass('vjs-ad-loading');
-                this.player.ima.adContainerDiv.style.display = 'none';
-            }.bind(this);
+                    this.originalAdData = adData;
+                    // this.player.removeClass('vjs-ad-loading');
+                    this.player.ima.adContainerDiv.style.display = 'none';
+                }.bind(this);
+            } else {
+                this.originalImaOnContentPauseRequested_ = function() {};
+            }
 
             this.player.ima.requestAds();
             if (this.config.pub_id == "10004590") {
@@ -1092,7 +1096,6 @@ if (!String.prototype.endsWithPowr) {
         }
         if (event.type == google.ima.AdEvent.Type.STARTED) {
             this.originalImaOnContentPauseRequested_(this.originalAdData);
-
             this.adsPlayed++;
             if (this.config.showhide == "yes") {
                 this.animateShow();
