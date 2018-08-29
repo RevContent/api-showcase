@@ -74,6 +74,7 @@ body .powr_player .video-js .rc-video-overlay img {
     max-height : 20px !important;
     float : right !important;
     width : auto !important;
+    margin: 0 0!important;
 }
 
 .powr_player .rc-video-overlay > small {
@@ -116,6 +117,7 @@ a.rc-video-close {
     white-space: nowrap !important;
     overflow: hidden !important;
     color : #FFF !important;
+    font-size: 13px !important;
 }
 
 .rc-float-video {
