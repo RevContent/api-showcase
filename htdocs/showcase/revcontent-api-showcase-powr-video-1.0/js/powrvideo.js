@@ -1015,25 +1015,26 @@ if (!String.prototype.endsWithPowr) {
             // var bufferPixels = (typeof buffer === 'number') ? buffer : 0;
             var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
             var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-            var elementTop, elementBottom, elementVisibleHeight;
+            var elementTop, elementBottom, elementVisibleHeight, elementDelta;
             if (that.config.showhide == "yes") {
                 elementTop = that.focusPixel.getBoundingClientRect().top;
                 elementBottom = that.focusPixel.getBoundingClientRect().bottom;
                 elementVisibleHeight = that.showhideHeight * 0.50;
+                elementDelta = 85;
             } else {
                 elementTop = that.element.getBoundingClientRect().top;
                 elementBottom = that.element.getBoundingClientRect().bottom;
                 elementVisibleHeight = that.element.offsetHeight * 0.50;
+                elementDelta = 0;
             }
 
             // var pixelsShown = Math.min(Math.max(elementTop > 0 ? windowHeight - elementTop : that.getPlayerHeight() + elementTop, 0), that.getPlayerHeight());
-
             if (elementTop + (that.getPlayerHeight() * 0.4) < 0) {
                 if (that.visible) {
                     that.visible = false;
                     that.onHidden();
                 }
-            } else if (elementTop + 30 < windowHeight) {
+            } else if (elementTop + 30 < windowHeight + elementDelta) {
                 if (!that.visible) {
                     that.visible = true;
                     that.onVisible();
