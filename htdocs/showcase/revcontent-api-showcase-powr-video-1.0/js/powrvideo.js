@@ -1024,7 +1024,7 @@ if (!String.prototype.endsWithPowr) {
                 elementTop = that.focusPixel.getBoundingClientRect().top;
                 elementBottom = that.focusPixel.getBoundingClientRect().bottom;
                 elementVisibleHeight = that.showhideHeight * 0.50;
-                elementDelta = 500;
+                elementDelta = 425;
             } else {
                 elementTop = that.element.getBoundingClientRect().top;
                 elementBottom = that.element.getBoundingClientRect().bottom;
