@@ -255,7 +255,7 @@ if (!String.prototype.endsWithPowr) {
             execution = "any";
             placement = "";
         }
-        
+
         if (this.config.adserver == "dfp") {
             var ret = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
                 + "&cust_params=p_width%3D" + width + "%26p_height%3D" + height
@@ -1024,7 +1024,7 @@ if (!String.prototype.endsWithPowr) {
                 elementTop = that.focusPixel.getBoundingClientRect().top;
                 elementBottom = that.focusPixel.getBoundingClientRect().bottom;
                 elementVisibleHeight = that.showhideHeight * 0.50;
-                elementDelta = 85;
+                elementDelta = 160;
             } else {
                 elementTop = that.element.getBoundingClientRect().top;
                 elementBottom = that.element.getBoundingClientRect().bottom;
