@@ -266,7 +266,7 @@ if (!String.prototype.endsWithPowr) {
             ret += "&description_url=" + encodeURI("http://www.powr.com/video/" + video.id);
             return ret;
         } else if (this.config.adserver == "lkqd") {
-            var ret = "//v.lkqd.net/ad?pid=505&sid=" + tag + "&output=vastvpaid&support=html5&execution=" + execution + "&placement=" + placement + "&playinit=auto&volume=" + volume + "&width=" + width + "&height=" + height + "&dnt=0&gdpr=0&gdprcs&pageurl=" + url + "&contentid=" + video.id + "&contenttitle=" + encodeURI(video.title) + "&contentlength=" + video.duration + "&contenturl=" + encodeURI("http://www.powr.com/video/" + video.id) + "&rnd=" + new Date().getTime() + "&c1=u_" + this.config.pub_id + "&c2=c_" + video.user_id;
+            var ret = "//v.lkqd.net/ad?pid=505&sid=" + tag + "&output=vastvpaid&support=html5&execution=" + execution + "&placement=" + placement + "&playinit=auto&volume=" + volume + "&width=" + width + "&height=" + height + "&dnt=0&gdpr=0&gdprcs&pageurl=" + url + "&contentid=" + video.id + "&contenttitle=" + encodeURI(video.title) + "&contentlength=" + video.duration + "&contenturl=" + encodeURI("http://www.powr.com/video/" + video.id) + "&rnd=" + new Date().getTime() + "&c1=u_" + this.config.pub_id + "&c2=c_" + video.id;
             return ret;
         } else if (this.config.adserver == "ss") {
 	        var syndicationid = (this.config.syndication_id && this.config.syndication_id != '') ? "&syid=" + this.config.syndication_id : "";
