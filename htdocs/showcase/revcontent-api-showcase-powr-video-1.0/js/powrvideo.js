@@ -480,6 +480,11 @@ if (!String.prototype.endsWithPowr) {
 
         dumbPlayer.className = 'video-js vjs-default-skin vjs-big-play-centered ' + aspectRatio;
         dumbPlayer.setAttribute('width', this.getPlayerWidth() + 'px');
+
+        if (this.config.showhide == "yes") {
+            dumbPlayer.setAttribute("style", "width:" + this.config.width + "px;");
+        }
+
         dumbPlayer.setAttribute('height', this.getPlayerHeight() + 'px');
         dumbPlayer.setAttribute("controls", "true");
         if (this.config.video_preload == null) {
