@@ -243,13 +243,17 @@ if (!String.prototype.endsWithPowr) {
             volume = "100";
         }
 
-        var width, height;
+        var width, height, execution, placement;
         if (this.config.showhide == "yes") {
             width = parseInt(this.config.width);
             height = parseInt(0.5625 * width);
+            execution = "outstream";
+            placement = "incontent";
         } else {
             width = parseInt(this.getPlayerWidth());
-            height = parseInt(this.getPlayerHeight());
+            height = parseInt(this.getPlayerHeight())
+            execution = "any";
+            placement = "";
         }
 
         if (this.config.adserver == "dfp") {
@@ -262,7 +266,7 @@ if (!String.prototype.endsWithPowr) {
             ret += "&description_url=" + encodeURI("http://www.powr.com/video/" + video.id);
             return ret;
         } else if (this.config.adserver == "lkqd") {
-            var ret = "//v.lkqd.net/ad?pid=505&sid=" + tag + "&output=vastvpaid&support=html5&execution=any&placement=&playinit=auto&volume=" + volume + "&width=" + width + "&height=" + height + "&dnt=0&gdpr=0&gdprcs&pageurl=" + url + "&contentid=" + video.id + "&contenttitle=" + encodeURI(video.title) + "&contentlength=" + video.duration + "&contenturl=" + encodeURI("http://www.powr.com/video/" + video.id) + "&rnd=" + new Date().getTime() + "&c1=u_" + this.config.pub_id;
+            var ret = "//v.lkqd.net/ad?pid=505&sid=" + tag + "&output=vastvpaid&support=html5&execution=" + execution + "&placement=" + placement + "&playinit=auto&volume=" + volume + "&width=" + width + "&height=" + height + "&dnt=0&gdpr=0&gdprcs&pageurl=" + url + "&contentid=" + video.id + "&contenttitle=" + encodeURI(video.title) + "&contentlength=" + video.duration + "&contenturl=" + encodeURI("http://www.powr.com/video/" + video.id) + "&rnd=" + new Date().getTime() + "&c1=u_" + this.config.pub_id + "&c2=v_" + video.id;
             return ret;
         } else if (this.config.adserver == "ss") {
 	        var syndicationid = (this.config.syndication_id && this.config.syndication_id != '') ? "&syid=" + this.config.syndication_id : "";
@@ -476,6 +480,11 @@ if (!String.prototype.endsWithPowr) {
 
         dumbPlayer.className = 'video-js vjs-default-skin vjs-big-play-centered ' + aspectRatio;
         dumbPlayer.setAttribute('width', this.getPlayerWidth() + 'px');
+
+        if (this.config.showhide == "yes") {
+            dumbPlayer.setAttribute("style", "width:" + this.config.width + "px;");
+        }
+
         dumbPlayer.setAttribute('height', this.getPlayerHeight() + 'px');
         dumbPlayer.setAttribute("controls", "true");
         if (this.config.video_preload == null) {
@@ -1015,25 +1024,26 @@ if (!String.prototype.endsWithPowr) {
             // var bufferPixels = (typeof buffer === 'number') ? buffer : 0;
             var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
             var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-            var elementTop, elementBottom, elementVisibleHeight;
+            var elementTop, elementBottom, elementVisibleHeight, elementDelta;
             if (that.config.showhide == "yes") {
                 elementTop = that.focusPixel.getBoundingClientRect().top;
                 elementBottom = that.focusPixel.getBoundingClientRect().bottom;
                 elementVisibleHeight = that.showhideHeight * 0.50;
+                elementDelta = 425;
             } else {
                 elementTop = that.element.getBoundingClientRect().top;
                 elementBottom = that.element.getBoundingClientRect().bottom;
                 elementVisibleHeight = that.element.offsetHeight * 0.50;
+                elementDelta = 0;
             }
 
             // var pixelsShown = Math.min(Math.max(elementTop > 0 ? windowHeight - elementTop : that.getPlayerHeight() + elementTop, 0), that.getPlayerHeight());
-
             if (elementTop + (that.getPlayerHeight() * 0.4) < 0) {
                 if (that.visible) {
                     that.visible = false;
                     that.onHidden();
                 }
-            } else if (elementTop + 30 < windowHeight) {
+            } else if (elementTop + 30 < windowHeight + elementDelta) {
                 if (!that.visible) {
                     that.visible = true;
                     that.onVisible();
