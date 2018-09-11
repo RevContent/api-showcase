@@ -184,7 +184,7 @@ if (!String.prototype.endsWithPowr) {
         this.log("getAdBreak " + type + "," + url + "," + duration);
         var ret = "";
         if (type == "preroll") {
-            ret = ret + '<vmap:AdBreak timeOffset="start" breakType="linear" breakId="preroll"><vmap:AdSource id="preroll-ad-1" allowMultipleAds="false" followRedirects="true"><vmap:AdTagURI templateType="vast3">';
+            ret = ret + '<vmap:AdBreak timeOffset="start" breakType="linear" breakId="preroll"><vmap:AdSource id="preroll-ad-1" allowMultipleAds="false" followRedirects="true"><vmap:AdTagURI templateType="vast2">';
         }
         if (type == "midroll") {
             var mins = duration / 60;
@@ -196,10 +196,10 @@ if (!String.prototype.endsWithPowr) {
                 mins = "0" + mins;
             }
             ret = ret + '<vmap:AdBreak timeOffset="00:' + mins + ':' + seconds + '.000" breakType="linear" breakId="midroll-1">';
-            ret = ret + '<vmap:AdSource id="midroll-1-ad-1" allowMultipleAds="false" followRedirects="true"><vmap:AdTagURI templateType="vast3">';
+            ret = ret + '<vmap:AdSource id="midroll-1-ad-1" allowMultipleAds="false" followRedirects="true"><vmap:AdTagURI templateType="vast2">';
         }
         if (type == "postroll") {
-            var ret = '<vmap:AdBreak timeOffset="end" breakType="linear" breakId="postroll"><vmap:AdSource id="postroll-ad-1" allowMultipleAds="false" followRedirects="true"><vmap:AdTagURI templateType="vast3">';
+            var ret = '<vmap:AdBreak timeOffset="end" breakType="linear" breakId="postroll"><vmap:AdSource id="postroll-ad-1" allowMultipleAds="false" followRedirects="true"><vmap:AdTagURI templateType="vast2">';
         }
         ret = ret + "\n";
         ret = ret + '<![CDATA[' + "\n";
@@ -510,8 +510,36 @@ if (!String.prototype.endsWithPowr) {
         contentSrc.setAttribute('src', this.getVideoFromResolution(this.videos[0]));
         contentSrc.setAttribute('type', 'video/mp4');
         dumbPlayer.appendChild(contentSrc);
-
         this.container.appendChild(dumbPlayer);
+
+        if (document.URL.indexOf('?debug=powr') !== -1) {
+
+            var openvv = new OpenVV(), element = document.getElementById(this.playerId);
+
+            openvv
+                .measureElement(element)
+                .onViewableStart(function (args) {
+                    // element has started being viewable according to the default threshold of 50% in view
+                    console.log('Viewable Start', new Date().toString(), args);
+                })
+                .onViewableStop(function (args) {
+                    // element has stopped being viewable as it has dropped below the default 50% in view threshold
+                    console.log('Viewable Stop', new Date().toString(), args);
+                })
+                .onViewableChange(function (args) {
+                    // element's in view percentage has changed. Will be called whenever element's in view percentage changes
+                    console.log('Viewable Change', new Date().toString(), args);
+                })
+                .onViewableComplete(function (args) {
+                    // element has been in view above the viewable threshold for atleast 2 continuous seconds
+                    console.log('Viewable Complete', new Date().toString(), args);
+                })
+                .onUnmeasureable(function () {
+                    // no measurement techniques were found that are capable of measuring in the current enviroment (browser + iframe context)
+                    console.log('Unmeasureable');
+                });
+        }
+
         this.player = videojs(this.playerId, {
             nativeControlForTouch: false
         });
@@ -592,7 +620,7 @@ if (!String.prototype.endsWithPowr) {
             me.player.pause();
             me.unfloatPlayer();
         });
-        
+
         // Don't show big button. we have our own.
         this.player.bigPlayButton.hide();
         this.player.controlBar.volumeMenuButton.hide();
@@ -765,7 +793,7 @@ if (!String.prototype.endsWithPowr) {
                         return;
                     });
                 }
-                
+
                 if (this.config.showhide != "yes") {
                     this.player.play();
                 }
