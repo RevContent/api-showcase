@@ -719,16 +719,10 @@ if (!String.prototype.endsWithPowr) {
             }
 
             this.player.ima.requestAds();
-            if (this.config.pub_id == "39348" ||
-                this.config.pub_id == "87977" ||
-                this.config.pub_id == "10001976" ||
-                this.config.pub_id == "10002863" ||
-                this.config.pub_id == "10002864" ||
-                this.config.pub_id == "10004590") {
-                powrApiOriginal.request("https://api.powr.com/p0/ads/requested?pub_id=" + this.config.pub_id, function () {
-                    return;
-                });
-            }
+
+            powrApiOriginal.request("https://api.powr.com/p0/ads/requested?pub_id=" + this.config.pub_id, function () {
+                 return;
+             });
 
         } else {
             if (!this.autoplaySettings.autoplay) {
