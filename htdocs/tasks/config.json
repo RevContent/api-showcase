@@ -41,6 +41,7 @@
       "./showcase/revcontent-api-showcase-powr-video-1.0/js/videojs.logobrand.js",
       "./showcase/revcontent-api-showcase-powr-video-1.0/js/videojs.ads.js",
       "./showcase/revcontent-api-showcase-powr-video-1.0/js/videojs.ima.js",
+      "./showcase/revcontent-api-showcase-powr-video-1.0/js/openvv.js",
       "./showcase/js/requestAnimationFrame.js",
       "./showcase/js/powrutils.js",
       "./showcase/js/powrapioriginal.js",
