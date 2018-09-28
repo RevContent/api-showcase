@@ -10,6 +10,7 @@
  * @todo Add DEBUG support
  * @todo Additional Font support
  */
+
 ( function (window, factory) {
     'use strict';
     window.RevcontentAMP = factory(
@@ -45,7 +46,6 @@
         self.useAutoSizer = ((self.data.sizer !== undefined && self.data.sizer != "false") ? true : false);
         self.isObserving = false;
         self.isResizing = false;
-        self.resizeTimeout = false;
         self.ENTITY_ID = "rev2-wid-" + self.data.id.toString();
         self.api = {
             enabled: ((self.data.api !== undefined) ? true : false),
@@ -162,6 +162,11 @@
         return self.data.wrapper !== undefined ? self.data.wrapper : self.defaultWrapperId;
     };
     
+    /**
+     * Get viewport width/height
+     * 
+     * @returns {Array}
+     */
     RevAMP.prototype.getViewport = function () {
         
         var viewPortWidth;
@@ -205,7 +210,6 @@
         self.rcel = document.createElement("script");
         self.rcel.id = 'rc_' + Math.floor(Math.random() * 1000);
         self.rcel.type = 'text/javascript';
-        
         self.serveParameters = '?' + (self.testing === true ? 'uitm=1&' : '') + "w=" + self.data.id + "&t=" + self.rcel.id + "&c=" + (new Date()).getTime() + "&width=" + self.viewport[0];
         self.serveUrl = self.serveProtocol + self.serveHost + self.serveScript + self.serveParameters;
         self.rcel.src = self.serveUrl;
@@ -319,7 +323,7 @@
         if (self.useAutoSizer) {
             self.dispatch("Auto-Sizer is turned ON (Default setting, to disable set data-sizer=false on your amp tag)");
             // --- IS THIS CALL NEEDED?
-            self.adjustHeight();
+            //self.adjustHeight();
             window.addEventListener('resize', function (event) {
                 self.dispatch("-- RESIZE.event -- if not already listening START OBSERVING...", 'warn');
                 //self.adjustHeight();
@@ -404,25 +408,24 @@
         /**
          * Dynamic Frameheight calculations (DISABLED!!)
          * -- could be used in the future, relying on Element.offsetHeight for now
-          var frameHeight = Math.max(
-            document.body.scrollHeight, document.documentElement.scrollHeight,
-            document.body.offsetHeight, document.documentElement.offsetHeight,
-            document.body.clientHeight, document.documentElement.clientHeight
-          );
-         
-          if (self.widgetEl.offsetHeight > 0 && frameHeight > self.widgetEl.offsetHeight) {
-           frameHeight = self.widgetEl.offsetHeight;
-          }
+         * var frameHeight = Math.max(
+         *   document.body.scrollHeight, document.documentElement.scrollHeight,
+         *   document.body.offsetHeight, document.documentElement.offsetHeight,
+         *   document.body.clientHeight, document.documentElement.clientHeight
+         * );
+         *
+         * if (self.widgetEl.offsetHeight > 0 && frameHeight > self.widgetEl.offsetHeight) {
+         *  frameHeight = self.widgetEl.offsetHeight;
+         * }
+         *
          */
          
-
         //clearTimeout(self.timeouts.resize);
         //self.timeouts.resize = setTimeout(function () {
         // -- DISABLE Timeoout in order to avoid losing scope or causing conflicts with the sizing rules...
         adHeight = self.viewport[1];
-console.log(self.viewport[0], specificHeight,adHeight, frameHeight );
         window.context.requestResize(self.viewport[0], self.viewport(!isNaN(specificHeight) ? specificHeight : adHeight));
-        console.log("AUTO-SIZER - Final API Call for resize: window.context.requestResize(" + self.viewport[0] + "," + (!isNaN(specificHeight) ? specificHeight : Math.max(50, providerHeight + frameHeight)));
+        self.dispatch("AUTO-SIZER - Final API Call for resize: window.context.requestResize(" + self.viewport[0] + "," + (!isNaN(specificHeight) ? specificHeight : Math.max(50, providerHeight + frameHeight)));
         //}, 125);
 
         window.context.onResizeDenied(function (h, w) {
