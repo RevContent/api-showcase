@@ -754,7 +754,6 @@ console.log(self.viewport[0], specificHeight,adHeight, frameHeight );
      * @returns {RevAMP}
      */
     RevAMP.prototype.dispatch = function (msg, level) {
-//console.log(msg);        
         var self = this;
         if (!level) {
             level = 'notice';
