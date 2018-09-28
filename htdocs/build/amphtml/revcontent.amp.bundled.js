@@ -10,7 +10,6 @@
  * @todo Add DEBUG support
  * @todo Additional Font support
  */
-
 ( function (window, factory) {
     'use strict';
     window.RevcontentAMP = factory(
@@ -37,7 +36,8 @@
         self.serveUrl = null;
         self.forceWidth = ((self.data.width !== undefined) ? self.data.width : undefined);
         self.defaultWrapperId = "rcjsload_2ff711";
-        self.viewportWidth = window.outerWidth || document.documentElement.clientWidth;
+        self.viewport = self.getViewport();
+        self.viewportWidth = self.viewport[0];
         self.rcjsload = null;
         self.rcel = null;
         self.serveParameters = null;
@@ -45,6 +45,7 @@
         self.useAutoSizer = ((self.data.sizer !== undefined && self.data.sizer != "false") ? true : false);
         self.isObserving = false;
         self.isResizing = false;
+        self.resizeTimeout = false;
         self.ENTITY_ID = "rev2-wid-" + self.data.id.toString();
         self.api = {
             enabled: ((self.data.api !== undefined) ? true : false),
@@ -160,6 +161,33 @@
         var self = this;
         return self.data.wrapper !== undefined ? self.data.wrapper : self.defaultWrapperId;
     };
+    
+    RevAMP.prototype.getViewport = function () {
+        
+        var viewPortWidth;
+        var viewPortHeight;
+
+        // the more standards compliant browsers (mozilla/netscape/opera/IE7) use window.innerWidth and window.innerHeight
+        if (typeof window.innerWidth != 'undefined') {
+            viewPortWidth = window.innerWidth,
+            viewPortHeight = window.innerHeight
+        }
+
+       // IE6 in standards compliant mode (i.e. with a valid doctype as the first line in the document)
+        else if (typeof document.documentElement != 'undefined'
+        && typeof document.documentElement.clientWidth !=
+        'undefined' && document.documentElement.clientWidth != 0) {
+            viewPortWidth = document.documentElement.clientWidth,
+            viewPortHeight = document.documentElement.clientHeight
+        }
+
+        // older versions of IE
+        else {
+            viewPortWidth = document.getElementsByTagName('body')[0].clientWidth,
+            viewPortHeight = document.getElementsByTagName('body')[0].clientHeight
+        }
+        return [viewPortWidth, viewPortHeight];
+    };
 
     /**
      * Create Serve.js script (ASYNC = false)
@@ -177,7 +205,8 @@
         self.rcel = document.createElement("script");
         self.rcel.id = 'rc_' + Math.floor(Math.random() * 1000);
         self.rcel.type = 'text/javascript';
-        self.serveParameters = '?' + (self.testing === true ? 'uitm=1&' : '') + "w=" + self.data.id + "&t=" + self.rcel.id + "&c=" + (new Date()).getTime() + "&width=" + document.clientWidth;
+        
+        self.serveParameters = '?' + (self.testing === true ? 'uitm=1&' : '') + "w=" + self.data.id + "&t=" + self.rcel.id + "&c=" + (new Date()).getTime() + "&width=" + self.viewport[0];
         self.serveUrl = self.serveProtocol + self.serveHost + self.serveScript + self.serveParameters;
         self.rcel.src = self.serveUrl;
         self.rcel.async = true;
@@ -284,13 +313,13 @@
         }
         // Trigger renderStart() Here for non-api based tags...
         if(!self.api.enabled) {
-            window.context.renderStart({width: document.clientWidth});
+            window.context.renderStart({width: self.viewport[0]});
         }
 
         if (self.useAutoSizer) {
             self.dispatch("Auto-Sizer is turned ON (Default setting, to disable set data-sizer=false on your amp tag)");
             // --- IS THIS CALL NEEDED?
-            //self.adjustHeight();
+            self.adjustHeight();
             window.addEventListener('resize', function (event) {
                 self.dispatch("-- RESIZE.event -- if not already listening START OBSERVING...", 'warn');
                 //self.adjustHeight();
@@ -332,7 +361,7 @@
 
         return self;
     };
-
+    
     /**
      * Dynamic Height Adjustment
      * -------------------------
@@ -375,23 +404,25 @@
         /**
          * Dynamic Frameheight calculations (DISABLED!!)
          * -- could be used in the future, relying on Element.offsetHeight for now
-         * var frameHeight = Math.max(
-         *   document.body.scrollHeight, document.documentElement.scrollHeight,
-         *   document.body.offsetHeight, document.documentElement.offsetHeight,
-         *   document.body.clientHeight, document.documentElement.clientHeight
-         * );
-         *
-         * if (self.widgetEl.offsetHeight > 0 && frameHeight > self.widgetEl.offsetHeight) {
-         *  frameHeight = self.widgetEl.offsetHeight;
-         * }
-         *
+          var frameHeight = Math.max(
+            document.body.scrollHeight, document.documentElement.scrollHeight,
+            document.body.offsetHeight, document.documentElement.offsetHeight,
+            document.body.clientHeight, document.documentElement.clientHeight
+          );
+         
+          if (self.widgetEl.offsetHeight > 0 && frameHeight > self.widgetEl.offsetHeight) {
+           frameHeight = self.widgetEl.offsetHeight;
+          }
          */
+         
 
         //clearTimeout(self.timeouts.resize);
         //self.timeouts.resize = setTimeout(function () {
         // -- DISABLE Timeoout in order to avoid losing scope or causing conflicts with the sizing rules...
-        window.context.requestResize(document.clientWidth, (!isNaN(specificHeight) ? specificHeight : adHeight));
-        self.dispatch("AUTO-SIZER - Final API Call for resize: window.context.requestResize(" + document.clientWidth + "," + (!isNaN(specificHeight) ? specificHeight : Math.max(50, providerHeight + frameHeight)));
+        adHeight = self.viewport[1];
+console.log(self.viewport[0], specificHeight,adHeight, frameHeight );
+        window.context.requestResize(self.viewport[0], self.viewport(!isNaN(specificHeight) ? specificHeight : adHeight));
+        console.log("AUTO-SIZER - Final API Call for resize: window.context.requestResize(" + self.viewport[0] + "," + (!isNaN(specificHeight) ? specificHeight : Math.max(50, providerHeight + frameHeight)));
         //}, 125);
 
         window.context.onResizeDenied(function (h, w) {
@@ -599,7 +630,7 @@
             self.adjustHeight(self.widgetEl.offsetHeight);
             //self.dispatch("Begin RENDER: Firing context.renderStart() NOW! for API-based amp-tag: height = " + self.widgetEl.offsetHeight);
             window.context.renderStart({
-                width: document.clientWidth,
+                width: self.viewport[0],
                 height: self.widgetEl.offsetHeight
             });
         }
@@ -723,6 +754,7 @@
      * @returns {RevAMP}
      */
     RevAMP.prototype.dispatch = function (msg, level) {
+//console.log(msg);        
         var self = this;
         if (!level) {
             level = 'notice';
