@@ -258,6 +258,11 @@
       "./showcase/revcontent-api-showcase-shifter-2.0/css/revshifter.css"
     ],
     "build": [
+      "./showcase/js/revutils.js",
+      "./showcase/js/revdialog.js",
+      "./showcase/js/revdisclose.js",
+      "./showcase/js/revdetect-standalone.js",
+      "./showcase/js/revbeacon.js",
       "./build/files/slider/revslider.pkgd.js",
       "./build/files/shifter/revshifter.embed.js"
     ],
