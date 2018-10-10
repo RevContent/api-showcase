@@ -423,8 +423,7 @@
         //clearTimeout(self.timeouts.resize);
         //self.timeouts.resize = setTimeout(function () {
         // -- DISABLE Timeoout in order to avoid losing scope or causing conflicts with the sizing rules...
-        adHeight = self.viewport[1];
-        window.context.requestResize(self.viewport[0], self.viewport(!isNaN(specificHeight) ? specificHeight : adHeight));
+        window.context.requestResize(self.viewport[0], !isNaN(specificHeight) ? specificHeight : adHeight);
         self.dispatch("AUTO-SIZER - Final API Call for resize: window.context.requestResize(" + self.viewport[0] + "," + (!isNaN(specificHeight) ? specificHeight : Math.max(50, providerHeight + frameHeight)));
         //}, 125);
 
@@ -806,7 +805,7 @@
      * @param lastIndex  last image Index
      * @returns {RevAMP}
      */
-    RevAMP.prototype.loadCreative = function (imageUrl, index, lastIndex) {
+    RevAMP.prototype.loadCreative = function (imageUrl, index, lastIndex, callback) {
         var self = this;
         self.dispatch("Preloading Creative Image Source from CDN.." + imageUrl, 'special');
         var creative = new Image();
