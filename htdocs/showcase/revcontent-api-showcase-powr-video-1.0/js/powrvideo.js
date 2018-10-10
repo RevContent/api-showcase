@@ -256,7 +256,10 @@ if (!String.prototype.endsWithPowr) {
             placement = "";
         }
 
-        if (this.config.adserver == "dfp") {
+        if (this.config.pub_id == 1281) {
+            var ret = "https://googleads.g.doubleclick.net/pagead/ads?ad_type=video&client=ca-video-pub-4968145218643279&videoad_start_delay=0&description_url=http%3A%2F%2Fwww.google.com&max_ad_duration=40000&adtest=on";
+            return ret;
+        } else if (this.config.adserver == "dfp") {
             var ret = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
                 + "&cust_params=p_width%3D" + width + "%26p_height%3D" + height
                 + "%26secure%3D" + this.getProtocol();
@@ -266,7 +269,8 @@ if (!String.prototype.endsWithPowr) {
             ret += "&description_url=" + encodeURI("http://www.powr.com/video/" + video.id);
             return ret;
         } else if (this.config.adserver == "lkqd") {
-            var ret = "//v.lkqd.net/ad?pid=505&sid=" + tag + "&output=vastvpaid&support=html5&execution=" + execution + "&placement=" + placement + "&playinit=auto&volume=" + volume + "&width=" + width + "&height=" + height + "&dnt=0&gdpr=0&gdprcs&pageurl=" + url + "&contentid=" + video.id + "&contenttitle=" + encodeURI(video.title) + "&contentlength=" + video.duration + "&contenturl=" + encodeURI("http://www.powr.com/video/" + video.id) + "&rnd=" + new Date().getTime() + "&c1=u_" + this.config.pub_id + "&c2=v_" + video.id;
+            var subid = (this.config.subid && this.config.subid != '') ? "&c3=" + this.config.subid : "";
+            var ret = "//v.lkqd.net/ad?pid=505&sid=" + tag + "&output=vastvpaid&support=html5&execution=" + execution + "&placement=" + placement + "&playinit=auto&volume=" + volume + "&width=" + width + "&height=" + height + "&dnt=0&gdpr=0&gdprcs&pageurl=" + url + "&contentid=" + video.id + "&contenttitle=" + encodeURI(video.title) + "&contentlength=" + video.duration + "&contenturl=" + encodeURI("http://www.powr.com/video/" + video.id) + "&rnd=" + new Date().getTime() + "&c1=u_" + this.config.pub_id + "&c2=v_" + video.id + subid;
             return ret;
         } else if (this.config.adserver == "ss") {
 	        var syndicationid = (this.config.syndication_id && this.config.syndication_id != '') ? "&syid=" + this.config.syndication_id : "";
