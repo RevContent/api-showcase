@@ -689,8 +689,8 @@ if (!String.prototype.endsWithPowr) {
 
                 id: this.playerId,
                 nativeControlForTouch: false,
-                prerollTimeout: 2000,
-                timeout: 10000,
+                prerollTimeout: 15000,
+                timeout: 20000,
                 adWillAutoPlay: this.autoplaySettings.autoplay,
                 showControlsForJSAds: this.showControls,
                 showCountdown: true,
@@ -1055,7 +1055,7 @@ if (!String.prototype.endsWithPowr) {
                 elementTop = that.focusPixel.getBoundingClientRect().top;
                 elementBottom = that.focusPixel.getBoundingClientRect().bottom;
                 elementVisibleHeight = that.showhideHeight * 0.50;
-                elementDelta = 425;
+                elementDelta = 500;
             } else {
                 elementTop = that.element.getBoundingClientRect().top;
                 elementBottom = that.element.getBoundingClientRect().bottom;
