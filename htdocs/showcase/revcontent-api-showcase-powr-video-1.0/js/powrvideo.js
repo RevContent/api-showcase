@@ -724,7 +724,7 @@ if (!String.prototype.endsWithPowr) {
 
             this.player.ima.requestAds();
 
-            powrApiOriginal.request("https://api.powr.com/p0/ads/requested?pub_id=" + this.config.pub_id, function () {
+            powrApiOriginal.request("https://api.powr.com/p0/ads/requested?account=" + this.config.pub_id, function () {
                  return;
              });
 
