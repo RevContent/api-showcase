@@ -259,6 +259,12 @@ if (!String.prototype.endsWithPowr) {
         if (this.config.pub_id == 1281) {
             var ret = "https://googleads.g.doubleclick.net/pagead/ads?ad_type=video&client=ca-video-pub-4968145218643279&videoad_start_delay=0&description_url=http%3A%2F%2Fwww.google.com&max_ad_duration=40000&adtest=on";
             return ret;
+        // } else if (this.config.pub_id == 10005097) {
+        //     var ret = "https://googleads.g.doubleclick.net/pagead/ads?client=ca-video-pub-5278973888786334&slotname=powr.com_NP%2Fpowr.com%2Fpowr.com_640x480_preroll&ad_type=video&description_url=https%3A%2F%2Fwww.keepandbear.com&max_ad_duration=30000&videoad_start_delay=0&type=js&vad_format=linear&vpmute=0&vpa=0";
+        //     return ret;
+        } else if (this.config.adserver == "custom") {
+            var ret = tag;
+            return ret;
         } else if (this.config.adserver == "dfp") {
             var ret = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
                 + "&cust_params=p_width%3D" + width + "%26p_height%3D" + height
