@@ -251,7 +251,7 @@ if (!String.prototype.endsWithPowr) {
             placement = "incontent";
         } else {
             width = parseInt(this.getPlayerWidth());
-            height = parseInt(this.getPlayerHeight())
+            height = parseInt(0.5625 * width);
             execution = "any";
             placement = "";
         }
