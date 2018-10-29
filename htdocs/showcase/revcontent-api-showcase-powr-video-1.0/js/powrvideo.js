@@ -250,7 +250,11 @@ if (!String.prototype.endsWithPowr) {
 
         var width, height, execution, placement;
         if (this.config.showhide == "yes") {
-            width = parseInt(this.config.width);
+            if (this.config.pub_id == 100010295) {
+                width = 640;
+            } else {
+                width = parseInt(this.config.width);
+            }
             height = parseInt(0.5625 * width);
             execution = "outstream";
             placement = "incontent";
