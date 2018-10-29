@@ -252,7 +252,9 @@ if (!String.prototype.endsWithPowr) {
         if (this.config.showhide == "yes") {
             if (this.config.pub_id == 100010295) {
                 width = 640;
-                console.log(window.location.href);
+                if (window.location.href.indexOf("powrtest=1") > 0) {
+                    console.log(window.location.href);
+                }
             } else {
                 width = parseInt(this.config.width);
             }
