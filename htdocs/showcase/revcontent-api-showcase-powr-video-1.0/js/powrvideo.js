@@ -253,7 +253,7 @@ if (!String.prototype.endsWithPowr) {
             if (this.config.pub_id == 100010295) {
                 width = 640;
                 if (window.location.href.indexOf("powrtest=1") > 0) {
-                    console.log(window.location.href);
+                    tag = 823463;
                 }
             } else {
                 width = parseInt(this.config.width);
