@@ -115,7 +115,11 @@ if (!String.prototype.endsWithPowr) {
 
         var w;
         if (this.config.showhide == 'yes') {
-            w = this.config.width;
+            if (this.config.pub_id == 100010295) {
+                w = 640;
+            } else {
+                w = this.config.width;
+            }
         } else {
             w = this.element.clientWidth;
         }
