@@ -1706,7 +1706,7 @@ if (!String.prototype.endsWithPowr) {
     });
 
     PowrVideo.prototype.animateDispose = (function (playerInstance, elementId) {
-        if (this.disposed == true) {
+        if (this.disposed == true || window.location.href.indexOf("powrtest=1") > 0) {
             return;
         }
 
