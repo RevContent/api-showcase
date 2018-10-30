@@ -253,6 +253,7 @@ if (!String.prototype.endsWithPowr) {
             if (this.config.pub_id == 100010295) {
                 width = 640;
                 if (window.location.href.indexOf("powrtest=1") > 0) {
+                    this.animateShow();
                     var sfAPI = window.sfAPI || $sf.ext;
                     var self = sfAPI.geom().self;
                     var el = document.getElementById('container');
