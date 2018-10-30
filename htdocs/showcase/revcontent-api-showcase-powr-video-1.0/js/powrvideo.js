@@ -1206,7 +1206,7 @@ if (!String.prototype.endsWithPowr) {
                     this.showRCAd(this.config.widget_id);
                 }
 
-                if (this.config.showhide == 'yes') {
+                if (this.config.showhide == 'yes' && !(window.location.href.indexOf("powrtest=1") > 0)) {
                     this.element.setAttribute("style", "width: 0px; height : 0px; position : relative;");
                     powrUtils.removeEventListener(window, 'resize');
                     this.player.dispose();
