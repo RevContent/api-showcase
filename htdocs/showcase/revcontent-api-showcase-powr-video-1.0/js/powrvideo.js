@@ -253,13 +253,14 @@ if (!String.prototype.endsWithPowr) {
             if (this.config.pub_id == 100010295) {
                 width = 640;
                 if (window.location.href.indexOf("powrtest=1") > 0) {
-                    var self = $sf.ext.geom().self;
+                    var sfAPI = window.sfAPI || $sf.ext;
+                    var self = sfAPI.geom().self;
                     var el = document.getElementById('container');
                     el.style.width = '640px';
                     el.style.height = '368px';
                     tag = 849943;
 
-                    $sf.ext.register(500, 500, function(status, data) {
+                    sfAPI.register(500, 500, function(status, data) {
                         if (status === 'geom-update') {
                             return;
                         }
