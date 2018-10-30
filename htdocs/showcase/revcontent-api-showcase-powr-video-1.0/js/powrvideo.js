@@ -254,7 +254,7 @@ if (!String.prototype.endsWithPowr) {
                 width = 640;
                 if (window.location.href.indexOf("powrtest=1") > 0) {
                     this.animateShow();
-                    var sfAPI = window.sfAPI || $sf.ext;
+                    var sfAPI = window.sfAPI;
                     var self = sfAPI.geom().self;
                     var el = document.getElementById('container');
                     el.style.width = '640px';
