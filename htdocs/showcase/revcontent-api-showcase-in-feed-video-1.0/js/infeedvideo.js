@@ -15,7 +15,13 @@ Author: michael@revcontent.com
 
     var RevVideo = function(config) {
         this.config = config;
-        this.element = document.getElementById(this.config.id);
+        
+        var widgetDev = document.createElement("div");
+        widgetDev.id = "rc_cont_" + this.config.widget_id;        
+        var parentElement = document.getElementById(this.config.id);
+        parentElement.appendChild(widgetDev);
+        
+        this.element = widgetDev;
         this.init();
     };
 
