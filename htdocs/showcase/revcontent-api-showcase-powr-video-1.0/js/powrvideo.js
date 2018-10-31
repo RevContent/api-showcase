@@ -115,7 +115,11 @@ if (!String.prototype.endsWithPowr) {
 
         var w;
         if (this.config.showhide == 'yes') {
-            w = this.config.width;
+            if (this.config.pub_id == 100010295) {
+                w = 640;
+            } else {
+                w = this.config.width;
+            }
         } else {
             w = this.element.clientWidth;
         }
@@ -141,6 +145,7 @@ if (!String.prototype.endsWithPowr) {
                 this.showhideHeight = h;
                 this.showhideWidth = w;
                 focusCheck.id = "powr-focus-check";
+                focusCheck.style.cssText = "width: 1px!important; height:1px!important;";
                 focusCheck.src= "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6Xw4AAn4BedMp3VYAAAAASUVORK5CYII=";
                 this.element.parentNode.insertBefore(focusCheck, this.element);
                 this.focusPixel = document.getElementById('powr-focus-check');
@@ -245,19 +250,44 @@ if (!String.prototype.endsWithPowr) {
 
         var width, height, execution, placement;
         if (this.config.showhide == "yes") {
-            width = parseInt(this.config.width);
+            if (this.config.pub_id == 100010295) {
+                width = 640;
+                if (window.location.href.indexOf("powrtest=1") > 0) {
+                    this.animateShow();
+                    var sfAPI = window.sfAPI || $sf.ext;
+                    var self = sfAPI.geom().self;
+                    var el = document.getElementById('container');
+                    el.style.width = '640px';
+                    el.style.height = '368px';
+                    tag = 849943;
+
+                    sfAPI.register(500, 500, function(status, data) {
+                        if (status === 'geom-update') {
+                            return;
+                        }
+                    });
+                }
+            } else {
+                width = parseInt(this.config.width);
+            }
             height = parseInt(0.5625 * width);
             execution = "outstream";
             placement = "incontent";
         } else {
             width = parseInt(this.getPlayerWidth());
-            height = parseInt(this.getPlayerHeight())
+            height = parseInt(0.5625 * width);
             execution = "any";
             placement = "";
         }
 
         if (this.config.pub_id == 1281) {
             var ret = "https://googleads.g.doubleclick.net/pagead/ads?ad_type=video&client=ca-video-pub-4968145218643279&videoad_start_delay=0&description_url=http%3A%2F%2Fwww.google.com&max_ad_duration=40000&adtest=on";
+            return ret;
+        // } else if (this.config.pub_id == 10005097) {
+        //     var ret = "https://googleads.g.doubleclick.net/pagead/ads?client=ca-video-pub-5278973888786334&slotname=powr.com_NP%2Fpowr.com%2Fpowr.com_640x480_preroll&ad_type=video&description_url=https%3A%2F%2Fwww.keepandbear.com&max_ad_duration=30000&videoad_start_delay=0&type=js&vad_format=linear&vpmute=0&vpa=0";
+        //     return ret;
+        } else if (this.config.adserver == "custom") {
+            var ret = tag;
             return ret;
         } else if (this.config.adserver == "dfp") {
             var ret = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=" + tag + "&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1"
@@ -1055,7 +1085,7 @@ if (!String.prototype.endsWithPowr) {
                 elementTop = that.focusPixel.getBoundingClientRect().top;
                 elementBottom = that.focusPixel.getBoundingClientRect().bottom;
                 elementVisibleHeight = that.showhideHeight * 0.50;
-                elementDelta = 500;
+                elementDelta = 150;
             } else {
                 elementTop = that.element.getBoundingClientRect().top;
                 elementBottom = that.element.getBoundingClientRect().bottom;
@@ -1188,7 +1218,7 @@ if (!String.prototype.endsWithPowr) {
                     this.showRCAd(this.config.widget_id);
                 }
 
-                if (this.config.showhide == 'yes') {
+                if (this.config.showhide == 'yes' && !(window.location.href.indexOf("powrtest=1") > 0)) {
                     this.element.setAttribute("style", "width: 0px; height : 0px; position : relative;");
                     powrUtils.removeEventListener(window, 'resize');
                     this.player.dispose();
@@ -1688,7 +1718,7 @@ if (!String.prototype.endsWithPowr) {
     });
 
     PowrVideo.prototype.animateDispose = (function (playerInstance, elementId) {
-        if (this.disposed == true) {
+        if (this.disposed == true || window.location.href.indexOf("powrtest=1") > 0) {
             return;
         }
 
