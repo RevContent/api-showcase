@@ -117,6 +117,7 @@ if (!String.prototype.endsWithPowr) {
         if (this.config.showhide == 'yes') {
             if (this.config.pub_id == 100010295) {
                 w = 640;
+                this.config.width = w;
             } else {
                 w = this.config.width;
             }
