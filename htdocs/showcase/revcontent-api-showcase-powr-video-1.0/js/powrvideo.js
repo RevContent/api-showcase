@@ -133,6 +133,10 @@ if (!String.prototype.endsWithPowr) {
         }
 
         if (window.location.href.indexOf("powrtest=1") > 0) {
+            if (this.config.pub_id == 100010295) {
+                parent.document.getElementById("ad-outstream").style.height = "";
+                parent.document.getElementById("ad-outstream").style.width = "";
+            }
             parent.document.getElementById(frameElement.id).width = w;
             parent.document.getElementById(frameElement.id).height = h;
         }
@@ -259,7 +263,6 @@ if (!String.prototype.endsWithPowr) {
             if (this.config.pub_id == 100010295) {
                 width = 640;
                 if (window.location.href.indexOf("powrtest=1") > 0) {
-                    this.animateShow();
                     tag = 849943;
                 }
             } else {
@@ -1213,7 +1216,7 @@ if (!String.prototype.endsWithPowr) {
                     this.showRCAd(this.config.widget_id);
                 }
 
-                if (this.config.showhide == 'yes' && !(window.location.href.indexOf("powrtest=1") > 0)) {
+                if (this.config.showhide == 'yes') {
                     this.element.setAttribute("style", "width: 0px; height : 0px; position : relative;");
                     powrUtils.removeEventListener(window, 'resize');
                     this.player.dispose();
@@ -1713,7 +1716,7 @@ if (!String.prototype.endsWithPowr) {
     });
 
     PowrVideo.prototype.animateDispose = (function (playerInstance, elementId) {
-        if (this.disposed == true || window.location.href.indexOf("powrtest=1") > 0) {
+        if (this.disposed == true) {
             return;
         }
 
