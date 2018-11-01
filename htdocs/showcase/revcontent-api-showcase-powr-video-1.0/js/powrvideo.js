@@ -131,6 +131,11 @@ if (!String.prototype.endsWithPowr) {
             hs = parseInt(h) + "px";
         }
 
+        if (window.location.href.indexOf("powrtest=1") > 0) {
+            parent.document.getElementById(frameElement.id).width = w;
+            parent.document.getElementById(frameElement.id).height = h;
+        }
+
         this.videos = config.videos;
 
         if (this.videos.length == 0) {
@@ -254,18 +259,7 @@ if (!String.prototype.endsWithPowr) {
                 width = 640;
                 if (window.location.href.indexOf("powrtest=1") > 0) {
                     this.animateShow();
-                   // var sfAPI = window.sfAPI || $sf.ext;
-                   // var self = sfAPI.geom().self;
-                   // var el = document.getElementById('container');
-                   // el.style.width = '640px';
-                   // el.style.height = '368px';
                     tag = 849943;
-
-                   // sfAPI.register(500, 500, function(status, data) {
-                   //     if (status === 'geom-update') {
-                   //         return;
-                   //     }
-                   // });
                 }
             } else {
                 width = parseInt(this.config.width);
