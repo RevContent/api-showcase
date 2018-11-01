@@ -132,15 +132,6 @@ if (!String.prototype.endsWithPowr) {
             hs = parseInt(h) + "px";
         }
 
-        if (window.location.href.indexOf("powrtest=1") > 0) {
-            if (this.config.pub_id == 100010295) {
-                parent.document.getElementById("ad-outstream").style.height = "";
-                parent.document.getElementById("ad-outstream").style.width = "";
-            }
-            parent.document.getElementById(frameElement.id).width = w;
-            parent.document.getElementById(frameElement.id).height = h;
-        }
-
         this.videos = config.videos;
 
         if (this.videos.length == 0) {
@@ -1708,6 +1699,14 @@ if (!String.prototype.endsWithPowr) {
             }
         })(document.createElement('div'));
         powrUtils.removeClass(this.element, "showhide");
+        if (window.location.href.indexOf("powrtest=1") > 0) {
+            if (this.config.pub_id == 100010295) {
+                parent.document.getElementById("ad-outstream").style.height = "";
+                parent.document.getElementById("ad-outstream").style.width = "";
+            }
+            parent.document.getElementById(frameElement.id).width = w;
+            parent.document.getElementById(frameElement.id).height = h;
+        }
         this.element.parentNode.classList.add("animated", "zoomIn");
         this.element.addEventListener(animationEnd, function(e) {
             e.target.removeEventListener(e.type, arguments.callee);
@@ -1743,6 +1742,10 @@ if (!String.prototype.endsWithPowr) {
             elementId.setAttribute("style", "width: 0px; height : 0px; position : relative;");
             playerInstance.dispose();
             elementId.parentNode.removeChild(elementId);
+            if (window.location.href.indexOf("powrtest=1") > 0) {
+                parent.document.getElementById(frameElement.id).width = 1;
+                parent.document.getElementById(frameElement.id).height = 1;
+            }
         });
 	});
     return PowrVideo;
