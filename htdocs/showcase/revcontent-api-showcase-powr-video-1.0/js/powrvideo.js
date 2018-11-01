@@ -1704,8 +1704,8 @@ if (!String.prototype.endsWithPowr) {
                 parent.document.getElementById("ad-outstream").style.height = "";
                 parent.document.getElementById("ad-outstream").style.width = "";
             }
-            parent.document.getElementById(frameElement.id).width = w;
-            parent.document.getElementById(frameElement.id).height = h;
+            parent.document.getElementById(frameElement.id).width = this.config.width;
+            parent.document.getElementById(frameElement.id).height = this.config.width * 0.5625;
         }
         this.element.parentNode.classList.add("animated", "zoomIn");
         this.element.addEventListener(animationEnd, function(e) {
