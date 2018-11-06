@@ -364,6 +364,10 @@ if (!String.prototype.endsWithPowr) {
             width = parseInt(this.config.width);
         }
 
+        if (this.config.pub_id == 100010295 && this.config.showhide == "yes") {
+            width = "100%";
+        }
+
         height = parseInt(0.5625 * width);
         var hs = height + "px";
 
