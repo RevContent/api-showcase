@@ -118,6 +118,8 @@ if (!String.prototype.endsWithPowr) {
             if (this.config.pub_id == 100010295) {
                 w = 640;
                 this.config.width = w;
+            } else if (this.config.pub_id == 98997) {
+                w = this.element.clientWidth;
             } else {
                 w = this.config.width;
             }
@@ -364,7 +366,7 @@ if (!String.prototype.endsWithPowr) {
             width = parseInt(this.config.width);
         }
 
-        if (this.config.pub_id == 100010295 && this.config.showhide == "yes") {
+        if (this.config.pub_id == 98997 && this.config.showhide == "yes") {
             width = "100%";
         }
 
@@ -499,17 +501,25 @@ if (!String.prototype.endsWithPowr) {
         var dumbPlayer = document.createElement('video');
         dumbPlayer.id = this.playerId;
         var aspectRatio;
+        var outstreamWidth;
         if (this.config.showhide == "yes") {
             aspectRatio = "vjs-16-9";
+            if (this.config.pub_id == 98997) {
+                outstreamWidth = this.getPlayerWidth();
+            } else {
+                outstreamWidth = this.config.width;
+            }
+
         } else {
             aspectRatio = "vjs-fluid";
         }
+
 
         dumbPlayer.className = 'video-js vjs-default-skin vjs-big-play-centered ' + aspectRatio;
         dumbPlayer.setAttribute('width', this.getPlayerWidth() + 'px');
 
         if (this.config.showhide == "yes") {
-            dumbPlayer.setAttribute("style", "width:" + this.config.width + "px;");
+            dumbPlayer.setAttribute("style", "width:" + outstreamWidth + "px;");
         }
 
         dumbPlayer.setAttribute('height', this.getPlayerHeight() + 'px');
@@ -1707,9 +1717,9 @@ if (!String.prototype.endsWithPowr) {
             if (this.config.pub_id == 100010295) {
                 parent.document.getElementById("ad-outstream").style.height = "";
                 parent.document.getElementById("ad-outstream").style.width = "";
+                parent.document.getElementById(frameElement.id).width = this.config.width;
+                parent.document.getElementById(frameElement.id).height = this.config.width * 0.5625;
             }
-            parent.document.getElementById(frameElement.id).width = this.config.width;
-            parent.document.getElementById(frameElement.id).height = this.config.width * 0.5625;
         }
         this.element.parentNode.classList.add("animated", "zoomIn");
         this.element.addEventListener(animationEnd, function(e) {
