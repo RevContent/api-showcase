@@ -258,6 +258,8 @@ if (!String.prototype.endsWithPowr) {
             }
             if (this.config.pub_id == 100010295) {
                 width = 640;
+            } else if (this.config.pub_id == 98997) {
+                width = parseInt(this.getPlayerWidth());
             } else {
                 width = parseInt(this.config.width);
             }
@@ -367,7 +369,7 @@ if (!String.prototype.endsWithPowr) {
         }
 
         if (this.config.pub_id == 98997 && this.config.showhide == "yes") {
-            width = "100%";
+            width = parseInt(this.getPlayerWidth());
         }
 
         height = parseInt(0.5625 * width);
