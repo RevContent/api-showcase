@@ -119,7 +119,7 @@ if (!String.prototype.endsWithPowr) {
                 w = 640;
                 this.config.width = w;
             } else if (this.config.pub_id == 98997) {
-                w = this.element.clientWidth;
+                w = 640;
             } else {
                 w = this.config.width;
             }
@@ -372,7 +372,7 @@ if (!String.prototype.endsWithPowr) {
         }
 
         if (this.config.pub_id == 98997 && this.config.showhide == "yes") {
-            width = parseInt(this.getPlayerWidth());
+            width = 640;
         }
 
         height = parseInt(0.5625 * width);
@@ -510,7 +510,7 @@ if (!String.prototype.endsWithPowr) {
         if (this.config.showhide == "yes") {
             aspectRatio = "vjs-16-9";
             if (this.config.pub_id == 98997) {
-                outstreamWidth = this.getPlayerWidth();
+                outstreamWidth = 640;
             } else {
                 outstreamWidth = this.config.width;
             }
