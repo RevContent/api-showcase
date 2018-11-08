@@ -254,7 +254,7 @@ if (!String.prototype.endsWithPowr) {
         var width, height, execution, placement;
         if (this.config.showhide == "yes") {
             if ((this.config.pub_id == 100010295 || this.config.pub_id == 98997) && window.location.href.indexOf("powrtest=1") > 0) {
-                tag = 849943;
+                tag = 919192;
             }
             if (this.config.pub_id == 100010295) {
                 width = 640;
