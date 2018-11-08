@@ -259,7 +259,8 @@ if (!String.prototype.endsWithPowr) {
             if (this.config.pub_id == 100010295) {
                 width = 640;
             } else if (this.config.pub_id == 98997) {
-                width = parseInt(this.getPlayerWidth());
+                // width = parseInt(this.getPlayerWidth());
+                width = 640;
             } else {
                 width = parseInt(this.config.width);
             }
