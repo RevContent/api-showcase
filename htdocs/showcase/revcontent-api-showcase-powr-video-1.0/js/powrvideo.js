@@ -119,7 +119,7 @@ if (!String.prototype.endsWithPowr) {
                 w = 640;
                 this.config.width = w;
             } else if (this.config.pub_id == 98997) {
-                w = 640;
+                w = window.innerWidth;
             } else {
                 w = this.config.width;
             }
@@ -148,7 +148,7 @@ if (!String.prototype.endsWithPowr) {
                 this.showhideHeight = h;
                 this.showhideWidth = w;
                 focusCheck.id = "powr-focus-check";
-                focusCheck.style.cssText = "width: 1px!important; height:1px!important;";
+                focusCheck.style.cssText = "width: 1px!important; height:1px!important; position: absolute;";
                 focusCheck.src= "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6Xw4AAn4BedMp3VYAAAAASUVORK5CYII=";
                 this.element.parentNode.insertBefore(focusCheck, this.element);
                 this.focusPixel = document.getElementById('powr-focus-check');
@@ -262,7 +262,7 @@ if (!String.prototype.endsWithPowr) {
                 // width = parseInt(this.getPlayerWidth());
                 tag = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dskippablelinear&correlator=";
                 this.config.adserver = "custom";
-                width = 640;
+                width = window.innerWidth;
             } else {
                 width = parseInt(this.config.width);
             }
@@ -372,7 +372,7 @@ if (!String.prototype.endsWithPowr) {
         }
 
         if (this.config.pub_id == 98997 && this.config.showhide == "yes") {
-            width = 640;
+            width = window.innerWidth;
         }
 
         height = parseInt(0.5625 * width);
@@ -510,7 +510,7 @@ if (!String.prototype.endsWithPowr) {
         if (this.config.showhide == "yes") {
             aspectRatio = "vjs-16-9";
             if (this.config.pub_id == 98997) {
-                outstreamWidth = 640;
+                outstreamWidth = window.innerWidth;
             } else {
                 outstreamWidth = this.config.width;
             }
