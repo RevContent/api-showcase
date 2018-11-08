@@ -718,7 +718,10 @@ if (!String.prototype.endsWithPowr) {
 
     PowrVideo.prototype.start = function(playOnLoad) {
     	this.started = true;
-
+        var debugIma = false;
+        if (window.location.href.indexOf("powrtest=1") > 0) {
+            debugIma = true;
+        }
         if (this.abp !== true) {
             this.options = {
 
@@ -729,7 +732,8 @@ if (!String.prototype.endsWithPowr) {
                 adWillAutoPlay: this.autoplaySettings.autoplay,
                 showControlsForJSAds: this.showControls,
                 showCountdown: true,
-                vpaidMode: google.ima.ImaSdkSettings.VpaidMode.INSECURE
+                vpaidMode: google.ima.ImaSdkSettings.VpaidMode.INSECURE,
+                debug: debugIma
             };
             this.player.ima(this.options, this.bind(this, this.adsManagerLoadedCallback));
             this.player.ima.initializeAdDisplayContainer();
