@@ -34,6 +34,7 @@
         self.serveProtocol = (self.isSecure === true ? 'https://' : 'http://');
         self.serveHost = ((self.data.endpoint !== undefined) ? self.data.endpoint : self.defaultHost);
         self.serveScript = '/serve.js.php';
+        self.feedScript = '/feed.js.php';
         self.serveUrl = null;
         self.forceWidth = ((self.data.width !== undefined) ? self.data.width : undefined);
         self.defaultWrapperId = "rcjsload_2ff711";
@@ -161,14 +162,14 @@
         var self = this;
         return self.data.wrapper !== undefined ? self.data.wrapper : self.defaultWrapperId;
     };
-    
+
     /**
      * Get viewport width/height
-     * 
+     *
      * @returns {Array}
      */
     RevAMP.prototype.getViewport = function () {
-        
+
         var viewPortWidth;
         var viewPortHeight;
 
@@ -365,7 +366,7 @@
 
         return self;
     };
-    
+
     /**
      * Dynamic Height Adjustment
      * -------------------------
@@ -419,7 +420,7 @@
          * }
          *
          */
-         
+
         //clearTimeout(self.timeouts.resize);
         //self.timeouts.resize = setTimeout(function () {
         // -- DISABLE Timeoout in order to avoid losing scope or causing conflicts with the sizing rules...
@@ -486,6 +487,26 @@
         return self;
     };
 
+    RevAMP.prototype.initFeed = function () {
+        var self = this;
+
+        var meta=document.head.querySelector("meta[name='keywords']"),k=!1;meta&&(k=meta.content),k||(meta=document.head.querySelector("meta[property='og:title']"))&&(k=meta.content),k||(meta=document.head.querySelector("meta[property='title']"))&&(k=meta.content),k=k?encodeURI(k):"";
+        var sParameterName,i,sPageURL=decodeURIComponent(window.location.search.substring(1)),sURLVariables=sPageURL.split("&"),page_utms="";for(i=0;i<sURLVariables.length;i++)"utm_"==(sParameterName=sURLVariables[i].split("="))[0].substr(0,4)&&(page_utms+=sParameterName[0]+"="+sParameterName[1]+"&");
+        var docReady = function(fn) {
+            if (document.readyState != 'loading') {fn(); } else if (document.addEventListener) {document.addEventListener('DOMContentLoaded', fn); } else {document.attachEvent('onreadystatechange', function() {if (document.readyState != 'loading') fn(); }); }
+        }(function() {
+        var referer="";try{if(referer=document.referrer,"undefined"==typeof referer||""==referer)throw"undefined"}catch(exception){referer=document.location.href,(""==referer||"undefined"==typeof referer)&&(referer=document.URL)}referer=referer.substr(0,700);
+        // var rcds = document.getElementById("rcjsload_a70f63");
+        var rcds = self.rcjsload;
+        var rcel = document.createElement("script");
+        rcel.id = 'rc_' + Math.floor(Math.random() * 1000);
+        rcel.type = 'text/javascript';
+        rcel.src = self.serveProtocol + self.serveHost + self.feedScript + "?w="+ self.data.id +"&t="+rcel.id+"&c="+(new Date()).getTime()+"&width="+(document.documentElement.clientWidth)+"&referer="+encodeURIComponent(referer)+'&container_width='+rcds.offsetWidth+"&k="+k+"&page_utms="+encodeURIComponent(page_utms);
+        rcel.async = true;
+        rcds.appendChild(rcel);
+        });
+    }
+
     /**
      * Service INIT
      * ----------
@@ -495,10 +516,16 @@
      */
     RevAMP.prototype.init = function () {
         var self = this;
+
         self.dispatch("Starting Up...");
         self.dispatch("Tag property configuration: ");
         self.dispatch(self.data);
         self.createWrapper();
+
+        if (self.data.source === 'feed') {
+            return self.initFeed();
+        }
+
         self.createScript();
         self.renderStart(3000);
         self.fetchAds();
