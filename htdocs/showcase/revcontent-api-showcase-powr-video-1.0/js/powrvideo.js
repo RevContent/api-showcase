@@ -855,7 +855,7 @@ if (!String.prototype.endsWithPowr) {
     PowrVideo.prototype.attachVisibleListener = function () {
         if (this.visibleListenerAttached) return;
         if (this.floatSettings.landscape || this.floatSettings.portrait || this.autoplaySettings.focus || (this.showOnFocus == 'yes')) {
-            if (this.config.pub_id == 98997 && window.location.href.indexOf("powrtest=1") > 0) {
+            if (this.config.pub_id == 98997) {
                 powrUtils.addEventListener(window.parent, 'scroll', this.checkVisible.bind(this));
             } else {
                 powrUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
@@ -1095,7 +1095,7 @@ if (!String.prototype.endsWithPowr) {
             var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
             var elementTop, elementBottom, elementVisibleHeight, elementDelta;
             if (that.config.showhide == "yes") {
-                if (that.config.pub_id == 98997 && window.location.href.indexOf("powrtest=1") > 0) {
+                if (that.config.pub_id == 98997) {
                     windowHeight = window.top.innerHeight;
                     elementTop = parent.document.getElementById(frameElement.id).getBoundingClientRect().top;
                     elementBottom = parent.document.getElementById(frameElement.id).getBoundingClientRect().bottom;
@@ -1113,12 +1113,7 @@ if (!String.prototype.endsWithPowr) {
                 elementVisibleHeight = that.element.offsetHeight * 0.50;
                 elementDelta = 0;
             }
-
-            if (window.location.href.indexOf("powrtest=1") > 0) {
-                console.log('player height: ' + that.getPlayerHeight());
-                console.log('window height: ' + windowHeight);
-            }
-
+            
             // var pixelsShown = Math.min(Math.max(elementTop > 0 ? windowHeight - elementTop : that.getPlayerHeight() + elementTop, 0), that.getPlayerHeight());
             if (elementTop + (that.getPlayerHeight() * 0.4) < 0) {
                 if (that.visible) {
