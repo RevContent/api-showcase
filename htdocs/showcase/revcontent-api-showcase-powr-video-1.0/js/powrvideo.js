@@ -1091,7 +1091,7 @@ if (!String.prototype.endsWithPowr) {
             var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
             var elementTop, elementBottom, elementVisibleHeight, elementDelta;
             if (that.config.showhide == "yes") {
-                if (this.config.pub_id == 98997 && window.location.href.indexOf("powrtest=1") > 0) {
+                if (that.config.pub_id == 98997 && window.location.href.indexOf("powrtest=1") > 0) {
                     windowHeight = window.top.innerHeight;
                     elementTop = parent.document.getElementById(frameElement.id).getBoundingClientRect().top;
                     elementBottom = parent.document.getElementById(frameElement.id).getBoundingClientRect().bottom;
