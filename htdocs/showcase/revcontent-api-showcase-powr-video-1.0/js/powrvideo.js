@@ -1091,15 +1091,28 @@ if (!String.prototype.endsWithPowr) {
             var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
             var elementTop, elementBottom, elementVisibleHeight, elementDelta;
             if (that.config.showhide == "yes") {
-                elementTop = that.focusPixel.getBoundingClientRect().top;
-                elementBottom = that.focusPixel.getBoundingClientRect().bottom;
-                elementVisibleHeight = that.showhideHeight * 0.50;
+                if (this.config.pub_id == 98997 && window.location.href.indexOf("powrtest=1") > 0) {
+                    windowHeight = window.top.innerHeight;
+                    elementTop = parent.document.getElementById(frameElement.id).getBoundingClientRect().top;
+                    elementBottom = parent.document.getElementById(frameElement.id).getBoundingClientRect().bottom;
+                    elementVisibleHeight = that.showhideHeight * 0.50;
+                } else {
+                    elementTop = that.focusPixel.getBoundingClientRect().top;
+                    elementBottom = that.focusPixel.getBoundingClientRect().bottom;
+                    elementVisibleHeight = that.showhideHeight * 0.50;
+                }
+
                 elementDelta = 150;
             } else {
                 elementTop = that.element.getBoundingClientRect().top;
                 elementBottom = that.element.getBoundingClientRect().bottom;
                 elementVisibleHeight = that.element.offsetHeight * 0.50;
                 elementDelta = 0;
+            }
+
+            if (window.location.href.indexOf("powrtest=1") > 0) {
+                console.log('player height: ' + that.getPlayerHeight());
+                console.log('window height: ' + windowHeight);
             }
 
             // var pixelsShown = Math.min(Math.max(elementTop > 0 ? windowHeight - elementTop : that.getPlayerHeight() + elementTop, 0), that.getPlayerHeight());
