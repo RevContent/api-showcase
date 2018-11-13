@@ -855,7 +855,11 @@ if (!String.prototype.endsWithPowr) {
     PowrVideo.prototype.attachVisibleListener = function () {
         if (this.visibleListenerAttached) return;
         if (this.floatSettings.landscape || this.floatSettings.portrait || this.autoplaySettings.focus || (this.showOnFocus == 'yes')) {
-            powrUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
+            if (this.config.pub_id == 98997 && window.location.href.indexOf("powrtest=1") > 0) {
+                powrUtils.addEventListener(window.parent, 'scroll', this.checkVisible.bind(this));
+            } else {
+                powrUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
+            }
             this.checkVisible();
         }
         this.visibleListenerAttached = true;
