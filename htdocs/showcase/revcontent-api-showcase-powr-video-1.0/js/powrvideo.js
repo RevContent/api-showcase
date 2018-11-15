@@ -470,7 +470,12 @@ if (!String.prototype.endsWithPowr) {
 
         this.container = document.createElement("div");
         this.container.className = "powr_player";
-        this.element.appendChild(this.container);
+
+        if (window.location.href.indexOf("overlay=1") > 0) {
+            document.body.appendChild(this.container);
+        } else {
+            this.element.appendChild(this.container);
+        }
 
         if (this.permanentClose == "yes") {
             this.container.className = 'powr_player powr_permanent_close';
@@ -1738,6 +1743,7 @@ if (!String.prototype.endsWithPowr) {
                 parent.document.getElementById(frameElement.id).width = this.config.width;
                 parent.document.getElementById(frameElement.id).height = this.config.width * 0.5625;
             }
+
             if (window.location.href.indexOf("overlay=1") > 0) {
                 document.body.appendChild(document.getElementsByClassName("powr_player")[0]);
                 document.getElementsByClassName("powr_player")[0].style.position = "absolute";
