@@ -1113,7 +1113,7 @@ if (!String.prototype.endsWithPowr) {
                 elementVisibleHeight = that.element.offsetHeight * 0.50;
                 elementDelta = 0;
             }
-            
+
             // var pixelsShown = Math.min(Math.max(elementTop > 0 ? windowHeight - elementTop : that.getPlayerHeight() + elementTop, 0), that.getPlayerHeight());
             if (elementTop + (that.getPlayerHeight() * 0.4) < 0) {
                 if (that.visible) {
@@ -1738,6 +1738,15 @@ if (!String.prototype.endsWithPowr) {
                 parent.document.getElementById(frameElement.id).width = this.config.width;
                 parent.document.getElementById(frameElement.id).height = this.config.width * 0.5625;
             }
+            if (window.location.href.indexOf("overlay=1") > 0) {
+                document.body.appendChild(document.getElementsByClassName("powr_player")[0]);
+                document.getElementsByClassName("powr_player")[0].style.position = "absolute";
+                document.getElementsByClassName("powr_player")[0].style.zIndex = "9999999";
+                document.getElementsByClassName("powr_player")[0].style.top = "50%";
+                document.getElementsByClassName("powr_player")[0].style.transform = "translate(0%, -50%)";
+                document.getElementsByClassName("rc-modal-shade")[0].style.background = "rgba(0,0,0,.85)";
+                document.getElementsByClassName('rc-modal-shade')[0].style.display = 'block';
+            }
         }
         this.element.parentNode.classList.add("animated", "zoomIn");
         this.element.addEventListener(animationEnd, function(e) {
@@ -1752,6 +1761,7 @@ if (!String.prototype.endsWithPowr) {
         }
 
         this.disposed = true;
+        var that = this;
         var animationEnd = (function(el) {
             var animations = {
                 animation: 'animationend',
@@ -1774,9 +1784,9 @@ if (!String.prototype.endsWithPowr) {
             elementId.setAttribute("style", "width: 0px; height : 0px; position : relative;");
             playerInstance.dispose();
             elementId.parentNode.removeChild(elementId);
-            if (window.location.href.indexOf("powrtest=1") > 0) {
-                parent.document.getElementById(frameElement.id).width = 1;
-                parent.document.getElementById(frameElement.id).height = 1;
+            if (window.location.href.indexOf("powrtest=1&overlay=1") > 0) {
+                document.getElementsByClassName('rc-modal-shade')[0].style.display = 'none';
+                document.getElementsByClassName("powr_player")[0].style.display = "none";
             }
         });
 	});
