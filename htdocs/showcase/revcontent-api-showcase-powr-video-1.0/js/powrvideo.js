@@ -1161,7 +1161,7 @@ if (!String.prototype.endsWithPowr) {
 
             if (this.config.showhide == "yes") {
                 if (this.disposed == true) {
-                    this.log("hidden but already disposed");
+                    this.log("hidden but already disposed.");
                     return;
                 }
                 this.player.pause();
