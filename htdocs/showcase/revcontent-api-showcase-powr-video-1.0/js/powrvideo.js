@@ -1790,6 +1790,7 @@ if (!String.prototype.endsWithPowr) {
             playerInstance.dispose();
             elementId.parentNode.removeChild(elementId);
             if (window.location.href.indexOf("powrtest=1&overlay=1") > 0) {
+                console.log(that.config.pub_id);
                 document.getElementsByClassName('rc-modal-shade')[0].style.display = 'none';
                 document.getElementsByClassName("rc-modal-shade")[0].style.background = "rgba(0,0,0,.5)";
                 document.getElementsByClassName('rc-modal-shade')[0].style.height = '100%';
