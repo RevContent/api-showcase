@@ -1131,11 +1131,22 @@ if (!String.prototype.endsWithPowr) {
                     that.onVisible();
                 }
             }
+
+            if (window.location.href.indexOf("powrtest=1") > 0) {
+                this.log("element top: " + elementTop);
+                this.log("player height: " + this.getPlayerHeight());
+                this.log("window height: " + windowHeight);
+            }
         });
     };
 
     PowrVideo.prototype.onVisible = function () {
         this.log("onVisible");
+        if (this.config.showhide == "yes") {
+            if (this.disposed == true) {
+                return;
+            }
+        }
         if (this.setupOnVisible) {
             this.setupOnVisible = false;
             this.setup();
@@ -1156,15 +1167,21 @@ if (!String.prototype.endsWithPowr) {
     };
 
     PowrVideo.prototype.onHidden = function () {
+        if (this.config.showhide == "yes") {
+            if (this.disposed == true) {
+                return;
+            }
+        }
+
         if (window.location.href.indexOf("powrtest=1") > 0) {
             this.log("onHidden");
 
             if (this.config.showhide == "yes") {
                 if (this.disposed == true) {
                     this.log("hidden but already disposed.");
-                    return;
+
                 }
-                this.player.pause();
+                this.player.ima.getAdsManager().pause();
                 return;
             }
         }
