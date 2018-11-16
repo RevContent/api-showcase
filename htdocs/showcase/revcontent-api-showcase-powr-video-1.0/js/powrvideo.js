@@ -136,6 +136,10 @@ if (!String.prototype.endsWithPowr) {
             hs = parseInt(h) + "px";
         }
 
+        if (window.location.href.indexOf("powrtest=1") > 0) {
+            this.log("ff test width: " + w);
+        }
+
         this.videos = config.videos;
 
         if (this.videos.length == 0) {
@@ -516,6 +520,10 @@ if (!String.prototype.endsWithPowr) {
             if (this.config.pub_id == 98997) {
                 outstreamWidth = window.innerWidth;
             } else {
+                if (window.location.href.indexOf("powrtest=1") > 0) {
+                    this.log('should not be here');
+                }
+
                 outstreamWidth = this.config.width;
             }
 
@@ -528,6 +536,9 @@ if (!String.prototype.endsWithPowr) {
         dumbPlayer.setAttribute('width', this.getPlayerWidth() + 'px');
 
         if (this.config.showhide == "yes") {
+            if (window.location.href.indexOf("powrtest=1") > 0) {
+                this.log("outstream width: " + outstreamWidth);
+            }
             dumbPlayer.setAttribute("style", "width:" + outstreamWidth + "px;");
         }
 
