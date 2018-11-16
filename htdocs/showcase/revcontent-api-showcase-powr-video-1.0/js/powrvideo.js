@@ -116,6 +116,7 @@ if (!String.prototype.endsWithPowr) {
         var w;
         if (this.config.showhide == 'yes') {
             this.playerHasShown = false;
+            this.adPaused = false;
             if (this.config.pub_id == 100010295) {
                 w = 640;
                 this.config.width = w;
@@ -1147,6 +1148,11 @@ if (!String.prototype.endsWithPowr) {
             if (this.disposed == true) {
                 return;
             }
+
+            if (this.adPaused == true) {
+                this.player.ima.getAdsManager().resume();
+                return;
+            }
         }
         if (this.setupOnVisible) {
             this.setupOnVisible = false;
@@ -1178,11 +1184,8 @@ if (!String.prototype.endsWithPowr) {
             this.log("onHidden");
 
             if (this.config.showhide == "yes") {
-                if (this.disposed == true) {
-                    this.log("hidden but already disposed.");
-
-                }
                 this.player.ima.getAdsManager().pause();
+                this.adPaused = true;
                 return;
             }
         }
