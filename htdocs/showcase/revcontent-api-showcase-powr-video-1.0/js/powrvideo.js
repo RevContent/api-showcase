@@ -471,7 +471,7 @@ if (!String.prototype.endsWithPowr) {
         this.container = document.createElement("div");
         this.container.className = "powr_player";
 
-        if (window.location.href.indexOf("overlay=1") > 0) {
+        if (this.config.pub_id == 98997) {
             document.body.appendChild(this.container);
         } else {
             this.element.appendChild(this.container);
