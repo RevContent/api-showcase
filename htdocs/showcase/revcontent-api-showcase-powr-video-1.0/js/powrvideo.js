@@ -1747,9 +1747,9 @@ if (!String.prototype.endsWithPowr) {
             if (window.location.href.indexOf("overlay=1") > 0) {
                 document.getElementsByClassName("powr_player")[0].style.position = "absolute";
                 document.getElementsByClassName("powr_player")[0].style.zIndex = "9999999";
-                document.getElementsByClassName("powr_player")[0].style.top = "50%";
-                document.getElementsByClassName("powr_player")[0].style.transform = "translate(0%, -50%)";
+                document.getElementsByClassName("powr_player")[0].style.top = "16%";
                 document.getElementsByClassName("rc-modal-shade")[0].style.background = "rgba(0,0,0,.85)";
+                document.getElementsByClassName('rc-modal-shade')[0].style.height = '97%';
                 document.getElementsByClassName('rc-modal-shade')[0].style.display = 'block';
             }
         }
@@ -1791,6 +1791,8 @@ if (!String.prototype.endsWithPowr) {
             elementId.parentNode.removeChild(elementId);
             if (window.location.href.indexOf("powrtest=1&overlay=1") > 0) {
                 document.getElementsByClassName('rc-modal-shade')[0].style.display = 'none';
+                document.getElementsByClassName("rc-modal-shade")[0].style.background = "rgba(0,0,0,.5)";
+                document.getElementsByClassName('rc-modal-shade')[0].style.height = '100%';
                 document.getElementsByClassName("powr_player")[0].style.display = "none";
             }
         });
