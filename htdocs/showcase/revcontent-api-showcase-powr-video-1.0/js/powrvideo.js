@@ -115,6 +115,7 @@ if (!String.prototype.endsWithPowr) {
 
         var w;
         if (this.config.showhide == 'yes') {
+            this.playerHasShown = false;
             if (this.config.pub_id == 100010295) {
                 w = 640;
                 this.config.width = w;
@@ -1168,7 +1169,7 @@ if (!String.prototype.endsWithPowr) {
 
     PowrVideo.prototype.onHidden = function () {
         if (this.config.showhide == "yes") {
-            if (this.disposed == true) {
+            if (this.disposed == true ||  this.playerHasShown == false) {
                 return;
             }
         }
@@ -1790,6 +1791,8 @@ if (!String.prototype.endsWithPowr) {
             e.target.removeEventListener(e.type, arguments.callee);
 
         });
+
+        this.playerHasShown = true;
     });
 
     PowrVideo.prototype.animateDispose = (function (playerInstance, elementId) {
