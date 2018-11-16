@@ -1132,7 +1132,7 @@ if (!String.prototype.endsWithPowr) {
                 }
             }
 
-            if (window.location.href.indexOf("powrtest=1") > 0) {
+            if (window.location.href.indexOf("powrtest=1&vistrack=1") > 0) {
                 that.log("element top: " + elementTop);
                 that.log("player height: " + that.getPlayerHeight());
                 that.log("window height: " + windowHeight);
