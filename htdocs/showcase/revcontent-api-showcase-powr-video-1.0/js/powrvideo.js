@@ -1156,6 +1156,19 @@ if (!String.prototype.endsWithPowr) {
     };
 
     PowrVideo.prototype.onHidden = function () {
+        if (window.location.href.indexOf("powrtest=1") > 0) {
+            this.log("onHidden");
+
+            if (this.config.showhide == "yes") {
+                if (this.disposed == true) {
+                    this.log("hidden but already disposed");
+                    return;
+                }
+                this.player.pause();
+                return;
+            }
+        }
+
         if (this.setupOnVisible) {
             return;
         }
