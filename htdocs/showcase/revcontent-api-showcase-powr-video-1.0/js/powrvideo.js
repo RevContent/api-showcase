@@ -1133,9 +1133,9 @@ if (!String.prototype.endsWithPowr) {
             }
 
             if (window.location.href.indexOf("powrtest=1") > 0) {
-                this.log("element top: " + elementTop);
-                this.log("player height: " + this.getPlayerHeight());
-                this.log("window height: " + windowHeight);
+                that.log("element top: " + elementTop);
+                that.log("player height: " + that.getPlayerHeight());
+                that.log("window height: " + windowHeight);
             }
         });
     };
