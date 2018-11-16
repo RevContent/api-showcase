@@ -138,6 +138,8 @@ if (!String.prototype.endsWithPowr) {
 
         if (window.location.href.indexOf("powrtest=1") > 0) {
             this.log("ff test width: " + w);
+            this.log("ff test width #2: " + document.width);
+            this.log("useragent: " + navigator.userAgent);
         }
 
         this.videos = config.videos;
