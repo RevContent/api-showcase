@@ -1745,7 +1745,6 @@ if (!String.prototype.endsWithPowr) {
             }
 
             if (window.location.href.indexOf("overlay=1") > 0) {
-                document.body.appendChild(document.getElementsByClassName("powr_player")[0]);
                 document.getElementsByClassName("powr_player")[0].style.position = "absolute";
                 document.getElementsByClassName("powr_player")[0].style.zIndex = "9999999";
                 document.getElementsByClassName("powr_player")[0].style.top = "50%";
