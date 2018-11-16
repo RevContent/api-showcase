@@ -121,6 +121,10 @@ if (!String.prototype.endsWithPowr) {
                 w = 640;
                 this.config.width = w;
             } else if (this.config.pub_id == 98997) {
+                if (navigator.userAgent.indexOf('Windows') > -1 && navigator.userAgent.indexOf('Firefox') > -1) {
+                    return false;
+                }
+                
                 w = window.innerWidth;
             } else {
                 w = this.config.width;
