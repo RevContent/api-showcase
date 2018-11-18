@@ -142,7 +142,8 @@ if (!String.prototype.endsWithPowr) {
 
         if (window.location.href.indexOf("powrtest=1") > 0) {
             this.log("ff test width: " + w);
-            this.log("ff test width #2: " + document.width);
+            this.log("ff test width #2: " + document.body.clientWidth);
+            this.log("ff playoverlay content: " + this.playOverlay);
             this.log("useragent: " + navigator.userAgent);
         }
 
@@ -427,9 +428,10 @@ if (!String.prototype.endsWithPowr) {
             var x = w / 2 - 32;
             var y = h / 2 - 32;
 
-            var playDom = this.playOverlay.contentEl();
-            playDom.setAttribute("style", "left : " + x + "px; bottom : " + y + "px; top : auto;");
-
+            if ("undefined" == typeof this.playOverlay) {
+                var playDom = this.playOverlay.contentEl();
+                playDom.setAttribute("style", "left : " + x + "px; bottom : " + y + "px; top : auto;");
+            }
         }
 
     };
