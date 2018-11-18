@@ -428,7 +428,7 @@ if (!String.prototype.endsWithPowr) {
             var x = w / 2 - 32;
             var y = h / 2 - 32;
 
-            if ("undefined" == typeof this.playOverlay) {
+            if ("undefined" != typeof this.playOverlay) {
                 var playDom = this.playOverlay.contentEl();
                 playDom.setAttribute("style", "left : " + x + "px; bottom : " + y + "px; top : auto;");
             }
