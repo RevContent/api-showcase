@@ -146,6 +146,7 @@ if (!String.prototype.endsWithPowr) {
             this.log("ff test width #3: " + parent.document.getElementById(frameElement.id).width);
             this.log("ff playoverlay content: " + this.playOverlay);
             this.log("useragent: " + navigator.userAgent);
+            console.log(this.config.widget_id);
         }
 
         this.videos = config.videos;
