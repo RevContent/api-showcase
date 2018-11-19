@@ -282,12 +282,19 @@ if (!String.prototype.endsWithPowr) {
                 width = parseInt(this.config.width);
             }
 
-            if (this.config.pub_id == 98997 && window.location.href.indexOf("powrtest=1") > 0) {
+            if (this.config.subid = "w_103808" && (window.location.href.indexOf("powrtest=1") < 0)) {
+                height = window.innerHeight;
+                width = height / 0.5625;
                 this.player.width(width);
                 document.getElementsByClassName("powr_player")[0].style.width = width + "px";
+            } else if (this.config.pub_id == 98997 && window.location.href.indexOf("powrtest=1") > 0) {
+                height = parseInt(0.5625 * width);
+                this.player.width(width);
+                document.getElementsByClassName("powr_player")[0].style.width = width + "px";
+            } else {
+                height = parseInt(0.5625 * width);
             }
 
-            height = parseInt(0.5625 * width);
             execution = "outstream";
             placement = "incontent";
         } else {
