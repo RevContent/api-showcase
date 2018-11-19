@@ -138,6 +138,9 @@ if (!String.prototype.endsWithPowr) {
         if (!this.config.fluid) {
             h = 0.5625 * w;
             hs = parseInt(h) + "px";
+        } else if (this.config.subid = "w_103808" && (window.location.href.indexOf("powrtest=1") < 0)) {
+            h = window.innerHeight;
+            w = h / 0.5625;
         }
 
         if (window.location.href.indexOf("powrtest=1") > 0) {
