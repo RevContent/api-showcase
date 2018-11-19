@@ -282,6 +282,11 @@ if (!String.prototype.endsWithPowr) {
             } else {
                 width = parseInt(this.config.width);
             }
+
+            if (window.location.href.indexOf("powrtest=1") > 0) {
+                this.player.width(width);
+            }
+
             height = parseInt(0.5625 * width);
             execution = "outstream";
             placement = "incontent";
