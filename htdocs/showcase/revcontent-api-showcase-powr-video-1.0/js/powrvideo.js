@@ -268,6 +268,7 @@ if (!String.prototype.endsWithPowr) {
             this.log("ff test width #4: " + window.innerWidth);
             this.log("ff test width #5: " + document.body.clientWidth);
             this.log("ff test width #6: " + parent.document.getElementById(frameElement.id).width);
+            this.player.width(window.innerWidth);
         }
         var width, height, execution, placement;
         if (this.config.showhide == "yes") {
