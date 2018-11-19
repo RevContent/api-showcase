@@ -264,7 +264,11 @@ if (!String.prototype.endsWithPowr) {
         if (muted != true) {
             volume = "100";
         }
-
+        if (window.location.href.indexOf("powrtest=1") > 0) {
+            this.log("ff test width #4: " + w);
+            this.log("ff test width #5: " + document.body.clientWidth);
+            this.log("ff test width #6: " + parent.document.getElementById(frameElement.id).width);
+        }
         var width, height, execution, placement;
         if (this.config.showhide == "yes") {
             if ((this.config.pub_id == 100010295 || this.config.pub_id == 98997) && window.location.href.indexOf("powrtest=1") > 0) {
