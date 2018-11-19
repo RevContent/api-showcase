@@ -264,12 +264,7 @@ if (!String.prototype.endsWithPowr) {
         if (muted != true) {
             volume = "100";
         }
-        if (window.location.href.indexOf("powrtest=1") > 0) {
-            this.log("ff test width #4: " + window.innerWidth);
-            this.log("ff test width #5: " + document.body.clientWidth);
-            this.log("ff test width #6: " + parent.document.getElementById(frameElement.id).width);
-            this.player.width(window.innerWidth);
-        }
+
         var width, height, execution, placement;
         if (this.config.showhide == "yes") {
             if ((this.config.pub_id == 100010295 || this.config.pub_id == 98997) && window.location.href.indexOf("powrtest=1") > 0) {
@@ -283,8 +278,9 @@ if (!String.prototype.endsWithPowr) {
                 width = parseInt(this.config.width);
             }
 
-            if (window.location.href.indexOf("powrtest=1") > 0) {
+            if (this.config.pub_id == 98997 && window.location.href.indexOf("powrtest=1") > 0) {
                 this.player.width(width);
+                document.getElementsByClassName("powr_player")[0].style.width = width + "px";
             }
 
             height = parseInt(0.5625 * width);
