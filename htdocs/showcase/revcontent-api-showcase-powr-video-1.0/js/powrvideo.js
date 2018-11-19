@@ -265,7 +265,7 @@ if (!String.prototype.endsWithPowr) {
             volume = "100";
         }
         if (window.location.href.indexOf("powrtest=1") > 0) {
-            this.log("ff test width #4: " + w);
+            this.log("ff test width #4: " + window.innerWidth);
             this.log("ff test width #5: " + document.body.clientWidth);
             this.log("ff test width #6: " + parent.document.getElementById(frameElement.id).width);
         }
