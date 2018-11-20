@@ -138,7 +138,7 @@ if (!String.prototype.endsWithPowr) {
         if (!this.config.fluid) {
             h = 0.5625 * w;
             hs = parseInt(h) + "px";
-        } else if (this.config.subid == "w_103808" && (window.location.href.indexOf("powrtest=1") >= 0)) {
+        } else if (this.config.subid == "w_103808") {
             h = window.innerHeight;
             w = h / 0.5625;
         }
@@ -283,7 +283,7 @@ if (!String.prototype.endsWithPowr) {
                 width = parseInt(this.config.width);
             }
 
-            if (this.config.subid == "w_103808" && (window.location.href.indexOf("powrtest=1") >= 0)) {
+            if (this.config.subid == "w_103808") {
                 height = window.innerHeight;
                 width = height / 0.5625;
                 this.player.width(width);
@@ -305,7 +305,7 @@ if (!String.prototype.endsWithPowr) {
             placement = "";
         }
 
-        if (this.config.subid == "w_103808" && (window.location.href.indexOf("powrtest=1") >= 0)) {
+        if (this.config.subid == "w_103808") {
             this.log("width: " + width +  "/ height: " + height);
         }
 
@@ -410,7 +410,7 @@ if (!String.prototype.endsWithPowr) {
 
         height = parseInt(0.5625 * width);
 
-        if (this.config.subid == "w_103808" && (window.location.href.indexOf("powrtest=1") >= 0)) {
+        if (this.config.subid == "w_103808") {
             height = window.innerHeight;
             width = height / 0.5625;
         }
@@ -554,9 +554,8 @@ if (!String.prototype.endsWithPowr) {
         var outstreamWidth;
         if (this.config.showhide == "yes") {
             aspectRatio = "vjs-16-9";
-            if (this.config.subid == "w_103808" && (window.location.href.indexOf("powrtest=1") >= 0)) {
+            if (this.config.subid == "w_103808") {
                 outstreamWidth = window.innerHeight / 0.5625;
-                this.log("outstream width: " + outstreamWidth);
             } else if (this.config.pub_id == 98997) {
                 outstreamWidth = window.innerWidth;
             } else {
@@ -1831,7 +1830,7 @@ if (!String.prototype.endsWithPowr) {
             document.getElementsByClassName("powr_player")[0].style.zIndex = "9999999";
             document.getElementsByClassName("rc-modal-shade")[0].style.background = "rgba(0,0,0,.85)";
             document.getElementsByClassName("powr_player")[0].style.top = "50%";
-            if (this.config.subid == "w_103808" && (window.location.href.indexOf("powrtest=1") >= 0)) {
+            if (this.config.subid == "w_103808" || window.location.href.indexOf("letterbox=1") > 0) {
                 document.getElementsByClassName("powr_player")[0].style.left = "50%";
                 document.getElementsByClassName("powr_player")[0].style.transform = "translate(-50%, -50%)";
                 document.getElementsByClassName('rc-modal-shade')[0].style.height = '100%';
