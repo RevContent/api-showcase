@@ -1829,10 +1829,17 @@ if (!String.prototype.endsWithPowr) {
         if (this.config.pub_id == 98997 || window.location.href.indexOf("overlay=1") > 0) {
             document.getElementsByClassName("powr_player")[0].style.position = "absolute";
             document.getElementsByClassName("powr_player")[0].style.zIndex = "9999999";
-            document.getElementsByClassName("powr_player")[0].style.top = "50%";
-            document.getElementsByClassName("powr_player")[0].style.transform = "translate(0%, -50%)";
             document.getElementsByClassName("rc-modal-shade")[0].style.background = "rgba(0,0,0,.85)";
-            document.getElementsByClassName('rc-modal-shade')[0].style.height = '97%';
+            document.getElementsByClassName("powr_player")[0].style.top = "50%";
+            if (this.config.subid == "w_103808" && (window.location.href.indexOf("powrtest=1") >= 0)) {
+                document.getElementsByClassName("powr_player")[0].style.left = "50%";
+                document.getElementsByClassName("powr_player")[0].style.transform = "translate(-50%, -50%)";
+                document.getElementsByClassName('rc-modal-shade')[0].style.height = '100%';
+            } else {
+                document.getElementsByClassName("powr_player")[0].style.transform = "translate(0%, -50%)";
+                document.getElementsByClassName('rc-modal-shade')[0].style.height = '97%';
+            }
+
             document.getElementsByClassName('rc-modal-shade')[0].style.display = 'block';
         }
 
