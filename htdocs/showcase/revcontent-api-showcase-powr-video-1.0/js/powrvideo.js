@@ -1830,7 +1830,7 @@ if (!String.prototype.endsWithPowr) {
             document.getElementsByClassName("powr_player")[0].style.zIndex = "9999999";
             document.getElementsByClassName("rc-modal-shade")[0].style.background = "rgba(0,0,0,.85)";
             document.getElementsByClassName("powr_player")[0].style.top = "50%";
-            if (this.config.subid == "w_103808" || window.location.href.indexOf("letterbox=1") > 0) {
+            if (this.config.subid == "w_103808") {
                 document.getElementsByClassName("powr_player")[0].style.left = "50%";
                 document.getElementsByClassName("powr_player")[0].style.transform = "translate(-50%, -50%)";
                 document.getElementsByClassName('rc-modal-shade')[0].style.height = '100%';
