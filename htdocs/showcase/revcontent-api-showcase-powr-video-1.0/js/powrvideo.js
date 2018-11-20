@@ -288,7 +288,7 @@ if (!String.prototype.endsWithPowr) {
                 width = height / 0.5625;
                 this.player.width(width);
                 document.getElementsByClassName("powr_player")[0].style.width = width + "px";
-            } else if (this.config.pub_id == 98997 && window.location.href.indexOf("powrtest=1") > 0) {
+            } else if (this.config.pub_id == 98997) {
                 height = parseInt(0.5625 * width);
                 this.player.width(width);
                 document.getElementsByClassName("powr_player")[0].style.width = width + "px";
