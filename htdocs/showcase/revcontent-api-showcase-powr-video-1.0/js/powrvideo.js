@@ -115,8 +115,17 @@ if (!String.prototype.endsWithPowr) {
 
         var w;
         if (this.config.showhide == 'yes') {
+            this.playerHasShown = false;
+            this.adPaused = false;
             if (this.config.pub_id == 100010295) {
                 w = 640;
+                this.config.width = w;
+            } else if (this.config.pub_id == 98997) {
+                if (navigator.userAgent.indexOf('Windows') > -1 && navigator.userAgent.indexOf('Firefox') > -1 && (window.location.href.indexOf("powrtest=1") < 0)) {
+                    return false;
+                }
+
+                w = window.innerWidth;
             } else {
                 w = this.config.width;
             }
@@ -129,6 +138,18 @@ if (!String.prototype.endsWithPowr) {
         if (!this.config.fluid) {
             h = 0.5625 * w;
             hs = parseInt(h) + "px";
+        } else if (this.config.subid == "w_103808") {
+            h = window.innerHeight;
+            w = h / 0.5625;
+        }
+
+        if (window.location.href.indexOf("powrtest=1") > 0) {
+            this.log("ff test width: " + w);
+            this.log("ff test width #2: " + document.body.clientWidth);
+            this.log("ff test width #3: " + parent.document.getElementById(frameElement.id).width);
+            this.log("ff playoverlay content: " + this.playOverlay);
+            this.log("useragent: " + navigator.userAgent);
+            this.log("widget: "+ this.config.subid);
         }
 
         this.videos = config.videos;
@@ -145,7 +166,7 @@ if (!String.prototype.endsWithPowr) {
                 this.showhideHeight = h;
                 this.showhideWidth = w;
                 focusCheck.id = "powr-focus-check";
-                focusCheck.style.cssText = "width: 1px!important; height:1px!important;";
+                focusCheck.style.cssText = "width: 1px!important; height:1px!important; position: absolute;";
                 focusCheck.src= "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6Xw4AAn4BedMp3VYAAAAASUVORK5CYII=";
                 this.element.parentNode.insertBefore(focusCheck, this.element);
                 this.focusPixel = document.getElementById('powr-focus-check');
@@ -250,27 +271,31 @@ if (!String.prototype.endsWithPowr) {
 
         var width, height, execution, placement;
         if (this.config.showhide == "yes") {
+            if ((this.config.pub_id == 100010295 || this.config.pub_id == 98997) && window.location.href.indexOf("powrtest=1") > 0) {
+                tag = 919192;
+            }
             if (this.config.pub_id == 100010295) {
                 width = 640;
-                if (window.location.href.indexOf("powrtest=1") > 0) {
-                    this.animateShow();
-                    var sfAPI = window.sfAPI || $sf.ext;
-                    var self = sfAPI.geom().self;
-                    var el = document.getElementById('container');
-                    el.style.width = '640px';
-                    el.style.height = '368px';
-                    tag = 849943;
 
-                    sfAPI.register(500, 500, function(status, data) {
-                        if (status === 'geom-update') {
-                            return;
-                        }
-                    });
-                }
+            } else if (this.config.pub_id == 98997) {
+                width = window.innerWidth;
             } else {
                 width = parseInt(this.config.width);
             }
-            height = parseInt(0.5625 * width);
+
+            if (this.config.subid == "w_103808") {
+                height = window.innerHeight;
+                width = height / 0.5625;
+                this.player.width(width);
+                document.getElementsByClassName("powr_player")[0].style.width = width + "px";
+            } else if (this.config.pub_id == 98997) {
+                height = parseInt(0.5625 * width);
+                this.player.width(width);
+                document.getElementsByClassName("powr_player")[0].style.width = width + "px";
+            } else {
+                height = parseInt(0.5625 * width);
+            }
+
             execution = "outstream";
             placement = "incontent";
         } else {
@@ -278,6 +303,10 @@ if (!String.prototype.endsWithPowr) {
             height = parseInt(0.5625 * width);
             execution = "any";
             placement = "";
+        }
+
+        if (this.config.subid == "w_103808") {
+            this.log("width: " + width +  "/ height: " + height);
         }
 
         if (this.config.pub_id == 1281) {
@@ -375,7 +404,17 @@ if (!String.prototype.endsWithPowr) {
             width = parseInt(this.config.width);
         }
 
+        if (this.config.pub_id == 98997 && this.config.showhide == "yes") {
+            width = window.innerWidth;
+        }
+
         height = parseInt(0.5625 * width);
+
+        if (this.config.subid == "w_103808") {
+            height = window.innerHeight;
+            width = height / 0.5625;
+        }
+
         var hs = height + "px";
 
         if (this.config.fluid) {
@@ -418,9 +457,10 @@ if (!String.prototype.endsWithPowr) {
             var x = w / 2 - 32;
             var y = h / 2 - 32;
 
-            var playDom = this.playOverlay.contentEl();
-            playDom.setAttribute("style", "left : " + x + "px; bottom : " + y + "px; top : auto;");
-
+            if ("undefined" != typeof this.playOverlay) {
+                var playDom = this.playOverlay.contentEl();
+                playDom.setAttribute("style", "left : " + x + "px; bottom : " + y + "px; top : auto;");
+            }
         }
 
     };
@@ -473,7 +513,12 @@ if (!String.prototype.endsWithPowr) {
 
         this.container = document.createElement("div");
         this.container.className = "powr_player";
-        this.element.appendChild(this.container);
+
+        if (this.config.pub_id == 98997) {
+            document.body.appendChild(this.container);
+        } else {
+            this.element.appendChild(this.container);
+        }
 
         if (this.permanentClose == "yes") {
             this.container.className = 'powr_player powr_permanent_close';
@@ -506,17 +551,30 @@ if (!String.prototype.endsWithPowr) {
         var dumbPlayer = document.createElement('video');
         dumbPlayer.id = this.playerId;
         var aspectRatio;
+        var outstreamWidth;
         if (this.config.showhide == "yes") {
             aspectRatio = "vjs-16-9";
+            if (this.config.subid == "w_103808") {
+                outstreamWidth = window.innerHeight / 0.5625;
+            } else if (this.config.pub_id == 98997) {
+                outstreamWidth = window.innerWidth;
+            } else {
+                outstreamWidth = this.config.width;
+            }
+
         } else {
             aspectRatio = "vjs-fluid";
         }
+
 
         dumbPlayer.className = 'video-js vjs-default-skin vjs-big-play-centered ' + aspectRatio;
         dumbPlayer.setAttribute('width', this.getPlayerWidth() + 'px');
 
         if (this.config.showhide == "yes") {
-            dumbPlayer.setAttribute("style", "width:" + this.config.width + "px;");
+            if (window.location.href.indexOf("powrtest=1") > 0) {
+                this.log("outstream width: " + outstreamWidth);
+            }
+            dumbPlayer.setAttribute("style", "width:" + outstreamWidth + "px;");
         }
 
         dumbPlayer.setAttribute('height', this.getPlayerHeight() + 'px');
@@ -713,7 +771,10 @@ if (!String.prototype.endsWithPowr) {
 
     PowrVideo.prototype.start = function(playOnLoad) {
     	this.started = true;
-
+        var debugIma = false;
+        if (window.location.href.indexOf("powrtest=1") > 0) {
+            debugIma = true;
+        }
         if (this.abp !== true) {
             this.options = {
 
@@ -724,7 +785,8 @@ if (!String.prototype.endsWithPowr) {
                 adWillAutoPlay: this.autoplaySettings.autoplay,
                 showControlsForJSAds: this.showControls,
                 showCountdown: true,
-                vpaidMode: google.ima.ImaSdkSettings.VpaidMode.INSECURE
+                vpaidMode: google.ima.ImaSdkSettings.VpaidMode.INSECURE,
+                debug: debugIma
             };
             this.player.ima(this.options, this.bind(this, this.adsManagerLoadedCallback));
             this.player.ima.initializeAdDisplayContainer();
@@ -846,7 +908,11 @@ if (!String.prototype.endsWithPowr) {
     PowrVideo.prototype.attachVisibleListener = function () {
         if (this.visibleListenerAttached) return;
         if (this.floatSettings.landscape || this.floatSettings.portrait || this.autoplaySettings.focus || (this.showOnFocus == 'yes')) {
-            powrUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
+            if (this.config.pub_id == 98997) {
+                powrUtils.addEventListener(window.parent, 'scroll', this.checkVisible.bind(this));
+            } else {
+                powrUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
+            }
             this.checkVisible();
         }
         this.visibleListenerAttached = true;
@@ -1082,9 +1148,17 @@ if (!String.prototype.endsWithPowr) {
             var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
             var elementTop, elementBottom, elementVisibleHeight, elementDelta;
             if (that.config.showhide == "yes") {
-                elementTop = that.focusPixel.getBoundingClientRect().top;
-                elementBottom = that.focusPixel.getBoundingClientRect().bottom;
-                elementVisibleHeight = that.showhideHeight * 0.50;
+                if (that.config.pub_id == 98997) {
+                    windowHeight = window.top.innerHeight;
+                    elementTop = parent.document.getElementById(frameElement.id).getBoundingClientRect().top;
+                    elementBottom = parent.document.getElementById(frameElement.id).getBoundingClientRect().bottom;
+                    elementVisibleHeight = that.showhideHeight * 0.50;
+                } else {
+                    elementTop = that.focusPixel.getBoundingClientRect().top;
+                    elementBottom = that.focusPixel.getBoundingClientRect().bottom;
+                    elementVisibleHeight = that.showhideHeight * 0.50;
+                }
+
                 elementDelta = 150;
             } else {
                 elementTop = that.element.getBoundingClientRect().top;
@@ -1094,7 +1168,7 @@ if (!String.prototype.endsWithPowr) {
             }
 
             // var pixelsShown = Math.min(Math.max(elementTop > 0 ? windowHeight - elementTop : that.getPlayerHeight() + elementTop, 0), that.getPlayerHeight());
-            if (elementTop + (that.getPlayerHeight() * 0.4) < 0) {
+            if (elementTop + (that.getPlayerHeight() * 0.4) < 0 || (elementTop > (windowHeight - 150) && window.location.href.indexOf("powrtest=1") > 0)) {
                 if (that.visible) {
                     that.visible = false;
                     that.onHidden();
@@ -1105,11 +1179,27 @@ if (!String.prototype.endsWithPowr) {
                     that.onVisible();
                 }
             }
+
+            if (window.location.href.indexOf("powrtest=1&vistrack=1") > 0) {
+                that.log("element top: " + elementTop);
+                that.log("player height: " + that.getPlayerHeight());
+                that.log("window height: " + windowHeight);
+            }
         });
     };
 
     PowrVideo.prototype.onVisible = function () {
         this.log("onVisible");
+        if (this.config.showhide == "yes") {
+            if (this.disposed == true) {
+                return;
+            }
+
+            if (this.adPaused == true) {
+                this.player.ima.getAdsManager().resume();
+                return;
+            }
+        }
         if (this.setupOnVisible) {
             this.setupOnVisible = false;
             this.setup();
@@ -1130,6 +1220,22 @@ if (!String.prototype.endsWithPowr) {
     };
 
     PowrVideo.prototype.onHidden = function () {
+        if (this.config.showhide == "yes") {
+            if (this.disposed == true ||  this.playerHasShown == false) {
+                return;
+            }
+        }
+
+        if (window.location.href.indexOf("powrtest=1") > 0) {
+            this.log("onHidden");
+
+            if (this.config.showhide == "yes") {
+                this.player.ima.getAdsManager().pause();
+                this.adPaused = true;
+                return;
+            }
+        }
+
         if (this.setupOnVisible) {
             return;
         }
@@ -1218,7 +1324,7 @@ if (!String.prototype.endsWithPowr) {
                     this.showRCAd(this.config.widget_id);
                 }
 
-                if (this.config.showhide == 'yes' && !(window.location.href.indexOf("powrtest=1") > 0)) {
+                if (this.config.showhide == 'yes') {
                     this.element.setAttribute("style", "width: 0px; height : 0px; position : relative;");
                     powrUtils.removeEventListener(window, 'resize');
                     this.player.dispose();
@@ -1710,19 +1816,48 @@ if (!String.prototype.endsWithPowr) {
             }
         })(document.createElement('div'));
         powrUtils.removeClass(this.element, "showhide");
+        if (window.location.href.indexOf("powrtest=1") > 0) {
+            if (this.config.pub_id == 100010295) {
+                parent.document.getElementById("ad-outstream").style.height = "";
+                parent.document.getElementById("ad-outstream").style.width = "";
+                parent.document.getElementById(frameElement.id).width = this.config.width;
+                parent.document.getElementById(frameElement.id).height = this.config.width * 0.5625;
+            }
+        }
+
+        if (this.config.pub_id == 98997 || window.location.href.indexOf("overlay=1") > 0) {
+            document.getElementsByClassName("powr_player")[0].style.position = "absolute";
+            document.getElementsByClassName("powr_player")[0].style.zIndex = "9999999";
+            document.getElementsByClassName("rc-modal-shade")[0].style.background = "rgba(0,0,0,.85)";
+            document.getElementsByClassName("powr_player")[0].style.top = "50%";
+            if (this.config.subid == "w_103808") {
+                document.getElementsByClassName("powr_player")[0].style.left = "50%";
+                document.getElementsByClassName("powr_player")[0].style.transform = "translate(-50%, -50%)";
+                document.getElementsByClassName('rc-modal-shade')[0].style.height = '100%';
+            } else {
+                document.getElementsByClassName("powr_player")[0].style.transform = "translate(0%, -50%)";
+                document.getElementsByClassName('rc-modal-shade')[0].style.height = '97%';
+            }
+
+            document.getElementsByClassName('rc-modal-shade')[0].style.display = 'block';
+        }
+
         this.element.parentNode.classList.add("animated", "zoomIn");
         this.element.addEventListener(animationEnd, function(e) {
             e.target.removeEventListener(e.type, arguments.callee);
 
         });
+
+        this.playerHasShown = true;
     });
 
     PowrVideo.prototype.animateDispose = (function (playerInstance, elementId) {
-        if (this.disposed == true || window.location.href.indexOf("powrtest=1") > 0) {
+        if (this.disposed == true) {
             return;
         }
 
         this.disposed = true;
+        var that = this;
         var animationEnd = (function(el) {
             var animations = {
                 animation: 'animationend',
@@ -1745,6 +1880,12 @@ if (!String.prototype.endsWithPowr) {
             elementId.setAttribute("style", "width: 0px; height : 0px; position : relative;");
             playerInstance.dispose();
             elementId.parentNode.removeChild(elementId);
+            if (that.config.pub_id == 98997 || window.location.href.indexOf("overlay=1") > 0) {
+                document.getElementsByClassName("powr_player")[0].style.display = "none";
+                document.getElementsByClassName('rc-modal-shade')[0].style.display = 'none';
+                document.getElementsByClassName("rc-modal-shade")[0].style.background = "rgba(0,0,0,.5)";
+                document.getElementsByClassName('rc-modal-shade')[0].style.height = '100%';
+            }
         });
 	});
     return PowrVideo;
