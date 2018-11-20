@@ -138,7 +138,7 @@ if (!String.prototype.endsWithPowr) {
         if (!this.config.fluid) {
             h = 0.5625 * w;
             hs = parseInt(h) + "px";
-        } else if (this.config.subid = "w_103808" && (window.location.href.indexOf("powrtest=1") < 0)) {
+        } else if (this.config.subid == "w_103808" && (window.location.href.indexOf("powrtest=1") < 0)) {
             h = window.innerHeight;
             w = h / 0.5625;
         }
@@ -283,7 +283,7 @@ if (!String.prototype.endsWithPowr) {
                 width = parseInt(this.config.width);
             }
 
-            if (this.config.subid = "w_103808" && (window.location.href.indexOf("powrtest=1") < 0)) {
+            if (this.config.subid == "w_103808" && (window.location.href.indexOf("powrtest=1") < 0)) {
                 height = window.innerHeight;
                 width = height / 0.5625;
                 this.player.width(width);
@@ -305,7 +305,7 @@ if (!String.prototype.endsWithPowr) {
             placement = "";
         }
 
-        if (this.config.subid = "w_103808" && (window.location.href.indexOf("powrtest=1") < 0)) {
+        if (this.config.subid == "w_103808" && (window.location.href.indexOf("powrtest=1") < 0)) {
             this.log("width: " + width +  "/ height: " + height);
         }
 
@@ -410,7 +410,7 @@ if (!String.prototype.endsWithPowr) {
 
         height = parseInt(0.5625 * width);
 
-        if (this.config.subid = "w_103808" && (window.location.href.indexOf("powrtest=1") < 0)) {
+        if (this.config.subid == "w_103808" && (window.location.href.indexOf("powrtest=1") < 0)) {
             height = window.innerHeight;
             width = height / 0.5625;
         }
@@ -554,7 +554,7 @@ if (!String.prototype.endsWithPowr) {
         var outstreamWidth;
         if (this.config.showhide == "yes") {
             aspectRatio = "vjs-16-9";
-            if (this.config.subid = "w_103808" && (window.location.href.indexOf("powrtest=1") < 0)) {
+            if (this.config.subid == "w_103808" && (window.location.href.indexOf("powrtest=1") < 0)) {
                 outstreamWidth = window.innerHeight / 0.5625;
             } else if (this.config.pub_id == 98997) {
                 outstreamWidth = window.innerWidth;
