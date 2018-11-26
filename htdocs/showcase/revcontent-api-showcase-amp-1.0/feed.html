@@ -24,6 +24,7 @@
 
     <!-- AMPHTML! -->
     <script async src="https://cdn.ampproject.org/v0.js"></script>
+    <script src="/app/resources/vendor/mobile-detect/mobile-detect.js"></script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -81,13 +82,22 @@
 
     <!-- Fake Page Content -->
     <div class="container">
+
+        <div class="alert alert-danger hide" id="mobile-alert" role="alert">This example is designed for a mobile device, it might have responsive sizing issues on other resolutions.</div>
+
         <div class="row">
             <div class="col-lg-12">
                 <h1 class="page-header">AMP Feed</h1>
             </div>
         </div>
 
-        <amp-ad type="revcontent" data-id="94025" data-source="feed" width="400" height="260" layout="responsive" data-wrapper="my-feed"></amp-ad>
+        <amp-ad style="transform: translateX(-15px)" type="revcontent" data-id="94025" data-source="feed" width="100vw" height="100vh" layout="flex-item" data-wrapper="my-feed">
+            <div overflow style="position: absolute; bottom: 0; background: #fff; padding: 10px 0; display: flex; justify-content: center; width: 100%;border-bottom: 1px solid #eee;">
+                <div style="padding: 10px; border: 1px solid #ccc; border-radius: 3px; font-size: 16px; color: #444;">
+                    Click to Resize
+                </div>
+            </div>
+        </amp-ad>
 
         <!-- Footer -->
         <footer>
@@ -101,6 +111,23 @@
 
     </div>
    <!-- /. Fake Page Content -->
+
+    <script type="text/javascript">
+
+        var removeClass = function(el, className) {
+            if (!el) return false;
+            if (el.classList)
+                el.classList.remove(className);
+            else
+                el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+        };
+
+       var detect = new MobileDetect(window.navigator.userAgent);
+
+       if (!detect.mobile()) {
+            removeClass(document.getElementById('mobile-alert'), 'hide');
+       }
+   </script>
 
 </body>
 
