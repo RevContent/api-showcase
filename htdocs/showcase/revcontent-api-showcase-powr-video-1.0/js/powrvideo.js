@@ -1153,13 +1153,13 @@ if (!String.prototype.endsWithPowr) {
                     elementTop = parent.document.getElementById(frameElement.id).getBoundingClientRect().top;
                     elementBottom = parent.document.getElementById(frameElement.id).getBoundingClientRect().bottom;
                     elementVisibleHeight = that.showhideHeight * 0.50;
+                    elementDelta = 150;
                 } else {
                     elementTop = that.focusPixel.getBoundingClientRect().top;
                     elementBottom = that.focusPixel.getBoundingClientRect().bottom;
                     elementVisibleHeight = that.showhideHeight * 0.50;
+                    elementDelta = 300;
                 }
-
-                elementDelta = 150;
             } else {
                 elementTop = that.element.getBoundingClientRect().top;
                 elementBottom = that.element.getBoundingClientRect().bottom;
