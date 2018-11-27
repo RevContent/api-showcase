@@ -1174,7 +1174,7 @@ if (!String.prototype.endsWithPowr) {
             }
 
             // var pixelsShown = Math.min(Math.max(elementTop > 0 ? windowHeight - elementTop : that.getPlayerHeight() + elementTop, 0), that.getPlayerHeight());
-            if (elementTop + (that.getPlayerHeight() * 0.4) < 0 || (elementTop > (windowHeight - (that.actualHeight * 0.25)) && window.location.href.indexOf("powrtest=1") > 0)) {
+            if (elementTop + (that.getPlayerHeight() * 0.4) < 0 || (elementTop > (windowHeight - (that.actualHeight * 0.25) - 125) && window.location.href.indexOf("powrtest=1") > 0)) {
                 if (that.visible) {
                     that.visible = false;
                     that.onHidden();
