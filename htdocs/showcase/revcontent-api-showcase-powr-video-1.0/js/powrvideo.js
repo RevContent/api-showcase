@@ -143,6 +143,9 @@ if (!String.prototype.endsWithPowr) {
             w = h / 0.5625;
         }
 
+        this.actualWidth = w;
+        this.actualHeight = h;
+
         if (window.location.href.indexOf("powrtest=1") > 0) {
             this.log("ff test width: " + w);
             this.log("ff test width #2: " + document.body.clientWidth);
@@ -414,6 +417,9 @@ if (!String.prototype.endsWithPowr) {
             height = window.innerHeight;
             width = height / 0.5625;
         }
+
+        this.actualWidth = width;
+        this.actualHeight = height;
 
         var hs = height + "px";
 
@@ -1168,7 +1174,7 @@ if (!String.prototype.endsWithPowr) {
             }
 
             // var pixelsShown = Math.min(Math.max(elementTop > 0 ? windowHeight - elementTop : that.getPlayerHeight() + elementTop, 0), that.getPlayerHeight());
-            if (elementTop + (that.getPlayerHeight() * 0.4) < 0 || (elementTop > (windowHeight - 150) && window.location.href.indexOf("powrtest=1") > 0)) {
+            if (elementTop + (that.getPlayerHeight() * 0.4) < 0 || (elementTop > (windowHeight - (that.actualHeight * 0.25)) && window.location.href.indexOf("powrtest=1") > 0)) {
                 if (that.visible) {
                     that.visible = false;
                     that.onHidden();
@@ -1181,6 +1187,7 @@ if (!String.prototype.endsWithPowr) {
             }
 
             if (window.location.href.indexOf("powrtest=1&vistrack=1") > 0) {
+                that.log("Actual Height: " + that.actualHeight);
                 that.log("element top: " + elementTop);
                 that.log("player height: " + that.getPlayerHeight());
                 that.log("window height: " + windowHeight);
