@@ -147,10 +147,10 @@ if (!String.prototype.endsWithPowr) {
         this.actualHeight = h;
 
         if (window.location.href.indexOf("powrtest=1") > 0) {
-            this.log("ff test width: " + w);
-            this.log("ff test width #2: " + document.body.clientWidth);
-            this.log("ff test width #3: " + parent.document.getElementById(frameElement.id).width);
-            this.log("ff playoverlay content: " + this.playOverlay);
+            // this.log("ff test width: " + w);
+            // this.log("ff test width #2: " + document.body.clientWidth);
+            // this.log("ff test width #3: " + parent.document.getElementById(frameElement.id).width);
+            // this.log("ff playoverlay content: " + this.playOverlay);
             this.log("useragent: " + navigator.userAgent);
             this.log("widget: "+ this.config.subid);
         }
@@ -1174,7 +1174,7 @@ if (!String.prototype.endsWithPowr) {
             }
 
             // var pixelsShown = Math.min(Math.max(elementTop > 0 ? windowHeight - elementTop : that.getPlayerHeight() + elementTop, 0), that.getPlayerHeight());
-            if (elementTop + (that.getPlayerHeight() * 0.4) < 0 || ((((elementTop - 100) - (that.actualHeight * 0.25)) > windowHeight) && window.location.href.indexOf("powrtest=1") > 0)) {
+            if (elementTop + (that.getPlayerHeight() * 0.4) < 0 || ((elementTop) > (windowHeight) && window.location.href.indexOf("powrtest=1") > 0)) {
                 if (that.visible) {
                     that.visible = false;
                     that.onHidden();
