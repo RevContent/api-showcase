@@ -1174,7 +1174,7 @@ if (!String.prototype.endsWithPowr) {
             }
 
             // var pixelsShown = Math.min(Math.max(elementTop > 0 ? windowHeight - elementTop : that.getPlayerHeight() + elementTop, 0), that.getPlayerHeight());
-            if (elementTop + (that.getPlayerHeight() * 0.4) < 0 || (elementTop > (windowHeight - (that.actualHeight * 0.25) - 125) && window.location.href.indexOf("powrtest=1") > 0)) {
+            if (elementTop + (that.getPlayerHeight() * 0.4) < 0 || ((((elementTop - 100) - (that.actualHeight * 0.25)) > windowHeight) && window.location.href.indexOf("powrtest=1") > 0)) {
                 if (that.visible) {
                     that.visible = false;
                     that.onHidden();
@@ -1187,6 +1187,7 @@ if (!String.prototype.endsWithPowr) {
             }
 
             if (window.location.href.indexOf("powrtest=1&vistrack=1") > 0) {
+                that.log("Is Visible: " + that.visible);
                 that.log("Actual Height: " + that.actualHeight);
                 that.log("Height calc:" + (windowHeight - (that.actualHeight * 0.25)));
                 that.log("Height calc 2:" + (windowHeight - (that.actualHeight * 0.75)));
