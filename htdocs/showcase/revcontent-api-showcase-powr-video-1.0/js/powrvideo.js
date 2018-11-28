@@ -1174,17 +1174,32 @@ if (!String.prototype.endsWithPowr) {
             }
 
             // var pixelsShown = Math.min(Math.max(elementTop > 0 ? windowHeight - elementTop : that.getPlayerHeight() + elementTop, 0), that.getPlayerHeight());
-            if (elementTop + (that.getPlayerHeight() * 0.4) < 0 || ((elementTop) > (windowHeight) && window.location.href.indexOf("powrtest=1") > 0)) {
-                if (that.visible) {
-                    that.visible = false;
-                    that.onHidden();
+            if (window.location.href.indexOf("powrtest=1") > 0 && that.config.pub_id == 98997) {
+                if (elementTop < (0 - (windowHeight * 0.33)) || elementTop > (windowHeight - 50)) {
+                    if (that.visible) {
+                        that.visible = false;
+                        that.onHidden();
+                    }
+                } else {
+                    if (!that.visible) {
+                        that.visible = true;
+                        that.onVisible();
+                    }
                 }
-            } else if (elementTop + 30 < windowHeight + elementDelta) {
-                if (!that.visible) {
-                    that.visible = true;
-                    that.onVisible();
+            } else {
+                if (elementTop + (that.getPlayerHeight() * 0.4) < 0 || ((elementTop) > (windowHeight) && window.location.href.indexOf("powrtest=1") > 0)) {
+                    if (that.visible) {
+                        that.visible = false;
+                        that.onHidden();
+                    }
+                } else if (elementTop + 30 < windowHeight + elementDelta) {
+                    if (!that.visible) {
+                        that.visible = true;
+                        that.onVisible();
+                    }
                 }
             }
+
 
             if (window.location.href.indexOf("powrtest=1&vistrack=1") > 0) {
                 that.log("Is Visible: " + that.visible);
