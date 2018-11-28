@@ -1174,7 +1174,7 @@ if (!String.prototype.endsWithPowr) {
             }
 
             // var pixelsShown = Math.min(Math.max(elementTop > 0 ? windowHeight - elementTop : that.getPlayerHeight() + elementTop, 0), that.getPlayerHeight());
-            if (window.location.href.indexOf("powrtest=1") > 0 && that.config.pub_id == 98997) {
+            if (that.config.subid == "w_103804" && that.config.pub_id == 98997) {
                 if (elementTop < (0 - (windowHeight * 0.33)) || elementTop > (windowHeight - 50)) {
                     if (that.visible) {
                         that.visible = false;
