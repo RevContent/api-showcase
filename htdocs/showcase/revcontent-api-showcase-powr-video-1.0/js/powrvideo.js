@@ -138,7 +138,7 @@ if (!String.prototype.endsWithPowr) {
         if (!this.config.fluid) {
             h = 0.5625 * w;
             hs = parseInt(h) + "px";
-        } else if (this.config.subid == "w_103808") {
+        } else if (this.config.subid == "w_103808" || this.config.subid == "w_103812") {
             h = window.innerHeight;
             w = h / 0.5625;
         }
@@ -286,7 +286,7 @@ if (!String.prototype.endsWithPowr) {
                 width = parseInt(this.config.width);
             }
 
-            if (this.config.subid == "w_103808") {
+            if (this.config.subid == "w_103808" || this.config.subid == "w_103812") {
                 height = window.innerHeight;
                 width = height / 0.5625;
                 this.player.width(width);
@@ -308,7 +308,7 @@ if (!String.prototype.endsWithPowr) {
             placement = "";
         }
 
-        if (this.config.subid == "w_103808") {
+        if (this.config.subid == "w_103808" || this.config.subid == "w_103812") {
             this.log("width: " + width +  "/ height: " + height);
         }
 
@@ -413,7 +413,7 @@ if (!String.prototype.endsWithPowr) {
 
         height = parseInt(0.5625 * width);
 
-        if (this.config.subid == "w_103808") {
+        if (this.config.subid == "w_103808" || this.config.subid == "w_103812") {
             height = window.innerHeight;
             width = height / 0.5625;
         }
@@ -560,7 +560,7 @@ if (!String.prototype.endsWithPowr) {
         var outstreamWidth;
         if (this.config.showhide == "yes") {
             aspectRatio = "vjs-16-9";
-            if (this.config.subid == "w_103808") {
+            if (this.config.subid == "w_103808" || this.config.subid == "w_103812") {
                 outstreamWidth = window.innerHeight / 0.5625;
             } else if (this.config.pub_id == 98997) {
                 outstreamWidth = window.innerWidth;
@@ -1174,7 +1174,7 @@ if (!String.prototype.endsWithPowr) {
             }
 
             // var pixelsShown = Math.min(Math.max(elementTop > 0 ? windowHeight - elementTop : that.getPlayerHeight() + elementTop, 0), that.getPlayerHeight());
-            if ((that.config.subid == "w_103804" && that.config.pub_id == 98997) || (window.location.href.indexOf("powrtest=1&vistrack=1") > 0)) {
+            if (((that.config.subid == "w_103804" || that.config.subid == "w_103812") && that.config.pub_id == 98997) || (window.location.href.indexOf("powrtest=1&vistrack=1") > 0)) {
                 if (elementTop < (0 - (windowHeight * 0.33)) || elementTop > (windowHeight - 50)) {
                     if (that.visible) {
                         that.visible = false;
@@ -1855,7 +1855,7 @@ if (!String.prototype.endsWithPowr) {
             document.getElementsByClassName("powr_player")[0].style.zIndex = "9999999";
             document.getElementsByClassName("rc-modal-shade")[0].style.background = "rgba(0,0,0,.85)";
             document.getElementsByClassName("powr_player")[0].style.top = "50%";
-            if (this.config.subid == "w_103808") {
+            if (this.config.subid == "w_103808" || this.config.subid == "w_103812") {
                 document.getElementsByClassName("powr_player")[0].style.left = "50%";
                 document.getElementsByClassName("powr_player")[0].style.transform = "translate(-50%, -50%)";
                 document.getElementsByClassName('rc-modal-shade')[0].style.height = '100%';
