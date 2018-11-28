@@ -1186,7 +1186,6 @@ if (!String.prototype.endsWithPowr) {
                         that.onVisible();
                     }
                 }
-                that.log("Is Visible: " + that.visible);
             } else {
                 if (elementTop + (that.getPlayerHeight() * 0.4) < 0 || ((elementTop) > (windowHeight) && window.location.href.indexOf("powrtest=1") > 0)) {
                     if (that.visible) {
