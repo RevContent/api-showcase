@@ -74,6 +74,11 @@ if (!String.prototype.endsWithPowr) {
 
         this.floatSettings = this.createFloatSettings();
 
+        if (this.config.subid == "w_86101" && window.location.href.indexOf("powrtest=1")) {
+            this.config.autoload = "focus";
+            this.config.mobile_tag = "919192";
+        }
+
         this.autoplaySettings = this.createAutoplaySettings();
         this.permanentClose = "no";
         if (this.config.permanent_cross) {
@@ -141,7 +146,7 @@ if (!String.prototype.endsWithPowr) {
         if (!this.config.fluid) {
             h = 0.5625 * w;
             hs = parseInt(h) + "px";
-        } else if (this.config.subid == "w_103808" || this.config.subid == "w_103812" || this.config.subid == "w_103813") {
+        } else if (this.letterbox === true) {
             h = window.innerHeight;
             w = h / 0.5625;
         }
@@ -277,7 +282,7 @@ if (!String.prototype.endsWithPowr) {
 
         var width, height, execution, placement;
         if (this.config.showhide == "yes") {
-            if ((this.config.pub_id == 100010295 || this.config.pub_id == 98997) && window.location.href.indexOf("powrtest=1") > 0) {
+            if ((this.config.pub_id == 100010295 || this.config.pub_id == 98997 || this.config.sub_id == ) && window.location.href.indexOf("powrtest=1") > 0) {
                 tag = 919192;
             }
             if (this.config.pub_id == 100010295) {
@@ -289,7 +294,7 @@ if (!String.prototype.endsWithPowr) {
                 width = parseInt(this.config.width);
             }
 
-            if (this.config.subid == "w_103808" || this.config.subid == "w_103812" || this.config.subid == "w_103813") {
+            if (this.letterbox === true) {
                 height = window.innerHeight;
                 width = height / 0.5625;
                 this.player.width(width);
@@ -311,9 +316,9 @@ if (!String.prototype.endsWithPowr) {
             placement = "";
         }
 
-        if (this.config.subid == "w_103808" || this.config.subid == "w_103812" || this.config.subid == "w_103813") {
-            this.log("width: " + width +  "/ height: " + height);
-        }
+        // if (this.letterbox === true) {
+        //     this.log("width: " + width +  "/ height: " + height);
+        // }
 
         if (this.config.pub_id == 1281) {
             var ret = "https://googleads.g.doubleclick.net/pagead/ads?ad_type=video&client=ca-video-pub-4968145218643279&videoad_start_delay=0&description_url=http%3A%2F%2Fwww.google.com&max_ad_duration=40000&adtest=on";
@@ -416,7 +421,7 @@ if (!String.prototype.endsWithPowr) {
 
         height = parseInt(0.5625 * width);
 
-        if (this.config.subid == "w_103808" || this.config.subid == "w_103812" || this.config.subid == "w_103813") {
+        if (this.letterbox === true) {
             height = window.innerHeight;
             width = height / 0.5625;
         }
@@ -563,7 +568,7 @@ if (!String.prototype.endsWithPowr) {
         var outstreamWidth;
         if (this.config.showhide == "yes") {
             aspectRatio = "vjs-16-9";
-            if (this.config.subid == "w_103808" || this.config.subid == "w_103812" || this.config.subid == "w_103813") {
+            if (this.letterbox === true) {
                 outstreamWidth = window.innerHeight / 0.5625;
             } else if (this.config.pub_id == 98997) {
                 outstreamWidth = window.innerWidth;
@@ -1858,7 +1863,7 @@ if (!String.prototype.endsWithPowr) {
             document.getElementsByClassName("powr_player")[0].style.zIndex = "9999999";
             document.getElementsByClassName("rc-modal-shade")[0].style.background = "rgba(0,0,0,.85)";
             document.getElementsByClassName("powr_player")[0].style.top = "50%";
-            if (this.config.subid == "w_103808" || this.config.subid == "w_103812" || this.config.subid == "w_103813") {
+            if (this.letterbox === true) {
                 document.getElementsByClassName("powr_player")[0].style.left = "50%";
                 document.getElementsByClassName("powr_player")[0].style.transform = "translate(-50%, -50%)";
                 document.getElementsByClassName('rc-modal-shade')[0].style.height = '100%';
