@@ -113,6 +113,8 @@ if (!String.prototype.endsWithPowr) {
         }
         this.viewed = false;
 
+        this.letterbox = false;
+
         var w;
         if (this.config.showhide == 'yes') {
             this.playerHasShown = false;
@@ -126,6 +128,7 @@ if (!String.prototype.endsWithPowr) {
                 }
 
                 w = window.innerWidth;
+                this.checkRatio(w);
             } else {
                 w = this.config.width;
             }
@@ -1913,5 +1916,14 @@ if (!String.prototype.endsWithPowr) {
             }
         });
 	});
+
+    PowrVideo.prototype.checkRatio = (function (calculated_width) {
+        var calculated_height = calculated_width * 0.5625;
+        if (calculated_height > parent.document.getElementById(frameElement.id).height) {
+            this.letterbox = true;
+            this.log("letterbox widget detected");
+        }
+    });
+
     return PowrVideo;
 }));
