@@ -74,9 +74,10 @@ if (!String.prototype.endsWithPowr) {
 
         this.floatSettings = this.createFloatSettings();
 
-        if (this.config.subid == "w_86101" && window.location.href.indexOf("powrtest=1") > 0) {
+        if (this.config.subid == "w_86101") {
             this.config.autoload = "focus";
             this.config.mobile_tag = "919192";
+            this.log(window.location.href);
         }
 
         this.autoplaySettings = this.createAutoplaySettings();
@@ -1924,9 +1925,16 @@ if (!String.prototype.endsWithPowr) {
 
     PowrVideo.prototype.checkRatio = (function (calculated_width) {
         var calculated_height = calculated_width * 0.5625;
+        if (window.location.href.indexOf("powrtest=1") > 0) {
+            this.log("height: " + calculated_height);
+            this.log("width: " + calculated_width);
+        }
+
         if (calculated_height > parent.document.getElementById(frameElement.id).height) {
             this.letterbox = true;
-            this.log("letterbox widget detected");
+            if (window.location.href.indexOf("powrtest=1") > 0) {
+                this.log("letterbox widget detected");
+            }
         }
     });
 
