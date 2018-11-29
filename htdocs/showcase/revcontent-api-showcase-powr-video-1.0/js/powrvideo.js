@@ -74,11 +74,11 @@ if (!String.prototype.endsWithPowr) {
 
         this.floatSettings = this.createFloatSettings();
 
-        if (this.config.subid == "w_86101") {
-            this.config.autoload = "focus";
-            this.config.mobile_tag = "919192";
-            this.log(window.location.href);
-        }
+        // if (this.config.subid == "w_86101") {
+        //     this.config.autoload = "focus";
+        //     this.config.mobile_tag = "919192";
+        //     this.log(window.location.href);
+        // }
 
         this.autoplaySettings = this.createAutoplaySettings();
         this.permanentClose = "no";
