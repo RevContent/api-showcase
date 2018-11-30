@@ -1938,12 +1938,13 @@ if (!String.prototype.endsWithPowr) {
             e.target.removeEventListener(e.type, arguments.callee);
             elementId.setAttribute("style", "width: 0px; height : 0px; position : relative;");
             playerInstance.dispose();
-            containerParent.removeChild(elementId);
             if (that.config.pub_id == 98997 || window.location.href.indexOf("overlay=1") > 0) {
                 document.getElementsByClassName("powr_player")[0].style.display = "none";
                 document.getElementsByClassName('rc-modal-shade')[0].style.display = 'none';
                 document.getElementsByClassName("rc-modal-shade")[0].style.background = "rgba(0,0,0,.5)";
                 document.getElementsByClassName('rc-modal-shade')[0].style.height = '100%';
+            } else {
+                containerParent.removeChild(elementId);
             }
         });
 	});
