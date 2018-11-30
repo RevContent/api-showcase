@@ -1886,7 +1886,7 @@ if (!String.prototype.endsWithPowr) {
             }
 
             document.getElementsByClassName('rc-modal-shade')[0].style.display = 'block';
-            this.container.parentNode.classList.add("animated", "zoomIn");
+            this.container.classList.add("animated", "zoomIn");
         } else {
             this.element.parentNode.classList.add("animated", "zoomIn");
         }
@@ -1929,10 +1929,9 @@ if (!String.prototype.endsWithPowr) {
         } else {
             containerParent = this.element.parentNode;
             containerChildClasses = this.element.classList;
+            containerParent.classList.add("animated", "zoomOut");
         }
 
-
-        containerParent.classList.add("animated", "zoomOut");
         containerChildClasses.add("animated", "zoomOut");
 
         containerParent.addEventListener(animationEnd, function(e) {
