@@ -536,7 +536,7 @@ if (!String.prototype.endsWithPowr) {
             this.element.appendChild(this.container);
         }
 
-        if (this.config.showhide == "yes" && letterbox !== true) {
+        if (this.config.showhide == "yes" && this.letterbox !== true) {
             this.brandingContainer = document.createElement("div");
             this.brandingContainer.className = "powr_branding";
             if (this.config.pub_id == 98997) {
