@@ -467,7 +467,6 @@ a.powr_close_hide {
     width: 100%;
     padding-bottom: 5px;
     font-size: 13px;
-    color: #c2c3c4!important;
 }
 
 .powr_branding_overlay {
@@ -477,14 +476,11 @@ a.powr_close_hide {
 }
 
 .powr_branding_overlay {
-    display: block;
-    text-align: center;
-    width: 100%;
-    color: white;
     margin-top: -15px;
 }
 
 .powr_branding_text {
+    color: #c2c3c4!important;
     cursor: pointer;
     font-family: Arial,Helvetica,sans-serif;
     text-decoration: none!important;

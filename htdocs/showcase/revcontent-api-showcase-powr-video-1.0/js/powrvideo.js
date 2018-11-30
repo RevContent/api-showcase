@@ -442,7 +442,7 @@ if (!String.prototype.endsWithPowr) {
         if (this.player && !this.floated) {
             this.player.dimensions(width, height);
         }
-        this.element.setAttribute("style", "width : 100%; height : " + hs + "; background-color : #EFEFEF");
+        this.element.setAttribute("style", "width : 100%; height : " + hs);
 
         var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
         var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
@@ -530,6 +530,7 @@ if (!String.prototype.endsWithPowr) {
         this.container.className = "powr_player";
 
         if (this.config.pub_id == 98997) {
+            this.container.className += " showhide";
             document.body.appendChild(this.container);
         } else {
             this.element.appendChild(this.container);
@@ -1870,6 +1871,7 @@ if (!String.prototype.endsWithPowr) {
         }
 
         if (this.config.pub_id == 98997 || window.location.href.indexOf("overlay=1") > 0) {
+            powrUtils.removeClass(this.container, "showhide");
             document.getElementsByClassName("powr_player")[0].style.position = "absolute";
             document.getElementsByClassName("powr_player")[0].style.zIndex = "9999999";
             document.getElementsByClassName("rc-modal-shade")[0].style.background = "rgba(0,0,0,.85)";
@@ -1884,9 +1886,12 @@ if (!String.prototype.endsWithPowr) {
             }
 
             document.getElementsByClassName('rc-modal-shade')[0].style.display = 'block';
+            this.container.parentNode.classList.add("animated", "zoomIn");
+        } else {
+            this.element.parentNode.classList.add("animated", "zoomIn");
         }
 
-        this.element.parentNode.classList.add("animated", "zoomIn");
+
         this.element.addEventListener(animationEnd, function(e) {
             e.target.removeEventListener(e.type, arguments.callee);
 
@@ -1917,13 +1922,24 @@ if (!String.prototype.endsWithPowr) {
             }
         })(document.createElement('div'));
 
-        this.element.parentNode.classList.add("animated", "zoomOut");
-        this.element.classList.add("animated", "zoomOut");
-        this.element.parentNode.addEventListener(animationEnd, function(e) {
+        var containerParent, containerChildClasses;
+        if (this.config.pub_id == 98997 || window.location.href.indexOf("overlay=1") > 0) {
+            containerParent = this.container.parentNode;
+            containerChildClasses = this.container.classList;
+        } else {
+            containerParent = this.element.parentNode;
+            containerChildClasses = this.element.classList;
+        }
+
+
+        containerParent.classList.add("animated", "zoomOut");
+        containerChildClasses.add("animated", "zoomOut");
+
+        containerParent.addEventListener(animationEnd, function(e) {
             e.target.removeEventListener(e.type, arguments.callee);
             elementId.setAttribute("style", "width: 0px; height : 0px; position : relative;");
             playerInstance.dispose();
-            elementId.parentNode.removeChild(elementId);
+            containerParent.removeChild(elementId);
             if (that.config.pub_id == 98997 || window.location.href.indexOf("overlay=1") > 0) {
                 document.getElementsByClassName("powr_player")[0].style.display = "none";
                 document.getElementsByClassName('rc-modal-shade')[0].style.display = 'none';
