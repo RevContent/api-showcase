@@ -539,7 +539,7 @@ if (!String.prototype.endsWithPowr) {
             this.brandingContainer = document.createElement("div");
             this.brandingContainer.className = "powr_branding";
             if (this.letterbox !== true) {
-                this.brandingContainer.className += "powr_branding";
+                this.brandingContainer.className += "powr_branding_overlay";
             }
             this.brandingContainer.innerHTML = '<a target="_blank" href="https://powr.com/getpowr" class="powr_branding_link">Powered by Powr</a>';
             this.container.appendChild(this.brandingContainer);
