@@ -535,6 +535,16 @@ if (!String.prototype.endsWithPowr) {
             this.element.appendChild(this.container);
         }
 
+        if (this.config.showhide == "yes" && window.location.href.indexOf("powrbranding=1") > 0) {
+            this.brandingContainer = document.createElement("div");
+            this.brandingContainer.className = "powr_branding";
+            if (this.letterbox !== true) {
+                this.brandingContainer.className += "powr_branding";
+            }
+            this.brandingContainer.innerHTML = '<a target="_blank" href="https://powr.com/getpowr" class="powr_branding_link">Powered by Powr</a>';
+            this.container.appendChild(this.brandingContainer);
+        }
+
         if (this.permanentClose == "yes") {
             this.container.className = 'powr_player powr_permanent_close';
             this.crossButton = document.createElement("a");
