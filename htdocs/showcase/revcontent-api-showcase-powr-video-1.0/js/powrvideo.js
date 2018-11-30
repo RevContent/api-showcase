@@ -536,10 +536,10 @@ if (!String.prototype.endsWithPowr) {
             this.element.appendChild(this.container);
         }
 
-        if (this.config.showhide == "yes" && window.location.href.indexOf("powrbranding=1") > 0) {
+        if (this.config.showhide == "yes" && letterbox !== true) {
             this.brandingContainer = document.createElement("div");
             this.brandingContainer.className = "powr_branding";
-            if (this.letterbox !== true && this.config.pub_id == 98997) {
+            if (this.config.pub_id == 98997) {
                 this.brandingContainer.className += " powr_branding_overlay";
             }
             this.brandingContainer.innerHTML = '<a target="_blank" href="https://powr.com/getpowr" class="powr_branding_text">Powered by Powr</a>';
