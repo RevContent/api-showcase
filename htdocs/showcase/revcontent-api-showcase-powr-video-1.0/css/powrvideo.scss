@@ -479,8 +479,13 @@ a.powr_close_hide {
     margin-top: -15px;
 }
 
-.powr_branding_text {
-    color: #c2c3c4!important;
+a.powr_branding_text,
+a.powr_branding_text:link,
+a.powr_branding_text:visited,
+a.powr_branding_text:hover,
+a.powr_branding_text:focus,
+a.powr_branding_text:active {
+    color: #999999!important;
     cursor: pointer;
     font-family: Arial,Helvetica,sans-serif;
     text-decoration: none!important;
