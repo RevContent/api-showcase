@@ -188,7 +188,7 @@ if (!String.prototype.endsWithPowr) {
             powrUtils.addClass(this.element, "showhide");
         }
 
-        this.element.setAttribute("style", "width: 100%; height : 100%; background-color : #EFEFEF; position : relative;");
+        this.element.setAttribute("style", "width: 100%; height : 100%; position : relative;");
 
         if (this.showOnFocus == "yes") {
             powrUtils.addClass(this.element, "powr_hidden");
@@ -538,7 +538,7 @@ if (!String.prototype.endsWithPowr) {
         if (this.config.showhide == "yes" && window.location.href.indexOf("powrbranding=1") > 0) {
             this.brandingContainer = document.createElement("div");
             this.brandingContainer.className = "powr_branding";
-            if (this.letterbox !== true) {
+            if (this.letterbox !== true && this.config.pub_id == 98997) {
                 this.brandingContainer.className += " powr_branding_overlay";
             }
             this.brandingContainer.innerHTML = '<a target="_blank" href="https://powr.com/getpowr" class="powr_branding_text">Powered by Powr</a>';
