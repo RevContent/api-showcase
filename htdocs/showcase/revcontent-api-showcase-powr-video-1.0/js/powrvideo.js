@@ -163,6 +163,9 @@ if (!String.prototype.endsWithPowr) {
             w = h / 0.5625;
         }
 
+        if (this.powrMaxWidth > 0) {
+            this.log("max Width initial height: " + h);
+        }
         this.actualWidth = w;
         this.actualHeight = h;
 
@@ -440,6 +443,9 @@ if (!String.prototype.endsWithPowr) {
 
         height = parseInt(0.5625 * width);
 
+        if (this.powrMaxWidth > 0) {
+            this.log("maxwidth height on resize: " + height);
+        }
         if (this.letterbox === true) {
             height = window.innerHeight;
             width = height / 0.5625;
@@ -621,6 +627,10 @@ if (!String.prototype.endsWithPowr) {
                 this.log("outstream width: " + outstreamWidth);
             }
             dumbPlayer.setAttribute("style", "width:" + outstreamWidth + "px;");
+        }
+
+        if (this.powrMaxWidth > 0) {
+            this.log("maxwidth Height in setup:" + this.getPlayerHeight());
         }
 
         dumbPlayer.setAttribute('height', this.getPlayerHeight() + 'px');
