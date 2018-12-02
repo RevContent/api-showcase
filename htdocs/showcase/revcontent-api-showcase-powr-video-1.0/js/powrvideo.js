@@ -121,11 +121,22 @@ if (!String.prototype.endsWithPowr) {
 
         this.letterbox = false;
 
+        this.powrMaxWidth = 0;
+        this.quartile_track = false;
+        if (this.config.pub_id == "10004590" || this.config.pub_id == "39348" || this.config.pub_id == "10001976"
+            || this.config.pub_id == "10002863" || this.config.pub_id == "10002864" || this.config.pub_id == "10006372"
+            || this.config.pub_id == "35362") {
+            this.quartile_track = true;
+        }
+
         var w;
         if (this.config.showhide == 'yes') {
             this.playerHasShown = false;
             this.adPaused = false;
-            if (this.config.pub_id == 100010295) {
+            if (window.location.href.indexOf("powrmaxwidth=1") > 0) {
+                this.powrMaxWidth = 300;
+                w = this.powrMaxWidth;
+            } else if (this.config.pub_id == 100010295) {
                 w = 640;
                 this.config.width = w;
             } else if (this.config.pub_id == 98997) {
@@ -286,11 +297,13 @@ if (!String.prototype.endsWithPowr) {
             if (window.location.href.indexOf("powrtest=1") > 0) {
                 tag = 919192;
             }
+
             if (this.config.pub_id == 100010295) {
                 width = 640;
-
             } else if (this.config.pub_id == 98997) {
                 width = window.innerWidth;
+            } else if (this.powrMaxWidth > 0) {
+                width = this.powrMaxWidth;
             } else {
                 width = parseInt(this.config.width);
             }
@@ -412,6 +425,11 @@ if (!String.prototype.endsWithPowr) {
 
         var width = this.element.clientWidth;
         var height;
+
+        if (this.powrMaxWidth > 0) {
+            width = this.powrMaxWidth;
+        }
+
         if ((width == null || width <= 0) && this.config.showhide == "yes") {
             width = parseInt(this.config.width);
         }
@@ -584,6 +602,8 @@ if (!String.prototype.endsWithPowr) {
                 outstreamWidth = window.innerHeight / 0.5625;
             } else if (this.config.pub_id == 98997) {
                 outstreamWidth = window.innerWidth;
+            } else if (this.powrMaxWidth > 0) {
+                outstreamWidth = this.powrMaxWidth;
             } else {
                 outstreamWidth = this.config.width;
             }
@@ -772,22 +792,50 @@ if (!String.prototype.endsWithPowr) {
         var video = this.videos[this.currentContent];
         var d = this.player.currentTime();
         d = (d * 1.0) / video.duration;
+
         if (video.tracking['start'] && (d > 0)) {
+            if (this.quartile_track === true) {
+                powrApiOriginal.request("https://api.powr.com/p0/ads/play?type=start&creator_id"
+                    + video.user_id + "&video_id=" + video.id, function () {
+                    return;
+                });
+            }
             powrApiOriginal.request(this.config.tracking_url + video.tracking['start'], function () {
                 return;
             });
             video.tracking['start'] = null;
         } else if (video.tracking['q_1'] && (d > 0.25)) {
+            if (this.quartile_track === true) {
+                powrApiOriginal.request("https://api.powr.com/p0/ads/play?type=quartile_1&creator_id"
+                    + video.user_id + "&video_id=" + video.id, function () {
+                    return;
+                });
+            }
+
             powrApiOriginal.request(this.config.tracking_url + video.tracking['q_1'], function () {
                 return;
             });
             video.tracking['q_1'] = null;
         } else if (video.tracking['q_2'] && (d > 0.5)) {
+            if (this.quartile_track === true) {
+                powrApiOriginal.request("https://api.powr.com/p0/ads/play?type=quartile_2&creator_id"
+                    + video.user_id + "&video_id=" + video.id, function () {
+                    return;
+                });
+            }
+
             powrApiOriginal.request(this.config.tracking_url + video.tracking['q_2'], function () {
                 return;
             });
             video.tracking['q_2'] = null;
         } else if (video.tracking['q_3'] && (d > 0.75)) {
+            if (this.quartile_track === true) {
+                powrApiOriginal.request("https://api.powr.com/p0/ads/play?type=quartile_3&creator_id"
+                    + video.user_id + "&video_id=" + video.id, function () {
+                    return;
+                });
+            }
+
             powrApiOriginal.request(this.config.tracking_url + video.tracking['q_3'], function () {
                 return;
             });
@@ -887,6 +935,13 @@ if (!String.prototype.endsWithPowr) {
         var video = this.videos[this.currentContent];
         if (this.config.hasOwnProperty("tracking_url")) {
             if (video.tracking['end']) {
+                if (this.quartile_track === true) {
+                    powrApiOriginal.request("https://api.powr.com/p0/ads/play?type=end&creator_id"
+                        + video.user_id + "&video_id=" + video.id, function () {
+                        return;
+                    });
+                }
+
                 powrApiOriginal.request(this.config.tracking_url + video.tracking['end'], function () {
                     return;
                 });
