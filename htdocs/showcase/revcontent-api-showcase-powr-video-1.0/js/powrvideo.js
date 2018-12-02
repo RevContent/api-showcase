@@ -125,7 +125,7 @@ if (!String.prototype.endsWithPowr) {
         this.quartile_track = false;
         if (this.config.pub_id == "10004590" || this.config.pub_id == "39348" || this.config.pub_id == "10001976"
             || this.config.pub_id == "10002863" || this.config.pub_id == "10002864" || this.config.pub_id == "10006372"
-            || this.config.pub_id == "35362") {
+            || this.config.pub_id == "35362" && window.location.href.indexOf("powrquartiles=1") > 0) {
             this.quartile_track = true;
         }
 
