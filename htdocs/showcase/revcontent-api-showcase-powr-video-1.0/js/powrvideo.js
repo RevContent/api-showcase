@@ -304,6 +304,7 @@ if (!String.prototype.endsWithPowr) {
                 width = window.innerWidth;
             } else if (this.powrMaxWidth > 0) {
                 width = this.powrMaxWidth;
+                this.log("max width detected:" + width);
             } else {
                 width = parseInt(this.config.width);
             }
@@ -321,6 +322,9 @@ if (!String.prototype.endsWithPowr) {
                 height = parseInt(0.5625 * width);
             }
 
+            if (this.powrMaxWidth > 0) {
+                this.log("max width height:" + height);
+            }
             execution = "outstream";
             placement = "incontent";
         } else {
@@ -428,13 +432,9 @@ if (!String.prototype.endsWithPowr) {
 
         if (this.powrMaxWidth > 0) {
             width = this.powrMaxWidth;
-        }
-
-        if ((width == null || width <= 0) && this.config.showhide == "yes") {
+        } else if ((width == null || width <= 0) && this.config.showhide == "yes") {
             width = parseInt(this.config.width);
-        }
-
-        if (this.config.pub_id == 98997 && this.config.showhide == "yes") {
+        } else if (this.config.pub_id == 98997 && this.config.showhide == "yes") {
             width = window.innerWidth;
         }
 
