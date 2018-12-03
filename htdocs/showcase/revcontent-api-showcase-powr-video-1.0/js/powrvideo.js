@@ -133,10 +133,7 @@ if (!String.prototype.endsWithPowr) {
         if (this.config.showhide == 'yes') {
             this.playerHasShown = false;
             this.adPaused = false;
-            if (window.location.href.indexOf("powrmaxwidth=1") > 0) {
-                this.powrMaxWidth = 300;
-                w = this.powrMaxWidth;
-            } else if (this.config.pub_id == 100010295) {
+            if (this.config.pub_id == 100010295) {
                 w = 640;
                 this.config.width = w;
             } else if (this.config.pub_id == 98997) {
@@ -148,6 +145,10 @@ if (!String.prototype.endsWithPowr) {
                 this.checkRatio(w);
             } else {
                 w = this.config.width;
+                if (w > 640) {
+                    this.powrMaxWidth = 640;
+                    w = this.powrMaxWidth;
+                }
             }
         } else {
             w = this.element.clientWidth;
