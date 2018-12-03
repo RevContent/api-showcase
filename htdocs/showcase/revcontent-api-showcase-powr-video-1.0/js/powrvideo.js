@@ -632,6 +632,10 @@ if (!String.prototype.endsWithPowr) {
             aspectRatio = "vjs-fluid";
         }
 
+        if (window.location.href.indexOf("odysseywidth=1") > 0) {
+            aspectRatio = "vjs-16-9";
+        }
+
 
         dumbPlayer.className = 'video-js vjs-default-skin vjs-big-play-centered ' + aspectRatio;
         dumbPlayer.setAttribute('width', this.getPlayerWidth() + 'px');
@@ -641,10 +645,6 @@ if (!String.prototype.endsWithPowr) {
                 this.log("outstream width: " + outstreamWidth);
             }
             dumbPlayer.setAttribute("style", "width:" + outstreamWidth + "px;");
-        }
-
-        if (this.powrMaxWidth > 0) {
-            this.log("maxwidth Height in setup:" + this.getPlayerHeight());
         }
 
         dumbPlayer.setAttribute('height', this.getPlayerHeight() + 'px');
