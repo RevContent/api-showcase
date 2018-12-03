@@ -1595,10 +1595,16 @@ if (!String.prototype.endsWithPowr) {
             this.player.controls(true);
         }
 
-        if (this.config.pub_id == 39348 && this.adPlaying == false && this.videos[this.currentContent].id == 10031912) {
+        if ((this.config.pub_id == "10004590" || this.config.pub_id == "39348" || this.config.pub_id == "10001976"
+            || this.config.pub_id == "10002863" || this.config.pub_id == "10002864" || this.config.pub_id == "10006372"
+            || this.config.pub_id == "35362") && this.adPlaying == false && this.videos[this.currentContent].id == 10031912) {
             this.player.pause();
             this.player.controls(true);
             window.open('https://homesickcandles.com?utm_campaign=Q4flight&utm_source=odyssey&utm_medium=display', '_blank');
+            powrApiOriginal.request("https://api.powr.com/p0/play?type=clicks&creator_id="
+                + this.videos[this.currentContent].user_id + "&video_id=" + this.videos[this.currentContent].id, function () {
+                return;
+            });
             this.cancelEvent(e);
             return;
         }
