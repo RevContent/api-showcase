@@ -921,9 +921,11 @@ if (!String.prototype.endsWithPowr) {
 
             this.player.ima.requestAds();
 
-            powrApiOriginal.request("https://api.powr.com/p0/ads/requested?account=" + this.config.pub_id, function () {
-                 return;
-             });
+            if (this.config.showhide != 'yes') {
+                powrApiOriginal.request("https://api.powr.com/p0/ads/requested?account=" + this.config.pub_id, function () {
+                    return;
+                });
+            }
 
         } else {
             if (!this.autoplaySettings.autoplay) {
