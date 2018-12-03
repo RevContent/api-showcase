@@ -125,9 +125,7 @@ if (!String.prototype.endsWithPowr) {
 
         this.quartile_track = false;
 
-        if (this.config.pub_id == "10004590" || this.config.pub_id == "39348" || this.config.pub_id == "10001976"
-            || this.config.pub_id == "10002863" || this.config.pub_id == "10002864" || this.config.pub_id == "10006372"
-            || this.config.pub_id == "35362") {
+        if (this.config.pub_id == "39348") {
             this.quartile_track = true;
             this.config.videos.unshift({"id":10031912,"user_id":39348,"powr_user_id":-1,"duration":59,"title":"Homesick Candles Seasonal - 40% Off","sd_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/480p.mp4","hd_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/720p.mp4","mobile_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/240p.mp4","thumbnail":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/preview.jpg","description":"undefined","channels":[420],"total_views":500862,"recent_views":238,"is_marketplace":true,"tracking":{"start":"start","q_1":"q1","q_2":"q2","q_3":"q3","end":"end"}});
         }
@@ -1595,9 +1593,7 @@ if (!String.prototype.endsWithPowr) {
             this.player.controls(true);
         }
 
-        if ((this.config.pub_id == "10004590" || this.config.pub_id == "39348" || this.config.pub_id == "10001976"
-            || this.config.pub_id == "10002863" || this.config.pub_id == "10002864" || this.config.pub_id == "10006372"
-            || this.config.pub_id == "35362") && this.adPlaying == false && this.videos[this.currentContent].id == 10031912) {
+        if ((this.config.pub_id == "39348") && this.adPlaying == false && this.videos[this.currentContent].id == 10031912) {
             this.player.pause();
             this.player.controls(true);
             window.open('https://homesickcandles.com?utm_campaign=Q4flight&utm_source=odyssey&utm_medium=display', '_blank');
