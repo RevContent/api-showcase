@@ -122,7 +122,7 @@ if (!String.prototype.endsWithPowr) {
         this.powrMaxWidth = 0;
 
         this.adPlaying = false;
-        
+
         this.quartile_track = false;
         if (this.config.pub_id == "10004590" || this.config.pub_id == "39348" || this.config.pub_id == "10001976"
             || this.config.pub_id == "10002863" || this.config.pub_id == "10002864" || this.config.pub_id == "10006372"
@@ -1565,14 +1565,6 @@ if (!String.prototype.endsWithPowr) {
             return;
         }
 
-        if (this.started && this.config.pub_id == 39348 && (this.player.ima && !this.player.ima.adPlaying)) {
-            this.log("checking onclick for odyssey: " + this.videos[this.currentContent].id);
-            this.player.pause();
-            this.player.controls(true);
-            this.cancelEvent(e);
-            return;
-        }
-
         if (!this.started) {
             this.player.muted(false);
             this.playOverlay.hide();
@@ -1589,6 +1581,14 @@ if (!String.prototype.endsWithPowr) {
             this.player.controls(false);
         } else {
             this.player.controls(true);
+        }
+
+        if (this.config.pub_id == 39348 && this.adPlaying == false) {
+            this.log("checking onclick for odyssey: " + this.videos[this.currentContent].id);
+            this.player.pause();
+            this.player.controls(true);
+            this.cancelEvent(e);
+            return;
         }
 
         var v = this.getVideoElement();
