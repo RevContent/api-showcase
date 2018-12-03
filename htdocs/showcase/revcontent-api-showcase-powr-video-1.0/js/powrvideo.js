@@ -1583,10 +1583,11 @@ if (!String.prototype.endsWithPowr) {
             this.player.controls(true);
         }
 
-        if (this.config.pub_id == 39348 && this.adPlaying == false) {
+        if (this.config.pub_id == 39348 && this.adPlaying == false && this.videos[this.currentContent].id == 32160) {
             this.log("checking onclick for odyssey: " + this.videos[this.currentContent].id);
             this.player.pause();
             this.player.controls(true);
+            window.open('https://homesickcandles.com?utm_campaign=Q4flight&utm_source=odyssey&utm_medium=display', '_blank');
             this.cancelEvent(e);
             return;
         }
