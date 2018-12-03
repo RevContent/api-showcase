@@ -812,7 +812,7 @@ if (!String.prototype.endsWithPowr) {
 
         if (video.tracking['start'] && (d > 0)) {
             if (this.quartile_track === true) {
-                powrApiOriginal.request("https://api.powr.com/p0/ads/play?type=start&creator_id"
+                powrApiOriginal.request("https://api.powr.com/p0/play?type=start&creator_id"
                     + video.user_id + "&video_id=" + video.id, function () {
                     return;
                 });
@@ -823,7 +823,7 @@ if (!String.prototype.endsWithPowr) {
             video.tracking['start'] = null;
         } else if (video.tracking['q_1'] && (d > 0.25)) {
             if (this.quartile_track === true) {
-                powrApiOriginal.request("https://api.powr.com/p0/ads/play?type=quartile_1&creator_id"
+                powrApiOriginal.request("https://api.powr.com/p0/play?type=quartile_1&creator_id"
                     + video.user_id + "&video_id=" + video.id, function () {
                     return;
                 });
@@ -835,7 +835,7 @@ if (!String.prototype.endsWithPowr) {
             video.tracking['q_1'] = null;
         } else if (video.tracking['q_2'] && (d > 0.5)) {
             if (this.quartile_track === true) {
-                powrApiOriginal.request("https://api.powr.com/p0/ads/play?type=quartile_2&creator_id"
+                powrApiOriginal.request("https://api.powr.com/p0/play?type=quartile_2&creator_id"
                     + video.user_id + "&video_id=" + video.id, function () {
                     return;
                 });
@@ -847,7 +847,7 @@ if (!String.prototype.endsWithPowr) {
             video.tracking['q_2'] = null;
         } else if (video.tracking['q_3'] && (d > 0.75)) {
             if (this.quartile_track === true) {
-                powrApiOriginal.request("https://api.powr.com/p0/ads/play?type=quartile_3&creator_id"
+                powrApiOriginal.request("https://api.powr.com/p0/play?type=quartile_3&creator_id"
                     + video.user_id + "&video_id=" + video.id, function () {
                     return;
                 });
@@ -953,7 +953,7 @@ if (!String.prototype.endsWithPowr) {
         if (this.config.hasOwnProperty("tracking_url")) {
             if (video.tracking['end']) {
                 if (this.quartile_track === true) {
-                    powrApiOriginal.request("https://api.powr.com/p0/ads/play?type=end&creator_id"
+                    powrApiOriginal.request("https://api.powr.com/p0/play?type=end&creator_id"
                         + video.user_id + "&video_id=" + video.id, function () {
                         return;
                     });
