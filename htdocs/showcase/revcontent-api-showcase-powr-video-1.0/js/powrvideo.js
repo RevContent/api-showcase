@@ -1561,9 +1561,13 @@ if (!String.prototype.endsWithPowr) {
             return;
         }
 
-        if (this.started && this.config.pub_id == 39348) {
+        if (this.started && this.config.pub_id == 39348 && (this.player.ima && !this.player.ima.adPlaying)) {
             this.log("checking onclick for odyssey: " + this.videos[this.currentContent].id);
+            this.player.pause();
+            this.cancelEvent(e);
+            return;
         }
+
         if (!this.started) {
             this.player.muted(false);
             this.playOverlay.hide();
