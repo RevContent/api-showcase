@@ -74,6 +74,10 @@ if (!String.prototype.endsWithPowr) {
 
         this.floatSettings = this.createFloatSettings();
 
+        // if (this.config.subid == "w_96899" && window.location.href.indexOf("powrtest=1") > 0) {
+        //     this.config.autoload = "load";
+        // }
+
         this.autoplaySettings = this.createAutoplaySettings();
         this.permanentClose = "no";
         if (this.config.permanent_cross) {
@@ -113,6 +117,22 @@ if (!String.prototype.endsWithPowr) {
         }
         this.viewed = false;
 
+        this.letterbox = false;
+
+        this.powrMaxWidth = 0;
+
+        this.adPlaying = false;
+
+        this.quartile_track = false;
+
+        if (this.config.pub_id == "10004590" || this.config.pub_id == "39348" || this.config.pub_id == "10001976"
+            || this.config.pub_id == "10002863" || this.config.pub_id == "10002864" || this.config.pub_id == "10006372"
+            || this.config.pub_id == "35362") {
+            this.quartile_track = true;
+            this.config.videos.unshift({"id":10031912,"user_id":39348,"powr_user_id":-1,"duration":59,"title":"Homesick Candles Seasonal - 40% Off","sd_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/480p.mp4","hd_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/720p.mp4","mobile_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/240p.mp4","thumbnail":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/preview.jpg","description":"undefined","channels":[420],"total_views":500862,"recent_views":238,"is_marketplace":true,"tracking":{"start":"start","q_1":"q1","q_2":"q2","q_3":"q3","end":"end"}});
+        }
+
+
         var w;
         if (this.config.showhide == 'yes') {
             this.playerHasShown = false;
@@ -126,8 +146,17 @@ if (!String.prototype.endsWithPowr) {
                 }
 
                 w = window.innerWidth;
+                this.checkRatio(w);
             } else {
                 w = this.config.width;
+                if (w > 640) {
+                    this.powrMaxWidth = 640;
+                    w = this.powrMaxWidth;
+                } else if (window.location.href.indexOf("powrmaxwidth=1") > 0) {
+                    this.powrMaxWidth = 500;
+                    w = this.powrMaxWidth;
+                }
+
             }
         } else {
             w = this.element.clientWidth;
@@ -138,21 +167,28 @@ if (!String.prototype.endsWithPowr) {
         if (!this.config.fluid) {
             h = 0.5625 * w;
             hs = parseInt(h) + "px";
-        } else if (this.config.subid == "w_103808") {
+        } else if (this.letterbox === true) {
             h = window.innerHeight;
             w = h / 0.5625;
         }
 
+        if (this.powrMaxWidth > 0) {
+            this.log("max Width initial height: " + h);
+        }
+        this.actualWidth = w;
+        this.actualHeight = h;
+
         if (window.location.href.indexOf("powrtest=1") > 0) {
-            this.log("ff test width: " + w);
-            this.log("ff test width #2: " + document.body.clientWidth);
-            this.log("ff test width #3: " + parent.document.getElementById(frameElement.id).width);
-            this.log("ff playoverlay content: " + this.playOverlay);
+            // this.log("ff test width: " + w);
+            // this.log("ff test width #2: " + document.body.clientWidth);
+            // this.log("ff test width #3: " + parent.document.getElementById(frameElement.id).width);
+            // this.log("ff playoverlay content: " + this.playOverlay);
             this.log("useragent: " + navigator.userAgent);
             this.log("widget: "+ this.config.subid);
         }
 
         this.videos = config.videos;
+
 
         if (this.videos.length == 0) {
             this.onCrossClicked(null);
@@ -176,7 +212,7 @@ if (!String.prototype.endsWithPowr) {
             powrUtils.addClass(this.element, "showhide");
         }
 
-        this.element.setAttribute("style", "width: 100%; height : 100%; background-color : #EFEFEF; position : relative;");
+        this.element.setAttribute("style", "width: 100%; height : 100%; position : relative;");
 
         if (this.showOnFocus == "yes") {
             powrUtils.addClass(this.element, "powr_hidden");
@@ -271,19 +307,22 @@ if (!String.prototype.endsWithPowr) {
 
         var width, height, execution, placement;
         if (this.config.showhide == "yes") {
-            if ((this.config.pub_id == 100010295 || this.config.pub_id == 98997) && window.location.href.indexOf("powrtest=1") > 0) {
+            if (window.location.href.indexOf("powrtest=1") > 0) {
                 tag = 919192;
             }
+
             if (this.config.pub_id == 100010295) {
                 width = 640;
-
             } else if (this.config.pub_id == 98997) {
                 width = window.innerWidth;
+            } else if (this.powrMaxWidth > 0) {
+                width = this.powrMaxWidth;
+                this.log("max width detected:" + width);
             } else {
                 width = parseInt(this.config.width);
             }
 
-            if (this.config.subid == "w_103808") {
+            if (this.letterbox === true) {
                 height = window.innerHeight;
                 width = height / 0.5625;
                 this.player.width(width);
@@ -292,10 +331,17 @@ if (!String.prototype.endsWithPowr) {
                 height = parseInt(0.5625 * width);
                 this.player.width(width);
                 document.getElementsByClassName("powr_player")[0].style.width = width + "px";
+            } else if (this.powrMaxWidth > 0) {
+                height = parseInt(0.5625 * width);
+                this.player.width(width);
+                document.getElementsByClassName("powr_player")[0].style.width = width + "px";
             } else {
                 height = parseInt(0.5625 * width);
             }
 
+            if (this.powrMaxWidth > 0) {
+                this.log("max width height:" + height);
+            }
             execution = "outstream";
             placement = "incontent";
         } else {
@@ -305,9 +351,9 @@ if (!String.prototype.endsWithPowr) {
             placement = "";
         }
 
-        if (this.config.subid == "w_103808") {
-            this.log("width: " + width +  "/ height: " + height);
-        }
+        // if (this.letterbox === true) {
+        //     this.log("width: " + width +  "/ height: " + height);
+        // }
 
         if (this.config.pub_id == 1281) {
             var ret = "https://googleads.g.doubleclick.net/pagead/ads?ad_type=video&client=ca-video-pub-4968145218643279&videoad_start_delay=0&description_url=http%3A%2F%2Fwww.google.com&max_ad_duration=40000&adtest=on";
@@ -400,20 +446,27 @@ if (!String.prototype.endsWithPowr) {
 
         var width = this.element.clientWidth;
         var height;
-        if ((width == null || width <= 0) && this.config.showhide == "yes") {
-            width = parseInt(this.config.width);
-        }
 
-        if (this.config.pub_id == 98997 && this.config.showhide == "yes") {
+        if (this.powrMaxWidth > 0) {
+            width = this.powrMaxWidth;
+        } else if ((width == null || width <= 0) && this.config.showhide == "yes") {
+            width = parseInt(this.config.width);
+        } else if (this.config.pub_id == 98997 && this.config.showhide == "yes") {
             width = window.innerWidth;
         }
 
         height = parseInt(0.5625 * width);
 
-        if (this.config.subid == "w_103808") {
+        if (this.powrMaxWidth > 0) {
+            this.log("maxwidth height on resize: " + height);
+        }
+        if (this.letterbox === true) {
             height = window.innerHeight;
             width = height / 0.5625;
         }
+
+        this.actualWidth = width;
+        this.actualHeight = height;
 
         var hs = height + "px";
 
@@ -427,7 +480,7 @@ if (!String.prototype.endsWithPowr) {
         if (this.player && !this.floated) {
             this.player.dimensions(width, height);
         }
-        this.element.setAttribute("style", "width : 100%; height : " + hs + "; background-color : #EFEFEF");
+        this.element.setAttribute("style", "width : 100%; height : " + hs);
 
         var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
         var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
@@ -515,9 +568,20 @@ if (!String.prototype.endsWithPowr) {
         this.container.className = "powr_player";
 
         if (this.config.pub_id == 98997) {
+            this.container.className += " showhide";
             document.body.appendChild(this.container);
         } else {
             this.element.appendChild(this.container);
+        }
+
+        if (this.config.showhide == "yes" && this.letterbox !== true) {
+            this.brandingContainer = document.createElement("div");
+            this.brandingContainer.className = "powr_branding";
+            if (this.config.pub_id == 98997) {
+                this.brandingContainer.className += " powr_branding_overlay";
+            }
+            this.brandingContainer.innerHTML = '<a target="_blank" href="https://powr.com/getpowr" class="powr_branding_text">Powered by Powr</a>';
+            this.container.appendChild(this.brandingContainer);
         }
 
         if (this.permanentClose == "yes") {
@@ -554,16 +618,22 @@ if (!String.prototype.endsWithPowr) {
         var outstreamWidth;
         if (this.config.showhide == "yes") {
             aspectRatio = "vjs-16-9";
-            if (this.config.subid == "w_103808") {
+            if (this.letterbox === true) {
                 outstreamWidth = window.innerHeight / 0.5625;
             } else if (this.config.pub_id == 98997) {
                 outstreamWidth = window.innerWidth;
+            } else if (this.powrMaxWidth > 0) {
+                outstreamWidth = this.powrMaxWidth;
             } else {
                 outstreamWidth = this.config.width;
             }
 
         } else {
             aspectRatio = "vjs-fluid";
+        }
+
+        if (window.location.href.indexOf("odysseywidth=1") > 0) {
+            aspectRatio = "vjs-16-9";
         }
 
 
@@ -746,25 +816,58 @@ if (!String.prototype.endsWithPowr) {
         var video = this.videos[this.currentContent];
         var d = this.player.currentTime();
         d = (d * 1.0) / video.duration;
+
         if (video.tracking['start'] && (d > 0)) {
-            powrApiOriginal.request(this.config.tracking_url + video.tracking['start'], function () {
-                return;
-            });
+            if (this.quartile_track === true) {
+                powrApiOriginal.request("https://api.powr.com/p0/play?type=start&creator_id="
+                    + video.user_id + "&video_id=" + video.id, function () {
+                    return;
+                });
+            } else {
+                powrApiOriginal.request(this.config.tracking_url + video.tracking['start'], function () {
+                    return;
+                });
+            }
+
             video.tracking['start'] = null;
         } else if (video.tracking['q_1'] && (d > 0.25)) {
-            powrApiOriginal.request(this.config.tracking_url + video.tracking['q_1'], function () {
-                return;
-            });
+            if (this.quartile_track === true) {
+                powrApiOriginal.request("https://api.powr.com/p0/play?type=quartile_1&creator_id="
+                    + video.user_id + "&video_id=" + video.id, function () {
+                    return;
+                });
+            } else {
+                powrApiOriginal.request(this.config.tracking_url + video.tracking['q_1'], function () {
+                    return;
+                });
+            }
+
             video.tracking['q_1'] = null;
         } else if (video.tracking['q_2'] && (d > 0.5)) {
-            powrApiOriginal.request(this.config.tracking_url + video.tracking['q_2'], function () {
-                return;
-            });
+            if (this.quartile_track === true) {
+                powrApiOriginal.request("https://api.powr.com/p0/play?type=quartile_2&creator_id="
+                    + video.user_id + "&video_id=" + video.id, function () {
+                    return;
+                });
+            } else {
+                powrApiOriginal.request(this.config.tracking_url + video.tracking['q_2'], function () {
+                    return;
+                });
+            }
+
             video.tracking['q_2'] = null;
         } else if (video.tracking['q_3'] && (d > 0.75)) {
-            powrApiOriginal.request(this.config.tracking_url + video.tracking['q_3'], function () {
-                return;
-            });
+            if (this.quartile_track === true) {
+                powrApiOriginal.request("https://api.powr.com/p0/play?type=quartile_3&creator_id="
+                    + video.user_id + "&video_id=" + video.id, function () {
+                    return;
+                });
+            } else {
+                powrApiOriginal.request(this.config.tracking_url + video.tracking['q_3'], function () {
+                    return;
+                });
+            }
+
             video.tracking['q_3'] = null;
         }
     };
@@ -816,9 +919,11 @@ if (!String.prototype.endsWithPowr) {
 
             this.player.ima.requestAds();
 
-            powrApiOriginal.request("https://api.powr.com/p0/ads/requested?account=" + this.config.pub_id, function () {
-                 return;
-             });
+            if (this.config.showhide != 'yes') {
+                powrApiOriginal.request("https://api.powr.com/p0/ads/requested?account=" + this.config.pub_id, function () {
+                    return;
+                });
+            }
 
         } else {
             if (!this.autoplaySettings.autoplay) {
@@ -861,9 +966,17 @@ if (!String.prototype.endsWithPowr) {
         var video = this.videos[this.currentContent];
         if (this.config.hasOwnProperty("tracking_url")) {
             if (video.tracking['end']) {
-                powrApiOriginal.request(this.config.tracking_url + video.tracking['end'], function () {
-                    return;
-                });
+                if (this.quartile_track === true) {
+                    powrApiOriginal.request("https://api.powr.com/p0/play?type=end&creator_id="
+                        + video.user_id + "&video_id=" + video.id, function () {
+                        return;
+                    });
+                } else {
+                    powrApiOriginal.request(this.config.tracking_url + video.tracking['end'], function () {
+                        return;
+                    });
+                }
+
                 video.tracking['end'] = null;
             }
         }
@@ -1158,7 +1271,7 @@ if (!String.prototype.endsWithPowr) {
                     elementTop = that.focusPixel.getBoundingClientRect().top;
                     elementBottom = that.focusPixel.getBoundingClientRect().bottom;
                     elementVisibleHeight = that.showhideHeight * 0.50;
-                    elementDelta = 300;
+                    elementDelta = 400;
                 }
             } else {
                 elementTop = that.element.getBoundingClientRect().top;
@@ -1168,19 +1281,38 @@ if (!String.prototype.endsWithPowr) {
             }
 
             // var pixelsShown = Math.min(Math.max(elementTop > 0 ? windowHeight - elementTop : that.getPlayerHeight() + elementTop, 0), that.getPlayerHeight());
-            if (elementTop + (that.getPlayerHeight() * 0.4) < 0 || (elementTop > (windowHeight - 150) && window.location.href.indexOf("powrtest=1") > 0)) {
-                if (that.visible) {
-                    that.visible = false;
-                    that.onHidden();
+            if (((that.config.subid == "w_103804" || that.config.subid == "w_103812") && that.config.pub_id == 98997) || (window.location.href.indexOf("powrtest=1&vistrack=1") > 0)) {
+                if (elementTop < (0 - (windowHeight * 0.33)) || elementTop > (windowHeight - 50)) {
+                    if (that.visible) {
+                        that.visible = false;
+                        that.onHidden();
+                    }
+                } else {
+                    if (!that.visible) {
+                        that.visible = true;
+                        that.onVisible();
+                    }
                 }
-            } else if (elementTop + 30 < windowHeight + elementDelta) {
-                if (!that.visible) {
-                    that.visible = true;
-                    that.onVisible();
+            } else {
+                if (elementTop + (that.getPlayerHeight() * 0.4) < 0 || ((elementTop) > (windowHeight) && window.location.href.indexOf("powrtest=1") > 0)) {
+                    if (that.visible) {
+                        that.visible = false;
+                        that.onHidden();
+                    }
+                } else if (elementTop + 30 < windowHeight + elementDelta) {
+                    if (!that.visible) {
+                        that.visible = true;
+                        that.onVisible();
+                    }
                 }
             }
 
+
             if (window.location.href.indexOf("powrtest=1&vistrack=1") > 0) {
+                that.log("Is Visible: " + that.visible);
+                that.log("Actual Height: " + that.actualHeight);
+                that.log("Height calc:" + (windowHeight - (that.actualHeight * 0.25)));
+                that.log("Height calc 2:" + (windowHeight - (that.actualHeight * 0.75)));
                 that.log("element top: " + elementTop);
                 that.log("player height: " + that.getPlayerHeight());
                 that.log("window height: " + windowHeight);
@@ -1273,7 +1405,7 @@ if (!String.prototype.endsWithPowr) {
         }
         if (event.type == google.ima.AdEvent.Type.STARTED) {
             if (document.URL.indexOf('debug=adspowr') !== -1) {
-
+                this.adPlaying = true;
                 var openvv = new OpenVV(), element = document.getElementById(this.playerId);
 
                 openvv
@@ -1318,6 +1450,7 @@ if (!String.prototype.endsWithPowr) {
             }
         }
         if (event.type == google.ima.AdEvent.Type.ALL_ADS_COMPLETED) {
+            this.adPlaying = false;
             if (this.adsPlayed == 0) {
                 this.log("No ads shown. Backfill");
                 if (this.config.widget_id && this.config.widget_id != -1) {
@@ -1443,6 +1576,7 @@ if (!String.prototype.endsWithPowr) {
         if ((this.player.ima && this.player.ima.adPlaying) || this.config.showhide == 'yes') {
             return;
         }
+
         if (!this.started) {
             this.player.muted(false);
             this.playOverlay.hide();
@@ -1459,6 +1593,20 @@ if (!String.prototype.endsWithPowr) {
             this.player.controls(false);
         } else {
             this.player.controls(true);
+        }
+
+        if ((this.config.pub_id == "10004590" || this.config.pub_id == "39348" || this.config.pub_id == "10001976"
+            || this.config.pub_id == "10002863" || this.config.pub_id == "10002864" || this.config.pub_id == "10006372"
+            || this.config.pub_id == "35362") && this.adPlaying == false && this.videos[this.currentContent].id == 10031912) {
+            this.player.pause();
+            this.player.controls(true);
+            window.open('https://homesickcandles.com?utm_campaign=Q4flight&utm_source=odyssey&utm_medium=display', '_blank');
+            powrApiOriginal.request("https://api.powr.com/p0/play?type=clicks&creator_id="
+                + this.videos[this.currentContent].user_id + "&video_id=" + this.videos[this.currentContent].id, function () {
+                return;
+            });
+            this.cancelEvent(e);
+            return;
         }
 
         var v = this.getVideoElement();
@@ -1826,11 +1974,12 @@ if (!String.prototype.endsWithPowr) {
         }
 
         if (this.config.pub_id == 98997 || window.location.href.indexOf("overlay=1") > 0) {
+            powrUtils.removeClass(this.container, "showhide");
             document.getElementsByClassName("powr_player")[0].style.position = "absolute";
             document.getElementsByClassName("powr_player")[0].style.zIndex = "9999999";
             document.getElementsByClassName("rc-modal-shade")[0].style.background = "rgba(0,0,0,.85)";
             document.getElementsByClassName("powr_player")[0].style.top = "50%";
-            if (this.config.subid == "w_103808") {
+            if (this.letterbox === true) {
                 document.getElementsByClassName("powr_player")[0].style.left = "50%";
                 document.getElementsByClassName("powr_player")[0].style.transform = "translate(-50%, -50%)";
                 document.getElementsByClassName('rc-modal-shade')[0].style.height = '100%';
@@ -1840,9 +1989,15 @@ if (!String.prototype.endsWithPowr) {
             }
 
             document.getElementsByClassName('rc-modal-shade')[0].style.display = 'block';
+            this.container.classList.add("animated", "zoomIn");
+        } else if (this.powrMaxWidth > 0) {
+            this.container.style.margin = "auto";
+            this.element.parentNode.classList.add("animated", "zoomIn");
+        } else {
+            this.element.parentNode.classList.add("animated", "zoomIn");
         }
 
-        this.element.parentNode.classList.add("animated", "zoomIn");
+
         this.element.addEventListener(animationEnd, function(e) {
             e.target.removeEventListener(e.type, arguments.callee);
 
@@ -1873,20 +2028,47 @@ if (!String.prototype.endsWithPowr) {
             }
         })(document.createElement('div'));
 
-        this.element.parentNode.classList.add("animated", "zoomOut");
-        this.element.classList.add("animated", "zoomOut");
-        this.element.parentNode.addEventListener(animationEnd, function(e) {
+        var containerParent, containerChildClasses;
+        if (this.config.pub_id == 98997 || window.location.href.indexOf("overlay=1") > 0) {
+            containerParent = this.container.parentNode;
+            containerChildClasses = this.container.classList;
+        } else {
+            containerParent = this.element.parentNode;
+            containerChildClasses = this.element.classList;
+            containerParent.classList.add("animated", "zoomOut");
+        }
+
+        containerChildClasses.add("animated", "zoomOut");
+
+        containerParent.addEventListener(animationEnd, function(e) {
             e.target.removeEventListener(e.type, arguments.callee);
             elementId.setAttribute("style", "width: 0px; height : 0px; position : relative;");
             playerInstance.dispose();
-            elementId.parentNode.removeChild(elementId);
             if (that.config.pub_id == 98997 || window.location.href.indexOf("overlay=1") > 0) {
                 document.getElementsByClassName("powr_player")[0].style.display = "none";
                 document.getElementsByClassName('rc-modal-shade')[0].style.display = 'none';
                 document.getElementsByClassName("rc-modal-shade")[0].style.background = "rgba(0,0,0,.5)";
                 document.getElementsByClassName('rc-modal-shade')[0].style.height = '100%';
+            } else {
+                containerParent.removeChild(elementId);
             }
         });
 	});
+
+    PowrVideo.prototype.checkRatio = (function (calculated_width) {
+        var calculated_height = calculated_width * 0.5625;
+        if (window.location.href.indexOf("powrtest=1") > 0) {
+            this.log("height: " + calculated_height);
+            this.log("width: " + calculated_width);
+        }
+
+        if (calculated_height > parent.document.getElementById(frameElement.id).height) {
+            this.letterbox = true;
+            if (window.location.href.indexOf("powrtest=1") > 0) {
+                this.log("letterbox widget detected");
+            }
+        }
+    });
+
     return PowrVideo;
 }));
