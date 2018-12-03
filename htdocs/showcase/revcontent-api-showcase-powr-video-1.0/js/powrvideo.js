@@ -1956,6 +1956,9 @@ if (!String.prototype.endsWithPowr) {
 
             document.getElementsByClassName('rc-modal-shade')[0].style.display = 'block';
             this.container.classList.add("animated", "zoomIn");
+        } else if (this.powrMaxWidth > 0) {
+            this.container.style.margin = "auto";
+            this.element.parentNode.classList.add("animated", "zoomIn");
         } else {
             this.element.parentNode.classList.add("animated", "zoomIn");
         }
