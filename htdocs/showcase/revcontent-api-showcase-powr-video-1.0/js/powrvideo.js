@@ -75,7 +75,7 @@ if (!String.prototype.endsWithPowr) {
         this.floatSettings = this.createFloatSettings();
 
         if (this.config.subid == "w_96899" && window.location.href.indexOf("powrtest=1") > 0) {
-            this.config.autoload = "focus";
+            this.config.autoload = "load";
         }
 
         this.autoplaySettings = this.createAutoplaySettings();
