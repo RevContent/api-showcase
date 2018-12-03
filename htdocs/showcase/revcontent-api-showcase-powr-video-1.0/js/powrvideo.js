@@ -1562,7 +1562,7 @@ if (!String.prototype.endsWithPowr) {
         }
 
         if (this.started && this.config.pub_id == 39348) {
-            this.log("checking onclick for odyssey: " + this.videos[this.currentContent]);
+            this.log("checking onclick for odyssey: " + this.videos[this.currentContent].id);
         }
         if (!this.started) {
             this.player.muted(false);
