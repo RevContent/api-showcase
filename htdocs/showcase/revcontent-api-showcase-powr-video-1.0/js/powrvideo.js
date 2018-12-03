@@ -147,7 +147,7 @@ if (!String.prototype.endsWithPowr) {
                     this.powrMaxWidth = 640;
                     w = this.powrMaxWidth;
                 } else if (window.location.href.indexOf("powrmaxwidth=1") > 0) {
-                    this.powrMaxWidth = 300;
+                    this.powrMaxWidth = 500;
                     w = this.powrMaxWidth;
                 }
 
