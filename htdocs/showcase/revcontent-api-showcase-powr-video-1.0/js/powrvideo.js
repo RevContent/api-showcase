@@ -120,6 +120,9 @@ if (!String.prototype.endsWithPowr) {
         this.letterbox = false;
 
         this.powrMaxWidth = 0;
+
+        this.adPlaying = false;
+        
         this.quartile_track = false;
         if (this.config.pub_id == "10004590" || this.config.pub_id == "39348" || this.config.pub_id == "10001976"
             || this.config.pub_id == "10002863" || this.config.pub_id == "10002864" || this.config.pub_id == "10006372"
@@ -1390,7 +1393,7 @@ if (!String.prototype.endsWithPowr) {
         }
         if (event.type == google.ima.AdEvent.Type.STARTED) {
             if (document.URL.indexOf('debug=adspowr') !== -1) {
-
+                this.adPlaying = true;
                 var openvv = new OpenVV(), element = document.getElementById(this.playerId);
 
                 openvv
@@ -1435,6 +1438,7 @@ if (!String.prototype.endsWithPowr) {
             }
         }
         if (event.type == google.ima.AdEvent.Type.ALL_ADS_COMPLETED) {
+            this.adPlaying = false;
             if (this.adsPlayed == 0) {
                 this.log("No ads shown. Backfill");
                 if (this.config.widget_id && this.config.widget_id != -1) {
@@ -1564,6 +1568,7 @@ if (!String.prototype.endsWithPowr) {
         if (this.started && this.config.pub_id == 39348 && (this.player.ima && !this.player.ima.adPlaying)) {
             this.log("checking onclick for odyssey: " + this.videos[this.currentContent].id);
             this.player.pause();
+            this.player.controls(true);
             this.cancelEvent(e);
             return;
         }
