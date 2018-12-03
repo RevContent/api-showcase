@@ -321,6 +321,10 @@ if (!String.prototype.endsWithPowr) {
                 height = parseInt(0.5625 * width);
                 this.player.width(width);
                 document.getElementsByClassName("powr_player")[0].style.width = width + "px";
+            } else if (this.powrMaxWidth > 0) {
+                height = parseInt(0.5625 * width);
+                this.player.width(width);
+                document.getElementsByClassName("powr_player")[0].style.width = width + "px";
             } else {
                 height = parseInt(0.5625 * width);
             }
