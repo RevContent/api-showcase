@@ -123,7 +123,7 @@ if (!String.prototype.endsWithPowr) {
         this.quartile_track = false;
         if (this.config.pub_id == "10004590" || this.config.pub_id == "39348" || this.config.pub_id == "10001976"
             || this.config.pub_id == "10002863" || this.config.pub_id == "10002864" || this.config.pub_id == "10006372"
-            || this.config.pub_id == "35362" && window.location.href.indexOf("powrquartiles=1") > 0) {
+            || this.config.pub_id == "35362") {
             this.quartile_track = true;
         }
 
@@ -1559,6 +1559,10 @@ if (!String.prototype.endsWithPowr) {
     PowrVideo.prototype.onClick = function (e) {
         if ((this.player.ima && this.player.ima.adPlaying) || this.config.showhide == 'yes') {
             return;
+        }
+
+        if (this.started && this.config.pub_id == 39348) {
+            this.log("checking onclick for odyssey: " + this.videos[this.currentContent]);
         }
         if (!this.started) {
             this.player.muted(false);
