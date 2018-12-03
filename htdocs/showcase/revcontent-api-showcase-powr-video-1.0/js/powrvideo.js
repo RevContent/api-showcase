@@ -74,9 +74,9 @@ if (!String.prototype.endsWithPowr) {
 
         this.floatSettings = this.createFloatSettings();
 
-        if (this.config.subid == "w_96899" && window.location.href.indexOf("powrtest=1") > 0) {
-            this.config.autoload = "load";
-        }
+        // if (this.config.subid == "w_96899" && window.location.href.indexOf("powrtest=1") > 0) {
+        //     this.config.autoload = "load";
+        // }
 
         this.autoplaySettings = this.createAutoplaySettings();
         this.permanentClose = "no";
@@ -146,7 +146,11 @@ if (!String.prototype.endsWithPowr) {
                 if (w > 640) {
                     this.powrMaxWidth = 640;
                     w = this.powrMaxWidth;
+                } else if (window.location.href.indexOf("powrmaxwidth=1") > 0) {
+                    this.powrMaxWidth = 300;
+                    w = this.powrMaxWidth;
                 }
+
             }
         } else {
             w = this.element.clientWidth;
