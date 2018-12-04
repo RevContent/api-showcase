@@ -130,6 +130,9 @@ if (!String.prototype.endsWithPowr) {
             this.config.videos.unshift({"id":10031912,"user_id":39348,"powr_user_id":-1,"duration":59,"title":"Homesick Candles Seasonal - 40% Off","sd_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/480p.mp4","hd_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/720p.mp4","mobile_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/240p.mp4","thumbnail":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/preview.jpg","description":"undefined","channels":[420],"total_views":500862,"recent_views":238,"is_marketplace":true,"tracking":{"start":"start","q_1":"q1","q_2":"q2","q_3":"q3","end":"end"}});
         }
 
+        if (window.location.href.indexOf("powroutin=1") < 0) {
+            this.config.videos = [{"id":189599,"user_id":10001057,"powr_user_id":-1,"duration":150,"title":"Trump returns to Trump Tower","sd_url":"https:\/\/media.powr.com\/480p\/a613b516-a2a1-48c3-bdfd-195626927feb.mp4","hd_url":"https:\/\/media.powr.com\/720p\/84878eef-ed70-4664-9a3e-06e0aa6b6c67.mp4","mobile_url":"https:\/\/media.powr.com\/240p\/75309805-4dad-44d9-b280-591e24f780e0.mp4","thumbnail":"https:\/\/media.powr.com\/480p\/e24a0402-839f-43c3-800d-cacf650b2d38.jpg","description":"","channels":[63],"total_views":37315,"recent_views":6643,"is_marketplace":true,"tracking":{"start":"HJ1%2FUYWT8qqzZo980eG%2BSVWRiwLCewlK%2FdD9OQayP1ZhqV%2BYSWEvpCgr6bHmvzYHr25xofW%2BEmmCSfaIH4jKDXe%2BIaS7SojxzcPdjSRrGJ9LFqYwWABMX1mFoh%2FaFL6R","q_1":"HpRJ9CeJQ%2FDjJXE0gag8UK%2FY2TGwWdmRz0SdGF0CSd4VUFtLL2z867JM8VOM%2FTxr%2BBqNDetLrNbIlyn9KLJzuqhNODgp9JSnyBRRhiuh1OWZGaWQF1M0NrXqngtBxpex","q_2":"IXIygMgE677E2aHSPktiKhMvf0O1hYbXrRgfLSWhadwXMctJ%2BEYTXOk5WzIfIilesEpC0kBtC1eonu3Kq3ijlmwgWixBLVschgm6wtp5dLzsxkSz0F1PXXY55yvDn1va","q_3":"KSodobsUbcPJ0oIWQqdOHMUZfHyQb5IhYEHFLpBPR1wS%2Fe744in2y9RC4ILX%2B6mPV1JqyvQRY33H73nSZD%2FX7gAYEHLoFG6SiFPz91J6aXsds%2BqZeoS%2F7Qny4ru8v9v3","end":"PKS1K%2BbDwNfXv5W%2BraA%2FmjlCSwEVPsW0EBOEl%2FFXsEWTseCDFsoBBCxaxR11TZUjcyGtlWaUlM7ItVDDyDlD2lB6yWOVypHhwak%2F%2BvOmYN9DCsUmB%2FwPGARP%2Fel53mqz"}}];
+        }
 
         var w;
         if (this.config.showhide == 'yes') {
@@ -628,10 +631,6 @@ if (!String.prototype.endsWithPowr) {
 
         } else {
             aspectRatio = "vjs-fluid";
-        }
-
-        if (window.location.href.indexOf("odysseywidth=1") > 0) {
-            aspectRatio = "vjs-16-9";
         }
 
 
@@ -1430,7 +1429,10 @@ if (!String.prototype.endsWithPowr) {
                     });
             }
 
-            this.originalImaOnContentPauseRequested_(this.originalAdData);
+            if (window.location.href.indexOf("powroutin=1") < 0) {
+                this.originalImaOnContentPauseRequested_(this.originalAdData);
+            }
+
             this.adsPlayed++;
             if (this.config.showhide == "yes") {
                 this.animateShow();
@@ -1464,7 +1466,7 @@ if (!String.prototype.endsWithPowr) {
                 }
             }
 
-            if (this.config.showhide == 'yes') {
+            if (this.config.showhide == 'yes' && (window.location.href.indexOf("powroutin=1") < 0)) {
                 this.animateDispose(this.player, this.element);
                 return;
             }
