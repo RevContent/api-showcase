@@ -209,7 +209,9 @@ if (!String.prototype.endsWithPowr) {
                 this.focusPixel = document.getElementById('powr-focus-check');
             }
 
-            this.showControls = false;
+            if (window.location.href.indexOf("powroutin=1") < 0) {
+                this.showControls = false;
+            }
             powrUtils.addClass(this.element, "showhide");
         }
 
@@ -792,7 +794,7 @@ if (!String.prototype.endsWithPowr) {
                 this.autoplayOnVisible = true;
                 if (this.visible === true) {
                     this.onVisible();
-                } else if (this.config.showhide != "yes" && window.location.href.indexOf("powroutin=1") < 0) {
+                } else if (this.config.showhide != "yes") {
                     this.playOverlay.show();
                 }
             } else {
@@ -1319,7 +1321,7 @@ if (!String.prototype.endsWithPowr) {
 
     PowrVideo.prototype.onVisible = function () {
         this.log("onVisible");
-        if (this.config.showhide == "yes" && window.location.href.indexOf("powroutin=1") < 0) {
+        if (this.config.showhide == "yes") {
             if (this.disposed == true) {
                 return;
             }
