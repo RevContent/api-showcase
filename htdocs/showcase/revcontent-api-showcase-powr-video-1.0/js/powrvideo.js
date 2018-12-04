@@ -1467,7 +1467,7 @@ if (!String.prototype.endsWithPowr) {
             }
 
             if (window.location.href.indexOf("powroutin=1") > 0) {
-                this.player.controls(true);
+                this.player.controlBar.show();
             } else if (this.config.showhide == 'yes' && (window.location.href.indexOf("powroutin=1") < 0)) {
                 this.animateDispose(this.player, this.element);
                 return;
