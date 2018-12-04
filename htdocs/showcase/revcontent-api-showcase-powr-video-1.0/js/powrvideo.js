@@ -1319,7 +1319,7 @@ if (!String.prototype.endsWithPowr) {
 
     PowrVideo.prototype.onVisible = function () {
         this.log("onVisible");
-        if (this.config.showhide == "yes") {
+        if (this.config.showhide == "yes" && window.location.href.indexOf("powroutin=1") < 0) {
             if (this.disposed == true) {
                 return;
             }
