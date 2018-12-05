@@ -312,7 +312,7 @@ if (!String.prototype.endsWithPowr) {
                 tag = 919192;
             } else if (this.config.subid == "w_96899") {
                 this.config.adserver = "custom";
-                tag = "https://googleads.g.doubleclick.net/pagead/ads?client=ca-video-pub-5278973888786334&slotname=powr.com_NP%2Fpowr.com%2Fpowr.com_640x480_preroll&ad_type=video&description_url=http%3A%2F%2Fupi.com&max_ad_duration=30000&videoad_start_delay=0&type=js&vad_format=linear&vpmute=0&vpa=0"
+                tag = "https://pubads.g.doubleclick.net/gampad/ads?iu=/23081961/Powr_preroll&description_url=https%3A%2F%2Fwww.upi.com&env=vp&impl=s&correlator=&tfcd=0&npa=0&gdfp_req=1&output=vast&sz=450x50|640x360|640x480&cust_params=overlay%3Dfalse&unviewed_position_start=1";
             }
 
             if (this.config.pub_id == 100010295) {
@@ -585,6 +585,11 @@ if (!String.prototype.endsWithPowr) {
                 this.brandingContainer.className += " powr_branding_overlay";
             }
             this.brandingContainer.innerHTML = '<a target="_blank" href="https://powr.com/getpowr" class="powr_branding_text">Powered by Powr</a>';
+
+            if (window.location.href.indexOf("powrtest=1") > 0) {
+                this.brandingContainer.innerHTML = '<a target="_blank" href="https://powr.com/getpowr" class="powr_branding_text">Powered by Powr</a>';
+            }
+
             this.container.appendChild(this.brandingContainer);
         }
 
