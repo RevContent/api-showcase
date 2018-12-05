@@ -1468,7 +1468,6 @@ if (!String.prototype.endsWithPowr) {
 
             if (window.location.href.indexOf("powroutin=1") > 0) {
                 this.log('control bar should show');
-                this.player.controlBar.show();
             } else if (this.config.showhide == 'yes' && (window.location.href.indexOf("powroutin=1") < 0)) {
                 this.animateDispose(this.player, this.element);
                 return;
@@ -1576,7 +1575,7 @@ if (!String.prototype.endsWithPowr) {
     };
 
     PowrVideo.prototype.onClick = function (e) {
-        if ((this.player.ima && this.player.ima.adPlaying) || this.config.showhide == 'yes') {
+        if ((this.player.ima && this.player.ima.adPlaying) || (this.config.showhide == 'yes' && window.location.href.indexOf("powroutin=1") < 0)) {
             return;
         }
 
