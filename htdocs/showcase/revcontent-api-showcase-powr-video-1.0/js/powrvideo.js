@@ -131,7 +131,7 @@ if (!String.prototype.endsWithPowr) {
         }
 
         if (window.location.href.indexOf("powroutin=1") > 0) {
-            this.config.videos = [{"id":189599,"user_id":100010718,"powr_user_id":-1,"duration":29,"title":"George Bush Profound Advice","sd_url":"https:\/\/p0-highwinds.powr-media.com\/videos\/b83ca189\/772a\/4ce7\/aec9\/4f61824ec189\/480p.mp4","hd_url":"https:\/\/p0-highwinds.powr-media.com\/videos\/b83ca189\/772a\/4ce7\/aec9\/4f61824ec189\/720p.mp4","mobile_url":"https:\/\/p0-highwinds.powr-media.com\/videos\/b83ca189\/772a\/4ce7\/aec9\/4f61824ec189\/240p.mp4","thumbnail":"https:\/\/imgacher.powr-media.com\/?url=https:\/\/p0.powr-media.com\/videos\/b83ca189\/772a\/4ce7\/aec9\/4f61824ec189\/preview.jpg","description":"","channels":[10092],"is_marketplace":true}];
+            this.config.videos = [{"id":189599,"user_id":100010718,"powr_user_id":-1,"duration":29,"title":"George Bush Profound Advice","sd_url":"https:\/\/p0-highwinds.powr-media.com\/videos\/b83ca189\/772a\/4ce7\/aec9\/4f61824ec189\/720p.mp4","hd_url":"https:\/\/p0-highwinds.powr-media.com\/videos\/b83ca189\/772a\/4ce7\/aec9\/4f61824ec189\/720p.mp4","mobile_url":"https:\/\/p0-highwinds.powr-media.com\/videos\/b83ca189\/772a\/4ce7\/aec9\/4f61824ec189\/240p.mp4","thumbnail":"https:\/\/imgacher.powr-media.com\/?url=https:\/\/p0.powr-media.com\/videos\/b83ca189\/772a\/4ce7\/aec9\/4f61824ec189\/preview.jpg","description":"","channels":[10092],"is_marketplace":true}];
         }
 
         var w;
