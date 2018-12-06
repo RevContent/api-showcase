@@ -125,10 +125,10 @@ if (!String.prototype.endsWithPowr) {
 
         this.quartile_track = false;
 
-        if (this.config.pub_id == "39348") {
-            this.quartile_track = true;
-            this.config.videos.unshift({"id":10031912,"user_id":39348,"powr_user_id":-1,"duration":59,"title":"Homesick Candles Seasonal - 40% Off","sd_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/720p.mp4","hd_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/720p.mp4","mobile_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/240p.mp4","thumbnail":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/preview.jpg","description":"undefined","channels":[420],"total_views":500862,"recent_views":238,"is_marketplace":true,"tracking":{"start":"start","q_1":"q1","q_2":"q2","q_3":"q3","end":"end"}});
-        }
+        // if (this.config.pub_id == "39348") {
+        //     this.quartile_track = true;
+        //     this.config.videos.unshift({"id":10031912,"user_id":39348,"powr_user_id":-1,"duration":59,"title":"Homesick Candles Seasonal - 40% Off","sd_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/720p.mp4","hd_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/720p.mp4","mobile_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/240p.mp4","thumbnail":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/preview.jpg","description":"undefined","channels":[420],"total_views":500862,"recent_views":238,"is_marketplace":true,"tracking":{"start":"start","q_1":"q1","q_2":"q2","q_3":"q3","end":"end"}});
+        // }
 
         if (this.config.pub_id == 49476) {
             this.config.videos = [{"id":189599,"user_id":100010718,"powr_user_id":-1,"duration":29,"title":"George Bush Profound Advice","sd_url":"https:\/\/p0-highwinds.powr-media.com\/videos\/b83ca189\/772a\/4ce7\/aec9\/4f61824ec189\/720p.mp4","hd_url":"https:\/\/p0-highwinds.powr-media.com\/videos\/b83ca189\/772a\/4ce7\/aec9\/4f61824ec189\/720p.mp4","mobile_url":"https:\/\/p0-highwinds.powr-media.com\/videos\/b83ca189\/772a\/4ce7\/aec9\/4f61824ec189\/240p.mp4","thumbnail":"https:\/\/imgacher.powr-media.com\/?url=https:\/\/p0.powr-media.com\/videos\/b83ca189\/772a\/4ce7\/aec9\/4f61824ec189\/preview.jpg","description":"","channels":[10092],"is_marketplace":true}];
@@ -586,7 +586,7 @@ if (!String.prototype.endsWithPowr) {
             }
             this.brandingContainer.innerHTML = '<a target="_blank" href="https://powr.com/getpowr" class="powr_branding_text">Powered by Powr</a>';
 
-            if (window.location.href.indexOf("powrtest=1") > 0) {
+            if (window.location.href.indexOf("powrnewbranding=1") > 0) {
                 this.brandingContainer.innerHTML = '<a target="_blank" href="https://powr.com/getpowr" class="powr_branding_text">Powered by Powr</a>';
             }
 
@@ -1605,17 +1605,17 @@ if (!String.prototype.endsWithPowr) {
             this.player.controls(true);
         }
 
-        if ((this.config.pub_id == "39348") && this.adPlaying == false && this.videos[this.currentContent].id == 10031912) {
-            this.player.pause();
-            this.player.controls(true);
-            window.open('https://homesickcandles.com?utm_campaign=Q4flight&utm_source=odyssey&utm_medium=display', '_blank');
-            powrApiOriginal.request("https://api.powr.com/p0/play?type=clicks&creator_id="
-                + this.videos[this.currentContent].user_id + "&video_id=" + this.videos[this.currentContent].id, function () {
-                return;
-            });
-            this.cancelEvent(e);
-            return;
-        }
+        // if ((this.config.pub_id == "39348") && this.adPlaying == false && this.videos[this.currentContent].id == 10031912) {
+        //     this.player.pause();
+        //     this.player.controls(true);
+        //     window.open('https://homesickcandles.com?utm_campaign=Q4flight&utm_source=odyssey&utm_medium=display', '_blank');
+        //     powrApiOriginal.request("https://api.powr.com/p0/play?type=clicks&creator_id="
+        //         + this.videos[this.currentContent].user_id + "&video_id=" + this.videos[this.currentContent].id, function () {
+        //         return;
+        //     });
+        //     this.cancelEvent(e);
+        //     return;
+        // }
 
         var v = this.getVideoElement();
         v.removeAttribute("muted");
