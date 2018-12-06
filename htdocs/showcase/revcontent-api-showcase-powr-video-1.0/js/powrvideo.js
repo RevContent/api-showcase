@@ -1936,6 +1936,11 @@ if (!String.prototype.endsWithPowr) {
                 }
             }
         }
+
+        if (video.id > 10000000 && this.config.resolution != "mobile") {
+            url = video.hd_url;
+        }
+
         return url;
     }
 
