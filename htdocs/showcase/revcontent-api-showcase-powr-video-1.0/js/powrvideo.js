@@ -1273,7 +1273,7 @@ if (!String.prototype.endsWithPowr) {
         // check if we are in ad or content playback
         //  and get reference to the relevant player
 
-        if (isPlayerInView(myPlayer.el())) {
+        if (isPlayerInView(this.element)) {
             this.player.ima.getAdsManager().resume();
             this.adPaused = false;
         } else {
