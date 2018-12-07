@@ -1311,13 +1311,16 @@ if (!String.prototype.endsWithPowr) {
     // +++ Checks if player is in view +++
     PowrVideo.prototype.isPlayerInView = function (elem) {
         // Get the position of the viewport
-        var docViewTop = window.scrollTop;
-        var docViewBottom = docViewTop + window.height;
+        var docViewTop = document.documentElement.scrollTop;
+        var docViewBottom = docViewTop + window.innerHeight;
 
+        var positionInfo = this.element.getBoundingClientRect();
+        var height = positionInfo.height;
+        var width = positionInfo.width;
         // get the position of the player element
         var elemTop = this.element.top;
-        var elemBottom = elemTop + this.element.height;
-this.log("top: " + elemTop);
+        var elemBottom = elemTop + height;
+        this.log("top: " + elemTop);
         this.log("bottom: " + elemBottom);
         this.log("docTop: " + elemBottom);
         this.log("docBottom: " + elemBottom);
