@@ -123,6 +123,7 @@ if (!String.prototype.endsWithPowr) {
 
         this.adPlaying = false;
 
+        // there is a bug with quartile track. Do not use until fixed and this message removed.
         this.quartile_track = false;
 
         // if (this.config.pub_id == "39348") {
@@ -578,20 +579,20 @@ if (!String.prototype.endsWithPowr) {
             this.element.appendChild(this.container);
         }
 
-        if (this.config.showhide == "yes" && this.letterbox !== true) {
-            this.brandingContainer = document.createElement("div");
-            this.brandingContainer.className = "powr_branding";
-            if (this.config.pub_id == 98997) {
-                this.brandingContainer.className += " powr_branding_overlay";
-            }
-            this.brandingContainer.innerHTML = '<a target="_blank" href="https://powr.com/getpowr" class="powr_branding_text">Powered by Powr</a>';
-
-            if (window.location.href.indexOf("powrnewbranding=1") > 0) {
-                this.brandingContainer.innerHTML = '<a target="_blank" href="https://powr.com/getpowr" class="powr_branding_text">Powered by Powr</a>';
-            }
-
-            this.container.appendChild(this.brandingContainer);
-        }
+        // if (this.config.showhide == "yes" && this.letterbox !== true) {
+        //     this.brandingContainer = document.createElement("div");
+        //     this.brandingContainer.className = "powr_branding";
+        //     if (this.config.pub_id == 98997) {
+        //         this.brandingContainer.className += " powr_branding_overlay";
+        //     }
+        //     this.brandingContainer.innerHTML = '<a target="_blank" href="https://powr.com/getpowr" class="powr_branding_text">Powered by Powr</a>';
+        //
+        //     if (window.location.href.indexOf("powrnewbranding=1") > 0) {
+        //         this.brandingContainer.innerHTML = '<a target="_blank" href="https://powr.com/getpowr" class="powr_branding_text">Powered by Powr</a>';
+        //     }
+        //
+        //     this.container.appendChild(this.brandingContainer);
+        // }
 
         if (this.permanentClose == "yes") {
             this.container.className = 'powr_player powr_permanent_close';
@@ -796,9 +797,14 @@ if (!String.prototype.endsWithPowr) {
 
         if (me.autoplaySettings.autoplay) {
             if (me.autoplaySettings.focus) {
-                this.checkVisible();
+                if (window.location.href.indexOf("powrvisibletest=1") > 0) {
+                    this.checkVisibleNew();
+                } else {
+                    this.checkVisible();
+                }
+
                 this.autoplayOnVisible = true;
-                if (this.visible === true) {
+                if (this.visible === true && window.location.href.indexOf("powrvisibletest=1") < 0) {
                     this.onVisible();
                 } else if (this.config.showhide != "yes") {
                     this.playOverlay.show();
@@ -1028,10 +1034,17 @@ if (!String.prototype.endsWithPowr) {
         if (this.floatSettings.landscape || this.floatSettings.portrait || this.autoplaySettings.focus || (this.showOnFocus == 'yes')) {
             if (this.config.pub_id == 98997) {
                 powrUtils.addEventListener(window.parent, 'scroll', this.checkVisible.bind(this));
+            } else if (window.location.href.indexOf("powrvisibletest=1") > 0) {
+                powrUtils.addEventListener(window, 'scroll', this.checkVisibleNew.bind(this));
             } else {
                 powrUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
             }
-            this.checkVisible();
+
+            if (window.location.href.indexOf("powrvisibletest=1") > 0) {
+                this.checkVisibleNew();
+            } else {
+                this.checkVisible();
+            }
         }
         this.visibleListenerAttached = true;
     };
@@ -1254,6 +1267,41 @@ if (!String.prototype.endsWithPowr) {
     PowrVideo.prototype.getTitle = function () {
 
     };
+
+    // +++ Called on scroll, check if in view and the play/pause +++
+    PowrVideo.prototype.checkVisibleNew = function () {
+        // check if we are in ad or content playback
+        //  and get reference to the relevant player
+
+        if (isPlayerInView(myPlayer.el())) {
+            this.player.ima.getAdsManager().resume();
+            this.adPaused = false;
+        } else {
+            // the player is not in the viewport
+            this.player.ima.getAdsManager().pause();
+            this.adPaused = true;
+        }
+    };
+
+    // +++ Checks if player is in view +++
+    PowrVideo.prototype.isPlayerInView = function (elem) {
+        // Get the position of the viewport
+        var docViewTop = window.scrollTop;
+        var docViewBottom = docViewTop + window.height;
+
+        // get the position of the player element
+        var elemTop = this.element.top;
+        var elemBottom = elemTop + this.element.height;
+
+        // Determine if the player element is in fully in the viewport
+        return (
+            elemBottom >= docViewTop &&
+            elemTop <= docViewBottom &&
+            elemBottom <= docViewBottom &&
+            elemTop >= docViewTop
+        );
+    };
+
 
     PowrVideo.prototype.checkVisible = function () {
         var that = this;
