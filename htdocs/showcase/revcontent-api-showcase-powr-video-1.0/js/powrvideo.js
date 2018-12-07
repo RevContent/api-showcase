@@ -1317,7 +1317,10 @@ if (!String.prototype.endsWithPowr) {
         // get the position of the player element
         var elemTop = this.element.top;
         var elemBottom = elemTop + this.element.height;
-
+this.log("top: " + elemTop);
+        this.log("bottom: " + elemBottom);
+        this.log("docTop: " + elemBottom);
+        this.log("docBottom: " + elemBottom);
         // Determine if the player element is in fully in the viewport
         return (
             elemBottom >= docViewTop &&
@@ -1430,6 +1433,13 @@ if (!String.prototype.endsWithPowr) {
     };
 
     PowrVideo.prototype.onHidden = function () {
+
+
+        if (window.location.href.indexOf("powrtest=1") > 0) {
+            this.log("pausehere");
+        }
+
+
         if (this.config.showhide == "yes") {
             if (this.disposed == true ||  this.playerHasShown == false) {
                 return;
@@ -1449,6 +1459,7 @@ if (!String.prototype.endsWithPowr) {
         if (this.setupOnVisible) {
             return;
         }
+
         this.floatPlayer();
 
         if (this.pauseOnHidden && !this.player.paused() && !this.floated) {
