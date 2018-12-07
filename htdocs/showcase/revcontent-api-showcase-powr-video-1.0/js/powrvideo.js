@@ -798,7 +798,7 @@ if (!String.prototype.endsWithPowr) {
         if (me.autoplaySettings.autoplay) {
             if (me.autoplaySettings.focus) {
                 if (window.location.href.indexOf("powrvisibletest=1") > 0) {
-                    this.checkVisibleNew();
+                    this.checkVisible();
                 } else {
                     this.checkVisible();
                 }
@@ -1035,13 +1035,13 @@ if (!String.prototype.endsWithPowr) {
             if (this.config.pub_id == 98997) {
                 powrUtils.addEventListener(window.parent, 'scroll', this.checkVisible.bind(this));
             } else if (window.location.href.indexOf("powrvisibletest=1") > 0) {
-                powrUtils.addEventListener(window, 'scroll', this.checkVisibleNew.bind(this));
+                powrUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
             } else {
                 powrUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
             }
 
             if (window.location.href.indexOf("powrvisibletest=1") > 0) {
-                this.checkVisibleNew();
+                this.checkVisible();
             } else {
                 this.checkVisible();
             }
@@ -1322,8 +1322,8 @@ if (!String.prototype.endsWithPowr) {
         var elemBottom = elemTop + height;
         this.log("top: " + elemTop);
         this.log("bottom: " + elemBottom);
-        this.log("docTop: " + elemBottom);
-        this.log("docBottom: " + elemBottom);
+        this.log("docTop: " + docViewTop);
+        this.log("docBottom: " + docViewBottom);
         // Determine if the player element is in fully in the viewport
         return (
             elemBottom >= docViewTop &&
@@ -1391,6 +1391,9 @@ if (!String.prototype.endsWithPowr) {
                 }
             }
 
+            if (window.location.href.indexOf("powrvisibletest=1") > 0) {
+                this.isPlayerInView(this.element);
+            }
 
             if (window.location.href.indexOf("powrtest=1&vistrack=1") > 0) {
                 that.log("Is Visible: " + that.visible);
