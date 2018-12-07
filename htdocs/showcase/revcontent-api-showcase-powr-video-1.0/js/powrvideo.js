@@ -1273,7 +1273,7 @@ if (!String.prototype.endsWithPowr) {
         // check if we are in ad or content playback
         //  and get reference to the relevant player
 
-        if (isPlayerInView(this.element)) {
+        if (this.isPlayerInView(this.element)) {
             if (this.config.showhide == "yes") {
                 if (this.disposed == true) {
                     return;
