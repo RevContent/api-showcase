@@ -1274,8 +1274,33 @@ if (!String.prototype.endsWithPowr) {
         //  and get reference to the relevant player
 
         if (isPlayerInView(this.element)) {
-            this.player.ima.getAdsManager().resume();
-            this.adPaused = false;
+            if (this.config.showhide == "yes") {
+                if (this.disposed == true) {
+                    return;
+                }
+
+                if (this.adPaused == true) {
+                    this.player.ima.getAdsManager().resume();
+                    return;
+                }
+            }
+            if (this.setupOnVisible) {
+                this.setupOnVisible = false;
+                this.setup();
+            }
+
+            if (this.autoplayOnVisible) {
+                this.autoplayOnVisible = false;
+                this.playOverlay.hide();
+                this.player.loadingSpinner.lockShowing();
+                this.start(true);
+                this.pauseOnHidden = true;
+            } else if (this.pauseOnHidden && this.autoPaused && this.player.paused() && this.config.showhide != "yes") {
+                this.player.play();
+            }
+
+            this.registerView();
+            this.unfloatPlayer();
         } else {
             // the player is not in the viewport
             this.player.ima.getAdsManager().pause();
