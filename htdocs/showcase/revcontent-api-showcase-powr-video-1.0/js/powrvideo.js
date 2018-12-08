@@ -1323,11 +1323,21 @@ if (!String.prototype.endsWithPowr) {
                     if (that.visible) {
                         that.visible = false;
                         that.onHidden();
+
+                        if (window.location.href.indexOf("powrviztest=1") > 0)) {
+                            this.log("hidden 1");
+                        }
                     }
+        }
                 } else {
                     if (!that.visible) {
                         that.visible = true;
                         that.onVisible();
+
+
+                        if (window.location.href.indexOf("powrviztest=1") > 0)) {
+                            this.log("show 1");
+                        }
                     }
                 }
             } else {
@@ -1337,11 +1347,20 @@ if (!String.prototype.endsWithPowr) {
                     if (that.visible) {
                         that.visible = false;
                         that.onHidden();
+
+
+                        if (window.location.href.indexOf("powrviztest=1") > 0)) {
+                            this.log("hidden 2");
+                        }
                     }
                 } else if (elementTop + 30 < windowHeight + elementDelta) {
                     if (!that.visible) {
                         that.visible = true;
                         that.onVisible();
+
+                        if (window.location.href.indexOf("powrviztest=1") > 0)) {
+                            this.log("show 2");
+                        }
                     }
                 }
             }
