@@ -1313,13 +1313,10 @@ if (!String.prototype.endsWithPowr) {
                 elementVisibleHeight = that.element.offsetHeight * 0.50;
                 elementDelta = 0;
             }
-
-            if (this.adPlaying == true && window.location.href.indexOf("powrviztest=1") > 0) {
-                elementDelta = 0;
-            }
+            
             // var pixelsShown = Math.min(Math.max(elementTop > 0 ? windowHeight - elementTop : that.getPlayerHeight() + elementTop, 0), that.getPlayerHeight());
             if (((that.config.subid == "w_103804" || that.config.subid == "w_103812") && that.config.pub_id == 98997) || (window.location.href.indexOf("powrtest=1&vistrack=1") > 0)) {
-                if (elementTop < (0 - (windowHeight * 0.20)) || elementTop > (windowHeight - (windowHeight * 0.33))) {
+                if (elementTop < (0 - (windowHeight * 0.33)) || elementTop > (windowHeight - 50)) {
                     if (that.visible) {
                         that.visible = false;
                         that.onHidden();
@@ -1342,7 +1339,7 @@ if (!String.prototype.endsWithPowr) {
                 }
             } else {
                 if (elementTop + (that.getPlayerHeight() * 0.4) < 0 ||
-                    window.location.href.indexOf("powrviztest=1") > 0 && this.adsPlaying == true && elementTop + 30 > windowHeight + elementDelta ||
+                    that.adsPlaying == true && (elementTop < (0 - (windowHeight * 0.20)) || elementTop > (windowHeight - (windowHeight * 0.33))) ||
                     ((elementTop) > (windowHeight) && window.location.href.indexOf("powrviztest=1") > 0)) {
                     if (that.visible) {
                         that.visible = false;
