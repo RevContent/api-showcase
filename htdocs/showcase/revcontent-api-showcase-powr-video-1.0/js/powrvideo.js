@@ -1324,18 +1324,18 @@ if (!String.prototype.endsWithPowr) {
                         that.visible = false;
                         that.onHidden();
 
-                        if (window.location.href.indexOf("powrviztest=1") > 0)) {
+                        if (window.location.href.indexOf("powrviztest=1") > 0) {
                             this.log("hidden 1");
                         }
                     }
-        }
+        
                 } else {
                     if (!that.visible) {
                         that.visible = true;
                         that.onVisible();
 
 
-                        if (window.location.href.indexOf("powrviztest=1") > 0)) {
+                        if (window.location.href.indexOf("powrviztest=1") > 0) {
                             this.log("show 1");
                         }
                     }
@@ -1349,7 +1349,7 @@ if (!String.prototype.endsWithPowr) {
                         that.onHidden();
 
 
-                        if (window.location.href.indexOf("powrviztest=1") > 0)) {
+                        if (window.location.href.indexOf("powrviztest=1") > 0) {
                             this.log("hidden 2");
                         }
                     }
@@ -1358,7 +1358,7 @@ if (!String.prototype.endsWithPowr) {
                         that.visible = true;
                         that.onVisible();
 
-                        if (window.location.href.indexOf("powrviztest=1") > 0)) {
+                        if (window.location.href.indexOf("powrviztest=1") > 0) {
                             this.log("show 2");
                         }
                     }
