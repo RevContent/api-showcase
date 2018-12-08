@@ -1325,10 +1325,10 @@ if (!String.prototype.endsWithPowr) {
                         that.onHidden();
 
                         if (window.location.href.indexOf("powrviztest=1") > 0) {
-                            this.log("hidden 1");
+                            that.log("hidden 1");
                         }
                     }
-        
+
                 } else {
                     if (!that.visible) {
                         that.visible = true;
@@ -1336,7 +1336,7 @@ if (!String.prototype.endsWithPowr) {
 
 
                         if (window.location.href.indexOf("powrviztest=1") > 0) {
-                            this.log("show 1");
+                            that.log("show 1");
                         }
                     }
                 }
@@ -1350,7 +1350,7 @@ if (!String.prototype.endsWithPowr) {
 
 
                         if (window.location.href.indexOf("powrviztest=1") > 0) {
-                            this.log("hidden 2");
+                            that.log("hidden 2");
                         }
                     }
                 } else if (elementTop + 30 < windowHeight + elementDelta) {
@@ -1359,7 +1359,7 @@ if (!String.prototype.endsWithPowr) {
                         that.onVisible();
 
                         if (window.location.href.indexOf("powrviztest=1") > 0) {
-                            this.log("show 2");
+                            that.log("show 2");
                         }
                     }
                 }
