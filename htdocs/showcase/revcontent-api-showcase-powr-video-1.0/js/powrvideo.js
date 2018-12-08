@@ -1331,7 +1331,9 @@ if (!String.prototype.endsWithPowr) {
                     }
                 }
             } else {
-                if (elementTop + (that.getPlayerHeight() * 0.4) < 0 || ((elementTop) > (windowHeight) && window.location.href.indexOf("powrviztest=1") > 0)) {
+                if (elementTop + (that.getPlayerHeight() * 0.4) < 0 ||
+                    window.location.href.indexOf("powrviztest=1") > 0 && this.adsPlaying == true && elementTop + 30 > windowHeight + elementDelta ||
+                    ((elementTop) > (windowHeight) && window.location.href.indexOf("powrviztest=1") > 0)) {
                     if (that.visible) {
                         that.visible = false;
                         that.onHidden();
