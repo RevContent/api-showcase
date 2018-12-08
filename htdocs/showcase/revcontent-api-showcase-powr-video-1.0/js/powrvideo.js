@@ -797,11 +797,7 @@ if (!String.prototype.endsWithPowr) {
 
         if (me.autoplaySettings.autoplay) {
             if (me.autoplaySettings.focus) {
-                if (window.location.href.indexOf("powrvisibletest=1") > 0) {
-                    this.checkVisible();
-                } else {
-                    this.checkVisible();
-                }
+                this.checkVisible();
 
                 this.autoplayOnVisible = true;
                 if (this.visible === true && window.location.href.indexOf("powrvisibletest=1") < 0) {
@@ -1034,17 +1030,10 @@ if (!String.prototype.endsWithPowr) {
         if (this.floatSettings.landscape || this.floatSettings.portrait || this.autoplaySettings.focus || (this.showOnFocus == 'yes')) {
             if (this.config.pub_id == 98997) {
                 powrUtils.addEventListener(window.parent, 'scroll', this.checkVisible.bind(this));
-            } else if (window.location.href.indexOf("powrvisibletest=1") > 0) {
-                powrUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
-            } else {
+            }  else {
                 powrUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
             }
-
-            if (window.location.href.indexOf("powrvisibletest=1") > 0) {
-                this.checkVisible();
-            } else {
-                this.checkVisible();
-            }
+            this.checkVisible();
         }
         this.visibleListenerAttached = true;
     };
@@ -1268,45 +1257,6 @@ if (!String.prototype.endsWithPowr) {
 
     };
 
-    // +++ Called on scroll, check if in view and the play/pause +++
-    PowrVideo.prototype.checkVisibleNew = function () {
-        // check if we are in ad or content playback
-        //  and get reference to the relevant player
-
-        if (this.isPlayerInView(this.element)) {
-            if (this.config.showhide == "yes") {
-                if (this.disposed == true) {
-                    return;
-                }
-
-                if (this.adPaused == true) {
-                    this.player.ima.getAdsManager().resume();
-                    return;
-                }
-            }
-            if (this.setupOnVisible) {
-                this.setupOnVisible = false;
-                this.setup();
-            }
-
-            if (this.autoplayOnVisible) {
-                this.autoplayOnVisible = false;
-                this.playOverlay.hide();
-                this.player.loadingSpinner.lockShowing();
-                this.start(true);
-                this.pauseOnHidden = true;
-            } else if (this.pauseOnHidden && this.autoPaused && this.player.paused() && this.config.showhide != "yes") {
-                this.player.play();
-            }
-
-            this.registerView();
-            this.unfloatPlayer();
-        } else {
-            // the player is not in the viewport
-            this.player.ima.getAdsManager().pause();
-            this.adPaused = true;
-        }
-    };
 
     // +++ Checks if player is in view +++
     PowrVideo.prototype.isPlayerInView = function (elem) {
@@ -1364,6 +1314,9 @@ if (!String.prototype.endsWithPowr) {
                 elementDelta = 0;
             }
 
+            if (this.adPlaying == true && window.location.href.indexOf("powrviztest=1") > 0) {
+                elementDelta = 0;
+            }
             // var pixelsShown = Math.min(Math.max(elementTop > 0 ? windowHeight - elementTop : that.getPlayerHeight() + elementTop, 0), that.getPlayerHeight());
             if (((that.config.subid == "w_103804" || that.config.subid == "w_103812") && that.config.pub_id == 98997) || (window.location.href.indexOf("powrtest=1&vistrack=1") > 0)) {
                 if (elementTop < (0 - (windowHeight * 0.33)) || elementTop > (windowHeight - 50)) {
@@ -1378,7 +1331,7 @@ if (!String.prototype.endsWithPowr) {
                     }
                 }
             } else {
-                if (elementTop + (that.getPlayerHeight() * 0.4) < 0 || ((elementTop) > (windowHeight) && window.location.href.indexOf("powrtest=1") > 0)) {
+                if (elementTop + (that.getPlayerHeight() * 0.4) < 0 || ((elementTop) > (windowHeight) && window.location.href.indexOf("powrviztest=1") > 0)) {
                     if (that.visible) {
                         that.visible = false;
                         that.onHidden();
