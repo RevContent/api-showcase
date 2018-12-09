@@ -1473,8 +1473,8 @@ if (!String.prototype.endsWithPowr) {
             }
         }
         if (event.type == google.ima.AdEvent.Type.STARTED) {
+            this.adPlaying = true;
             if (document.URL.indexOf('debug=adspowr') !== -1) {
-                this.adPlaying = true;
                 var openvv = new OpenVV(), element = document.getElementById(this.playerId);
 
                 openvv
