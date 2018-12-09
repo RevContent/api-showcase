@@ -1339,7 +1339,7 @@ if (!String.prototype.endsWithPowr) {
                 }
             } else {
                 if (elementTop + (that.getPlayerHeight() * 0.4) < 0 ||
-                    (that.config.showhide == "yes" && that.adPlaying == true && (elementTop + (that.getPlayerHeight() * 0.4) > window.height) && window.location.href.indexOf("powrviztest=1") > 0)) {
+                    (that.config.showhide == "yes" && that.adPlaying == true && (elementTop + (that.getPlayerHeight() * 0.4) > windowHeight) && window.location.href.indexOf("powrviztest=1") > 0)) {
                     if (that.visible) {
                         that.visible = false;
                         that.onHidden();
