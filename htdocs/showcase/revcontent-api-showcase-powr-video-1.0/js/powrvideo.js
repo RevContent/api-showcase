@@ -1339,7 +1339,7 @@ if (!String.prototype.endsWithPowr) {
                 }
             } else {
                 if (elementTop + (that.getPlayerHeight() * 0.4) < 0 ||
-                    that.adPlaying == true && (elementTop + (that.getPlayerHeight() * 0.4) > window.height) && window.location.href.indexOf("powrviztest=1") > 0) {
+                    (that.config.showhide == "yes" && that.adPlaying == true && (elementTop + (that.getPlayerHeight() * 0.4) > window.height) && window.location.href.indexOf("powrviztest=1") > 0)) {
                     if (that.visible) {
                         that.visible = false;
                         that.onHidden();
@@ -1373,7 +1373,7 @@ if (!String.prototype.endsWithPowr) {
                 that.log("element top: " + elementTop);
                 that.log("player height: " + that.getPlayerHeight());
                 that.log("window height: " + windowHeight);
-                that.log("ads playing? :" + that.adsPlaying);
+                that.log("ads playing? :" + that.adPlaying);
                 that.log("hidden height comparison:" + (windowHeight - (windowHeight * 0.33)));
             }
         });
