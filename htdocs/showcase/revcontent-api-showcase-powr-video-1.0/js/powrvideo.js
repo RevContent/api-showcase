@@ -1313,7 +1313,7 @@ if (!String.prototype.endsWithPowr) {
                 elementVisibleHeight = that.element.offsetHeight * 0.50;
                 elementDelta = 0;
             }
-            
+
             // var pixelsShown = Math.min(Math.max(elementTop > 0 ? windowHeight - elementTop : that.getPlayerHeight() + elementTop, 0), that.getPlayerHeight());
             if (((that.config.subid == "w_103804" || that.config.subid == "w_103812") && that.config.pub_id == 98997) || (window.location.href.indexOf("powrtest=1&vistrack=1") > 0)) {
                 if (elementTop < (0 - (windowHeight * 0.33)) || elementTop > (windowHeight - 50)) {
@@ -1424,13 +1424,15 @@ if (!String.prototype.endsWithPowr) {
         }
 
         if (window.location.href.indexOf("powrtest=1") > 0) {
-            this.log("onHidden");
+            this.log("onHidden hit");
 
-            if (this.config.showhide == "yes") {
-                this.player.ima.getAdsManager().pause();
-                this.adPaused = true;
-                return;
-            }
+
+        }
+
+        if (this.config.showhide == "yes") {
+            this.player.ima.getAdsManager().pause();
+            this.adPaused = true;
+            return;
         }
 
         if (this.setupOnVisible) {
