@@ -271,10 +271,11 @@ if (!String.prototype.endsWithPowr) {
         ret = ret + "\n]]>\n";
 
         if (window.location.href.indexOf("powrfallback=1") > 0) {
-            ret = ret + '</vmap:AdTagURI></vmap:AdSource>'
+            ret = ret + '</vmap:AdTagURI>'
                 + '<Extensions>'
                 + '<Extension type="waterfall" fallback_index="0"/>' +
                 + '</Extensions>'
+                + '</vmap:AdSource>'
                 + '</vmap:AdBreak>';
                 + '<vmap:AdBreak timeOffset="start" breakType="linear" breakId="preroll"><vmap:AdSource id="preroll-ad-1" allowMultipleAds="false" followRedirects="true"><vmap:AdTagURI templateType="vast3">'
                 + "\n"
@@ -282,10 +283,10 @@ if (!String.prototype.endsWithPowr) {
                 + "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dlinear&correlator="
                 + "\n]]>\n"
                 + '</vmap:AdTagURI>' +
-                + '</vmap:AdSource>'
                 + '<Extensions>'
-                + '<Extension type="waterfall" fallback_index="0"/>' +
+                + '<Extension type="waterfall" fallback_index="1"/>' +
                 + '</Extensions>'
+                + '</vmap:AdSource>'
                 + '</vmap:AdBreak>';
 
         } else {
