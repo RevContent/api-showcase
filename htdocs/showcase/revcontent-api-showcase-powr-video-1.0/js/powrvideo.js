@@ -131,9 +131,9 @@ if (!String.prototype.endsWithPowr) {
         //     this.config.videos.unshift({"id":10031912,"user_id":39348,"powr_user_id":-1,"duration":59,"title":"Homesick Candles Seasonal - 40% Off","sd_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/720p.mp4","hd_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/720p.mp4","mobile_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/240p.mp4","thumbnail":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/preview.jpg","description":"undefined","channels":[420],"total_views":500862,"recent_views":238,"is_marketplace":true,"tracking":{"start":"start","q_1":"q1","q_2":"q2","q_3":"q3","end":"end"}});
         // }
 
-        if (this.config.pub_id == 49476) {
-            this.config.videos = [{"id":189599,"user_id":100010718,"powr_user_id":-1,"duration":29,"title":"George Bush Profound Advice","sd_url":"https:\/\/p0-highwinds.powr-media.com\/videos\/b83ca189\/772a\/4ce7\/aec9\/4f61824ec189\/720p.mp4","hd_url":"https:\/\/p0-highwinds.powr-media.com\/videos\/b83ca189\/772a\/4ce7\/aec9\/4f61824ec189\/720p.mp4","mobile_url":"https:\/\/p0-highwinds.powr-media.com\/videos\/b83ca189\/772a\/4ce7\/aec9\/4f61824ec189\/240p.mp4","thumbnail":"https:\/\/imgacher.powr-media.com\/?url=https:\/\/p0.powr-media.com\/videos\/b83ca189\/772a\/4ce7\/aec9\/4f61824ec189\/preview.jpg","description":"","channels":[10092],"is_marketplace":true}];
-        }
+        // if (this.config.pub_id == 49476) {
+        //     this.config.videos = [{"id":189599,"user_id":100010718,"powr_user_id":-1,"duration":29,"title":"George Bush Profound Advice","sd_url":"https:\/\/p0-highwinds.powr-media.com\/videos\/b83ca189\/772a\/4ce7\/aec9\/4f61824ec189\/720p.mp4","hd_url":"https:\/\/p0-highwinds.powr-media.com\/videos\/b83ca189\/772a\/4ce7\/aec9\/4f61824ec189\/720p.mp4","mobile_url":"https:\/\/p0-highwinds.powr-media.com\/videos\/b83ca189\/772a\/4ce7\/aec9\/4f61824ec189\/240p.mp4","thumbnail":"https:\/\/imgacher.powr-media.com\/?url=https:\/\/p0.powr-media.com\/videos\/b83ca189\/772a\/4ce7\/aec9\/4f61824ec189\/preview.jpg","description":"","channels":[10092],"is_marketplace":true}];
+        // }
 
         var w;
         if (this.config.showhide == 'yes') {
@@ -341,10 +341,12 @@ if (!String.prototype.endsWithPowr) {
             volume = "0";
             if (window.location.href.indexOf("powrtest=1") > 0) {
                 tag = 919192;
-            } else if (this.config.subid == "w_96899") {
-                this.config.adserver = "custom";
-                tag = "https://pubads.g.doubleclick.net/gampad/ads?iu=/23081961/Powr_preroll&description_url=https%3A%2F%2Fwww.upi.com&env=vp&impl=s&correlator=&tfcd=0&npa=0&gdfp_req=1&output=vast&sz=450x50|640x360|640x480&cust_params=overlay%3Dfalse&unviewed_position_start=1";
             }
+
+            // else if (this.config.subid == "w_96899") {
+            //     this.config.adserver = "custom";
+            //     tag = "https://pubads.g.doubleclick.net/gampad/ads?iu=/23081961/Powr_preroll&description_url=https%3A%2F%2Fwww.upi.com&env=vp&impl=s&correlator=&tfcd=0&npa=0&gdfp_req=1&output=vast&sz=450x50|640x360|640x480&cust_params=overlay%3Dfalse&unviewed_position_start=1";
+            // }
 
             if (this.config.pub_id == 100010295) {
                 width = 640;
@@ -1531,9 +1533,9 @@ if (!String.prototype.endsWithPowr) {
                     });
             }
 
-            if (this.config.pub_id != 49476) {
+            // if (this.config.pub_id != 49476) {
                 this.originalImaOnContentPauseRequested_(this.originalAdData);
-            }
+            // }
 
             this.adsPlayed++;
             if (this.config.showhide == "yes") {
@@ -1568,9 +1570,9 @@ if (!String.prototype.endsWithPowr) {
                 }
             }
 
-            if (this.config.pub_id == 49476) {
-                this.log('control bar should show');
-            } else if (this.config.showhide == 'yes' && (this.config.pub_id != 49476)) {
+            // if (this.config.pub_id == 49476) {
+            //     this.log('control bar should show');
+            if (this.config.showhide == 'yes') {
                 this.animateDispose(this.player, this.element);
                 return;
             }
@@ -1677,7 +1679,7 @@ if (!String.prototype.endsWithPowr) {
     };
 
     PowrVideo.prototype.onClick = function (e) {
-        if ((this.player.ima && this.player.ima.adPlaying) || (this.config.showhide == 'yes' && this.config.pub_id != 49476)) {
+        if ((this.player.ima && this.player.ima.adPlaying) || (this.config.showhide == 'yes')) {
             return;
         }
 
