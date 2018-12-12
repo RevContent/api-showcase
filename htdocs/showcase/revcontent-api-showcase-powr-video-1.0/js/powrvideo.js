@@ -338,6 +338,7 @@ if (!String.prototype.endsWithPowr) {
 
         var width, height, execution, placement;
         if (this.config.showhide == "yes") {
+            volume = "0";
             if (window.location.href.indexOf("powrtest=1") > 0) {
                 tag = 919192;
             } else if (this.config.subid == "w_96899") {
