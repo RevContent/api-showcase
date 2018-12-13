@@ -123,15 +123,17 @@ if (!String.prototype.endsWithPowr) {
 
         this.adPlaying = false;
 
+        // there is a bug with quartile track. Do not use until fixed and this message removed.
         this.quartile_track = false;
 
-        if (this.config.pub_id == "10004590" || this.config.pub_id == "39348" || this.config.pub_id == "10001976"
-            || this.config.pub_id == "10002863" || this.config.pub_id == "10002864" || this.config.pub_id == "10006372"
-            || this.config.pub_id == "35362") {
-            this.quartile_track = true;
-            this.config.videos.unshift({"id":10031912,"user_id":39348,"powr_user_id":-1,"duration":59,"title":"Homesick Candles Seasonal - 40% Off","sd_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/480p.mp4","hd_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/720p.mp4","mobile_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/240p.mp4","thumbnail":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/preview.jpg","description":"undefined","channels":[420],"total_views":500862,"recent_views":238,"is_marketplace":true,"tracking":{"start":"start","q_1":"q1","q_2":"q2","q_3":"q3","end":"end"}});
-        }
+        // if (this.config.pub_id == "39348") {
+        //     this.quartile_track = true;
+        //     this.config.videos.unshift({"id":10031912,"user_id":39348,"powr_user_id":-1,"duration":59,"title":"Homesick Candles Seasonal - 40% Off","sd_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/720p.mp4","hd_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/720p.mp4","mobile_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/240p.mp4","thumbnail":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/preview.jpg","description":"undefined","channels":[420],"total_views":500862,"recent_views":238,"is_marketplace":true,"tracking":{"start":"start","q_1":"q1","q_2":"q2","q_3":"q3","end":"end"}});
+        // }
 
+        // if (this.config.pub_id == 49476) {
+        //     this.config.videos = [{"id":189599,"user_id":100010718,"powr_user_id":-1,"duration":29,"title":"George Bush Profound Advice","sd_url":"https:\/\/p0-highwinds.powr-media.com\/videos\/b83ca189\/772a\/4ce7\/aec9\/4f61824ec189\/720p.mp4","hd_url":"https:\/\/p0-highwinds.powr-media.com\/videos\/b83ca189\/772a\/4ce7\/aec9\/4f61824ec189\/720p.mp4","mobile_url":"https:\/\/p0-highwinds.powr-media.com\/videos\/b83ca189\/772a\/4ce7\/aec9\/4f61824ec189\/240p.mp4","thumbnail":"https:\/\/imgacher.powr-media.com\/?url=https:\/\/p0.powr-media.com\/videos\/b83ca189\/772a\/4ce7\/aec9\/4f61824ec189\/preview.jpg","description":"","channels":[10092],"is_marketplace":true}];
+        // }
 
         var w;
         if (this.config.showhide == 'yes') {
@@ -267,7 +269,36 @@ if (!String.prototype.endsWithPowr) {
         ret = ret + '<![CDATA[' + "\n";
         ret = ret + url;
         ret = ret + "\n]]>\n";
-        ret = ret + '</vmap:AdTagURI></vmap:AdSource></vmap:AdBreak>';
+
+        // if (window.location.href.indexOf("powrfallback=1") > 0) {
+        //     ret = ret + '</vmap:AdTagURI>'
+        //         + '<vmap:Extensions>'
+        //         + '<vmap:Extension type="waterfall" fallback_index="0"/>'
+        //         + '</vmap:Extensions>'
+        //         + '</vmap:AdSource>'
+        //         + '</vmap:AdBreak>'
+        //         + '<vmap:AdBreak timeOffset="start" breakType="linear" breakId="preroll">'
+        //         + '<vmap:AdSource id="preroll-ad-2" allowMultipleAds="false" followRedirects="true">'
+        //         + '<vmap:AdTagURI templateType="vast3">'
+        //         + "\n"
+        //         + '<![CDATA[' + "\n"
+        //         + "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dlinear&correlator="
+        //         + "\n]]>\n"
+        //         + '</vmap:AdTagURI>'
+        //         +'<vmap:Extensions>'
+        //         + '<vmap:Extension type="waterfall" fallback_index="1"/>'
+        //         +'</vmap:Extensions>'
+        //         + '</vmap:AdSource>'
+        //         + '</vmap:AdBreak>';
+        //
+        // } else {
+            ret = ret + '</vmap:AdTagURI></vmap:AdSource></vmap:AdBreak>';
+        // }
+
+        // if (window.location.href.indexOf("powrfallback=1") > 0) {
+        //     this.log(ret);
+        // }
+
         return ret;
     };
 
@@ -307,9 +338,15 @@ if (!String.prototype.endsWithPowr) {
 
         var width, height, execution, placement;
         if (this.config.showhide == "yes") {
+            volume = "0";
             if (window.location.href.indexOf("powrtest=1") > 0) {
                 tag = 919192;
             }
+
+            // else if (this.config.subid == "w_96899") {
+            //     this.config.adserver = "custom";
+            //     tag = "https://pubads.g.doubleclick.net/gampad/ads?iu=/23081961/Powr_preroll&description_url=https%3A%2F%2Fwww.upi.com&env=vp&impl=s&correlator=&tfcd=0&npa=0&gdfp_req=1&output=vast&sz=450x50|640x360|640x480&cust_params=overlay%3Dfalse&unviewed_position_start=1";
+            // }
 
             if (this.config.pub_id == 100010295) {
                 width = 640;
@@ -574,15 +611,20 @@ if (!String.prototype.endsWithPowr) {
             this.element.appendChild(this.container);
         }
 
-        if (this.config.showhide == "yes" && this.letterbox !== true) {
-            this.brandingContainer = document.createElement("div");
-            this.brandingContainer.className = "powr_branding";
-            if (this.config.pub_id == 98997) {
-                this.brandingContainer.className += " powr_branding_overlay";
-            }
-            this.brandingContainer.innerHTML = '<a target="_blank" href="https://powr.com/getpowr" class="powr_branding_text">Powered by Powr</a>';
-            this.container.appendChild(this.brandingContainer);
-        }
+        // if (this.config.showhide == "yes" && this.letterbox !== true) {
+        //     this.brandingContainer = document.createElement("div");
+        //     this.brandingContainer.className = "powr_branding";
+        //     if (this.config.pub_id == 98997) {
+        //         this.brandingContainer.className += " powr_branding_overlay";
+        //     }
+        //     this.brandingContainer.innerHTML = '<a target="_blank" href="https://powr.com/getpowr" class="powr_branding_text">Powered by Powr</a>';
+        //
+        //     if (window.location.href.indexOf("powrnewbranding=1") > 0) {
+        //         this.brandingContainer.innerHTML = '<a target="_blank" href="https://powr.com/getpowr" class="powr_branding_text">Powered by Powr</a>';
+        //     }
+        //
+        //     this.container.appendChild(this.brandingContainer);
+        // }
 
         if (this.permanentClose == "yes") {
             this.container.className = 'powr_player powr_permanent_close';
@@ -630,10 +672,6 @@ if (!String.prototype.endsWithPowr) {
 
         } else {
             aspectRatio = "vjs-fluid";
-        }
-
-        if (window.location.href.indexOf("odysseywidth=1") > 0) {
-            aspectRatio = "vjs-16-9";
         }
 
 
@@ -706,7 +744,7 @@ if (!String.prototype.endsWithPowr) {
             nativeControlForTouch: false
         });
 
-        if (this.autoplaySettings.autoplay && !this.autoplaySettings.audio) {
+        if ((this.autoplaySettings.autoplay && !this.autoplaySettings.audio) || this.config.showhide == "yes") {
             this.log("Setting player muted");
             this.player.muted(true);
         }
@@ -792,8 +830,9 @@ if (!String.prototype.endsWithPowr) {
         if (me.autoplaySettings.autoplay) {
             if (me.autoplaySettings.focus) {
                 this.checkVisible();
+
                 this.autoplayOnVisible = true;
-                if (this.visible === true) {
+                if (this.visible === true && window.location.href.indexOf("powrvisibletest=1") < 0) {
                     this.onVisible();
                 } else if (this.config.showhide != "yes") {
                     this.playOverlay.show();
@@ -1023,7 +1062,7 @@ if (!String.prototype.endsWithPowr) {
         if (this.floatSettings.landscape || this.floatSettings.portrait || this.autoplaySettings.focus || (this.showOnFocus == 'yes')) {
             if (this.config.pub_id == 98997) {
                 powrUtils.addEventListener(window.parent, 'scroll', this.checkVisible.bind(this));
-            } else {
+            }  else {
                 powrUtils.addEventListener(window, 'scroll', this.checkVisible.bind(this));
             }
             this.checkVisible();
@@ -1250,6 +1289,33 @@ if (!String.prototype.endsWithPowr) {
 
     };
 
+
+    // +++ Checks if player is in view +++
+    PowrVideo.prototype.isPlayerInView = function (elem) {
+        // Get the position of the viewport
+        var docViewTop = document.documentElement.scrollTop;
+        var docViewBottom = docViewTop + window.innerHeight;
+
+        var positionInfo = this.element.getBoundingClientRect();
+        var height = positionInfo.height;
+        var width = positionInfo.width;
+        // get the position of the player element
+        var elemTop = this.element.top;
+        var elemBottom = elemTop + height;
+        this.log("top: " + elemTop);
+        this.log("bottom: " + elemBottom);
+        this.log("docTop: " + docViewTop);
+        this.log("docBottom: " + docViewBottom);
+        // Determine if the player element is in fully in the viewport
+        return (
+            elemBottom >= docViewTop &&
+            elemTop <= docViewBottom &&
+            elemBottom <= docViewBottom &&
+            elemTop >= docViewTop
+        );
+    };
+
+
     PowrVideo.prototype.checkVisible = function () {
         var that = this;
         requestAnimationFrame(function () {
@@ -1281,32 +1347,55 @@ if (!String.prototype.endsWithPowr) {
             }
 
             // var pixelsShown = Math.min(Math.max(elementTop > 0 ? windowHeight - elementTop : that.getPlayerHeight() + elementTop, 0), that.getPlayerHeight());
-            if (((that.config.subid == "w_103804" || that.config.subid == "w_103812") && that.config.pub_id == 98997) || (window.location.href.indexOf("powrtest=1&vistrack=1") > 0)) {
+            if (((that.config.subid == "w_103804" || that.config.subid == "w_103812") && that.config.pub_id == 98997)) {
                 if (elementTop < (0 - (windowHeight * 0.33)) || elementTop > (windowHeight - 50)) {
                     if (that.visible) {
                         that.visible = false;
                         that.onHidden();
+
+                        if (window.location.href.indexOf("powrviztest=1") > 0) {
+                            that.log("hidden 1");
+                        }
                     }
+
                 } else {
                     if (!that.visible) {
                         that.visible = true;
                         that.onVisible();
+
+
+                        if (window.location.href.indexOf("powrviztest=1") > 0) {
+                            that.log("show 1");
+                        }
                     }
                 }
             } else {
-                if (elementTop + (that.getPlayerHeight() * 0.4) < 0 || ((elementTop) > (windowHeight) && window.location.href.indexOf("powrtest=1") > 0)) {
+                if (elementTop + (that.getPlayerHeight() * 0.4) < 0 ||
+                    (that.config.showhide == "yes" && that.adPlaying == true && (elementTop + (that.getPlayerHeight() * 0.4) > windowHeight))) {
                     if (that.visible) {
                         that.visible = false;
                         that.onHidden();
+
+
+                        if (window.location.href.indexOf("powrviztest=1") > 0) {
+                            that.log("hidden 2");
+                        }
                     }
                 } else if (elementTop + 30 < windowHeight + elementDelta) {
                     if (!that.visible) {
                         that.visible = true;
                         that.onVisible();
+
+                        if (window.location.href.indexOf("powrviztest=1") > 0) {
+                            that.log("show 2");
+                        }
                     }
                 }
             }
 
+            if (window.location.href.indexOf("powrvisibletest=1") > 0) {
+                this.isPlayerInView(this.element);
+            }
 
             if (window.location.href.indexOf("powrtest=1&vistrack=1") > 0) {
                 that.log("Is Visible: " + that.visible);
@@ -1316,6 +1405,8 @@ if (!String.prototype.endsWithPowr) {
                 that.log("element top: " + elementTop);
                 that.log("player height: " + that.getPlayerHeight());
                 that.log("window height: " + windowHeight);
+                that.log("ads playing? :" + that.adPlaying);
+                that.log("hidden height comparison:" + (windowHeight - (windowHeight * 0.33)));
             }
         });
     };
@@ -1352,6 +1443,13 @@ if (!String.prototype.endsWithPowr) {
     };
 
     PowrVideo.prototype.onHidden = function () {
+
+
+        if (window.location.href.indexOf("powrtest=1") > 0) {
+            this.log("pausehere");
+        }
+
+
         if (this.config.showhide == "yes") {
             if (this.disposed == true ||  this.playerHasShown == false) {
                 return;
@@ -1359,18 +1457,21 @@ if (!String.prototype.endsWithPowr) {
         }
 
         if (window.location.href.indexOf("powrtest=1") > 0) {
-            this.log("onHidden");
+            this.log("onHidden hit");
 
-            if (this.config.showhide == "yes") {
-                this.player.ima.getAdsManager().pause();
-                this.adPaused = true;
-                return;
-            }
+
+        }
+
+        if (this.config.showhide == "yes") {
+            this.player.ima.getAdsManager().pause();
+            this.adPaused = true;
+            return;
         }
 
         if (this.setupOnVisible) {
             return;
         }
+
         this.floatPlayer();
 
         if (this.pauseOnHidden && !this.player.paused() && !this.floated) {
@@ -1404,8 +1505,8 @@ if (!String.prototype.endsWithPowr) {
             }
         }
         if (event.type == google.ima.AdEvent.Type.STARTED) {
+            this.adPlaying = true;
             if (document.URL.indexOf('debug=adspowr') !== -1) {
-                this.adPlaying = true;
                 var openvv = new OpenVV(), element = document.getElementById(this.playerId);
 
                 openvv
@@ -1432,7 +1533,10 @@ if (!String.prototype.endsWithPowr) {
                     });
             }
 
-            this.originalImaOnContentPauseRequested_(this.originalAdData);
+            // if (this.config.pub_id != 49476) {
+                this.originalImaOnContentPauseRequested_(this.originalAdData);
+            // }
+
             this.adsPlayed++;
             if (this.config.showhide == "yes") {
                 this.animateShow();
@@ -1466,6 +1570,8 @@ if (!String.prototype.endsWithPowr) {
                 }
             }
 
+            // if (this.config.pub_id == 49476) {
+            //     this.log('control bar should show');
             if (this.config.showhide == 'yes') {
                 this.animateDispose(this.player, this.element);
                 return;
@@ -1573,7 +1679,7 @@ if (!String.prototype.endsWithPowr) {
     };
 
     PowrVideo.prototype.onClick = function (e) {
-        if ((this.player.ima && this.player.ima.adPlaying) || this.config.showhide == 'yes') {
+        if ((this.player.ima && this.player.ima.adPlaying) || (this.config.showhide == 'yes')) {
             return;
         }
 
@@ -1595,19 +1701,17 @@ if (!String.prototype.endsWithPowr) {
             this.player.controls(true);
         }
 
-        if ((this.config.pub_id == "10004590" || this.config.pub_id == "39348" || this.config.pub_id == "10001976"
-            || this.config.pub_id == "10002863" || this.config.pub_id == "10002864" || this.config.pub_id == "10006372"
-            || this.config.pub_id == "35362") && this.adPlaying == false && this.videos[this.currentContent].id == 10031912) {
-            this.player.pause();
-            this.player.controls(true);
-            window.open('https://homesickcandles.com?utm_campaign=Q4flight&utm_source=odyssey&utm_medium=display', '_blank');
-            powrApiOriginal.request("https://api.powr.com/p0/play?type=clicks&creator_id="
-                + this.videos[this.currentContent].user_id + "&video_id=" + this.videos[this.currentContent].id, function () {
-                return;
-            });
-            this.cancelEvent(e);
-            return;
-        }
+        // if ((this.config.pub_id == "39348") && this.adPlaying == false && this.videos[this.currentContent].id == 10031912) {
+        //     this.player.pause();
+        //     this.player.controls(true);
+        //     window.open('https://homesickcandles.com?utm_campaign=Q4flight&utm_source=odyssey&utm_medium=display', '_blank');
+        //     powrApiOriginal.request("https://api.powr.com/p0/play?type=clicks&creator_id="
+        //         + this.videos[this.currentContent].user_id + "&video_id=" + this.videos[this.currentContent].id, function () {
+        //         return;
+        //     });
+        //     this.cancelEvent(e);
+        //     return;
+        // }
 
         var v = this.getVideoElement();
         v.removeAttribute("muted");
@@ -1928,6 +2032,11 @@ if (!String.prototype.endsWithPowr) {
                 }
             }
         }
+
+        if (video.id > 10000000 && this.config.resolution != "mobile") {
+            url = video.hd_url;
+        }
+
         return url;
     }
 
