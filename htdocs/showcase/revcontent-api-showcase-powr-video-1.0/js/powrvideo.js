@@ -1418,10 +1418,10 @@ if (!String.prototype.endsWithPowr) {
                 return;
             }
 
-            if (this.adPaused == true) {
-                this.player.ima.getAdsManager().resume();
-                return;
-            }
+            // if (this.adPaused == true) {
+            //     this.player.ima.getAdsManager().resume();
+            //     return;
+            // }
         }
         if (this.setupOnVisible) {
             this.setupOnVisible = false;
@@ -1463,8 +1463,8 @@ if (!String.prototype.endsWithPowr) {
         }
 
         if (this.config.showhide == "yes") {
-            this.player.ima.getAdsManager().pause();
-            this.adPaused = true;
+            // this.player.ima.getAdsManager().pause();
+            // this.adPaused = true;
             return;
         }
 
