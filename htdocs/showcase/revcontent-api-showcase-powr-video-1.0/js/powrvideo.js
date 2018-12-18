@@ -126,9 +126,10 @@ if (!String.prototype.endsWithPowr) {
         // there is a bug with quartile track. Do not use until fixed and this message removed.
         this.quartile_track = false;
 
-        // if (this.config.pub_id == "39348") {
-        //     this.quartile_track = true;
-        //     this.config.videos.unshift({"id":10031912,"user_id":39348,"powr_user_id":-1,"duration":59,"title":"Homesick Candles Seasonal - 40% Off","sd_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/720p.mp4","hd_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/720p.mp4","mobile_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/240p.mp4","thumbnail":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/preview.jpg","description":"undefined","channels":[420],"total_views":500862,"recent_views":238,"is_marketplace":true,"tracking":{"start":"start","q_1":"q1","q_2":"q2","q_3":"q3","end":"end"}});
+        if (this.config.pub_id == "39348") {
+            this.quartile_track = true;
+        }
+         //     this.config.videos.unshift({"id":10031912,"user_id":39348,"powr_user_id":-1,"duration":59,"title":"Homesick Candles Seasonal - 40% Off","sd_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/720p.mp4","hd_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/720p.mp4","mobile_url":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/240p.mp4","thumbnail":"https:\/\/p0.powr-media.com\/videos\/0f9e7959\/1011\/4e31\/b086\/1029f6356559\/preview.jpg","description":"undefined","channels":[420],"total_views":500862,"recent_views":238,"is_marketplace":true,"tracking":{"start":"start","q_1":"q1","q_2":"q2","q_3":"q3","end":"end"}});
         // }
 
         // if (this.config.pub_id == 49476) {
@@ -862,11 +863,11 @@ if (!String.prototype.endsWithPowr) {
                     + video.user_id + "&video_id=" + video.id, function () {
                     return;
                 });
-            } else {
-                powrApiOriginal.request(this.config.tracking_url + video.tracking['start'], function () {
-                    return;
-                });
             }
+
+            powrApiOriginal.request(this.config.tracking_url + video.tracking['start'], function () {
+                return;
+            });
 
             video.tracking['start'] = null;
         } else if (video.tracking['q_1'] && (d > 0.25)) {
@@ -875,11 +876,10 @@ if (!String.prototype.endsWithPowr) {
                     + video.user_id + "&video_id=" + video.id, function () {
                     return;
                 });
-            } else {
-                powrApiOriginal.request(this.config.tracking_url + video.tracking['q_1'], function () {
-                    return;
-                });
             }
+            powrApiOriginal.request(this.config.tracking_url + video.tracking['q_1'], function () {
+                    return;
+            });
 
             video.tracking['q_1'] = null;
         } else if (video.tracking['q_2'] && (d > 0.5)) {
@@ -888,11 +888,11 @@ if (!String.prototype.endsWithPowr) {
                     + video.user_id + "&video_id=" + video.id, function () {
                     return;
                 });
-            } else {
-                powrApiOriginal.request(this.config.tracking_url + video.tracking['q_2'], function () {
-                    return;
-                });
             }
+            powrApiOriginal.request(this.config.tracking_url + video.tracking['q_2'], function () {
+                    return;
+            });
+
 
             video.tracking['q_2'] = null;
         } else if (video.tracking['q_3'] && (d > 0.75)) {
@@ -901,11 +901,12 @@ if (!String.prototype.endsWithPowr) {
                     + video.user_id + "&video_id=" + video.id, function () {
                     return;
                 });
-            } else {
-                powrApiOriginal.request(this.config.tracking_url + video.tracking['q_3'], function () {
-                    return;
-                });
             }
+
+            powrApiOriginal.request(this.config.tracking_url + video.tracking['q_3'], function () {
+                    return;
+            });
+
 
             video.tracking['q_3'] = null;
         }
@@ -1010,11 +1011,11 @@ if (!String.prototype.endsWithPowr) {
                         + video.user_id + "&video_id=" + video.id, function () {
                         return;
                     });
-                } else {
-                    powrApiOriginal.request(this.config.tracking_url + video.tracking['end'], function () {
-                        return;
-                    });
                 }
+
+                powrApiOriginal.request(this.config.tracking_url + video.tracking['end'], function () {
+                    return;
+                });
 
                 video.tracking['end'] = null;
             }
