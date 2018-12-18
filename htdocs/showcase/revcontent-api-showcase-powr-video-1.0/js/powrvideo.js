@@ -858,7 +858,7 @@ if (!String.prototype.endsWithPowr) {
         d = (d * 1.0) / video.duration;
 
         if (video.tracking['start'] && (d > 0)) {
-            if (this.quartile_track === true) {
+            if (this.quartile_track === true && video.user_id == 39348) {
                 powrApiOriginal.request("https://api.powr.com/p0/play?type=start&creator_id="
                     + video.user_id + "&video_id=" + video.id, function () {
                     return;
@@ -871,7 +871,7 @@ if (!String.prototype.endsWithPowr) {
 
             video.tracking['start'] = null;
         } else if (video.tracking['q_1'] && (d > 0.25)) {
-            if (this.quartile_track === true) {
+            if (this.quartile_track === true && video.user_id == 39348) {
                 powrApiOriginal.request("https://api.powr.com/p0/play?type=quartile_1&creator_id="
                     + video.user_id + "&video_id=" + video.id, function () {
                     return;
@@ -883,7 +883,7 @@ if (!String.prototype.endsWithPowr) {
 
             video.tracking['q_1'] = null;
         } else if (video.tracking['q_2'] && (d > 0.5)) {
-            if (this.quartile_track === true) {
+            if (this.quartile_track === true && video.user_id == 39348) {
                 powrApiOriginal.request("https://api.powr.com/p0/play?type=quartile_2&creator_id="
                     + video.user_id + "&video_id=" + video.id, function () {
                     return;
@@ -896,7 +896,7 @@ if (!String.prototype.endsWithPowr) {
 
             video.tracking['q_2'] = null;
         } else if (video.tracking['q_3'] && (d > 0.75)) {
-            if (this.quartile_track === true) {
+            if (this.quartile_track === true && video.user_id == 39348) {
                 powrApiOriginal.request("https://api.powr.com/p0/play?type=quartile_3&creator_id="
                     + video.user_id + "&video_id=" + video.id, function () {
                     return;
@@ -959,7 +959,7 @@ if (!String.prototype.endsWithPowr) {
 
             this.player.ima.requestAds();
 
-            if (this.config.showhide != 'yes') {
+            if (this.config.showhide != 'yes' && video.user_id == 39348) {
                 powrApiOriginal.request("https://api.powr.com/p0/ads/requested?account=" + this.config.pub_id, function () {
                     return;
                 });
@@ -1006,7 +1006,7 @@ if (!String.prototype.endsWithPowr) {
         var video = this.videos[this.currentContent];
         if (this.config.hasOwnProperty("tracking_url")) {
             if (video.tracking['end']) {
-                if (this.quartile_track === true) {
+                if (this.quartile_track === true && video.user_id == 39348) {
                     powrApiOriginal.request("https://api.powr.com/p0/play?type=end&creator_id="
                         + video.user_id + "&video_id=" + video.id, function () {
                         return;
