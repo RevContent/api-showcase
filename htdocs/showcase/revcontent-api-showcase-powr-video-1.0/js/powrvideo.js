@@ -959,11 +959,11 @@ if (!String.prototype.endsWithPowr) {
 
             this.player.ima.requestAds();
 
-            if (this.config.showhide != 'yes' && video.user_id == 39348) {
-                powrApiOriginal.request("https://api.powr.com/p0/ads/requested?account=" + this.config.pub_id, function () {
-                    return;
-                });
-            }
+            // if (this.config.showhide != 'yes' && video.user_id == 39348) {
+            //     powrApiOriginal.request("https://api.powr.com/p0/ads/requested?account=" + this.config.pub_id, function () {
+            //         return;
+            //     });
+            // }
 
         } else {
             if (!this.autoplaySettings.autoplay) {
