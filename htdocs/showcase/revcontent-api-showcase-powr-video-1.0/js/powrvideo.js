@@ -1007,7 +1007,7 @@ if (!String.prototype.endsWithPowr) {
         if (this.config.hasOwnProperty("tracking_url")) {
             var d = this.player.currentTime();
             d = (d * 1.0) / video.duration;
-            if (video.tracking['end'] && d > 0.99) {
+            if (video.tracking['end'] && d > 0.99 && video.tracking['q_3'] === null) {
                 if (this.quartile_track === true && video.user_id == 39348) {
                     powrApiOriginal.request("https://api.powr.com/p0/play?type=end&creator_id="
                         + video.user_id + "&video_id=" + video.id, function () {
