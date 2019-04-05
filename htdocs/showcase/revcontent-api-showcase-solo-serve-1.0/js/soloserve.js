@@ -25,7 +25,8 @@ var revcontentsolourl = document.getElementById('revsoloserve').src,
     revcontentsolohashes = revcontentsolourl.slice(revcontentsolourl.indexOf('?') + 1).split('&'),
     solo_widget_id,
     solo_habitat_id =  Math.floor(Math.random() * 1000),
-    solo_widget_dest;
+    solo_widget_dest,
+    use_unique_names;
 
     for (var i = 0; i < revcontentsolohashes.length; i++) {
         revcontentsolohash = revcontentsolohashes[i].split('=');
@@ -46,6 +47,10 @@ if (typeof RevContentSolo != 'undefined') {
 
     if (RevContentSolo.target){
         solo_widget_dest = RevContentSolo.target;
+    }
+
+    if (RevContentSolo.use_unique_names) {
+      use_unique_names = RevContentSolo.use_unique_names
     }
 
     if (RevContentSolo.query_params) {
@@ -76,8 +81,12 @@ if (!solo_widget_id) {
 
 if (typeof hideSoloServe === 'undefined') {
 
+  var elementBase = '#rc-solo';
+  if (use_unique_names) {
+    elementBase = elementBase + '-' + solo_habitat_id;
+  }
     var css = '<style>'+
-    '#rc-solo-'+ solo_habitat_id + ' {' +
+    elementBase + ' {' +
         'border: 1px solid #dedede;'+
         'border-radius: 3px;'+
         'max-width: 550px;'+
@@ -85,8 +94,7 @@ if (typeof hideSoloServe === 'undefined') {
         'margin: 0 auto 20px;'+
         'cursor: pointer;'+
     '}'+
-
-    '#rc-solo-'+ solo_habitat_id + ' * {'+
+     elementBase + ' * {'+
         '-webkit-box-sizing: border-box;'+
         '-moz-box-sizing: border-box;'+
         'box-sizing: border-box;'+
@@ -96,44 +104,54 @@ if (typeof hideSoloServe === 'undefined') {
         'margin:0;'+
         'padding:0;'+
     '}'+
-    '#rc-solo-'+ solo_habitat_id + ' .rc-w-'+solo_widget_id+' .rc-headline {'+
+
+      elementBase + ' .rc-w-'+solo_widget_id+' .rc-headline {'+
         'font-family: Hind, Arial, sans-serif!important;'+
         'font-size: 24px!important;'+
         'line-height: 28px!important;'+
         'margin: 14px 4% 0px 4%!important;'+
         'width: 92%!important;'+
     '}'+
-    '#rc-solo-'+ solo_habitat_id + ' .rc-w-'+solo_widget_id+' .rc-provider {'+
+
+      elementBase + ' .rc-w-'+solo_widget_id+' .rc-provider {'+
         'margin: 1px 4%!important;'+
         'width: 92%!important;'+
         'font-size: 12px!important;'+
     '}'+
-    '#rc-solo-'+ solo_habitat_id + ' .rc-w-'+solo_widget_id+' .rc-item-wrapper {'+
+
+      elementBase + ' .rc-w-'+solo_widget_id+' .rc-item-wrapper {'+
         'margin: 0!important;'+
     '}'+
-    '#rc-solo-'+ solo_habitat_id + ' .rc-w-'+solo_widget_id+' .rc-photo {'+
+
+      elementBase + ' .rc-w-'+solo_widget_id+' .rc-photo {'+
         'border-top-left-radius: 3px;'+
         'border-top-right-radius: 3px;'+
     '}'+
-    '#rc-solo-'+ solo_habitat_id + ' .rc-branding {' +
+
+      elementBase + ' .rc-branding {' +
         'width: auto;' +
     '}'+
-    '#rc-solo-'+ solo_habitat_id + ' .rc-branding div {' +
+
+      elementBase + ' .rc-branding div {' +
         'font-size: 10px !important' +
     '}'+
-    '#rc-solo-'+ solo_habitat_id + ' .rc-branding.rc-text-center {' +
+
+      elementBase + ' .rc-branding.rc-text-center {' +
         'width: 100%;' +
     '}'+
-    '#rc-solo-'+ solo_habitat_id + ' .rc-uid-'+solo_widget_id+' .rc-text-bottom .rc-branding-label,'+
-    '#rc-solo-'+ solo_habitat_id + ' .rc-uid-'+solo_widget_id+' .rc-text-bottom .hateit {'+
+
+      elementBase + ' .rc-uid-'+solo_widget_id+' .rc-text-bottom .rc-branding-label,'+
+      elementBase + ' .rc-uid-'+solo_widget_id+' .rc-text-bottom .hateit {'+
         'position: relative;'+
         'top: 77px;'+
     '}'+
-    '#rc-solo-'+ solo_habitat_id + ' .rc-text-center.rc-branding,'+
-    '#rc-solo-'+ solo_habitat_id + ' .rc-text-left.rc-branding {'+
+
+      elementBase + ' .rc-text-center.rc-branding,'+
+      elementBase + ' .rc-text-left.rc-branding {'+
         'float: left;'+
     '}'+
-    '#rc-solo-'+ solo_habitat_id + ' .rc-solo-more-button {'+
+
+      elementBase + ' .rc-solo-more-button {'+
         'box-shadow: none;'+
         'background: #0785f2;'+
         'cursor: pointer;'+
@@ -147,10 +165,12 @@ if (typeof hideSoloServe === 'undefined') {
         'height: 40px;'+
         'overflow: hidden;'+
     '}'+
-    '#rc-solo-'+ solo_habitat_id + ' .rc-solo-more-button:hover {'+
+
+      elementBase + ' .rc-solo-more-button:hover {'+
         'background: #0862b0;'+
     '}'+
-    '#rc-solo-'+ solo_habitat_id + ' .rc-solo-more-buttontext {'+
+
+      elementBase + ' .rc-solo-more-buttontext {'+
         'display: inline;'+
         'color: #fff;'+
         'font-size: 16px;'+
@@ -160,14 +180,16 @@ if (typeof hideSoloServe === 'undefined') {
         'margin-left: 0px;'+
         'line-height: 40px;'+
     '}'+
-    '#rc-solo-'+ solo_habitat_id + ' .rc-hot-holder {'+
+
+      elementBase + ' .rc-hot-holder {'+
         'position: relative;'+
         'display: table;'+
         'float: right;'+
         'margin-top: -45px;'+
         'margin-right: 18px;'+
     '}'+
-    '#rc-solo-'+ solo_habitat_id + ' .hotnum {'+
+
+      elementBase + ' .hotnum {'+
         'display: table-cell !important;'+
         'vertical-align: bottom !important;'+
         'color:#e63e3e !important;'+
@@ -178,50 +200,62 @@ if (typeof hideSoloServe === 'undefined') {
         'line-height:20px !important;'+
         'left:0px !important;'+
     '}'+
-    '#rc-solo-'+ solo_habitat_id + ' .rc-hot-holder-icon {'+
+
+      elementBase + ' .rc-hot-holder-icon {'+
         'height:20px !important;'+
         'width:auto !important;'+
         'margin-right:3px;'+
         'vertical-align:baseline;'+
     '}'+
-    '#rc-solo-'+ solo_habitat_id + ' .rc-block-for-well {'+
+
+      elementBase + ' .rc-block-for-well {'+
         'width: 100%;'+
         'height: 56px;'+
     '}'+
-    '#rc-solo-'+ solo_habitat_id + '.social_rc_theme {'+
+
+      elementBase + '.social_rc_theme {'+
         'border-radius: 0px!important;'+
         'box-shadow: rgba(0, 0, 0, 0.0980392) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.0470588) 0px 1px 1px 0px;'+
     '}'+
-    '#rc-solo-'+ solo_habitat_id + '.social_rc_theme .rc-w-43583 .rc-photo {'+
+
+      elementBase + '.social_rc_theme .rc-w-'+solo_widget_id+' .rc-photo {'+
         'border-top-left-radius: 0px!important;'+
         'border-top-right-radius: 0px!important;'+
         'border-bottom: 1px solid #dedede;'+
     '}'+
-    '#rc-solo-'+ solo_habitat_id + '.social_rc_theme .rc-hot-holder .rc-hot-flame {'+
+
+      elementBase + '.social_rc_theme .rc-hot-holder .rc-hot-flame {'+
         'display:none;'+
     '}'+
-    '#rc-solo-'+ solo_habitat_id + ' .rc-hot-holder .rc-hot-social {'+
+
+      elementBase + ' .rc-hot-holder .rc-hot-social {'+
         'display:none;'+
     '}'+
-    '#rc-solo-'+ solo_habitat_id + '.social_rc_theme .rc-hot-holder .rc-hot-social {'+
+
+      elementBase + '.social_rc_theme .rc-hot-holder .rc-hot-social {'+
         'display:block;'+
     '}'+
-    '#rc-solo-'+ solo_habitat_id + '.social_rc_theme .rc-solo-more-button {'+
+
+      elementBase + '.social_rc_theme .rc-solo-more-button {'+
         'background: #E9EBEE;'+
         'border: 1px solid #dedede;'+
         'box-shadow:none;'+
     '}'+
-    '#rc-solo-'+ solo_habitat_id + '.social_rc_theme .rc-solo-more-button:hover {'+
+
+      elementBase + '.social_rc_theme .rc-solo-more-button:hover {'+
         'background: #dedede;'+
     '}'+
-    '#rc-solo-'+ solo_habitat_id + '.social_rc_theme .rc-solo-more-buttontext {'+
+
+      elementBase + '.social_rc_theme .rc-solo-more-buttontext {'+
         'color:#333;'+
     '}'+
-    '#rc-solo-'+ solo_habitat_id + '.social_rc_theme .hotnum {'+
+
+      elementBase + '.social_rc_theme .hotnum {'+
         'color:#898F9C!important;'+
     '}'+
     '@media only screen and (max-width : 400px) {'+
-        '#rc-solo-'+ solo_habitat_id + ' .rc-hot-holder {'+
+
+      elementBase + ' .rc-hot-holder {'+
             'display: none;'+
         '}'+
     '}'+
@@ -259,7 +293,10 @@ if (typeof hideSoloServe === 'undefined') {
 
         '}'+
     '</script>';
-    var target = "rc-solo-" + solo_habitat_id;
+    var target = 'rc-solo';
+    if(use_unique_names) {
+      target = target + '-' + solo_habitat_id;
+    }
 
     var html = '<div id="' + target + '" class="'+RevContentSolo.theme+'_rc_theme">'+
         '<div id="rcjsload_soloserve_'+solo_widget_id+'"></div>'+
