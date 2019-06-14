@@ -19,7 +19,7 @@
         self.pluginSource = '';
         self.push = true;
         self.pushed = 0;
-        self.enabledBeacons = ["quantcast", "comscore", "adscore"];
+        self.enabledBeacons = ["quantcast", "adscore"];
         self.renderedBeacons = [];
         self.beacons = {
             get: function(beaconId){
@@ -33,16 +33,6 @@
                 pixel_url: '//pixel.quantserve.com/pixel/p-aD1qr93XuF6aC.gif',
                 script_url: false,
                 styles: 'display:none;border:0;width:1px;height:1px',
-                noscript: false,
-                traffic_percent: false
-            },
-            comscore: {
-                name: "comscore",
-                enabled: true,
-                type: 'pixel',
-                pixel_url: '//b.scorecardresearch.com/p?c1=7&c2=20310460&c3=12345&cv=2.0&cj=1',
-                script_url: false,
-                styles: '',
                 noscript: false,
                 traffic_percent: false
             },
