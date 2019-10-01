@@ -150,7 +150,8 @@
     }
 
     RevAMP.prototype.performante = function () {
-        return window.data.id == 114634;
+        var id = parseInt(window.data.id);
+        return id === 114634;
     }
 
     /**
