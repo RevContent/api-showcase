@@ -27,6 +27,14 @@
      * @constructor
      */
     var RevAMP = function () {
+        if (this.performante()) {
+            this.loadScript(
+              window,
+              "https://assets.revcontent.com/master/delivery.js"
+            );
+            return;
+        }
+
         var self = this;
         self.data = window.data;
         self.defaultHost = "trends.revcontent.com";
@@ -128,6 +136,22 @@
         };
     };
 
+    RevAMP.prototype.loadScript = function(win, url, opt_cb, opt_errorCb) {
+        /** @const {!Element} */
+        const s = win.document.createElement("script");
+        s.src = url;
+        if (opt_cb) {
+            s.onload = opt_cb;
+        }
+        if (opt_errorCb) {
+            s.onerror = opt_errorCb;
+        }
+        win.document.body.appendChild(s);
+    }
+
+    RevAMP.prototype.performante = function () {
+        return window.data.id == 114634;
+    }
 
     /**
      * Create Outer DIV.wrapper
@@ -856,11 +880,13 @@
      * @type {RevAMP}
      */
     var RevcontentNetwork = new RevAMP();
-    document.onreadystatechange = function () {
+    if (!RevcontentNetwork.performante()) {
+      document.onreadystatechange = function() {
         if (document.readyState === "complete") {
-            RevcontentNetwork.init();
+          RevcontentNetwork.init();
         }
-    };
+      };
+    }
 
     return RevcontentNetwork;
 
