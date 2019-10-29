@@ -34,7 +34,7 @@
     "es6-promise": "~3",
     "hammerjs": "~2",
     "wolfy87-eventemitter": "~4",
-    "jquery": "~1",
+    "jquery": "~3",
     "jquery-mousewheel": "~3"
   }
 }
